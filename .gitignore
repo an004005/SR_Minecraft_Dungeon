@@ -240,3 +240,11 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+
+Client/Bin/*
+!Client/Bin/Resource
+Reference/Header/
+!Reference/Header/Base.h
+!Reference/Header/Base.inl
+Reference/Library/
+
