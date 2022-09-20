@@ -16,10 +16,11 @@ public:
 	static void LoggerWindow();
 	static void LogOut(const char* fmt, ...)
 	{
-	    va_list args;
-	    va_start(args, fmt);
-	    log.appendfv(fmt, args);
-	    va_end(args);
+		va_list args;
+		va_start(args, fmt);
+		log.appendfv(fmt, args);
+		log.append("\n");
+		va_end(args);
 	}
 	virtual void Free() override;
 

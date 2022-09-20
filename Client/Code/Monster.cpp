@@ -58,7 +58,7 @@ void CMonster::LateUpdate_Object()
 	Engine::CGameObject::LateUpdate_Object();
 }
 
-void CMonster::Render_Obejct()
+void CMonster::Render_Object()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
 	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);

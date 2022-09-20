@@ -25,7 +25,7 @@ _int CTestCube::Update_Object(const _float& fTimeDelta)
 	return 0;
 }
 
-void CTestCube::Render_Obejct()
+void CTestCube::Render_Object()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
 	m_pTextureCom->Set_Texture(2);
@@ -43,10 +43,10 @@ HRESULT CTestCube::Add_Component()
 	pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Clone_Proto(L"Proto_CubeTexture"));
 	NULL_CHECK_RETURN(m_pTextureCom, E_FAIL);
 	m_mapComponent[ID_STATIC].insert({ L"Proto_CubeTexture", pComponent });
-
+	              
 	pComponent = m_pTransCom = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_TransformCom"));
 	NULL_CHECK_RETURN(m_pTransCom, E_FAIL);
-	m_mapComponent[ID_STATIC].insert({ L"Proto_TransformCom", pComponent });
+	m_mapComponent[ID_DYNAMIC].insert({ L"Proto_TransformCom", pComponent });
 
 
 	return S_OK;

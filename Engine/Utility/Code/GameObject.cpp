@@ -38,7 +38,7 @@ void CGameObject::LateUpdate_Object(void)
 		iter.second->LateUpdate_Component();
 }
 
-void CGameObject::Render_Obejct(void)
+void CGameObject::Render_Object(void)
 {
 }
 

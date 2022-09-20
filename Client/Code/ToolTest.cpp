@@ -28,14 +28,14 @@ HRESULT CToolTest::Ready_Scene()
 	pGameObject = m_pCam = CDynamicCamera::Create(m_pGraphicDev, &_vec3(0.f, 10.f, -10.f), &_vec3(0.f, 0.f, 0.f), &_vec3(0.f, 1.f, 0.f));
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"DynamicCamera", pGameObject), E_FAIL);
-	LOGOUT("DynamicCamera created\n");
+	LOGOUT("DynamicCamera created");
 
 	// skybox
 	pGameObject = CTestCube::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"SkyBox", pGameObject), E_FAIL);
 	m_pSelectedTransform = dynamic_cast<CTestCube*>(pGameObject)->m_pTransCom;
-	LOGOUT("SkyBox created\n");
+	LOGOUT("SkyBox created");
 
 	m_mapLayer.insert({ L"TestLayer", pLayer });
 
@@ -45,7 +45,6 @@ HRESULT CToolTest::Ready_Scene()
 _int CToolTest::Update_Scene(const _float& fTimeDelta)
 {
 	CImGuiMgr::TransformEdit(m_pCam, m_pSelectedTransform);
-
 	return CScene::Update_Scene(fTimeDelta);
 }
 
@@ -64,7 +63,7 @@ CToolTest* CToolTest::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 		return nullptr;
 	}
 
-	LOGOUT("CToolTest created %d\n", 3);
+	LOGOUT("CToolTest created %d", 3);
 
 	return pInstance;
 }

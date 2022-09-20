@@ -28,7 +28,7 @@ void CRenderer::Render_GameObject(LPDIRECT3DDEVICE9 & pGraphicDev)
 	{
 		for (auto& iter : m_RenderGroup[i])
 		{
-			iter->Render_Obejct();
+			iter->Render_Object();
 			Safe_Release(iter);			// 삭제가 아님, 레퍼런스 카운트 감소
 		}
 		m_RenderGroup[i].clear();
