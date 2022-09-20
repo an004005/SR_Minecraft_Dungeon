@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "..\Header\MainApp.h"
+
+#include "ImGuiMgr.h"
 #include "Logo.h"
 #include "ToolTest.h"
 
@@ -36,8 +38,12 @@ _int CMainApp::Update_MainApp(const _float & fTimeDelta)
 
 	NULL_CHECK_RETURN(m_pManagementClass, -1);
 
+    ImGui_ImplDX9_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+    ImGui::NewFrame();
 
-	
+	CImGuiMgr::LoggerWindow();
+
 	m_pManagementClass->Update_Scene(fTimeDelta);
 
 	return 0;
@@ -48,19 +54,12 @@ void CMainApp::LateUpdate_MainApp(void)
 	NULL_CHECK(m_pManagementClass);
 
 	m_pManagementClass->LateUpdate_Scene();
+
+	ImGui::EndFrame();
 }
 
 void CMainApp::Render_MainApp(void)
 {
-    ImGui_ImplDX9_NewFrame();
-    ImGui_ImplWin32_NewFrame();
-    ImGui::NewFrame();
-	// imgui draw
-	Engine::BeginImGuiFrame();
-	ImGui::EndFrame();
-
-	//////////////////////////
-
 	m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, FALSE);
 
 	Engine::Render_Begin(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.f));

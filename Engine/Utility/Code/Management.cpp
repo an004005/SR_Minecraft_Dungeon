@@ -68,14 +68,6 @@ void CManagement::Render_Scene(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_pScene->Render_Scene();
 }
 
-void CManagement::BeginImGuiFrame()
-{
-	if (m_pScene == nullptr)
-		return;
-
-	m_pScene->ImGuiFrameMain();
-}
-
 void Engine::CManagement::Free(void)
 {
 	Safe_Release(m_pScene);

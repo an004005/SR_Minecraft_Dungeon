@@ -14,6 +14,8 @@ public:
 	virtual HRESULT Ready_Object(void) override;
 	virtual _int Update_Object(const _float& fTimeDelta) override;
 	virtual void LateUpdate_Object(void) override;
+	_matrix GetView() const { return m_matView; }
+	_matrix GetProj() const { return m_matProj; }
 
 protected:
 	_vec3		m_vEye, m_vAt, m_vUp;

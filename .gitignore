@@ -242,6 +242,7 @@ ModelManifest.xml
 .fake/
 
 Client/Bin/*
+
 !Client/Bin/Resource
 Reference/Header/
 !Reference/Header/Base.h

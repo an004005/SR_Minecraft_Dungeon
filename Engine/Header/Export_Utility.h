@@ -31,8 +31,6 @@ inline 	CComponent*				Get_Component(const _tchar* pLayerTag,
 	const _tchar* pComponentTag,
 	COMPONENTID eID);
 inline void AddGameObject(const _tchar* pLayerTag, const _tchar* pObjTag, CGameObject* pObject);
-inline void		BeginImGuiFrame();
-
 
 
 // ProtoMgr

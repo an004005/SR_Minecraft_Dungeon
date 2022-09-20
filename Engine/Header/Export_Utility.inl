@@ -36,12 +36,6 @@ void AddGameObject(const _tchar* pLayerTag, const _tchar* pObjTag, CGameObject* 
 	CManagement::GetInstance()->AddGameObject(pLayerTag, pObjTag, pObject);
 }
 
-inline void BeginImGuiFrame()
-{
-	CManagement::GetInstance()->BeginImGuiFrame();
-}
-
-
 inline HRESULT			Ready_Proto(const _tchar* pProtoTag, CComponent* pComponent)
 {
 	return CProtoMgr::GetInstance()->Ready_Proto(pProtoTag, pComponent);

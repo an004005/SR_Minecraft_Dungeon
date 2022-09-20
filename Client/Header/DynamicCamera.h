@@ -20,9 +20,6 @@ public:
 
 	virtual void LateUpdate_Object(void) override;
 
-	_matrix* GetView() { return &m_matView; }
-	_matrix* GetPrj() { return &m_matProj; }
-
 private:
 	void		Key_Input(const _float& fTimeDelta);
 	void		Mouse_Move(void);

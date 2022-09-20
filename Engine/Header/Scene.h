@@ -20,7 +20,6 @@ public:
 	virtual		_int Update_Scene(const _float& fTimeDelta);
 	virtual		void LateUpdate_Scene(void);
 	virtual		void Render_Scene(void) {}
-	virtual		void ImGuiFrameMain(){}
 
 protected:
 	LPDIRECT3DDEVICE9				m_pGraphicDev;
