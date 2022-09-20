@@ -21,7 +21,6 @@
 // #include "GraphEditor.h"
 
 #include <windows.h>
-
 // C 런타임 헤더 파일입니다.
 #include <stdlib.h>
 #include <malloc.h>
@@ -50,3 +49,5 @@
 
 extern HWND g_hWnd;
 extern HINSTANCE g_hInst;
+
+#include "ImGuiMgr.h"

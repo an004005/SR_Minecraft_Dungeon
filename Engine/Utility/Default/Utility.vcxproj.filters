@@ -46,9 +46,6 @@
     <Filter Include="00. Component\02. Texture">
       <UniqueIdentifier>{e247e3c6-d534-4896-87f7-50727d976c71}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. GameObject\03. SkeletalCube">
-      <UniqueIdentifier>{c924428e-04ac-4e20-b88d-a361c933727a}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Header\TriCol.h">
@@ -102,9 +99,6 @@
     <ClInclude Include="..\..\Header\CubeTex.h">
       <Filter>00. Component\00. VIBuffer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Header\SkeletalCube.h">
-      <Filter>01. GameObject\03. SkeletalCube</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\TriCol.cpp">
@@ -154,9 +148,6 @@
     </ClCompile>
     <ClCompile Include="..\Code\CubeTex.cpp">
       <Filter>00. Component\00. VIBuffer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\SkeletalCube.cpp">
-      <Filter>01. GameObject\03. SkeletalCube</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

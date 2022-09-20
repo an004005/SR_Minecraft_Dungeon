@@ -1,22 +1,15 @@
 #include "stdafx.h"
 #include "..\Header\ImGuiMgr.h"
 #include "ImGuizmo.h"
+#include "SkeletalCube.h"
 
-IMPLEMENT_SINGLETON(CImGuiMgr)
-
-ImGuiTextBuffer CImGuiMgr::log;
-
-CImGuiMgr::CImGuiMgr()
-{
-}
-
-
-CImGuiMgr::~CImGuiMgr()
-{
-}
+ImGuiTextBuffer CImGuiMgr::s_log;
 
 void CImGuiMgr::TransformEdit(CCamera* pCamera, CTransform* pTransform)
 {
+	if (pCamera == nullptr || pTransform == nullptr)
+		return;
+
 	ImGui::Begin("Transform");
 	ImGuizmo::BeginFrame();
 	static float snap[3] = { 1.f, 1.f, 1.f };
@@ -104,17 +97,43 @@ void CImGuiMgr::LoggerWindow()
 {
 	ImGui::Begin("Logger");
 
-	if (ImGui::Button("Clear")) { log.clear(); }
+	if (ImGui::Button("Clear")) { s_log.clear(); }
 	ImGui::SameLine();
 
 	ImGui::BeginChild("Log");
 	ImGui::SetWindowFontScale(1.1f);
-	ImGui::TextUnformatted(log.begin(), log.end());
+	ImGui::TextUnformatted(s_log.begin(), s_log.end());
 
 	ImGui::EndChild();
 	ImGui::End();
 }
 
-void CImGuiMgr::Free()
+void CImGuiMgr::Logging(const char* fmt, ...)
 {
+	va_list args;
+	va_start(args, fmt);
+	s_log.appendfv(fmt, args);
+	s_log.append("\n");
+	va_end(args);
+}
+
+void CImGuiMgr::SkeletalSelector(CSkeletalCube* pSkeletal, CTransform* pSelected)
+{
+	ImGui::Begin("Skeletal Selector");
+
+	auto& mapParts = pSkeletal->m_mapParts;
+    if (ImGui::TreeNode("Skeletal"))
+    {
+        static int selected = -1;
+        for (int n = 0; n < 5; n++)
+        {
+            char buf[32];
+            sprintf_s(buf, "Object %d", n);
+            if (ImGui::Selectable(buf, selected == n))
+                selected = n;
+        }
+        ImGui::TreePop();
+    }
+
+	ImGui::End();
 }

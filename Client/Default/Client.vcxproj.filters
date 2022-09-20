@@ -35,6 +35,9 @@
     <Filter Include="Tool">
       <UniqueIdentifier>{50f4077e-3ed9-4674-ba98-1dfac0acb172}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\03. SkeletalCube">
+      <UniqueIdentifier>{0604fd92-5ba3-4721-a47c-07829de8ecab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\MainApp.h">
@@ -130,6 +133,9 @@
     <ClInclude Include="..\Header\TestCube.h">
       <Filter>Tool</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\SkeletalCube.h">
+      <Filter>02. GameObject\03. SkeletalCube</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\MainApp.cpp">
@@ -212,6 +218,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\TestCube.cpp">
       <Filter>Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SkeletalCube.cpp">
+      <Filter>02. GameObject\03. SkeletalCube</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

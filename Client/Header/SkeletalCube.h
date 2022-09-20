@@ -1,28 +1,36 @@
 #pragma once
 #include "GameObject.h"
 
-BEGIN(Engine)
-class CVIBuffer;
-class CTexture;
-class CTransform;
-
 struct SkeletalPart
 {
-	string strName;
+	// string strName;
 	SkeletalPart* pParent = nullptr;
-	vector<SkeletalPart*> vecChild;
+	// vector<SkeletalPart*> vecChild;
 
 	CVIBuffer* pBuf = nullptr;
 	_uint iTexIdx = 0;
 	CTexture* pTex = nullptr;
 	CTransform* pTrans = nullptr;
+
+	_matrix GetSkeletalWorldMat() const
+	{
+		_matrix matWorldPart = pTrans->m_matWorld;
+		const SkeletalPart* pTmpParent = pParent;
+		while (pTmpParent != nullptr)
+		{
+			matWorldPart = matWorldPart * pTmpParent->pTrans->m_matWorld;
+			pTmpParent = pTmpParent->pParent;
+		}
+
+		return matWorldPart;
+	}
 };
 
 class CSkeletalCube : public CGameObject
 {
+	friend class CImGuiMgr; // for tool
 private:
 	explicit CSkeletalCube(LPDIRECT3DDEVICE9 pGraphicDev);
-	explicit CSkeletalCube(const CGameObject& rhs);
 	virtual ~CSkeletalCube() override;
 
 public:
@@ -32,8 +40,11 @@ public:
 	virtual void Render_Object() override;
 	virtual void Free() override;
 
+	static CSkeletalCube* Create(LPDIRECT3DDEVICE9 pGraphicDev);
+
 private:
-	static string m_strRoot;
+	static string s_strRoot;
+
+	SkeletalPart* m_pRootPart = nullptr;
 	map<string, SkeletalPart*> m_mapParts;
 };
-END
