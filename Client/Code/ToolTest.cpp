@@ -31,8 +31,8 @@ HRESULT CToolTest::Ready_Scene()
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"DynamicCamera", pGameObject), E_FAIL);
 
-	// skybox
-	pGameObject = CSkeletalCube::Create(m_pGraphicDev);
+	// skeletal
+	pGameObject = m_Skel = CSkeletalCube::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Skeletal", pGameObject), E_FAIL);
 	// m_pSelectedTransform = dynamic_cast<CTestCube*>(pGameObject)->m_pTransCom;
@@ -45,8 +45,11 @@ HRESULT CToolTest::Ready_Scene()
 
 _int CToolTest::Update_Scene(const _float& fTimeDelta)
 {
-	CImGuiMgr::TransformEdit(m_pCam, m_pSelectedTransform);
 	ImGui::ShowDemoWindow(nullptr);
+	IM_BEGIN("Skeletal Editor");
+	CImGuiMgr::SkeletalEditor(m_pCam, m_Skel);
+	IM_END;
+
 	return CScene::Update_Scene(fTimeDelta);
 }
 

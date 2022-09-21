@@ -3,26 +3,38 @@
 
 struct SkeletalPart
 {
-	// string strName;
+	// info
+	string strName;
 	SkeletalPart* pParent = nullptr;
-	// vector<SkeletalPart*> vecChild;
+	vector<SkeletalPart*> vecChild;
+	_matrix matLocal;
 
+	// components
 	CVIBuffer* pBuf = nullptr;
 	_uint iTexIdx = 0;
 	CTexture* pTex = nullptr;
 	CTransform* pTrans = nullptr;
 
-	_matrix GetSkeletalWorldMat() const
+	SkeletalPart() { D3DXMatrixIdentity(&matLocal); }
+
+	// todo 같은 부모의 world 공유로 최적화
+	_matrix GetParentsWorldMat() const 
 	{
-		_matrix matWorldPart = pTrans->m_matWorld;
+		_matrix matParentsWorld;
+		D3DXMatrixIdentity(&matParentsWorld);
 		const SkeletalPart* pTmpParent = pParent;
 		while (pTmpParent != nullptr)
 		{
-			matWorldPart = matWorldPart * pTmpParent->pTrans->m_matWorld;
+			matParentsWorld = matParentsWorld * pTmpParent->pTrans->m_matWorld;
 			pTmpParent = pTmpParent->pParent;
 		}
 
-		return matWorldPart;
+		return matParentsWorld;
+	}
+
+	_matrix GetWorldMat() const
+	{
+		return matLocal *  pTrans->m_matWorld * GetParentsWorldMat();
 	}
 };
 

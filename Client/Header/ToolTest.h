@@ -14,7 +14,8 @@ public:
 	static CToolTest* Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
 private:
-	CTransform* m_pSelectedTransform = nullptr;
 	class CDynamicCamera* m_pCam = nullptr;
+	class CSkeletalCube* m_Skel = nullptr;
+	struct SkeletalPart* m_part;
 };
 

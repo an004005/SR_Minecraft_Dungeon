@@ -36,31 +36,55 @@ HRESULT CCubeTex::Ready_Buffer(void)
 	// 3인자 : 배열에 저장된 첫 번째 버텍스의 주소를 얻어옴
 
 	// 앞면
-	pVertex[0].vPos = { -1.f, 1.f, -1.f };
+	// pVertex[0].vPos = { -1.f, 1.f, -1.f };
+	// pVertex[0].vTexUV = pVertex[0].vPos;
+	//
+	// pVertex[1].vPos = { 1.f, 1.f, -1.f };
+	// pVertex[1].vTexUV = pVertex[1].vPos;
+	//
+	// pVertex[2].vPos = { 1.f, -1.f, -1.f };
+	// pVertex[2].vTexUV = pVertex[2].vPos;
+	//
+	// pVertex[3].vPos = { -1.f, -1.f, -1.f };
+	// pVertex[3].vTexUV = pVertex[3].vPos;
+	//
+	// // 뒷면
+	// pVertex[4].vPos = { -1.f, 1.f, 1.f };
+	// pVertex[4].vTexUV = pVertex[4].vPos;
+	//
+	// pVertex[5].vPos = { 1.f, 1.f, 1.f };
+	// pVertex[5].vTexUV = pVertex[5].vPos;
+	//
+	// pVertex[6].vPos = { 1.f, -1.f, 1.f };
+	// pVertex[6].vTexUV = pVertex[6].vPos;
+	//
+	// pVertex[7].vPos = { -1.f, -1.f, 1.f };
+	// pVertex[7].vTexUV = pVertex[7].vPos;
+
+	pVertex[0].vPos = { -0.5f, 0.5f, -0.5f };
 	pVertex[0].vTexUV = pVertex[0].vPos;
-
-	pVertex[1].vPos = { 1.f, 1.f, -1.f };
+	
+	pVertex[1].vPos = { 0.5f, 0.5f, -0.5f };
 	pVertex[1].vTexUV = pVertex[1].vPos;
-
-	pVertex[2].vPos = { 1.f, -1.f, -1.f };
+	
+	pVertex[2].vPos = { 0.5f, -0.5f, -0.5f };
 	pVertex[2].vTexUV = pVertex[2].vPos;
-
-	pVertex[3].vPos = { -1.f, -1.f, -1.f };
+	
+	pVertex[3].vPos = { -0.5f, -0.5f, -0.5f };
 	pVertex[3].vTexUV = pVertex[3].vPos;
-
+	
 	// 뒷면
-	pVertex[4].vPos = { -1.f, 1.f, 1.f };
+	pVertex[4].vPos = { -0.5f, 0.5f, 0.5f };
 	pVertex[4].vTexUV = pVertex[4].vPos;
-
-	pVertex[5].vPos = { 1.f, 1.f, 1.f };
+	
+	pVertex[5].vPos = { 0.5f, 0.5f, 0.5f };
 	pVertex[5].vTexUV = pVertex[5].vPos;
-
-	pVertex[6].vPos = { 1.f, -1.f, 1.f };
+	
+	pVertex[6].vPos = { 0.5f, -0.5f, 0.5f };
 	pVertex[6].vTexUV = pVertex[6].vPos;
-
-	pVertex[7].vPos = { -1.f, -1.f, 1.f };
+	
+	pVertex[7].vPos = { -0.5f, -0.5f, 0.5f };
 	pVertex[7].vTexUV = pVertex[7].vPos;
-
 	m_pVB->Unlock();
 
 
