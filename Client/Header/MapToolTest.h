@@ -26,7 +26,8 @@ public:
 private:
 	DWORD			m_dwTime = GetTickCount();
 	CLayer*			m_pLayer = nullptr;
-
+	_float			m_fHeight = 1.f;
+	_float			m_fFloor = 1.f;
 private:
 	virtual void	Free(void);
 };

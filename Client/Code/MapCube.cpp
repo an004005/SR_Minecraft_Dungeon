@@ -3,8 +3,9 @@
 
 #include "Export_Function.h"
 
-CMapCube::CMapCube(LPDIRECT3DDEVICE9 pGraphicDev)
+CMapCube::CMapCube(LPDIRECT3DDEVICE9 pGraphicDev , _float Height)
 	: Engine::CGameObject(pGraphicDev)
+	, m_fHeight(Height)
 {
 }
 
@@ -16,7 +17,7 @@ HRESULT CMapCube::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
-	m_pTransCom->Set_Scale(1.f, 1.f, 1.f);
+	m_pTransCom->Set_Y(m_fHeight);
 
 	_vec3	vPickPos = PickUp_OnTerrain();
 	m_pTransCom->Set_Pos(vPickPos.x, vPickPos.y, vPickPos.z);
@@ -26,7 +27,6 @@ HRESULT CMapCube::Ready_Object(void)
 
 _int CMapCube::Update_Object(const _float & fTimeDelta)
 {
-
 	CGameObject::Update_Object(fTimeDelta);
 
 	Engine::Add_RenderGroup(RENDER_PRIORITY, this);
@@ -44,12 +44,12 @@ void CMapCube::Render_Object(void)
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
 	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-	m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
+	//m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 
 	m_pTextureCom->Set_Texture(2);
 	m_pBufferCom->Render_Buffer();
 
-	m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
+	//m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
 }
@@ -78,9 +78,9 @@ HRESULT CMapCube::Add_Component(void)
 	return S_OK;
 }
 
-CMapCube * CMapCube::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CMapCube * CMapCube::Create(LPDIRECT3DDEVICE9 pGraphicDev, _float Height)
 {
-	CMapCube*	pInstance = new CMapCube(pGraphicDev);
+	CMapCube*	pInstance = new CMapCube(pGraphicDev, Height);
 
 	if (FAILED(pInstance->Ready_Object()))
 	{

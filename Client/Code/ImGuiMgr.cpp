@@ -255,13 +255,82 @@ void CImGuiMgr::SkeletalEditor(CCamera* pCamera, CSkeletalCube* pSkeletal)
 	}
 }
 
-void CImGuiMgr::MapControl()
+void CImGuiMgr::MapControl(_float& floor, _float& Height)
 {
 #ifndef _DEBUG
 	return;
 #endif
+	ImGui::Separator();
+
+	if (ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None))
+	{
+		if (ImGui::BeginTabItem("Set Block"))
+		{
+			
+			ImGui::AlignTextToFramePadding();
+			ImGui::Text("Set Block Floor");
+			ImGui::SameLine();
+			static int counter1 = 0;
+			float spacing1 = ImGui::GetStyle().ItemInnerSpacing.x;
+			ImGui::PushButtonRepeat(true);
+			if (ImGui::ArrowButton("##left", ImGuiDir_Left)) { counter1--; }
+			ImGui::SameLine(0.0f, spacing1);
+			if (ImGui::ArrowButton("##right", ImGuiDir_Right)) { counter1++; }
+			ImGui::PopButtonRepeat();
+			ImGui::SameLine();
+			ImGui::Text("%d", counter1);
 
 
+			ImGui::NewLine();
+
+			ImGui::AlignTextToFramePadding();
+			ImGui::Text("Set Block Height");
+			ImGui::SameLine();
+			//static int counter2 = 0;
+			float spacing2 = ImGui::GetStyle().ItemInnerSpacing.x;
+			ImGui::PushButtonRepeat(true);
+			if (ImGui::ArrowButton("###left", ImGuiDir_Left)) { Height--; }
+			ImGui::SameLine(0.0f, spacing2);
+			if (ImGui::ArrowButton("###right", ImGuiDir_Right)) { Height++; }
+			ImGui::PopButtonRepeat();
+			ImGui::SameLine();
+			ImGui::Text("%d", Height);
+		
+
+
+			ImGui::NewLine();
+			ImGui::Text("Set Block Texture");
+
+			
+
+			ImGui::EndTabItem();
+		}
+
+		if (ImGui::BeginTabItem("Set Rect"))
+		{
+			ImGui::Text("holl");
+
+			ImGui::EndTabItem();
+		}
+
+		if (ImGui::BeginTabItem("Set Element"))
+		{
+			ImGui::Text("checkyt");
+
+			ImGui::EndTabItem();
+		}
+
+		if (ImGui::BeginTabItem("Save / Load"))
+		{
+			ImGui::Text("Main");
+
+			ImGui::EndTabItem();
+		}
+
+		ImGui::EndTabBar();
+	}
+
+	
 }
 
 void CImGuiMgr::SkeletalRecursive(SkeletalPart* Part, string& strSelected, ImGuiTreeNodeFlags baseFlags)

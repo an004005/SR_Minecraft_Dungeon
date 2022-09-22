@@ -14,7 +14,7 @@ class CMapCube :
 	public CGameObject
 {
 public:
-	CMapCube(LPDIRECT3DDEVICE9 pGraphicDev);
+	CMapCube(LPDIRECT3DDEVICE9 pGraphicDev, _float Height);
 	virtual ~CMapCube();
 
 public:
@@ -34,8 +34,12 @@ private:
 	CCalculator*		m_pCalculatorCom = nullptr;
 
 	_vec3				m_vDirection;
+
+	_float				m_fFloor = 1.f;
+	_float				m_fHeight = 1.f;
+
 public:
-	static CMapCube*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CMapCube*		Create(LPDIRECT3DDEVICE9 pGraphicDev, _float Height);
 	virtual void	Free(void);
 };
 

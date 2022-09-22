@@ -33,10 +33,16 @@ HRESULT CMapToolTest::Ready_Scene(void)
 
 _int CMapToolTest::Update_Scene(const _float & fTimeDelta)
 {
+
+	ImGui::ShowDemoWindow(nullptr);
+	IM_BEGIN("Map Editor Window");
+	CImGuiMgr::MapControl(m_fFloor, m_fHeight);
+	
 	if (Engine::Get_DIMouseState(DIM_LB) & 0X80 && m_dwTime + 1000 < GetTickCount())
 	{
+		
 		CGameObject*		pGameObject = nullptr;
-		pGameObject = CMapCube::Create(m_pGraphicDev);
+		pGameObject = CMapCube::Create(m_pGraphicDev, m_fHeight);
 		NULL_CHECK_RETURN(pGameObject, E_FAIL);
 		FAILED_CHECK_RETURN(m_pLayer->Add_GameObject(L"MapCube", pGameObject), E_FAIL);
 
@@ -44,12 +50,8 @@ _int CMapToolTest::Update_Scene(const _float & fTimeDelta)
 
 		m_dwTime = GetTickCount();
 	}
-
-	ImGui::ShowDemoWindow(nullptr);
-	IM_BEGIN("Map Editor Window");
-	CImGuiMgr::MapControl();
+	
 	IM_END;
-
 	return Engine::CScene::Update_Scene(fTimeDelta);
 }
 
