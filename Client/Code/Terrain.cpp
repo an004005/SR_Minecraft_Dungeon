@@ -39,12 +39,12 @@ void CTerrain::Render_Object(void)
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
 	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
-	// m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	 m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 
-	m_pTextureCom->Set_Texture(0);	// 텍스처 정보 세팅을 우선적으로 한다.
+	//m_pTextureCom->Set_Texture(0);	// 텍스처 정보 세팅을 우선적으로 한다.
 	m_pBufferCom->Render_Buffer();
 
-	// m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+	 m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 }
 
 HRESULT CTerrain::Add_Component(void)
@@ -55,9 +55,9 @@ HRESULT CTerrain::Add_Component(void)
 	NULL_CHECK_RETURN(m_pBufferCom, E_FAIL);
 	m_mapComponent[ID_STATIC].insert({ L"Proto_TerrainTexCom", pComponent });
 
-	pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Clone_Proto(L"Proto_TerrainTexture"));
+	/*pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Clone_Proto(L"Proto_TerrainTexture"));
 	NULL_CHECK_RETURN(m_pTextureCom, E_FAIL);
-	m_mapComponent[ID_STATIC].insert({ L"Proto_TerrainTexture", pComponent });
+	m_mapComponent[ID_STATIC].insert({ L"Proto_TerrainTexture", pComponent });*/
 
 	pComponent = m_pTransCom = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_TransformCom"));
 	NULL_CHECK_RETURN(m_pTransCom, E_FAIL);

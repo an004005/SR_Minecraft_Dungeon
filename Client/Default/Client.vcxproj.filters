@@ -38,6 +38,12 @@
     <Filter Include="02. GameObject\03. SkeletalCube">
       <UniqueIdentifier>{0604fd92-5ba3-4721-a47c-07829de8ecab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Scene\MapToolTest">
+      <UniqueIdentifier>{1385fa4b-4f42-4f68-b1e9-221568eecdb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\04. MapCube">
+      <UniqueIdentifier>{ca29e199-0f6d-4818-ae09-7431ccba8a2c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\MainApp.h">
@@ -136,6 +142,12 @@
     <ClInclude Include="..\Header\SkeletalCube.h">
       <Filter>02. GameObject\03. SkeletalCube</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\MapToolTest.h">
+      <Filter>01. Scene\MapToolTest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\MapCube.h">
+      <Filter>02. GameObject\04. MapCube</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\MainApp.cpp">
@@ -221,6 +233,12 @@
     </ClCompile>
     <ClCompile Include="..\Code\SkeletalCube.cpp">
       <Filter>02. GameObject\03. SkeletalCube</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MapToolTest.cpp">
+      <Filter>01. Scene\MapToolTest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MapCube.cpp">
+      <Filter>02. GameObject\04. MapCube</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

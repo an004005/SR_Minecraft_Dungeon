@@ -4,6 +4,7 @@
 #include "ImGuiMgr.h"
 #include "Logo.h"
 #include "ToolTest.h"
+#include "MapToolTest.h"
 
 USING(Engine)
 CMainApp::CMainApp()	
@@ -129,7 +130,8 @@ HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement
 	Engine::CScene*			pScene = nullptr;
 
 	// pScene = CLogo::Create(pGraphicDev);
-	pScene = CToolTest::Create(pGraphicDev);
+	//pScene = CToolTest::Create(pGraphicDev);
+	pScene = CMapToolTest::Create(pGraphicDev);
 	NULL_CHECK_RETURN(pScene, E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Create_Management(pGraphicDev, ppManagement), E_FAIL);
