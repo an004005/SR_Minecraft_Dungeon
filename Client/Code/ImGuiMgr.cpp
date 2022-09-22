@@ -255,6 +255,15 @@ void CImGuiMgr::SkeletalEditor(CCamera* pCamera, CSkeletalCube* pSkeletal)
 	}
 }
 
+void CImGuiMgr::MapControl()
+{
+#ifndef _DEBUG
+	return;
+#endif
+
+
+}
+
 void CImGuiMgr::SkeletalRecursive(SkeletalPart* Part, string& strSelected, ImGuiTreeNodeFlags baseFlags)
 {
 #ifndef _DEBUG

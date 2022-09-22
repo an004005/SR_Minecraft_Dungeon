@@ -3,6 +3,7 @@
 #include "Terrain.h"
 #include "MapCube.h"
 #include "DynamicCamera.h"
+#include "ImGuiMgr.h"
 #include "Export_Function.h"
 
 CMapToolTest::CMapToolTest(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -43,6 +44,12 @@ _int CMapToolTest::Update_Scene(const _float & fTimeDelta)
 
 		m_dwTime = GetTickCount();
 	}
+
+	ImGui::ShowDemoWindow(nullptr);
+	IM_BEGIN("Map Editor Window");
+	CImGuiMgr::MapControl();
+	IM_END;
+
 	return Engine::CScene::Update_Scene(fTimeDelta);
 }
 
@@ -53,7 +60,6 @@ void CMapToolTest::LateUpdate_Scene(void)
 
 void CMapToolTest::Render_Scene(void)
 {
-
 }
 
 HRESULT CMapToolTest::Ready_Layer_Environment(const _tchar * pLayerTag)

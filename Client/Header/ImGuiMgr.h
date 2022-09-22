@@ -22,6 +22,7 @@ public:
 	static void LoggerWindow();
 	static void Logging(const char* fmt, ...);
 	static void SkeletalEditor(CCamera* pCamera, CSkeletalCube* pSkeletal); // for CSkeletalCube
+	static void MapControl();
 
 private:
 	static void SkeletalRecursive(SkeletalPart* Part, string& strSelected, ImGuiTreeNodeFlags baseFlags);
