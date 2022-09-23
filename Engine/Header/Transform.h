@@ -23,7 +23,7 @@ public:
 		m_vInfo[INFO_POS].z = fZ;
 	}
 
-	void	Set_Y(const _float& fY) { m_vInfo[INFO_POS].y = fY; }
+	void	Set_Height(const _float& fY) { m_vScale.y = fY; m_vInfo[INFO_POS].y += fY; }
 	void	SetRotation(const _vec3& vAngle) { m_vAngle = vAngle; }
 	void	Get_WorldMatrix(_matrix* pWorld) const { *pWorld = m_matWorld; }
 	void	Set_WorldMatrix(_matrix* pWorld) { m_matWorld = *pWorld; }

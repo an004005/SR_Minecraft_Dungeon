@@ -165,6 +165,7 @@ Engine::_vec3 Engine::CCalculator::PickingOnTerrain(HWND hWnd, const CTerrainTex
 	return _vec3(0.f, 0.f, 0.f);
 }
 
+
 CComponent* CCalculator::Clone(void)
 {
 	return new CCalculator(*this);

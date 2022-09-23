@@ -255,7 +255,7 @@ void CImGuiMgr::SkeletalEditor(CCamera* pCamera, CSkeletalCube* pSkeletal)
 	}
 }
 
-void CImGuiMgr::MapControl(_float& floor, _float& Height)
+void CImGuiMgr::MapControl(_float& floor, _float& Height, _int& Index)
 {
 #ifndef _DEBUG
 	return;
@@ -286,7 +286,7 @@ void CImGuiMgr::MapControl(_float& floor, _float& Height)
 			ImGui::AlignTextToFramePadding();
 			ImGui::Text("Set Block Height");
 			ImGui::SameLine();
-			//static int counter2 = 0;
+	
 			float spacing2 = ImGui::GetStyle().ItemInnerSpacing.x;
 			ImGui::PushButtonRepeat(true);
 			if (ImGui::ArrowButton("###left", ImGuiDir_Left)) { Height--; }
@@ -294,13 +294,13 @@ void CImGuiMgr::MapControl(_float& floor, _float& Height)
 			if (ImGui::ArrowButton("###right", ImGuiDir_Right)) { Height++; }
 			ImGui::PopButtonRepeat();
 			ImGui::SameLine();
-			ImGui::Text("%d", Height);
+			ImGui::Text("%1.f", Height);
 		
 
 
 			ImGui::NewLine();
 			ImGui::Text("Set Block Texture");
-
+			ImGui::InputInt("input int", &Index);
 			
 
 			ImGui::EndTabItem();
