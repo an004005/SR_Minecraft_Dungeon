@@ -19,6 +19,9 @@ CInputDev::~CInputDev()
 
 HRESULT CInputDev::Ready_InputDev(HINSTANCE hInst, HWND hWnd)
 {
+	m_hWnd = hWnd;
+	_states.resize(KEY_TYPE_COUNT, KEY_STATE::NONE);
+
 	// DInput 컴객체를 생성하는 함수
 	FAILED_CHECK_RETURN(DirectInput8Create(hInst,
 											DIRECTINPUT_VERSION,
@@ -56,7 +59,41 @@ HRESULT CInputDev::Ready_InputDev(HINSTANCE hInst, HWND hWnd)
 
 void CInputDev::SetUp_InputDev(void)
 {
+	HWND hwnd = ::GetActiveWindow(); //활성창이 아니면 입력 안함
+	if (m_hWnd != hwnd)
+	{
+		for (_uint key = 0; key < KEY_TYPE_COUNT; key++)
+			_states[key] = KEY_STATE::NONE;
+		return;
+	}
+
 	m_pKeyBoard->GetDeviceState(256, m_byKeyState);
+
+	for (_uint key = 0; key < KEY_TYPE_COUNT; key++)
+	{
+		// 키가 눌려 있으면 true
+		if (m_byKeyState[key] & 0x80)
+		{
+			KEY_STATE& state = _states[key];
+
+			// 이전 프레임에 키를 누른 상태라면 PRESS
+			if (state == KEY_STATE::PRESS || state == KEY_STATE::DOWN)
+				state = KEY_STATE::PRESS;
+			else
+				state = KEY_STATE::DOWN;
+		}
+		else
+		{
+			KEY_STATE& state = _states[key];
+
+			// 이전 프레임에 키를 누른 상태라면 UP
+			if (state == KEY_STATE::PRESS || state == KEY_STATE::DOWN)
+				state = KEY_STATE::UP;
+			else
+				state = KEY_STATE::NONE;
+		}
+	}
+
 	m_pMouse->GetDeviceState(sizeof(m_MouseState), &m_MouseState);
 }
 

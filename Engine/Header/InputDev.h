@@ -5,6 +5,21 @@
 
 BEGIN(Engine)
 
+enum class KEY_STATE
+{
+	NONE,
+	PRESS,
+	DOWN,
+	UP,
+	E_END
+};
+
+enum
+{
+	KEY_TYPE_COUNT = static_cast<_int>(UINT8_MAX + 1),
+	KEY_STATE_COUNT = static_cast<_int>(KEY_STATE::E_END),
+};
+
 class ENGINE_DLL CInputDev :	public CBase
 {
 	DECLARE_SINGLETON(CInputDev)
@@ -24,6 +39,13 @@ public:
 		return *(((long*)&m_MouseState) + eMoveState);
 	}
 
+	// 누르고 있을 때
+	bool DIKeyPressing(_ubyte byKeyID) { return _states[byKeyID] == KEY_STATE::PRESS; }
+	// 맨 처음 눌렀을 때
+	bool DIKeyDown(_ubyte byKeyID) { return _states[byKeyID] == KEY_STATE::DOWN; }
+	// 맨 처음 눌렀다 뗐을 때
+	bool DIKeyUp(_ubyte byKeyID) { return _states[byKeyID] == KEY_STATE::UP; }
+
 public:
 	HRESULT			Ready_InputDev(HINSTANCE hInst, HWND hWnd);
 	void			SetUp_InputDev(void);
@@ -37,6 +59,8 @@ private:
 
 	LPDIRECTINPUT8				m_pInputSDK;
 
+	HWND m_hWnd;
+	vector<KEY_STATE> _states;
 public:
 	virtual void		Free(void);
 };

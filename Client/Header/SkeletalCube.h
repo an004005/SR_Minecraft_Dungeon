@@ -11,9 +11,17 @@ struct SkeletalPart
 
 	// components
 	CVIBuffer* pBuf = nullptr;
+	wstring strBufCom;
+	wstring strBufProto;
+
 	_uint iTexIdx = 0;
 	CTexture* pTex = nullptr;
+	wstring strTexCom;
+	wstring strTexProto;
+
 	CTransform* pTrans = nullptr;
+	wstring strTransCom;
+	wstring strTransProto;
 
 	SkeletalPart() { D3DXMatrixIdentity(&matLocal); }
 
@@ -52,7 +60,17 @@ public:
 	virtual void Render_Object() override;
 	virtual void Free() override;
 
-	static CSkeletalCube* Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	_bool AddSkeletalPart(const string& strPart, const string& strParent, const wstring& strBuf, const wstring& strTex, const _uint iTexNum);
+	_bool DeleteSkeletalPart(const string& strPart);
+	static CSkeletalCube* Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrPath = L"");
+
+	void Load(wstring wstrPath);
+	void Save(wstring wstrPath);
+
+private:
+	void SaveRecursive(HANDLE hFile, SkeletalPart* pPart);
+	void DeleteRecursive(const string& strPart);
+
 
 private:
 	static string s_strRoot;

@@ -23,9 +23,7 @@ HRESULT CMainApp::Ready_MainApp(void)
 
 	FAILED_CHECK_RETURN(Ready_Scene(m_pGraphicDev, &m_pManagementClass), E_FAIL);
 
-	Engine::Ready_Input(g_hWnd);
 	// CClientServiceMgr::GetInstance()->ReadyClientService();
-
 
 
 	return S_OK;
@@ -33,7 +31,6 @@ HRESULT CMainApp::Ready_MainApp(void)
 
 _int CMainApp::Update_MainApp(const _float & fTimeDelta)
 {
-	// Engine::Update_Input();
 	Engine::SetUp_InputDev();
 
 	NULL_CHECK_RETURN(m_pManagementClass, -1);

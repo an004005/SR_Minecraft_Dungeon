@@ -36,6 +36,7 @@ inline void AddGameObject(const _tchar* pLayerTag, const _tchar* pObjTag, CGameO
 // ProtoMgr
 inline HRESULT			Ready_Proto(const _tchar* pProtoTag, CComponent* pComponent);
 inline CComponent*		Clone_Proto(const _tchar* pProtoTag);
+inline CComponent*		Find_Proto(const _tchar* pProtoTag);
 
 
 // Renderer

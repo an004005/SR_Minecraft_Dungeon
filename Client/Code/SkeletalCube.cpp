@@ -18,72 +18,14 @@ HRESULT CSkeletalCube::Ready_Object()
 
 	// root
 	m_pRootPart = new SkeletalPart;
-
+	// 루트 부분 수정하지 말기
 	pComponent = m_pRootPart->pTrans = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_TransformCom"));
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_DYNAMIC].insert({ L"Proto_TransformCom_root", pComponent });
+	m_mapComponent[ID_DYNAMIC].insert({L"Proto_TransformCom_root", pComponent});
 	m_pRootPart->strName = s_strRoot;
 	m_mapParts.insert({s_strRoot, m_pRootPart});
-
-	// body
-	SkeletalPart* body = new SkeletalPart;
-
-	pComponent = body->pBuf = dynamic_cast<CCubeTex*>(Clone_Proto(L"Proto_CubeTexCom"));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_STATIC].insert({ L"Proto_CubeTexCom_body", pComponent });
-	
-	pComponent = body->pTex = dynamic_cast<CTexture*>(Clone_Proto(L"Proto_MinecraftCubeTexture"));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_STATIC].insert({ L"Proto_CubeTexture_body", pComponent });
-	              
-	pComponent = body->pTrans = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_TransformCom"));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_STATIC].insert({ L"Proto_TransformCom_body", pComponent });
-	body->iTexIdx = 10;
-	body->pParent = m_pRootPart;
-	body->strName = "body";
-	m_mapParts.insert({"body", body});
-
-	// leg l
-	SkeletalPart* leg_l = new SkeletalPart;
-
-	pComponent = leg_l->pBuf = dynamic_cast<CCubeTex*>(Clone_Proto(L"Proto_CubeTexCom"));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_STATIC].insert({ L"Proto_CubeTexCom_leg_l", pComponent });
-	
-	pComponent = leg_l->pTex = dynamic_cast<CTexture*>(Clone_Proto(L"Proto_MinecraftCubeTexture"));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_STATIC].insert({ L"Proto_CubeTexture_leg_l", pComponent });
-	              
-	pComponent = leg_l->pTrans = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_TransformCom"));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_STATIC].insert({ L"Proto_TransformCom_leg_l", pComponent });
-	leg_l->iTexIdx = 1;
-	leg_l->pParent = body;
-	leg_l->strName = "leg_l";
-	m_mapParts.insert({"leg_l", leg_l});
-
-	SkeletalPart* leg_r = new SkeletalPart;
-
-	pComponent = leg_r->pBuf = dynamic_cast<CCubeTex*>(Clone_Proto(L"Proto_CubeTexCom"));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_STATIC].insert({ L"Proto_CubeTexCom_leg_r", pComponent });
-	
-	pComponent = leg_r->pTex = dynamic_cast<CTexture*>(Clone_Proto(L"Proto_MinecraftCubeTexture"));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_STATIC].insert({ L"Proto_CubeTexture_leg_r", pComponent });
-	              
-	pComponent = leg_r->pTrans = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_TransformCom"));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_STATIC].insert({ L"Proto_TransformCom_leg_r", pComponent });
-	leg_r->iTexIdx = 2;
-	leg_r->pParent = body;
-	leg_r->strName = "leg_r";
-	m_mapParts.insert({"leg_r", leg_r});
-
-	m_pRootPart->vecChild.push_back(body);
-	body->vecChild.push_back(leg_l);
-	body->vecChild.push_back(leg_r);
+	m_pRootPart->strTransProto = L"Proto_TransformCom";
+	m_pRootPart->strTransCom = L"Proto_TransformCom_root";
 
 	return S_OK;
 }
@@ -103,7 +45,7 @@ void CSkeletalCube::LateUpdate_Object()
 
 void CSkeletalCube::Render_Object()
 {
-	for(const auto& Pair : m_mapParts)
+	for (const auto& Pair : m_mapParts)
 	{
 		SkeletalPart* pPart = Pair.second;
 		if (pPart->pBuf != nullptr && pPart->pTex != nullptr)
@@ -126,9 +68,90 @@ void CSkeletalCube::Free()
 	});
 }
 
-CSkeletalCube* CSkeletalCube::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+_bool CSkeletalCube::AddSkeletalPart(const string& strPart, const string& strParent, const wstring& strBuf,
+                                     const wstring& strTex,
+                                     const _uint iTexNum)
 {
-	CSkeletalCube*	pInstance = new CSkeletalCube(pGraphicDev);
+	const auto itr_dup_check = m_mapParts.find(strPart);
+	if (itr_dup_check != m_mapParts.end())
+	{
+		MSG_BOX("strPart is already exist");
+		return false;
+	}
+
+	auto itr_parent = m_mapParts.find(strParent);
+	if (itr_parent == m_mapParts.end())
+	{
+		MSG_BOX("Fail to Find strParent");
+		return false;
+	}
+
+	SkeletalPart* pPart = new SkeletalPart;
+	CComponent* pComponent = nullptr;
+	wstring wstrPart;
+	wstrPart.assign(strPart.begin(), strPart.end());
+
+	pComponent = pPart->pBuf = dynamic_cast<CVIBuffer*>(Clone_Proto(strBuf.c_str()));
+	NULL_CHECK_RETURN(pComponent, false);
+	pPart->strBufCom = strBuf + L"_" + wstrPart;
+	m_mapComponent[ID_STATIC].insert({pPart->strBufCom.c_str(), pComponent});
+	pPart->strBufProto = strBuf;
+
+	pComponent = pPart->pTex = dynamic_cast<CTexture*>(Clone_Proto(strTex.c_str()));
+	NULL_CHECK_RETURN(pComponent, false);
+	pPart->strTexCom = strTex + L"_" + wstrPart;
+	m_mapComponent[ID_STATIC].insert({pPart->strTexCom.c_str(), pComponent});
+	pPart->strTexProto = strTex;
+
+	pComponent = pPart->pTrans = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_TransformCom"));
+	NULL_CHECK_RETURN(pComponent, false);
+	pPart->strTransCom = L"Proto_TransformCom_" + wstrPart;
+	m_mapComponent[ID_STATIC].insert({pPart->strTransCom.c_str(), pComponent});
+	pPart->strTransProto = L"Proto_TransformCom";
+
+	pPart->iTexIdx = iTexNum;
+	pPart->pParent = (*itr_parent).second;
+	pPart->strName = strPart;
+	m_mapParts.insert({strPart, pPart});
+	pPart->pParent->vecChild.push_back(pPart);
+
+	return true;
+}
+
+_bool CSkeletalCube::DeleteSkeletalPart(const string& strPart)
+{
+	auto itr_part = m_mapParts.find(strPart);
+	if (itr_part == m_mapParts.end())
+	{
+		MSG_BOX("Fail to Find strPart");
+		return false;
+	}
+	if (strPart == s_strRoot)
+	{
+		MSG_BOX("Do not delete root");
+		return false;
+	}
+
+	SkeletalPart* pToDelete = (*itr_part).second;
+	SkeletalPart* pParent = pToDelete->pParent;
+	pParent->vecChild.erase(
+		remove_if(pParent->vecChild.begin(), pParent->vecChild.end(),
+		          [strPart](const SkeletalPart* pChild)
+		          {
+			          if (pChild->strName == strPart)
+				          return true;
+			          return false;
+		          }),
+		pParent->vecChild.end());
+
+	DeleteRecursive(strPart);
+
+	return true;
+}
+
+CSkeletalCube* CSkeletalCube::Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrPath)
+{
+	CSkeletalCube* pInstance = new CSkeletalCube(pGraphicDev);
 
 	if (FAILED(pInstance->Ready_Object()))
 	{
@@ -136,5 +159,187 @@ CSkeletalCube* CSkeletalCube::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 		return nullptr;
 	}
 
+	if (!wstrPath.empty())
+		pInstance->Load(wstrPath);
+
 	return pInstance;
+}
+
+void CSkeletalCube::Load(wstring wstrPath)
+{
+	HANDLE hFile = CreateFile(wstrPath.c_str(), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+
+	if (INVALID_HANDLE_VALUE == hFile)
+	{
+		MSG_BOX("Fail to Load SkeletalCube");
+		return;
+	}
+
+	for (auto& child : m_pRootPart->vecChild)
+	{
+		string strChild = child->strName;
+		DeleteRecursive(strChild);
+	}
+	m_pRootPart->vecChild.clear();
+
+
+	DWORD dwByte = 0;
+	DWORD dwStrByte = 0;
+
+	size_t iPartCnt = 0;
+
+	ReadFile(hFile, &iPartCnt, sizeof(size_t), &dwByte, nullptr);
+
+	for (size_t i = 0; i < iPartCnt; ++i)
+	{
+		string strParent;
+		string strPart;
+		wstring wstrBufProto;
+		wstring wstrTexProto;
+
+		_uint iTexNum;
+		_matrix matLocal;
+		_matrix matWorld;
+
+		// read parent
+		ReadFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
+		char szParent[128]{};
+		ReadFile(hFile, szParent, dwStrByte, &dwByte, nullptr);
+		strParent = szParent;
+
+		// read part name
+		ReadFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
+		char szPart[128]{};
+		ReadFile(hFile, szPart, dwStrByte, &dwByte, nullptr);
+		strPart = szPart;
+
+		// read buf proto
+		ReadFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
+		_tchar wszBufProto[128]{};
+		ReadFile(hFile, wszBufProto, dwStrByte, &dwByte, nullptr);
+		wstrBufProto = wszBufProto;
+
+		// read tex proto
+		ReadFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
+		_tchar wszTexProto[128]{};
+		ReadFile(hFile, wszTexProto, dwStrByte, &dwByte, nullptr);
+		wstrTexProto = wszTexProto;
+
+		// read tex num
+		ReadFile(hFile, &iTexNum, sizeof(_uint), &dwByte, nullptr);
+
+		AddSkeletalPart(strPart, strParent, wstrBufProto, wstrTexProto, iTexNum);
+
+		// local, world mat
+		ReadFile(hFile, &matLocal, sizeof(_matrix), &dwByte, nullptr);
+		ReadFile(hFile, &matWorld, sizeof(_matrix), &dwByte, nullptr);
+		
+		const auto itr_part = m_mapParts.find(strPart);
+		if (itr_part != m_mapParts.end())
+		{
+			(*itr_part).second->matLocal = matLocal;
+			(*itr_part).second->pTrans->m_matWorld = matWorld;
+		}
+	}
+
+	CloseHandle(hFile);
+}
+
+void CSkeletalCube::Save(wstring wstrPath)
+{
+	HANDLE hFile = CreateFile(wstrPath.c_str(), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+
+	if (INVALID_HANDLE_VALUE == hFile)
+	{
+		MSG_BOX("Fail to Save SkeletalCube");
+		return;
+	}
+	DWORD dwByte = 0;
+
+	size_t iPartCnt = m_mapParts.size() - 1; // except root
+
+	WriteFile(hFile, &iPartCnt, sizeof(size_t), &dwByte, nullptr);
+
+	for (const auto& child : m_pRootPart->vecChild)
+	{
+		SaveRecursive(hFile, child);
+	}
+
+	CloseHandle(hFile);
+}
+
+void CSkeletalCube::SaveRecursive(HANDLE hFile, SkeletalPart* pPart)
+{
+	DWORD dwByte = 0;
+	DWORD dwStrByte = 0;
+
+	// parent name
+	dwStrByte = (DWORD)pPart->pParent->strName.size();
+	WriteFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
+	WriteFile(hFile, pPart->pParent->strName.c_str(), dwStrByte, &dwByte, nullptr);
+
+	// part name
+	dwStrByte = (DWORD)pPart->strName.size();
+	WriteFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
+	WriteFile(hFile, pPart->strName.c_str(), dwStrByte, &dwByte, nullptr);
+
+	// Buf proto name
+	dwStrByte = (DWORD)pPart->strBufProto.size() * sizeof(_tchar);
+	WriteFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
+	WriteFile(hFile, pPart->strBufProto.c_str(), dwStrByte, &dwByte, nullptr);
+
+	// Tex proto name, idx
+	dwStrByte = (DWORD)pPart->strTexProto.size() * sizeof(_tchar);
+	WriteFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
+	WriteFile(hFile, pPart->strTexProto.c_str(), dwStrByte, &dwByte, nullptr);
+	WriteFile(hFile, &pPart->iTexIdx, sizeof(_uint), &dwByte, nullptr);
+
+	// mat local
+	WriteFile(hFile, &pPart->matLocal, sizeof(_matrix), &dwByte, nullptr);
+
+	// trans world
+	WriteFile(hFile, &pPart->pTrans->m_matWorld, sizeof(_matrix), &dwByte, nullptr);
+
+	for (const auto& child : pPart->vecChild)
+	{
+		SaveRecursive(hFile, child);
+	}
+}
+
+void CSkeletalCube::DeleteRecursive(const string& strPart)
+{
+	auto itr_part = m_mapParts.find(strPart);
+	if (itr_part == m_mapParts.end())
+	{
+		MSG_BOX("Fail to Find strPart");
+		return;
+	}
+	SkeletalPart* pToDelete = (*itr_part).second;
+
+	for (auto& child : pToDelete->vecChild)
+	{
+		string strChild = child->strName;
+		DeleteRecursive(strChild);
+	}
+	pToDelete->vecChild.clear();
+
+
+	pToDelete->pBuf->Release();
+	pToDelete->pTex->Release();
+	pToDelete->pTrans->Release();
+
+	// m_mapComponent[ID_STATIC].erase(pToDelete->strBufCom.c_str());
+	// m_mapComponent[ID_STATIC].erase(pToDelete->strTexCom.c_str());
+	// m_mapComponent[ID_STATIC].erase(pToDelete->strTransCom.c_str());
+
+
+	auto itr = find_if(m_mapComponent[ID_STATIC].begin(), m_mapComponent[ID_STATIC].end(), CTag_Finder(pToDelete->strBufCom.c_str()));
+	m_mapComponent[ID_STATIC].erase(itr);
+	auto itr2 = find_if(m_mapComponent[ID_STATIC].begin(), m_mapComponent[ID_STATIC].end(), CTag_Finder(pToDelete->strTexCom.c_str()));
+	m_mapComponent[ID_STATIC].erase(itr2);
+	auto itr3 = find_if(m_mapComponent[ID_STATIC].begin(), m_mapComponent[ID_STATIC].end(), CTag_Finder(pToDelete->strTransCom.c_str()));
+	m_mapComponent[ID_STATIC].erase(itr3);
+
+	m_mapParts.erase(strPart);
+	delete pToDelete;
 }

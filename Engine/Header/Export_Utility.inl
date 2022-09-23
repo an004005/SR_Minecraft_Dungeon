@@ -46,6 +46,11 @@ inline CComponent*		Clone_Proto(const _tchar* pProtoTag)
 	return CProtoMgr::GetInstance()->Clone_Proto(pProtoTag);
 }
 
+inline CComponent* Find_Proto(const _tchar* pProtoTag)
+{
+	return CProtoMgr::GetInstance()->Find_Proto(pProtoTag);
+}
+
 void		Add_RenderGroup(RENDERID eID, CGameObject* pGameObject)
 {
 	CRenderer::GetInstance()->Add_RenderGroup(eID, pGameObject);

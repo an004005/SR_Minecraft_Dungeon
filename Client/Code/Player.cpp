@@ -28,45 +28,45 @@ Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
 
 	Engine::CGameObject::Update_Object(fTimeDelta);
 
-	if (Engine::GetButton(KEY_TYPE::W))
-	{
-		_vec3 NormalUp;
-		D3DXVec3Normalize(OUT &NormalUp, &m_pTransCom->m_vInfo[INFO_UP]);
-		m_pTransCom->m_vInfo[INFO_POS] += NormalUp * m_fSpeed * fTimeDelta;
-	}
-	else if (Engine::GetButton(KEY_TYPE::S))
-	{
-		_vec3 NormalUp;
-		D3DXVec3Normalize(OUT &NormalUp, &m_pTransCom->m_vInfo[INFO_UP]);
-		m_pTransCom->m_vInfo[INFO_POS] -= NormalUp * m_fSpeed * fTimeDelta;
-	}
-
-	if (Engine::GetButton(KEY_TYPE::A))
-	{
-		m_pTransCom->m_vAngle.z += D3DXToRadian(m_fRotSpeed * fTimeDelta);
-	}
-	else if (Engine::GetButton(KEY_TYPE::D))
-	{
-		m_pTransCom->m_vAngle.z -= D3DXToRadian(m_fRotSpeed * fTimeDelta);
-	}
-
-	if (Engine::GetButton(KEY_TYPE::Q))
-	{
-		m_pTransCom->m_vAngle.y += D3DXToRadian(m_fRotSpeed * fTimeDelta);
-	}
-	else if (Engine::GetButton(KEY_TYPE::E))
-	{
-		m_pTransCom->m_vAngle.y -= D3DXToRadian(m_fRotSpeed * fTimeDelta);
-	}
-
-	if (Engine::GetButton(KEY_TYPE::Z))
-	{
-		m_pTransCom->m_vAngle.x += D3DXToRadian(m_fRotSpeed * fTimeDelta);
-	}
-	else if (Engine::GetButton(KEY_TYPE::C))
-	{
-		m_pTransCom->m_vAngle.x -= D3DXToRadian(m_fRotSpeed * fTimeDelta);
-	}
+	// if (Engine::DIK(KEY_TYPE::W))
+	// {
+	// 	_vec3 NormalUp;
+	// 	D3DXVec3Normalize(OUT &NormalUp, &m_pTransCom->m_vInfo[INFO_UP]);
+	// 	m_pTransCom->m_vInfo[INFO_POS] += NormalUp * m_fSpeed * fTimeDelta;
+	// }
+	// else if (Engine::GetButton(KEY_TYPE::S))
+	// {
+	// 	_vec3 NormalUp;
+	// 	D3DXVec3Normalize(OUT &NormalUp, &m_pTransCom->m_vInfo[INFO_UP]);
+	// 	m_pTransCom->m_vInfo[INFO_POS] -= NormalUp * m_fSpeed * fTimeDelta;
+	// }
+	//
+	// if (Engine::GetButton(KEY_TYPE::A))
+	// {
+	// 	m_pTransCom->m_vAngle.z += D3DXToRadian(m_fRotSpeed * fTimeDelta);
+	// }
+	// else if (Engine::GetButton(KEY_TYPE::D))
+	// {
+	// 	m_pTransCom->m_vAngle.z -= D3DXToRadian(m_fRotSpeed * fTimeDelta);
+	// }
+	//
+	// if (Engine::GetButton(KEY_TYPE::Q))
+	// {
+	// 	m_pTransCom->m_vAngle.y += D3DXToRadian(m_fRotSpeed * fTimeDelta);
+	// }
+	// else if (Engine::GetButton(KEY_TYPE::E))
+	// {
+	// 	m_pTransCom->m_vAngle.y -= D3DXToRadian(m_fRotSpeed * fTimeDelta);
+	// }
+	//
+	// if (Engine::GetButton(KEY_TYPE::Z))
+	// {
+	// 	m_pTransCom->m_vAngle.x += D3DXToRadian(m_fRotSpeed * fTimeDelta);
+	// }
+	// else if (Engine::GetButton(KEY_TYPE::C))
+	// {
+	// 	m_pTransCom->m_vAngle.x -= D3DXToRadian(m_fRotSpeed * fTimeDelta);
+	// }
 
 
 

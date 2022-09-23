@@ -2,6 +2,7 @@
 #include "..\Header\ImGuiMgr.h"
 #include "ImGuizmo.h"
 #include "SkeletalCube.h"
+#include "ImGuiFileDialog.h"
 
 ImGuiTextBuffer CImGuiMgr::s_log;
 
@@ -168,7 +169,7 @@ void CImGuiMgr::LocalTransformEditor(CCamera* pCamera, _matrix& matLocal)
 	GetClientRect(g_hWnd, &rt);
 	POINT lt{rt.left, rt.top};
 	ClientToScreen(g_hWnd, &lt);
-	ImGuizmo::SetRect(lt.x, lt.y, io.DisplaySize.x, io.DisplaySize.y);
+	ImGuizmo::SetRect((_float)lt.x, (_float)lt.y, io.DisplaySize.x, io.DisplaySize.y);
 
 	// ImGuizmo::DrawGrid(pCamera->GetView(), pCamera->GetProj(), matId, 100.f);
 
@@ -213,6 +214,43 @@ void CImGuiMgr::SkeletalEditor(CCamera* pCamera, CSkeletalCube* pSkeletal)
 #endif
 
 	NULL_CHECK(pSkeletal);
+	NULL_CHECK(pCamera);
+
+	if (ImGui::Button("Load Skeletal"))
+	{
+		ImGuiFileDialog::Instance()->OpenDialog("ChooseFileToLoad", "Choose File", ".cube", "../Bin/Resource/SkeletalCube");
+	}
+	if (ImGuiFileDialog::Instance()->Display("ChooseFileToLoad"))
+	{
+		if (ImGuiFileDialog::Instance()->IsOk())
+		{
+			std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+			
+			wstring tmp;
+			tmp.assign(filePathName.begin(), filePathName.end());
+			pSkeletal->Load(tmp);
+		}
+		ImGuiFileDialog::Instance()->Close();
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Save Skeletal"))
+	{
+		ImGuiFileDialog::Instance()->OpenDialog("ChooseFileToSave", "Choose File", ".cube", "../Bin/Resource/SkeletalCube");
+	}
+	if (ImGuiFileDialog::Instance()->Display("ChooseFileToSave"))
+	{
+		if (ImGuiFileDialog::Instance()->IsOk())
+		{
+			std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+			
+			wstring tmp;
+			tmp.assign(filePathName.begin(), filePathName.end());
+			pSkeletal->Save(tmp);
+		}
+		ImGuiFileDialog::Instance()->Close();
+	}
+
+	//////////////////////////////////////////////////
 	static SkeletalPart* pSelectedPart = nullptr;
 	static string strSelected = CSkeletalCube::s_strRoot;
 
@@ -226,7 +264,14 @@ void CImGuiMgr::SkeletalEditor(CCamera* pCamera, CSkeletalCube* pSkeletal)
 	if (itr != pSkeletal->m_mapParts.end())
 		pSelectedPart = (*itr).second;
 
-	ImGui::NewLine();
+	string tmpTex, tmpBuf;
+	tmpTex.assign(pSelectedPart->strTexProto.begin(), pSelectedPart->strTexProto.end());
+	tmpBuf.assign(pSelectedPart->strBufProto.begin(), pSelectedPart->strBufProto.end());
+	ImGui::Text("Texture : %s", tmpTex.c_str());
+	ImGui::Text("Buffer : %s", tmpBuf.c_str());
+
+	//////////////////////////////////////////////////////
+	ImGui::Separator();
 	ImGui::Text("Part Transform");
 	enum TransMode
 	{
@@ -252,6 +297,126 @@ void CImGuiMgr::SkeletalEditor(CCamera* pCamera, CSkeletalCube* pSkeletal)
 		break;
 	default:
 		IM_LOG("Warning : selected TransMode is not valid");
+	}
+
+	//////////////////////////////////////////////////////
+	ImGui::Separator();
+	static wstring strSelectTex;
+	static _uint iSelectTexNum;
+	static wstring strSelectBuf;
+	static char szPartName[16] = "";
+	CImGuiMgr::TextureSelector(strSelectTex, iSelectTexNum);
+	ImGui::Separator();
+	CImGuiMgr::VIBufferSelector(strSelectBuf);
+	if (ImGui::Button("Add Part"))
+	{
+		if (pSelectedPart != nullptr && !strSelectTex.empty() && !strSelectBuf.empty() && strcmp(szPartName, "") != 0)
+		{
+			pSkeletal->AddSkeletalPart(string(szPartName), strSelected, strSelectBuf, strSelectTex, iSelectTexNum);
+		}
+		else
+		{
+			IM_LOG("Warning : Select Part, texture, Part Name and buffer to add");
+		}
+	}
+	ImGui::SameLine();
+	ImGui::InputText("Part Name", &szPartName[0], sizeof(szPartName));
+	if (ImGui::Button("Change Texture Index"))
+	{
+		if (pSelectedPart != nullptr && !strSelectTex.empty())
+		{
+			pSelectedPart->iTexIdx = iSelectTexNum;
+		}
+		else
+		{
+			IM_LOG("Warning : Select Part and Texture to Change");
+		}
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Delete Select Part"))
+	{
+		if (pSelectedPart != nullptr)
+		{
+			pSkeletal->DeleteSkeletalPart(strSelected);
+			strSelected = CSkeletalCube::s_strRoot;
+		}
+		else
+		{
+			IM_LOG("Warning : Select Part to Delete");
+		}
+	}
+}
+
+void CImGuiMgr::TextureSelector(wstring& strTex, _uint& iTexIdx)
+{
+#ifndef _DEBUG
+	return;
+#endif
+
+	ImGui::Text("Texture Selector");
+	static const vector<wstring> vecTexName{
+		L"Proto_CubeTexture",
+		L"Proto_MinecraftCubeTexture"
+	};
+	static vector<_int> vecTexIdx(vecTexName.size(), 0);
+	static size_t iCurIdx = 0;
+
+	if (ImGui::BeginListBox("##1"))
+	{
+		for (size_t i = 0; i < vecTexName.size(); ++i)
+		{
+			CTexture* pTexture = dynamic_cast<CTexture*>(Find_Proto(vecTexName[i].c_str()));
+			NULL_CHECK(pTexture);
+
+			size_t iTexSize = pTexture->GetTexSize();
+			string _TexName;
+			_TexName.assign(vecTexName[i].begin(), vecTexName[i].end());
+
+			const bool bSelected = (iCurIdx == i);
+			if (ImGui::Selectable(_TexName.c_str(), bSelected))
+			{
+				iCurIdx = i;
+				strTex = vecTexName[i];
+				iTexIdx = vecTexIdx[i];
+			}
+
+			if (bSelected)
+			{
+				ImGui::SliderInt("TexIdx", &vecTexIdx[i], 0, static_cast<int>(iTexSize));
+				iTexIdx = vecTexIdx[i];
+				ImGui::SetItemDefaultFocus();
+			}
+		}
+		ImGui::EndListBox();
+	}
+}
+
+void CImGuiMgr::VIBufferSelector(wstring& strBuf)
+{
+	ImGui::Text("VIBuffer Selector");
+	static const vector<wstring> vecBufName{
+		L"Proto_CubeTexCom"
+	};
+	static size_t iCurIdx = 0;
+
+	if (ImGui::BeginListBox("##2"))
+	{
+		for (size_t i = 0; i < vecBufName.size(); ++i)
+		{
+			CVIBuffer* pBuf = dynamic_cast<CVIBuffer*>(Find_Proto(vecBufName[i].c_str()));
+			NULL_CHECK(pBuf);
+
+			string _BufName;
+			_BufName.assign(vecBufName[i].begin(), vecBufName[i].end());
+
+			const bool bSelected = (iCurIdx == i);
+			if (ImGui::Selectable(_BufName.c_str(), bSelected))
+			{
+				iCurIdx = i;
+				strBuf = vecBufName[i];
+			}
+		}
+		ImGui::EndListBox();
 	}
 }
 
