@@ -301,10 +301,35 @@ void CImGuiMgr::MapControl(_float& floor, _float& Height)
 			ImGui::NewLine();
 			ImGui::Text("Set Block Texture");
 
+			ImGui::EndTabItem();
 			
 
-			ImGui::EndTabItem();
+
+			static bool input_step = true;
+			ImGui::Text("Total Block Count :");
+
+			ImGui::Text("----------------------------------------------------");
+
+			static bool c1 = false;
+
+			if (ImGui::Checkbox("Delete This", &c1))
+			{
+				if (c1 == true)
+				{
+					MSG_BOX("button true");
+
+					POINT	pt{};
+
+					GetCursorPos(&pt);
+					ScreenToClient(g_hWnd, &pt);
+				}
+				
+				if (c1 == false)
+					MSG_BOX("button false");
+			}
 		}
+
+		
 
 		if (ImGui::BeginTabItem("Set Rect"))
 		{

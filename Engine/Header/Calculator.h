@@ -23,7 +23,6 @@ public:
 		const _ulong& dwVtxItv = 1);
 
 	_vec3		PickingOnTerrain(HWND hWnd, const CTerrainTex* pTerrainBufferCom, const CTransform* pTerrainTransformCom);
-
 public:
 	virtual CComponent* Clone(void) override;
 	static CCalculator*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
