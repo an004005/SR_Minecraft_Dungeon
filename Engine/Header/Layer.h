@@ -21,7 +21,7 @@ public:
 	void			LateUpdate_Layer(void);
 
 private:
-	multimap<const _tchar*, CGameObject*>			m_mapObject;
+	map<const _tchar*, CGameObject*>			m_mapObject;
 
 public:
 	static CLayer*		Create(void);

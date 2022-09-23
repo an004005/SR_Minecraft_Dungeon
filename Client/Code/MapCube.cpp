@@ -1,12 +1,46 @@
 #include "stdafx.h"
 #include "..\Header\MapCube.h"
-
+#include "MapToolTest.h"
 #include "Export_Function.h"
 
-CMapCube::CMapCube(LPDIRECT3DDEVICE9 pGraphicDev , _float Height)
+CMapCube::CMapCube(LPDIRECT3DDEVICE9 pGraphicDev , _float Height, _int Index, _vec3 PickPos)
 	: Engine::CGameObject(pGraphicDev)
 	, m_fHeight(Height)
+	, m_iIndex(Index)
+	, m_vPickPos(PickPos)
 {
+	_float fP = 0.5f;
+	_float fM = -0.5f;
+
+	vFaceVtx[FACE_LOOK][0] = { fM, fP, fP };
+	vFaceVtx[FACE_LOOK][1] = { fP, fP, fP };
+	vFaceVtx[FACE_LOOK][2] = { fP, fM, fP };
+	vFaceVtx[FACE_LOOK][3] = { fM, fM, fP };
+
+	vFaceVtx[FACE_BACK][0] = { fM, fP, fM };
+	vFaceVtx[FACE_BACK][1] = { fP, fP, fM };
+	vFaceVtx[FACE_BACK][2] = { fP, fM, fM };
+	vFaceVtx[FACE_BACK][3] = { fM, fM, fM };
+
+	vFaceVtx[FACE_RIGHT][0] = { fP, fP, fP };
+	vFaceVtx[FACE_RIGHT][1] = { fP, fM, fP };
+	vFaceVtx[FACE_RIGHT][2] = { fP, fM, fM };
+	vFaceVtx[FACE_RIGHT][3] = { fP, fP, fM };
+
+	vFaceVtx[FACE_LEFT][0] = { fM, fP,  fP };
+	vFaceVtx[FACE_LEFT][1] = { fM, fM,  fP };
+	vFaceVtx[FACE_LEFT][2] = { fM, fM,  fM };
+	vFaceVtx[FACE_LEFT][3] = { fM, fP,  fM };
+
+	vFaceVtx[FACE_UP][0] = { fP, fP, fP };
+	vFaceVtx[FACE_UP][1] = { fP, fP, fM };
+	vFaceVtx[FACE_UP][2] = { fM, fP, fM };
+	vFaceVtx[FACE_UP][3] = { fM, fP, fP };
+
+	vFaceVtx[FACE_DOWN][0] = { fP, fM, fP };
+	vFaceVtx[FACE_DOWN][1] = { fP, fM, fM };
+	vFaceVtx[FACE_DOWN][2] = { fM, fM, fM };
+	vFaceVtx[FACE_DOWN][3] = { fM, fM, fP };
 }
 
 CMapCube::~CMapCube()
@@ -17,10 +51,22 @@ HRESULT CMapCube::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
-	m_pTransCom->Set_Y(m_fHeight);
+	m_pTransCom->Set_Height(m_fHeight);
 
-	_vec3	vPickPos = PickUp_OnTerrain();
-	m_pTransCom->Set_Pos(vPickPos.x, vPickPos.y, vPickPos.z);
+	/*_vec3	vPickPos = PickUp_OnTerrain();
+	m_pTransCom->Set_Pos(vPickPos.x, vPickPos.y, vPickPos.z);*/
+
+	m_pTransCom->Set_Pos(m_vPickPos.x, m_vPickPos.y, m_vPickPos.z);
+	m_pTransCom->Update_Component(0.f);
+
+	for (int i = 0; i < FACE_END; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			D3DXVec3TransformCoord(&vFaceVtx[i][j], &vFaceVtx[i][j], &m_pTransCom->m_matWorld);
+		}
+	}
+	D3DXVec3TransformCoord(&vCenter, &vCenter, &m_pTransCom->m_matWorld);
 
 	return S_OK;
 }
@@ -46,7 +92,7 @@ void CMapCube::Render_Object(void)
 	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	//m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 
-	m_pTextureCom->Set_Texture(2);
+	m_pTextureCom->Set_Texture(m_iIndex);
 	m_pBufferCom->Render_Buffer();
 
 	//m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
@@ -78,9 +124,9 @@ HRESULT CMapCube::Add_Component(void)
 	return S_OK;
 }
 
-CMapCube * CMapCube::Create(LPDIRECT3DDEVICE9 pGraphicDev, _float Height)
+CMapCube * CMapCube::Create(LPDIRECT3DDEVICE9 pGraphicDev, _float Height, _int Index, _vec3 PickPos)
 {
-	CMapCube*	pInstance = new CMapCube(pGraphicDev, Height);
+	CMapCube*	pInstance = new CMapCube(pGraphicDev, Height, Index , PickPos);
 
 	if (FAILED(pInstance->Ready_Object()))
 	{
