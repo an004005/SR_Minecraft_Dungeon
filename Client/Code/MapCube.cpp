@@ -32,6 +32,10 @@ HRESULT CMapCube::Ready_Object(void)
 	if (m_tMapTool.iPickingOption == PICK_TERRAIN)
 	{
 		_vec3	vPickPos = PickUp_OnTerrain();
+
+		if (vPickPos == _vec3(0.f, 0.f, 0.f))
+			return E_FAIL;
+
 		m_pTransCom->Set_Pos(vPickPos.x, vPickPos.y, vPickPos.z);
 		m_pTransCom->Update_Component(0.f);
 	}

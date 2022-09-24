@@ -35,13 +35,13 @@ HRESULT CMapToolTest::Ready_Scene(void)
 
 _int CMapToolTest::Update_Scene(const _float & fTimeDelta)
 {
-	ImGui::ShowDemoWindow(nullptr);
+	//ImGui::ShowDemoWindow(nullptr);
 	IM_BEGIN("Map Editor Window");
-	CImGuiMgr::MapControl(m_tMapTool, *this);
+	CImGuiMgr::MapControl(m_tMapTool, *this, m_vecCube.size());
 	
 	
 	//마우스 피킹 때 MapCube 생성
-	if (Engine::Get_DIMouseState(DIM_LB) & 0X80 && m_dwTime + 500 < GetTickCount())
+	if (Engine::Get_DIMouseState(DIM_LB) & 0X80 && m_dwTime + 200 < GetTickCount())
 	{
 		_vec3 PickPos;
 		CGameObject*		pGameObject = nullptr;
@@ -67,7 +67,8 @@ _int CMapToolTest::Update_Scene(const _float & fTimeDelta)
 
 		case PICK_TERRAIN:
 			pGameObject = pCube = CMapCube::Create(m_pGraphicDev, m_fHeight, m_tMapTool, PickPos);
-			NULL_CHECK_RETURN(pGameObject, E_FAIL);
+			if (pGameObject == nullptr)
+				break;
 
 			pCube->m_wstrName = L"MapCube_" + to_wstring(m_tMapTool.iCubeCount);
 			FAILED_CHECK_RETURN(m_pLayer->Add_GameObject(pCube->m_wstrName.c_str(), pGameObject), E_FAIL);

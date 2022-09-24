@@ -495,7 +495,7 @@ void CImGuiMgr::AnimationEditor(CSkeletalCube* pSkeletal)
 	          ImSequencer::SEQUENCER_ADD | ImSequencer::SEQUENCER_DEL | ImSequencer::SEQUENCER_CHANGE_FRAME);
 }
 
-void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapToolTest& MapToolTest)
+void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapToolTest& MapToolTest, size_t CubeCount)
 {
 #ifndef _DEBUG
 	return;
@@ -516,7 +516,7 @@ void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapToolTest& MapToolTest
 
 			ImGui::Text("Total Block Count :");
 			ImGui::SameLine();
-			ImGui::Text("%d", tMaptool.iCubeCount);
+			ImGui::Text("%d", CubeCount);
 
 			ImGui::RadioButton("Terrain", &tMaptool.iPickingOption, PICK_TERRAIN); ImGui::SameLine();
 			ImGui::RadioButton("Cube", &tMaptool.iPickingOption, PICK_CUBE); ImGui::SameLine();
@@ -552,7 +552,7 @@ void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapToolTest& MapToolTest
 				
 			if (ImGui::Button("Load Map"))		
 			{
-				//On button
+			
 				MapToolTest.LoadMap();
 			}
 
