@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "SkeletalCube.h"
-
+#include "CubeAnimMgr.h"
+#include "GameUtilMgr.h"
+#include "CubeAnimationInstance.h"
 
 string CSkeletalCube::s_strRoot = "root";
 
@@ -27,12 +29,38 @@ HRESULT CSkeletalCube::Ready_Object()
 	m_pRootPart->strTransProto = L"Proto_TransformCom";
 	m_pRootPart->strTransCom = L"Proto_TransformCom_root";
 
+
+	// _matrix tmp1, tmp2;
+	// D3DXMatrixIdentity(&tmp1);
+	// D3DXMatrixRotationZ(&tmp2, D3DXToRadian(90.f));
+	// _vec3 s1, s2;
+	// D3DXQUATERNION q1, q2;
+	// _vec3 v1, v2;
+	//
+	// D3DXMatrixDecompose(&s1, &q1, &v1, &tmp1);
+	// D3DXMatrixDecompose(&s2, &q2, &v2, &tmp2);
+	//
+	// v2 = {1.f, 1.f, 1.f};
+	// s2 = {2.f, 2.f, 2.f};
+	//
+	// m_pCurAnim = new CubeAnimFrame;
+	// m_pCurAnim->fTotalTime = 1.f;
+	// m_pCurAnim->bLoop = true;
+	//
+	// TransFrame f1 = {0.f, s1, q1, v1};
+	// TransFrame f2 = {1.f, s2, q2,v2};
+	// m_pCurAnim->mapFrame.insert({"root", {f1, f2}});
+
 	return S_OK;
 }
 
 _int CSkeletalCube::Update_Object(const _float& fTimeDelta)
 {
 	CGameObject::Update_Object(fTimeDelta);
+
+	AnimFrameConsume(fTimeDelta);
+
+
 	Add_RenderGroup(RENDER_NONALPHA, this);
 
 	return 0;
@@ -45,17 +73,25 @@ void CSkeletalCube::LateUpdate_Object()
 
 void CSkeletalCube::Render_Object()
 {
-	for (const auto& Pair : m_mapParts)
+	m_pRootPart->matParents = m_pRootPart->pTrans->m_matWorld;
+	for (const auto& child : m_pRootPart->vecChild)
 	{
-		SkeletalPart* pPart = Pair.second;
-		if (pPart->pBuf != nullptr && pPart->pTex != nullptr)
-		{
-			_matrix matPartWorld = pPart->GetWorldMat();
-			m_pGraphicDev->SetTransform(D3DTS_WORLD, &matPartWorld);
-			pPart->pTex->Set_Texture(pPart->iTexIdx);
-			pPart->pBuf->Render_Buffer();
-		}
+		RenderObjectRecur(child);
 	}
+}
+
+void CSkeletalCube::RenderObjectRecur(SkeletalPart* pPart)
+{
+	if (pPart->pBuf != nullptr && pPart->pTex != nullptr)
+	{
+		const _matrix matPartWorld = pPart->GetWorldMat();
+		m_pGraphicDev->SetTransform(D3DTS_WORLD, &matPartWorld);
+		pPart->pTex->Set_Texture(pPart->iTexIdx);
+		pPart->pBuf->Render_Buffer();
+	}
+
+	for (const auto& child : pPart->vecChild)
+		RenderObjectRecur(child);
 }
 
 void CSkeletalCube::Free()
@@ -163,6 +199,80 @@ CSkeletalCube* CSkeletalCube::Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstr
 		pInstance->Load(wstrPath);
 
 	return pInstance;
+}
+
+void CSkeletalCube::AnimFrameConsume(_float fTimeDelta)
+{
+#ifdef _DEBUG
+	if (m_bStopAnim)  // for imgui
+		return;
+#endif
+
+	if (m_pCurAnim == nullptr) return;
+
+	fAccTime += fTimeDelta;
+	if (m_pCurAnim->fTotalTime < fAccTime)
+	{
+		fAccTime = 0.f;
+		if (m_pCurAnim->bLoop == false) // loop 가 아니면 다 실행하고 loop로 변경
+		{
+			m_pCurAnim = m_pAnimInst->GetCurrentLoopAnim();
+			m_pCurAnim->bLoop = true;
+			return;
+		}
+	}
+
+	for (const auto& Part : m_mapParts)
+	{
+		auto itr_frame = m_pCurAnim->mapFrame.find(Part.second->strName);
+		if (itr_frame == m_pCurAnim->mapFrame.end())
+			continue;
+
+		vector<TransFrame>& vecTransFrame = itr_frame->second;
+
+		const TransFrame* pPrevFrame = nullptr;
+		const TransFrame* pNextFrame = nullptr;
+		
+		for (auto& frame : vecTransFrame)
+		{
+			const _float fTime = frame.fTime;
+			if (fTime < fAccTime)
+			{
+				pPrevFrame = &frame;
+			}
+			else if (fTime > fAccTime)
+			{
+				pNextFrame = &frame;
+				break;
+			}
+		}
+		if (pPrevFrame == nullptr)
+			continue;
+		if (pNextFrame == nullptr)
+		{
+			CGameUtilMgr::MatWorldCompose(
+				OUT Part.second->pTrans->m_matWorld,
+				pPrevFrame->vScale,
+				pPrevFrame->qRot,
+				pPrevFrame->vPos);
+			continue;
+		}
+		
+		const _float fS = (fAccTime - pPrevFrame->fTime) / (pNextFrame->fTime - pPrevFrame->fTime);
+		TransFrameLerp(
+			OUT Part.second->pTrans->m_matWorld, 
+			*pPrevFrame, 
+			*pNextFrame, 
+			fS);
+	}
+}
+
+void CSkeletalCube::PlayAnimationOnce(const string& strAnim)
+{
+	fAccTime = 0.f;
+	m_pCurAnim = CCubeAnimMgr::GetInstance()->GetAnim(strAnim);
+	m_pCurAnim->bLoop = false;
+	// std::sort(m_pCurAnim..begin(), vecFrame.end());
 }
 
 void CSkeletalCube::Load(wstring wstrPath)
@@ -323,15 +433,9 @@ void CSkeletalCube::DeleteRecursive(const string& strPart)
 	}
 	pToDelete->vecChild.clear();
 
-
 	pToDelete->pBuf->Release();
 	pToDelete->pTex->Release();
 	pToDelete->pTrans->Release();
-
-	// m_mapComponent[ID_STATIC].erase(pToDelete->strBufCom.c_str());
-	// m_mapComponent[ID_STATIC].erase(pToDelete->strTexCom.c_str());
-	// m_mapComponent[ID_STATIC].erase(pToDelete->strTransCom.c_str());
-
 
 	auto itr = find_if(m_mapComponent[ID_STATIC].begin(), m_mapComponent[ID_STATIC].end(), CTag_Finder(pToDelete->strBufCom.c_str()));
 	m_mapComponent[ID_STATIC].erase(itr);
@@ -342,4 +446,26 @@ void CSkeletalCube::DeleteRecursive(const string& strPart)
 
 	m_mapParts.erase(strPart);
 	delete pToDelete;
+}
+
+void CSkeletalCube::TransFrameLerp(_matrix& matOut, const TransFrame& PrevFrame, const TransFrame& NextFrame,
+	const _float fS)
+{
+	const _vec3 vPrevScale = PrevFrame.vScale;
+	const D3DXQUATERNION qPrevQuat = PrevFrame.qRot;
+	const _vec3 vPrevPos = PrevFrame.vPos;
+
+	const _vec3 vNextScale = NextFrame.vScale;
+	const D3DXQUATERNION qNextQuat = NextFrame.qRot;
+	const _vec3 vNextPos = NextFrame.vPos;
+
+	_vec3 vLerpScale = vPrevScale;
+	D3DXQUATERNION qLerpQuat = qPrevQuat;
+	_vec3 vLerpPos = vPrevPos;
+
+	D3DXVec3Lerp(&vLerpScale, &vPrevScale, &vNextScale, fS);
+	D3DXQuaternionSlerp(&qLerpQuat, &qPrevQuat, &qNextQuat, fS);
+	D3DXVec3Lerp(&vLerpPos, &vPrevPos, &vNextPos, fS);
+
+	CGameUtilMgr::MatWorldCompose(matOut, vLerpScale, qLerpQuat, vLerpPos);
 }

@@ -24,6 +24,7 @@ public:
 	static void SkeletalEditor(CCamera* pCamera, CSkeletalCube* pSkeletal); // for CSkeletalCube
 	static void TextureSelector(wstring& strTex, _uint& iTexIdx);
 	static void VIBufferSelector(wstring& strBuf);
+	static void AnimationEditor(CSkeletalCube* pSkeletal);
 
 
 private:
@@ -31,5 +32,7 @@ private:
 
 private:
 	static ImGuiTextBuffer s_log;
+	static SkeletalPart* s_SelectedPart; // for AnimationEditor
+
 
 };

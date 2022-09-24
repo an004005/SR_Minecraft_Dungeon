@@ -1,6 +1,8 @@
 #pragma once
 #include "GameObject.h"
 
+class CCubeAnimationInstance;
+
 struct SkeletalPart
 {
 	// info
@@ -23,27 +25,36 @@ struct SkeletalPart
 	wstring strTransCom;
 	wstring strTransProto;
 
-	SkeletalPart() { D3DXMatrixIdentity(&matLocal); }
+	_matrix matParents;
 
-	// todo 같은 부모의 world 공유로 최적화
-	_matrix GetParentsWorldMat() const 
+	SkeletalPart() { D3DXMatrixIdentity(&matLocal); D3DXMatrixIdentity(&matParents); }
+
+	_matrix GetWorldMat()
 	{
-		_matrix matParentsWorld;
-		D3DXMatrixIdentity(&matParentsWorld);
-		const SkeletalPart* pTmpParent = pParent;
-		while (pTmpParent != nullptr)
-		{
-			matParentsWorld = matParentsWorld * pTmpParent->pTrans->m_matWorld;
-			pTmpParent = pTmpParent->pParent;
-		}
-
-		return matParentsWorld;
+		matParents = pTrans->m_matWorld * pParent->matParents;
+		return matLocal *  matParents;
 	}
+};
 
-	_matrix GetWorldMat() const
-	{
-		return matLocal *  pTrans->m_matWorld * GetParentsWorldMat();
-	}
+// _float 시간에 맞는 scale, rot, pos 저장
+struct TransFrame
+{
+	_float fTime = 0.f;
+	_vec3 vScale;
+	D3DXQUATERNION qRot;
+	_vec3 vPos;
+
+	TransFrame() = default;
+	TransFrame(_float fTime, _vec3 vScale, D3DXQUATERNION qRot, _vec3 vPos)
+		: fTime(fTime), vScale(vScale), qRot(qRot), vPos(vPos) {}
+};
+
+struct CubeAnimFrame
+{
+	_bool bLoop = false;			// 반복 여부
+	_float fTotalTime = 0.f;		// 총 재생 시간
+	// part이름,     part의 시간별 transform정보
+	map<string, vector<TransFrame>> mapFrame; // (float기준으로 정렬상태여야 한다.)
 };
 
 class CSkeletalCube : public CGameObject
@@ -58,23 +69,37 @@ public:
 	virtual _int Update_Object(const _float& fTimeDelta) override;
 	virtual void LateUpdate_Object() override;
 	virtual void Render_Object() override;
+	virtual void RenderObjectRecur(SkeletalPart* pPart);
 	virtual void Free() override;
+
 
 	_bool AddSkeletalPart(const string& strPart, const string& strParent, const wstring& strBuf, const wstring& strTex, const _uint iTexNum);
 	_bool DeleteSkeletalPart(const string& strPart);
 	static CSkeletalCube* Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrPath = L"");
 
-	void Load(wstring wstrPath);
-	void Save(wstring wstrPath);
+	virtual void AnimFrameConsume(_float fTimeDelta);
+	virtual void PlayAnimationOnce(const string& strAnim);
+
+	virtual void Load(wstring wstrPath);
+	virtual void Save(wstring wstrPath);
+
 
 private:
-	void SaveRecursive(HANDLE hFile, SkeletalPart* pPart);
-	void DeleteRecursive(const string& strPart);
+	virtual void SaveRecursive(HANDLE hFile, SkeletalPart* pPart);
+	virtual void DeleteRecursive(const string& strPart);
+	static void TransFrameLerp(_matrix& matOut, const TransFrame& PrevFrame, const TransFrame& NextFrame, const _float fS);
 
 
 private:
 	static string s_strRoot;
 
+	// buffer, tex, trans com
 	SkeletalPart* m_pRootPart = nullptr;
 	map<string, SkeletalPart*> m_mapParts;
+
+	// animation com
+	CCubeAnimationInstance* m_pAnimInst = nullptr;
+	CubeAnimFrame* m_pCurAnim = nullptr;
+	_float fAccTime = 0.f;	  // 애니메이션 현재 시간
+	_bool m_bStopAnim = false;
 };

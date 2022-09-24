@@ -3,8 +3,10 @@
 #include "ImGuizmo.h"
 #include "SkeletalCube.h"
 #include "ImGuiFileDialog.h"
+#include "ImSequencerImpl.h"
 
 ImGuiTextBuffer CImGuiMgr::s_log;
+SkeletalPart* CImGuiMgr::s_SelectedPart = nullptr;
 
 void CImGuiMgr::TransformEditor(CCamera* pCamera, CTransform* pTransform)
 {
@@ -82,7 +84,7 @@ void CImGuiMgr::TransformEditor(CCamera* pCamera, CTransform* pTransform)
 	GetClientRect(g_hWnd, &rt);
 	POINT lt{rt.left, rt.top};
 	ClientToScreen(g_hWnd, &lt);
-	ImGuizmo::SetRect(lt.x, lt.y, io.DisplaySize.x, io.DisplaySize.y);
+	ImGuizmo::SetRect((_float)lt.x, (_float)lt.y, io.DisplaySize.x, io.DisplaySize.y);
 
 	// ImGuizmo::DrawGrid(m_pCam->GetView(), m_pCam->GetPrj(), matId, 100.f);
 
@@ -218,14 +220,15 @@ void CImGuiMgr::SkeletalEditor(CCamera* pCamera, CSkeletalCube* pSkeletal)
 
 	if (ImGui::Button("Load Skeletal"))
 	{
-		ImGuiFileDialog::Instance()->OpenDialog("ChooseFileToLoad", "Choose File", ".cube", "../Bin/Resource/SkeletalCube");
+		ImGuiFileDialog::Instance()->OpenDialog("ChooseFileToLoad", "Choose File", ".cube",
+		                                        "../Bin/Resource/SkeletalCube");
 	}
 	if (ImGuiFileDialog::Instance()->Display("ChooseFileToLoad"))
 	{
 		if (ImGuiFileDialog::Instance()->IsOk())
 		{
 			std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-			
+
 			wstring tmp;
 			tmp.assign(filePathName.begin(), filePathName.end());
 			pSkeletal->Load(tmp);
@@ -235,14 +238,15 @@ void CImGuiMgr::SkeletalEditor(CCamera* pCamera, CSkeletalCube* pSkeletal)
 	ImGui::SameLine();
 	if (ImGui::Button("Save Skeletal"))
 	{
-		ImGuiFileDialog::Instance()->OpenDialog("ChooseFileToSave", "Choose File", ".cube", "../Bin/Resource/SkeletalCube");
+		ImGuiFileDialog::Instance()->OpenDialog("ChooseFileToSave", "Choose File", ".cube",
+		                                        "../Bin/Resource/SkeletalCube");
 	}
 	if (ImGuiFileDialog::Instance()->Display("ChooseFileToSave"))
 	{
 		if (ImGuiFileDialog::Instance()->IsOk())
 		{
 			std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-			
+
 			wstring tmp;
 			tmp.assign(filePathName.begin(), filePathName.end());
 			pSkeletal->Save(tmp);
@@ -345,6 +349,8 @@ void CImGuiMgr::SkeletalEditor(CCamera* pCamera, CSkeletalCube* pSkeletal)
 			IM_LOG("Warning : Select Part to Delete");
 		}
 	}
+
+	s_SelectedPart = pSelectedPart; // for AnimationEditor
 }
 
 void CImGuiMgr::TextureSelector(wstring& strTex, _uint& iTexIdx)
@@ -418,6 +424,74 @@ void CImGuiMgr::VIBufferSelector(wstring& strBuf)
 		}
 		ImGui::EndListBox();
 	}
+}
+
+void CImGuiMgr::AnimationEditor(CSkeletalCube* pSkeletal)
+{
+#ifndef _DEBUG
+	return;
+#endif
+
+	ImGui::Text("60 frame = 1 sec / only use world transform");
+	static CImSequencerImpl mySequence;
+	static bool bOnce = true;
+	if (bOnce)
+	{
+		pSkeletal->m_pCurAnim = &mySequence.m_CubeAnim;
+		mySequence.m_CubeAnim.bLoop = true;
+		mySequence.m_iFrameMin = 0;
+		mySequence.m_iFrameMax = 100;
+		bOnce = false;
+	}
+
+	static int selectedEntry = -1;
+	static int firstFrame = 0;
+	static bool expanded = true;
+	static int currentFrame = 0;
+	static char szPartName[128];
+
+	if (mySequence.m_iFrameMin < 0)
+		mySequence.m_iFrameMin = 0;
+
+	if (pSkeletal->m_bStopAnim == false)
+	{
+		currentFrame = static_cast<int>(pSkeletal->fAccTime * 60.f); // 60 frame == 1 sec
+	}
+	else
+	{
+		pSkeletal->fAccTime = (_float)currentFrame / 60.f;
+	}
+
+	mySequence.m_CubeAnim.fTotalTime = (_float)mySequence.m_iFrameMax / 60.f;
+
+	ImGui::PushItemWidth(130);
+	ImGui::InputInt("Frame Min", &mySequence.m_iFrameMin);
+	ImGui::SameLine();
+	ImGui::InputInt("Frame ", &currentFrame);
+	ImGui::SameLine();
+	ImGui::InputInt("Frame Max", &mySequence.m_iFrameMax);
+	ImGui::InputText("PartName", szPartName, 128);
+	ImGui::SameLine();
+	if (ImGui::Button("Add Part"))
+	{
+		mySequence.AddPart(szPartName);
+	}
+	if (ImGui::Button("Play"))
+	{
+		pSkeletal->m_bStopAnim = !pSkeletal->m_bStopAnim;
+	}
+	if (ImGui::Button("Add Selected Part Trans"))
+	{
+		mySequence.AddTransFrame(currentFrame, s_SelectedPart);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Add All Part Trans"))
+	{
+		
+	}
+	ImGui::PopItemWidth();
+	Sequencer(&mySequence, &currentFrame, &expanded, &selectedEntry, &firstFrame,
+	          ImSequencer::SEQUENCER_ADD | ImSequencer::SEQUENCER_DEL | ImSequencer::SEQUENCER_CHANGE_FRAME);
 }
 
 void CImGuiMgr::SkeletalRecursive(SkeletalPart* Part, string& strSelected, ImGuiTreeNodeFlags baseFlags)

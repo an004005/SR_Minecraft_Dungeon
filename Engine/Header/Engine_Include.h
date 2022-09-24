@@ -13,6 +13,8 @@
 #include <iostream>
 #include <process.h>
 #include <fstream>
+#include <array>
+#include <tuple>
 
 #define DIRECTINPUT_VERSION	0x0800
 #include <dinput.h>

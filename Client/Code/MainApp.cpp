@@ -4,6 +4,7 @@
 #include "ImGuiMgr.h"
 #include "Logo.h"
 #include "ToolTest.h"
+#include "CubeAnimMgr.h"
 
 USING(Engine)
 CMainApp::CMainApp()	
@@ -118,6 +119,9 @@ HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 * ppGraphicDev)
     ImGui_ImplWin32_Init(g_hWnd);
     ImGui_ImplDX9_Init(m_pGraphicDev);
 
+	// mgr
+	CCubeAnimMgr::GetInstance();
+
 	return S_OK;
 }
 
@@ -154,6 +158,8 @@ void CMainApp::Free(void)
     ImGui_ImplDX9_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
+
+	CCubeAnimMgr::GetInstance()->DestroyInstance();
 
 	Safe_Release(m_pGraphicDev);
 	Safe_Release(m_pDeviceClass);
