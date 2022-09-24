@@ -19,6 +19,7 @@ public:
 	HRESULT			Ready_Layer(void);
 	_int			Update_Layer(const _float& fTimeDelta);
 	void			LateUpdate_Layer(void);
+	HRESULT			Delete_GameObject(const _tchar* pObjTag);
 
 private:
 	map<const _tchar*, CGameObject*>			m_mapObject;

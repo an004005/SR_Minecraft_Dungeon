@@ -56,6 +56,25 @@ void CLayer::LateUpdate_Layer(void)
 		iter.second->LateUpdate_Object();
 }
 
+HRESULT CLayer::Delete_GameObject(const _tchar * pObjTag)
+{
+	auto	iter = find_if(m_mapObject.begin(), m_mapObject.end(), CTag_Finder(pObjTag));
+
+	if (iter == m_mapObject.end())
+		return E_FAIL;
+
+	_ulong dwCnt = 0;
+
+	dwCnt = iter->second->Release();
+
+	if (dwCnt == 0)
+		iter->second = nullptr;
+	
+	m_mapObject.erase(iter);
+	
+	return S_OK;
+}
+
 CLayer* CLayer::Create(void)
 {
 	CLayer*	pLayer = new CLayer;

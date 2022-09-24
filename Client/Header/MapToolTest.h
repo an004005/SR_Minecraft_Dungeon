@@ -17,12 +17,16 @@ public:
 	virtual void Render_Scene(void) override;
 
 public:
-	_vec3			PickingOnCube(HWND hWnd);
+	_bool			PickingOnCube(_vec3& CubeCenter);
 
 private:
 	HRESULT			Ready_Layer_Environment(const _tchar* pLayerTag);
 	HRESULT			Ready_Proto(void);
+	void			Creat_Cube(_matrix& CubeWorld, MapTool& tMapTool);
 
+public:
+	void			SaveMap();
+	void			LoadMap();
 
 public:
 	static CMapToolTest*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
@@ -31,13 +35,11 @@ private:
 	DWORD			m_dwTime = GetTickCount();
 	CLayer*			m_pLayer = nullptr;
 	_float			m_fHeight = 1.f;
-	_float			m_fFloor = 1.f;
-	_int			m_iIndex = 0;
-	_int			m_iCubeCount = 0;
+	MapTool			m_tMapTool;
+	wstring			m_wDeleteName;
 
 	vector<CMapCube*> m_vecCube;
-public:
-	_vec3 PickPos;
+
 private:
 	virtual void	Free(void);
 };

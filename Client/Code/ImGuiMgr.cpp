@@ -2,6 +2,7 @@
 #include "..\Header\ImGuiMgr.h"
 #include "ImGuizmo.h"
 #include "SkeletalCube.h"
+#include "MapToolTest.h"
 
 ImGuiTextBuffer CImGuiMgr::s_log;
 
@@ -255,7 +256,7 @@ void CImGuiMgr::SkeletalEditor(CCamera* pCamera, CSkeletalCube* pSkeletal)
 	}
 }
 
-void CImGuiMgr::MapControl(_float& floor, _float& Height, _int& Index)
+void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapToolTest& MapToolTest)
 {
 #ifndef _DEBUG
 	return;
@@ -266,70 +267,26 @@ void CImGuiMgr::MapControl(_float& floor, _float& Height, _int& Index)
 	{
 		if (ImGui::BeginTabItem("Set Block"))
 		{
-			
-			ImGui::AlignTextToFramePadding();
-			ImGui::Text("Set Block Floor");
-			ImGui::SameLine();
-			static int counter1 = 0;
-			float spacing1 = ImGui::GetStyle().ItemInnerSpacing.x;
-			ImGui::PushButtonRepeat(true);
-			if (ImGui::ArrowButton("##left", ImGuiDir_Left)) { counter1--; }
-			ImGui::SameLine(0.0f, spacing1);
-			if (ImGui::ArrowButton("##right", ImGuiDir_Right)) { counter1++; }
-			ImGui::PopButtonRepeat();
-			ImGui::SameLine();
-			ImGui::Text("%d", counter1);
 
-
-			ImGui::NewLine();
-
-			ImGui::AlignTextToFramePadding();
-			ImGui::Text("Set Block Height");
-			ImGui::SameLine();
-			
-			float spacing2 = ImGui::GetStyle().ItemInnerSpacing.x;
-			ImGui::PushButtonRepeat(true);
-			if (ImGui::ArrowButton("###left", ImGuiDir_Left)) { Height--; }
-			ImGui::SameLine(0.0f, spacing2);
-			if (ImGui::ArrowButton("###right", ImGuiDir_Right)) { Height++; }
-			ImGui::PopButtonRepeat();
-			ImGui::SameLine();
-			ImGui::Text("%d", Height);
-		
-
-
-			ImGui::NewLine();
 			ImGui::Text("Set Block Texture");
+			ImGui::InputInt("input Index", &tMaptool.iTexIdx);
 
-			ImGui::EndTabItem();
-			
+			ImGui::NewLine();
 
 
-			static bool input_step = true;
+
 			ImGui::Text("Total Block Count :");
+			ImGui::SameLine();
+			ImGui::Text("%d", tMaptool.iCubeCount);
 
-			ImGui::Text("----------------------------------------------------");
-
-			static bool c1 = false;
-
-			if (ImGui::Checkbox("Delete This", &c1))
-			{
-				if (c1 == true)
-				{
-					MSG_BOX("button true");
-
-					POINT	pt{};
-
-					GetCursorPos(&pt);
-					ScreenToClient(g_hWnd, &pt);
-				}
-				
-				if (c1 == false)
-					MSG_BOX("button false");
-			}
-		}
+			ImGui::RadioButton("Terrain", &tMaptool.iPickingOption, PICK_TERRAIN); ImGui::SameLine();
+			ImGui::RadioButton("Cube", &tMaptool.iPickingOption, PICK_CUBE); ImGui::SameLine();
+			ImGui::RadioButton("Delete", &tMaptool.iPickingOption, PICK_DELETE); ImGui::SameLine();
 
 		
+		
+			ImGui::EndTabItem();
+		}
 
 		if (ImGui::BeginTabItem("Set Rect"))
 		{
@@ -347,7 +304,18 @@ void CImGuiMgr::MapControl(_float& floor, _float& Height, _int& Index)
 
 		if (ImGui::BeginTabItem("Save / Load"))
 		{
-			ImGui::Text("Main");
+			
+			if (ImGui::Button("Save Map"))
+			{
+				MapToolTest.SaveMap();
+
+			}
+				
+			if (ImGui::Button("Load Map"))		
+			{
+				//On button
+				MapToolTest.LoadMap();
+			}
 
 			ImGui::EndTabItem();
 		}

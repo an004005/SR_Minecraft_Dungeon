@@ -23,17 +23,11 @@ namespace Engine
 
 	enum MOUSEMOVESTATE { DIMS_X, DIMS_Y,DIMS_Z,  DIMS_END }; 
 
+	//Maptool enums
+	enum CubeFace {	FACE_LOOK,	FACE_BACK,	FACE_LEFT,	FACE_RIGHT,	FACE_UP, FACE_DOWN,	FACE_END};
 
-	enum CubeFace
-	{
-		FACE_LOOK,
-		FACE_BACK,
-		FACE_LEFT,
-		FACE_RIGHT,
-		FACE_UP,
-		FACE_DOWN,
-		FACE_END
-	};
+	enum PICKOPTION { PICK_TERRAIN, PICK_CUBE, PICK_DELETE, PICK_END};
+	/////////////////////////////////////////////////////////////////
 }
 
 #endif // Engine_Enum_h__
