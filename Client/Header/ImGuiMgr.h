@@ -12,6 +12,7 @@
 
 
 class CSkeletalCube;
+class CMapToolTest;
 struct SkeletalPart;
 
 class CImGuiMgr
@@ -25,6 +26,7 @@ public:
 	static void TextureSelector(wstring& strTex, _uint& iTexIdx);
 	static void VIBufferSelector(wstring& strBuf);
 	static void AnimationEditor(CSkeletalCube* pSkeletal);
+	static void MapControl(Engine::MapTool& sMaptool, CMapToolTest& MapToolTest);
 
 
 private:

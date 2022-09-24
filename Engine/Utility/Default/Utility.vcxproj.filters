@@ -46,6 +46,9 @@
     <Filter Include="00. Component\02. Texture">
       <UniqueIdentifier>{e247e3c6-d534-4896-87f7-50727d976c71}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00. Component\03. Calculator">
+      <UniqueIdentifier>{44c9bb9f-c04c-432a-9d34-b303331c51ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Header\TriCol.h">
@@ -99,6 +102,9 @@
     <ClInclude Include="..\..\Header\CubeTex.h">
       <Filter>00. Component\00. VIBuffer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Header\Calculator.h">
+      <Filter>00. Component\03. Calculator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\TriCol.cpp">
@@ -148,6 +154,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\CubeTex.cpp">
       <Filter>00. Component\00. VIBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Calculator.cpp">
+      <Filter>00. Component\03. Calculator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

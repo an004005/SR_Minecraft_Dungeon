@@ -47,6 +47,12 @@
     <Filter Include="Animation">
       <UniqueIdentifier>{1b64abcb-a7b9-4030-b6c5-c3e564bc440b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Scene\MapToolTest">
+      <UniqueIdentifier>{1385fa4b-4f42-4f68-b1e9-221568eecdb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\04. MapCube">
+      <UniqueIdentifier>{ca29e199-0f6d-4818-ae09-7431ccba8a2c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\MainApp.h">
@@ -161,6 +167,12 @@
       <Filter>Animation</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\CubeAnimationInstance.h" />
+    <ClInclude Include="..\Header\MapToolTest.h">
+      <Filter>01. Scene\MapToolTest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\MapCube.h">
+      <Filter>02. GameObject\04. MapCube</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\MainApp.cpp">
@@ -260,6 +272,12 @@
       <Filter>Animation</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\CubeAnimationInstance.cpp" />
+    <ClCompile Include="..\Code\MapToolTest.cpp">
+      <Filter>01. Scene\MapToolTest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MapCube.cpp">
+      <Filter>02. GameObject\04. MapCube</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">

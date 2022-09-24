@@ -4,6 +4,7 @@
 #include "SkeletalCube.h"
 #include "ImGuiFileDialog.h"
 #include "ImSequencerImpl.h"
+#include "MapToolTest.h"
 
 ImGuiTextBuffer CImGuiMgr::s_log;
 SkeletalPart* CImGuiMgr::s_SelectedPart = nullptr;
@@ -492,6 +493,76 @@ void CImGuiMgr::AnimationEditor(CSkeletalCube* pSkeletal)
 	ImGui::PopItemWidth();
 	Sequencer(&mySequence, &currentFrame, &expanded, &selectedEntry, &firstFrame,
 	          ImSequencer::SEQUENCER_ADD | ImSequencer::SEQUENCER_DEL | ImSequencer::SEQUENCER_CHANGE_FRAME);
+}
+
+void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapToolTest& MapToolTest)
+{
+#ifndef _DEBUG
+	return;
+#endif
+	ImGui::Separator();
+
+	if (ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None))
+	{
+		if (ImGui::BeginTabItem("Set Block"))
+		{
+
+			ImGui::Text("Set Block Texture");
+			ImGui::InputInt("input Index", &tMaptool.iTexIdx);
+
+			ImGui::NewLine();
+
+
+
+			ImGui::Text("Total Block Count :");
+			ImGui::SameLine();
+			ImGui::Text("%d", tMaptool.iCubeCount);
+
+			ImGui::RadioButton("Terrain", &tMaptool.iPickingOption, PICK_TERRAIN); ImGui::SameLine();
+			ImGui::RadioButton("Cube", &tMaptool.iPickingOption, PICK_CUBE); ImGui::SameLine();
+			ImGui::RadioButton("Delete", &tMaptool.iPickingOption, PICK_DELETE); ImGui::SameLine();
+
+		
+		
+			ImGui::EndTabItem();
+		}
+
+		if (ImGui::BeginTabItem("Set Rect"))
+		{
+			ImGui::Text("holl");
+
+			ImGui::EndTabItem();
+		}
+
+		if (ImGui::BeginTabItem("Set Element"))
+		{
+			ImGui::Text("checkyt");
+
+			ImGui::EndTabItem();
+		}
+
+		if (ImGui::BeginTabItem("Save / Load"))
+		{
+			
+			if (ImGui::Button("Save Map"))
+			{
+				MapToolTest.SaveMap();
+
+			}
+				
+			if (ImGui::Button("Load Map"))		
+			{
+				//On button
+				MapToolTest.LoadMap();
+			}
+
+			ImGui::EndTabItem();
+		}
+
+		ImGui::EndTabBar();
+	}
+
+	
 }
 
 void CImGuiMgr::SkeletalRecursive(SkeletalPart* Part, string& strSelected, ImGuiTreeNodeFlags baseFlags)
