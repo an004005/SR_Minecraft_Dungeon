@@ -23,12 +23,18 @@ public:
 	static void LoggerWindow();
 	static void Logging(const char* fmt, ...);
 	static void SkeletalEditor(CCamera* pCamera, CSkeletalCube* pSkeletal); // for CSkeletalCube
+	static void TextureSelector(wstring& strTex, _uint& iTexIdx);
+	static void VIBufferSelector(wstring& strBuf);
+	static void AnimationEditor(CSkeletalCube* pSkeletal);
 	static void MapControl(Engine::MapTool& sMaptool, CMapToolTest& MapToolTest);
+
 
 private:
 	static void SkeletalRecursive(SkeletalPart* Part, string& strSelected, ImGuiTreeNodeFlags baseFlags);
 
 private:
 	static ImGuiTextBuffer s_log;
-};
+	static SkeletalPart* s_SelectedPart; // for AnimationEditor
 
+
+};

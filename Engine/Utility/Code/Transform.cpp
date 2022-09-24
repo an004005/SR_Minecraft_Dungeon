@@ -107,19 +107,6 @@ _int CTransform::Update_Component(const _float & fTimeDelta)
 	return 0;
 }
 
-void CTransform::QuatToPitchYawRoll(const D3DXQUATERNION& q, _float& pitch, _float& yaw, _float& roll)
-{
-	// to radian version
-	_float sqw = q.w * q.w;
-	_float sqx = q.x * q.x;
-	_float sqy = q.y * q.y;
-	_float sqz = q.z * q.z;
-
-	pitch = asinf(2.f * (q.w * q.x - q.y * q.z));
-	yaw = atan2f(2.f * (q.x * q.z + q.w * q.y), (-sqx - sqy + sqz + sqw));
-	roll = atan2f(2.f * (q.x * q.y + q.w * q.z), (-sqx + sqy - sqz + sqw));
-}
-
 CTransform * CTransform::Create(void)
 {
 	CTransform* pInstance = new CTransform;

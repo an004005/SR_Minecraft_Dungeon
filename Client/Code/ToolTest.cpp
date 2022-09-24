@@ -30,7 +30,7 @@ HRESULT CToolTest::Ready_Scene()
 	pGameObject = m_pCam = CDynamicCamera::Create(m_pGraphicDev, &_vec3(0.f, 10.f, -10.f), &_vec3(0.f, 0.f, 0.f), &_vec3(0.f, 1.f, 0.f));
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"DynamicCamera", pGameObject), E_FAIL);
-
+		
 	// skeletal
 	pGameObject = m_Skel = CSkeletalCube::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
@@ -45,9 +45,15 @@ HRESULT CToolTest::Ready_Scene()
 
 _int CToolTest::Update_Scene(const _float& fTimeDelta)
 {
-	ImGui::ShowDemoWindow(nullptr);
+	// ImGui::ShowDemoWindow(nullptr);
+
 	IM_BEGIN("Skeletal Editor");
 	CImGuiMgr::SkeletalEditor(m_pCam, m_Skel);
+	IM_END;
+
+	// ImGui::SetNextWindowSize(ImVec2(960, 300));
+	IM_BEGIN("Animation Editor");
+	CImGuiMgr::AnimationEditor(m_Skel);
 	IM_END;
 
 	return CScene::Update_Scene(fTimeDelta);

@@ -44,44 +44,6 @@ HRESULT		Ready_Frame(const _tchar* pFrameTag, const _float& fCallLimit)
 }
 
 /*--------------------
- *		InputMgr
- --------------------*/
-inline void Ready_Input(HWND hwnd)
-{
-	CInputMgr::GetInstance()->Ready_Input(hwnd);
-}
-inline void Update_Input()
-{
-	CInputMgr::GetInstance()->Update_Input();
-}
-inline bool GetButton(KEY_TYPE key)
-{
-	return CInputMgr::GetInstance()->GetButton(key);
-}
-inline bool GetButtonDown(KEY_TYPE key)
-{
-	return CInputMgr::GetInstance()->GetButtonDown(key);
-}
-inline bool GetButtonUp(KEY_TYPE key)
-{
-	return CInputMgr::GetInstance()->GetButtonUp(key);
-}
-inline void SetAxisMode(bool bAxisMode)
-{
-	CInputMgr::GetInstance()->SetAxisMode(bAxisMode);
-}
-
-inline _float GetVerticalAxis()
-{
-	return CInputMgr::GetInstance()->GetVerticalAxis();
-}
-
-inline _float GetHorizontalAxis()
-{
-	return CInputMgr::GetInstance()->GetHorizontalAxis();
-}
-
-/*--------------------
  *		InputDev
  --------------------*/
 _byte		Get_DIKeyState(_ubyte byKeyID)
@@ -106,6 +68,21 @@ void			SetUp_InputDev(void)
 	CInputDev::GetInstance()->SetUp_InputDev();
  }
 
+inline bool DIKeyPressing(_ubyte byKeyID)
+{
+	return CInputDev::GetInstance()->DIKeyPressing(byKeyID);
+}
+
+inline bool DIKeyDown(_ubyte byKeyID)
+{
+	return CInputDev::GetInstance()->DIKeyDown(byKeyID);
+}
+
+inline bool DIKeyUp(_ubyte byKeyID)
+{
+	return CInputDev::GetInstance()->DIKeyUp(byKeyID);
+}
+
 /*--------------------
  *		FontMgr
  --------------------*/
@@ -129,7 +106,6 @@ void	Render_Font(const _tchar* pFontTag,
 
 inline void			Release_System(void)
 {
-	CInputMgr::GetInstance()->DestroyInstance();
 	CFontMgr::GetInstance()->DestroyInstance();
 	CInputDev::GetInstance()->DestroyInstance();
 	CFrameMgr::GetInstance()->DestroyInstance();

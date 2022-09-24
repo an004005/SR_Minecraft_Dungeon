@@ -4,6 +4,7 @@
 #include "ImGuiMgr.h"
 #include "Logo.h"
 #include "ToolTest.h"
+#include "CubeAnimMgr.h"
 #include "MapToolTest.h"
 
 USING(Engine)
@@ -24,9 +25,7 @@ HRESULT CMainApp::Ready_MainApp(void)
 
 	FAILED_CHECK_RETURN(Ready_Scene(m_pGraphicDev, &m_pManagementClass), E_FAIL);
 
-	Engine::Ready_Input(g_hWnd);
 	// CClientServiceMgr::GetInstance()->ReadyClientService();
-
 
 
 	return S_OK;
@@ -34,7 +33,6 @@ HRESULT CMainApp::Ready_MainApp(void)
 
 _int CMainApp::Update_MainApp(const _float & fTimeDelta)
 {
-	// Engine::Update_Input();
 	Engine::SetUp_InputDev();
 
 	NULL_CHECK_RETURN(m_pManagementClass, -1);
@@ -122,6 +120,9 @@ HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 * ppGraphicDev)
     ImGui_ImplWin32_Init(g_hWnd);
     ImGui_ImplDX9_Init(m_pGraphicDev);
 
+	// mgr
+	CCubeAnimMgr::GetInstance();
+
 	return S_OK;
 }
 
@@ -130,8 +131,8 @@ HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement
 	Engine::CScene*			pScene = nullptr;
 
 	// pScene = CLogo::Create(pGraphicDev);
-	//pScene = CToolTest::Create(pGraphicDev);
-	pScene = CMapToolTest::Create(pGraphicDev);
+	pScene = CToolTest::Create(pGraphicDev);
+	// pScene = CMapToolTest::Create(pGraphicDev);
 	NULL_CHECK_RETURN(pScene, E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Create_Management(pGraphicDev, ppManagement), E_FAIL);
@@ -159,6 +160,8 @@ void CMainApp::Free(void)
     ImGui_ImplDX9_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
+
+	CCubeAnimMgr::GetInstance()->DestroyInstance();
 
 	Safe_Release(m_pGraphicDev);
 	Safe_Release(m_pDeviceClass);

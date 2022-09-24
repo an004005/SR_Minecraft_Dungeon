@@ -36,7 +36,6 @@ public:
 	HRESULT Ready_Transform(void);
 	virtual _int Update_Component(const _float& fTimeDelta);
 
-	static void QuatToPitchYawRoll(const D3DXQUATERNION& q, _float& pitch, _float& yaw, _float& roll);
 
 public:
 	_vec3 m_vInfo[INFO_END];

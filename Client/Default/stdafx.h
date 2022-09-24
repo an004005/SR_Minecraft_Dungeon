@@ -13,12 +13,7 @@
 #include "imgui.h"
 #include "imgui_impl_dx9.h"
 #include "imgui_impl_win32.h"
-
-// #include "ImGuizmo.h"
-// #include "ImSequencer.h"
-// #include "ImZoomSlider.h"
-// #include "ImCurveEdit.h"
-// #include "GraphEditor.h"
+#include "imgui_internal.h"
 
 #include <windows.h>
 // C 런타임 헤더 파일입니다.

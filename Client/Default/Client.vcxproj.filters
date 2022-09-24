@@ -38,6 +38,15 @@
     <Filter Include="02. GameObject\03. SkeletalCube">
       <UniqueIdentifier>{0604fd92-5ba3-4721-a47c-07829de8ecab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="99. Default\imgui\FileDialog">
+      <UniqueIdentifier>{08a19095-3aa1-42d0-9a82-d854e4e8eb94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mgr">
+      <UniqueIdentifier>{f7f725b8-8ee0-47e0-8719-2e0d9e5c1f83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{1b64abcb-a7b9-4030-b6c5-c3e564bc440b}</UniqueIdentifier>
+    </Filter>
     <Filter Include="01. Scene\MapToolTest">
       <UniqueIdentifier>{1385fa4b-4f42-4f68-b1e9-221568eecdb2}</UniqueIdentifier>
     </Filter>
@@ -142,6 +151,22 @@
     <ClInclude Include="..\Header\SkeletalCube.h">
       <Filter>02. GameObject\03. SkeletalCube</Filter>
     </ClInclude>
+    <ClInclude Include="ImGuiFileDialogConfig.h">
+      <Filter>99. Default\imgui\FileDialog</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiFileDialog.h">
+      <Filter>99. Default\imgui\FileDialog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\GameUtilMgr.h">
+      <Filter>Mgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ImSequencerImpl.h">
+      <Filter>Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\CubeAnimMgr.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\CubeAnimationInstance.h" />
     <ClInclude Include="..\Header\MapToolTest.h">
       <Filter>01. Scene\MapToolTest</Filter>
     </ClInclude>
@@ -234,6 +259,19 @@
     <ClCompile Include="..\Code\SkeletalCube.cpp">
       <Filter>02. GameObject\03. SkeletalCube</Filter>
     </ClCompile>
+    <ClCompile Include="ImGuiFileDialog.cpp">
+      <Filter>99. Default\imgui\FileDialog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GameUtilMgr.cpp">
+      <Filter>Mgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ImSequencerImpl.cpp">
+      <Filter>Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\CubeAnimMgr.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\CubeAnimationInstance.cpp" />
     <ClCompile Include="..\Code\MapToolTest.cpp">
       <Filter>01. Scene\MapToolTest</Filter>
     </ClCompile>

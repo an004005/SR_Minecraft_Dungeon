@@ -5,7 +5,7 @@
 #include "GraphicDev.h"
 #include "TimerMgr.h"
 #include "FrameMgr.h"
-#include "InputMgr.h"
+// #include "InputMgr.h"
 #include "InputDev.h"
 #include "FontMgr.h"
 
@@ -26,25 +26,15 @@ inline void			Update_Timer(const _tchar* pTimerTag);
 inline _bool		IsPermit_Call(const _tchar* pFrameTag, const _float& fTimeDelta);
 inline HRESULT		Ready_Frame(const _tchar* pFrameTag, const _float& fCallLimit);
 
-// InputMgr
-inline void Ready_Input(HWND hwnd);
-inline void Update_Input();
-
-inline bool GetButton(KEY_TYPE key);
-inline bool GetButtonDown(KEY_TYPE key);
-inline bool GetButtonUp(KEY_TYPE key);
-
-inline void SetAxisMode(bool bAxisMode);
-inline _float GetVerticalAxis();
-inline _float GetHorizontalAxis();
-
 // InputDev
 inline _byte		Get_DIKeyState(_ubyte byKeyID);
 inline _byte		Get_DIMouseState(MOUSEKEYSTATE byMouseID);
 inline _long		Get_DIMouseMove(MOUSEMOVESTATE eMoveState);
 inline	HRESULT		Ready_InputDev(HINSTANCE hInst, HWND hWnd);
 inline void			SetUp_InputDev(void);
-
+inline bool DIKeyPressing(_ubyte byKeyID);
+inline bool DIKeyDown(_ubyte byKeyID);
+inline bool DIKeyUp(_ubyte byKeyID);
 
 // FontMgr
 
