@@ -29,28 +29,6 @@ HRESULT CSkeletalCube::Ready_Object()
 	m_pRootPart->strTransProto = L"Proto_TransformCom";
 	m_pRootPart->strTransCom = L"Proto_TransformCom_root";
 
-
-	// _matrix tmp1, tmp2;
-	// D3DXMatrixIdentity(&tmp1);
-	// D3DXMatrixRotationZ(&tmp2, D3DXToRadian(90.f));
-	// _vec3 s1, s2;
-	// D3DXQUATERNION q1, q2;
-	// _vec3 v1, v2;
-	//
-	// D3DXMatrixDecompose(&s1, &q1, &v1, &tmp1);
-	// D3DXMatrixDecompose(&s2, &q2, &v2, &tmp2);
-	//
-	// v2 = {1.f, 1.f, 1.f};
-	// s2 = {2.f, 2.f, 2.f};
-	//
-	// m_pCurAnim = new CubeAnimFrame;
-	// m_pCurAnim->fTotalTime = 1.f;
-	// m_pCurAnim->bLoop = true;
-	//
-	// TransFrame f1 = {0.f, s1, q1, v1};
-	// TransFrame f2 = {1.f, s2, q2,v2};
-	// m_pCurAnim->mapFrame.insert({"root", {f1, f2}});
-
 	return S_OK;
 }
 
@@ -468,4 +446,101 @@ void CSkeletalCube::TransFrameLerp(_matrix& matOut, const TransFrame& PrevFrame,
 	D3DXVec3Lerp(&vLerpPos, &vPrevPos, &vNextPos, fS);
 
 	CGameUtilMgr::MatWorldCompose(matOut, vLerpScale, qLerpQuat, vLerpPos);
+}
+
+
+/*----------------------
+ *     CubeAnimFrame
+ -----------------------*/
+CubeAnimFrame CubeAnimFrame::Load(const wstring& wstrPath)
+{
+	CubeAnimFrame tmp;
+
+	HANDLE hFile = CreateFile(wstrPath.c_str(), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+
+	if (INVALID_HANDLE_VALUE == hFile)
+	{
+		MSG_BOX("Fail to Load CubeAnimFrame");
+		return tmp;
+	}
+
+	DWORD dwByte = 0;
+	DWORD dwStrByte = 0;
+	size_t mapSize;
+
+	string strPartName;
+	size_t vecSize;
+	TransFrame tFrame;
+
+	ReadFile(hFile, &tmp.bLoop, sizeof(_bool), &dwByte, nullptr);
+	ReadFile(hFile, &tmp.fTotalTime, sizeof(_float), &dwByte, nullptr);
+
+	ReadFile(hFile, &mapSize, sizeof(size_t), &dwByte, nullptr);
+
+	for (size_t i = 0; i < mapSize; ++i)
+	{
+		ReadFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
+		char szPartName[128]{};
+		ReadFile(hFile, szPartName, dwStrByte, &dwByte, nullptr);
+		strPartName = szPartName;
+
+		vector<TransFrame> vecFrameTmp;
+		ReadFile(hFile, &vecSize, sizeof(size_t), &dwByte, nullptr);
+
+		for (size_t j = 0; j < vecSize; ++j)
+		{
+			ReadFile(hFile, &tFrame.fTime, sizeof(_float), &dwByte, nullptr);
+			ReadFile(hFile, &tFrame.vScale, sizeof(_vec3), &dwByte, nullptr);
+			ReadFile(hFile, &tFrame.qRot, sizeof(D3DXQUATERNION), &dwByte, nullptr);
+			ReadFile(hFile, &tFrame.vPos, sizeof(_vec3), &dwByte, nullptr);
+			vecFrameTmp.push_back(tFrame);
+		}
+
+		tmp.mapFrame.insert({strPartName, vecFrameTmp});
+	}
+
+
+	return tmp;
+}
+
+void CubeAnimFrame::Save(const wstring& wstrPath)
+{
+	HANDLE hFile = CreateFile(wstrPath.c_str(), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+
+	if (INVALID_HANDLE_VALUE == hFile)
+	{
+		MSG_BOX("Fail to Save CubeAnimFrame");
+		return;
+	}
+
+	DWORD dwByte = 0;
+	DWORD dwStrByte = 0;
+
+	WriteFile(hFile, &bLoop, sizeof(_bool), &dwByte, nullptr);
+	WriteFile(hFile, &fTotalTime, sizeof(_float), &dwByte, nullptr);
+
+	size_t mapSize = mapFrame.size();
+	WriteFile(hFile, &mapSize, sizeof(size_t), &dwByte, nullptr);
+
+	for (const auto& frame : mapFrame)
+	{
+		// target part name
+		dwStrByte = (DWORD)frame.first.size();
+		WriteFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
+		WriteFile(hFile, frame.first.c_str(), dwStrByte, &dwByte, nullptr);
+
+		size_t vecSize = frame.second.size();
+		WriteFile(hFile, &vecSize, sizeof(size_t), &dwByte, nullptr);
+
+		for (const auto& trans : frame.second)
+		{
+			WriteFile(hFile, &trans.fTime, sizeof(_float), &dwByte, nullptr);
+			WriteFile(hFile, &trans.vScale, sizeof(_vec3), &dwByte, nullptr);
+			WriteFile(hFile, &trans.qRot, sizeof(D3DXQUATERNION), &dwByte, nullptr);
+			WriteFile(hFile, &trans.vPos, sizeof(_vec3), &dwByte, nullptr);
+		}
+	}
+	
+	CloseHandle(hFile);
+
 }

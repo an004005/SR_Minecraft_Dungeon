@@ -31,3 +31,12 @@ void CImSequencerImpl::AddTransFrame(const int iCurrentFrame, const SkeletalPart
 	D3DXMatrixDecompose(&vScale, &qRot, &vPos, &pPart->pTrans->m_matWorld);
 	itrFrame->second.push_back({fTime, vScale, qRot, vPos});
 }
+
+void CImSequencerImpl::AddTransFrameRecur(const int iCurrentFrame, const SkeletalPart* pPart)
+{
+	AddTransFrame(iCurrentFrame, pPart);
+	for (auto& child : pPart->vecChild)
+	{
+		AddTransFrameRecur(iCurrentFrame, child);
+	}
+}

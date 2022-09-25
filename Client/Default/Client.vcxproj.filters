@@ -166,12 +166,14 @@
     <ClInclude Include="..\Header\CubeAnimMgr.h">
       <Filter>Animation</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\CubeAnimationInstance.h" />
     <ClInclude Include="..\Header\MapToolTest.h">
       <Filter>01. Scene\MapToolTest</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\MapCube.h">
       <Filter>02. GameObject\04. MapCube</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\CubeAnimationInstance.h">
+      <Filter>Animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -271,12 +273,14 @@
     <ClCompile Include="..\Code\CubeAnimMgr.cpp">
       <Filter>Animation</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\CubeAnimationInstance.cpp" />
     <ClCompile Include="..\Code\MapToolTest.cpp">
       <Filter>01. Scene\MapToolTest</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\MapCube.cpp">
       <Filter>02. GameObject\04. MapCube</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\CubeAnimationInstance.cpp">
+      <Filter>Animation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

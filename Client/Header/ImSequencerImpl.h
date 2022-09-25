@@ -71,31 +71,25 @@ public:
 
 		draw_list->PushClipRect(rc.Min, rc.Max, true);
 
-		for (auto& frame : vecFrame)
+		for (auto itr = vecFrame.begin(); itr != vecFrame.end();)
 		{
-			float fCurFrameCnt = frame.fTime * 60.f; // sec to frame
+			float fCurFrameCnt = itr->fTime * 60.f; // sec to frame
 			float r = (fCurFrameCnt - m_iFrameMin) / float(m_iFrameMax - m_iFrameMin);
 			float x = ImLerp(rc.Min.x, rc.Max.x, r);
-			draw_list->AddCircleFilled(ImVec2(x, rc.Min.y + 10), 4.f, 0xAA000000);
+			draw_list->AddCircleFilled(ImVec2(x, rc.Min.y + 10), 6.f, 0xAA000000);
+			ImVec2 pta(x - 3, rc.Min.y + 10 - 3);
+			ImVec2 ptb(x + 3, rc.Min.y + 10 + 3);
+			if (ImRect(pta, ptb).Contains(ImGui::GetMousePos()) && ImGui::IsMouseClicked(1))
+			{
+				itr = vecFrame.erase(itr);
+			}
+			else ++itr;
 		}
-		// for (int i = 0; i < 1; i++)
-		// {
-		// 	for (int j = 0; j < rampEdit.mPointCount[i]; j++)
-		// 	{
-		// 		float p = rampEdit.mPts[i][j].x;
-		// 		if (p < myItems[index].mFrameStart || p > myItems[index].mFrameEnd)
-		// 			continue;
-		// 		float r = (p - mFrameMin) / float(mFrameMax - mFrameMin);
-		// 		float x = ImLerp(rc.Min.x, rc.Max.x, r);
-		// 		// draw_list->AddLine(ImVec2(x, rc.Min.y + 6), ImVec2(x, rc.Max.y - 4), 0xAA000000, 4.f);
-		// 		draw_list->AddCircleFilled(ImVec2(x, rc.Min.y + 10), 3.f, 0xAA000000);
-		// 	}
-		// }
-
 		draw_list->PopClipRect();
 	}
 
 	void AddTransFrame(const int iCurrentFrame, const SkeletalPart* pPart);
+	void AddTransFrameRecur(const int iCurrentFrame, const SkeletalPart* pPart);
 
 	static _float Frame2Sec(const int iFrame) { return _float(iFrame) / 60.f; }
 	static int Sec2Frame(const _float fSec) { return int(fSec * 60.f); }

@@ -45,7 +45,7 @@ HRESULT CToolTest::Ready_Scene()
 
 _int CToolTest::Update_Scene(const _float& fTimeDelta)
 {
-	// ImGui::ShowDemoWindow(nullptr);
+	ImGui::ShowDemoWindow(nullptr);
 
 	IM_BEGIN("Skeletal Editor");
 	CImGuiMgr::SkeletalEditor(m_pCam, m_Skel);
