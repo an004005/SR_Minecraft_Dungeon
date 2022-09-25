@@ -10,7 +10,7 @@ CMapToolTest::CMapToolTest(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
 {
 	ZeroMemory(&m_tMapTool, sizeof(MapTool));
-	
+	m_tMapTool.fHeight = 1.f;
 }
 
 
@@ -35,10 +35,11 @@ HRESULT CMapToolTest::Ready_Scene(void)
 
 _int CMapToolTest::Update_Scene(const _float & fTimeDelta)
 {
-	//ImGui::ShowDemoWindow(nullptr);
+	ImGui::ShowDemoWindow(nullptr);
 	IM_BEGIN("Map Editor Window");
+
+
 	CImGuiMgr::MapControl(m_tMapTool, *this, m_vecCube.size());
-	
 	
 	//마우스 피킹 때 MapCube 생성
 	if (Engine::Get_DIMouseState(DIM_LB) & 0X80 && m_dwTime + 200 < GetTickCount())
@@ -47,32 +48,35 @@ _int CMapToolTest::Update_Scene(const _float & fTimeDelta)
 		CGameObject*		pGameObject = nullptr;
 		CMapCube* pCube;
 
-
 		switch (m_tMapTool.iPickingOption)
 		{
 		case PICK_CUBE:
 			if (!PickingOnCube(PickPos))
 				break;
 
-			pGameObject = pCube = CMapCube::Create(m_pGraphicDev, m_fHeight, m_tMapTool, PickPos);
+			pGameObject = pCube = CMapCube::Create(m_pGraphicDev, m_tMapTool, PickPos);
 			NULL_CHECK_RETURN(pGameObject, E_FAIL);
 
 			pCube->m_wstrName = L"MapCube_" + to_wstring(m_tMapTool.iCubeCount);
 			FAILED_CHECK_RETURN(m_pLayer->Add_GameObject(pCube->m_wstrName.c_str(), pGameObject), E_FAIL);
+
 			m_vecCube.push_back(dynamic_cast<CMapCube*>(pGameObject));
+			Cube_Type(m_tMapTool.iCubeType, pGameObject);
 
 			m_mapLayer.insert({ L"Layer_Terrain", m_pLayer });
 			m_tMapTool.iCubeCount++;
 			break;
 
 		case PICK_TERRAIN:
-			pGameObject = pCube = CMapCube::Create(m_pGraphicDev, m_fHeight, m_tMapTool, PickPos);
+			pGameObject = pCube = CMapCube::Create(m_pGraphicDev, m_tMapTool, PickPos);
 			if (pGameObject == nullptr)
 				break;
 
 			pCube->m_wstrName = L"MapCube_" + to_wstring(m_tMapTool.iCubeCount);
 			FAILED_CHECK_RETURN(m_pLayer->Add_GameObject(pCube->m_wstrName.c_str(), pGameObject), E_FAIL);
+
 			m_vecCube.push_back(dynamic_cast<CMapCube*>(pGameObject));
+			Cube_Type(m_tMapTool.iCubeType, pGameObject);
 
 			m_mapLayer.insert({ L"Layer_Terrain", m_pLayer });
 			m_tMapTool.iCubeCount++;
@@ -99,6 +103,8 @@ _int CMapToolTest::Update_Scene(const _float & fTimeDelta)
 
 		m_dwTime = GetTickCount();
 	}
+
+	Cube_DebugShow();
 
 	IM_END;
 	return Engine::CScene::Update_Scene(fTimeDelta);
@@ -140,7 +146,7 @@ HRESULT CMapToolTest::Ready_Proto(void)
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_TerrainTexCom", CTerrainTex::Create(m_pGraphicDev, VTXCNTX, VTXCNTZ, VTXITV)), E_FAIL);
 	//FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_TerrainTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Terrain/Grass_%d.tga", TEX_NORMAL)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CubeTexCom", CCubeTex::Create(m_pGraphicDev)), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_MinecraftCubeTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/MinscraftCubeTile/CubeTile_%d.dds", TEX_CUBE, 103)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_MinecraftCubeTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/MinscraftCubeTile/CubeTile_%d.dds", TEX_CUBE, 107)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CalculatorCom", CCalculator::Create(m_pGraphicDev)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_TransformCom", CTransform::Create()), E_FAIL);
 
@@ -151,17 +157,6 @@ HRESULT CMapToolTest::Ready_Proto(void)
 
 void CMapToolTest::SaveMap()
 {
-	/*ofstream fout("a.txt", ios_base::out | ios_base::binary);
-
-	if (!fout)
-	{
-		MSG_BOX("file open failed!");
-		return;
-	}
-
-	fout.write((char*)&m_vecCube, sizeof(CMapCube*) * m_tMapTool.iCubeCount);
-	MSG_BOX("file write success");
-	fout.close();*/
 
 	HANDLE hFile = CreateFile(L"../Bin/Resource/Map/Map.dat", GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 	if (INVALID_HANDLE_VALUE == hFile)
@@ -188,22 +183,6 @@ void CMapToolTest::LoadMap()
 	m_pLayer->Free();
 	m_vecCube.clear();
 	m_tMapTool.iCubeCount = 0;
-
-	//ifstream fin("a.txt", ios_base::in | ios_base::binary);
-
-	//if (!fin)
-	//{
-	//	MSG_BOX("file open failed!");
-	//	return;
-	//}
-
-	//while (!fin.eof())
-	//{
-	//	fin.read((char*)&m_vecCube, sizeof(CMapCube*));
-	//}
-	//
-	//MSG_BOX("file read success");
-	//fin.close();
 
 	HANDLE hFile = CreateFile(L"../Bin/Resource/Map/Map.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
@@ -248,6 +227,43 @@ void CMapToolTest::Creat_Cube(_matrix & CubeWorld, MapTool& tMapTool)
 	m_vecCube.push_back(dynamic_cast<CMapCube*>(pGameObject));
 	m_mapLayer.insert({ L"Layer_Terrain", m_pLayer });
 	m_tMapTool.iCubeCount++;
+
+}
+void CMapToolTest::Cube_Type(_int eType, CGameObject* pGameObject)
+{
+	switch (eType)
+	{
+	case TYPE_LAND:
+		m_vecLand.push_back(dynamic_cast<CMapCube*>(pGameObject));
+		break;
+	case TYPE_COLLISION:
+		m_vecCollision.push_back(dynamic_cast<CMapCube*>(pGameObject));
+		break;
+	case TYPE_DECO:
+		m_vecDeco.push_back(dynamic_cast<CMapCube*>(pGameObject));
+		break;
+	default:
+		break;
+	}
+}
+void CMapToolTest::Cube_DebugShow(void)
+{
+	if (m_tMapTool.bRendState)
+	{
+		for (auto& iter : m_vecCube)
+		{
+			iter->m_tMapTool.bRendState = true;
+		}
+
+	}
+	else
+	{
+		for (auto& iter : m_vecCube)
+		{
+			iter->m_tMapTool.bRendState = false;
+		}
+	}
+
 
 }
 CMapToolTest * CMapToolTest::Create(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -362,6 +378,13 @@ _bool CMapToolTest::PickingOnCube(_vec3& CubeCenter)
 
 	_vec3& vCenter = m_vecCube[iCurCube]->vCenter;
 	m_wDeleteName = m_vecCube[iCurCube]->m_wstrName;
+
+	//Block Height Option
+	_float fCurHeight = m_vecCube[iCurCube]->m_tMapTool.fHeight;
+
+	_float fCenterY = fCurHeight * 0.5f + m_tMapTool.fHeight * 0.5f;
+
+
 	switch (eFace)
 	{
 	case FACE_LOOK:
@@ -377,10 +400,10 @@ _bool CMapToolTest::PickingOnCube(_vec3& CubeCenter)
 		CubeCenter = _vec3(vCenter.x + 1.f, vCenter.y, vCenter.z);
 		break;
 	case FACE_UP:
-		CubeCenter = _vec3(vCenter.x, vCenter.y + 1.f, vCenter.z);
+		CubeCenter = _vec3(vCenter.x, vCenter.y + fCenterY, vCenter.z);
 		break;
 	case FACE_DOWN:
-		CubeCenter = _vec3(vCenter.x,	vCenter.y - 1.f, vCenter.z);
+		CubeCenter = _vec3(vCenter.x,	vCenter.y - fCenterY, vCenter.z);
 		break;
 	default:
 		return false;
