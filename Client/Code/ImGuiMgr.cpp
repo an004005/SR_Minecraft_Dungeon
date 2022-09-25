@@ -516,6 +516,7 @@ void CImGuiMgr::AnimationEditor(CSkeletalCube* pSkeletal)
 			mySequence.m_vecPartName.clear();
 			for (auto& e : mySequence.m_CubeAnim.mapFrame)
 				mySequence.m_vecPartName.push_back(e.first);
+			mySequence.m_iFrameMax = CImSequencerImpl::Sec2Frame(mySequence.m_CubeAnim.fTotalTime);
 		}
 		ImGuiFileDialog::Instance()->Close();
 	}

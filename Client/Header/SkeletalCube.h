@@ -44,7 +44,7 @@ struct TransFrame
 	D3DXQUATERNION qRot;
 	_vec3 vPos;
 
-	TransFrame() = default;
+	TransFrame(){}
 	TransFrame(_float fTime, _vec3 vScale, D3DXQUATERNION qRot, _vec3 vPos)
 		: fTime(fTime), vScale(vScale), qRot(qRot), vPos(vPos) {}
 };
@@ -58,6 +58,7 @@ struct CubeAnimFrame
 
 	static CubeAnimFrame Load(const wstring& wstrPath);
 	void Save(const wstring& wstrPath);
+	void SortFrame(const string& strPart);
 };
 
 class CSkeletalCube : public CGameObject

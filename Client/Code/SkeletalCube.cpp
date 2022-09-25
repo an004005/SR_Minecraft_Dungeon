@@ -448,7 +448,6 @@ void CSkeletalCube::TransFrameLerp(_matrix& matOut, const TransFrame& PrevFrame,
 	CGameUtilMgr::MatWorldCompose(matOut, vLerpScale, qLerpQuat, vLerpPos);
 }
 
-
 /*----------------------
  *     CubeAnimFrame
  -----------------------*/
@@ -543,4 +542,14 @@ void CubeAnimFrame::Save(const wstring& wstrPath)
 	
 	CloseHandle(hFile);
 
+}
+
+
+void CubeAnimFrame::SortFrame(const string& strPart)
+{
+	auto& vecFrame = mapFrame.find(strPart)->second;
+	sort(vecFrame.begin(), vecFrame.end(), [](const TransFrame& a, const TransFrame& b)
+	{
+		return a.fTime < b.fTime;
+	});
 }
