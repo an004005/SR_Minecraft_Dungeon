@@ -363,7 +363,8 @@ void CImGuiMgr::TextureSelector(wstring& strTex, _uint& iTexIdx)
 	ImGui::Text("Texture Selector");
 	static const vector<wstring> vecTexName{
 		L"Proto_CubeTexture",
-		L"Proto_MinecraftCubeTexture"
+		L"Proto_MinecraftCubeTexture",
+		L"Proto_WeaponTexture",
 	};
 	static vector<_int> vecTexIdx(vecTexName.size(), 0);
 	static size_t iCurIdx = 0;
@@ -402,7 +403,9 @@ void CImGuiMgr::VIBufferSelector(wstring& strBuf)
 {
 	ImGui::Text("VIBuffer Selector");
 	static const vector<wstring> vecBufName{
-		L"Proto_CubeTexCom"
+		L"Proto_CubeTexCom",
+		L"Proto_VoxelTex_Sword",
+		L"Proto_RcCol"
 	};
 	static size_t iCurIdx = 0;
 

@@ -3,6 +3,7 @@
 
 #include "Export_Function.h"
 #include "Stage.h"
+#include "Player.h"
 
 CLogo::CLogo(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
@@ -73,15 +74,15 @@ HRESULT CLogo::Ready_Layer_Environment(const _tchar * pLayerTag)
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"BackGround", pGameObject), E_FAIL);
 
-	/*// TestPlayer
-	pGameObject = CTestPlayer::Create(m_pGraphicDev);
+	// TestPlayer
+	pGameObject = CPlayer::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"TestPlayer", pGameObject), E_FAIL);
 
-	// TestMonster
-	pGameObject = CTestMonster::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"TestMonster", pGameObject), E_FAIL);*/
+	// // TestMonster
+	// pGameObject = CTestMonster::Create(m_pGraphicDev);
+	// NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	// FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"TestMonster", pGameObject), E_FAIL);
 
 		
 	m_mapLayer.insert({ pLayerTag, pLayer });

@@ -60,13 +60,12 @@ void CSkeletalCube::Render_Object()
 
 void CSkeletalCube::RenderObjectRecur(SkeletalPart* pPart)
 {
-	if (pPart->pBuf != nullptr && pPart->pTex != nullptr)
-	{
-		const _matrix matPartWorld = pPart->GetWorldMat();
-		m_pGraphicDev->SetTransform(D3DTS_WORLD, &matPartWorld);
+	const _matrix matPartWorld = pPart->GetWorldMat();
+	m_pGraphicDev->SetTransform(D3DTS_WORLD, &matPartWorld);
+	if (pPart->pTex)
 		pPart->pTex->Set_Texture(pPart->iTexIdx);
+	if (pPart->pBuf)
 		pPart->pBuf->Render_Buffer();
-	}
 
 	for (const auto& child : pPart->vecChild)
 		RenderObjectRecur(child);
@@ -116,6 +115,7 @@ _bool CSkeletalCube::AddSkeletalPart(const string& strPart, const string& strPar
 	pPart->strTexCom = strTex + L"_" + wstrPart;
 	m_mapComponent[ID_STATIC].insert({pPart->strTexCom.c_str(), pComponent});
 	pPart->strTexProto = strTex;
+
 
 	pComponent = pPart->pTrans = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_TransformCom"));
 	NULL_CHECK_RETURN(pComponent, false);

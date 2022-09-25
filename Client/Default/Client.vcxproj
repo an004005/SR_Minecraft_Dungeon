@@ -202,6 +202,7 @@
     <ClInclude Include="imstb_truetype.h" />
     <ClInclude Include="ImZoomSlider.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="stb\stb_image.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
