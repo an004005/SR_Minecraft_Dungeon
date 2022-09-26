@@ -182,6 +182,7 @@
     <ClInclude Include="..\Header\Stage.h" />
     <ClInclude Include="..\Header\StaticCamera.h" />
     <ClInclude Include="..\Header\Terrain.h" />
+    <ClInclude Include="..\Header\TerrainMap.h" />
     <ClInclude Include="..\Header\TestCube.h" />
     <ClInclude Include="..\Header\ToolTest.h" />
     <ClInclude Include="Client.h" />
@@ -224,6 +225,7 @@
     <ClCompile Include="..\Code\Stage.cpp" />
     <ClCompile Include="..\Code\StaticCamera.cpp" />
     <ClCompile Include="..\Code\Terrain.cpp" />
+    <ClCompile Include="..\Code\TerrainMap.cpp" />
     <ClCompile Include="..\Code\TestCube.cpp" />
     <ClCompile Include="..\Code\ToolTest.cpp" />
     <ClCompile Include="Client.cpp" />

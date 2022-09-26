@@ -2,6 +2,7 @@
 
 #include "Engine_Include.h"
 #include "Scene.h"
+#include "TerrainMap.h"
 
 
 class CStage : public Engine::CScene
@@ -23,6 +24,11 @@ private:
 	HRESULT			Ready_Layer_UI(const _tchar* pLayerTag);
 
 	HRESULT			Ready_Proto(void);
+
+private:
+	CTerrainMap*	m_pTerrainMap = nullptr;
+	
+
 
 public:
 	static CStage*		Create(LPDIRECT3DDEVICE9 pGraphicDev);

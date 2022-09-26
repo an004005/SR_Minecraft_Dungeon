@@ -30,6 +30,7 @@ HRESULT CMapToolTest::Ready_Scene(void)
 	m_pLayer = Engine::CLayer::Create();
 	NULL_CHECK_RETURN(m_pLayer, E_FAIL);
 
+	LoadMap();
 	return S_OK;
 }
 
@@ -107,6 +108,14 @@ _int CMapToolTest::Update_Scene(const _float & fTimeDelta)
 	Cube_DebugShow();
 
 	IM_END;
+
+
+
+
+	//Test
+
+
+
 	return Engine::CScene::Update_Scene(fTimeDelta);
 }
 
@@ -135,6 +144,7 @@ HRESULT CMapToolTest::Ready_Layer_Environment(const _tchar * pLayerTag)
 	pGameObject = CTerrain::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Terrain", pGameObject), E_FAIL);
+
 	
 	m_mapLayer.insert({ pLayerTag, pLayer });
 
@@ -149,7 +159,7 @@ HRESULT CMapToolTest::Ready_Proto(void)
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_MinecraftCubeTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/MinscraftCubeTile/CubeTile_%d.dds", TEX_CUBE, 107)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CalculatorCom", CCalculator::Create(m_pGraphicDev)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_TransformCom", CTransform::Create()), E_FAIL);
-
+	
 	return S_OK;
 }
 
@@ -205,14 +215,14 @@ void CMapToolTest::LoadMap()
 		if (0 == dwByte)
 			break;
 
-		Creat_Cube(matCubeWorld, tMapTool);
+		Create_Cube(matCubeWorld, tMapTool);
 	}
 
 	CloseHandle(hFile);
 
 }
 
-void CMapToolTest::Creat_Cube(_matrix & CubeWorld, MapTool& tMapTool)
+void CMapToolTest::Create_Cube(_matrix & CubeWorld, MapTool& tMapTool)
 {
 	CGameObject* pGameObject = nullptr;
 	CMapCube* pMapCube = nullptr;
@@ -231,7 +241,7 @@ void CMapToolTest::Creat_Cube(_matrix & CubeWorld, MapTool& tMapTool)
 }
 void CMapToolTest::Cube_Type(_int eType, CGameObject* pGameObject)
 {
-	switch (eType)
+	/*switch (eType)
 	{
 	case TYPE_LAND:
 		m_vecLand.push_back(dynamic_cast<CMapCube*>(pGameObject));
@@ -244,7 +254,7 @@ void CMapToolTest::Cube_Type(_int eType, CGameObject* pGameObject)
 		break;
 	default:
 		break;
-	}
+	}*/
 }
 void CMapToolTest::Cube_DebugShow(void)
 {

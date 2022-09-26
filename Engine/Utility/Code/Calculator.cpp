@@ -139,9 +139,9 @@ Engine::_vec3 Engine::CCalculator::PickingOnTerrain(HWND hWnd, const CTerrainTex
 				&vRayPos, &vRayDir,
 				&fU, &fV, &fDist))
 			{
-				return _vec3(pTerrainVtx[dwVtxIdx[1]].x - 0.5f/*+ (pTerrainVtx[dwVtxIdx[0]].x - pTerrainVtx[dwVtxIdx[1]].x) * fU*/,
-					0.5f,
-					pTerrainVtx[dwVtxIdx[1]].z - 0.5f /*+ (pTerrainVtx[dwVtxIdx[2]].z - pTerrainVtx[dwVtxIdx[1]].z) * fV*/);
+				return _vec3(pTerrainVtx[dwVtxIdx[1]].x - 0.5f,
+							0.5f,
+							pTerrainVtx[dwVtxIdx[1]].z - 0.5f);
 			}
 
 			// ¿ÞÂÊ ¾Æ·¡
@@ -155,9 +155,9 @@ Engine::_vec3 Engine::CCalculator::PickingOnTerrain(HWND hWnd, const CTerrainTex
 				&vRayPos, &vRayDir,
 				&fU, &fV, &fDist))
 			{
-				return _vec3(pTerrainVtx[dwVtxIdx[2]].x + 0.5f/*+  (pTerrainVtx[dwVtxIdx[1]].x - pTerrainVtx[dwVtxIdx[2]].x) * fU*/,
-					0.5f,
-					pTerrainVtx[dwVtxIdx[2]].z + 0.5f/*+ (pTerrainVtx[dwVtxIdx[0]].z - pTerrainVtx[dwVtxIdx[2]].z) * fV*/);
+				return _vec3(pTerrainVtx[dwVtxIdx[2]].x + 0.5f,
+							0.5f,
+							pTerrainVtx[dwVtxIdx[2]].z + 0.5f);
 			}
 		}
 	}

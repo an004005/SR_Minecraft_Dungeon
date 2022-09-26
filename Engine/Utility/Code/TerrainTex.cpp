@@ -27,28 +27,6 @@ CTerrainTex::~CTerrainTex()
 
 HRESULT CTerrainTex::Ready_Buffer(const _ulong& dwCntX, const _ulong& dwCntZ, const _ulong& dwVtxItv)
 {
-	/*LPDIRECT3DTEXTURE9		pTexture = nullptr;
-	D3DXCreateTexture(m_pGraphicDev, 129, 129, 1, 0, D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, &pTexture);
-
-	D3DLOCKED_RECT		LockRect;
-
-	pTexture->LockRect(0, &LockRect, nullptr, 0);
-
-	for (_int i = 0; i < 129; ++i)
-	{
-	for (_int j = 0; j < 129; ++j)
-	{
-	_int	iIndex = i * 129 + j;
-	*(((_ulong*)LockRect.pBits) + iIndex) = D3DCOLOR_ARGB(255, 255, 0, 0);
-	}
-	}
-	pTexture->UnlockRect(0);
-
-	D3DXSaveTextureToFile(L"../Bin/Resource/Texture/Test.bmp", D3DXIFF_BMP, pTexture, nullptr);*/
-
-
-
-
 	m_dwVtxCnt = dwCntX * dwCntZ;
 	m_pPos = new _vec3[m_dwVtxCnt];
 	m_dwTriCnt = (dwCntX - 1) * (dwCntZ - 1) * 2;
@@ -87,11 +65,10 @@ HRESULT CTerrainTex::Ready_Buffer(const _ulong& dwCntX, const _ulong& dwCntZ, co
 			dwIndex = i * dwCntX + j;
 
 			pVertex[dwIndex].vPos = { _float(j) * dwVtxItv,
-				/*(pPixel[dwIndex] & 0x000000ff) / 20.f*/0.f,
-				_float(i) * dwVtxItv };
+									0.f,
+									_float(i) * dwVtxItv };
 
 			m_pPos[dwIndex] = pVertex[dwIndex].vPos;
-			pVertex[dwIndex].vNormal = { 0.f, 0.f, 0.f };
 
 			pVertex[dwIndex].vTexUV = { _float(j) / (dwCntX - 1) * 20.f,
 				_float(i) / (dwCntZ - 1) * 20.f };
@@ -118,35 +95,16 @@ HRESULT CTerrainTex::Ready_Buffer(const _ulong& dwCntX, const _ulong& dwCntZ, co
 			pIndex[dwTriCnt]._1 = dwIndex + dwCntX + 1;
 			pIndex[dwTriCnt]._2 = dwIndex + 1;
 
-			_vec3	vDest, vSour, vNormal;
-
-			vDest = pVertex[pIndex[dwTriCnt]._1].vPos - pVertex[pIndex[dwTriCnt]._0].vPos;
-			vSour = pVertex[pIndex[dwTriCnt]._2].vPos - pVertex[pIndex[dwTriCnt]._1].vPos;
-
-			D3DXVec3Cross(&vNormal, &vDest, &vSour);
-			pVertex[pIndex[dwTriCnt]._0].vNormal += vNormal;
-			pVertex[pIndex[dwTriCnt]._1].vNormal += vNormal;
-			pVertex[pIndex[dwTriCnt]._2].vNormal += vNormal;
 			++dwTriCnt;
 
 			// ¿ÞÂÊ ¾Æ·¡
 			pIndex[dwTriCnt]._0 = dwIndex + dwCntX;
 			pIndex[dwTriCnt]._1 = dwIndex + 1;
 			pIndex[dwTriCnt]._2 = dwIndex;
-
-			vDest = pVertex[pIndex[dwTriCnt]._1].vPos - pVertex[pIndex[dwTriCnt]._0].vPos;
-			vSour = pVertex[pIndex[dwTriCnt]._2].vPos - pVertex[pIndex[dwTriCnt]._1].vPos;
-
-			D3DXVec3Cross(&vNormal, &vDest, &vSour);
-			pVertex[pIndex[dwTriCnt]._0].vNormal += vNormal;
-			pVertex[pIndex[dwTriCnt]._1].vNormal += vNormal;
-			pVertex[pIndex[dwTriCnt]._2].vNormal += vNormal;
 			++dwTriCnt;
 		}
 	}
 
-	for (_ulong i = 0; i < m_dwVtxCnt; ++i)
-		D3DXVec3Normalize(&pVertex[i].vNormal, &pVertex[i].vNormal);
 
 	m_pVB->Unlock();
 	m_pIB->Unlock();

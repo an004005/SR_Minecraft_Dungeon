@@ -173,6 +173,9 @@
     <ClInclude Include="..\Header\MapCube.h">
       <Filter>02. GameObject\04. MapCube</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\TerrainMap.h">
+      <Filter>02. GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\MainApp.cpp">
@@ -277,6 +280,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\MapCube.cpp">
       <Filter>02. GameObject\04. MapCube</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\TerrainMap.cpp">
+      <Filter>02. GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

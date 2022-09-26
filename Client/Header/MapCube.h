@@ -42,9 +42,10 @@ private:
 	_vec3				m_vDirection;
 
 	_vec3				m_vPickPos;
-	MapTool				m_tMapTool;
+
 	
 public:
+	MapTool				m_tMapTool;
 	wstring				m_wstrName;
 	//_int				m_iDebugShowTxtIdx;
 	_vec3 vFaceVtx[FACE_END][4]; // 어떤 면인지, 어느 삼각형인지, 어떤 점인지
