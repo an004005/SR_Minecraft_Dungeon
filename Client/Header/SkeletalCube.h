@@ -81,7 +81,6 @@ public:
 	_bool DeleteSkeletalPart(const string& strPart);
 	static CSkeletalCube* Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrPath = L"");
 
-	virtual void AnimFrameConsume(_float fTimeDelta);
 	virtual void PlayAnimationOnce(const string& strAnim);
 
 	virtual void Load(wstring wstrPath);
@@ -92,6 +91,7 @@ private:
 	virtual void SaveRecursive(HANDLE hFile, SkeletalPart* pPart);
 	virtual void DeleteRecursive(const string& strPart);
 	static void TransFrameLerp(_matrix& matOut, const TransFrame& PrevFrame, const TransFrame& NextFrame, const _float fS);
+	virtual void AnimFrameConsume(_float fTimeDelta);
 
 
 private:

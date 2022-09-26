@@ -43,10 +43,10 @@ Engine::_int CStaticCamera::Update_Object(const _float& fTimeDelta)
 
 	_int iExit = CCamera::Update_Object(fTimeDelta);
 
-	CTransform*	pSkyBoxTransform = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_Environment", L"SkyBox", L"Proto_TransformCom", ID_DYNAMIC));
-	NULL_CHECK_RETURN(pSkyBoxTransform, -1);
+	// CTransform*	pSkyBoxTransform = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_Environment", L"SkyBox", L"Proto_TransformCom", ID_DYNAMIC));
+	// NULL_CHECK_RETURN(pSkyBoxTransform, -1);
 
-	pSkyBoxTransform->m_vInfo[INFO_POS] = m_vEye;
+	// pSkyBoxTransform->m_vInfo[INFO_POS] = m_vEye;
 
 	return iExit;
 }
@@ -93,7 +93,7 @@ void CStaticCamera::Key_Input(const _float& fTimeDelta)
 
 void CStaticCamera::Target_Renewal(void)
 {
-	CTransform*	pPlayerTransform = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_GameLogic", L"TestPlayer", L"Proto_TransformCom", ID_DYNAMIC));
+	CTransform*	pPlayerTransform = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_GameLogic", L"Player", L"Proto_TransformCom_root", ID_DYNAMIC));
 	NULL_CHECK(pPlayerTransform);
 
 	_vec3	vLook;
