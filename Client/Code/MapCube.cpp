@@ -1,17 +1,17 @@
 #include "stdafx.h"
 #include "..\Header\MapCube.h"
-#include "MapToolTest.h"
+#include "MapTool.h"
 #include "Export_Function.h"
 
-CMapCube::CMapCube(LPDIRECT3DDEVICE9 pGraphicDev)
+CMapCube::CMapCube(LPDIRECT3DDEVICE9 pGraphicDev, MapTool& tMapTool)
 	:CGameObject(pGraphicDev)
+	, m_tMapTool(tMapTool)
 {
 	Initalize_vFaceVtx();
 }
 
-CMapCube::CMapCube(LPDIRECT3DDEVICE9 pGraphicDev , _float Height, MapTool maptool, _vec3 PickPos)
+CMapCube::CMapCube(LPDIRECT3DDEVICE9 pGraphicDev , MapTool maptool, _vec3 PickPos)
 	: Engine::CGameObject(pGraphicDev)
-	, m_fHeight(Height)
 	, m_tMapTool(maptool)
 	, m_vPickPos(PickPos)
 {
@@ -24,24 +24,27 @@ CMapCube::~CMapCube()
 
 HRESULT CMapCube::Ready_Object(void)
 {
+	
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
-
-	m_pTransCom->Set_Height(m_fHeight);
-
+	
 	//maptool 에서 피킹 옵션 선택
 	if (m_tMapTool.iPickingOption == PICK_TERRAIN)
 	{
 		_vec3	vPickPos = PickUp_OnTerrain();
+
+		if (vPickPos == _vec3(0.f, 0.f, 0.f))
+			return E_FAIL;
+
 		m_pTransCom->Set_Pos(vPickPos.x, vPickPos.y, vPickPos.z);
 		m_pTransCom->Update_Component(0.f);
 	}
 	else
 	{
 		m_pTransCom->Set_Pos(m_vPickPos.x, m_vPickPos.y, m_vPickPos.z);
+		m_pTransCom->Set_ScaleY(m_tMapTool.fHeight);
 		m_pTransCom->Update_Component(0.f);
 	}
 	
-
 	for (int i = 0; i < FACE_END; ++i)
 	{
 		for (int j = 0; j < 4; ++j)
@@ -75,7 +78,7 @@ void CMapCube::Render_Object(void)
 	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	//m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 
-	m_pTextureCom->Set_Texture(m_tMapTool.iTexIdx);
+	Render_State();
 	m_pBufferCom->Render_Buffer();
 
 	//m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
@@ -107,9 +110,11 @@ HRESULT CMapCube::Add_Component(void)
 	return S_OK;
 }
 
-CMapCube * CMapCube::Create(LPDIRECT3DDEVICE9 pGraphicDev, _float Height, MapTool maptool, _vec3 PickPos)
+
+
+CMapCube * CMapCube::Create(LPDIRECT3DDEVICE9 pGraphicDev, MapTool maptool, _vec3 PickPos)
 {
-	CMapCube*	pInstance = new CMapCube(pGraphicDev, Height, maptool, PickPos);
+	CMapCube*	pInstance = new CMapCube(pGraphicDev, maptool, PickPos);
 
 	if (FAILED(pInstance->Ready_Object()))
 	{
@@ -122,13 +127,12 @@ CMapCube * CMapCube::Create(LPDIRECT3DDEVICE9 pGraphicDev, _float Height, MapToo
 
 CMapCube * CMapCube::Create(LPDIRECT3DDEVICE9 pGrahpicDev, _matrix & CubeWorld, MapTool& tMapTool)
 {
-	CMapCube*	pInstance = new CMapCube(pGrahpicDev);
+	CMapCube*	pInstance = new CMapCube(pGrahpicDev, tMapTool);
 
 	pInstance->Add_Component();
 	pInstance->m_pTransCom->Set_WorldMatrix(&CubeWorld);
-	pInstance->m_tMapTool.iTexIdx = tMapTool.iTexIdx;
 	pInstance->m_wstrName = L"MapCube_" + to_wstring(tMapTool.iCubeCount);
-
+	
 	for (int i = 0; i < FACE_END; ++i)
 	{
 		for (int j = 0; j < 4; ++j)
@@ -154,7 +158,6 @@ Engine::_vec3 CMapCube::PickUp_OnTerrain(void)
 
 	CTransform*		pTerrainTransformCom = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_Environment", L"Terrain", L"Proto_TransformCom", ID_DYNAMIC));
 	NULL_CHECK_RETURN(pTerrainTransformCom, _vec3());
-
 
 	return m_pCalculatorCom->PickingOnTerrain(g_hWnd, pTerrainBufferCom, pTerrainTransformCom);
 }
@@ -195,3 +198,12 @@ void CMapCube::Initalize_vFaceVtx(void)
 	vFaceVtx[FACE_DOWN][2] = { fM, fM, fM };
 	vFaceVtx[FACE_DOWN][3] = { fM, fM, fP };
 }
+
+void CMapCube::Render_State(void)
+{
+	if(m_tMapTool.bRendState)
+		m_pTextureCom->Set_Texture(m_tMapTool.iCubeType);
+	else
+		m_pTextureCom->Set_Texture(m_tMapTool.iTexIdx);
+}
+

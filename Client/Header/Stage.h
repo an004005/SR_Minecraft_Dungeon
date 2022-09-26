@@ -2,6 +2,7 @@
 
 #include "Engine_Include.h"
 #include "Scene.h"
+#include "TerrainCubeMap.h"
 
 
 class CStage : public Engine::CScene
@@ -18,11 +19,15 @@ public:
 
 private:
 	HRESULT			Ready_Layer_Environment(const _tchar* pLayerTag);
-
 	HRESULT			Ready_Layer_GameLogic(const _tchar* pLayerTag);
 	HRESULT			Ready_Layer_UI(const _tchar* pLayerTag);
-
 	HRESULT			Ready_Proto(void);
+
+
+private:
+	CTerrainCubeMap*	m_pTerrainMap = nullptr;
+	
+
 
 public:
 	static CStage*		Create(LPDIRECT3DDEVICE9 pGraphicDev);

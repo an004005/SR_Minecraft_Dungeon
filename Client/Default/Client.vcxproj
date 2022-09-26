@@ -173,7 +173,7 @@
     <ClInclude Include="..\Header\ImSequencerImpl.h" />
     <ClInclude Include="..\Header\Loading.h" />
     <ClInclude Include="..\Header\MapCube.h" />
-    <ClInclude Include="..\Header\MapToolTest.h" />
+    <ClInclude Include="..\Header\MapTool.h" />
     <ClInclude Include="..\Header\Monster.h" />
     <ClInclude Include="..\Header\Player.h" />
     <ClInclude Include="..\Header\Logo.h" />
@@ -182,6 +182,7 @@
     <ClInclude Include="..\Header\Stage.h" />
     <ClInclude Include="..\Header\StaticCamera.h" />
     <ClInclude Include="..\Header\Terrain.h" />
+    <ClInclude Include="..\Header\TerrainCubeMap.h" />
     <ClInclude Include="..\Header\TestCube.h" />
     <ClInclude Include="..\Header\ToolTest.h" />
     <ClInclude Include="Client.h" />
@@ -215,7 +216,7 @@
     <ClCompile Include="..\Code\ImSequencerImpl.cpp" />
     <ClCompile Include="..\Code\Loading.cpp" />
     <ClCompile Include="..\Code\MapCube.cpp" />
-    <ClCompile Include="..\Code\MapToolTest.cpp" />
+    <ClCompile Include="..\Code\MapTool.cpp" />
     <ClCompile Include="..\Code\Monster.cpp" />
     <ClCompile Include="..\Code\Player.cpp" />
     <ClCompile Include="..\Code\Logo.cpp" />
@@ -224,6 +225,7 @@
     <ClCompile Include="..\Code\Stage.cpp" />
     <ClCompile Include="..\Code\StaticCamera.cpp" />
     <ClCompile Include="..\Code\Terrain.cpp" />
+    <ClCompile Include="..\Code\TerrainCubeMap.cpp" />
     <ClCompile Include="..\Code\TestCube.cpp" />
     <ClCompile Include="..\Code\ToolTest.cpp" />
     <ClCompile Include="Client.cpp" />

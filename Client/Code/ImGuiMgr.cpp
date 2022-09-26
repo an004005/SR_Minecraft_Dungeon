@@ -4,7 +4,7 @@
 #include "SkeletalCube.h"
 #include "ImGuiFileDialog.h"
 #include "ImSequencerImpl.h"
-#include "MapToolTest.h"
+#include "MapTool.h"
 
 ImGuiTextBuffer CImGuiMgr::s_log;
 SkeletalPart* CImGuiMgr::s_SelectedPart = nullptr;
@@ -495,7 +495,7 @@ void CImGuiMgr::AnimationEditor(CSkeletalCube* pSkeletal)
 	          ImSequencer::SEQUENCER_ADD | ImSequencer::SEQUENCER_DEL | ImSequencer::SEQUENCER_CHANGE_FRAME);
 }
 
-void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapToolTest& MapToolTest)
+void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapTool& MapToolTest, size_t CubeCount)
 {
 #ifndef _DEBUG
 	return;
@@ -509,21 +509,50 @@ void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapToolTest& MapToolTest
 
 			ImGui::Text("Set Block Texture");
 			ImGui::InputInt("input Index", &tMaptool.iTexIdx);
-
 			ImGui::NewLine();
 
-
+			ImGui::Text("Set Height");
+			ImGui::SliderFloat("Y", &tMaptool.fHeight, 1.f, 2.0f, "ratio = %.3f");
+			ImGui::InputFloat("Insert Y", &tMaptool.fHeight);
+			ImGui::NewLine();
 
 			ImGui::Text("Total Block Count :");
 			ImGui::SameLine();
-			ImGui::Text("%d", tMaptool.iCubeCount);
+			ImGui::Text("%d", CubeCount);
+			ImGui::NewLine();
 
+			ImGui::Text("Select Options");
 			ImGui::RadioButton("Terrain", &tMaptool.iPickingOption, PICK_TERRAIN); ImGui::SameLine();
 			ImGui::RadioButton("Cube", &tMaptool.iPickingOption, PICK_CUBE); ImGui::SameLine();
 			ImGui::RadioButton("Delete", &tMaptool.iPickingOption, PICK_DELETE); ImGui::SameLine();
 
-		
-		
+			ImGui::NewLine();
+			ImGui::NewLine();
+
+			ImGui::Text("Cube Type");
+			ImGui::SameLine(); 
+			ImGui::TextColored(ImVec4(1.0f, 0.0f, 1.0f, 1.0f), "     (Please Check Type!!)");
+			ImGui::RadioButton("Land", &tMaptool.iCubeType, TYPE_LAND); ImGui::SameLine();
+			ImGui::RadioButton("Collision", &tMaptool.iCubeType, TYPE_COLLISION); ImGui::SameLine();
+			ImGui::RadioButton("Decoration", &tMaptool.iCubeType, TYPE_DECO); ImGui::SameLine();
+
+			ImGui::NewLine();
+			ImGui::NewLine();
+
+			static int clicked = 0;
+			if (ImGui::Button("Debug Mode"))
+				clicked++;
+
+			if (clicked & 1)
+			{
+				ImGui::SameLine();
+				ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Checked!!");
+				tMaptool.bRendState = true;
+			}
+			else
+				tMaptool.bRendState = false;
+
+
 			ImGui::EndTabItem();
 		}
 
@@ -552,7 +581,7 @@ void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapToolTest& MapToolTest
 				
 			if (ImGui::Button("Load Map"))		
 			{
-				//On button
+			
 				MapToolTest.LoadMap();
 			}
 
