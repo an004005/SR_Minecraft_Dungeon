@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Player.h"
+#include "TerrainCubeMap.h"
 #include "Export_Function.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -10,21 +11,6 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev, _vec3* VtxPos)
 	: CGameObject(pGraphicDev)
 {
-	//m_pPos = new _vec3[WINCX * WINCY];
-
-	//m_pPos = VtxPos;
-	/*_ulong dwIndex = 0;
-
-	for (_ulong i = 0; i < WINCY; ++i)
-	{
-		for (_ulong j = 0; j < WINCX; ++j)
-		{
-			dwIndex = i * WINCX + j;
-
-			m_pPos[dwIndex] = VtxPos[dwIndex];
-		}
-	}
-	*/
 }
 
 
@@ -141,11 +127,9 @@ void CPlayer::Set_OnTerrain(void)
 	_vec3		vPos;
 	m_pTransCom->Get_Info(INFO_POS, &vPos);
 
-	Engine::CTerrainTex*	pTerrainTexCom = dynamic_cast<Engine::CTerrainTex*>(Engine::Get_Component(L"Layer_Environment", L"Terrain", L"Proto_TerrainTexCom", ID_STATIC));
-	NULL_CHECK(pTerrainTexCom);
+	_float fHeight = m_pTerrainMap->m_fHeight[(int)vPos.x][(int)vPos.z];
 
-	_float fHeight = m_pCalculatorCom->HeightOnTerrain(&vPos, m_pPos, VTXCNTX, VTXCNTZ);
-
+	//_float fHeight = m_pCalculatorCom->HeightOnTerrain(&vPos, m_pTerrainMap->Get_Pos(), VTXCNTX, VTXCNTZ);
 	m_pTransCom->Set_Pos(vPos.x, fHeight, vPos.z);
 }
 

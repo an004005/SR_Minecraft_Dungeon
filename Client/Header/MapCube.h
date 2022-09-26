@@ -13,7 +13,7 @@ END
 class CMapCube :
 	public CGameObject
 {
-	friend class CMapToolTest;
+	friend class CMapTool;
 	friend class CImGuiMgr;
 
 private:
@@ -50,6 +50,8 @@ public:
 	//_int				m_iDebugShowTxtIdx;
 	_vec3 vFaceVtx[FACE_END][4]; // 어떤 면인지, 어느 삼각형인지, 어떤 점인지
 	_vec3 vCenter{ 0.f, 0.f, 0.f };
+
+	
 
 public:
 	static CMapCube*		Create(LPDIRECT3DDEVICE9 pGraphicDev, MapTool maptool, _vec3 PickPos);

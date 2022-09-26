@@ -1,22 +1,22 @@
 #include "stdafx.h"
-#include "..\Header\TerrainMap.h"
+#include "..\Header\TerrainCubeMap.h"
 #include "MapCube.h"
 
-CTerrainMap::CTerrainMap()
+CTerrainCubeMap::CTerrainCubeMap()
 {
 	ZeroMemory(&m_tMapTool, sizeof(MapTool));
+	ZeroMemory(&m_fHeight, sizeof(_float) * VTXCNTX * VTXCNTZ);
 }
 
-CTerrainMap::~CTerrainMap()
+CTerrainCubeMap::~CTerrainCubeMap()
 {
 }
 
-void CTerrainMap::LoadMap(LPDIRECT3DDEVICE9 pGrahpicDev, 
-	map<const _tchar*, 
-	CLayer*>& m_mapLayer, 
+void CTerrainCubeMap::LoadMap(LPDIRECT3DDEVICE9 pGrahpicDev, 
+	map<const _tchar*, CLayer*>& m_mapLayer, 
 	CLayer* pLayer)
 {
-	HANDLE hFile = CreateFile(L"../Bin/Resource/Map/Map.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE hFile = CreateFile(L"../Bin/Resource/Map/MapTest.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 	{
@@ -25,26 +25,28 @@ void CTerrainMap::LoadMap(LPDIRECT3DDEVICE9 pGrahpicDev,
 	}
 	DWORD	dwByte = 0;
 
+	size_t vecSize;
 	_matrix matCubeWorld;
 	MapTool tMapTool;
 
-	while (true)
+	ReadFile(hFile, &vecSize, sizeof(size_t), &dwByte, nullptr);
+
+	while (vecSize--)
 	{
 
 		ReadFile(hFile, &matCubeWorld, sizeof(_matrix), &dwByte, nullptr);
 		ReadFile(hFile, &tMapTool, sizeof(MapTool), &dwByte, nullptr);
 
-		if (0 == dwByte)
-			break;
-
 		Create_Cube(matCubeWorld, tMapTool, pGrahpicDev, m_mapLayer, pLayer);
 	}
 
-	CloseHandle(hFile);
+	ReadFile(hFile, &m_fHeight, sizeof(_float) * VTXCNTX * VTXCNTZ, &dwByte, nullptr);
 
+	CloseHandle(hFile);
+	Set_CubeCoordinate();
 }
 
-void CTerrainMap::Create_Cube(_matrix & CubeWorld,
+void CTerrainCubeMap::Create_Cube(_matrix & CubeWorld,
 	MapTool & tMapTool,
 	LPDIRECT3DDEVICE9 pGrahpicDev,
 	map<const _tchar*, CLayer*>& m_mapLayer, 
@@ -66,7 +68,7 @@ void CTerrainMap::Create_Cube(_matrix & CubeWorld,
 	m_tMapTool.iCubeCount++;
 }
 
-void CTerrainMap::Divide_CubeType(CMapCube * pMapCube)
+void CTerrainCubeMap::Divide_CubeType(CMapCube * pMapCube)
 {
 	m_vecTotalCube.push_back(pMapCube);
 
@@ -85,18 +87,39 @@ void CTerrainMap::Divide_CubeType(CMapCube * pMapCube)
 		break;
 	}
 }
-CTerrainMap * CTerrainMap::Create()
+
+void CTerrainCubeMap::Set_CubeCoordinate(void)
 {
-	CTerrainMap*	pInstance = new CTerrainMap();
+	m_pPos = new _vec3[VTXCNTX * VTXCNTZ];
+
+	_ulong	dwIndex = 0;
+
+	for (_ulong i = 0; i < VTXCNTZ; ++i)
+	{
+		for (_ulong j = 0; j < VTXCNTX; ++j)
+		{
+			m_pPos[dwIndex] = { _float(j) * VTXITV,
+								m_fHeight[j* VTXITV][i * VTXITV],
+								_float(i) * VTXITV };
+		}
+	}
+}
+
+
+CTerrainCubeMap * CTerrainCubeMap::Create()
+{
+	CTerrainCubeMap*	pInstance = new CTerrainCubeMap();
 
 	return pInstance;
 }
 
-void CTerrainMap::Free(void)
+void CTerrainCubeMap::Free(void)
 {
 	for_each(m_vecTotalCube.begin(), m_vecTotalCube.end(), Safe_Release<CMapCube*>);
 	m_vecTotalCube.clear();
 	m_vecLand.clear();
 	m_vecCollision.clear();
 	m_vecDeco.clear();
+
+	Safe_Delete_Array(m_pPos);
 }

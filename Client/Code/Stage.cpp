@@ -26,8 +26,6 @@ HRESULT CStage::Ready_Scene(void)
 	FAILED_CHECK_RETURN(Ready_Layer_UI(L"Layer_UI"), E_FAIL);
 
 
-	
-
 	return S_OK;
 }
 
@@ -51,7 +49,7 @@ HRESULT CStage::Ready_Layer_Environment(const _tchar * pLayerTag)
 	Engine::CLayer*		pLayer = Engine::CLayer::Create();
 	NULL_CHECK_RETURN(pLayer, E_FAIL);
 	
-	m_pTerrainMap = CTerrainMap::Create();
+	m_pTerrainMap = CTerrainCubeMap::Create();
 	m_pTerrainMap->LoadMap(m_pGraphicDev, m_mapLayer, pLayer);
 	
 	CGameObject*		pGameObject = nullptr;
@@ -69,7 +67,8 @@ HRESULT CStage::Ready_Layer_Environment(const _tchar * pLayerTag)
 	//Player
 	pGameObject = CPlayer::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Terrain", pGameObject), E_FAIL);
+	dynamic_cast<CPlayer*>(pGameObject)->Set_TerrainMap(m_pTerrainMap);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player", pGameObject), E_FAIL);
 	
 	
 
@@ -112,6 +111,8 @@ HRESULT CStage::Ready_Proto(void)
 	return S_OK;
 }
 
+
+
 CStage * CStage::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	CStage *	pInstance = new CStage(pGraphicDev);
@@ -128,8 +129,11 @@ CStage * CStage::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 
 void CStage::Free(void)
 {
-	if(m_pTerrainMap == nullptr)
+	if (m_pTerrainMap != nullptr)
+	{
 		delete m_pTerrainMap;
+		m_pTerrainMap = nullptr;
+	}
 
 	CScene::Free();
 }

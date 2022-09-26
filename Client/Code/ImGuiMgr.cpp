@@ -4,7 +4,7 @@
 #include "SkeletalCube.h"
 #include "ImGuiFileDialog.h"
 #include "ImSequencerImpl.h"
-#include "MapToolTest.h"
+#include "MapTool.h"
 
 ImGuiTextBuffer CImGuiMgr::s_log;
 SkeletalPart* CImGuiMgr::s_SelectedPart = nullptr;
@@ -495,7 +495,7 @@ void CImGuiMgr::AnimationEditor(CSkeletalCube* pSkeletal)
 	          ImSequencer::SEQUENCER_ADD | ImSequencer::SEQUENCER_DEL | ImSequencer::SEQUENCER_CHANGE_FRAME);
 }
 
-void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapToolTest& MapToolTest, size_t CubeCount)
+void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapTool& MapToolTest, size_t CubeCount)
 {
 #ifndef _DEBUG
 	return;

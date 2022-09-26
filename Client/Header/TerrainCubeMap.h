@@ -3,11 +3,11 @@
 
 class CMapCube;
 
-class CTerrainMap
+class CTerrainCubeMap
 {
 public:
-	explicit CTerrainMap();
-	virtual ~CTerrainMap();
+	explicit CTerrainCubeMap();
+	virtual ~CTerrainCubeMap();
 
 private:
 	void			Create_Cube(_matrix& CubeWorld, 
@@ -25,6 +25,10 @@ public:
 
 	void			Divide_CubeType(CMapCube* pMapCube);
 
+	const _vec3*	Get_Pos() { return m_pPos; }
+
+	void			Set_CubeCoordinate(void);
+
 private:
 	CLayer*			m_pLayer = nullptr;		
 	MapTool			m_tMapTool;
@@ -33,8 +37,13 @@ private:
 	vector<CMapCube*> m_vecLand;
 	vector<CMapCube*> m_vecCollision;
 	vector<CMapCube*> m_vecDeco;
+
+	_vec3*			m_pPos = nullptr;
 public:
-	static CTerrainMap*		Create();
+	_float			m_fHeight[VTXCNTX][VTXCNTZ];
+
+public:
+	static CTerrainCubeMap*		Create();
 
 private:
 	virtual void	Free(void);

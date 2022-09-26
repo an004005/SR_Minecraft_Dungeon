@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "..\Header\MapCube.h"
-#include "MapToolTest.h"
+#include "MapTool.h"
 #include "Export_Function.h"
 
 CMapCube::CMapCube(LPDIRECT3DDEVICE9 pGraphicDev, MapTool& tMapTool)
@@ -44,7 +44,6 @@ HRESULT CMapCube::Ready_Object(void)
 		m_pTransCom->Set_ScaleY(m_tMapTool.fHeight);
 		m_pTransCom->Update_Component(0.f);
 	}
-	
 	
 	for (int i = 0; i < FACE_END; ++i)
 	{
@@ -111,6 +110,8 @@ HRESULT CMapCube::Add_Component(void)
 	return S_OK;
 }
 
+
+
 CMapCube * CMapCube::Create(LPDIRECT3DDEVICE9 pGraphicDev, MapTool maptool, _vec3 PickPos)
 {
 	CMapCube*	pInstance = new CMapCube(pGraphicDev, maptool, PickPos);
@@ -157,7 +158,6 @@ Engine::_vec3 CMapCube::PickUp_OnTerrain(void)
 
 	CTransform*		pTerrainTransformCom = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_Environment", L"Terrain", L"Proto_TransformCom", ID_DYNAMIC));
 	NULL_CHECK_RETURN(pTerrainTransformCom, _vec3());
-
 
 	return m_pCalculatorCom->PickingOnTerrain(g_hWnd, pTerrainBufferCom, pTerrainTransformCom);
 }

@@ -3,6 +3,7 @@
 #include "Engine_Include.h"
 #include "GameObject.h"
 
+
 BEGIN(Engine)
 
 class CRcCol;
@@ -10,6 +11,9 @@ class CTransform;
 class CCalculator;
 
 END
+
+class CTerrainCubeMap;
+
 class CPlayer :	public Engine::CGameObject
 {
 private:
@@ -23,7 +27,8 @@ public:
 	virtual void LateUpdate_Object(void) override;
 	virtual void Render_Object(void) override;
 
-
+public:
+	void		Set_TerrainMap(CTerrainCubeMap* terrainmap) { m_pTerrainMap = terrainmap; }
 private:
 	HRESULT				Add_Component(void);
 	void				Key_Input(const _float& fTimeDelta);
@@ -37,7 +42,7 @@ private:
 	CCalculator*		m_pCalculatorCom = nullptr;
 
 	_vec3				m_vDirection;
-	_vec3*				m_pPos;
+	CTerrainCubeMap*	m_pTerrainMap = nullptr;
 
 public:
 	static CPlayer*		Create(LPDIRECT3DDEVICE9 pGraphicDev);

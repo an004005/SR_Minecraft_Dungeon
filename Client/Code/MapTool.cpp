@@ -1,24 +1,25 @@
 #include "stdafx.h"
-#include "..\Header\MapToolTest.h"
+#include "..\Header\MapTool.h"
 #include "Terrain.h"
 
 #include "DynamicCamera.h"
 #include "ImGuiMgr.h"
-#include "Export_Function.h"
+#include "TerrainCubeMap.h"
 
-CMapToolTest::CMapToolTest(LPDIRECT3DDEVICE9 pGraphicDev)
+CMapTool::CMapTool(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
 {
 	ZeroMemory(&m_tMapTool, sizeof(MapTool));
+	ZeroMemory(&m_fHeight, sizeof(_float) * VTXCNTX * VTXCNTZ);
 	m_tMapTool.fHeight = 1.f;
 }
 
 
-CMapToolTest::~CMapToolTest()
+CMapTool::~CMapTool()
 {
 }
 
-HRESULT CMapToolTest::Ready_Scene(void)
+HRESULT CMapTool::Ready_Scene(void)
 {
 	if (FAILED(Engine::CScene::Ready_Scene()))
 		return E_FAIL;
@@ -30,17 +31,18 @@ HRESULT CMapToolTest::Ready_Scene(void)
 	m_pLayer = Engine::CLayer::Create();
 	NULL_CHECK_RETURN(m_pLayer, E_FAIL);
 
-	LoadMap();
+	//LoadMap();
 	return S_OK;
 }
 
-_int CMapToolTest::Update_Scene(const _float & fTimeDelta)
+_int CMapTool::Update_Scene(const _float & fTimeDelta)
 {
 	ImGui::ShowDemoWindow(nullptr);
 	IM_BEGIN("Map Editor Window");
 
 
-	CImGuiMgr::MapControl(m_tMapTool, *this, m_vecCube.size());
+	CImGuiMgr::MapControl(m_tMapTool, *this, m_vecTotalCube.size());
+
 	
 	//마우스 피킹 때 MapCube 생성
 	if (Engine::Get_DIMouseState(DIM_LB) & 0X80 && m_dwTime + 200 < GetTickCount())
@@ -61,8 +63,7 @@ _int CMapToolTest::Update_Scene(const _float & fTimeDelta)
 			pCube->m_wstrName = L"MapCube_" + to_wstring(m_tMapTool.iCubeCount);
 			FAILED_CHECK_RETURN(m_pLayer->Add_GameObject(pCube->m_wstrName.c_str(), pGameObject), E_FAIL);
 
-			m_vecCube.push_back(dynamic_cast<CMapCube*>(pGameObject));
-			Cube_Type(m_tMapTool.iCubeType, pGameObject);
+			m_vecTotalCube.push_back(dynamic_cast<CMapCube*>(pGameObject));
 
 			m_mapLayer.insert({ L"Layer_Terrain", m_pLayer });
 			m_tMapTool.iCubeCount++;
@@ -76,8 +77,7 @@ _int CMapToolTest::Update_Scene(const _float & fTimeDelta)
 			pCube->m_wstrName = L"MapCube_" + to_wstring(m_tMapTool.iCubeCount);
 			FAILED_CHECK_RETURN(m_pLayer->Add_GameObject(pCube->m_wstrName.c_str(), pGameObject), E_FAIL);
 
-			m_vecCube.push_back(dynamic_cast<CMapCube*>(pGameObject));
-			Cube_Type(m_tMapTool.iCubeType, pGameObject);
+			m_vecTotalCube.push_back(dynamic_cast<CMapCube*>(pGameObject));
 
 			m_mapLayer.insert({ L"Layer_Terrain", m_pLayer });
 			m_tMapTool.iCubeCount++;
@@ -87,11 +87,11 @@ _int CMapToolTest::Update_Scene(const _float & fTimeDelta)
 			if (!PickingOnCube(PickPos))
 				break;
 
-			m_vecCube.erase(remove_if(m_vecCube.begin(), m_vecCube.end(),
+			m_vecTotalCube.erase(remove_if(m_vecTotalCube.begin(), m_vecTotalCube.end(),
 				[this](const CMapCube* mapCube)
 			{
 				return mapCube->m_wstrName == this->m_wDeleteName;
-			}), m_vecCube.end());
+			}), m_vecTotalCube.end());
 
 			if (FAILED(m_pLayer->Delete_GameObject(m_wDeleteName.c_str())))
 				break;
@@ -119,16 +119,16 @@ _int CMapToolTest::Update_Scene(const _float & fTimeDelta)
 	return Engine::CScene::Update_Scene(fTimeDelta);
 }
 
-void CMapToolTest::LateUpdate_Scene(void)
+void CMapTool::LateUpdate_Scene(void)
 {
 	Engine::CScene::LateUpdate_Scene();
 }
 
-void CMapToolTest::Render_Scene(void)
+void CMapTool::Render_Scene(void)
 {
 }
 
-HRESULT CMapToolTest::Ready_Layer_Environment(const _tchar * pLayerTag)
+HRESULT CMapTool::Ready_Layer_Environment(const _tchar * pLayerTag)
 {
 	Engine::CLayer*		pLayer = Engine::CLayer::Create();
 	NULL_CHECK_RETURN(pLayer, E_FAIL);
@@ -145,13 +145,30 @@ HRESULT CMapToolTest::Ready_Layer_Environment(const _tchar * pLayerTag)
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Terrain", pGameObject), E_FAIL);
 
-	
+	/*CMapCube* pCube;
+	for (int i = 0; i < VTXCNTZ; ++i)
+	{
+		for (int j = 0; j < VTXCNTX; ++j)
+		{
+			pGameObject = pCube = CMapCube::Create(m_pGraphicDev, m_tMapTool, _vec3((_float)i, 1.f, (_float)j));
+			NULL_CHECK_RETURN(pGameObject, E_FAIL);
+
+			pCube->m_wstrName = L"MapCube_" + to_wstring(m_tMapTool.iCubeCount);
+			FAILED_CHECK_RETURN(pLayer->Add_GameObject(pCube->m_wstrName.c_str(), pGameObject), E_FAIL);
+
+			m_vecTotalCube.push_back(dynamic_cast<CMapCube*>(pGameObject));
+			m_tMapTool.iCubeCount++;
+		}
+	}
+	*/
+
+		
 	m_mapLayer.insert({ pLayerTag, pLayer });
 
 	return S_OK;
 }
 
-HRESULT CMapToolTest::Ready_Proto(void)
+HRESULT CMapTool::Ready_Proto(void)
 {
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_TerrainTexCom", CTerrainTex::Create(m_pGraphicDev, VTXCNTX, VTXCNTZ, VTXITV)), E_FAIL);
 	//FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_TerrainTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Terrain/Grass_%d.tga", TEX_NORMAL)), E_FAIL);
@@ -165,10 +182,19 @@ HRESULT CMapToolTest::Ready_Proto(void)
 
 
 
-void CMapToolTest::SaveMap()
+void CMapTool::SaveMap()
 {
+	//input data in m_vecLand
+	for (auto iter : m_vecTotalCube)
+	{
+		if (iter->m_tMapTool.iCubeType == TYPE_LAND)
+			m_vecLand.push_back(iter);
+	}
 
-	HANDLE hFile = CreateFile(L"../Bin/Resource/Map/Map.dat", GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+	//Set data in m_fHeight
+	Set_CubeCoordinate();
+
+	HANDLE hFile = CreateFile(L"../Bin/Resource/Map/MapTest.dat", GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 	if (INVALID_HANDLE_VALUE == hFile)
 	{
 		MSG_BOX("Failed Save Map");
@@ -177,24 +203,34 @@ void CMapToolTest::SaveMap()
 
 	DWORD	dwByte = 0;
 	
-	for (auto iter : m_vecCube)
+	size_t m_vecTotalCubeSize = m_vecTotalCube.size();
+
+
+	WriteFile(hFile, &m_vecTotalCubeSize, sizeof(size_t), &dwByte, nullptr);
+
+	for (auto iter : m_vecTotalCube)
 	{
 		WriteFile(hFile, &iter->m_pTransCom->m_matWorld, sizeof(_matrix), &dwByte, nullptr);
 		WriteFile(hFile, &iter->m_tMapTool, sizeof(MapTool), &dwByte, nullptr);
 	}
+	
+
+	WriteFile(hFile, &m_fHeight, sizeof(_float) * VTXCNTX * VTXCNTZ, &dwByte, nullptr);
 		
 	CloseHandle(hFile);
 
 }
 
-void CMapToolTest::LoadMap()
+void CMapTool::LoadMap()
 {
 
 	m_pLayer->Free();
-	m_vecCube.clear();
+	m_vecTotalCube.clear();
+	m_vecLand.clear();
+	ZeroMemory(&m_fHeight, sizeof(_float) * VTXCNTX * VTXCNTZ);
 	m_tMapTool.iCubeCount = 0;
 
-	HANDLE hFile = CreateFile(L"../Bin/Resource/Map/Map.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE hFile = CreateFile(L"../Bin/Resource/Map/MapTest.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 	{
@@ -203,26 +239,27 @@ void CMapToolTest::LoadMap()
 	}
 	DWORD	dwByte = 0;
 
+	size_t vecSize;
 	_matrix matCubeWorld;
 	MapTool tMapTool;
 
-	while (true)
+	ReadFile(hFile, &vecSize, sizeof(size_t), &dwByte, nullptr);
+
+	while (vecSize--)
 	{
 		
 		ReadFile(hFile, &matCubeWorld, sizeof(_matrix), &dwByte, nullptr);
 		ReadFile(hFile, &tMapTool, sizeof(MapTool), &dwByte, nullptr);
-
-		if (0 == dwByte)
-			break;
-
 		Create_Cube(matCubeWorld, tMapTool);
 	}
+
+	ReadFile(hFile, &m_fHeight, sizeof(_float) * VTXCNTX * VTXCNTZ, &dwByte, nullptr);
 
 	CloseHandle(hFile);
 
 }
 
-void CMapToolTest::Create_Cube(_matrix & CubeWorld, MapTool& tMapTool)
+void CMapTool::Create_Cube(_matrix & CubeWorld, MapTool& tMapTool)
 {
 	CGameObject* pGameObject = nullptr;
 	CMapCube* pMapCube = nullptr;
@@ -234,33 +271,17 @@ void CMapToolTest::Create_Cube(_matrix & CubeWorld, MapTool& tMapTool)
 
 	m_pLayer->Add_GameObject(pMapCube->m_wstrName.c_str(), pGameObject);
 
-	m_vecCube.push_back(dynamic_cast<CMapCube*>(pGameObject));
+	m_vecTotalCube.push_back(dynamic_cast<CMapCube*>(pGameObject));
 	m_mapLayer.insert({ L"Layer_Terrain", m_pLayer });
 	m_tMapTool.iCubeCount++;
 
 }
-void CMapToolTest::Cube_Type(_int eType, CGameObject* pGameObject)
-{
-	/*switch (eType)
-	{
-	case TYPE_LAND:
-		m_vecLand.push_back(dynamic_cast<CMapCube*>(pGameObject));
-		break;
-	case TYPE_COLLISION:
-		m_vecCollision.push_back(dynamic_cast<CMapCube*>(pGameObject));
-		break;
-	case TYPE_DECO:
-		m_vecDeco.push_back(dynamic_cast<CMapCube*>(pGameObject));
-		break;
-	default:
-		break;
-	}*/
-}
-void CMapToolTest::Cube_DebugShow(void)
+
+void CMapTool::Cube_DebugShow(void)
 {
 	if (m_tMapTool.bRendState)
 	{
-		for (auto& iter : m_vecCube)
+		for (auto& iter : m_vecTotalCube)
 		{
 			iter->m_tMapTool.bRendState = true;
 		}
@@ -268,7 +289,7 @@ void CMapToolTest::Cube_DebugShow(void)
 	}
 	else
 	{
-		for (auto& iter : m_vecCube)
+		for (auto& iter : m_vecTotalCube)
 		{
 			iter->m_tMapTool.bRendState = false;
 		}
@@ -276,9 +297,9 @@ void CMapToolTest::Cube_DebugShow(void)
 
 
 }
-CMapToolTest * CMapToolTest::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CMapTool * CMapTool::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
-	CMapToolTest *	pInstance = new CMapToolTest(pGraphicDev);
+	CMapTool *	pInstance = new CMapTool(pGraphicDev);
 
 	if (FAILED(pInstance->Ready_Scene()))
 	{
@@ -289,16 +310,16 @@ CMapToolTest * CMapToolTest::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 	return pInstance;
 }
 
-void CMapToolTest::Free(void)
+void CMapTool::Free(void)
 {
 	CScene::Free();
 }
 
 
 
-_bool CMapToolTest::PickingOnCube(_vec3& CubeCenter)
+_bool CMapTool::PickingOnCube(_vec3& CubeCenter)
 {
-	if (m_vecCube.empty())
+	if (m_vecTotalCube.empty())
 		return false;
 
 	POINT		ptMouse{};
@@ -347,19 +368,19 @@ _bool CMapToolTest::PickingOnCube(_vec3& CubeCenter)
 
 	
 
-	for (_ulong i = 0; i < m_vecCube.size(); ++i)
+	for (_ulong i = 0; i < m_vecTotalCube.size(); ++i)
 	{
 		for (_ulong j = 0; j < FACE_END; ++j)
 		{
 				// 오른쪽 위
-				dwVtxIdxRU[0] = m_vecCube[i]->vFaceVtx[j][0];
-				dwVtxIdxRU[1] = m_vecCube[i]->vFaceVtx[j][1];
-				dwVtxIdxRU[2] = m_vecCube[i]->vFaceVtx[j][2];
+				dwVtxIdxRU[0] = m_vecTotalCube[i]->vFaceVtx[j][0];
+				dwVtxIdxRU[1] = m_vecTotalCube[i]->vFaceVtx[j][1];
+				dwVtxIdxRU[2] = m_vecTotalCube[i]->vFaceVtx[j][2];
 
 				// 왼쪽 아래
-				dwVtxIdxLD[0] = m_vecCube[i]->vFaceVtx[j][0];
-				dwVtxIdxLD[1] = m_vecCube[i]->vFaceVtx[j][2];
-				dwVtxIdxLD[2] = m_vecCube[i]->vFaceVtx[j][3];
+				dwVtxIdxLD[0] = m_vecTotalCube[i]->vFaceVtx[j][0];
+				dwVtxIdxLD[1] = m_vecTotalCube[i]->vFaceVtx[j][2];
+				dwVtxIdxLD[2] = m_vecTotalCube[i]->vFaceVtx[j][3];
 
 				//광선과 닿은 면이 있다면 vRayPos와의 거리가 최소값인지 확인한다.
 				_bool RUtriCheck = D3DXIntersectTri(&dwVtxIdxRU[1], &dwVtxIdxRU[2], &dwVtxIdxRU[0], &vRayPos, &vRayDir, &fU, &fV, &fDist);
@@ -386,11 +407,11 @@ _bool CMapToolTest::PickingOnCube(_vec3& CubeCenter)
 	if (eFace == FACE_END)
 		return false;
 
-	_vec3& vCenter = m_vecCube[iCurCube]->vCenter;
-	m_wDeleteName = m_vecCube[iCurCube]->m_wstrName;
+	_vec3& vCenter = m_vecTotalCube[iCurCube]->vCenter;
+	m_wDeleteName = m_vecTotalCube[iCurCube]->m_wstrName;
 
 	//Block Height Option
-	_float fCurHeight = m_vecCube[iCurCube]->m_tMapTool.fHeight;
+	_float fCurHeight = m_vecTotalCube[iCurCube]->m_tMapTool.fHeight;
 
 	_float fCenterY = fCurHeight * 0.5f + m_tMapTool.fHeight * 0.5f;
 
@@ -420,4 +441,37 @@ _bool CMapToolTest::PickingOnCube(_vec3& CubeCenter)
 	}
 
 	return true;
+}
+
+void CMapTool::Set_CubeCoordinate(void)
+{
+	_ulong	dwIndex = 0;
+
+	for (_ulong i = 0; i < VTXCNTZ; ++i)
+	{
+		for (_ulong j = 0; j < VTXCNTX; ++j)
+		{
+			CubeHeight(_float(j) * VTXITV, _float(i) * VTXITV);		
+		}
+	}
+}
+
+
+void CMapTool::CubeHeight(_float x, _float z)
+{
+	_float fMostHeightValue = 0;
+	_float fLength = 0;
+	for (auto iter : m_vecLand)
+	{
+		if ((iter->vCenter.x - 0.5f) == x && (iter->vCenter.z - 0.5f) == z)
+		{
+			if (fMostHeightValue < iter->vCenter.y)
+			{
+				fMostHeightValue = iter->vCenter.y;
+				fLength = iter->m_tMapTool.fHeight / 2.f;
+			}
+		}
+	}
+
+	m_fHeight[(_int)x][(_int)z] = fMostHeightValue + fLength;
 }

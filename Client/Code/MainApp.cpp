@@ -5,8 +5,8 @@
 #include "Logo.h"
 #include "ToolTest.h"
 #include "CubeAnimMgr.h"
-#include "MapToolTest.h"
-#include "TerrainMap.h"
+#include "MapTool.h"
+#include "TerrainCubeMap.h"
 
 USING(Engine)
 CMainApp::CMainApp()	
@@ -133,7 +133,7 @@ HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement
 
 	pScene = CLogo::Create(pGraphicDev);
 	//pScene = CToolTest::Create(pGraphicDev);
-	//pScene = CMapToolTest::Create(pGraphicDev);
+	//pScene = CMapTool::Create(pGraphicDev);
 
 	NULL_CHECK_RETURN(pScene, E_FAIL);
 
