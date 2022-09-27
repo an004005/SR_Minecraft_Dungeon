@@ -46,6 +46,31 @@ public:
 	// ∏« √≥¿Ω ¥≠∑∂¥Ÿ ∂√¿ª ∂ß
 	bool DIKeyUp(_ubyte byKeyID) { return _states[byKeyID] == KEY_STATE::UP; }
 
+	bool MouseKeyDown(MOUSEKEYSTATE byMouseID)
+	{
+		if (byMouseID == DIM_LB)
+		{
+			return m_MouseLeftState == KEY_STATE::DOWN;
+		}
+		else if (byMouseID == DIM_RB)
+		{
+			return m_MouseRightState == KEY_STATE::DOWN;
+		}
+		return false;
+	};
+	bool MouseKeyUp(MOUSEKEYSTATE byMouseID)
+	{
+		if (byMouseID == DIM_LB)
+		{
+			return m_MouseLeftState == KEY_STATE::UP;
+		}
+		else if (byMouseID == DIM_RB)
+		{
+			return m_MouseRightState == KEY_STATE::UP;
+		}
+		return false;
+	}
+
 public:
 	HRESULT			Ready_InputDev(HINSTANCE hInst, HWND hWnd);
 	void			SetUp_InputDev(void);
@@ -61,6 +86,8 @@ private:
 
 	HWND m_hWnd;
 	vector<KEY_STATE> _states;
+	KEY_STATE m_MouseLeftState;
+	KEY_STATE m_MouseRightState;
 public:
 	virtual void		Free(void);
 };

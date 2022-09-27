@@ -75,9 +75,9 @@ HRESULT CLogo::Ready_Layer_Environment(const _tchar * pLayerTag)
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"BackGround", pGameObject), E_FAIL);
 
 	// TestPlayer
-	pGameObject = CPlayer::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"TestPlayer", pGameObject), E_FAIL);
+	// pGameObject = CPlayer::Create(m_pGraphicDev);
+	// NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	// FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"TestPlayer", pGameObject), E_FAIL);
 
 	// // TestMonster
 	// pGameObject = CTestMonster::Create(m_pGraphicDev);

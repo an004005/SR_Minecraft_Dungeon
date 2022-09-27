@@ -2,6 +2,15 @@
 #include "ImSequencerImpl.h"
 
 
+void CImSequencerImpl::LoadAnimFrame(const wstring& wstrPath)
+{
+	m_CubeAnim = CubeAnimFrame::Load(wstrPath);
+	m_vecPartName.clear();
+	for (auto& e : m_CubeAnim.mapFrame)
+		m_vecPartName.push_back(e.first);
+	m_iFrameMax = CImSequencerImpl::Sec2Frame(m_CubeAnim.fTotalTime);
+}
+
 void CImSequencerImpl::AddTransFrame(const int iCurrentFrame, const SkeletalPart* pPart)
 {
 	if (pPart == nullptr)

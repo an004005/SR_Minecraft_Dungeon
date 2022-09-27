@@ -53,6 +53,9 @@
     <Filter Include="02. GameObject\04. MapCube">
       <UniqueIdentifier>{ca29e199-0f6d-4818-ae09-7431ccba8a2c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{581ccd6e-210e-44c4-adac-31cb57593560}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\MainApp.h">
@@ -60,12 +63,6 @@
     </ClInclude>
     <ClInclude Include="..\Header\Logo.h">
       <Filter>01. Scene\00. Logo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\Player.h">
-      <Filter>02. GameObject\00. Player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\Monster.h">
-      <Filter>02. GameObject\00. Player</Filter>
     </ClInclude>
     <ClInclude Include="Client.h">
       <Filter>99. Default</Filter>
@@ -172,12 +169,16 @@
     <ClInclude Include="..\Header\MapCube.h">
       <Filter>02. GameObject\04. MapCube</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\CubeAnimationInstance.h">
-      <Filter>Animation</Filter>
-    </ClInclude>
     <ClInclude Include="stb\stb_image.h">
       <Filter>99. Default</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\Monster.h">
+      <Filter>02. GameObject\00. Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Player.h">
+      <Filter>02. GameObject\00. Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Controller.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\MainApp.cpp">
@@ -185,12 +186,6 @@
     </ClCompile>
     <ClCompile Include="..\Code\Logo.cpp">
       <Filter>01. Scene\00. Logo</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\Player.cpp">
-      <Filter>02. GameObject\00. Player</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\Monster.cpp">
-      <Filter>02. GameObject\00. Player</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>99. Default</Filter>
@@ -282,9 +277,13 @@
     <ClCompile Include="..\Code\MapCube.cpp">
       <Filter>02. GameObject\04. MapCube</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\CubeAnimationInstance.cpp">
-      <Filter>Animation</Filter>
+    <ClCompile Include="..\Code\Monster.cpp">
+      <Filter>02. GameObject\00. Player</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\Player.cpp">
+      <Filter>02. GameObject\00. Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Controller.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">

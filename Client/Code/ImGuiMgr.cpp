@@ -189,6 +189,7 @@ void CImGuiMgr::LoggerWindow()
 #endif
 
 	ImGui::Begin("Logger");
+    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
 	if (ImGui::Button("Clear")) { s_log.clear(); }
 	ImGui::SameLine();
@@ -232,7 +233,7 @@ void CImGuiMgr::SkeletalEditor(CCamera* pCamera, CSkeletalCube* pSkeletal)
 
 			wstring tmp;
 			tmp.assign(filePathName.begin(), filePathName.end());
-			pSkeletal->Load(tmp);
+			pSkeletal->LoadSkeletal(tmp);
 		}
 		ImGuiFileDialog::Instance()->Close();
 	}
@@ -250,7 +251,7 @@ void CImGuiMgr::SkeletalEditor(CCamera* pCamera, CSkeletalCube* pSkeletal)
 
 			wstring tmp;
 			tmp.assign(filePathName.begin(), filePathName.end());
-			pSkeletal->Save(tmp);
+			pSkeletal->SaveSkeletal(tmp);
 		}
 		ImGuiFileDialog::Instance()->Close();
 	}
@@ -511,12 +512,8 @@ void CImGuiMgr::AnimationEditor(CSkeletalCube* pSkeletal)
 
 			wstring tmp;
 			tmp.assign(filePathName.begin(), filePathName.end());
-			mySequence.m_CubeAnim = CubeAnimFrame::Load(tmp);
+			mySequence.LoadAnimFrame(tmp);
 			pSkeletal->m_pCurAnim = &mySequence.m_CubeAnim;
-			mySequence.m_vecPartName.clear();
-			for (auto& e : mySequence.m_CubeAnim.mapFrame)
-				mySequence.m_vecPartName.push_back(e.first);
-			mySequence.m_iFrameMax = CImSequencerImpl::Sec2Frame(mySequence.m_CubeAnim.fTotalTime);
 		}
 		ImGuiFileDialog::Instance()->Close();
 	}

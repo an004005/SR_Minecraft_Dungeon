@@ -1,44 +1,58 @@
 #pragma once
+#include "SkeletalCube.h"
 
-#include "Engine_Include.h"
-#include "GameObject.h"
+class CController;
 
-BEGIN(Engine)
-
-class CRcCol;
-class CTransform;
-
-END
-class CPlayer :	public Engine::CGameObject
+class CPlayer : public CSkeletalCube
 {
-private:
+protected:
 	explicit CPlayer(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual ~CPlayer() override;
 
+private:
+	enum LoopAnim
+	{
+		WALK,
+		IDLE,
+		DEAD,
+		LA_END
+	};
+	enum OnceAnim
+	{
+		ATTACK1,
+		// ATTACK2, // 무기에서 가져와서 실행하게 구현
+		// ATTACK3,
+		DOTGE,
+		TELEPORT,
+		RESCUE,
+
+		OA_END
+	};
+
+
 public:
-	virtual HRESULT Ready_Object(void) override;
+	virtual HRESULT Ready_Object() override;
 	virtual _int Update_Object(const _float& fTimeDelta) override;
-	virtual void LateUpdate_Object(void) override;
-	virtual void Render_Object(void) override;
+	virtual void Free() override;
 
+	virtual void CheckCursor();
+	virtual void SetMove(const _vec3& vPos);
+	virtual void SetTarget(CSkeletalCube* pTarget);
 
-private:
-	HRESULT				Add_Component(void);
+	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
 
-private:
-	CTransform*			m_pTransCom = nullptr;
+	_vec3 PickingOnTerrain(HWND hWnd, const CTerrainTex* pTerrainBufferCom, const CTransform* pTerrainTransformCom);
 
-public:
-	static CPlayer*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
+protected:
+	CController* m_pController;
 
-private:
+	array<CubeAnimFrame, LA_END> m_arrLoopAnim;
+	array<CubeAnimFrame, OA_END> m_arrOnceAnim;
 
-	virtual void Free(void);
+	_vec3 m_vDest;
+	CSkeletalCube* m_pTarget = nullptr;
 
-private:
-	_float m_fSpeed;
-	_float m_fRotSpeed;
-
-
+	_float m_fVelocity;
 };
+
 

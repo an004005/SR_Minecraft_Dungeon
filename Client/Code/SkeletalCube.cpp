@@ -2,7 +2,6 @@
 #include "SkeletalCube.h"
 #include "CubeAnimMgr.h"
 #include "GameUtilMgr.h"
-#include "CubeAnimationInstance.h"
 
 string CSkeletalCube::s_strRoot = "root";
 
@@ -174,7 +173,7 @@ CSkeletalCube* CSkeletalCube::Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstr
 	}
 
 	if (!wstrPath.empty())
-		pInstance->Load(wstrPath);
+		pInstance->LoadSkeletal(wstrPath);
 
 	return pInstance;
 }
@@ -194,7 +193,8 @@ void CSkeletalCube::AnimFrameConsume(_float fTimeDelta)
 		fAccTime = 0.f;
 		if (m_pCurAnim->bLoop == false) // loop 가 아니면 다 실행하고 loop로 변경
 		{
-			m_pCurAnim = m_pAnimInst->GetCurrentLoopAnim();
+			// m_pCurAnim = m_pAnimInst->GetCurrentLoopAnim();
+			m_pCurAnim = m_pIdleAnim;
 			m_pCurAnim->bLoop = true;
 			return;
 		}
@@ -253,7 +253,14 @@ void CSkeletalCube::PlayAnimationOnce(const string& strAnim)
 	// std::sort(m_pCurAnim..begin(), vecFrame.end());
 }
 
-void CSkeletalCube::Load(wstring wstrPath)
+void CSkeletalCube::PlayAnimationOnce(CubeAnimFrame* frame)
+{
+	fAccTime = 0.f;
+	m_pCurAnim = frame;
+	m_pCurAnim->bLoop = false;
+}
+
+void CSkeletalCube::LoadSkeletal(wstring wstrPath)
 {
 	HANDLE hFile = CreateFile(wstrPath.c_str(), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
@@ -333,7 +340,7 @@ void CSkeletalCube::Load(wstring wstrPath)
 	CloseHandle(hFile);
 }
 
-void CSkeletalCube::Save(wstring wstrPath)
+void CSkeletalCube::SaveSkeletal(wstring wstrPath)
 {
 	HANDLE hFile = CreateFile(wstrPath.c_str(), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 
@@ -498,6 +505,7 @@ CubeAnimFrame CubeAnimFrame::Load(const wstring& wstrPath)
 		tmp.mapFrame.insert({strPartName, vecFrameTmp});
 	}
 
+	CloseHandle(hFile);
 
 	return tmp;
 }
@@ -541,7 +549,6 @@ void CubeAnimFrame::Save(const wstring& wstrPath)
 	}
 	
 	CloseHandle(hFile);
-
 }
 
 

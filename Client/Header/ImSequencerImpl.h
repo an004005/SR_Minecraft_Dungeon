@@ -88,6 +88,8 @@ public:
 		draw_list->PopClipRect();
 	}
 
+	void LoadAnimFrame(const wstring& wstrPath);
+
 	void AddTransFrame(const int iCurrentFrame, const SkeletalPart* pPart);
 	void AddTransFrameRecur(const int iCurrentFrame, const SkeletalPart* pPart);
 

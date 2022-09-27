@@ -165,7 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\BackGround.h" />
-    <ClInclude Include="..\Header\CubeAnimationInstance.h" />
+    <ClInclude Include="..\Header\Controller.h" />
     <ClInclude Include="..\Header\CubeAnimMgr.h" />
     <ClInclude Include="..\Header\DynamicCamera.h" />
     <ClInclude Include="..\Header\GameUtilMgr.h" />
@@ -174,10 +174,10 @@
     <ClInclude Include="..\Header\Loading.h" />
     <ClInclude Include="..\Header\MapCube.h" />
     <ClInclude Include="..\Header\MapToolTest.h" />
-    <ClInclude Include="..\Header\Monster.h" />
-    <ClInclude Include="..\Header\Player.h" />
     <ClInclude Include="..\Header\Logo.h" />
     <ClInclude Include="..\Header\MainApp.h" />
+    <ClInclude Include="..\Header\Monster.h" />
+    <ClInclude Include="..\Header\Player.h" />
     <ClInclude Include="..\Header\SkeletalCube.h" />
     <ClInclude Include="..\Header\Stage.h" />
     <ClInclude Include="..\Header\StaticCamera.h" />
@@ -208,7 +208,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\BackGround.cpp" />
-    <ClCompile Include="..\Code\CubeAnimationInstance.cpp" />
+    <ClCompile Include="..\Code\Controller.cpp" />
     <ClCompile Include="..\Code\CubeAnimMgr.cpp" />
     <ClCompile Include="..\Code\DynamicCamera.cpp" />
     <ClCompile Include="..\Code\GameUtilMgr.cpp" />
@@ -217,10 +217,10 @@
     <ClCompile Include="..\Code\Loading.cpp" />
     <ClCompile Include="..\Code\MapCube.cpp" />
     <ClCompile Include="..\Code\MapToolTest.cpp" />
-    <ClCompile Include="..\Code\Monster.cpp" />
-    <ClCompile Include="..\Code\Player.cpp" />
     <ClCompile Include="..\Code\Logo.cpp" />
     <ClCompile Include="..\Code\MainApp.cpp" />
+    <ClCompile Include="..\Code\Monster.cpp" />
+    <ClCompile Include="..\Code\Player.cpp" />
     <ClCompile Include="..\Code\SkeletalCube.cpp" />
     <ClCompile Include="..\Code\Stage.cpp" />
     <ClCompile Include="..\Code\StaticCamera.cpp" />
