@@ -11,6 +11,7 @@ CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev) : CSkeletalCube(pGraphicDev)
 	m_fVelocity = 5.f;
 }
 
+
 CPlayer::~CPlayer()
 {
 }

@@ -5,6 +5,8 @@
 #include "Logo.h"
 #include "ToolTest.h"
 #include "CubeAnimMgr.h"
+#include "MapTool.h"
+#include "TerrainCubeMap.h"
 #include "MapToolTest.h"
 #include "Stage.h"
 

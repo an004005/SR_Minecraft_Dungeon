@@ -63,9 +63,12 @@ namespace Engine
 	//MapImGuiTool
 	typedef struct maptool
 	{
-		_int iTexIdx;
-		_int iCubeCount;
-		_int iPickingOption;
+		_int	iTexIdx;
+		_int	iCubeCount;
+		_int	iPickingOption;
+		_float	fHeight;
+		_int	iCubeType;
+		_bool	bRendState;
 
 	}MapTool;
 
