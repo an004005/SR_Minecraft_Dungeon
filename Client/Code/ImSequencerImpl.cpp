@@ -2,6 +2,15 @@
 #include "ImSequencerImpl.h"
 
 
+void CImSequencerImpl::LoadAnimFrame(const wstring& wstrPath)
+{
+	m_CubeAnim = CubeAnimFrame::Load(wstrPath);
+	m_vecPartName.clear();
+	for (auto& e : m_CubeAnim.mapFrame)
+		m_vecPartName.push_back(e.first);
+	m_iFrameMax = CImSequencerImpl::Sec2Frame(m_CubeAnim.fTotalTime);
+}
+
 void CImSequencerImpl::AddTransFrame(const int iCurrentFrame, const SkeletalPart* pPart)
 {
 	if (pPart == nullptr)
@@ -30,4 +39,14 @@ void CImSequencerImpl::AddTransFrame(const int iCurrentFrame, const SkeletalPart
 
 	D3DXMatrixDecompose(&vScale, &qRot, &vPos, &pPart->pTrans->m_matWorld);
 	itrFrame->second.push_back({fTime, vScale, qRot, vPos});
+	m_CubeAnim.SortFrame(pPart->strName);
+}
+
+void CImSequencerImpl::AddTransFrameRecur(const int iCurrentFrame, const SkeletalPart* pPart)
+{
+	AddTransFrame(iCurrentFrame, pPart);
+	for (auto& child : pPart->vecChild)
+	{
+		AddTransFrameRecur(iCurrentFrame, child);
+	}
 }

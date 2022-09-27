@@ -189,6 +189,7 @@ void CImGuiMgr::LoggerWindow()
 #endif
 
 	ImGui::Begin("Logger");
+    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
 	if (ImGui::Button("Clear")) { s_log.clear(); }
 	ImGui::SameLine();
@@ -222,7 +223,7 @@ void CImGuiMgr::SkeletalEditor(CCamera* pCamera, CSkeletalCube* pSkeletal)
 	if (ImGui::Button("Load Skeletal"))
 	{
 		ImGuiFileDialog::Instance()->OpenDialog("ChooseFileToLoad", "Choose File", ".cube",
-		                                        "../Bin/Resource/SkeletalCube");
+		                                        "../Bin/Resource/SkeletalCube/");
 	}
 	if (ImGuiFileDialog::Instance()->Display("ChooseFileToLoad"))
 	{
@@ -232,7 +233,7 @@ void CImGuiMgr::SkeletalEditor(CCamera* pCamera, CSkeletalCube* pSkeletal)
 
 			wstring tmp;
 			tmp.assign(filePathName.begin(), filePathName.end());
-			pSkeletal->Load(tmp);
+			pSkeletal->LoadSkeletal(tmp);
 		}
 		ImGuiFileDialog::Instance()->Close();
 	}
@@ -240,7 +241,7 @@ void CImGuiMgr::SkeletalEditor(CCamera* pCamera, CSkeletalCube* pSkeletal)
 	if (ImGui::Button("Save Skeletal"))
 	{
 		ImGuiFileDialog::Instance()->OpenDialog("ChooseFileToSave", "Choose File", ".cube",
-		                                        "../Bin/Resource/SkeletalCube");
+		                                        "../Bin/Resource/SkeletalCube/");
 	}
 	if (ImGuiFileDialog::Instance()->Display("ChooseFileToSave"))
 	{
@@ -250,7 +251,7 @@ void CImGuiMgr::SkeletalEditor(CCamera* pCamera, CSkeletalCube* pSkeletal)
 
 			wstring tmp;
 			tmp.assign(filePathName.begin(), filePathName.end());
-			pSkeletal->Save(tmp);
+			pSkeletal->SaveSkeletal(tmp);
 		}
 		ImGuiFileDialog::Instance()->Close();
 	}
@@ -363,7 +364,8 @@ void CImGuiMgr::TextureSelector(wstring& strTex, _uint& iTexIdx)
 	ImGui::Text("Texture Selector");
 	static const vector<wstring> vecTexName{
 		L"Proto_CubeTexture",
-		L"Proto_MinecraftCubeTexture"
+		L"Proto_MinecraftCubeTexture",
+		L"Proto_WeaponTexture",
 	};
 	static vector<_int> vecTexIdx(vecTexName.size(), 0);
 	static size_t iCurIdx = 0;
@@ -375,7 +377,7 @@ void CImGuiMgr::TextureSelector(wstring& strTex, _uint& iTexIdx)
 			CTexture* pTexture = dynamic_cast<CTexture*>(Find_Proto(vecTexName[i].c_str()));
 			NULL_CHECK(pTexture);
 
-			size_t iTexSize = pTexture->GetTexSize();
+			size_t iTexSize = pTexture->GetTexSize() - 1;
 			string _TexName;
 			_TexName.assign(vecTexName[i].begin(), vecTexName[i].end());
 
@@ -402,7 +404,9 @@ void CImGuiMgr::VIBufferSelector(wstring& strBuf)
 {
 	ImGui::Text("VIBuffer Selector");
 	static const vector<wstring> vecBufName{
-		L"Proto_CubeTexCom"
+		L"Proto_CubeTexCom",
+		L"Proto_VoxelTex_Sword",
+		L"Proto_RcCol"
 	};
 	static size_t iCurIdx = 0;
 
@@ -488,11 +492,49 @@ void CImGuiMgr::AnimationEditor(CSkeletalCube* pSkeletal)
 	ImGui::SameLine();
 	if (ImGui::Button("Add All Part Trans"))
 	{
-		
+		mySequence.AddTransFrameRecur(currentFrame, pSkeletal->m_pRootPart);
 	}
 	ImGui::PopItemWidth();
 	Sequencer(&mySequence, &currentFrame, &expanded, &selectedEntry, &firstFrame,
 	          ImSequencer::SEQUENCER_ADD | ImSequencer::SEQUENCER_DEL | ImSequencer::SEQUENCER_CHANGE_FRAME);
+
+
+	if (ImGui::Button("Load Anim"))
+	{
+		ImGuiFileDialog::Instance()->OpenDialog("ChooseFileToLoadAnim", "Choose File", ".anim",
+		                                        "../Bin/Resource/CubeAnim/");
+	}
+	if (ImGuiFileDialog::Instance()->Display("ChooseFileToLoadAnim"))
+	{
+		if (ImGuiFileDialog::Instance()->IsOk())
+		{
+			std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+
+			wstring tmp;
+			tmp.assign(filePathName.begin(), filePathName.end());
+			mySequence.LoadAnimFrame(tmp);
+			pSkeletal->m_pCurAnim = &mySequence.m_CubeAnim;
+		}
+		ImGuiFileDialog::Instance()->Close();
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Save Anim"))
+	{
+		ImGuiFileDialog::Instance()->OpenDialog("ChooseFileToSaveAnim", "Choose File", ".anim",
+		                                        "../Bin/Resource/CubeAnim/");
+	}
+	if (ImGuiFileDialog::Instance()->Display("ChooseFileToSaveAnim"))
+	{
+		if (ImGuiFileDialog::Instance()->IsOk())
+		{
+			std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+
+			wstring tmp;
+			tmp.assign(filePathName.begin(), filePathName.end());
+			mySequence.m_CubeAnim.Save(tmp);
+		}
+		ImGuiFileDialog::Instance()->Close();
+	}
 }
 
 void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapTool& MapToolTest, size_t CubeCount)

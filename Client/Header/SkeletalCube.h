@@ -1,8 +1,6 @@
 #pragma once
 #include "GameObject.h"
 
-class CCubeAnimationInstance;
-
 struct SkeletalPart
 {
 	// info
@@ -44,7 +42,7 @@ struct TransFrame
 	D3DXQUATERNION qRot;
 	_vec3 vPos;
 
-	TransFrame() = default;
+	TransFrame(){}
 	TransFrame(_float fTime, _vec3 vScale, D3DXQUATERNION qRot, _vec3 vPos)
 		: fTime(fTime), vScale(vScale), qRot(qRot), vPos(vPos) {}
 };
@@ -52,15 +50,20 @@ struct TransFrame
 struct CubeAnimFrame
 {
 	_bool bLoop = false;			// 반복 여부
+	_bool bCancen = false;			// 중간 취소 가능 여부
 	_float fTotalTime = 0.f;		// 총 재생 시간
 	// part이름,     part의 시간별 transform정보
 	map<string, vector<TransFrame>> mapFrame; // (float기준으로 정렬상태여야 한다.)
+
+	static CubeAnimFrame Load(const wstring& wstrPath);
+	void Save(const wstring& wstrPath);
+	void SortFrame(const string& strPart);
 };
 
 class CSkeletalCube : public CGameObject
 {
 	friend class CImGuiMgr; // for tool
-private:
+protected:
 	explicit CSkeletalCube(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual ~CSkeletalCube() override;
 
@@ -77,20 +80,21 @@ public:
 	_bool DeleteSkeletalPart(const string& strPart);
 	static CSkeletalCube* Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrPath = L"");
 
-	virtual void AnimFrameConsume(_float fTimeDelta);
 	virtual void PlayAnimationOnce(const string& strAnim);
+	virtual void PlayAnimationOnce(CubeAnimFrame* frame);
 
-	virtual void Load(wstring wstrPath);
-	virtual void Save(wstring wstrPath);
+	void LoadSkeletal(wstring wstrPath);
+	void SaveSkeletal(wstring wstrPath);
 
 
 private:
 	virtual void SaveRecursive(HANDLE hFile, SkeletalPart* pPart);
 	virtual void DeleteRecursive(const string& strPart);
 	static void TransFrameLerp(_matrix& matOut, const TransFrame& PrevFrame, const TransFrame& NextFrame, const _float fS);
+	virtual void AnimFrameConsume(_float fTimeDelta);
 
 
-private:
+protected:
 	static string s_strRoot;
 
 	// buffer, tex, trans com
@@ -98,8 +102,8 @@ private:
 	map<string, SkeletalPart*> m_mapParts;
 
 	// animation com
-	CCubeAnimationInstance* m_pAnimInst = nullptr;
 	CubeAnimFrame* m_pCurAnim = nullptr;
+	CubeAnimFrame* m_pIdleAnim = nullptr;
 	_float fAccTime = 0.f;	  // 애니메이션 현재 시간
 	_bool m_bStopAnim = false;
 };

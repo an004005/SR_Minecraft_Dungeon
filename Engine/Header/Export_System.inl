@@ -83,6 +83,16 @@ inline bool DIKeyUp(_ubyte byKeyID)
 	return CInputDev::GetInstance()->DIKeyUp(byKeyID);
 }
 
+inline bool MouseKeyDown(MOUSEKEYSTATE byMouseID)
+{
+	return CInputDev::GetInstance()->MouseKeyDown(byMouseID);
+}
+
+inline bool MouseKeyUp(MOUSEKEYSTATE byMouseID)
+{
+	return CInputDev::GetInstance()->MouseKeyUp(byMouseID);
+}
+
 /*--------------------
  *		FontMgr
  --------------------*/

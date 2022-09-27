@@ -105,6 +105,9 @@
     <ClInclude Include="..\..\Header\Calculator.h">
       <Filter>00. Component\03. Calculator</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Header\VoxelTex.h">
+      <Filter>00. Component\00. VIBuffer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\TriCol.cpp">
@@ -157,6 +160,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\Calculator.cpp">
       <Filter>00. Component\03. Calculator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\VoxelTex.cpp">
+      <Filter>00. Component\00. VIBuffer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -35,6 +35,8 @@ inline void			SetUp_InputDev(void);
 inline bool DIKeyPressing(_ubyte byKeyID);
 inline bool DIKeyDown(_ubyte byKeyID);
 inline bool DIKeyUp(_ubyte byKeyID);
+inline bool MouseKeyDown(MOUSEKEYSTATE byMouseID);
+inline bool MouseKeyUp(MOUSEKEYSTATE byMouseID);
 
 // FontMgr
 

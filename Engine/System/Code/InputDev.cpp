@@ -9,6 +9,8 @@ CInputDev::CInputDev()
 {
 	ZeroMemory(m_byKeyState, sizeof(m_byKeyState));
 	ZeroMemory(&m_MouseState, sizeof(m_MouseState));
+	m_MouseLeftState = KEY_STATE::E_END;
+	m_MouseRightState = KEY_STATE::E_END;
 }
 
 
@@ -95,6 +97,49 @@ void CInputDev::SetUp_InputDev(void)
 	}
 
 	m_pMouse->GetDeviceState(sizeof(m_MouseState), &m_MouseState);
+
+	if (Get_DIMouseState(DIM_LB) & 0x8000)
+	{
+		KEY_STATE& state = m_MouseLeftState;
+
+		// 이전 프레임에 키를 누른 상태라면 PRESS
+		if (state == KEY_STATE::PRESS || state == KEY_STATE::DOWN)
+			state = KEY_STATE::PRESS;
+		else
+			state = KEY_STATE::DOWN;
+	}
+	else
+	{
+		KEY_STATE& state = m_MouseLeftState;
+
+		// 이전 프레임에 키를 누른 상태라면 UP
+		if (state == KEY_STATE::PRESS || state == KEY_STATE::DOWN)
+			state = KEY_STATE::UP;
+		else
+			state = KEY_STATE::NONE;
+	}
+
+
+	if (Get_DIMouseState(DIM_RB) & 0x8000)
+	{
+		KEY_STATE& state = m_MouseRightState;
+
+		// 이전 프레임에 키를 누른 상태라면 PRESS
+		if (state == KEY_STATE::PRESS || state == KEY_STATE::DOWN)
+			state = KEY_STATE::PRESS;
+		else
+			state = KEY_STATE::DOWN;
+	}
+	else
+	{
+		KEY_STATE& state = m_MouseRightState;
+
+		// 이전 프레임에 키를 누른 상태라면 UP
+		if (state == KEY_STATE::PRESS || state == KEY_STATE::DOWN)
+			state = KEY_STATE::UP;
+		else
+			state = KEY_STATE::NONE;
+	}
 }
 
 void Engine::CInputDev::Free(void)

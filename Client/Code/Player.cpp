@@ -1,16 +1,14 @@
 #include "stdafx.h"
 #include "Player.h"
-#include "TerrainCubeMap.h"
-#include "Export_Function.h"
+#include "Controller.h"
 
-CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev)
-	: CGameObject(pGraphicDev)
+/*-----------------------
+ *    CCharacter
+ ----------------------*/
+CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev) : CSkeletalCube(pGraphicDev)
 {
-}
-
-CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev, _vec3* VtxPos)
-	: CGameObject(pGraphicDev)
-{
+	m_vDest = {0.f, 0.f, 0.f};
+	m_fVelocity = 5.f;
 }
 
 
@@ -18,191 +16,197 @@ CPlayer::~CPlayer()
 {
 }
 
-HRESULT CPlayer::Ready_Object(void)
+HRESULT CPlayer::Ready_Object()
 {
-	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
+	CSkeletalCube::Ready_Object();
+	m_pController = CPlayerController::Create();
 
-	m_fSpeed = 5.f;
-	m_fRotSpeed = 90.f;
-	
+	m_arrLoopAnim[IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_idle.anim");
+	m_arrLoopAnim[WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_walk.anim");
+	m_arrOnceAnim[ATTACK1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_a.anim");
+	m_pIdleAnim = &m_arrLoopAnim[IDLE];
+
 	return S_OK;
 }
 
-Engine::_int CPlayer::Update_Object(const _float& fTimeDelta)
+_int CPlayer::Update_Object(const _float& fTimeDelta)
 {
-	//m_pTransCom->m_vAngle.z = D3DXToRadian(45.f);
-	Key_Input(fTimeDelta);
-	Engine::CGameObject::Update_Object(fTimeDelta);
+	CSkeletalCube::Update_Object(fTimeDelta);
+	m_pController->Update(this);
 
-	// if (Engine::DIK(KEY_TYPE::W))
-	// {
-	// 	_vec3 NormalUp;
-	// 	D3DXVec3Normalize(OUT &NormalUp, &m_pTransCom->m_vInfo[INFO_UP]);
-	// 	m_pTransCom->m_vInfo[INFO_POS] += NormalUp * m_fSpeed * fTimeDelta;
-	// }
-	// else if (Engine::GetButton(KEY_TYPE::S))
-	// {
-	// 	_vec3 NormalUp;
-	// 	D3DXVec3Normalize(OUT &NormalUp, &m_pTransCom->m_vInfo[INFO_UP]);
-	// 	m_pTransCom->m_vInfo[INFO_POS] -= NormalUp * m_fSpeed * fTimeDelta;
-	// }
-	//
-	// if (Engine::GetButton(KEY_TYPE::A))
-	// {
-	// 	m_pTransCom->m_vAngle.z += D3DXToRadian(m_fRotSpeed * fTimeDelta);
-	// }
-	// else if (Engine::GetButton(KEY_TYPE::D))
-	// {
-	// 	m_pTransCom->m_vAngle.z -= D3DXToRadian(m_fRotSpeed * fTimeDelta);
-	// }
-	//
-	// if (Engine::GetButton(KEY_TYPE::Q))
-	// {
-	// 	m_pTransCom->m_vAngle.y += D3DXToRadian(m_fRotSpeed * fTimeDelta);
-	// }
-	// else if (Engine::GetButton(KEY_TYPE::E))
-	// {
-	// 	m_pTransCom->m_vAngle.y -= D3DXToRadian(m_fRotSpeed * fTimeDelta);
-	// }
-	//
-	// if (Engine::GetButton(KEY_TYPE::Z))
-	// {
-	// 	m_pTransCom->m_vAngle.x += D3DXToRadian(m_fRotSpeed * fTimeDelta);
-	// }
-	// else if (Engine::GetButton(KEY_TYPE::C))
-	// {
-	// 	m_pTransCom->m_vAngle.x -= D3DXToRadian(m_fRotSpeed * fTimeDelta);
-	// }
+	if (m_vDest != _vec3(0.f, 0.f, 0.f))
+	{
+		_vec3& vCurPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+		_vec3  vToDest =  m_vDest - vCurPos;
+		_float fLenth = D3DXVec3Length(&vToDest);
+		D3DXVec3Normalize(&vToDest, &vToDest);
+
+		vCurPos += vToDest * fTimeDelta * m_fVelocity;
+		if (fLenth < 0.1f)
+		{
+			m_vDest = _vec3(0.f, 0.f, 0.f);
+			m_pCurAnim = &m_arrLoopAnim[IDLE];
+		}
+	}
 
 
-
-	Add_RenderGroup(RENDER_PRIORITY, this);
+	// if (D3DXVec3LengthSq())
 
 	return 0;
 }
 
-void CPlayer::LateUpdate_Object(void)
+void CPlayer::Free()
 {
-	Set_OnTerrain();
-	Engine::CGameObject::LateUpdate_Object();
+	CSkeletalCube::Free();
+	Safe_Release(m_pController);
 }
 
-void CPlayer::Render_Object(void)
+void CPlayer::CheckCursor()
 {
-	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
-	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+	const CTerrainTex* pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"Layer_Environment", L"Terrain", L"Proto_TerrainTexCom", ID_STATIC));
+	const CTransform* pTerrainTransformCom = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_Environment", L"Terrain", L"Proto_TransformCom", ID_DYNAMIC));
 
-	m_pTextureCom->Set_Texture(0);	
-	m_pBufferCom->Render_Buffer();
-	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+	m_vDest = PickingOnTerrain(g_hWnd, pTerrainBufferCom, pTerrainTransformCom);
+	if (m_vDest != _vec3(0.f, 0.f, 0.f))
+	{
+		_vec3& vCurPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+		_vec3  vToDest =  m_vDest - vCurPos;
+		D3DXVec3Normalize(&vToDest, &vToDest);
+
+		_vec2 v2Look{0.f, 1.f};
+		_vec2 v2ToDest{vToDest.x, vToDest.z};
+		_float fDot = D3DXVec2Dot(&v2Look, &v2ToDest);
+
+		m_pRootPart->pTrans->m_vAngle.y = acosf(fDot);
+		if (m_vDest.x < vCurPos.x)
+			m_pRootPart->pTrans->m_vAngle.y *= -1.f;
+
+		m_pCurAnim = &m_arrLoopAnim[WALK];
+	}
 }
 
-CPlayer * CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+void CPlayer::SetMove(const _vec3& vPos)
 {
-	CPlayer *	pInstance = new CPlayer(pGraphicDev);
+	m_pCurAnim = &m_arrLoopAnim[WALK];
+	m_vDest = vPos;
+}
+
+void CPlayer::SetTarget(CSkeletalCube* pTarget)
+{
+	// m_pTarget = pTarget;
+}
+
+CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
+{
+	CPlayer* pInstance = new CPlayer(pGraphicDev);
 
 	if (FAILED(pInstance->Ready_Object()))
 	{
 		Safe_Release(pInstance);
 		return nullptr;
 	}
-	
-	return pInstance;
-}
 
-CPlayer * CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, _vec3 * VtxPos)
-{
-	CPlayer *	pInstance = new CPlayer(pGraphicDev, VtxPos);
-
-	if (FAILED(pInstance->Ready_Object()))
-	{
-		Safe_Release(pInstance);
-		return nullptr;
-	}
+	if (!wstrPath.empty())
+		pInstance->LoadSkeletal(wstrPath);
 
 	return pInstance;
 }
-void CPlayer::Set_OnTerrain(void)
+
+_vec3 CPlayer::PickingOnTerrain(HWND hWnd, const CTerrainTex* pTerrainBufferCom, const CTransform* pTerrainTransformCom)
 {
-	_vec3		vPos;
-	m_pTransCom->Get_Info(INFO_POS, &vPos);
+	POINT		ptMouse{};
 
-	_float fHeight = m_pTerrainMap->m_fHeight[(int)vPos.x][(int)vPos.z];
+	GetCursorPos(&ptMouse);
+	ScreenToClient(hWnd, &ptMouse);
 
-	//_float fHeight = m_pCalculatorCom->HeightOnTerrain(&vPos, m_pTerrainMap->Get_Pos(), VTXCNTX, VTXCNTZ);
-	m_pTransCom->Set_Pos(vPos.x, fHeight, vPos.z);
-}
+	_vec3		vPoint;
 
-_vec3 CPlayer::PickUp_OnTerrain(void)
-{
-	CTerrainTex*	pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"Layer_Environment", L"Terrain", L"Proto_TerrainTexCom", ID_STATIC));
-	NULL_CHECK_RETURN(pTerrainBufferCom, _vec3());
+	D3DVIEWPORT9		ViewPort;
+	ZeroMemory(&ViewPort, sizeof(D3DVIEWPORT9));
+	m_pGraphicDev->GetViewport(&ViewPort);
 
-	CTransform*		pTerrainTransformCom = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_Environment", L"Terrain", L"Proto_TransformCom", ID_DYNAMIC));
-	NULL_CHECK_RETURN(pTerrainTransformCom, _vec3());
+	// 뷰포트 -> 투영
+	vPoint.x = ptMouse.x / (ViewPort.Width * 0.5f) - 1.f;
+	vPoint.y = ptMouse.y / -(ViewPort.Height * 0.5f) + 1.f;
+	vPoint.z = 0.f;
 
+	//vPoint 는 위치 벡터. 그래서 위치값을 저장할 수 있게 w = 1을 만들어주는 D3DXCoord 함수를 사용해야 한다.
 
-	return m_pCalculatorCom->PickingOnTerrain(g_hWnd, pTerrainBufferCom, pTerrainTransformCom);
-}
+	// 투영 -> 뷰 스페이스
+	_matrix		matProj;
 
-void CPlayer::Free(void)
-{
-	CGameObject::Free();
-}
+	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &matProj);
+	D3DXMatrixInverse(&matProj, nullptr, &matProj);
+	D3DXVec3TransformCoord(&vPoint, &vPoint, &matProj);
 
-HRESULT CPlayer::Add_Component(void)
-{
-	CComponent* pComponent = nullptr;
+	_vec3	vRayDir, vRayPos;		// 뷰 스페이스 영역에 있는 상태
 
-	pComponent = m_pBufferCom = dynamic_cast<CRcTex*>(Clone_Proto(L"Proto_RcTexCom"));
-	NULL_CHECK_RETURN(m_pBufferCom, E_FAIL);
-	m_mapComponent[ID_STATIC].insert({ L"Proto_RcTexCom", pComponent });
+	vRayPos = { 0.f, 0.f, 0.f };
+	vRayDir = vPoint - vRayPos;
 
-	pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Clone_Proto(L"Proto_PlayerTexture"));
-	NULL_CHECK_RETURN(m_pTextureCom, E_FAIL);
-	m_mapComponent[ID_STATIC].insert({ L"Proto_PlayerTexture", pComponent });
+	// 뷰 스페이스 -> 월드
 
-	pComponent = m_pTransCom = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_TransformCom"));
-	NULL_CHECK_RETURN(m_pTransCom, E_FAIL);
-	m_mapComponent[ID_DYNAMIC].insert({ L"Proto_TransformCom", pComponent });
+	_matrix		matView;
+	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
+	D3DXMatrixInverse(&matView, nullptr, &matView);
+	D3DXVec3TransformCoord(&vRayPos, &vRayPos, &matView);
+	D3DXVec3TransformNormal(&vRayDir, &vRayDir, &matView);
 
-	pComponent = m_pCalculatorCom = dynamic_cast<CCalculator*>(Clone_Proto(L"Proto_CalculatorCom"));
-	NULL_CHECK_RETURN(m_pTransCom, E_FAIL);
-	m_mapComponent[ID_STATIC].insert({ L"Proto_CalculatorCom", pComponent });
+	// 월드 -> 로컬
+	_matrix		matWorld;
 
-	return S_OK;
-}
+	pTerrainTransformCom->Get_WorldMatrix(&matWorld);
+	D3DXMatrixInverse(&matWorld, nullptr, &matWorld);
+	D3DXVec3TransformCoord(&vRayPos, &vRayPos, &matWorld);
+	D3DXVec3TransformNormal(&vRayDir, &vRayDir, &matWorld);
 
-void CPlayer::Key_Input(const _float & fTimeDelta)
-{
-	m_pTransCom->Get_Info(INFO_LOOK, &m_vDirection);
+	const _vec3*	pTerrainVtx = pTerrainBufferCom->Get_VtxPos();
 
+	_ulong		dwVtxCntX = pTerrainBufferCom->Get_VtxCntX();
+	_ulong		dwVtxCntZ = pTerrainBufferCom->Get_VtxCntZ();
 
-	if (GetAsyncKeyState(VK_UP) & 0x8000)
+	_ulong	dwVtxIdx[3]{};
+	_float	fU, fV, fDist;
+
+	for (_ulong i = 0; i < dwVtxCntZ - 1; ++i)
 	{
-		D3DXVec3Normalize(&m_vDirection, &m_vDirection);
-		m_pTransCom->Move_Pos(&(m_vDirection * 10.f * fTimeDelta));
+		for (_ulong j = 0; j < dwVtxCntX - 1; ++j)
+		{
+			_ulong dwIndex = i * dwVtxCntX + j;
+
+			// 오른쪽 위
+			dwVtxIdx[0] = dwIndex + dwVtxCntX;
+			dwVtxIdx[1] = dwIndex + dwVtxCntX + 1;
+			dwVtxIdx[2] = dwIndex + 1;
+
+			if (D3DXIntersectTri(&pTerrainVtx[dwVtxIdx[1]],
+				&pTerrainVtx[dwVtxIdx[0]],
+				&pTerrainVtx[dwVtxIdx[2]],
+				&vRayPos, &vRayDir,
+				&fU, &fV, &fDist))
+			{
+				return _vec3(pTerrainVtx[dwVtxIdx[1]].x - 0.5f/*+ (pTerrainVtx[dwVtxIdx[0]].x - pTerrainVtx[dwVtxIdx[1]].x) * fU*/,
+					0.5f,
+					pTerrainVtx[dwVtxIdx[1]].z - 0.5f /*+ (pTerrainVtx[dwVtxIdx[2]].z - pTerrainVtx[dwVtxIdx[1]].z) * fV*/);
+			}
+
+			// 왼쪽 아래
+			dwVtxIdx[0] = dwIndex + dwVtxCntX;
+			dwVtxIdx[1] = dwIndex + 1;
+			dwVtxIdx[2] = dwIndex;
+
+			if (D3DXIntersectTri(&pTerrainVtx[dwVtxIdx[2]],
+				&pTerrainVtx[dwVtxIdx[1]],
+				&pTerrainVtx[dwVtxIdx[0]],
+				&vRayPos, &vRayDir,
+				&fU, &fV, &fDist))
+			{
+				return _vec3(pTerrainVtx[dwVtxIdx[2]].x + 0.5f/*+  (pTerrainVtx[dwVtxIdx[1]].x - pTerrainVtx[dwVtxIdx[2]].x) * fU*/,
+					0.5f,
+					pTerrainVtx[dwVtxIdx[2]].z + 0.5f/*+ (pTerrainVtx[dwVtxIdx[0]].z - pTerrainVtx[dwVtxIdx[2]].z) * fV*/);
+			}
+		}
 	}
 
-	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
-	{
-		D3DXVec3Normalize(&m_vDirection, &m_vDirection);
-		m_pTransCom->Move_Pos(&(m_vDirection * -10.f * fTimeDelta));
-	}
-
-	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
-		m_pTransCom->Rotation(ROT_Y, D3DXToRadian(180.f * fTimeDelta));
-
-	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
-		m_pTransCom->Rotation(ROT_Y, D3DXToRadian(-180.f * fTimeDelta));
-
-	if (Engine::Get_DIMouseState(DIM_LB) & 0X80)
-	{
-		_vec3	vPickPos = PickUp_OnTerrain();
-		_vec3	vPlayerPos, vDir;
-		m_pTransCom->Get_Info(INFO_POS, &vPlayerPos);
-		vDir = vPickPos - vPlayerPos;
-		D3DXVec3Normalize(&vDir, &vDir);
-		m_pTransCom->Move_Pos(&(vDir * 5.f * fTimeDelta));
-	}
+	return _vec3(0.f, 0.f, 0.f);
 }
