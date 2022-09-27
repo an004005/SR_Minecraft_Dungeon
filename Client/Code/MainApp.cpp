@@ -7,7 +7,6 @@
 #include "CubeAnimMgr.h"
 #include "MapTool.h"
 #include "TerrainCubeMap.h"
-#include "MapToolTest.h"
 #include "Stage.h"
 
 USING(Engine)

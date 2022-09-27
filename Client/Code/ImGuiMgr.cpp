@@ -377,7 +377,7 @@ void CImGuiMgr::TextureSelector(wstring& strTex, _uint& iTexIdx)
 			CTexture* pTexture = dynamic_cast<CTexture*>(Find_Proto(vecTexName[i].c_str()));
 			NULL_CHECK(pTexture);
 
-			size_t iTexSize = pTexture->GetTexSize();
+			size_t iTexSize = pTexture->GetTexSize() - 1;
 			string _TexName;
 			_TexName.assign(vecTexName[i].begin(), vecTexName[i].end());
 

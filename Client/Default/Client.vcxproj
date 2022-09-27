@@ -174,7 +174,6 @@
     <ClInclude Include="..\Header\Loading.h" />
     <ClInclude Include="..\Header\MapCube.h" />
     <ClInclude Include="..\Header\MapTool.h" />
-
     <ClInclude Include="..\Header\Logo.h" />
     <ClInclude Include="..\Header\MainApp.h" />
     <ClInclude Include="..\Header\Monster.h" />
@@ -217,6 +216,7 @@
     <ClCompile Include="..\Code\ImGuiMgr.cpp" />
     <ClCompile Include="..\Code\ImSequencerImpl.cpp" />
     <ClCompile Include="..\Code\Loading.cpp" />
+    <ClCompile Include="..\Code\MainApp.cpp" />
     <ClCompile Include="..\Code\MapCube.cpp" />
     <ClCompile Include="..\Code\MapTool.cpp" />
     <ClCompile Include="..\Code\Monster.cpp" />
