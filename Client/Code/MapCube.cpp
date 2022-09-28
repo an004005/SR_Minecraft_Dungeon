@@ -26,7 +26,7 @@ HRESULT CMapCube::Ready_Object(void)
 {
 	
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
-	
+
 	//maptool 에서 피킹 옵션 선택
 	if (m_tMapTool.iPickingOption == PICK_TERRAIN)
 	{
@@ -44,6 +44,7 @@ HRESULT CMapCube::Ready_Object(void)
 		m_pTransCom->Set_ScaleY(m_tMapTool.fHeight);
 		m_pTransCom->Update_Component(0.f);
 	}
+
 	
 	for (int i = 0; i < FACE_END; ++i)
 	{
