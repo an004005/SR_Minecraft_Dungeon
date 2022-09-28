@@ -30,8 +30,6 @@ HRESULT CStage::Ready_Scene(void)
 	FAILED_CHECK_RETURN(Ready_Layer_UI(L"Layer_UI"), E_FAIL);
 
 
-	
-
 	return S_OK;
 }
 
@@ -47,19 +45,16 @@ void CStage::LateUpdate_Scene(void)
 
 void CStage::Render_Scene(void)
 {
-	_matrix matI;
-	D3DXMatrixIdentity(&matI);
-	m_pGraphicDev->SetTransform(D3DTS_WORLD, &matI);
 
-	//tmpTex->Set_Texture(5);
-	//tmp->Render_Buffer();
 }
 
 HRESULT CStage::Ready_Layer_Environment(const _tchar * pLayerTag)
 {
 	Engine::CLayer*		pLayer = Engine::CLayer::Create();
 	NULL_CHECK_RETURN(pLayer, E_FAIL);
-
+	
+	m_pTerrainMap = CTerrainCubeMap::Create();
+	m_pTerrainMap->LoadMap(m_pGraphicDev, m_mapLayer, pLayer);
 	
 	CGameObject*		pGameObject = nullptr;
 
@@ -67,11 +62,6 @@ HRESULT CStage::Ready_Layer_Environment(const _tchar * pLayerTag)
 	pGameObject = CTerrain::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Terrain", pGameObject), E_FAIL);
-
-	// TerrainCubeMap
-	pGameObject = CTerrainCubeMap::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"TerrainCubeMap", pGameObject), E_FAIL);
 	
 	m_mapLayer.insert({ pLayerTag, pLayer });
 
@@ -105,6 +95,8 @@ HRESULT CStage::Ready_Layer_UI(const _tchar * pLayerTag)
 	CGameObject*		pGameObject = nullptr;
 
 
+
+
 	m_mapLayer.insert({ pLayerTag, pLayer });
 
 	return S_OK;
@@ -125,10 +117,8 @@ HRESULT CStage::Ready_Proto(void)
 
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_WeaponTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/weapon/weapon_%d.png", TEX_NORMAL, 2)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_VoxelTex_Sword", CVoxelTex::Create(m_pGraphicDev, "../Bin/Resource/Texture/weapon/weapon_0.png", 0.08f)), E_FAIL);
-	//FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_TerrainCubeTexCom",CTerrainCubeTex::Create(m_pGraphicDev, L"../Bin/Resource/Map/MapTest.dat", 1)), E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CalculatorCom", CCalculator::Create(m_pGraphicDev)), E_FAIL);
-
 
 
 	return S_OK;

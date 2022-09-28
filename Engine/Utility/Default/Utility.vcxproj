@@ -180,7 +180,6 @@ call CopyUtility.bat</Command>
     <ClInclude Include="..\..\Header\Calculator.h" />
     <ClInclude Include="..\..\Header\Camera.h" />
     <ClInclude Include="..\..\Header\Component.h" />
-    <ClInclude Include="..\..\Header\CubeNorTex.h" />
     <ClInclude Include="..\..\Header\CubeTex.h" />
     <ClInclude Include="..\..\Header\Export_Utility.h" />
     <ClInclude Include="..\..\Header\GameObject.h" />
@@ -191,7 +190,6 @@ call CopyUtility.bat</Command>
     <ClInclude Include="..\..\Header\RcTex.h" />
     <ClInclude Include="..\..\Header\Renderer.h" />
     <ClInclude Include="..\..\Header\Scene.h" />
-    <ClInclude Include="..\..\Header\TerrainCubeTex.h" />
     <ClInclude Include="..\..\Header\TerrainTex.h" />
     <ClInclude Include="..\..\Header\Texture.h" />
     <ClInclude Include="..\..\Header\Transform.h" />
@@ -203,7 +201,6 @@ call CopyUtility.bat</Command>
     <ClCompile Include="..\Code\Calculator.cpp" />
     <ClCompile Include="..\Code\Camera.cpp" />
     <ClCompile Include="..\Code\Component.cpp" />
-    <ClCompile Include="..\Code\CubeNorTex.cpp" />
     <ClCompile Include="..\Code\CubeTex.cpp" />
     <ClCompile Include="..\Code\GameObject.cpp" />
     <ClCompile Include="..\Code\Layer.cpp" />
@@ -213,7 +210,6 @@ call CopyUtility.bat</Command>
     <ClCompile Include="..\Code\RcTex.cpp" />
     <ClCompile Include="..\Code\Renderer.cpp" />
     <ClCompile Include="..\Code\Scene.cpp" />
-    <ClCompile Include="..\Code\TerrainCubeTex.cpp" />
     <ClCompile Include="..\Code\TerrainTex.cpp" />
     <ClCompile Include="..\Code\Texture.cpp" />
     <ClCompile Include="..\Code\Transform.cpp" />
