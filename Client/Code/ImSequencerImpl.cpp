@@ -6,6 +6,7 @@ void CImSequencerImpl::LoadAnimFrame(const wstring& wstrPath)
 {
 	m_CubeAnim = CubeAnimFrame::Load(wstrPath);
 	m_vecPartName.clear();
+	m_vecPartName.push_back("__EVENT__");
 	for (auto& e : m_CubeAnim.mapFrame)
 		m_vecPartName.push_back(e.first);
 	m_iFrameMax = CImSequencerImpl::Sec2Frame(m_CubeAnim.fTotalTime);
