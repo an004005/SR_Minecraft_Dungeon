@@ -43,7 +43,6 @@ _int CMapTool::Update_Scene(const _float & fTimeDelta)
 
 	CImGuiMgr::MapControl(m_tMapTool, *this, m_vecTotalCube.size());
 
-	
 	//마우스 피킹 때 MapCube 생성
 	if (Engine::Get_DIMouseState(DIM_LB) & 0X80 && m_dwTime + 200 < GetTickCount())
 	{
@@ -159,8 +158,8 @@ HRESULT CMapTool::Ready_Layer_Environment(const _tchar * pLayerTag)
 			m_vecTotalCube.push_back(dynamic_cast<CMapCube*>(pGameObject));
 			m_tMapTool.iCubeCount++;
 		}
-	}
-	*/
+	}*/
+	
 
 		
 	m_mapLayer.insert({ pLayerTag, pLayer });
@@ -182,7 +181,7 @@ HRESULT CMapTool::Ready_Proto(void)
 
 
 
-void CMapTool::SaveMap()
+void CMapTool::SaveMap(wstring wstrFileName)
 {
 	//input data in m_vecLand
 	for (auto iter : m_vecTotalCube)
@@ -194,7 +193,7 @@ void CMapTool::SaveMap()
 	//Set data in m_fHeight
 	Set_CubeCoordinate();
 
-	HANDLE hFile = CreateFile(L"../Bin/Resource/Map/MapTest.dat", GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE hFile = CreateFile(wstrFileName.c_str(), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 	if (INVALID_HANDLE_VALUE == hFile)
 	{
 		MSG_BOX("Failed Save Map");
@@ -221,7 +220,7 @@ void CMapTool::SaveMap()
 
 }
 
-void CMapTool::LoadMap()
+void CMapTool::LoadMap(wstring wstrFileName)
 {
 
 	m_pLayer->Free();
@@ -230,7 +229,7 @@ void CMapTool::LoadMap()
 	ZeroMemory(&m_fHeight, sizeof(_float) * VTXCNTX * VTXCNTZ);
 	m_tMapTool.iCubeCount = 0;
 
-	HANDLE hFile = CreateFile(L"../Bin/Resource/Map/MapTest.dat", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE hFile = CreateFile(wstrFileName.c_str(), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 	{

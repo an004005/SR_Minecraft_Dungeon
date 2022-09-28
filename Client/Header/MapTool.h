@@ -28,8 +28,8 @@ private:
 
 
 public:
-	void			SaveMap();
-	void			LoadMap();
+	void			SaveMap(wstring wstrFileName);
+	void			LoadMap(wstring wstrFileName);
 	//const _vec3*	Get_VtxPos(void) const {return m_pPos;}
 
 private:
