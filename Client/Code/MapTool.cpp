@@ -43,6 +43,7 @@ _int CMapTool::Update_Scene(const _float & fTimeDelta)
 
 	CImGuiMgr::MapControl(m_tMapTool, *this, m_vecTotalCube.size());
 
+	
 	//마우스 피킹 때 MapCube 생성
 	if (Engine::Get_DIMouseState(DIM_LB) & 0X80 && m_dwTime + 200 < GetTickCount())
 	{
@@ -158,8 +159,8 @@ HRESULT CMapTool::Ready_Layer_Environment(const _tchar * pLayerTag)
 			m_vecTotalCube.push_back(dynamic_cast<CMapCube*>(pGameObject));
 			m_tMapTool.iCubeCount++;
 		}
-	}*/
-	
+	}
+	*/
 
 		
 	m_mapLayer.insert({ pLayerTag, pLayer });

@@ -108,12 +108,6 @@
     <ClInclude Include="..\..\Header\VoxelTex.h">
       <Filter>00. Component\00. VIBuffer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Header\TerrainCubeTex.h">
-      <Filter>00. Component\00. VIBuffer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Header\CubeNorTex.h">
-      <Filter>00. Component\00. VIBuffer</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\TriCol.cpp">
@@ -168,12 +162,6 @@
       <Filter>00. Component\03. Calculator</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\VoxelTex.cpp">
-      <Filter>00. Component\00. VIBuffer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\TerrainCubeTex.cpp">
-      <Filter>00. Component\00. VIBuffer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\CubeNorTex.cpp">
       <Filter>00. Component\00. VIBuffer</Filter>
     </ClCompile>
   </ItemGroup>
