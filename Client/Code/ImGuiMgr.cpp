@@ -539,7 +539,7 @@ void CImGuiMgr::AnimationEditor(CSkeletalCube* pSkeletal)
 	}
 }
 
-void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapTool& MapToolTest, size_t CubeCount)
+void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapTool& CMapTool, size_t CubeCount)
 {
 #ifndef _DEBUG
 	return;
@@ -617,16 +617,41 @@ void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapTool& MapToolTest, si
 		if (ImGui::BeginTabItem("Save / Load"))
 		{
 			
+			if (ImGui::Button("Load Map"))
+			{
+				ImGuiFileDialog::Instance()->OpenDialog("ChooseFileToLoadMap", "Choose File", ".map",
+					"../Bin/Resource/Map/");
+			}
+			if (ImGuiFileDialog::Instance()->Display("ChooseFileToLoadMap"))
+			{
+				if (ImGuiFileDialog::Instance()->IsOk())
+				{
+					std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+
+					wstring tmp;
+					tmp.assign(filePathName.begin(), filePathName.end());
+					CMapTool.LoadMap(tmp);
+				}
+				ImGuiFileDialog::Instance()->Close();
+			}
+			ImGui::SameLine();
+
 			if (ImGui::Button("Save Map"))
 			{
-				MapToolTest.SaveMap();
-
+				ImGuiFileDialog::Instance()->OpenDialog("ChooseFileToSaveMap", "Choose File", ".map",
+					"../Bin/Resource/Map/");
 			}
-				
-			if (ImGui::Button("Load Map"))		
+			if (ImGuiFileDialog::Instance()->Display("ChooseFileToSaveMap"))
 			{
-			
-				MapToolTest.LoadMap();
+				if (ImGuiFileDialog::Instance()->IsOk())
+				{
+					std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+
+					wstring tmp;
+					tmp.assign(filePathName.begin(), filePathName.end());
+					CMapTool.SaveMap(tmp);
+				}
+				ImGuiFileDialog::Instance()->Close();
 			}
 
 			ImGui::EndTabItem();
