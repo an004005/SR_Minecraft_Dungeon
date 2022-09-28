@@ -27,6 +27,8 @@ private:
 private:
 	CTerrainCubeMap*	m_pTerrainMap = nullptr;
 	
+	CTerrainCubeTex* tmp;
+	CTexture* tmpTex;
 
 
 public:
