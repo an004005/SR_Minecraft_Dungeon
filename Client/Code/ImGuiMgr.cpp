@@ -273,7 +273,8 @@ void CImGuiMgr::SkeletalEditor(CCamera* pCamera, CSkeletalCube* pSkeletal)
 	string tmpTex, tmpBuf;
 	tmpTex.assign(pSelectedPart->strTexProto.begin(), pSelectedPart->strTexProto.end());
 	tmpBuf.assign(pSelectedPart->strBufProto.begin(), pSelectedPart->strBufProto.end());
-	ImGui::Text("Texture : %s", tmpTex.c_str());
+	
+	ImGui::Text("Texture : %s %d", tmpTex.c_str(), pSelectedPart->iTexIdx);
 	ImGui::Text("Buffer : %s", tmpBuf.c_str());
 
 	//////////////////////////////////////////////////////
@@ -392,6 +393,7 @@ void CImGuiMgr::TextureSelector(wstring& strTex, _uint& iTexIdx)
 			if (bSelected)
 			{
 				ImGui::SliderInt("TexIdx", &vecTexIdx[i], 0, static_cast<int>(iTexSize));
+				ImGui::InputInt("TexIdxInput", &vecTexIdx[i]);
 				iTexIdx = vecTexIdx[i];
 				ImGui::SetItemDefaultFocus();
 			}

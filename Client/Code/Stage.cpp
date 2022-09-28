@@ -78,9 +78,25 @@ HRESULT CStage::Ready_Layer_GameLogic(const _tchar * pLayerTag)
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"StaticCamera", pGameObject), E_FAIL);
 
-	pGameObject = CPlayer::Create(m_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/DefaultMan.cube");
+	static vector<wstring> vecNs;
+
+
+	pGameObject = CPlayer::Create(m_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Steve.cube");
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player", pGameObject), E_FAIL);
+
+	// for (int i = 0; i < 150; ++i)
+	// {
+	// 	pGameObject = CPlayer::Create(m_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Steve.cube");
+	// 	dynamic_cast<CTransform*>(pGameObject->Get_Component(L"Proto_TransformCom_root", ID_DYNAMIC))->m_vInfo[INFO_POS] = _vec3((_float)i, 0.f, 0.f);
+	// 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	// 	vecNs.push_back(L"Player_" + to_wstring(i));
+	// 	// FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player", pGameObject), E_FAIL);
+	// 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(vecNs.back().c_str(), pGameObject), E_FAIL);
+	// }
+
+	// pGameObject = CPlayer::Create(m_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Skeleton.cube");
+
 
 	m_mapLayer.insert({ pLayerTag, pLayer });
 
@@ -109,7 +125,7 @@ HRESULT CStage::Ready_Proto(void)
 
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CubeTexCom", CCubeTex::Create(m_pGraphicDev)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CubeTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/SkyBox/burger%d.dds", TEX_CUBE, 4)), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_MinecraftCubeTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/MinscraftCubeTile/CubeTile_%d.dds", TEX_CUBE, 108)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_MinecraftCubeTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/MinscraftCubeTile/CubeTile_%d.dds", TEX_CUBE, 144)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_TransformCom", CTransform::Create()), E_FAIL);
 
 
