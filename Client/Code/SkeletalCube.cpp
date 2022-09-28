@@ -516,6 +516,21 @@ CubeAnimFrame CubeAnimFrame::Load(const wstring& wstrPath)
 		tmp.mapFrame.insert({strPartName, vecFrameTmp});
 	}
 
+	size_t eventSize = 0;
+	ReadFile(hFile, &eventSize, sizeof(size_t), &dwByte, nullptr);
+
+	_float fEventTime;
+	for (size_t i = 0; i < eventSize; ++i)
+	{
+		ReadFile(hFile, &fEventTime, sizeof(_float), &dwByte, nullptr);
+		ReadFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
+		char szEventName[128]{};
+		ReadFile(hFile, szEventName, dwStrByte, &dwByte, nullptr);
+		string strEventName = szEventName;
+
+		tmp.vecEvent.push_back({fEventTime, strEventName});
+	}
+
 	CloseHandle(hFile);
 
 	return tmp;
@@ -557,6 +572,18 @@ void CubeAnimFrame::Save(const wstring& wstrPath)
 			WriteFile(hFile, &trans.qRot, sizeof(D3DXQUATERNION), &dwByte, nullptr);
 			WriteFile(hFile, &trans.vPos, sizeof(_vec3), &dwByte, nullptr);
 		}
+	}
+
+	size_t eventSize = vecEvent.size();
+	WriteFile(hFile, &eventSize, sizeof(size_t), &dwByte, nullptr);
+	for (size_t i = 0; i < eventSize; ++i)
+	{
+		
+		WriteFile(hFile, &vecEvent[i].first, sizeof(_float), &dwByte, nullptr);
+		dwStrByte = (DWORD)vecEvent[i].second.size();
+		WriteFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
+		WriteFile(hFile, vecEvent[i].second.c_str(), dwStrByte, &dwByte, nullptr);
+		
 	}
 	
 	CloseHandle(hFile);

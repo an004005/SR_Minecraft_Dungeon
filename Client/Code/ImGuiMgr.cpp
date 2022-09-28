@@ -456,6 +456,7 @@ void CImGuiMgr::AnimationEditor(CSkeletalCube* pSkeletal)
 	static bool expanded = true;
 	static int currentFrame = 0;
 	static char szPartName[128];
+	static char szEventName[128];
 
 	if (mySequence.m_iFrameMin < 0)
 		mySequence.m_iFrameMin = 0;
@@ -495,6 +496,12 @@ void CImGuiMgr::AnimationEditor(CSkeletalCube* pSkeletal)
 	if (ImGui::Button("Add All Part Trans"))
 	{
 		mySequence.AddTransFrameRecur(currentFrame, pSkeletal->m_pRootPart);
+	}
+	ImGui::InputText("Event Name", szEventName, 128);
+	ImGui::SameLine();
+	if (ImGui::Button("Add Event"))
+	{
+		mySequence.AddEvent(currentFrame, szEventName);
 	}
 	ImGui::PopItemWidth();
 	Sequencer(&mySequence, &currentFrame, &expanded, &selectedEntry, &firstFrame,
