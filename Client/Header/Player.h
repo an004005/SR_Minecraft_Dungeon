@@ -34,6 +34,7 @@ public:
 	virtual HRESULT Ready_Object() override;
 	virtual _int Update_Object(const _float& fTimeDelta) override;
 	virtual void Free() override;
+	virtual void AnimationEvent(const string& strEvent) override;
 
 	virtual void CheckCursor();
 	virtual void SetMove(const _vec3& vPos);

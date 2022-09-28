@@ -463,11 +463,11 @@ void CImGuiMgr::AnimationEditor(CSkeletalCube* pSkeletal)
 
 	if (pSkeletal->m_bStopAnim == false)
 	{
-		currentFrame = static_cast<int>(pSkeletal->fAccTime * 60.f); // 60 frame == 1 sec
+		currentFrame = static_cast<int>(pSkeletal->m_fAccTime * 60.f); // 60 frame == 1 sec
 	}
 	else
 	{
-		pSkeletal->fAccTime = (_float)currentFrame / 60.f;
+		pSkeletal->m_fAccTime = (_float)currentFrame / 60.f;
 	}
 
 	mySequence.m_CubeAnim.fTotalTime = (_float)mySequence.m_iFrameMax / 60.f;

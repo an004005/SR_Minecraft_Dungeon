@@ -81,7 +81,7 @@ public:
 
 			for (auto itr = m_CubeAnim.vecEvent.begin(); itr != m_CubeAnim.vecEvent.end();)
 			{
-				float fCurFrameCnt =  Sec2Frame(itr->first); // sec to frame
+				float fCurFrameCnt =  (float)Sec2Frame(itr->first); // sec to frame
 				float r = (fCurFrameCnt - m_iFrameMin) / float(m_iFrameMax - m_iFrameMin);
 				float x = ImLerp(rc.Min.x, rc.Max.x, r);
 				draw_list->AddCircleFilled(ImVec2(x, rc.Min.y + 10), 6.f, 0xAAA00000);

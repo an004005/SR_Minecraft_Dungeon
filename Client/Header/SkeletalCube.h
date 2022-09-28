@@ -78,6 +78,7 @@ public:
 	virtual void Free() override;
 
 
+	virtual void AnimationEvent(const string& strEvent) {}
 	_bool AddSkeletalPart(const string& strPart, const string& strParent, const wstring& strBuf, const wstring& strTex, const _uint iTexNum);
 	_bool DeleteSkeletalPart(const string& strPart);
 	static CSkeletalCube* Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrPath = L"");
@@ -106,6 +107,7 @@ protected:
 	// animation com
 	CubeAnimFrame* m_pCurAnim = nullptr;
 	CubeAnimFrame* m_pIdleAnim = nullptr;
-	_float fAccTime = 0.f;	  // 애니메이션 현재 시간
+	_float m_fAccTime = 0.f;	  // 애니메이션 현재 시간
+
 	_bool m_bStopAnim = false;
 };

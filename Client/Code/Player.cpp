@@ -61,6 +61,12 @@ void CPlayer::Free()
 	Safe_Release(m_pController);
 }
 
+void CPlayer::AnimationEvent(const string& strEvent)
+{
+	IM_LOG(strEvent.c_str());
+	CSkeletalCube::AnimationEvent(strEvent);
+}
+
 void CPlayer::CheckCursor()
 {
 	const CTerrainTex* pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"Layer_Environment", L"Terrain", L"Proto_TerrainTexCom", ID_STATIC));
