@@ -54,6 +54,7 @@ struct CubeAnimFrame
 	_float fTotalTime = 0.f;		// 총 재생 시간
 	// part이름,     part의 시간별 transform정보
 	map<string, vector<TransFrame>> mapFrame; // (float기준으로 정렬상태여야 한다.)
+	vector<pair<_float, string>> vecEvent;
 
 	static CubeAnimFrame Load(const wstring& wstrPath);
 	void Save(const wstring& wstrPath);
