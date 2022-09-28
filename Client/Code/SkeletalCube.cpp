@@ -50,11 +50,22 @@ void CSkeletalCube::LateUpdate_Object()
 
 void CSkeletalCube::Render_Object()
 {
+	// // m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
+ //   m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+ //   m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+ //   m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+ //   m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+ //   m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0xcc);
+ //   m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+
 	m_pRootPart->matParents = m_pRootPart->pTrans->m_matWorld;
 	for (const auto& child : m_pRootPart->vecChild)
 	{
 		RenderObjectRecur(child);
 	}
+
+   // m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+   // m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 }
 
 void CSkeletalCube::RenderObjectRecur(SkeletalPart* pPart)
@@ -559,4 +570,6 @@ void CubeAnimFrame::SortFrame(const string& strPart)
 	{
 		return a.fTime < b.fTime;
 	});
+
+	sort(vecEvent.begin(), vecEvent.end());
 }
