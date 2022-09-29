@@ -60,8 +60,8 @@ void CImGuiMgr::TransformEditor(CCamera* pCamera, CTransform* pTransform)
 	}
 
 	static bool useSnap(false);
-	if (ImGui::IsKeyPressed(83))
-		useSnap = !useSnap;
+	// if (ImGui::IsKeyPressed(83))
+		// useSnap = !useSnap;
 	ImGui::Checkbox("##something", &useSnap);
 	ImGui::SameLine();
 	switch (mCurrentGizmoOperation)
@@ -147,8 +147,8 @@ void CImGuiMgr::LocalTransformEditor(CCamera* pCamera, _matrix& matLocal)
 	}
 
 	static bool useSnap(false);
-	if (ImGui::IsKeyPressed(83))
-		useSnap = !useSnap;
+	// if (ImGui::IsKeyPressed(83))
+		// useSnap = !useSnap;
 	ImGui::Checkbox("##something", &useSnap);
 	ImGui::SameLine();
 	switch (mCurrentGizmoOperation)
