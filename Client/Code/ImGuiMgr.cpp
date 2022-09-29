@@ -367,6 +367,7 @@ void CImGuiMgr::TextureSelector(wstring& strTex, _uint& iTexIdx)
 		L"Proto_CubeTexture",
 		L"Proto_MinecraftCubeTexture",
 		L"Proto_WeaponTexture",
+		L"Proto_BossCubeTile"
 	};
 	static vector<_int> vecTexIdx(vecTexName.size(), 0);
 	static size_t iCurIdx = 0;
@@ -457,6 +458,7 @@ void CImGuiMgr::AnimationEditor(CSkeletalCube* pSkeletal)
 	static int currentFrame = 0;
 	static char szPartName[128];
 	static char szEventName[128];
+	static int iFrameAmount = 0;
 
 	if (mySequence.m_iFrameMin < 0)
 		mySequence.m_iFrameMin = 0;
@@ -503,6 +505,13 @@ void CImGuiMgr::AnimationEditor(CSkeletalCube* pSkeletal)
 	{
 		mySequence.AddEvent(currentFrame, szEventName);
 	}
+	ImGui::InputInt("Move Frame Amount", &iFrameAmount);
+	ImGui::SameLine();
+	if (ImGui::Button("Move Frame"))
+	{
+		mySequence.MoveFrame(currentFrame, iFrameAmount);
+	}
+
 	ImGui::PopItemWidth();
 	Sequencer(&mySequence, &currentFrame, &expanded, &selectedEntry, &firstFrame,
 	          ImSequencer::SEQUENCER_ADD | ImSequencer::SEQUENCER_DEL | ImSequencer::SEQUENCER_CHANGE_FRAME);

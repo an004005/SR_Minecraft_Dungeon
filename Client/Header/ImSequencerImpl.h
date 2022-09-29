@@ -70,6 +70,25 @@ public:
 		m_CubeAnim.vecEvent.push_back({Frame2Sec(iCurFrame), szEventName});
 	}
 
+	void MoveFrame(int& iCurFrame, int iFrameAmount)
+	{
+		bool bFound = false;
+		for (auto& vecFrame : m_CubeAnim.mapFrame)
+		{
+			for (auto& frame : vecFrame.second)
+			{
+				if (Sec2Frame(frame.fTime) == iCurFrame)
+				{
+					frame.fTime += Frame2Sec(iFrameAmount);
+					bFound = true;
+				}
+			}
+		}
+
+		if (bFound)
+			iCurFrame += iFrameAmount;
+	}
+
 
 	virtual void CustomDrawCompact(int index, ImDrawList* draw_list, const ImRect& rc, const ImRect& clippingRect)
 	{

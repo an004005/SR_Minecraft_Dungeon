@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "Controller.h"
+#include "GameUtilMgr.h"
+#include "TerrainCubeMap.h"
 
 /*-----------------------
  *    CCharacter
@@ -24,6 +26,8 @@ HRESULT CPlayer::Ready_Object()
 	m_arrLoopAnim[IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_idle.anim");
 	m_arrLoopAnim[WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_walk.anim");
 	m_arrOnceAnim[ATTACK1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_a.anim");
+	m_arrOnceAnim[ATTACK2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_b.anim");
+	m_arrOnceAnim[ATTACK3] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_c.anim");
 	m_pIdleAnim = &m_arrLoopAnim[IDLE];
 
 	return S_OK;
@@ -38,17 +42,22 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 	{
 		_vec3& vCurPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
 		_vec3  vToDest =  m_vDest - vCurPos;
-		_float fLenth = D3DXVec3Length(&vToDest);
+		_float fLengthXZ = CGameUtilMgr::Vec3LenXZ(vToDest);
+
 		D3DXVec3Normalize(&vToDest, &vToDest);
 
 		vCurPos += vToDest * fTimeDelta * m_fVelocity;
-		if (fLenth < 0.1f)
+		if (fLengthXZ < 0.1f)
 		{
 			m_vDest = _vec3(0.f, 0.f, 0.f);
 			m_pCurAnim = &m_arrLoopAnim[IDLE];
 		}
 	}
 
+	CTerrainCubeMap* pTerrain = dynamic_cast<CTerrainCubeMap*>(Get_GameObject(L"Layer_Environment", L"TerrainCubeMap"));
+	NULL_CHECK_RETURN(pTerrain, -1);
+	_vec3& vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+	vPos.y = pTerrain->GetHeight(vPos.x, vPos.z);
 
 	// if (D3DXVec3LengthSq())
 
@@ -100,6 +109,23 @@ void CPlayer::SetMove(const _vec3& vPos)
 void CPlayer::SetTarget(CSkeletalCube* pTarget)
 {
 	// m_pTarget = pTarget;
+}
+
+void CPlayer::Attack()
+{
+	if (m_iAttackCnt == 0)
+	{
+		PlayAnimationOnce(&m_arrOnceAnim[ATTACK1]);
+	}
+	else if (m_iAttackCnt == 1)
+	{
+		PlayAnimationOnce(&m_arrOnceAnim[ATTACK2]);
+	}
+	else
+	{
+		PlayAnimationOnce(&m_arrOnceAnim[ATTACK3]);
+	}
+	m_iAttackCnt = (m_iAttackCnt + 1) % 3;
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
