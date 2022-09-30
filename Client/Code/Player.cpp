@@ -60,7 +60,9 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 	_vec3& vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
 	vPos.y = pTerrain->GetHeight(vPos.x, vPos.z);
 
-	// if (D3DXVec3LengthSq())
+	//collision check
+	if (pTerrain->IsCollision(vPos.x, vPos.z))
+		IM_LOG("COLLISION!!");
 
 	return 0;
 }
@@ -243,3 +245,4 @@ _vec3 CPlayer::PickingOnTerrain(HWND hWnd, const CTerrainTex* pTerrainBufferCom,
 
 	return _vec3(0.f, 0.f, 0.f);
 }
+

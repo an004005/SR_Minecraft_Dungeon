@@ -45,6 +45,8 @@ public:
 
 	_vec3 PickingOnTerrain(HWND hWnd, const CTerrainTex* pTerrainBufferCom, const CTransform* pTerrainTransformCom);
 
+
+
 protected:
 	CController* m_pController;
 

@@ -23,14 +23,6 @@ private:
 	HRESULT			Ready_Layer_UI(const _tchar* pLayerTag);
 	HRESULT			Ready_Proto(void);
 
-
-private:
-	CTerrainCubeMap*	m_pTerrainMap = nullptr;
-	
-	CTerrainCubeTex* tmp;
-	CTexture* tmpTex;
-
-
 public:
 	static CStage*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
 

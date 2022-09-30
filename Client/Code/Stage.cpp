@@ -47,12 +47,7 @@ void CStage::LateUpdate_Scene(void)
 
 void CStage::Render_Scene(void)
 {
-	_matrix matI;
-	D3DXMatrixIdentity(&matI);
-	m_pGraphicDev->SetTransform(D3DTS_WORLD, &matI);
-
-	//tmpTex->Set_Texture(5);
-	//tmp->Render_Buffer();
+	
 }
 
 HRESULT CStage::Ready_Layer_Environment(const _tchar * pLayerTag)
@@ -67,9 +62,10 @@ HRESULT CStage::Ready_Layer_Environment(const _tchar * pLayerTag)
 	pGameObject = CTerrain::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Terrain", pGameObject), E_FAIL);
-
+	
 	// TerrainCubeMap
-	pGameObject = CTerrainCubeMap::Create(m_pGraphicDev);
+	wstring strpath = L"../Bin/Resource/Map/CollisionCheck.map";
+	pGameObject = CTerrainCubeMap::Create(m_pGraphicDev, strpath);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"TerrainCubeMap", pGameObject), E_FAIL);
 	
@@ -172,11 +168,5 @@ CStage * CStage::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 
 void CStage::Free(void)
 {
-	if (m_pTerrainMap != nullptr)
-	{
-		delete m_pTerrainMap;
-		m_pTerrainMap = nullptr;
-	}
-
 	CScene::Free();
 }

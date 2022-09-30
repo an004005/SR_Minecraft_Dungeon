@@ -27,7 +27,12 @@ public:
 	virtual ~CTerrainCubeMap();
 
 public:
-	virtual HRESULT Ready_Object(void) override;
+	_float	GetHeight(_float fX, _float fZ) { return m_fHeight[(_int)fX][(_int)fZ]; }
+	//x, z 값에 따라 충돌인지 아닌지 판별
+	_bool	IsCollision(_float fx, _float fz) { return m_fCollisionPos[(_int)fx][(_int)fz]; }
+
+public:
+	virtual HRESULT Ready_Object(wstring& wstrPath);
 	virtual _int	Update_Object(const _float& fTimeDelta) override;
 	virtual void	LateUpdate_Object(void) override;
 	virtual void	Render_Object(void) override;
@@ -37,12 +42,8 @@ private:
 	HRESULT				Add_Component(void);
 	
 public:
-	void			LoadMap();
+	void			LoadMap(wstring& wstrPath);
 
-	void			Divide_CubeType(CMapCube* pMapCube);
-	const _vec3*	Get_Pos() { return m_pPos; }
-	void			Set_CubeCoordinate(void);
-	_float GetHeight(_float fX, _float fZ);
 
 private:
 	CLayer*			m_pLayer = nullptr;		
@@ -57,12 +58,13 @@ private:
 	vector<pair<wstring, CTerrainCubeTex*>> m_vecTerrainCom;
 	CTexture* m_pTextureCom = nullptr;
 
-	_vec3*			m_pPos = nullptr;
-public:
-	_float			m_fHeight[VTXCNTX][VTXCNTZ];
 
 public:
-	static CTerrainCubeMap*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	_float			m_fHeight[VTXCNTX][VTXCNTZ];
+	_bool			m_fCollisionPos[VTXCNTX][VTXCNTZ];
+
+public:
+	static CTerrainCubeMap*		Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring& wstrPath);
 
 private:
 	virtual void	Free(void);

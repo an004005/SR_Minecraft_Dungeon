@@ -48,9 +48,6 @@ private:
 	vector<CMapCube*> m_vecTotalCube;
 
 	vector<CMapCube*> m_vecLand;
-	//vector<CMapCube*> m_vecCollision;
-	//vector<CMapCube*> m_vecDeco;
-
 	_float			m_fHeight[VTXCNTX][VTXCNTZ];
 
 	
