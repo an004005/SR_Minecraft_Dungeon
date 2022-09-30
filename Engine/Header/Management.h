@@ -16,6 +16,7 @@ private:
 
 public:
 	CComponent*				Get_Component(const _tchar* pLayerTag, const _tchar* pObjTag, const _tchar* pComponentTag, COMPONENTID eID);
+	CGameObject* Get_GameObject(const _tchar* pLayerTag, const _tchar* pObjTag);
 	void AddGameObject(const _tchar* pLayerTag, const _tchar* pObjTag, CGameObject* pObject);
 public:
 	HRESULT		Set_Scene(CScene* pScene);

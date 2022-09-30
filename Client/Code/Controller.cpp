@@ -47,6 +47,8 @@ void CPlayerController::Update(CSkeletalCube* m_pOwner)
 	if (DIKeyDown(DIK_SPACE))
 	{
 		// dotge
+		dynamic_cast<CPlayer*>(m_pOwner)->Attack();
+
 	}
 }
 

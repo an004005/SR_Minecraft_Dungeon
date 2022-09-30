@@ -198,10 +198,19 @@ void CSkeletalCube::AnimFrameConsume(_float fTimeDelta)
 
 	if (m_pCurAnim == nullptr) return;
 
-	fAccTime += fTimeDelta;
-	if (m_pCurAnim->fTotalTime < fAccTime)
+	for (const auto& animEvent : m_pCurAnim->vecEvent)
 	{
-		fAccTime = 0.f;
+		if (m_fAccTime <= animEvent.first && m_fAccTime + fTimeDelta >= animEvent.first)
+		{
+			AnimationEvent(animEvent.second);
+			break;
+		}
+	}
+
+	m_fAccTime += fTimeDelta;
+	if (m_pCurAnim->fTotalTime < m_fAccTime)
+	{
+		m_fAccTime = 0.f;
 		if (m_pCurAnim->bLoop == false) // loop 가 아니면 다 실행하고 loop로 변경
 		{
 			// m_pCurAnim = m_pAnimInst->GetCurrentLoopAnim();
@@ -225,11 +234,11 @@ void CSkeletalCube::AnimFrameConsume(_float fTimeDelta)
 		for (auto& frame : vecTransFrame)
 		{
 			const _float fTime = frame.fTime;
-			if (fTime < fAccTime)
+			if (fTime < m_fAccTime)
 			{
 				pPrevFrame = &frame;
 			}
-			else if (fTime > fAccTime)
+			else if (fTime > m_fAccTime)
 			{
 				pNextFrame = &frame;
 				break;
@@ -247,7 +256,7 @@ void CSkeletalCube::AnimFrameConsume(_float fTimeDelta)
 			continue;
 		}
 		
-		const _float fS = (fAccTime - pPrevFrame->fTime) / (pNextFrame->fTime - pPrevFrame->fTime);
+		const _float fS = (m_fAccTime - pPrevFrame->fTime) / (pNextFrame->fTime - pPrevFrame->fTime);
 		TransFrameLerp(
 			OUT Part.second->pTrans->m_matWorld, 
 			*pPrevFrame, 
@@ -258,7 +267,7 @@ void CSkeletalCube::AnimFrameConsume(_float fTimeDelta)
 
 void CSkeletalCube::PlayAnimationOnce(const string& strAnim)
 {
-	fAccTime = 0.f;
+	m_fAccTime = 0.f;
 	m_pCurAnim = CCubeAnimMgr::GetInstance()->GetAnim(strAnim);
 	m_pCurAnim->bLoop = false;
 	// std::sort(m_pCurAnim..begin(), vecFrame.end());
@@ -266,7 +275,7 @@ void CSkeletalCube::PlayAnimationOnce(const string& strAnim)
 
 void CSkeletalCube::PlayAnimationOnce(CubeAnimFrame* frame)
 {
-	fAccTime = 0.f;
+	m_fAccTime = 0.f;
 	m_pCurAnim = frame;
 	m_pCurAnim->bLoop = false;
 }

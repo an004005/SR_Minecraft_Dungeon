@@ -42,6 +42,7 @@ public:
 	void			Divide_CubeType(CMapCube* pMapCube);
 	const _vec3*	Get_Pos() { return m_pPos; }
 	void			Set_CubeCoordinate(void);
+	_float GetHeight(_float fX, _float fZ);
 
 private:
 	CLayer*			m_pLayer = nullptr;		

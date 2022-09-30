@@ -91,3 +91,8 @@ void CGameUtilMgr::MatWorldCompose(_matrix& matOut, const _vec3& vScale, const D
 	matOut._42 = vPos.y;
 	matOut._43 = vPos.z;
 }
+
+_float CGameUtilMgr::Vec3LenXZ(const _vec3& v1)
+{
+	return sqrtf(v1.x * v1.x + v1.z * v1.z);
+}

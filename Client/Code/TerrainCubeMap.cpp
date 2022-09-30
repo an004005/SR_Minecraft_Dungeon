@@ -159,6 +159,11 @@ void CTerrainCubeMap::Set_CubeCoordinate(void)
 	}
 }
 
+_float CTerrainCubeMap::GetHeight(_float fX, _float fZ)
+{
+	return m_fHeight[(_int)fX][(_int)fZ];
+}
+
 
 CTerrainCubeMap * CTerrainCubeMap::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {

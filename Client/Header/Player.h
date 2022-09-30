@@ -20,8 +20,8 @@ private:
 	enum OnceAnim
 	{
 		ATTACK1,
-		// ATTACK2, // 무기에서 가져와서 실행하게 구현
-		// ATTACK3,
+		ATTACK2, // 무기에서 가져와서 실행하게 구현
+		ATTACK3,
 		DOTGE,
 		TELEPORT,
 		RESCUE,
@@ -34,10 +34,12 @@ public:
 	virtual HRESULT Ready_Object() override;
 	virtual _int Update_Object(const _float& fTimeDelta) override;
 	virtual void Free() override;
+	virtual void AnimationEvent(const string& strEvent) override;
 
 	virtual void CheckCursor();
 	virtual void SetMove(const _vec3& vPos);
 	virtual void SetTarget(CSkeletalCube* pTarget);
+	virtual void Attack();
 
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
 
@@ -53,6 +55,8 @@ protected:
 	CSkeletalCube* m_pTarget = nullptr;
 
 	_float m_fVelocity;
+
+	_uint m_iAttackCnt = 0;
 };
 
 

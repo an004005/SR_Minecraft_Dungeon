@@ -60,8 +60,8 @@ void CImGuiMgr::TransformEditor(CCamera* pCamera, CTransform* pTransform)
 	}
 
 	static bool useSnap(false);
-	if (ImGui::IsKeyPressed(83))
-		useSnap = !useSnap;
+	// if (ImGui::IsKeyPressed(83))
+		// useSnap = !useSnap;
 	ImGui::Checkbox("##something", &useSnap);
 	ImGui::SameLine();
 	switch (mCurrentGizmoOperation)
@@ -147,8 +147,8 @@ void CImGuiMgr::LocalTransformEditor(CCamera* pCamera, _matrix& matLocal)
 	}
 
 	static bool useSnap(false);
-	if (ImGui::IsKeyPressed(83))
-		useSnap = !useSnap;
+	// if (ImGui::IsKeyPressed(83))
+		// useSnap = !useSnap;
 	ImGui::Checkbox("##something", &useSnap);
 	ImGui::SameLine();
 	switch (mCurrentGizmoOperation)
@@ -367,6 +367,7 @@ void CImGuiMgr::TextureSelector(wstring& strTex, _uint& iTexIdx)
 		L"Proto_CubeTexture",
 		L"Proto_MinecraftCubeTexture",
 		L"Proto_WeaponTexture",
+		L"Proto_BossCubeTile"
 	};
 	static vector<_int> vecTexIdx(vecTexName.size(), 0);
 	static size_t iCurIdx = 0;
@@ -457,17 +458,18 @@ void CImGuiMgr::AnimationEditor(CSkeletalCube* pSkeletal)
 	static int currentFrame = 0;
 	static char szPartName[128];
 	static char szEventName[128];
+	static int iFrameAmount = 0;
 
 	if (mySequence.m_iFrameMin < 0)
 		mySequence.m_iFrameMin = 0;
 
 	if (pSkeletal->m_bStopAnim == false)
 	{
-		currentFrame = static_cast<int>(pSkeletal->fAccTime * 60.f); // 60 frame == 1 sec
+		currentFrame = static_cast<int>(pSkeletal->m_fAccTime * 60.f); // 60 frame == 1 sec
 	}
 	else
 	{
-		pSkeletal->fAccTime = (_float)currentFrame / 60.f;
+		pSkeletal->m_fAccTime = (_float)currentFrame / 60.f;
 	}
 
 	mySequence.m_CubeAnim.fTotalTime = (_float)mySequence.m_iFrameMax / 60.f;
@@ -503,6 +505,13 @@ void CImGuiMgr::AnimationEditor(CSkeletalCube* pSkeletal)
 	{
 		mySequence.AddEvent(currentFrame, szEventName);
 	}
+	ImGui::InputInt("Move Frame Amount", &iFrameAmount);
+	ImGui::SameLine();
+	if (ImGui::Button("Move Frame"))
+	{
+		mySequence.MoveFrame(currentFrame, iFrameAmount);
+	}
+
 	ImGui::PopItemWidth();
 	Sequencer(&mySequence, &currentFrame, &expanded, &selectedEntry, &firstFrame,
 	          ImSequencer::SEQUENCER_ADD | ImSequencer::SEQUENCER_DEL | ImSequencer::SEQUENCER_CHANGE_FRAME);

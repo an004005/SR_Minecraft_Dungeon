@@ -23,6 +23,14 @@ CComponent* Engine::CManagement::Get_Component(const _tchar* pLayerTag, const _t
 	return m_pScene->Get_Component(pLayerTag, pObjTag, pComponentTag, eID);
 }
 
+CGameObject* CManagement::Get_GameObject(const _tchar* pLayerTag, const _tchar* pObjTag)
+{
+	if (nullptr == m_pScene)
+		return nullptr;
+
+	return m_pScene->Get_GameObject(pLayerTag, pObjTag);
+}
+
 void CManagement::AddGameObject(const _tchar* pLayerTag, const _tchar* pObjTag, CGameObject* pObject)
 {
 	if (pObject == nullptr)
