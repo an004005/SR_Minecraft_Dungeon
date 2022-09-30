@@ -13,9 +13,9 @@ protected:
 	virtual ~CScene();
 
 public:
-	CComponent*				Get_Component(const _tchar* pLayerTag, const _tchar* pObjTag, const _tchar* pComponentTag, COMPONENTID eID);
-	CGameObject* Get_GameObject(const _tchar* pLayerTag, const _tchar* pObjTag);
-	void AddGameObject(const _tchar* pLayerTag, const _tchar* pObjTag, CGameObject* pObject);
+	CComponent*				Get_Component(const wstring& pLayerTag, const wstring& pObjTag, const wstring& pComponentTag, COMPONENTID eID);
+	CGameObject* Get_GameObject(const wstring& pLayerTag, const wstring& pObjTag);
+	void AddGameObject(const wstring& pLayerTag, const wstring& pObjTag, CGameObject* pObject);
 public:
 	virtual		HRESULT		Ready_Scene(void);
 	virtual		_int Update_Scene(const _float& fTimeDelta);
@@ -24,7 +24,7 @@ public:
 
 protected:
 	LPDIRECT3DDEVICE9				m_pGraphicDev;
-	map<const _tchar*, CLayer*>		m_mapLayer;
+	map<wstring, CLayer*>		m_mapLayer;
 
 public:
 	virtual void	Free(void);

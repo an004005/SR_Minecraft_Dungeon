@@ -3,7 +3,6 @@
 #include "Player.h"
 
 BEGIN(Engine)
-	class CTriCol;
 	class CTransform;
 END
 
@@ -26,7 +25,6 @@ private:
 	virtual void Free() override;
 
 private:
-	CTriCol*				m_pBufferCom = nullptr;
 	CTransform*			m_pTransCom = nullptr;
 
 	_vec3				m_vDirection;

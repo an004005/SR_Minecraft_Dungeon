@@ -13,9 +13,10 @@ CScene::~CScene()
 {
 }
 
-CComponent * CScene::Get_Component(const _tchar * pLayerTag, const _tchar * pObjTag, const _tchar * pComponentTag, COMPONENTID eID)
+CComponent * CScene::Get_Component(const wstring& pLayerTag, const wstring& pObjTag, const wstring& pComponentTag, COMPONENTID eID)
 {
-	auto	iter = find_if(m_mapLayer.begin(), m_mapLayer.end(), CTag_Finder(pLayerTag));
+	// auto	iter = find_if(m_mapLayer.begin(), m_mapLayer.end(), CTag_Finder(pLayerTag));
+	auto iter = m_mapLayer.find(pLayerTag);
 
 	if (iter == m_mapLayer.end())
 		return nullptr;
@@ -23,21 +24,25 @@ CComponent * CScene::Get_Component(const _tchar * pLayerTag, const _tchar * pObj
 	return iter->second->Get_Component(pObjTag, pComponentTag, eID);
 }
 
-CGameObject* CScene::Get_GameObject(const _tchar* pLayerTag, const _tchar* pObjTag)
+CGameObject* CScene::Get_GameObject(const wstring& pLayerTag, const wstring& pObjTag)
 {
-	auto	iter = find_if(m_mapLayer.begin(), m_mapLayer.end(), CTag_Finder(pLayerTag));
+	// auto	iter = find_if(m_mapLayer.begin(), m_mapLayer.end(), CTag_Finder(pLayerTag));
+	auto iter = m_mapLayer.find(pLayerTag);
+
 	if (iter == m_mapLayer.end())
 		return nullptr;
 
 	return iter->second->Get_GameObject(pObjTag);
 }
 
-void CScene::AddGameObject(const _tchar* pLayerTag, const _tchar* pObjTag, CGameObject* pObject)
+void CScene::AddGameObject(const wstring& pLayerTag, const wstring& pObjTag, CGameObject* pObject)
 {
 	if (pObject == nullptr)
 		return;
 
-	const auto itr = find_if(m_mapLayer.begin(), m_mapLayer.end(), CTag_Finder(pLayerTag));
+	// const auto itr = find_if(m_mapLayer.begin(), m_mapLayer.end(), CTag_Finder(pLayerTag));
+	auto itr = m_mapLayer.find(pLayerTag);
+
 	if (itr != m_mapLayer.end())
 		return;
 

@@ -15,7 +15,7 @@ CManagement::~CManagement()
 }
 
 
-CComponent* Engine::CManagement::Get_Component(const _tchar* pLayerTag, const _tchar* pObjTag, const _tchar* pComponentTag, COMPONENTID eID)
+CComponent* Engine::CManagement::Get_Component(const wstring& pLayerTag, const wstring& pObjTag, const wstring& pComponentTag, COMPONENTID eID)
 {
 	if (nullptr == m_pScene)
 		return nullptr;
@@ -23,7 +23,7 @@ CComponent* Engine::CManagement::Get_Component(const _tchar* pLayerTag, const _t
 	return m_pScene->Get_Component(pLayerTag, pObjTag, pComponentTag, eID);
 }
 
-CGameObject* CManagement::Get_GameObject(const _tchar* pLayerTag, const _tchar* pObjTag)
+CGameObject* CManagement::Get_GameObject(const wstring& pLayerTag, const wstring& pObjTag)
 {
 	if (nullptr == m_pScene)
 		return nullptr;
@@ -31,7 +31,7 @@ CGameObject* CManagement::Get_GameObject(const _tchar* pLayerTag, const _tchar* 
 	return m_pScene->Get_GameObject(pLayerTag, pObjTag);
 }
 
-void CManagement::AddGameObject(const _tchar* pLayerTag, const _tchar* pObjTag, CGameObject* pObject)
+void CManagement::AddGameObject(const wstring& pLayerTag, const wstring& pObjTag, CGameObject* pObject)
 {
 	if (pObject == nullptr)
 		return;

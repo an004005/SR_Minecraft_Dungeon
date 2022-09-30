@@ -376,7 +376,7 @@ void CImGuiMgr::TextureSelector(wstring& strTex, _uint& iTexIdx)
 	{
 		for (size_t i = 0; i < vecTexName.size(); ++i)
 		{
-			CTexture* pTexture = dynamic_cast<CTexture*>(Find_Proto(vecTexName[i].c_str()));
+			CTexture* pTexture = dynamic_cast<CTexture*>(Find_Proto(vecTexName[i]));
 			NULL_CHECK(pTexture);
 
 			size_t iTexSize = pTexture->GetTexSize() - 1;
@@ -409,7 +409,6 @@ void CImGuiMgr::VIBufferSelector(wstring& strBuf)
 	static const vector<wstring> vecBufName{
 		L"Proto_CubeTexCom",
 		L"Proto_VoxelTex_Sword",
-		L"Proto_RcCol"
 	};
 	static size_t iCurIdx = 0;
 
@@ -417,7 +416,7 @@ void CImGuiMgr::VIBufferSelector(wstring& strBuf)
 	{
 		for (size_t i = 0; i < vecBufName.size(); ++i)
 		{
-			CVIBuffer* pBuf = dynamic_cast<CVIBuffer*>(Find_Proto(vecBufName[i].c_str()));
+			CVIBuffer* pBuf = dynamic_cast<CVIBuffer*>(Find_Proto(vecBufName[i]));
 			NULL_CHECK(pBuf);
 
 			string _BufName;
