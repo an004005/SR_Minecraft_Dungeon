@@ -122,14 +122,22 @@ void CTerrainCubeMap::LoadMap(wstring& wstrPath)
 	}
 
 	// terrain에 충돌 큐브가 있는지 저장한다.
+
+	_int SetPosX[4] = { 0.5f, 0.5f, -0.5f, -0.5f };
+	_int SetPosZ[4] = { 0.5f, -0.5f, 0.5f, -0.5f };
+
 	for (auto iter : m_vecCollision)
 	{
 		_vec3 vCenter{ 0.f,0.f,0.f };
 		D3DXVec3TransformCoord(&vCenter, &vCenter, &iter.matWorld);
 
-		_int iCenterx = (_int)vCenter.x;
-		_int iCenterz = (_int)vCenter.z;
-		m_fCollisionPos[iCenterx][iCenterz] = true;
+		for (_int i = 0; i < 4; ++i)
+		{
+			_int iCenterx = (_int)vCenter.x + SetPosX[i];
+			_int iCenterz = (_int)vCenter.z + SetPosZ[i];
+			m_fCollisionPos[iCenterx][iCenterz] = true;
+		}
+	
 	}
 }
 
