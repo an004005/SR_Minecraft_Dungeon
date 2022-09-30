@@ -93,7 +93,7 @@ void CStaticCamera::Key_Input(const _float& fTimeDelta)
 
 void CStaticCamera::Target_Renewal(void)
 {
-	CTransform*	pPlayerTransform = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_GameLogic", L"Player", L"Proto_TransformCom_root", ID_DYNAMIC));
+	CTransform*	pPlayerTransform = dynamic_cast<CTransform*>(Engine::Get_Component(LAYER_GAMEOBJ, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC));
 	NULL_CHECK(pPlayerTransform);
 
 	// _vec3	vPos;

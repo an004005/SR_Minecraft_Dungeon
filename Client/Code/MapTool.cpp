@@ -64,7 +64,7 @@ _int CMapTool::Update_Scene(const _float & fTimeDelta)
 
 			m_vecTotalCube.push_back(dynamic_cast<CMapCube*>(pGameObject));
 
-			m_mapLayer.insert({ L"Layer_Terrain", m_pLayer });
+			
 			m_tMapTool.iCubeCount++;
 			break;
 
@@ -78,7 +78,6 @@ _int CMapTool::Update_Scene(const _float & fTimeDelta)
 
 			m_vecTotalCube.push_back(dynamic_cast<CMapCube*>(pGameObject));
 
-			m_mapLayer.insert({ L"Layer_Terrain", m_pLayer });
 			m_tMapTool.iCubeCount++;
 			break;
 
@@ -129,20 +128,18 @@ void CMapTool::Render_Scene(void)
 
 HRESULT CMapTool::Ready_Layer_Environment(const _tchar * pLayerTag)
 {
-	Engine::CLayer*		pLayer = Engine::CLayer::Create();
-	NULL_CHECK_RETURN(pLayer, E_FAIL);
 
 	CGameObject*		pGameObject = nullptr;
 
 	// DynamicCamera
 	pGameObject = CDynamicCamera::Create(m_pGraphicDev, &_vec3(0.f, 10.f, -10.f), &_vec3(0.f, 0.f, 0.f), &_vec3(0.f, 1.f, 0.f));
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"DynamicCamera", pGameObject), E_FAIL);
+	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"DynamicCamera", pGameObject), E_FAIL);
 
 	// Terrain
 	pGameObject = CTerrain::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Terrain", pGameObject), E_FAIL);
+	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"Terrain", pGameObject), E_FAIL);
 
 	/*CMapCube* pCube;
 	for (int i = 0; i < VTXCNTZ; ++i)
@@ -162,7 +159,6 @@ HRESULT CMapTool::Ready_Layer_Environment(const _tchar * pLayerTag)
 	
 
 		
-	m_mapLayer.insert({ pLayerTag, pLayer });
 
 	return S_OK;
 }
@@ -271,7 +267,6 @@ void CMapTool::Create_Cube(_matrix & CubeWorld, MapTool& tMapTool)
 	m_pLayer->Add_GameObject(pMapCube->m_wstrName.c_str(), pGameObject);
 
 	m_vecTotalCube.push_back(dynamic_cast<CMapCube*>(pGameObject));
-	m_mapLayer.insert({ L"Layer_Terrain", m_pLayer });
 	m_tMapTool.iCubeCount++;
 
 }

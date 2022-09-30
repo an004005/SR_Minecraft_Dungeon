@@ -26,19 +26,22 @@ void		Render_Scene(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	CManagement::GetInstance()->Render_Scene(pGraphicDev);
 }
-CComponent*				Get_Component(const wstring& pLayerTag, const wstring& pObjTag, const wstring& pComponentTag, COMPONENTID eID)
+CComponent*				Get_Component(LAYERID eLayerID, const wstring& pObjTag, const wstring& pComponentTag, COMPONENTID eID)
 {
-	return CManagement::GetInstance()->Get_Component(pLayerTag, pObjTag, pComponentTag, eID);
+	return CManagement::GetInstance()->Get_Component(eLayerID, pObjTag, pComponentTag, eID);
 }
-inline 	CGameObject* Get_GameObject(const wstring& pLayerTag, const wstring& pObjTag)
+inline 	CGameObject* Get_GameObject(LAYERID eLayerID, const wstring& pObjTag)
 {
-	return CManagement::GetInstance()->Get_GameObject(pLayerTag, pObjTag);
+	return CManagement::GetInstance()->Get_GameObject(eLayerID, pObjTag);
+}
+inline CLayer* Get_Layer(LAYERID eLayerID)
+{
+	return CManagement::GetInstance()->Get_Layer(eLayerID);
 }
 
-
-void AddGameObject(const wstring& pLayerTag, const wstring& pObjTag, CGameObject* pObject)
+void AddGameObject(LAYERID eLayerID, const wstring& pObjTag, CGameObject* pObject)
 {
-	CManagement::GetInstance()->AddGameObject(pLayerTag, pObjTag, pObject);
+	CManagement::GetInstance()->AddGameObject(eLayerID, pObjTag, pObject);
 }
 
 inline HRESULT			Ready_Proto(const wstring& pProtoTag, CComponent* pComponent)

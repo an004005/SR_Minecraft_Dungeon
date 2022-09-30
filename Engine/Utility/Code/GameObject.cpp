@@ -61,7 +61,7 @@ CComponent * CGameObject::Get_Component(const wstring& pComponentTag, COMPONENTI
 CComponent * CGameObject::Find_Component(const wstring& pComponentTag, COMPONENTID eID)
 {
 	// auto	iter = find_if(m_mapComponent[eID].begin(), m_mapComponent[eID].end(), CTag_Finder(pComponentTag));
-	auto	iter = m_mapComponent->find(pComponentTag);
+	auto	iter = m_mapComponent[eID].find(pComponentTag);
 
 	if (iter == m_mapComponent[eID].end())
 		return nullptr;

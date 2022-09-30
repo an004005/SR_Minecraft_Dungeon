@@ -15,28 +15,33 @@ CManagement::~CManagement()
 }
 
 
-CComponent* Engine::CManagement::Get_Component(const wstring& pLayerTag, const wstring& pObjTag, const wstring& pComponentTag, COMPONENTID eID)
+CComponent* Engine::CManagement::Get_Component(LAYERID eLayerID, const wstring& pObjTag, const wstring& pComponentTag, COMPONENTID eID)
 {
 	if (nullptr == m_pScene)
 		return nullptr;
 
-	return m_pScene->Get_Component(pLayerTag, pObjTag, pComponentTag, eID);
+	return m_pScene->Get_Component(eLayerID, pObjTag, pComponentTag, eID);
 }
 
-CGameObject* CManagement::Get_GameObject(const wstring& pLayerTag, const wstring& pObjTag)
+CGameObject* CManagement::Get_GameObject(LAYERID eLayerID, const wstring& pObjTag)
 {
 	if (nullptr == m_pScene)
 		return nullptr;
 
-	return m_pScene->Get_GameObject(pLayerTag, pObjTag);
+	return m_pScene->Get_GameObject(eLayerID, pObjTag);
 }
 
-void CManagement::AddGameObject(const wstring& pLayerTag, const wstring& pObjTag, CGameObject* pObject)
+CLayer* CManagement::Get_Layer(LAYERID eLayerID)
+{
+	return m_pScene->Get_Layer(eLayerID);
+}
+
+void CManagement::AddGameObject(LAYERID eLayerID, const wstring& pObjTag, CGameObject* pObject)
 {
 	if (pObject == nullptr)
 		return;
 
-	m_pScene->AddGameObject(pLayerTag, pObjTag, pObject);
+	m_pScene->AddGameObject(eLayerID, pObjTag, pObject);
 }
 
 HRESULT CManagement::Set_Scene(CScene * pScene)

@@ -29,12 +29,13 @@ inline HRESULT		Set_Scene(CScene* pScene);
 inline _int		Update_Scene(const _float& fTimeDelta);
 inline void		LateUpdate_Scene(void);
 inline void		Render_Scene(LPDIRECT3DDEVICE9 pGraphicDev);
-inline 	CComponent*				Get_Component(const wstring& pLayerTag,
+inline 	CComponent*				Get_Component(LAYERID eLayerID,
 	const wstring& pObjTag,
 	const wstring& pComponentTag,
 	COMPONENTID eID);
-inline 	CGameObject* Get_GameObject(const wstring& pLayerTag, const wstring& pObjTag);
-inline void AddGameObject(const wstring& pLayerTag, const wstring& pObjTag, CGameObject* pObject);
+inline 	CGameObject* Get_GameObject(LAYERID eLayerID, const wstring& pObjTag);
+inline CLayer* Get_Layer(LAYERID eLayerID);
+inline void AddGameObject(LAYERID eLayerID, const wstring& pObjTag, CGameObject* pObject);
 
 
 // ProtoMgr

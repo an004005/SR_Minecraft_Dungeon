@@ -43,7 +43,7 @@ _int CMonster::Update_Object(const _float& fTimeDelta)
 
 void CMonster::LateUpdate_Object()
 {
-	CTransform*		pPlayerTransformCom = dynamic_cast<CTransform*>(Engine::Get_Component(L"Ready_Layer_Environment", L"Player", L"Proto_TransformCom", ID_DYNAMIC));
+	CTransform*		pPlayerTransformCom = dynamic_cast<CTransform*>(Engine::Get_Component(LAYER_ENV, L"Player", L"Proto_TransformCom", ID_DYNAMIC));
 	NULL_CHECK(pPlayerTransformCom);
 
 	_vec3		vPlayerPos;

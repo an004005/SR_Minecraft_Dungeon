@@ -51,6 +51,7 @@ _int CLayer::Update_Layer(const _float & fTimeDelta)
 	{
 		if (OBJ_DEAD == itr->second->Update_Object(fTimeDelta))
 		{
+			Safe_Release(itr->second);
 			itr = m_mapObject.erase(itr);
 		}
 		else

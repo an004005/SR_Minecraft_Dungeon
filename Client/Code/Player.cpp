@@ -25,8 +25,8 @@ HRESULT CPlayer::Ready_Object()
 
 	m_arrLoopAnim[IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_idle.anim");
 	m_arrLoopAnim[WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_walk.anim");
-	// m_arrOnceAnim[ATTACK1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_a.anim");
-	m_arrOnceAnim[ATTACK1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/JK/Intro.anim");
+	m_arrOnceAnim[ATTACK1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_a.anim");
+	// m_arrOnceAnim[ATTACK1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/JK/Intro.anim");
 	m_arrOnceAnim[ATTACK2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_b.anim");
 	m_arrOnceAnim[ATTACK3] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_c.anim");
 	m_pIdleAnim = &m_arrLoopAnim[IDLE];
@@ -55,7 +55,7 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 		}
 	}
 
-	CTerrainCubeMap* pTerrain = dynamic_cast<CTerrainCubeMap*>(Get_GameObject(L"Layer_Environment", L"TerrainCubeMap"));
+	CTerrainCubeMap* pTerrain = dynamic_cast<CTerrainCubeMap*>(Get_GameObject(LAYER_ENV, L"TerrainCubeMap"));
 	NULL_CHECK_RETURN(pTerrain, -1);
 	_vec3& vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
 	vPos.y = pTerrain->GetHeight(vPos.x, vPos.z);
@@ -79,8 +79,8 @@ void CPlayer::AnimationEvent(const string& strEvent)
 
 void CPlayer::CheckCursor()
 {
-	const CTerrainTex* pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"Layer_Environment", L"Terrain", L"Proto_TerrainTexCom", ID_STATIC));
-	const CTransform* pTerrainTransformCom = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_Environment", L"Terrain", L"Proto_TransformCom", ID_DYNAMIC));
+	const CTerrainTex* pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(LAYER_ENV, L"Terrain", L"Proto_TerrainTexCom", ID_STATIC));
+	const CTransform* pTerrainTransformCom = dynamic_cast<CTransform*>(Engine::Get_Component(LAYER_ENV, L"Terrain", L"Proto_TransformCom", ID_DYNAMIC));
 
 	m_vDest = PickingOnTerrain(g_hWnd, pTerrainBufferCom, pTerrainTransformCom);
 	if (m_vDest != _vec3(0.f, 0.f, 0.f))

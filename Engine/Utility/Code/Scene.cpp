@@ -6,6 +6,8 @@ CScene::CScene(LPDIRECT3DDEVICE9 pGraphicDev)
 	: m_pGraphicDev(pGraphicDev)
 {
 	m_pGraphicDev->AddRef();
+	for (auto& e : m_arrLayer)
+		e = CLayer::Create();
 }
 
 
@@ -13,40 +15,27 @@ CScene::~CScene()
 {
 }
 
-CComponent * CScene::Get_Component(const wstring& pLayerTag, const wstring& pObjTag, const wstring& pComponentTag, COMPONENTID eID)
+CComponent * CScene::Get_Component(LAYERID eLayerID, const wstring& pObjTag, const wstring& pComponentTag, COMPONENTID eID)
 {
-	// auto	iter = find_if(m_mapLayer.begin(), m_mapLayer.end(), CTag_Finder(pLayerTag));
-	auto iter = m_mapLayer.find(pLayerTag);
-
-	if (iter == m_mapLayer.end())
-		return nullptr;
-
-	return iter->second->Get_Component(pObjTag, pComponentTag, eID);
+	return m_arrLayer[eLayerID]->Get_Component(pObjTag, pComponentTag, eID);
 }
 
-CGameObject* CScene::Get_GameObject(const wstring& pLayerTag, const wstring& pObjTag)
+CGameObject* CScene::Get_GameObject(LAYERID eLayerID, const wstring& pObjTag)
 {
-	// auto	iter = find_if(m_mapLayer.begin(), m_mapLayer.end(), CTag_Finder(pLayerTag));
-	auto iter = m_mapLayer.find(pLayerTag);
-
-	if (iter == m_mapLayer.end())
-		return nullptr;
-
-	return iter->second->Get_GameObject(pObjTag);
+	return m_arrLayer[eLayerID]->Get_GameObject(pObjTag);
 }
 
-void CScene::AddGameObject(const wstring& pLayerTag, const wstring& pObjTag, CGameObject* pObject)
+CLayer* CScene::Get_Layer(LAYERID eLayerID)
+{
+	return m_arrLayer[eLayerID];
+}
+
+void CScene::AddGameObject(LAYERID eLayerID, const wstring& pObjTag, CGameObject* pObject)
 {
 	if (pObject == nullptr)
 		return;
 
-	// const auto itr = find_if(m_mapLayer.begin(), m_mapLayer.end(), CTag_Finder(pLayerTag));
-	auto itr = m_mapLayer.find(pLayerTag);
-
-	if (itr != m_mapLayer.end())
-		return;
-
-	itr->second->Add_GameObject(pObjTag, pObject);
+	m_arrLayer[eLayerID]->Add_GameObject(pObjTag, pObject);
 }
 
 HRESULT CScene::Ready_Scene(void)
@@ -58,10 +47,9 @@ _int CScene::Update_Scene(const _float & fTimeDelta)
 {
 	_int iResult = 0;
 
-	for (auto& iter : m_mapLayer)
+	for (auto& layer : m_arrLayer)
 	{
-		iResult = iter.second->Update_Layer(fTimeDelta);
-
+		iResult = layer->Update_Layer(fTimeDelta);
 		if (iResult & 0x80000000)
 			return iResult;
 	}
@@ -71,14 +59,16 @@ _int CScene::Update_Scene(const _float & fTimeDelta)
 
 void CScene::LateUpdate_Scene(void)
 {
-	for (auto& iter : m_mapLayer)
-		iter.second->LateUpdate_Layer();
+	for (auto& layer : m_arrLayer)
+	{
+		layer->LateUpdate_Layer();
+	}
 }
 
 void Engine::CScene::Free(void)
 {
-	for_each(m_mapLayer.begin(), m_mapLayer.end(), CDeleteMap());
-	m_mapLayer.clear();
+	for (auto& i : m_arrLayer)
+		Safe_Release(i);
 
 	Safe_Release(m_pGraphicDev);
 }
