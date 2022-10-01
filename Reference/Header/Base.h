@@ -10,7 +10,7 @@ protected:
 public:
 	inline		unsigned long		AddRef(void);		// 레퍼런스 카운트 증가
 	inline		unsigned long		Release(void);		// 레퍼런스 카운트 감소 및 삭제
-
+	inline		unsigned long		GetRef() const;     // ref 카운트 확인
 private:
 	unsigned long				m_dwRefCnt;
 
