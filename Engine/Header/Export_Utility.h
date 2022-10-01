@@ -17,44 +17,63 @@
 #include "ProtoMgr.h"
 #include "Management.h"
 #include "Renderer.h"
+#include "GameUtilMgr.h"
 
 
 BEGIN(Engine)
-
-// Management
-
-
-inline HRESULT	Create_Management(LPDIRECT3DDEVICE9& pGraphicDev, CManagement** ppManagement);
-inline HRESULT		Set_Scene(CScene* pScene);
-inline _int		Update_Scene(const _float& fTimeDelta);
-inline void		LateUpdate_Scene(void);
-inline void		Render_Scene(LPDIRECT3DDEVICE9 pGraphicDev);
-inline 	CComponent*				Get_Component(LAYERID eLayerID,
-	const wstring& pObjTag,
-	const wstring& pComponentTag,
-	COMPONENTID eID);
-inline 	CGameObject* Get_GameObject(LAYERID eLayerID, const wstring& pObjTag);
-inline CLayer* Get_Layer(LAYERID eLayerID);
-inline void AddGameObject(LAYERID eLayerID, const wstring& pObjTag, CGameObject* pObject);
+	// Management
 
 
-// ProtoMgr
-inline HRESULT			Ready_Proto(const wstring& pProtoTag, CComponent* pComponent);
-inline CComponent*		Clone_Proto(const wstring& pProtoTag);
-inline CComponent*		Find_Proto(const wstring& pProtoTag);
+	inline HRESULT Create_Management(LPDIRECT3DDEVICE9& pGraphicDev, CManagement** ppManagement);
+	inline HRESULT Set_Scene(CScene* pScene);
+	inline _int Update_Scene(const _float& fTimeDelta);
+	inline void LateUpdate_Scene(void);
+	inline void Render_Scene(LPDIRECT3DDEVICE9 pGraphicDev);
+
+	template <typename T>
+	T* Get_Component(LAYERID eLayerID,
+	                                 const wstring& pObjTag,
+	                                 const wstring& pComponentTag,
+	                                 COMPONENTID eID)
+	{
+		CComponent* pComponent = CManagement::GetInstance()->Get_Component(eLayerID, pObjTag, pComponentTag, eID);
+		T* pCasted = dynamic_cast<T*>(pComponent);
+		NULL_CHECK_RETURN(pCasted, nullptr);
+
+		return pCasted;
+	}
+
+	template <typename T>
+	T* Get_GameObject(LAYERID eLayerID, const wstring& pObjTag)
+	{
+		CGameObject* pGameObject = CManagement::GetInstance()->Get_GameObject(eLayerID, pObjTag);
+		T* pCasted = dynamic_cast<T*>(pGameObject);
+		NULL_CHECK_RETURN(pCasted, nullptr);
+
+		return pCasted;
+	}
+
+	inline CLayer* Get_Layer(LAYERID eLayerID);
+	inline void AddGameObject(LAYERID eLayerID, const wstring& pObjTag, CGameObject* pObject);
 
 
-// Renderer
+	// ProtoMgr
+	inline HRESULT Ready_Proto(const wstring& pProtoTag, CComponent* pComponent);
+	inline CComponent* Clone_Proto(const wstring& pProtoTag);
+	inline CComponent* Find_Proto(const wstring& pProtoTag);
 
-inline void		Add_RenderGroup(RENDERID eID, CGameObject* pGameObject);
-inline void		Render_GameObject(LPDIRECT3DDEVICE9& pGraphicDev);
-inline void		Clear_RenderGroup(void);
+
+	// Renderer
+
+	inline void Add_RenderGroup(RENDERID eID, CGameObject* pGameObject);
+	inline void Render_GameObject(LPDIRECT3DDEVICE9& pGraphicDev);
+	inline void Clear_RenderGroup(void);
 
 
-inline void			Release_Utility(void);
+	inline void Release_Utility(void);
 
 
 #include "Export_Utility.inl"
 
 END
-#endif 
+#endif

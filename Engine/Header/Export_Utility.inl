@@ -26,14 +26,6 @@ void		Render_Scene(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	CManagement::GetInstance()->Render_Scene(pGraphicDev);
 }
-CComponent*				Get_Component(LAYERID eLayerID, const wstring& pObjTag, const wstring& pComponentTag, COMPONENTID eID)
-{
-	return CManagement::GetInstance()->Get_Component(eLayerID, pObjTag, pComponentTag, eID);
-}
-inline 	CGameObject* Get_GameObject(LAYERID eLayerID, const wstring& pObjTag)
-{
-	return CManagement::GetInstance()->Get_GameObject(eLayerID, pObjTag);
-}
 inline CLayer* Get_Layer(LAYERID eLayerID)
 {
 	return CManagement::GetInstance()->Get_Layer(eLayerID);

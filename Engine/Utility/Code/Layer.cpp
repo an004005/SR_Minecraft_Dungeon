@@ -17,7 +17,7 @@ CComponent * CLayer::Get_Component(const wstring& pObjTag, const wstring& pCompo
 	if (iter == m_mapObject.end())
 		return nullptr;
 
-	return iter->second->Get_Component(pComponentTag, eID);
+	return iter->second->Get_Component<CComponent>(pComponentTag, eID);
 }
 
 CGameObject* CLayer::Get_GameObject(const wstring& pObjTag)

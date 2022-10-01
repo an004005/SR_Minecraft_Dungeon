@@ -32,6 +32,8 @@ CComponent * CProtoMgr::Clone_Proto(const wstring& pProtoTag)
 	if (pProtoTag.empty())
 		return nullptr;
 
+	NULL_CHECK_RETURN(pPrototype, nullptr);
+
 	return pPrototype->Clone();
 }
 

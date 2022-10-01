@@ -4,6 +4,7 @@
 #include "StaticCamera.h"
 #include "Terrain.h"
 #include "Player.h"
+#include "AbstFactory.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
@@ -41,12 +42,6 @@ void CStage::LateUpdate_Scene(void)
 
 void CStage::Render_Scene(void)
 {
-	_matrix matI;
-	D3DXMatrixIdentity(&matI);
-	m_pGraphicDev->SetTransform(D3DTS_WORLD, &matI);
-
-	//tmpTex->Set_Texture(5);
-	//tmp->Render_Buffer();
 }
 
 HRESULT CStage::Ready_Layer_Environment()
@@ -54,9 +49,7 @@ HRESULT CStage::Ready_Layer_Environment()
 	CGameObject*		pGameObject = nullptr;
 
 	// Terrain
-	pGameObject = CTerrain::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"Terrain", pGameObject), E_FAIL);
+	CEnvFactory::Create<CTerrain>("DefaultTerrain", L"Terrain");
 
 	// TerrainCubeMap
 	pGameObject = CTerrainCubeMap::Create(m_pGraphicDev);
@@ -70,29 +63,15 @@ HRESULT CStage::Ready_Layer_Environment()
 HRESULT CStage::Ready_Layer_GameLogic()
 {
 	CGameObject*		pGameObject = nullptr;
+
 	pGameObject = CStaticCamera::Create(m_pGraphicDev, &_vec3(0.f, 10.f, -10.f), &_vec3(0.f, 0.f, 0.f), &_vec3(0.f, 1.f, 0.f));
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_GAMEOBJ]->Add_GameObject(L"StaticCamera", pGameObject), E_FAIL);
 
-	static vector<wstring> vecNs;
 
-
-	pGameObject = CPlayer::Create(m_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Steve.cube");
-	// pGameObject = CPlayer::Create(m_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Redstone_monstrosity.cube");
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(m_arrLayer[LAYER_GAMEOBJ]->Add_GameObject(L"Player", pGameObject), E_FAIL);
-
-	// for (int i = 0; i < 150; ++i)
-	// {
-	// 	pGameObject = CPlayer::Create(m_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Steve.cube");
-	// 	dynamic_cast<CTransform*>(pGameObject->Get_Component(L"Proto_TransformCom_root", ID_DYNAMIC))->m_vInfo[INFO_POS] = _vec3((_float)i, 0.f, 0.f);
-	// 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	// 	vecNs.push_back(L"Player_" + to_wstring(i));
-	// 	// FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player", pGameObject), E_FAIL);
-	// 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(vecNs.back().c_str(), pGameObject), E_FAIL);
-	// }
-
-	// pGameObject = CPlayer::Create(m_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Skeleton.cube");
+	_matrix matWorld;
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {1.f, 0.f ,1.f});
+	CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld);
 
 
 	return S_OK;

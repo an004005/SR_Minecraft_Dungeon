@@ -14,7 +14,6 @@ CManagement::~CManagement()
 	Free();
 }
 
-
 CComponent* Engine::CManagement::Get_Component(LAYERID eLayerID, const wstring& pObjTag, const wstring& pComponentTag, COMPONENTID eID)
 {
 	if (nullptr == m_pScene)
@@ -33,6 +32,7 @@ CGameObject* CManagement::Get_GameObject(LAYERID eLayerID, const wstring& pObjTa
 
 CLayer* CManagement::Get_Layer(LAYERID eLayerID)
 {
+	NULL_CHECK_RETURN(m_pScene, nullptr);
 	return m_pScene->Get_Layer(eLayerID);
 }
 
@@ -41,6 +41,7 @@ void CManagement::AddGameObject(LAYERID eLayerID, const wstring& pObjTag, CGameO
 	if (pObject == nullptr)
 		return;
 
+	NULL_CHECK(m_pScene);
 	m_pScene->AddGameObject(eLayerID, pObjTag, pObject);
 }
 

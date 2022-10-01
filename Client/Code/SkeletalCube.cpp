@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "SkeletalCube.h"
-#include "CubeAnimMgr.h"
 #include "GameUtilMgr.h"
 
 string CSkeletalCube::s_strRoot = "root";
@@ -259,9 +258,8 @@ void CSkeletalCube::AnimFrameConsume(_float fTimeDelta)
 
 void CSkeletalCube::PlayAnimationOnce(const string& strAnim)
 {
-	m_fAccTime = 0.f;
-	m_pCurAnim = CCubeAnimMgr::GetInstance()->GetAnim(strAnim);
-	m_pCurAnim->bLoop = false;
+	// m_fAccTime = 0.f;
+	// m_pCurAnim->bLoop = false;
 	// std::sort(m_pCurAnim..begin(), vecFrame.end());
 }
 

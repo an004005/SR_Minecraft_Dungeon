@@ -15,7 +15,7 @@ private:
 	virtual ~CManagement();
 
 public:
-	CComponent*				Get_Component(LAYERID eLayerID, const wstring& pObjTag, const wstring& pComponentTag, COMPONENTID eID);
+	CComponent* Get_Component(LAYERID eLayerID, const wstring& pObjTag, const wstring& pComponentTag, COMPONENTID eID);
 	CGameObject* Get_GameObject(LAYERID eLayerID, const wstring& pObjTag);
 	CLayer* Get_Layer(LAYERID eLayerID);
 	void AddGameObject(LAYERID eLayerID, const wstring& pObjTag, CGameObject* pObject);
@@ -31,4 +31,5 @@ private:
 public:
 	virtual void Free(void);
 };
+
 END

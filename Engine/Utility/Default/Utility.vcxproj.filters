@@ -43,6 +43,9 @@
     <Filter Include="00. Component\03. Calculator">
       <UniqueIdentifier>{44c9bb9f-c04c-432a-9d34-b303331c51ad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{4df27b23-bdb1-4604-b66b-69aa133859c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Header\Export_Utility.h">
@@ -99,6 +102,9 @@
     <ClInclude Include="..\..\Header\TerrainCubeTex.h">
       <Filter>00. Component\00. VIBuffer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Header\GameUtilMgr.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\VIBuffer.cpp">
@@ -151,6 +157,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\TerrainCubeTex.cpp">
       <Filter>00. Component\00. VIBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GameUtilMgr.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

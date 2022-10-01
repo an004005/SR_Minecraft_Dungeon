@@ -1,19 +1,19 @@
 #include "stdafx.h"
-#include "ToolTest.h"
+#include "AnimationTool.h"
 #include "DynamicCamera.h"
 #include "TestCube.h"
 #include "ImGuiMgr.h"
 #include "SkeletalCube.h"
 
-CToolTest::CToolTest(LPDIRECT3DDEVICE9 pGraphicDev): CScene(pGraphicDev)
+CAnimationTool::CAnimationTool(LPDIRECT3DDEVICE9 pGraphicDev): CScene(pGraphicDev)
 {
 }
 
-CToolTest::~CToolTest()
+CAnimationTool::~CAnimationTool()
 {
 }
 
-HRESULT CToolTest::Ready_Scene()
+HRESULT CAnimationTool::Ready_Scene()
 {
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CubeTexCom", CCubeTex::Create(m_pGraphicDev)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CubeTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/SkyBox/burger%d.dds", TEX_CUBE, 4)), E_FAIL);
@@ -43,7 +43,7 @@ HRESULT CToolTest::Ready_Scene()
 	return CScene::Ready_Scene();
 }
 
-_int CToolTest::Update_Scene(const _float& fTimeDelta)
+_int CAnimationTool::Update_Scene(const _float& fTimeDelta)
 {
 	// ImGui::ShowDemoWindow(nullptr);
 
@@ -59,14 +59,14 @@ _int CToolTest::Update_Scene(const _float& fTimeDelta)
 	return CScene::Update_Scene(fTimeDelta);
 }
 
-void CToolTest::Free()
+void CAnimationTool::Free()
 {
 	CScene::Free();
 }
 
-CToolTest* CToolTest::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CAnimationTool* CAnimationTool::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
-	CToolTest*	pInstance = new CToolTest(pGraphicDev);
+	CAnimationTool*	pInstance = new CAnimationTool(pGraphicDev);
 
 	if (FAILED(pInstance->Ready_Scene()))
 	{

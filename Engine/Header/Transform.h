@@ -26,6 +26,7 @@ public:
 	void	SetRotation(const _vec3& vAngle) { m_vAngle = vAngle; }
 	void	Get_WorldMatrix(_matrix* pWorld) const { *pWorld = m_matWorld; }
 	void	Set_WorldMatrix(_matrix* pWorld) { m_matWorld = *pWorld; }
+	void    Set_WorldDecompose(const _matrix& matWorld);
 
 public:
 	void Chase_Target(const _vec3* pTargetPos, const _float& fSpeed, const _float& fTimeDelta);

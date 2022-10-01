@@ -1,5 +1,5 @@
 #include "..\..\Header\Scene.h"
-
+#include "Management.h"
 USING(Engine)
 
 CScene::CScene(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -40,6 +40,8 @@ void CScene::AddGameObject(LAYERID eLayerID, const wstring& pObjTag, CGameObject
 
 HRESULT CScene::Ready_Scene(void)
 {
+	CManagement::GetInstance()->Set_Scene(this);
+
 	return S_OK;
 }
 

@@ -154,10 +154,10 @@ void CMapCube::Free(void)
 
 Engine::_vec3 CMapCube::PickUp_OnTerrain(void)
 {
-	CTerrainTex*	pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(LAYER_ENV, L"Terrain", L"Proto_TerrainTexCom", ID_STATIC));
+	CTerrainTex*	pTerrainBufferCom = Engine::Get_Component<CTerrainTex>(LAYER_ENV, L"Terrain", L"Proto_TerrainTexCom", ID_STATIC);
 	NULL_CHECK_RETURN(pTerrainBufferCom, _vec3());
 
-	CTransform*		pTerrainTransformCom = dynamic_cast<CTransform*>(Engine::Get_Component(LAYER_ENV, L"Terrain", L"Proto_TransformCom", ID_DYNAMIC));
+	CTransform*		pTerrainTransformCom = Engine::Get_Component<CTransform>(LAYER_ENV, L"Terrain", L"Proto_TransformCom", ID_DYNAMIC);
 	NULL_CHECK_RETURN(pTerrainTransformCom, _vec3());
 
 	return m_pCalculatorCom->PickingOnTerrain(g_hWnd, pTerrainBufferCom, pTerrainTransformCom);
