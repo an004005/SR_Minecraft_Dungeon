@@ -13,12 +13,12 @@ private:
 	virtual ~CProtoMgr();
 
 public:
-	HRESULT			Ready_Proto(const _tchar* pProtoTag, CComponent* pComponent);
-	CComponent*		Clone_Proto(const _tchar* pProtoTag);
-	CComponent*		Find_Proto(const _tchar* pProtoTag);
+	HRESULT			Ready_Proto(const wstring& pProtoTag, CComponent* pComponent);
+	CComponent*		Clone_Proto(const wstring& pProtoTag);
+	CComponent*		Find_Proto(const wstring& pProtoTag);
 
 private:
-	map<const _tchar*, CComponent*>		m_mapProto;
+	map<wstring, CComponent*>		m_mapProto;
 
 public:
 	virtual void	Free(void);

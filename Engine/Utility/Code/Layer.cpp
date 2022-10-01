@@ -10,26 +10,27 @@ CLayer::~CLayer()
 {
 }
 
-CComponent * CLayer::Get_Component(const _tchar * pObjTag, const _tchar * pComponentTag, COMPONENTID eID)
+CComponent * CLayer::Get_Component(const wstring& pObjTag, const wstring& pComponentTag, COMPONENTID eID)
 {
-	auto	iter = find_if(m_mapObject.begin(), m_mapObject.end(), CTag_Finder(pObjTag));
+	auto	iter = m_mapObject.find(pObjTag);
 
 	if (iter == m_mapObject.end())
 		return nullptr;
 
-	return iter->second->Get_Component(pComponentTag, eID);
+	return iter->second->Get_Component<CComponent>(pComponentTag, eID);
 }
 
-CGameObject* CLayer::Get_GameObject(const _tchar* pObjTag)
+CGameObject* CLayer::Get_GameObject(const wstring& pObjTag)
 {
-	auto	iter = find_if(m_mapObject.begin(), m_mapObject.end(), CTag_Finder(pObjTag));
+	auto	iter = m_mapObject.find(pObjTag);
+
 	if (iter == m_mapObject.end())
 		return nullptr;
 
 	return iter->second;
 }
 
-HRESULT CLayer::Add_GameObject(const _tchar * pObjTag, CGameObject * pInstance)
+HRESULT CLayer::Add_GameObject(const wstring& pObjTag, CGameObject * pInstance)
 {
 	if (nullptr == pInstance)
 		return E_FAIL;
@@ -46,17 +47,20 @@ HRESULT CLayer::Ready_Layer(void)
 
 _int CLayer::Update_Layer(const _float & fTimeDelta)
 {
-	_int iResult = 0;
-
-	for (auto& iter : m_mapObject)
+	for (auto itr = m_mapObject.begin(); itr != m_mapObject.end();)
 	{
-		iResult = iter.second->Update_Object(fTimeDelta);
-
-		if (iResult & 0x80000000)
-			return iResult;
+		if (OBJ_DEAD == itr->second->Update_Object(fTimeDelta))
+		{
+			Safe_Release(itr->second);
+			itr = m_mapObject.erase(itr);
+		}
+		else
+		{
+			++itr;
+		}
 	}
 
-	return iResult;
+	return LAY_NOEVENT;
 }
 
 void CLayer::LateUpdate_Layer(void)
@@ -65,9 +69,9 @@ void CLayer::LateUpdate_Layer(void)
 		iter.second->LateUpdate_Object();
 }
 
-HRESULT CLayer::Delete_GameObject(const _tchar * pObjTag)
+HRESULT CLayer::Delete_GameObject(const wstring& pObjTag)
 {
-	auto	iter = find_if(m_mapObject.begin(), m_mapObject.end(), CTag_Finder(pObjTag));
+	auto	iter = m_mapObject.find(pObjTag);
 
 	if (iter == m_mapObject.end())
 		return E_FAIL;

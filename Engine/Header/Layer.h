@@ -12,17 +12,17 @@ private:
 	virtual ~CLayer();
 
 public:
-	CComponent*				Get_Component(const _tchar* pObjTag, const _tchar* pComponentTag, COMPONENTID eID);
-	CGameObject* Get_GameObject(const _tchar* pObjTag);
+	CComponent*				Get_Component(const wstring& pObjTag, const wstring& pComponentTag, COMPONENTID eID);
+	CGameObject* Get_GameObject(const wstring& pObjTag);
 public:
-	HRESULT			Add_GameObject(const _tchar* pObjTag, CGameObject* pInstance);
+	HRESULT			Add_GameObject(const wstring& pObjTag, CGameObject* pInstance);
 	HRESULT			Ready_Layer(void);
 	_int			Update_Layer(const _float& fTimeDelta);
 	void			LateUpdate_Layer(void);
-	HRESULT			Delete_GameObject(const _tchar* pObjTag);
+	HRESULT			Delete_GameObject(const wstring& pObjTag);
 
 private:
-	map<const _tchar*, CGameObject*>			m_mapObject;
+	unordered_map<wstring, CGameObject*>			m_mapObject;
 
 public:
 	static CLayer*		Create(void);

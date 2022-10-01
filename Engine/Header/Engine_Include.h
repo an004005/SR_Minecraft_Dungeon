@@ -15,6 +15,8 @@
 #include <fstream>
 #include <array>
 #include <tuple>
+#include <unordered_map>
+
 
 #define DIRECTINPUT_VERSION	0x0800
 #include <dinput.h>

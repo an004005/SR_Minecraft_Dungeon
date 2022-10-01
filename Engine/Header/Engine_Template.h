@@ -52,29 +52,29 @@ namespace Engine
 	//////////////////////////////////////////////////////////////////
 	/////////////////////////////////Functor ÇÔ¼ö°´Ã¼//////////////////////////
 
-	class CTag_Finder
-	{
-	public:
-		explicit CTag_Finder(const _tchar* pTag)
-			: m_pTargetTag(pTag)
-		{
-		}
-		~CTag_Finder() {		}
-	public:
-		template<typename T>
-		bool operator()(const T& pair)
-		{
-			if (0 == lstrcmpW(m_pTargetTag, pair.first))
-			{
-				return true;
-			}
+	//class CTag_Finder
+	//{
+	//public:
+	//	explicit CTag_Finder(const _tchar* pTag)
+	//		: m_pTargetTag(pTag)
+	//	{
+	//	}
+	//	~CTag_Finder() {		}
+	//public:
+	//	template<typename T>
+	//	bool operator()(const T& pair)
+	//	{
+	//		if (0 == lstrcmpW(m_pTargetTag, pair.first))
+	//		{
+	//			return true;
+	//		}
 
-			return false;
-		}
+	//		return false;
+	//	}
 
-	private:
-		const _tchar*		m_pTargetTag = nullptr;
-	};
+	//private:
+	//	const _tchar*		m_pTargetTag = nullptr;
+	//};
 
 	class CDeleteObj
 	{

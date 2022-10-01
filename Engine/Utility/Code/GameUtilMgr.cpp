@@ -1,6 +1,6 @@
-#include "stdafx.h"
 #include "GameUtilMgr.h"
 
+USING(Engine);
 
 void CGameUtilMgr::WorldMatrixLerp(_matrix& matOut, const _matrix& matPrev, const _matrix& matNext, const _float fS)
 {
@@ -90,6 +90,34 @@ void CGameUtilMgr::MatWorldCompose(_matrix& matOut, const _vec3& vScale, const D
 	matOut._41 = vPos.x;
 	matOut._42 = vPos.y;
 	matOut._43 = vPos.z;
+}
+
+void CGameUtilMgr::MatWorldComposeEuler(_matrix& matOut, const _vec3& vScale, const _vec3& vAngle, const _vec3& vPos)
+{
+	D3DXMatrixIdentity(&matOut);
+
+	_matrix matRot[3];
+
+	matOut._11 *= vScale.x;
+	matOut._22 *= vScale.y;
+	matOut._33 *= vScale.z;
+
+	D3DXMatrixRotationX(&matRot[0], vAngle.x);
+	D3DXMatrixRotationY(&matRot[1], vAngle.y);
+	D3DXMatrixRotationZ(&matRot[2], vAngle.z);
+
+	matOut = matOut * matRot[0] * matRot[1] * matRot[2];
+
+	matOut._41 = vPos.x;
+	matOut._42 = vPos.y;
+	matOut._43 = vPos.z;
+}
+
+void CGameUtilMgr::MatWorldDecompose(const _matrix& matWorld, _vec3& vScale, _vec3& vAngle, _vec3& vPos)
+{
+	D3DXQUATERNION qRot;
+	D3DXMatrixDecompose(&vScale, &qRot, &vPos, &matWorld);
+	QuatToPitchYawRoll(qRot, vAngle.x, vAngle.y, vAngle.z);
 }
 
 _float CGameUtilMgr::Vec3LenXZ(const _vec3& v1)

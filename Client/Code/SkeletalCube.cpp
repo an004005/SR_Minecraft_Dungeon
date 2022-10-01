@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "SkeletalCube.h"
-#include "CubeAnimMgr.h"
 #include "GameUtilMgr.h"
 
 string CSkeletalCube::s_strRoot = "root";
@@ -20,9 +19,9 @@ HRESULT CSkeletalCube::Ready_Object()
 	// root
 	m_pRootPart = new SkeletalPart;
 	// 루트 부분 수정하지 말기
-	pComponent = m_pRootPart->pTrans = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_TransformCom"));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_DYNAMIC].insert({L"Proto_TransformCom_root", pComponent});
+
+	m_pRootPart->pTrans = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom_root", ID_DYNAMIC);
+
 	m_pRootPart->strName = s_strRoot;
 	m_mapParts.insert({s_strRoot, m_pRootPart});
 	m_pRootPart->strTransProto = L"Proto_TransformCom";
@@ -110,28 +109,20 @@ _bool CSkeletalCube::AddSkeletalPart(const string& strPart, const string& strPar
 	}
 
 	SkeletalPart* pPart = new SkeletalPart;
-	CComponent* pComponent = nullptr;
 	wstring wstrPart;
 	wstrPart.assign(strPart.begin(), strPart.end());
 
-	pComponent = pPart->pBuf = dynamic_cast<CVIBuffer*>(Clone_Proto(strBuf.c_str()));
-	NULL_CHECK_RETURN(pComponent, false);
 	pPart->strBufCom = strBuf + L"_" + wstrPart;
-	m_mapComponent[ID_STATIC].insert({pPart->strBufCom.c_str(), pComponent});
 	pPart->strBufProto = strBuf;
+	pPart->pBuf = Add_Component<CVIBuffer>(pPart->strBufProto, pPart->strBufCom, ID_STATIC);
 
-	pComponent = pPart->pTex = dynamic_cast<CTexture*>(Clone_Proto(strTex.c_str()));
-	NULL_CHECK_RETURN(pComponent, false);
 	pPart->strTexCom = strTex + L"_" + wstrPart;
-	m_mapComponent[ID_STATIC].insert({pPart->strTexCom.c_str(), pComponent});
 	pPart->strTexProto = strTex;
+	pPart->pTex = Add_Component<CTexture>(pPart->strTexProto, pPart->strTexCom, ID_STATIC);
 
-
-	pComponent = pPart->pTrans = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_TransformCom"));
-	NULL_CHECK_RETURN(pComponent, false);
 	pPart->strTransCom = L"Proto_TransformCom_" + wstrPart;
-	m_mapComponent[ID_STATIC].insert({pPart->strTransCom.c_str(), pComponent});
 	pPart->strTransProto = L"Proto_TransformCom";
+	pPart->pTrans = Add_Component<CTransform>(pPart->strTransProto, pPart->strTransCom, ID_STATIC);
 
 	pPart->iTexIdx = iTexNum;
 	pPart->pParent = (*itr_parent).second;
@@ -267,9 +258,8 @@ void CSkeletalCube::AnimFrameConsume(_float fTimeDelta)
 
 void CSkeletalCube::PlayAnimationOnce(const string& strAnim)
 {
-	m_fAccTime = 0.f;
-	m_pCurAnim = CCubeAnimMgr::GetInstance()->GetAnim(strAnim);
-	m_pCurAnim->bLoop = false;
+	// m_fAccTime = 0.f;
+	// m_pCurAnim->bLoop = false;
 	// std::sort(m_pCurAnim..begin(), vecFrame.end());
 }
 
@@ -442,12 +432,21 @@ void CSkeletalCube::DeleteRecursive(const string& strPart)
 	pToDelete->pTex->Release();
 	pToDelete->pTrans->Release();
 
-	auto itr = find_if(m_mapComponent[ID_STATIC].begin(), m_mapComponent[ID_STATIC].end(), CTag_Finder(pToDelete->strBufCom.c_str()));
-	m_mapComponent[ID_STATIC].erase(itr);
-	auto itr2 = find_if(m_mapComponent[ID_STATIC].begin(), m_mapComponent[ID_STATIC].end(), CTag_Finder(pToDelete->strTexCom.c_str()));
-	m_mapComponent[ID_STATIC].erase(itr2);
-	auto itr3 = find_if(m_mapComponent[ID_STATIC].begin(), m_mapComponent[ID_STATIC].end(), CTag_Finder(pToDelete->strTransCom.c_str()));
-	m_mapComponent[ID_STATIC].erase(itr3);
+	{
+		auto itr = m_mapComponent->find(pToDelete->strBufCom);
+		if (itr != m_mapComponent->end())
+			m_mapComponent[ID_STATIC].erase(itr);
+	}
+	{
+		auto itr = m_mapComponent->find(pToDelete->strTexCom);
+		if (itr != m_mapComponent->end())
+			m_mapComponent[ID_STATIC].erase(itr);
+	}
+	{
+		auto itr = m_mapComponent->find(pToDelete->strTransCom);
+		if (itr != m_mapComponent->end())
+			m_mapComponent[ID_STATIC].erase(itr);
+	}
 
 	m_mapParts.erase(strPart);
 	delete pToDelete;

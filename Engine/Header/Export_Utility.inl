@@ -26,32 +26,27 @@ void		Render_Scene(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	CManagement::GetInstance()->Render_Scene(pGraphicDev);
 }
-CComponent*				Get_Component(const _tchar* pLayerTag, const _tchar* pObjTag, const _tchar* pComponentTag, COMPONENTID eID)
+inline CLayer* Get_Layer(LAYERID eLayerID)
 {
-	return CManagement::GetInstance()->Get_Component(pLayerTag, pObjTag, pComponentTag, eID);
-}
-inline 	CGameObject* Get_GameObject(const _tchar* pLayerTag, const _tchar* pObjTag)
-{
-	return CManagement::GetInstance()->Get_GameObject(pLayerTag, pObjTag);
+	return CManagement::GetInstance()->Get_Layer(eLayerID);
 }
 
-
-void AddGameObject(const _tchar* pLayerTag, const _tchar* pObjTag, CGameObject* pObject)
+void AddGameObject(LAYERID eLayerID, const wstring& pObjTag, CGameObject* pObject)
 {
-	CManagement::GetInstance()->AddGameObject(pLayerTag, pObjTag, pObject);
+	CManagement::GetInstance()->AddGameObject(eLayerID, pObjTag, pObject);
 }
 
-inline HRESULT			Ready_Proto(const _tchar* pProtoTag, CComponent* pComponent)
+inline HRESULT			Ready_Proto(const wstring& pProtoTag, CComponent* pComponent)
 {
 	return CProtoMgr::GetInstance()->Ready_Proto(pProtoTag, pComponent);
 }
 
-inline CComponent*		Clone_Proto(const _tchar* pProtoTag)
+inline CComponent*		Clone_Proto(const wstring& pProtoTag)
 {
 	return CProtoMgr::GetInstance()->Clone_Proto(pProtoTag);
 }
 
-inline CComponent* Find_Proto(const _tchar* pProtoTag)
+inline CComponent* Find_Proto(const wstring& pProtoTag)
 {
 	return CProtoMgr::GetInstance()->Find_Proto(pProtoTag);
 }

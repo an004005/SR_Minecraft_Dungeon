@@ -2,6 +2,7 @@
 
 #include "Component.h"
 #include "Engine_Include.h"
+#include "ProtoMgr.h"
 
 BEGIN(Engine)
 
@@ -13,7 +14,38 @@ protected:
 	virtual ~CGameObject();
 
 public:
-	CComponent*				Get_Component(const _tchar* pComponentTag, COMPONENTID eID);
+	template<typename T>
+	T* Get_Component(const wstring& pComponentTag, COMPONENTID eID)
+	{
+		CComponent*		pComponent = Find_Component(pComponentTag, eID);
+
+		NULL_CHECK_RETURN(pComponent, nullptr);
+
+		T* pT = dynamic_cast<T*>(pComponent);
+		NULL_CHECK_RETURN(pT, nullptr); //"insert component fail : Fail to cast"
+
+		return pT;
+	}
+
+	template<typename T>
+	T* Add_Component(const wstring& pProtoTag, const wstring& pComponentTag, COMPONENTID eID)
+	{
+		// get proto check
+		CComponent* pComponent = CProtoMgr::GetInstance()->Clone_Proto(pProtoTag);
+		NULL_CHECK_RETURN(pComponent, nullptr);// "insert component fail : pProtoTag is not exist"
+
+		// cast check
+		T* pT = dynamic_cast<T*>(pComponent);
+		NULL_CHECK_RETURN(pT, nullptr); //"insert component fail : Fail to cast"
+
+		_bool bSuccess = m_mapComponent[eID].insert({pComponentTag, pComponent}).second;
+
+		// insert check(duplicated)
+		_ASSERT_CRASH(bSuccess == true); // "insert component fail : pComponentTag is duplicated"
+
+		return pT;
+	}
+
 
 public:
 	virtual		HRESULT		Ready_Object(void);
@@ -22,11 +54,11 @@ public:
 	virtual		void		Render_Object(void);
 
 private:
-	CComponent*		Find_Component(const _tchar* pComponentTag, COMPONENTID eID);
+	CComponent*		Find_Component(const wstring& pComponentTag, COMPONENTID eID);
 
 protected:
 	LPDIRECT3DDEVICE9					m_pGraphicDev;
-	map<const _tchar*, CComponent*>		m_mapComponent[ID_END];
+	map<wstring, CComponent*>		m_mapComponent[ID_END];
 
 
 public:

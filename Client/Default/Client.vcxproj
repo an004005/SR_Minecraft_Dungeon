@@ -164,11 +164,11 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Header\AbstFactory.h" />
+    <ClInclude Include="..\Header\AnimationTool.h" />
     <ClInclude Include="..\Header\BackGround.h" />
     <ClInclude Include="..\Header\Controller.h" />
-    <ClInclude Include="..\Header\CubeAnimMgr.h" />
     <ClInclude Include="..\Header\DynamicCamera.h" />
-    <ClInclude Include="..\Header\GameUtilMgr.h" />
     <ClInclude Include="..\Header\ImGuiMgr.h" />
     <ClInclude Include="..\Header\ImSequencerImpl.h" />
     <ClInclude Include="..\Header\Loading.h" />
@@ -184,7 +184,6 @@
     <ClInclude Include="..\Header\Terrain.h" />
     <ClInclude Include="..\Header\TerrainCubeMap.h" />
     <ClInclude Include="..\Header\TestCube.h" />
-    <ClInclude Include="..\Header\ToolTest.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="GraphEditor.h" />
     <ClInclude Include="imconfig.h" />
@@ -208,14 +207,15 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Code\AbstFactory.cpp" />
+    <ClCompile Include="..\Code\AnimationTool.cpp" />
     <ClCompile Include="..\Code\BackGround.cpp" />
     <ClCompile Include="..\Code\Controller.cpp" />
-    <ClCompile Include="..\Code\CubeAnimMgr.cpp" />
     <ClCompile Include="..\Code\DynamicCamera.cpp" />
-    <ClCompile Include="..\Code\GameUtilMgr.cpp" />
     <ClCompile Include="..\Code\ImGuiMgr.cpp" />
     <ClCompile Include="..\Code\ImSequencerImpl.cpp" />
     <ClCompile Include="..\Code\Loading.cpp" />
+    <ClCompile Include="..\Code\Logo.cpp" />
     <ClCompile Include="..\Code\MainApp.cpp" />
     <ClCompile Include="..\Code\MapCube.cpp" />
     <ClCompile Include="..\Code\MapTool.cpp" />
@@ -227,7 +227,6 @@
     <ClCompile Include="..\Code\Terrain.cpp" />
     <ClCompile Include="..\Code\TerrainCubeMap.cpp" />
     <ClCompile Include="..\Code\TestCube.cpp" />
-    <ClCompile Include="..\Code\ToolTest.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="GraphEditor.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>

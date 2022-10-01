@@ -1,17 +1,16 @@
 #include "stdafx.h"
 #include "..\Header\MainApp.h"
-
+#include "AbstFactory.h"
 #include "ImGuiMgr.h"
 #include "Logo.h"
-#include "ToolTest.h"
-#include "CubeAnimMgr.h"
+#include "AnimationTool.h"
 #include "MapTool.h"
 #include "TerrainCubeMap.h"
 #include "Stage.h"
 
 USING(Engine)
 
-CMainApp::CMainApp()	
+CMainApp::CMainApp()
 	: m_pGraphicDev(nullptr)
 {
 }
@@ -25,6 +24,7 @@ CMainApp::~CMainApp()
 HRESULT CMainApp::Ready_MainApp(void)
 {
 	FAILED_CHECK_RETURN(SetUp_DefaultSetting(&m_pGraphicDev), E_FAIL);	
+	CAbstFactory::Ready_Factories(m_pGraphicDev);
 
 	FAILED_CHECK_RETURN(Ready_Scene(m_pGraphicDev, &m_pManagementClass), E_FAIL);
 
@@ -123,26 +123,25 @@ HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 * ppGraphicDev)
     ImGui_ImplWin32_Init(g_hWnd);
     ImGui_ImplDX9_Init(m_pGraphicDev);
 
-	// mgr
-	CCubeAnimMgr::GetInstance();
-
 	return S_OK;
 }
 
 HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement** ppManagement)
 {
-	Engine::CScene*			pScene = nullptr;
+
+	// scene 생성시 Management에 자동 set됩니다. scene을 보존하고 싶으면 ref 1올려서 저장하기
+	// Scene::Ready_Scene 에서 Management에 set
+
 
 	// pScene = CLogo::Create(pGraphicDev);
-	//pScene = CToolTest::Create(pGraphicDev);
-	 //pScene = CStage::Create(pGraphicDev);
-	 pScene = CMapTool::Create(pGraphicDev);
-	NULL_CHECK_RETURN(pScene, E_FAIL);
+	// pScene = CAnimationTool::Create(pGraphicDev);
+	 CMapTool::Create(pGraphicDev);
+	//NULL_CHECK_RETURN(CStage::Create(pGraphicDev), E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Create_Management(pGraphicDev, ppManagement), E_FAIL);
 	(*ppManagement)->AddRef();
 
-	FAILED_CHECK_RETURN((*ppManagement)->Set_Scene(pScene), E_FAIL);
+	// FAILED_CHECK_RETURN((*ppManagement)->Set_Scene(pScene), E_FAIL);
 	return S_OK;
 }
 
@@ -165,8 +164,7 @@ void CMainApp::Free(void)
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
 
-	CCubeAnimMgr::GetInstance()->DestroyInstance();
-
+	CAbstFactory::ReleaseGraphicDev();
 	Safe_Release(m_pGraphicDev);
 	Safe_Release(m_pDeviceClass);
 	Safe_Release(m_pManagementClass);

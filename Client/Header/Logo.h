@@ -18,10 +18,10 @@ public:
 	virtual void Render_Scene(void) override;
 
 private:
-	HRESULT			Ready_Layer_Environment(const _tchar* pLayerTag);
+	HRESULT			Ready_Layer_Environment();
 	
-	HRESULT			Ready_Layer_GameLogic(const _tchar* pLayerTag) { return S_OK; }
-	HRESULT			Ready_Layer_UI(const _tchar* pLayerTag) { return S_OK; }
+	HRESULT			Ready_Layer_GameLogic() { return S_OK; }
+	HRESULT			Ready_Layer_UI() { return S_OK; }
 
 	HRESULT			Ready_Proto(void);
 

@@ -11,6 +11,12 @@ namespace Engine
 #define		VTXCNTZ		129
 #define		VTXITV		1
 
+#define		OBJ_NOEVENT 0
+#define		OBJ_DEAD    -1
+
+#define		LAY_NOEVENT 0
+#define		LAY_DEAD    -1
+
 #ifndef			MSG_BOX
 #define			MSG_BOX(_message)			MessageBox(NULL, TEXT(_message), L"System Message", MB_OK)
 #endif
@@ -54,6 +60,21 @@ namespace Engine
 	{ MessageBoxW(NULL, _message, L"System Message",MB_OK); __debugbreak();return _return;}
 
 
+#define _CRASH(cause)						\
+{											\
+	_uint* crash = nullptr;				\
+	__analysis_assume(crash != nullptr);	\
+	*crash = 0xDEADBEEF;					\
+}
+
+#define _ASSERT_CRASH(expr)			\
+{									\
+	if (!(expr))					\
+	{								\
+		_CRASH("ASSERT_CRASH");		\
+		__analysis_assume(expr);	\
+	}								\
+}
 
 #define NO_COPY(CLASSNAME)							\
 		private:											\

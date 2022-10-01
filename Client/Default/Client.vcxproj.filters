@@ -53,6 +53,12 @@
     <Filter Include="Component">
       <UniqueIdentifier>{581ccd6e-210e-44c4-adac-31cb57593560}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Scene\ToolScene">
+      <UniqueIdentifier>{021ed417-4fe4-4be3-8588-73a43c18ad17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Controller">
+      <UniqueIdentifier>{5c61c5e2-69c8-4019-8fef-662f80fc6b31}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\MainApp.h">
@@ -133,9 +139,6 @@
     <ClInclude Include="ImCurveEdit.h">
       <Filter>99. Default\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\ToolTest.h">
-      <Filter>01. Scene</Filter>
-    </ClInclude>
     <ClInclude Include="..\Header\ImGuiMgr.h">
       <Filter>Tool</Filter>
     </ClInclude>
@@ -151,14 +154,8 @@
     <ClInclude Include="ImGuiFileDialog.h">
       <Filter>99. Default\imgui\FileDialog</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\GameUtilMgr.h">
-      <Filter>Mgr</Filter>
-    </ClInclude>
     <ClInclude Include="..\Header\ImSequencerImpl.h">
       <Filter>Tool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\CubeAnimMgr.h">
-      <Filter>Animation</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\MapCube.h">
       <Filter>02. GameObject\04. MapCube</Filter>
@@ -172,9 +169,21 @@
     <ClInclude Include="..\Header\Player.h">
       <Filter>02. GameObject\00. Player</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\Controller.h" />
-    <ClInclude Include="..\Header\MapTool.h" />
-    <ClInclude Include="..\Header\TerrainCubeMap.h" />
+    <ClInclude Include="..\Header\AnimationTool.h">
+      <Filter>01. Scene\ToolScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\MapTool.h">
+      <Filter>01. Scene\ToolScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\TerrainCubeMap.h">
+      <Filter>02. GameObject\04. MapCube</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Controller.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\AbstFactory.h">
+      <Filter>Mgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -237,9 +246,6 @@
     <ClCompile Include="ImGradient.cpp">
       <Filter>99. Default\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\ToolTest.cpp">
-      <Filter>01. Scene</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\ImGuiMgr.cpp">
       <Filter>Tool</Filter>
     </ClCompile>
@@ -252,14 +258,8 @@
     <ClCompile Include="ImGuiFileDialog.cpp">
       <Filter>99. Default\imgui\FileDialog</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\GameUtilMgr.cpp">
-      <Filter>Mgr</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\ImSequencerImpl.cpp">
       <Filter>Tool</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\CubeAnimMgr.cpp">
-      <Filter>Animation</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\MapCube.cpp">
       <Filter>02. GameObject\04. MapCube</Filter>
@@ -270,11 +270,26 @@
     <ClCompile Include="..\Code\Player.cpp">
       <Filter>02. GameObject\00. Player</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Controller.cpp" />
-    <ClCompile Include="..\Code\MapTool.cpp" />
-    <ClCompile Include="..\Code\TerrainCubeMap.cpp" />
     <ClCompile Include="..\Code\MainApp.cpp">
       <Filter>00. MainApp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Logo.cpp">
+      <Filter>01. Scene\00. Logo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\AnimationTool.cpp">
+      <Filter>01. Scene\ToolScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MapTool.cpp">
+      <Filter>01. Scene\ToolScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\TerrainCubeMap.cpp">
+      <Filter>02. GameObject\04. MapCube</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Controller.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\AbstFactory.cpp">
+      <Filter>Mgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -29,6 +29,19 @@ namespace Engine
 	enum PICKOPTION { PICK_TERRAIN, PICK_CUBE, PICK_DELETE, PICK_END};
 	enum CUBETYPE { TYPE_LAND = 104, TYPE_COLLISION, TYPE_DECO, TYPE_END };
 	/////////////////////////////////////////////////////////////////
+
+	enum LAYERID
+	{
+		LAYER_ENV, // 지형, 맵
+		LAYER_GAMEOBJ, // 기타 GameObject
+		LAYER_ENEMY, // 적
+		LAYER_PLAYER, // 플레이어
+		LAYER_UI, // ui
+		LAYER_EFFECT, // effect
+		LAYER_BULLET,
+		LAYER_END
+	};
+
 }
 
 #endif // Engine_Enum_h__

@@ -16,21 +16,21 @@ private:
 
 public:
 	HRESULT			Ready_Font(LPDIRECT3DDEVICE9 pGraphicDev,
-		const _tchar* pFontTag,	 // 키값
+		const wstring& pFontTag,	 // 키값
 		const _tchar* pFontType, // 서체
 		const _uint& iWidth,
 		const _uint& iHeight,
 		const _uint& iWeight);
 
-	void	Render_Font(const _tchar* pFontTag,
+	void	Render_Font(const wstring& pFontTag,
 						const _tchar* pString,
 						const _vec2* pPos,
 						D3DXCOLOR Color);
 private:
-	CMyFont*		Find_Font(const _tchar* pFontTag);
+	CMyFont*		Find_Font(const wstring& pFontTag);
 
 private:
-	map<const _tchar*, CMyFont*>		m_mapFont;
+	map<wstring, CMyFont*>		m_mapFont;
 
 
 private:
