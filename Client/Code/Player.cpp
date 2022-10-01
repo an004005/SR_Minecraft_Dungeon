@@ -31,6 +31,10 @@ HRESULT CPlayer::Ready_Object()
 	m_arrOnceAnim[ATTACK3] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_c.anim");
 	m_pIdleAnim = &m_arrLoopAnim[IDLE];
 
+	CCollisionCom* pColl = Add_Component<CCollisionCom>(L"Proto_CollisionCom", L"Proto_CollisionCom", ID_DYNAMIC);
+	pColl->SetOwner(this);
+	pColl->SetOwnerTransform(m_pRootPart->pTrans);
+	
 	return S_OK;
 }
 

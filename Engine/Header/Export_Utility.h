@@ -8,6 +8,9 @@
 #include "CubeTex.h"
 #include "VoxelTex.h"
 #include "TerrainCubeTex.h"
+#include "CollisionCom.h"
+
+#include "Collider.h"
 
 #include "Transform.h"
 #include "Calculator.h"

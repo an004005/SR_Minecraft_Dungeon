@@ -49,6 +49,7 @@ HRESULT CManagement::Set_Scene(CScene * pScene)
 {
 	Safe_Release(m_pScene);
 	Engine::Clear_RenderGroup(); // 기존 scene에 그려지고 있던 모든 렌더 요소들을 삭제
+	CCollider::GetInstance()->Clear_All();
 
 	m_pScene = pScene;
 	
@@ -69,6 +70,8 @@ void CManagement::LateUpdate_Scene(void)
 		return;
 
 	m_pScene->LateUpdate_Scene();
+	CCollider::GetInstance()->Check_Blocking();
+	CCollider::GetInstance()->Clear_Dynamic();
 }
 
 void CManagement::Render_Scene(LPDIRECT3DDEVICE9 pGraphicDev)
