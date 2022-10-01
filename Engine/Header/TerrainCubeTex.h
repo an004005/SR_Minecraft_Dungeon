@@ -17,6 +17,9 @@ public:
 	static CTerrainCubeTex* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath, _int iTex);
 
 	int m_iTexIdx;
+
+private:
+
 };
 
 END

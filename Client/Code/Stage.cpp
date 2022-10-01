@@ -64,8 +64,7 @@ HRESULT CStage::Ready_Layer_Environment(const _tchar * pLayerTag)
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Terrain", pGameObject), E_FAIL);
 	
 	// TerrainCubeMap
-	wstring strpath = L"../Bin/Resource/Map/CollisionCheck.map";
-	pGameObject = CTerrainCubeMap::Create(m_pGraphicDev, strpath);
+	pGameObject = CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/CollisionCheck.map");
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"TerrainCubeMap", pGameObject), E_FAIL);
 	

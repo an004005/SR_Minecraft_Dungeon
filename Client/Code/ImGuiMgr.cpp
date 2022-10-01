@@ -555,7 +555,7 @@ void CImGuiMgr::AnimationEditor(CSkeletalCube* pSkeletal)
 	}
 }
 
-void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapTool& CMapTool, size_t CubeCount)
+void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapTool& CMapTool, size_t CubeCount, _float& _far)
 {
 #ifndef _DEBUG
 	return;
@@ -574,6 +574,11 @@ void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapTool& CMapTool, size_
 			ImGui::Text("Set Height");
 			ImGui::SliderFloat("Y", &tMaptool.fHeight, 1.f, 2.0f, "ratio = %.3f");
 			ImGui::InputFloat("Insert Y", &tMaptool.fHeight);
+			ImGui::NewLine();
+
+			ImGui::Text("Set Far");
+			ImGui::SliderFloat("Far", &_far, 10.f, 30.0f, "ratio = %.3f");
+			ImGui::InputFloat("Insert Far", &_far);
 			ImGui::NewLine();
 
 			ImGui::Text("Total Block Count :");

@@ -30,7 +30,7 @@ HRESULT CMapTool::Ready_Scene(void)
 
 	m_pLayer = Engine::CLayer::Create();
 	NULL_CHECK_RETURN(m_pLayer, E_FAIL);
-
+	
 	//LoadMap();
 	return S_OK;
 }
@@ -41,7 +41,10 @@ _int CMapTool::Update_Scene(const _float & fTimeDelta)
 	IM_BEGIN("Map Editor Window");
 
 
-	CImGuiMgr::MapControl(m_tMapTool, *this, m_vecTotalCube.size());
+	CImGuiMgr::MapControl(m_tMapTool, *this, m_vecTotalCube.size(), m_fFar);
+	
+	m_pDCamera->Set_Far(m_fFar);
+
 
 	//마우스 피킹 때 MapCube 생성
 	if (Engine::Get_DIMouseState(DIM_LB) & 0X80 && m_dwTime + 200 < GetTickCount())
@@ -108,13 +111,6 @@ _int CMapTool::Update_Scene(const _float & fTimeDelta)
 
 	IM_END;
 
-
-
-
-	//Test
-
-
-
 	return Engine::CScene::Update_Scene(fTimeDelta);
 }
 
@@ -135,30 +131,31 @@ HRESULT CMapTool::Ready_Layer_Environment(const _tchar * pLayerTag)
 	CGameObject*		pGameObject = nullptr;
 
 	// DynamicCamera
-	pGameObject = CDynamicCamera::Create(m_pGraphicDev, &_vec3(0.f, 10.f, -10.f), &_vec3(0.f, 0.f, 0.f), &_vec3(0.f, 1.f, 0.f));
+	pGameObject = m_pDCamera = CDynamicCamera::Create(m_pGraphicDev, &_vec3(0.f, 10.f, -10.f), &_vec3(0.f, 0.f, 0.f), &_vec3(0.f, 1.f, 0.f), D3DXToDegree(60.f), (_float)WINCX/WINCY, 0.1f, m_fFar);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"DynamicCamera", pGameObject), E_FAIL);
+	g_cam = (CDynamicCamera*)pGameObject;
 
 	// Terrain
 	pGameObject = CTerrain::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Terrain", pGameObject), E_FAIL);
 
-	/*CMapCube* pCube;
-	for (int i = 0; i < VTXCNTZ; ++i)
-	{
-		for (int j = 0; j < VTXCNTX; ++j)
-		{
-			pGameObject = pCube = CMapCube::Create(m_pGraphicDev, m_tMapTool, _vec3((_float)i, 1.f, (_float)j));
-			NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	//CMapCube* pCube;
+	//for (int i = 0; i < VTXCNTX; ++i)
+	//{
+	//	for (int j = 0; j < VTXCNTZ; ++j)
+	//	{
+	//		pGameObject = pCube = CMapCube::Create(m_pGraphicDev, m_tMapTool, _vec3((_float)i, 1.f, (_float)j));
+	//		NULL_CHECK_RETURN(pGameObject, E_FAIL);
 
-			pCube->m_wstrName = L"MapCube_" + to_wstring(m_tMapTool.iCubeCount);
-			FAILED_CHECK_RETURN(pLayer->Add_GameObject(pCube->m_wstrName.c_str(), pGameObject), E_FAIL);
+	//		pCube->m_wstrName = L"MapCube_" + to_wstring(m_tMapTool.iCubeCount);
+	//		FAILED_CHECK_RETURN(pLayer->Add_GameObject(pCube->m_wstrName.c_str(), pGameObject), E_FAIL);
 
-			m_vecTotalCube.push_back(dynamic_cast<CMapCube*>(pGameObject));
-			m_tMapTool.iCubeCount++;
-		}
-	}*/
+	//		m_vecTotalCube.push_back(dynamic_cast<CMapCube*>(pGameObject));
+	//		m_tMapTool.iCubeCount++;
+	//	}
+	//}
 	
 
 		
@@ -255,7 +252,6 @@ void CMapTool::LoadMap(wstring wstrFileName)
 	ReadFile(hFile, &m_fHeight, sizeof(_float) * VTXCNTX * VTXCNTZ, &dwByte, nullptr);
 
 	CloseHandle(hFile);
-
 }
 
 void CMapTool::Create_Cube(_matrix & CubeWorld, MapTool& tMapTool)

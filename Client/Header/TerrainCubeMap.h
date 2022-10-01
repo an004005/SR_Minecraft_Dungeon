@@ -32,7 +32,7 @@ public:
 	_bool	IsCollision(_float fx, _float fz) { return m_fCollisionPos[(_int)fx][(_int)fz]; }
 
 public:
-	virtual HRESULT Ready_Object(wstring& wstrPath);
+	virtual HRESULT Ready_Object(const wstring& wstrPath);
 	virtual _int	Update_Object(const _float& fTimeDelta) override;
 	virtual void	LateUpdate_Object(void) override;
 	virtual void	Render_Object(void) override;
@@ -42,7 +42,7 @@ private:
 	HRESULT				Add_Component(void);
 	
 public:
-	void			LoadMap(wstring& wstrPath);
+	void			LoadMap(const wstring& wstrPath);
 
 
 private:
@@ -64,7 +64,7 @@ public:
 	_bool			m_fCollisionPos[VTXCNTX][VTXCNTZ];
 
 public:
-	static CTerrainCubeMap*		Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring& wstrPath);
+	static CTerrainCubeMap*		Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
 
 private:
 	virtual void	Free(void);

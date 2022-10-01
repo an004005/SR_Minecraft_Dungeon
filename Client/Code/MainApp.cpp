@@ -135,8 +135,8 @@ HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement
 
 	// pScene = CLogo::Create(pGraphicDev);
 	//pScene = CToolTest::Create(pGraphicDev);
-	 pScene = CStage::Create(pGraphicDev);
-	// pScene = CMapTool::Create(pGraphicDev);
+	 //pScene = CStage::Create(pGraphicDev);
+	 pScene = CMapTool::Create(pGraphicDev);
 	NULL_CHECK_RETURN(pScene, E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Create_Management(pGraphicDev, ppManagement), E_FAIL);

@@ -5,6 +5,8 @@
 #include "MapCube.h"
 #include "Player.h"
 
+class CDynamicCamera;
+
 class CMapTool : public Engine::CScene
 {
 private:
@@ -50,7 +52,8 @@ private:
 	vector<CMapCube*> m_vecLand;
 	_float			m_fHeight[VTXCNTX][VTXCNTZ];
 
-	
+	CDynamicCamera* m_pDCamera = nullptr;
+	_float			m_fFar = 50.f;
 
 private:
 	virtual void	Free(void);

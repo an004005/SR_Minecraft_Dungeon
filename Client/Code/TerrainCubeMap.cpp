@@ -16,7 +16,7 @@ CTerrainCubeMap::~CTerrainCubeMap()
 }
 
 
-HRESULT CTerrainCubeMap::Ready_Object(wstring& wstrPath)
+HRESULT CTerrainCubeMap::Ready_Object(const wstring& wstrPath)
 {
 	LoadMap(wstrPath);
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
@@ -57,7 +57,7 @@ void CTerrainCubeMap::Render_Object(void)
 	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 }
 
-void CTerrainCubeMap::LoadMap(wstring& wstrPath)
+void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 {
 	HANDLE hFile = CreateFile(wstrPath.c_str(), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
@@ -155,7 +155,7 @@ HRESULT CTerrainCubeMap::Add_Component(void)
 }
 
 
-CTerrainCubeMap * CTerrainCubeMap::Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring& wstrPath)
+CTerrainCubeMap * CTerrainCubeMap::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
 {
 	CTerrainCubeMap*	pInstance = new CTerrainCubeMap(pGraphicDev);
 
