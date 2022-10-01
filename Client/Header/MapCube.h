@@ -10,6 +10,7 @@ class CCalculator;
 
 END
 
+
 class CMapCube :
 	public CGameObject
 {
@@ -42,8 +43,6 @@ private:
 	_vec3				m_vDirection;
 
 	_vec3				m_vPickPos;
-
-	
 public:
 	MapTool				m_tMapTool;
 	wstring				m_wstrName;

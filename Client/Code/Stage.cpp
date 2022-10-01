@@ -52,7 +52,7 @@ HRESULT CStage::Ready_Layer_Environment()
 	CEnvFactory::Create<CTerrain>("DefaultTerrain", L"Terrain");
 
 	// TerrainCubeMap
-	pGameObject = CTerrainCubeMap::Create(m_pGraphicDev);
+	pGameObject = CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/CollisionCheck.map");
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", pGameObject), E_FAIL);
 	
@@ -127,11 +127,5 @@ CStage * CStage::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 
 void CStage::Free(void)
 {
-	if (m_pTerrainMap != nullptr)
-	{
-		delete m_pTerrainMap;
-		m_pTerrainMap = nullptr;
-	}
-
 	CScene::Free();
 }
