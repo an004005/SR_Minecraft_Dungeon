@@ -3,6 +3,7 @@
 #include "Controller.h"
 #include "GameUtilMgr.h"
 #include "TerrainCubeMap.h"
+#include "StaticCamera.h"
 
 /*-----------------------
  *    CCharacter
@@ -34,7 +35,11 @@ HRESULT CPlayer::Ready_Object()
 	CCollisionCom* pColl = Add_Component<CCollisionCom>(L"Proto_CollisionCom", L"Proto_CollisionCom", ID_DYNAMIC);
 	pColl->SetOwner(this);
 	pColl->SetOwnerTransform(m_pRootPart->pTrans);
-	
+
+
+	// 항상 카메라 먼저 만들고 플레이어 만들기!
+	Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")->SetTarget(this);
+
 	return S_OK;
 }
 

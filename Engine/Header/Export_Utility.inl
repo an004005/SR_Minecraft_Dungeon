@@ -89,5 +89,4 @@ inline void			Release_Utility(void)
 	CProtoMgr::GetInstance()->DestroyInstance();
 	CManagement::GetInstance()->DestroyInstance();
 	CCollider::GetInstance()->DestroyInstance();
-	CMainCamera::GetInstance()->DestroyInstance();
 }

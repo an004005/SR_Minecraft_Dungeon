@@ -1,45 +1,42 @@
 #pragma once
 
-#include "Camera.h"
-#include "Engine_Include.h"
+#include "GameObject.h"
 
-class CStaticCamera : public Engine::CCamera
+class CStaticCamera : public CGameObject
 {
 private:
 	explicit CStaticCamera(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual ~CStaticCamera();
 
 public:
-	HRESULT Ready_Object(const _vec3* pEye, const _vec3* pAt, const _vec3* pUp, 
-		const _float& fFov , 
-		const _float& fAspect, 
-		const _float& fNear, 
-		const _float& fFar);
+	HRESULT Ready_Object() override;
 
 	virtual _int Update_Object(const _float& fTimeDelta) override;
+	void SetMatProj(const _float& fFov = D3DXToRadian(60.f),
+	                const _float& fAspect = (float)WINCX / WINCY,
+	                const _float& fNear = 0.1f,
+	                const _float& fFar = 1000.f);
 
-	virtual void LateUpdate_Object(void) override;
+	void SetTarget(CGameObject* pTarget);
+	void LerpDistanceTo(_float fDistance);
 
 private:
-	void		Target_Renewal(void);
+	void Update_DefaultFollow(const _float& fTimeDelta);
 
 private:
-	_float			m_fDistance = 10.f;
-	_float			m_fSpeed = 10.f;
-	_float			m_fAngle = 0.f;
+	_matrix m_matView, m_matProj;
+	CTransform* m_pTransform = nullptr;
+
+	CGameObject* m_pTarget = nullptr;
+	CTransform* m_pTargetTrans = nullptr;
+
+	// normal mode
+	_float m_fDistance;
+	// normal mode
 
 public:
-	static CStaticCamera*		Create(LPDIRECT3DDEVICE9 pGraphicDev,
-										const _vec3* pEye, 
-										const _vec3* pAt, 
-										const _vec3* pUp,
-										const _float& fFov = D3DXToRadian(60.f),
-										const _float& fAspect = (float)WINCX / WINCY,
-										const _float& fNear = 0.1f,
-										const _float& fFar = 1000.f);
+	static CStaticCamera* Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
 private:
 	virtual void Free(void) override;
-
 };
-

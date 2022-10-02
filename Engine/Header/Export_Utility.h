@@ -14,7 +14,6 @@
 #include "Transform.h"
 #include "Calculator.h"
 #include "Camera.h"
-#include "MainCamera.h"
 
 
 #include "ProtoMgr.h"

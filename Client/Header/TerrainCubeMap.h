@@ -43,7 +43,10 @@ private:
 	
 public:
 	void			LoadMap(const wstring& wstrPath);
-
+	void			SaveMap(const wstring& wstrPath);
+	vector<MapCubeInfo>* GetTotalCubes() { return &m_vecTotalCube; }
+	void AddCube(const MapCubeInfo& tInfo);
+	void DeleteCube(const MapCubeInfo& tInfo);
 
 private:
 	CLayer*			m_pLayer = nullptr;		
@@ -52,7 +55,7 @@ private:
 	vector<MapCubeInfo> m_vecTotalCube;
 	vector<MapCubeInfo> m_vecLand;
 	vector<MapCubeInfo> m_vecCollision;
-	vector<MapCubeInfo> m_vecDeco;
+	vector<MapCubeInfo> m_vecDeco; // 필요없네
 
 
 	vector<pair<wstring, CTerrainCubeTex*>> m_vecTerrainCom;
@@ -61,7 +64,7 @@ private:
 
 public:
 	_float			m_fHeight[VTXCNTX][VTXCNTZ];
-	_bool			m_fCollisionPos[VTXCNTX][VTXCNTZ];
+	_bool			m_fCollisionPos[VTXCNTX][VTXCNTZ]; // 필요없음
 
 public:
 	static CTerrainCubeMap*		Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
