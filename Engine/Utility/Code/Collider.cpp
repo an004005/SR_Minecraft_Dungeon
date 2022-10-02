@@ -154,7 +154,7 @@ void CCollider::Clear_Dynamic()
 	}
 }
 
-void CCollider::Clear_All()
+void CCollider::Clear_ColliderAll()
 {
 	for(auto& vecRow : m_vecGrid)
 	{
@@ -168,7 +168,7 @@ void CCollider::Clear_All()
 
 void CCollider::Free()
 {
-	Clear_All();
+	Clear_ColliderAll();
 }
 
 bool CCollider::IsCollided(const _vec3& vPos1, _float fRadius1, const _vec3& vPos2, _float fRadius2)

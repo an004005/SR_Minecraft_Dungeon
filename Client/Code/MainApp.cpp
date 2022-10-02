@@ -30,6 +30,10 @@ HRESULT CMainApp::Ready_MainApp(void)
 
 	// CClientServiceMgr::GetInstance()->ReadyClientService();
 
+	CMainCamera::GetInstance()->SetGraphicDev(m_pGraphicDev);
+	CMainCamera::GetInstance()->SetMatProj();
+
+
 
 	return S_OK;
 }
@@ -47,6 +51,7 @@ _int CMainApp::Update_MainApp(const _float & fTimeDelta)
 	CImGuiMgr::LoggerWindow();
 
 	m_pManagementClass->Update_Scene(fTimeDelta);
+	CMainCamera::GetInstance()->UpdateCamera(fTimeDelta);
 
 	return 0;
 }
@@ -165,13 +170,16 @@ void CMainApp::Free(void)
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
 
+
+	Engine::Release_Utility();
+	Engine::Release_System();
+
 	CAbstFactory::ReleaseGraphicDev();
 	Safe_Release(m_pGraphicDev);
 	Safe_Release(m_pDeviceClass);
 	Safe_Release(m_pManagementClass);
 
-	Engine::Release_Utility();
-	Engine::Release_System();
+
 
 	// CClientServiceMgr::GetInstance()->DestroyInstance();
 }

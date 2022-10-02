@@ -187,6 +187,7 @@ call CopyUtility.bat</Command>
     <ClInclude Include="..\..\Header\GameObject.h" />
     <ClInclude Include="..\..\Header\GameUtilMgr.h" />
     <ClInclude Include="..\..\Header\Layer.h" />
+    <ClInclude Include="..\..\Header\MainCamera.h" />
     <ClInclude Include="..\..\Header\Management.h" />
     <ClInclude Include="..\..\Header\ProtoMgr.h" />
     <ClInclude Include="..\..\Header\RcTex.h" />
@@ -209,6 +210,7 @@ call CopyUtility.bat</Command>
     <ClCompile Include="..\Code\GameObject.cpp" />
     <ClCompile Include="..\Code\GameUtilMgr.cpp" />
     <ClCompile Include="..\Code\Layer.cpp" />
+    <ClCompile Include="..\Code\MainCamera.cpp" />
     <ClCompile Include="..\Code\Management.cpp" />
     <ClCompile Include="..\Code\ProtoMgr.cpp" />
     <ClCompile Include="..\Code\RcTex.cpp" />
