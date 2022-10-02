@@ -31,7 +31,6 @@ HRESULT CMapTool::Ready_Scene(void)
 	m_pLayer = Engine::CLayer::Create();
 	NULL_CHECK_RETURN(m_pLayer, E_FAIL);
 	
-	//LoadMap();
 	return S_OK;
 }
 

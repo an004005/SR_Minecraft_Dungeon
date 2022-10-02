@@ -123,8 +123,8 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 
 	// terrain에 충돌 큐브가 있는지 저장한다.
 
-	_int SetPosX[4] = { 0.5f, 0.5f, -0.5f, -0.5f };
-	_int SetPosZ[4] = { 0.5f, -0.5f, 0.5f, -0.5f };
+	_float SetPosX[4] = { 0.5f, 0.5f, -0.5f, -0.5f };
+	_float SetPosZ[4] = { 0.5f, -0.5f, 0.5f, -0.5f };
 
 	for (auto iter : m_vecCollision)
 	{
@@ -133,8 +133,8 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 
 		for (_int i = 0; i < 4; ++i)
 		{
-			_int iCenterx = (_int)vCenter.x + SetPosX[i];
-			_int iCenterz = (_int)vCenter.z + SetPosZ[i];
+			_int iCenterx = _int(vCenter.x + SetPosX[i]);
+			_int iCenterz = _int(vCenter.z + SetPosZ[i]);
 			m_fCollisionPos[iCenterx][iCenterz] = true;
 		}
 	
