@@ -3,8 +3,7 @@
 
 #include "Engine_Typedef.h"
 #include <functional>
-
-#include "GameObject.h"
+#include "Base.h"
 
 namespace Engine
 {
@@ -149,7 +148,7 @@ namespace Engine
 				if (itr->first->GetRef() == 0) // ref == 0이라는 뜻은 이 델리게이터만 해당 ref를 가지고 있다는 뜻
 				{
 					Safe_Release(itr->first);
-					itr = m_vecBinds.erace(itr);
+					itr = m_vecBinds.erase(itr);
 				}
 				else
 				{

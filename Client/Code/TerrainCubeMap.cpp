@@ -130,6 +130,8 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 	{
 		_vec3 vCenter{ 0.f,0.f,0.f };
 		D3DXVec3TransformCoord(&vCenter, &vCenter, &iter.matWorld);
+		//////////// coll
+		CCollider::GetInstance()->Add_StaticCollision(vCenter, 1.f);
 
 		for (_int i = 0; i < 4; ++i)
 		{
@@ -137,7 +139,6 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 			_int iCenterz = (_int)vCenter.z + SetPosZ[i];
 			m_fCollisionPos[iCenterx][iCenterz] = true;
 		}
-	
 	}
 }
 
