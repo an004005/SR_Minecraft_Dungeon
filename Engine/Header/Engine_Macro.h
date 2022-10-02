@@ -17,8 +17,8 @@ namespace Engine
 #define		LAY_NOEVENT 0
 #define		LAY_DEAD    -1
 
-#define		COLL_GRID_X 8
-#define		COLL_GRID_Z 8
+#define		COLL_GRID_X 16
+#define		COLL_GRID_Z 16
 
 #ifndef			MSG_BOX
 #define			MSG_BOX(_message)			MessageBox(NULL, TEXT(_message), L"System Message", MB_OK)

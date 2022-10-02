@@ -1,13 +1,10 @@
-#include "..\..\Header\Collider.h"
+#include "Collider.h"
 #include "CollisionCom.h"
 #include "Transform.h"
 #include "GameObject.h"
 
 USING(Engine)
 IMPLEMENT_SINGLETON(CCollider)
-
-_float fdx[8]{};
-_float fdz[8]{};
 
 CCollider::CCollider()
 {
@@ -78,8 +75,34 @@ void CCollider::Add_StaticCollision(const _vec3& vCenter, _float fRadius)
 	}
 }
 
-void CCollider::GetOverlappedObject(vector<CGameObject*>& vecObj, const _vec3& vPos, _float fRadius)
+void CCollider::GetOverlappedObject(list<CGameObject*>& objList, const _vec3& vPos, _float fRadius)
 {
+	objList.clear();
+	_int iX_start = (_int)(vPos.x - fRadius / m_fGridCX);
+	_int iZ_start = (_int)(vPos.z - fRadius / m_fGridCZ);
+	if (iX_start < 0) iX_start = 0;
+	if (iZ_start < 0) iZ_start = 0;
+
+	_int iX_end = (_int)(vPos.x + fRadius / m_fGridCX);
+	_int iZ_end = (_int)(vPos.z + fRadius / m_fGridCZ);
+	if (iX_end >= COLL_GRID_X) iX_end = COLL_GRID_X - 1;
+	if (iZ_end >= COLL_GRID_X) iZ_end = COLL_GRID_Z - 1;
+
+	for (int i = iZ_start; i <= iZ_end; ++i)
+	{
+		for (int j = iX_start; j <= iX_end; ++j)
+		{
+			for (auto& dynamic : m_vecGrid[i][j].dynamicList)
+			{
+				if (IsCollided(
+					dynamic->GetTransform()->m_vInfo[INFO_POS], dynamic->GetRadius(),
+					vPos, fRadius))
+				{
+					objList.push_back(dynamic->GetOwner());
+				}
+			}
+		}
+	}
 }
 
 void CCollider::Check_Blocking()
@@ -88,10 +111,14 @@ void CCollider::Check_Blocking()
 	{
 		for (auto& cell : vecRow)
 		{
-			for(auto& coll_1 : cell.dynamicList)
+			for (size_t i = 0; i < cell.dynamicList.size(); ++i)
 			{
-				for(auto& coll_2 : cell.dynamicList)
+				CCollisionCom*& coll_1 = cell.dynamicList[i];
+
+				for (size_t j = i; j < cell.dynamicList.size(); ++j)
 				{
+					CCollisionCom*& coll_2 = cell.dynamicList[j];
+
 					if (coll_1->GetOwner() == coll_2->GetOwner()) continue;
 					if (IsCollided(
 						coll_1->GetTransform()->m_vInfo[INFO_POS], coll_1->GetRadius(),

@@ -9,7 +9,7 @@ class CCollisionCom;
 
 struct ENGINE_DLL CollisionGrid
 {
-	list<CCollisionCom*> dynamicList;
+	vector<CCollisionCom*> dynamicList;
 	list<pair<_vec3, _float>> staticList;
 };
 
@@ -26,7 +26,7 @@ public:
 	void Add_CollisionCom(CCollisionCom* pCollision);
 	void Add_StaticCollision(const _vec3& vCenter, _float fRadius);
 	// run at only late update
-	void GetOverlappedObject(OUT vector<CGameObject*>& vecObj, const _vec3& vPos, _float fRadius);
+	void GetOverlappedObject(OUT list<CGameObject*>& objList, const _vec3& vPos, _float fRadius);
 	void Check_Blocking();
 	void Clear_Dynamic();
 	void Clear_All();

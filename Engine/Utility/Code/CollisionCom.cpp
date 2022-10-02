@@ -43,6 +43,16 @@ CCollisionCom* CCollisionCom::Create()
 
 void CCollisionCom::CollisionDynamic(CCollisionCom* pOther)
 {
+	_vec3& vPos = m_pOwnerTrans->m_vInfo[INFO_POS];
+	_vec3& vPosOther = pOther->GetTransform()->m_vInfo[INFO_POS];
+
+	_vec3 vToMe = vPos - vPosOther;
+	_float fMoved = (m_fRadius + pOther->GetRadius() - D3DXVec3Length(&vToMe)) * 0.5;
+
+	D3DXVec3Normalize(&vToMe, &vToMe);
+
+	vPos += fMoved * vToMe;
+	vPosOther += -fMoved * vToMe;
 }
 
 void CCollisionCom::CollisionStatic(const _vec3& vCenter, _float fRadius)
