@@ -21,7 +21,6 @@ public:
 	virtual void LateUpdate_Object(void) override;
 
 private:
-	void		Key_Input(const _float& fTimeDelta);
 	void		Target_Renewal(void);
 
 private:

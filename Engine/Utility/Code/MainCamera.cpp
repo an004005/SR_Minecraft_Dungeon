@@ -1,8 +1,7 @@
 #include "MainCamera.h"
-
 #include "GameObject.h"
 #include "Transform.h"
-
+#include "GameUtilMgr.h"
 
 USING(Engine)
 IMPLEMENT_SINGLETON(CMainCamera)
@@ -30,9 +29,16 @@ void CMainCamera::UpdateCameraNormal(const _float& fTimeDelta)
 	m_vAt = m_pTargetTrans->m_vInfo[INFO_POS];
 	m_vPrePos = m_vAt;
 	m_vEye = m_vAt + (m_vCamAwayDir * m_fDist);
+	m_vEye = _vec3(0.f, 10.f, -10.f);
+	m_vAt = _vec3{0.f, 0.f, 0.f};
+
+	_matrix world;
+	CGameUtilMgr::MatWorldComposeEuler(world, {1.f, 1.f, 1.f}, {45.f, 0.f ,0.f }, {0.f, 10.f, -10.f});
+	D3DXMatrixInverse(&world, nullptr, &world);
+
 
 	D3DXMatrixLookAtLH(&m_matView, &m_vEye, &m_vAt, &m_vUp);
-	m_pGraphicDev->SetTransform(D3DTS_VIEW, &m_matView);
+	m_pGraphicDev->SetTransform(D3DTS_VIEW, &world);
 }
 
 void CMainCamera::Free()

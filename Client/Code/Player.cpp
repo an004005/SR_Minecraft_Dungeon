@@ -64,10 +64,6 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 	_vec3& vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
 	vPos.y = pTerrain->GetHeight(vPos.x, vPos.z);
 
-	//collision check
-	if (pTerrain->IsCollision(vPos.x, vPos.z))
-		IM_LOG("COLLISION!!");
-
 	return 0;
 }
 
