@@ -15,9 +15,10 @@ struct MapCubeInfo
 	_matrix matWorld;
 	_int iTexIdx = 0;
 	CUBETYPE eType = TYPE_END;
+	_float fHeight = 0.f;
 	MapCubeInfo() { D3DXMatrixIdentity(&matWorld); }
-	MapCubeInfo(_matrix matWorld, _int iTexIdx, CUBETYPE eType)
-		: matWorld(matWorld), iTexIdx(iTexIdx), eType(eType) {}
+	MapCubeInfo(_matrix matWorld, _int iTexIdx, CUBETYPE eType, _float Height)
+		: matWorld(matWorld), iTexIdx(iTexIdx), eType(eType), fHeight(Height) {}
 };
 
 class CTerrainCubeMap : public CGameObject
@@ -28,45 +29,76 @@ public:
 
 public:
 	_float	GetHeight(_float fX, _float fZ) { return m_fHeight[(_int)fX][(_int)fZ]; }
-	//x, z 값에 따라 충돌인지 아닌지 판별
-	_bool	IsCollision(_float fx, _float fz) { return m_fCollisionPos[(_int)fx][(_int)fz]; }
 
 public:
-	virtual HRESULT Ready_Object(const wstring& wstrPath);
+	virtual HRESULT Ready_Object(const wstring& wstrPath = L"");
 	virtual _int	Update_Object(const _float& fTimeDelta) override;
 	virtual void	LateUpdate_Object(void) override;
 	virtual void	Render_Object(void) override;
 
 
 private:
-	HRESULT				Add_Component(void);
 	
 public:
-	void			LoadMap(const wstring& wstrPath);
-
+	void				 LoadMap(const wstring& wstrPath);
+	void				 SaveMap(const wstring& wstrPath);
+	const vector<MapCubeInfo>& GetTotalCubes() { return m_vecTotalCube; }
+	void				 AddCube(const MapCubeInfo& tInfo);
+	void			     DeleteCube(int iToDel);
 
 private:
-	CLayer*			m_pLayer = nullptr;		
-	MapTool			m_tMapTool;
+	CLayer*			m_pLayer = nullptr;
 
 	vector<MapCubeInfo> m_vecTotalCube;
 	vector<MapCubeInfo> m_vecLand;
 	vector<MapCubeInfo> m_vecCollision;
-	vector<MapCubeInfo> m_vecDeco;
 
 
-	vector<pair<wstring, CTerrainCubeTex*>> m_vecTerrainCom;
+	map<_uint, CTerrainCubeTex*> m_mapTerrainCom;
 	CTexture* m_pTextureCom = nullptr;
 
 
 public:
 	_float			m_fHeight[VTXCNTX][VTXCNTZ];
-	_bool			m_fCollisionPos[VTXCNTX][VTXCNTZ];
 
 public:
-	static CTerrainCubeMap*		Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
+	static CTerrainCubeMap*		Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath = L"");
 
 private:
 	virtual void	Free(void);
 };
+
+//void CMapTool::Set_CubeCoordinate(void)
+//{
+//	_ulong	dwIndex = 0;
+//
+//	for (_ulong i = 0; i < VTXCNTZ; ++i)
+//	{
+//		for (_ulong j = 0; j < VTXCNTX; ++j)
+//		{
+//			CubeHeight(_float(j) * VTXITV, _float(i) * VTXITV);
+//		}
+//	}
+//}
+
+
+//void CMapTool::CubeHeight(_float x, _float z)
+//{
+//	_float fMostHeightValue = 0;
+//	_float fLength = 0;
+//	for (auto iter : m_vecLand)
+//	{
+//		if ((iter->vCenter.x - 0.5f) == x && (iter->vCenter.z - 0.5f) == z)
+//		{
+//			if (fMostHeightValue < iter->vCenter.y)
+//			{
+//				fMostHeightValue = iter->vCenter.y;
+//				fLength = iter->m_tMapTool.fHeight / 2.f;
+//			}
+//		}
+//	}
+//
+//	m_fHeight[(_int)x][(_int)z] = fMostHeightValue + fLength;
+//}
+
 

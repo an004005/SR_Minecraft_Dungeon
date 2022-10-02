@@ -157,9 +157,6 @@
     <ClInclude Include="..\Header\ImSequencerImpl.h">
       <Filter>Tool</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\MapCube.h">
-      <Filter>02. GameObject\04. MapCube</Filter>
-    </ClInclude>
     <ClInclude Include="stb\stb_image.h">
       <Filter>99. Default</Filter>
     </ClInclude>
@@ -260,9 +257,6 @@
     </ClCompile>
     <ClCompile Include="..\Code\ImSequencerImpl.cpp">
       <Filter>Tool</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\MapCube.cpp">
-      <Filter>02. GameObject\04. MapCube</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Monster.cpp">
       <Filter>02. GameObject\00. Player</Filter>

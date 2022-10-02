@@ -61,8 +61,8 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 	vPos.y = pTerrain->GetHeight(vPos.x, vPos.z);
 
 	//collision check
-	if (pTerrain->IsCollision(vPos.x, vPos.z))
-		IM_LOG("COLLISION!!");
+	//if (pTerrain->IsCollision(vPos.x, vPos.z))
+	//	IM_LOG("COLLISION!!");
 
 	return 0;
 }

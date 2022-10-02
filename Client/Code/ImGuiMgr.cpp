@@ -554,7 +554,7 @@ void CImGuiMgr::AnimationEditor(CSkeletalCube* pSkeletal)
 	}
 }
 
-void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapTool& CMapTool, size_t CubeCount, _float& _far)
+void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapTool& CMapTool, _float& _far)
 {
 #ifndef _DEBUG
 	return;
@@ -580,13 +580,8 @@ void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapTool& CMapTool, size_
 			ImGui::InputFloat("Insert Far", &_far);
 			ImGui::NewLine();
 
-			ImGui::Text("Total Block Count :");
-			ImGui::SameLine();
-			ImGui::Text("%d", CubeCount);
-			ImGui::NewLine();
-
+		
 			ImGui::Text("Select Options");
-			ImGui::RadioButton("Terrain", &tMaptool.iPickingOption, PICK_TERRAIN); ImGui::SameLine();
 			ImGui::RadioButton("Cube", &tMaptool.iPickingOption, PICK_CUBE); ImGui::SameLine();
 			ImGui::RadioButton("Delete", &tMaptool.iPickingOption, PICK_DELETE); ImGui::SameLine();
 

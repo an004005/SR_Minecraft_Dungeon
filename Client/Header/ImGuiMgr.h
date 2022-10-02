@@ -26,7 +26,7 @@ public:
 	static void TextureSelector(wstring& strTex, _uint& iTexIdx);
 	static void VIBufferSelector(wstring& strBuf);
 	static void AnimationEditor(CSkeletalCube* pSkeletal);
-	static void MapControl(Engine::MapTool& sMaptool, CMapTool& MapToolTest, size_t CubeCount , _float& _far);
+	static void MapControl(Engine::MapTool& sMaptool, CMapTool& MapToolTest, _float& _far);
 
 
 private:

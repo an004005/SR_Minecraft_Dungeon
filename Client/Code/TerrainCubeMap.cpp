@@ -1,14 +1,11 @@
 #include "stdafx.h"
 #include "..\Header\TerrainCubeMap.h"
-#include "MapCube.h"
 #include <set>
 
 CTerrainCubeMap::CTerrainCubeMap(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CGameObject(pGraphicDev)
 {
-	ZeroMemory(&m_tMapTool, sizeof(MapTool));
 	ZeroMemory(&m_fHeight, sizeof(_float) * VTXCNTX * VTXCNTZ);
-	ZeroMemory(&m_fCollisionPos, sizeof(_bool) * VTXCNTX * VTXCNTZ);
 }
 
 CTerrainCubeMap::~CTerrainCubeMap()
@@ -18,11 +15,14 @@ CTerrainCubeMap::~CTerrainCubeMap()
 
 HRESULT CTerrainCubeMap::Ready_Object(const wstring& wstrPath)
 {
-	LoadMap(wstrPath);
-	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
+	m_pTextureCom = Add_Component<CTexture>(L"Proto_MinecraftCubeTexture", L"Proto_MinecraftCubeTexture", ID_STATIC);
+
+	if (!wstrPath.empty())
+	{
+		LoadMap(wstrPath);
+	}
 
 	return S_OK;
-
 }
 
 _int CTerrainCubeMap::Update_Object(const _float & fTimeDelta)
@@ -42,19 +42,17 @@ void CTerrainCubeMap::Render_Object(void)
 {
 	_matrix matWorld;
 	D3DXMatrixIdentity(&matWorld);
-
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &matWorld);
-	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-	//m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 
-	for (auto& cube : m_vecTerrainCom)
+	for (auto& cubeTex : m_mapTerrainCom)
 	{
-		m_pTextureCom->Set_Texture(cube.second->m_iTexIdx);
-		cube.second->Render_Buffer();
-	}
+		if (cubeTex.second->GetCubeCnt() > 0)
+		{
+			m_pTextureCom->Set_Texture(cubeTex.first);
+			cubeTex.second->Render_Buffer();
+		}
 
-	//m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
-	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+	}
 }
 
 void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
@@ -79,7 +77,7 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 		ReadFile(hFile, &matCubeWorld, sizeof(_matrix), &dwByte, nullptr);
 		ReadFile(hFile, &tMapTool, sizeof(MapTool), &dwByte, nullptr);
 
-		MapCubeInfo tMapCubeInfo{ matCubeWorld, tMapTool.iTexIdx, (CUBETYPE)tMapTool.iCubeType };
+		MapCubeInfo tMapCubeInfo{ matCubeWorld, tMapTool.iTexIdx, (CUBETYPE)tMapTool.iCubeType, tMapTool.fHeight };
 		m_vecTotalCube.push_back(tMapCubeInfo);
 		
 		//divide cubetype
@@ -90,9 +88,6 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 			break;
 		case TYPE_COLLISION:
 			m_vecCollision.push_back(tMapCubeInfo);
-			break;
-		case TYPE_DECO:
-			m_vecDeco.push_back(tMapCubeInfo);
 			break;
 		default:
 			MSG_BOX("Invalid MapCubeInfo when load CTerrainCubeMap");
@@ -109,49 +104,87 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 	set<_int> SetTexIdx;
 	for (auto& cube : m_vecTotalCube)
 		SetTexIdx.insert(cube.iTexIdx);
+	
 
+	// 수정 하기!!!!!!!!!!!!!
 	for (auto texIdx : SetTexIdx)
 	{
-		CTerrainCubeTex* pTerrainCubeTex = CTerrainCubeTex::Create(m_pGraphicDev, wstrPath, texIdx);
+		//CTerrainCubeTex* pTerrainCubeTex = CTerrainCubeTex::Create(m_pGraphicDev, wstrPath, texIdx);
+		CTerrainCubeTex* pTerrainCubeTex = nullptr;
 		NULL_CHECK(pTerrainCubeTex);
 
 		wstring wstrTmp = L"TerrainCubeTexCom" + to_wstring(texIdx);
-		m_vecTerrainCom.push_back({ wstrTmp, pTerrainCubeTex });
 
-		m_mapComponent[ID_STATIC].insert({ m_vecTerrainCom.back().first.c_str(), pTerrainCubeTex });
-	}
-
-	// terrain에 충돌 큐브가 있는지 저장한다.
-
-	_float SetPosX[4] = { 0.5f, 0.5f, -0.5f, -0.5f };
-	_float SetPosZ[4] = { 0.5f, -0.5f, 0.5f, -0.5f };
-
-	for (auto iter : m_vecCollision)
-	{
-		_vec3 vCenter{ 0.f,0.f,0.f };
-		D3DXVec3TransformCoord(&vCenter, &vCenter, &iter.matWorld);
-
-		for (_int i = 0; i < 4; ++i)
-		{
-			_int iCenterx = _int(vCenter.x + SetPosX[i]);
-			_int iCenterz = _int(vCenter.z + SetPosZ[i]);
-			m_fCollisionPos[iCenterx][iCenterz] = true;
-		}
-	
+		m_mapTerrainCom.insert({ texIdx, pTerrainCubeTex });
+		m_mapComponent[ID_STATIC].insert({ wstrTmp, pTerrainCubeTex });
 	}
 }
 
-HRESULT CTerrainCubeMap::Add_Component(void)
+void CTerrainCubeMap::SaveMap(const wstring & wstrPath)
 {
-	CComponent* pComponent = nullptr;
+}
+
+void CTerrainCubeMap::AddCube(const MapCubeInfo& tInfo)
+{
+	m_vecTotalCube.push_back(tInfo);
+
+	switch (tInfo.eType)
+	{
+	case TYPE_LAND:
+		m_vecLand.push_back(tInfo);
+		break;
+	case TYPE_COLLISION:
+		m_vecCollision.push_back(tInfo);
+		break;
+	case TYPE_DECO:
+		break;
+	default:
+		_CRASH("Invalid type");
+	}
+
+	auto itr = m_mapTerrainCom.find(tInfo.iTexIdx);
+	if (itr == m_mapTerrainCom.end())
+	{
+		vector<_matrix> vecTmp;
+		vecTmp.push_back(tInfo.matWorld);
+		CTerrainCubeTex* pTerrainTex = CTerrainCubeTex::Create(m_pGraphicDev, vecTmp);
+		m_mapTerrainCom.insert({tInfo.iTexIdx, pTerrainTex });
+		m_mapComponent[ID_STATIC].insert({ to_wstring(tInfo.iTexIdx), pTerrainTex });
+	}
+	else
+	{
+		vector<_matrix> vecTmp;
+		for (const auto& info : m_vecTotalCube)
+		{
+			if (info.iTexIdx == tInfo.iTexIdx)
+				vecTmp.push_back(info.matWorld);
+		}
+
+		itr->second->ReCreateBuffer(vecTmp);
+	}
+}
 
 
-	pComponent = m_pTextureCom = dynamic_cast<CTexture*>(Clone_Proto(L"Proto_MinecraftCubeTexture"));
-	NULL_CHECK_RETURN(m_pTextureCom, E_FAIL);
-	m_mapComponent[ID_STATIC].insert({ L"Proto_MinecraftCubeTexture", pComponent });
+void CTerrainCubeMap::DeleteCube(int iToDel)
+{
+	int iTexId = m_vecTotalCube[iToDel].iTexIdx;
+	m_vecTotalCube.erase(m_vecTotalCube.begin() + iToDel);
+
+	auto itr = m_mapTerrainCom.find(iTexId);
+	if (itr == m_mapTerrainCom.end())
+	{
+		_CRASH("Invalid");
+	}
+
+	vector<_matrix> vecTmp;
+	for (const auto& info : m_vecTotalCube)
+	{
+		if (info.iTexIdx == iTexId)
+			vecTmp.push_back(info.matWorld);
+	}
 
 	
-	return S_OK;
+	itr->second->ReCreateBuffer(vecTmp);
 }
 
 
@@ -175,8 +208,7 @@ void CTerrainCubeMap::Free(void)
 	m_vecTotalCube.clear();
 	m_vecLand.clear();
 	m_vecCollision.clear();
-	m_vecDeco.clear();
-	m_vecTerrainCom.clear();
+	m_mapTerrainCom.clear();
 	//for_each(m_vecTotalCube.begin(), m_vecTotalCube.end(), Safe_Release<CMapCube*>);
 
 	
