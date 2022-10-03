@@ -14,7 +14,7 @@ CFrameMgr::~CFrameMgr()
 	Free();
 }
 
-_bool CFrameMgr::IsPermit_Call(const _tchar * pFrameTag, const _float & fTimeDelta)
+_bool CFrameMgr::IsPermit_Call(const wstring& pFrameTag, const _float & fTimeDelta)
 {
 	CFrame*		pFrame = Find_Frame(pFrameTag);
 	NULL_CHECK_RETURN(pFrame, false);
@@ -22,7 +22,7 @@ _bool CFrameMgr::IsPermit_Call(const _tchar * pFrameTag, const _float & fTimeDel
 	return pFrame->IsPermit_Call(fTimeDelta);
 }
 
-HRESULT CFrameMgr::Ready_Frame(const _tchar * pFrameTag, const _float & fCallLimit)
+HRESULT CFrameMgr::Ready_Frame(const wstring& pFrameTag, const _float & fCallLimit)
 {
 	CFrame*		pFrame = Find_Frame(pFrameTag);
 
@@ -37,10 +37,10 @@ HRESULT CFrameMgr::Ready_Frame(const _tchar * pFrameTag, const _float & fCallLim
 	return S_OK;
 }
 
-CFrame * CFrameMgr::Find_Frame(const _tchar * pFrameTag)
+CFrame * CFrameMgr::Find_Frame(const wstring& pFrameTag)
 {
-	auto	iter = find_if(m_mapFrame.begin(), m_mapFrame.end(), CTag_Finder(pFrameTag));
-
+	// auto	iter = find_if(m_mapFrame.begin(), m_mapFrame.end(), CTag_Finder(pFrameTag));
+	auto iter = m_mapFrame.find(pFrameTag);
 	if (iter == m_mapFrame.end())
 		return nullptr;
 

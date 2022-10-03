@@ -14,27 +14,42 @@ CManagement::~CManagement()
 	Free();
 }
 
-
-CComponent* Engine::CManagement::Get_Component(const _tchar* pLayerTag, const _tchar* pObjTag, const _tchar* pComponentTag, COMPONENTID eID)
+CComponent* Engine::CManagement::Get_Component(LAYERID eLayerID, const wstring& pObjTag, const wstring& pComponentTag, COMPONENTID eID)
 {
 	if (nullptr == m_pScene)
 		return nullptr;
 
-	return m_pScene->Get_Component(pLayerTag, pObjTag, pComponentTag, eID);
+	return m_pScene->Get_Component(eLayerID, pObjTag, pComponentTag, eID);
 }
 
-void CManagement::AddGameObject(const _tchar* pLayerTag, const _tchar* pObjTag, CGameObject* pObject)
+CGameObject* CManagement::Get_GameObject(LAYERID eLayerID, const wstring& pObjTag)
+{
+	if (nullptr == m_pScene)
+		return nullptr;
+
+	return m_pScene->Get_GameObject(eLayerID, pObjTag);
+}
+
+CLayer* CManagement::Get_Layer(LAYERID eLayerID)
+{
+	NULL_CHECK_RETURN(m_pScene, nullptr);
+	return m_pScene->Get_Layer(eLayerID);
+}
+
+void CManagement::AddGameObject(LAYERID eLayerID, const wstring& pObjTag, CGameObject* pObject)
 {
 	if (pObject == nullptr)
 		return;
 
-	m_pScene->AddGameObject(pLayerTag, pObjTag, pObject);
+	NULL_CHECK(m_pScene);
+	m_pScene->AddGameObject(eLayerID, pObjTag, pObject);
 }
 
 HRESULT CManagement::Set_Scene(CScene * pScene)
 {
 	Safe_Release(m_pScene);
 	Engine::Clear_RenderGroup(); // 기존 scene에 그려지고 있던 모든 렌더 요소들을 삭제
+	CCollider::GetInstance()->Clear_All();
 
 	m_pScene = pScene;
 	
@@ -55,6 +70,8 @@ void CManagement::LateUpdate_Scene(void)
 		return;
 
 	m_pScene->LateUpdate_Scene();
+	CCollider::GetInstance()->Check_Blocking();
+	CCollider::GetInstance()->Clear_Dynamic();
 }
 
 void CManagement::Render_Scene(LPDIRECT3DDEVICE9 pGraphicDev)

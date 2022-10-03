@@ -21,7 +21,7 @@ HRESULT CLogo::Ready_Scene(void)
 
 	FAILED_CHECK_RETURN(Ready_Proto(), E_FAIL);
 
-	FAILED_CHECK_RETURN(Ready_Layer_Environment(L"Ready_Layer_Environment"), E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Layer_Environment(), E_FAIL);
 
 	// 로딩 클래스 생성
 	m_pLoading = CLoading::Create(m_pGraphicDev, LOADING_STAGE);
@@ -60,19 +60,15 @@ void CLogo::Render_Scene(void)
 	// 개발자 모드 출력 함수
 }
 
-HRESULT CLogo::Ready_Layer_Environment(const _tchar * pLayerTag)
+HRESULT CLogo::Ready_Layer_Environment()
 {
-	Engine::CLayer*		pLayer = Engine::CLayer::Create();
-	NULL_CHECK_RETURN(pLayer, E_FAIL);
-
-
 	CGameObject*		pGameObject = nullptr;
 
 	// backGround
 
 	pGameObject = CBackGround::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"BackGround", pGameObject), E_FAIL);
+	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"BackGround", pGameObject), E_FAIL);
 
 	// TestPlayer
 	// pGameObject = CPlayer::Create(m_pGraphicDev);
@@ -84,8 +80,6 @@ HRESULT CLogo::Ready_Layer_Environment(const _tchar * pLayerTag)
 	// NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	// FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"TestMonster", pGameObject), E_FAIL);
 
-		
-	m_mapLayer.insert({ pLayerTag, pLayer });
 
 	return S_OK;
 }

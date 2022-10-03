@@ -60,8 +60,8 @@ void CImGuiMgr::TransformEditor(CCamera* pCamera, CTransform* pTransform)
 	}
 
 	static bool useSnap(false);
-	if (ImGui::IsKeyPressed(83))
-		useSnap = !useSnap;
+	// if (ImGui::IsKeyPressed(83))
+		// useSnap = !useSnap;
 	ImGui::Checkbox("##something", &useSnap);
 	ImGui::SameLine();
 	switch (mCurrentGizmoOperation)
@@ -147,8 +147,8 @@ void CImGuiMgr::LocalTransformEditor(CCamera* pCamera, _matrix& matLocal)
 	}
 
 	static bool useSnap(false);
-	if (ImGui::IsKeyPressed(83))
-		useSnap = !useSnap;
+	// if (ImGui::IsKeyPressed(83))
+		// useSnap = !useSnap;
 	ImGui::Checkbox("##something", &useSnap);
 	ImGui::SameLine();
 	switch (mCurrentGizmoOperation)
@@ -367,6 +367,7 @@ void CImGuiMgr::TextureSelector(wstring& strTex, _uint& iTexIdx)
 		L"Proto_CubeTexture",
 		L"Proto_MinecraftCubeTexture",
 		L"Proto_WeaponTexture",
+		L"Proto_BossCubeTile"
 	};
 	static vector<_int> vecTexIdx(vecTexName.size(), 0);
 	static size_t iCurIdx = 0;
@@ -375,7 +376,7 @@ void CImGuiMgr::TextureSelector(wstring& strTex, _uint& iTexIdx)
 	{
 		for (size_t i = 0; i < vecTexName.size(); ++i)
 		{
-			CTexture* pTexture = dynamic_cast<CTexture*>(Find_Proto(vecTexName[i].c_str()));
+			CTexture* pTexture = dynamic_cast<CTexture*>(Find_Proto(vecTexName[i]));
 			NULL_CHECK(pTexture);
 
 			size_t iTexSize = pTexture->GetTexSize() - 1;
@@ -408,7 +409,6 @@ void CImGuiMgr::VIBufferSelector(wstring& strBuf)
 	static const vector<wstring> vecBufName{
 		L"Proto_CubeTexCom",
 		L"Proto_VoxelTex_Sword",
-		L"Proto_RcCol"
 	};
 	static size_t iCurIdx = 0;
 
@@ -416,7 +416,7 @@ void CImGuiMgr::VIBufferSelector(wstring& strBuf)
 	{
 		for (size_t i = 0; i < vecBufName.size(); ++i)
 		{
-			CVIBuffer* pBuf = dynamic_cast<CVIBuffer*>(Find_Proto(vecBufName[i].c_str()));
+			CVIBuffer* pBuf = dynamic_cast<CVIBuffer*>(Find_Proto(vecBufName[i]));
 			NULL_CHECK(pBuf);
 
 			string _BufName;
@@ -456,17 +456,19 @@ void CImGuiMgr::AnimationEditor(CSkeletalCube* pSkeletal)
 	static bool expanded = true;
 	static int currentFrame = 0;
 	static char szPartName[128];
+	static char szEventName[128];
+	static int iFrameAmount = 0;
 
 	if (mySequence.m_iFrameMin < 0)
 		mySequence.m_iFrameMin = 0;
 
 	if (pSkeletal->m_bStopAnim == false)
 	{
-		currentFrame = static_cast<int>(pSkeletal->fAccTime * 60.f); // 60 frame == 1 sec
+		currentFrame = static_cast<int>(pSkeletal->m_fAccTime * 60.f); // 60 frame == 1 sec
 	}
 	else
 	{
-		pSkeletal->fAccTime = (_float)currentFrame / 60.f;
+		pSkeletal->m_fAccTime = (_float)currentFrame / 60.f;
 	}
 
 	mySequence.m_CubeAnim.fTotalTime = (_float)mySequence.m_iFrameMax / 60.f;
@@ -496,6 +498,19 @@ void CImGuiMgr::AnimationEditor(CSkeletalCube* pSkeletal)
 	{
 		mySequence.AddTransFrameRecur(currentFrame, pSkeletal->m_pRootPart);
 	}
+	ImGui::InputText("Event Name", szEventName, 128);
+	ImGui::SameLine();
+	if (ImGui::Button("Add Event"))
+	{
+		mySequence.AddEvent(currentFrame, szEventName);
+	}
+	ImGui::InputInt("Move Frame Amount", &iFrameAmount);
+	ImGui::SameLine();
+	if (ImGui::Button("Move Frame"))
+	{
+		mySequence.MoveFrame(currentFrame, iFrameAmount);
+	}
+
 	ImGui::PopItemWidth();
 	Sequencer(&mySequence, &currentFrame, &expanded, &selectedEntry, &firstFrame,
 	          ImSequencer::SEQUENCER_ADD | ImSequencer::SEQUENCER_DEL | ImSequencer::SEQUENCER_CHANGE_FRAME);
@@ -539,7 +554,7 @@ void CImGuiMgr::AnimationEditor(CSkeletalCube* pSkeletal)
 	}
 }
 
-void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapTool& MapToolTest, size_t CubeCount)
+void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapTool& CMapTool, size_t CubeCount, _float& _far)
 {
 #ifndef _DEBUG
 	return;
@@ -558,6 +573,11 @@ void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapTool& MapToolTest, si
 			ImGui::Text("Set Height");
 			ImGui::SliderFloat("Y", &tMaptool.fHeight, 1.f, 2.0f, "ratio = %.3f");
 			ImGui::InputFloat("Insert Y", &tMaptool.fHeight);
+			ImGui::NewLine();
+
+			ImGui::Text("Set Far");
+			ImGui::SliderFloat("Far", &_far, 10.f, 30.0f, "ratio = %.3f");
+			ImGui::InputFloat("Insert Far", &_far);
 			ImGui::NewLine();
 
 			ImGui::Text("Total Block Count :");
@@ -617,16 +637,41 @@ void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapTool& MapToolTest, si
 		if (ImGui::BeginTabItem("Save / Load"))
 		{
 			
+			if (ImGui::Button("Load Map"))
+			{
+				ImGuiFileDialog::Instance()->OpenDialog("ChooseFileToLoadMap", "Choose File", ".map",
+					"../Bin/Resource/Map/");
+			}
+			if (ImGuiFileDialog::Instance()->Display("ChooseFileToLoadMap"))
+			{
+				if (ImGuiFileDialog::Instance()->IsOk())
+				{
+					std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+
+					wstring tmp;
+					tmp.assign(filePathName.begin(), filePathName.end());
+					CMapTool.LoadMap(tmp);
+				}
+				ImGuiFileDialog::Instance()->Close();
+			}
+			ImGui::SameLine();
+
 			if (ImGui::Button("Save Map"))
 			{
-				MapToolTest.SaveMap();
-
+				ImGuiFileDialog::Instance()->OpenDialog("ChooseFileToSaveMap", "Choose File", ".map",
+					"../Bin/Resource/Map/");
 			}
-				
-			if (ImGui::Button("Load Map"))		
+			if (ImGuiFileDialog::Instance()->Display("ChooseFileToSaveMap"))
 			{
-			
-				MapToolTest.LoadMap();
+				if (ImGuiFileDialog::Instance()->IsOk())
+				{
+					std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+
+					wstring tmp;
+					tmp.assign(filePathName.begin(), filePathName.end());
+					CMapTool.SaveMap(tmp);
+				}
+				ImGuiFileDialog::Instance()->Close();
 			}
 
 			ImGui::EndTabItem();

@@ -28,6 +28,12 @@ CTransform::~CTransform()
 {
 }
 
+void CTransform::Set_WorldDecompose(const _matrix& matWorld)
+{
+	m_matWorld = matWorld;
+	CGameUtilMgr::MatWorldDecompose(matWorld, m_vScale, m_vAngle, m_vInfo[INFO_POS]);
+}
+
 void CTransform::Chase_Target(const _vec3* pTargetPos, const _float& fSpeed, const _float& fTimeDelta)
 {
 	_vec3		vDir = *pTargetPos - m_vInfo[INFO_POS];

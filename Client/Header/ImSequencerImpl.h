@@ -9,6 +9,7 @@ class CImSequencerImpl : public ImSequencer::SequenceInterface
 public:
 	CImSequencerImpl() : m_iFrameMin(0), m_iFrameMax(0)
 	{
+		m_vecPartName.push_back("__EVENT__");
 	}
 
 public:
@@ -56,6 +57,7 @@ public:
 	virtual void Del(int index)
 	{
 		string strPartName = m_vecPartName[index];
+		if (strPartName == "__EVENT__") return;
 		m_CubeAnim.mapFrame.erase(strPartName);
 		m_vecPartName.erase(m_vecPartName.begin() + index);
 	}
@@ -63,29 +65,85 @@ public:
 	//
 	// virtual size_t GetCustomHeight(int index) { return myItems[index].mExpanded ? 300 : 0; }
 
+	void AddEvent(int iCurFrame, const char* szEventName)
+	{
+		m_CubeAnim.vecEvent.push_back({Frame2Sec(iCurFrame), szEventName});
+	}
+
+	void MoveFrame(int& iCurFrame, int iFrameAmount)
+	{
+		bool bFound = false;
+		for (auto& vecFrame : m_CubeAnim.mapFrame)
+		{
+			for (auto& frame : vecFrame.second)
+			{
+				if (Sec2Frame(frame.fTime) == iCurFrame)
+				{
+					frame.fTime += Frame2Sec(iFrameAmount);
+					bFound = true;
+				}
+			}
+		}
+
+		if (bFound)
+			iCurFrame += iFrameAmount;
+	}
+
 
 	virtual void CustomDrawCompact(int index, ImDrawList* draw_list, const ImRect& rc, const ImRect& clippingRect)
 	{
 		string& strPartName = m_vecPartName[index];
-		vector<TransFrame>& vecFrame = m_CubeAnim.mapFrame.find(strPartName)->second;
 
-		draw_list->PushClipRect(rc.Min, rc.Max, true);
-
-		for (auto itr = vecFrame.begin(); itr != vecFrame.end();)
+		if (strPartName == "__EVENT__")
 		{
-			float fCurFrameCnt = itr->fTime * 60.f; // sec to frame
-			float r = (fCurFrameCnt - m_iFrameMin) / float(m_iFrameMax - m_iFrameMin);
-			float x = ImLerp(rc.Min.x, rc.Max.x, r);
-			draw_list->AddCircleFilled(ImVec2(x, rc.Min.y + 10), 6.f, 0xAA000000);
-			ImVec2 pta(x - 3, rc.Min.y + 10 - 3);
-			ImVec2 ptb(x + 3, rc.Min.y + 10 + 3);
-			if (ImRect(pta, ptb).Contains(ImGui::GetMousePos()) && ImGui::IsMouseClicked(1))
+			draw_list->PushClipRect(rc.Min, rc.Max, true);
+
+			for (auto itr = m_CubeAnim.vecEvent.begin(); itr != m_CubeAnim.vecEvent.end();)
 			{
-				itr = vecFrame.erase(itr);
+				float fCurFrameCnt =  (float)Sec2Frame(itr->first); // sec to frame
+				float r = (fCurFrameCnt - m_iFrameMin) / float(m_iFrameMax - m_iFrameMin);
+				float x = ImLerp(rc.Min.x, rc.Max.x, r);
+				draw_list->AddCircleFilled(ImVec2(x, rc.Min.y + 10), 6.f, 0xAAA00000);
+				ImVec2 pta(x - 3, rc.Min.y + 10 - 3);
+				ImVec2 ptb(x + 3, rc.Min.y + 10 + 3);
+				if (ImRect(pta, ptb).Contains(ImGui::GetMousePos()))
+				{
+					if (ImGui::IsMouseClicked(1))
+					{
+						itr = m_CubeAnim.vecEvent.erase(itr);
+						continue;
+					}
+					draw_list->AddText(ImVec2(x + 7, rc.Min.y + 2), 0xAA000000, itr->second.c_str());
+				}
+
+				++itr;
 			}
-			else ++itr;
+			draw_list->PopClipRect();
 		}
-		draw_list->PopClipRect();
+		else
+		{
+			vector<TransFrame>& vecFrame = m_CubeAnim.mapFrame.find(strPartName)->second;
+
+			draw_list->PushClipRect(rc.Min, rc.Max, true);
+
+			for (auto itr = vecFrame.begin(); itr != vecFrame.end();)
+			{
+				float fCurFrameCnt = itr->fTime * 60.f; // sec to frame
+				float r = (fCurFrameCnt - m_iFrameMin) / float(m_iFrameMax - m_iFrameMin);
+				float x = ImLerp(rc.Min.x, rc.Max.x, r);
+				draw_list->AddCircleFilled(ImVec2(x, rc.Min.y + 10), 6.f, 0xAA000000);
+				ImVec2 pta(x - 3, rc.Min.y + 10 - 3);
+				ImVec2 ptb(x + 3, rc.Min.y + 10 + 3);
+				if (ImRect(pta, ptb).Contains(ImGui::GetMousePos()) && ImGui::IsMouseClicked(1))
+				{
+					itr = vecFrame.erase(itr);
+				}
+				else ++itr;
+			}
+			draw_list->PopClipRect();
+		}
+
+
 	}
 
 	void LoadAnimFrame(const wstring& wstrPath);

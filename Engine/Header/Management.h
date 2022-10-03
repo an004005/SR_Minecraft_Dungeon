@@ -15,8 +15,10 @@ private:
 	virtual ~CManagement();
 
 public:
-	CComponent*				Get_Component(const _tchar* pLayerTag, const _tchar* pObjTag, const _tchar* pComponentTag, COMPONENTID eID);
-	void AddGameObject(const _tchar* pLayerTag, const _tchar* pObjTag, CGameObject* pObject);
+	CComponent* Get_Component(LAYERID eLayerID, const wstring& pObjTag, const wstring& pComponentTag, COMPONENTID eID);
+	CGameObject* Get_GameObject(LAYERID eLayerID, const wstring& pObjTag);
+	CLayer* Get_Layer(LAYERID eLayerID);
+	void AddGameObject(LAYERID eLayerID, const wstring& pObjTag, CGameObject* pObject);
 public:
 	HRESULT		Set_Scene(CScene* pScene);
 	_int		Update_Scene(const _float& fTimeDelta);
@@ -29,4 +31,5 @@ private:
 public:
 	virtual void Free(void);
 };
+
 END

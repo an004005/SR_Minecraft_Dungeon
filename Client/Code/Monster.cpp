@@ -21,10 +21,6 @@ HRESULT CMonster::Ready_Object()
 {
 	CComponent* pComponent = nullptr;
 
-	pComponent = m_pBufferCom = dynamic_cast<CTriCol*>(Clone_Proto(L"Proto_BufferCom_Tri"));
-	NULL_CHECK_RETURN(m_pBufferCom, E_FAIL);
-	m_mapComponent[ID_STATIC].insert({ L"Proto_BufferCom_Tri", pComponent });
-
 	pComponent = m_pTransCom = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_TransformCom"));
 	NULL_CHECK_RETURN(m_pTransCom, E_FAIL);
 	m_mapComponent[ID_STATIC].insert({ L"Proto_TransformCom", pComponent });
@@ -47,7 +43,7 @@ _int CMonster::Update_Object(const _float& fTimeDelta)
 
 void CMonster::LateUpdate_Object()
 {
-	CTransform*		pPlayerTransformCom = dynamic_cast<CTransform*>(Engine::Get_Component(L"Ready_Layer_Environment", L"Player", L"Proto_TransformCom", ID_DYNAMIC));
+	CTransform*		pPlayerTransformCom = Engine::Get_Component<CTransform>(LAYER_ENV, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 	NULL_CHECK(pPlayerTransformCom);
 
 	_vec3		vPlayerPos;
@@ -63,7 +59,7 @@ void CMonster::Render_Object()
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
 	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
-	m_pBufferCom->Render_Buffer();
+	// m_pBufferCom->Render_Buffer();
 }
 
 CMonster* CMonster::Create(LPDIRECT3DDEVICE9 pGraphicDev)

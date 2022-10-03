@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "..\Header\DynamicCamera.h"
 
-#include "Engine_Include.h"
-#include "Export_Function.h"
+
+CDynamicCamera* g_cam = nullptr;
 
 CDynamicCamera::CDynamicCamera(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CCamera(pGraphicDev)
@@ -31,6 +31,7 @@ HRESULT CDynamicCamera::Ready_Object(const _vec3* pEye,
 	m_fNear = fNear;
 	m_fFar = fFar;
 
+	
 	FAILED_CHECK_RETURN(CCamera::Ready_Object(), E_FAIL);
 
 	return S_OK;
@@ -39,8 +40,8 @@ HRESULT CDynamicCamera::Ready_Object(const _vec3* pEye,
 Engine::_int CDynamicCamera::Update_Object(const _float& fTimeDelta)
 {
 	Key_Input(fTimeDelta);
-
 	_int iExit = CCamera::Update_Object(fTimeDelta);
+	Make();
 
 	return iExit;
 }
@@ -52,9 +53,64 @@ void CDynamicCamera::LateUpdate_Object(void)
 		Mouse_Fix();
 		Mouse_Move();
 	}
-
-
 	CCamera::LateUpdate_Object();
+}
+
+BOOL CDynamicCamera::Make()
+{
+	m_vtx[0].x = -1.0f;	m_vtx[0].y = -1.0f;	m_vtx[0].z = 0.0f;
+	m_vtx[1].x = 1.0f;	m_vtx[1].y = -1.0f;	m_vtx[1].z = 0.0f;
+	m_vtx[2].x = 1.0f;	m_vtx[2].y = -1.0f;	m_vtx[2].z = 1.0f;
+	m_vtx[3].x = -1.0f;	m_vtx[3].y = -1.0f;	m_vtx[3].z = 1.0f;
+	m_vtx[4].x = -1.0f;	m_vtx[4].y = 1.0f;	m_vtx[4].z = 0.0f;
+	m_vtx[5].x = 1.0f;	m_vtx[5].y = 1.0f;	m_vtx[5].z = 0.0f;
+	m_vtx[6].x = 1.0f;	m_vtx[6].y = 1.0f;	m_vtx[6].z = 1.0f;
+	m_vtx[7].x = -1.0f;	m_vtx[7].y = 1.0f;	m_vtx[7].z = 1.0f;
+
+	_matrix		matProjInv;
+	//투영좌표의 역행렬
+	D3DXMatrixInverse(&matProjInv, NULL, &m_matProj);
+
+	for (_int i = 0; i < 8; i++)
+		D3DXVec3TransformCoord(&m_vtx[i], &m_vtx[i], &matProjInv);
+
+	_matrix matViewInv;
+
+	D3DXMatrixInverse(&matViewInv, NULL, &m_matView);
+
+	for (_int i = 0; i < 8; ++i)
+		D3DXVec3TransformCoord(&m_vtx[i], &m_vtx[i], &matViewInv);
+
+	// 0번과 5번은 프러스텀중 near평면의 좌측상단과 우측하단이므로, 둘의 좌표를 더해서 2로 나누면
+	// 카메라의 좌표를 얻을 수 있다.(정확히 일치하는 것은 아니다.)
+	m_vPos = (m_vtx[0] + m_vtx[5]) / 2.0f;
+
+	// 얻어진 월드좌표로 프러스텀 평면을 만든다
+	// 벡터가 프러스텀 안쪽에서 바깥쪽으로 나가는 평면들이다.
+	D3DXPlaneFromPoints(&m_plane[0], m_vtx+4, m_vtx+7, m_vtx+6);	// 상 평면(top)
+	D3DXPlaneFromPoints(&m_plane[1], m_vtx  , m_vtx+1, m_vtx+2);	// 하 평면(bottom)
+	D3DXPlaneFromPoints(&m_plane[2], m_vtx  , m_vtx+4, m_vtx+5);	// 근 평면(near)
+	D3DXPlaneFromPoints(&m_plane[3], m_vtx + 2, m_vtx + 6, m_vtx + 7);	// 원 평면(far)
+	D3DXPlaneFromPoints(&m_plane[4], m_vtx, m_vtx + 3, m_vtx + 7);	// 좌 평면(left)
+	D3DXPlaneFromPoints(&m_plane[5], m_vtx + 1, m_vtx + 5, m_vtx + 6);	// 우 평면(right)
+
+	return TRUE;
+}
+
+BOOL CDynamicCamera::IsIn(_vec3 * pv)
+{
+	_float	fDist = 0.f;
+
+	for(_int i = 0 ; i < 6 ; i++ )
+	{
+		fDist = D3DXPlaneDotCoord(&m_plane[i], pv);
+
+		if (fDist > PLANE_EPSILON) 
+			return FALSE;
+	
+	}
+
+	return TRUE;
 }
 
 void CDynamicCamera::Free(void)
@@ -73,6 +129,8 @@ CDynamicCamera* CDynamicCamera::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _vec
 	}
 	return pInstance;
 }
+
+
 
 void CDynamicCamera::Key_Input(const _float& fTimeDelta)
 {

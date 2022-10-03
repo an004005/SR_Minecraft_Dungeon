@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "SkeletalCube.h"
-#include "CubeAnimMgr.h"
 #include "GameUtilMgr.h"
 
 string CSkeletalCube::s_strRoot = "root";
@@ -20,9 +19,9 @@ HRESULT CSkeletalCube::Ready_Object()
 	// root
 	m_pRootPart = new SkeletalPart;
 	// 루트 부분 수정하지 말기
-	pComponent = m_pRootPart->pTrans = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_TransformCom"));
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_mapComponent[ID_DYNAMIC].insert({L"Proto_TransformCom_root", pComponent});
+
+	m_pRootPart->pTrans = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom_root", ID_DYNAMIC);
+
 	m_pRootPart->strName = s_strRoot;
 	m_mapParts.insert({s_strRoot, m_pRootPart});
 	m_pRootPart->strTransProto = L"Proto_TransformCom";
@@ -110,28 +109,20 @@ _bool CSkeletalCube::AddSkeletalPart(const string& strPart, const string& strPar
 	}
 
 	SkeletalPart* pPart = new SkeletalPart;
-	CComponent* pComponent = nullptr;
 	wstring wstrPart;
 	wstrPart.assign(strPart.begin(), strPart.end());
 
-	pComponent = pPart->pBuf = dynamic_cast<CVIBuffer*>(Clone_Proto(strBuf.c_str()));
-	NULL_CHECK_RETURN(pComponent, false);
 	pPart->strBufCom = strBuf + L"_" + wstrPart;
-	m_mapComponent[ID_STATIC].insert({pPart->strBufCom.c_str(), pComponent});
 	pPart->strBufProto = strBuf;
+	pPart->pBuf = Add_Component<CVIBuffer>(pPart->strBufProto, pPart->strBufCom, ID_STATIC);
 
-	pComponent = pPart->pTex = dynamic_cast<CTexture*>(Clone_Proto(strTex.c_str()));
-	NULL_CHECK_RETURN(pComponent, false);
 	pPart->strTexCom = strTex + L"_" + wstrPart;
-	m_mapComponent[ID_STATIC].insert({pPart->strTexCom.c_str(), pComponent});
 	pPart->strTexProto = strTex;
+	pPart->pTex = Add_Component<CTexture>(pPart->strTexProto, pPart->strTexCom, ID_STATIC);
 
-
-	pComponent = pPart->pTrans = dynamic_cast<CTransform*>(Clone_Proto(L"Proto_TransformCom"));
-	NULL_CHECK_RETURN(pComponent, false);
 	pPart->strTransCom = L"Proto_TransformCom_" + wstrPart;
-	m_mapComponent[ID_STATIC].insert({pPart->strTransCom.c_str(), pComponent});
 	pPart->strTransProto = L"Proto_TransformCom";
+	pPart->pTrans = Add_Component<CTransform>(pPart->strTransProto, pPart->strTransCom, ID_STATIC);
 
 	pPart->iTexIdx = iTexNum;
 	pPart->pParent = (*itr_parent).second;
@@ -198,10 +189,19 @@ void CSkeletalCube::AnimFrameConsume(_float fTimeDelta)
 
 	if (m_pCurAnim == nullptr) return;
 
-	fAccTime += fTimeDelta;
-	if (m_pCurAnim->fTotalTime < fAccTime)
+	for (const auto& animEvent : m_pCurAnim->vecEvent)
 	{
-		fAccTime = 0.f;
+		if (m_fAccTime <= animEvent.first && m_fAccTime + fTimeDelta >= animEvent.first)
+		{
+			AnimationEvent(animEvent.second);
+			break;
+		}
+	}
+
+	m_fAccTime += fTimeDelta;
+	if (m_pCurAnim->fTotalTime < m_fAccTime)
+	{
+		m_fAccTime = 0.f;
 		if (m_pCurAnim->bLoop == false) // loop 가 아니면 다 실행하고 loop로 변경
 		{
 			// m_pCurAnim = m_pAnimInst->GetCurrentLoopAnim();
@@ -225,11 +225,11 @@ void CSkeletalCube::AnimFrameConsume(_float fTimeDelta)
 		for (auto& frame : vecTransFrame)
 		{
 			const _float fTime = frame.fTime;
-			if (fTime < fAccTime)
+			if (fTime < m_fAccTime)
 			{
 				pPrevFrame = &frame;
 			}
-			else if (fTime > fAccTime)
+			else if (fTime > m_fAccTime)
 			{
 				pNextFrame = &frame;
 				break;
@@ -247,7 +247,7 @@ void CSkeletalCube::AnimFrameConsume(_float fTimeDelta)
 			continue;
 		}
 		
-		const _float fS = (fAccTime - pPrevFrame->fTime) / (pNextFrame->fTime - pPrevFrame->fTime);
+		const _float fS = (m_fAccTime - pPrevFrame->fTime) / (pNextFrame->fTime - pPrevFrame->fTime);
 		TransFrameLerp(
 			OUT Part.second->pTrans->m_matWorld, 
 			*pPrevFrame, 
@@ -258,15 +258,14 @@ void CSkeletalCube::AnimFrameConsume(_float fTimeDelta)
 
 void CSkeletalCube::PlayAnimationOnce(const string& strAnim)
 {
-	fAccTime = 0.f;
-	m_pCurAnim = CCubeAnimMgr::GetInstance()->GetAnim(strAnim);
-	m_pCurAnim->bLoop = false;
+	// m_fAccTime = 0.f;
+	// m_pCurAnim->bLoop = false;
 	// std::sort(m_pCurAnim..begin(), vecFrame.end());
 }
 
 void CSkeletalCube::PlayAnimationOnce(CubeAnimFrame* frame)
 {
-	fAccTime = 0.f;
+	m_fAccTime = 0.f;
 	m_pCurAnim = frame;
 	m_pCurAnim->bLoop = false;
 }
@@ -433,12 +432,21 @@ void CSkeletalCube::DeleteRecursive(const string& strPart)
 	pToDelete->pTex->Release();
 	pToDelete->pTrans->Release();
 
-	auto itr = find_if(m_mapComponent[ID_STATIC].begin(), m_mapComponent[ID_STATIC].end(), CTag_Finder(pToDelete->strBufCom.c_str()));
-	m_mapComponent[ID_STATIC].erase(itr);
-	auto itr2 = find_if(m_mapComponent[ID_STATIC].begin(), m_mapComponent[ID_STATIC].end(), CTag_Finder(pToDelete->strTexCom.c_str()));
-	m_mapComponent[ID_STATIC].erase(itr2);
-	auto itr3 = find_if(m_mapComponent[ID_STATIC].begin(), m_mapComponent[ID_STATIC].end(), CTag_Finder(pToDelete->strTransCom.c_str()));
-	m_mapComponent[ID_STATIC].erase(itr3);
+	{
+		auto itr = m_mapComponent->find(pToDelete->strBufCom);
+		if (itr != m_mapComponent->end())
+			m_mapComponent[ID_STATIC].erase(itr);
+	}
+	{
+		auto itr = m_mapComponent->find(pToDelete->strTexCom);
+		if (itr != m_mapComponent->end())
+			m_mapComponent[ID_STATIC].erase(itr);
+	}
+	{
+		auto itr = m_mapComponent->find(pToDelete->strTransCom);
+		if (itr != m_mapComponent->end())
+			m_mapComponent[ID_STATIC].erase(itr);
+	}
 
 	m_mapParts.erase(strPart);
 	delete pToDelete;
@@ -516,6 +524,21 @@ CubeAnimFrame CubeAnimFrame::Load(const wstring& wstrPath)
 		tmp.mapFrame.insert({strPartName, vecFrameTmp});
 	}
 
+	size_t eventSize = 0;
+	ReadFile(hFile, &eventSize, sizeof(size_t), &dwByte, nullptr);
+
+	_float fEventTime;
+	for (size_t i = 0; i < eventSize; ++i)
+	{
+		ReadFile(hFile, &fEventTime, sizeof(_float), &dwByte, nullptr);
+		ReadFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
+		char szEventName[128]{};
+		ReadFile(hFile, szEventName, dwStrByte, &dwByte, nullptr);
+		string strEventName = szEventName;
+
+		tmp.vecEvent.push_back({fEventTime, strEventName});
+	}
+
 	CloseHandle(hFile);
 
 	return tmp;
@@ -557,6 +580,18 @@ void CubeAnimFrame::Save(const wstring& wstrPath)
 			WriteFile(hFile, &trans.qRot, sizeof(D3DXQUATERNION), &dwByte, nullptr);
 			WriteFile(hFile, &trans.vPos, sizeof(_vec3), &dwByte, nullptr);
 		}
+	}
+
+	size_t eventSize = vecEvent.size();
+	WriteFile(hFile, &eventSize, sizeof(size_t), &dwByte, nullptr);
+	for (size_t i = 0; i < eventSize; ++i)
+	{
+		
+		WriteFile(hFile, &vecEvent[i].first, sizeof(_float), &dwByte, nullptr);
+		dwStrByte = (DWORD)vecEvent[i].second.size();
+		WriteFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
+		WriteFile(hFile, vecEvent[i].second.c_str(), dwStrByte, &dwByte, nullptr);
+		
 	}
 	
 	CloseHandle(hFile);

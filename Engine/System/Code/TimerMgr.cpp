@@ -19,17 +19,17 @@ void Engine::CTimerMgr::Free(void)
 	m_mapTimers.clear();
 }
 
-CTimer* Engine::CTimerMgr::Find_Timer(const _tchar* pTimerTag)
+CTimer* Engine::CTimerMgr::Find_Timer(const wstring& pTimerTag)
 {
-	auto		iter = find_if(m_mapTimers.begin(), m_mapTimers.end(), CTag_Finder(pTimerTag));
-
+	// auto		iter = find_if(m_mapTimers.begin(), m_mapTimers.end(), CTag_Finder(pTimerTag));
+	auto iter = m_mapTimers.find(pTimerTag);
 	if (iter == m_mapTimers.end())
 		return nullptr;
 	
 	return iter->second;
 }
 
-HRESULT Engine::CTimerMgr::Ready_Timer(const _tchar* pTimerTag)
+HRESULT Engine::CTimerMgr::Ready_Timer(const wstring& pTimerTag)
 {
 	CTimer*	pTimer = Find_Timer(pTimerTag);
 
@@ -43,14 +43,14 @@ HRESULT Engine::CTimerMgr::Ready_Timer(const _tchar* pTimerTag)
 
 	return S_OK;
 }
-void Engine::CTimerMgr::Update_Timer(const _tchar* pTimerTag)
+void Engine::CTimerMgr::Update_Timer(const wstring& pTimerTag)
 {
 	CTimer*	pTimer = Find_Timer(pTimerTag);
 	NULL_CHECK(pTimer);
 
 	pTimer->Update_Timer();
 }
-_float Engine::CTimerMgr::Get_TimeDelta(const _tchar* pTimerTag)
+_float Engine::CTimerMgr::Get_TimeDelta(const wstring& pTimerTag)
 {
 	CTimer*	pTimer = Find_Timer(pTimerTag);
 	NULL_CHECK_RETURN(pTimer, 0.f);

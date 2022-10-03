@@ -54,6 +54,7 @@ struct CubeAnimFrame
 	_float fTotalTime = 0.f;		// 총 재생 시간
 	// part이름,     part의 시간별 transform정보
 	map<string, vector<TransFrame>> mapFrame; // (float기준으로 정렬상태여야 한다.)
+	//          시간,     이벤트 이름 
 	vector<pair<_float, string>> vecEvent;
 
 	static CubeAnimFrame Load(const wstring& wstrPath);
@@ -77,6 +78,7 @@ public:
 	virtual void Free() override;
 
 
+	virtual void AnimationEvent(const string& strEvent) {}
 	_bool AddSkeletalPart(const string& strPart, const string& strParent, const wstring& strBuf, const wstring& strTex, const _uint iTexNum);
 	_bool DeleteSkeletalPart(const string& strPart);
 	static CSkeletalCube* Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrPath = L"");
@@ -105,6 +107,7 @@ protected:
 	// animation com
 	CubeAnimFrame* m_pCurAnim = nullptr;
 	CubeAnimFrame* m_pIdleAnim = nullptr;
-	_float fAccTime = 0.f;	  // 애니메이션 현재 시간
+	_float m_fAccTime = 0.f;	  // 애니메이션 현재 시간
+
 	_bool m_bStopAnim = false;
 };

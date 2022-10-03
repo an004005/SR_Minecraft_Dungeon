@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Header\MapCube.h"
 #include "MapTool.h"
+#include "DynamicCamera.h"
 #include "Export_Function.h"
 
 CMapCube::CMapCube(LPDIRECT3DDEVICE9 pGraphicDev, MapTool& tMapTool)
@@ -26,7 +27,7 @@ HRESULT CMapCube::Ready_Object(void)
 {
 	
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
-	
+
 	//maptool 에서 피킹 옵션 선택
 	if (m_tMapTool.iPickingOption == PICK_TERRAIN)
 	{
@@ -44,7 +45,8 @@ HRESULT CMapCube::Ready_Object(void)
 		m_pTransCom->Set_ScaleY(m_tMapTool.fHeight);
 		m_pTransCom->Update_Component(0.f);
 	}
-	
+
+
 	for (int i = 0; i < FACE_END; ++i)
 	{
 		for (int j = 0; j < 4; ++j)
@@ -61,7 +63,11 @@ _int CMapCube::Update_Object(const _float & fTimeDelta)
 {
 	CGameObject::Update_Object(fTimeDelta);
 
-	Engine::Add_RenderGroup(RENDER_PRIORITY, this);
+	//CDynamicCamera* pDCamera = static_cast<CDynamicCamera*>(Get_GameObject(L"Layer_Environment", L"DynamicCamera"));
+
+	if (g_cam->IsIn(&vCenter))
+		Engine::Add_RenderGroup(RENDER_PRIORITY, this);
+
 	return 0;
 }
 
@@ -75,14 +81,13 @@ void CMapCube::LateUpdate_Object(void)
 void CMapCube::Render_Object(void)
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
-	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 	//m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 
 	Render_State();
 	m_pBufferCom->Render_Buffer();
 
 	//m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
-	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
 }
 
@@ -153,10 +158,10 @@ void CMapCube::Free(void)
 
 Engine::_vec3 CMapCube::PickUp_OnTerrain(void)
 {
-	CTerrainTex*	pTerrainBufferCom = dynamic_cast<CTerrainTex*>(Engine::Get_Component(L"Layer_Environment", L"Terrain", L"Proto_TerrainTexCom", ID_STATIC));
+	CTerrainTex*	pTerrainBufferCom = Engine::Get_Component<CTerrainTex>(LAYER_ENV, L"Terrain", L"Proto_TerrainTexCom", ID_STATIC);
 	NULL_CHECK_RETURN(pTerrainBufferCom, _vec3());
 
-	CTransform*		pTerrainTransformCom = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_Environment", L"Terrain", L"Proto_TransformCom", ID_DYNAMIC));
+	CTransform*		pTerrainTransformCom = Engine::Get_Component<CTransform>(LAYER_ENV, L"Terrain", L"Proto_TransformCom", ID_DYNAMIC);
 	NULL_CHECK_RETURN(pTerrainTransformCom, _vec3());
 
 	return m_pCalculatorCom->PickingOnTerrain(g_hWnd, pTerrainBufferCom, pTerrainTransformCom);
