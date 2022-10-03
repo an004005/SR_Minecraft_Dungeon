@@ -42,9 +42,9 @@ void CTerrainCubeMap::LateUpdate_Object(void)
 
 void CTerrainCubeMap::Render_Object(void)
 {
-	/*_matrix matWorld;
+	_matrix matWorld;
 	D3DXMatrixIdentity(&matWorld);
-	m_pGraphicDev->SetTransform(D3DTS_WORLD, &matWorld);*/
+	m_pGraphicDev->SetTransform(D3DTS_WORLD, &matWorld);
 
 	for (auto& cubeTex : m_mapTerrainCubeCom)
 	{
@@ -181,16 +181,6 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 		}
 		else
 			iter->second->ReCreateBuffer(vecmatWorld);
-	}
-	}
-
-	for (auto& coll : m_vecCollision)
-	{
-		_vec3 vCenter;
-		vCenter.x = coll.matWorld._41;
-		vCenter.y = coll.matWorld._42;
-		vCenter.z = coll.matWorld._43;
-		CCollider::GetInstance()->Add_StaticCollision(vCenter, 1.f);
 	}
 }
 
