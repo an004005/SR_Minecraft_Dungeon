@@ -23,9 +23,7 @@ private:
 
 
 public:
-	void			SaveMap(wstring wstrFileName);
 	void			LoadMap(wstring wstrFileName);
-	//const _vec3*	Get_VtxPos(void) const {return m_pPos;}
 	_bool			PickingOnCube(_vec3& CubeCenter, int& iToDelIdx);
 
 public:

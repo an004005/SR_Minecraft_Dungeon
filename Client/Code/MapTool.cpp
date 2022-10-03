@@ -79,7 +79,7 @@ _int CMapTool::Update_Scene(const _float & fTimeDelta)
 	IM_BEGIN("Map Editor Window");
 
 
-	CImGuiMgr::MapControl(m_tMapTool, *this, m_fFar);
+	CImGuiMgr::MapControl(m_tMapTool,m_fFar, m_pCubeMap);
 	
 	m_pDCamera->Set_Far(m_fFar);
 
@@ -175,46 +175,6 @@ HRESULT CMapTool::Ready_Proto(void)
 	return S_OK;
 }
 
-
-
-void CMapTool::SaveMap(wstring wstrFileName)
-{
-	////input data in m_vecLand
-	//for (auto iter : m_vecTotalCube)
-	//{
-	//	if (iter->m_tMapTool.iCubeType == TYPE_LAND)
-	//		m_vecLand.push_back(iter);
-	//}
-
-	////Set data in m_fHeight
-	//Set_CubeCoordinate();
-
-	//HANDLE hFile = CreateFile(wstrFileName.c_str(), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
-	//if (INVALID_HANDLE_VALUE == hFile)
-	//{
-	//	MSG_BOX("Failed Save Map");
-	//	return;
-	//}
-
-	//DWORD	dwByte = 0;
-	//
-	//size_t m_vecTotalCubeSize = m_vecTotalCube.size();
-
-
-	//WriteFile(hFile, &m_vecTotalCubeSize, sizeof(size_t), &dwByte, nullptr);
-
-	//for (auto iter : m_vecTotalCube)
-	//{
-	//	WriteFile(hFile, &iter->m_pTransCom->m_matWorld, sizeof(_matrix), &dwByte, nullptr);
-	//	WriteFile(hFile, &iter->m_tMapTool, sizeof(MapTool), &dwByte, nullptr);
-	//}
-	//
-
-	//WriteFile(hFile, &m_fHeight, sizeof(_float) * VTXCNTX * VTXCNTZ, &dwByte, nullptr);
-	//	
-	//CloseHandle(hFile);
-
-}
 
 void CMapTool::LoadMap(wstring wstrFileName)
 {

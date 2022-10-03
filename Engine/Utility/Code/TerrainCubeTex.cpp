@@ -127,7 +127,7 @@ HRESULT CTerrainCubeTex::Ready_Buffer(const vector<_matrix>& _vecmatworld)
 			IdxTmp[11]._2 = 3;
 		}
 
-		int iVtxCnt = 8 * i;
+		size_t iVtxCnt = 8 * i;
 		for (int j = 0; j < 12; ++j)
 		{
 			IdxTmp[j]._0 += iVtxCnt;
@@ -178,4 +178,9 @@ CTerrainCubeTex * CTerrainCubeTex::Create(LPDIRECT3DDEVICE9 pGraphicDev, const v
 	}
 
 	return pInstance;
+}
+
+void CTerrainCubeTex::Free(void)
+{
+	CVIBuffer::Free();
 }

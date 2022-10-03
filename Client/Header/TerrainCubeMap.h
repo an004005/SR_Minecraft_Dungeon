@@ -19,6 +19,7 @@ struct MapCubeInfo
 	MapCubeInfo() { D3DXMatrixIdentity(&matWorld); }
 	MapCubeInfo(_matrix matWorld, _int iTexIdx, CUBETYPE eType, _float Height)
 		: matWorld(matWorld), iTexIdx(iTexIdx), eType(eType), fHeight(Height) {}
+
 };
 
 class CTerrainCubeMap : public CGameObject
@@ -42,6 +43,8 @@ private:
 public:
 	void				 LoadMap(const wstring& wstrPath);
 	void				 SaveMap(const wstring& wstrPath);
+	void				Set_CubeCoordinate(void);
+	void				CubeHeight(_float x, _float z);
 	const vector<MapCubeInfo>& GetTotalCubes() { return m_vecTotalCube; }
 	void				 AddCube(const MapCubeInfo& tInfo);
 	void			     DeleteCube(int iToDel);
@@ -68,37 +71,6 @@ private:
 	virtual void	Free(void);
 };
 
-//void CMapTool::Set_CubeCoordinate(void)
-//{
-//	_ulong	dwIndex = 0;
-//
-//	for (_ulong i = 0; i < VTXCNTZ; ++i)
-//	{
-//		for (_ulong j = 0; j < VTXCNTX; ++j)
-//		{
-//			CubeHeight(_float(j) * VTXITV, _float(i) * VTXITV);
-//		}
-//	}
-//}
 
-
-//void CMapTool::CubeHeight(_float x, _float z)
-//{
-//	_float fMostHeightValue = 0;
-//	_float fLength = 0;
-//	for (auto iter : m_vecLand)
-//	{
-//		if ((iter->vCenter.x - 0.5f) == x && (iter->vCenter.z - 0.5f) == z)
-//		{
-//			if (fMostHeightValue < iter->vCenter.y)
-//			{
-//				fMostHeightValue = iter->vCenter.y;
-//				fLength = iter->m_tMapTool.fHeight / 2.f;
-//			}
-//		}
-//	}
-//
-//	m_fHeight[(_int)x][(_int)z] = fMostHeightValue + fLength;
-//}
 
 
