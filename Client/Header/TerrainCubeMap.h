@@ -7,6 +7,7 @@ BEGIN(Engine)
 
 class CTexture;
 class CTerrainCubeTex;
+class CTerrainRcTex;
 
 END
 
@@ -48,18 +49,21 @@ public:
 	const vector<MapCubeInfo>& GetTotalCubes() { return m_vecTotalCube; }
 	void				 AddCube(const MapCubeInfo& tInfo);
 	void			     DeleteCube(int iToDel);
-
+	void				 AddTex(const MapCubeInfo& tInfo);
+	void			     DeleteTex(_vec3 PickPos);
 private:
-	CLayer*			m_pLayer = nullptr;
 
 	vector<MapCubeInfo> m_vecTotalCube;
 	vector<MapCubeInfo> m_vecLand;
 	vector<MapCubeInfo> m_vecCollision;
 
+	vector<MapCubeInfo> m_vecTotalTex;
 
-	map<_uint, CTerrainCubeTex*> m_mapTerrainCom;
+
+	map<_uint, CTerrainCubeTex*> m_mapTerrainCubeCom;
+	map<_uint, CTerrainRcTex*> m_mapTerrainRcCom;
+	CTexture* m_pCubeTextureCom = nullptr;
 	CTexture* m_pTextureCom = nullptr;
-
 
 public:
 	_float			m_fHeight[VTXCNTX][VTXCNTZ];
