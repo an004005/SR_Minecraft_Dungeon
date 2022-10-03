@@ -9,7 +9,7 @@
 #include "VoxelTex.h"
 #include "TerrainCubeTex.h"
 #include "CollisionCom.h"
-
+#include "ParticleSystem.h"
 #include "Collider.h"
 
 #include "Transform.h"

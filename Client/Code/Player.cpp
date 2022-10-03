@@ -3,7 +3,8 @@
 #include "Controller.h"
 #include "GameUtilMgr.h"
 #include "TerrainCubeMap.h"
-
+#include "AbstFactory.h"
+#include "Particle.h"
 /*-----------------------
  *    CCharacter
  ----------------------*/
@@ -29,6 +30,13 @@ HRESULT CPlayer::Ready_Object()
 	// m_arrOnceAnim[ATTACK1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/JK/Intro.anim");
 	m_arrOnceAnim[ATTACK2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_b.anim");
 	m_arrOnceAnim[ATTACK3] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_c.anim");
+
+	// m_arrOnceAnim[ATTACK1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/shock_powder.anim");
+	// // m_arrOnceAnim[ATTACK1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/JK/Intro.anim");
+	// m_arrOnceAnim[ATTACK2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/shock_powder.anim");
+	// m_arrOnceAnim[ATTACK3] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/shock_powder.anim");
+
+
 	m_pIdleAnim = &m_arrLoopAnim[IDLE];
 
 	CCollisionCom* pColl = Add_Component<CCollisionCom>(L"Proto_CollisionCom", L"Proto_CollisionCom", ID_DYNAMIC);
@@ -66,8 +74,20 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 
 	//collision check
 	if (pTerrain->IsCollision(vPos.x, vPos.z))
+	{
 		IM_LOG("COLLISION!!");
-
+		//
+		// static _matrix matWorld;
+		// static CCircle* desk = CEffectFactory::Create<CCircle>("Circle", L"Effect", matWorld);
+		// //desk->reset();
+		//
+		// if (desk->IsEmpty())
+		// {
+		// 	desk->Add_Particle();
+		// }
+		// else
+		// 	desk->reset();
+	}
 	return 0;
 }
 
@@ -120,6 +140,9 @@ void CPlayer::SetTarget(CSkeletalCube* pTarget)
 
 void CPlayer::Attack()
 {
+	static _matrix matWorld;
+	static CCircle* tmp = CEffectFactory::Create<CCircle>("Circle", L"Effect", matWorld);
+
 	if (m_iAttackCnt == 0)
 	{
 		PlayAnimationOnce(&m_arrOnceAnim[ATTACK1]);
@@ -133,6 +156,28 @@ void CPlayer::Attack()
 		PlayAnimationOnce(&m_arrOnceAnim[ATTACK3]);
 	}
 	m_iAttackCnt = (m_iAttackCnt + 1) % 3;
+
+	// if(tmp->IsEmpty())
+	// {
+	// 	for (int i = 0; i < 10; ++i)
+	// 	{
+	tmp->Add_Particle(_vec3(3.0f,3.0f,3.0f),0.3f,RED, 3,0.3f);
+
+	// 	}
+	// }
+
+	//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 1.f, 0.f ,1.f });
+
+	// if (tmp->IsEmpty())
+	// {
+	// 	tmp->Add_Particle();
+	// }
+	// else
+	// 	tmp->reset();
+
+
+	
+
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)

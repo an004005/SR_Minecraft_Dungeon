@@ -56,10 +56,6 @@ namespace Engine
 	const _ulong		FVF_CUBE2 = D3DFVF_XYZ | D3DFVF_TEX1;
 
 
-
-
-
-
 	//MapImGuiTool
 	typedef struct maptool
 	{
@@ -72,7 +68,31 @@ namespace Engine
 
 	}MapTool;
 
+#pragma region Particle Struct
+	
 
+	
+
+	struct Attribute
+	{
+		Attribute()
+		{
+			_fLifeTime = 0.0f;
+			_fAge = 0.0f;
+			_bIsAlive = true;
+		}
+
+		_vec3		_vPosition;	//	월드 스페이스 내의 파티클 위치 
+		_vec3		_vVelocity;  //  파티클의 속도, 보통은 초당 이동단위로 기록  
+		_vec3		_vAcceleration;  // 파티클의 가속, 보통은 초당 이동단위로 기록
+		_float		_fLifeTime;     // 파티클이 소멸할 때 까지 유지되는 시간
+		_float      _fAge;          // 파티클의 현재 나이
+		D3DXCOLOR   _color;        // 파티클의 색상
+		D3DXCOLOR   _colorFade;    // 파티클의 컬러가 시간의 흐름에 따라 퇴색하는 방법
+		_bool       _bIsAlive;	   // 파티클이 생존한 경우 True, 소멸한 경우 False
+		_float		_fSize;
+	};
+#pragma endregion
 }
 
 

@@ -5,6 +5,8 @@
 #include "Terrain.h"
 #include "Player.h"
 #include "AbstFactory.h"
+#include "DynamicCamera.h"
+#include "Particle.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
@@ -67,7 +69,6 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	pGameObject = CStaticCamera::Create(m_pGraphicDev, &_vec3(0.f, 10.f, -10.f), &_vec3(0.f, 0.f, 0.f), &_vec3(0.f, 1.f, 0.f));
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_GAMEOBJ]->Add_GameObject(L"StaticCamera", pGameObject), E_FAIL);
-
 
 	_matrix matWorld;
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {1.f, 0.f ,1.f});

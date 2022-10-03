@@ -2,7 +2,7 @@
 #include "AbstFactory.h"
 #include "Player.h"
 #include "Terrain.h"
-
+#include "Particle.h"
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
 map<string, std::function<CGameObject*()>> CPlayerFactory::s_mapPlayerSpawner;
@@ -49,6 +49,10 @@ void CEnemyFactory::Ready_EnemyFactory()
 
 void CEffectFactory::Ready_EffectFactory()
 {
+	s_mapEffectSpawner.insert({ "Circle", []()
+	{
+		return CCircle::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/Corona.tga");
+	} });
 }
 
 void CEnvFactory::Ready_EnvFactory()
