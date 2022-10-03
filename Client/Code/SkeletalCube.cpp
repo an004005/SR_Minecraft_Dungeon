@@ -186,6 +186,7 @@ void CSkeletalCube::AnimFrameConsume(_float fTimeDelta)
 	if (m_bStopAnim)  // for imgui
 		return;
 #endif
+	fTimeDelta *= m_fAnimSpeed;
 
 	if (m_pCurAnim == nullptr) return;
 
@@ -204,7 +205,6 @@ void CSkeletalCube::AnimFrameConsume(_float fTimeDelta)
 		m_fAccTime = 0.f;
 		if (m_pCurAnim->bLoop == false) // loop 가 아니면 다 실행하고 loop로 변경
 		{
-			// m_pCurAnim = m_pAnimInst->GetCurrentLoopAnim();
 			m_pCurAnim = m_pIdleAnim;
 			m_pCurAnim->bLoop = true;
 			return;
@@ -256,18 +256,20 @@ void CSkeletalCube::AnimFrameConsume(_float fTimeDelta)
 	}
 }
 
-void CSkeletalCube::PlayAnimationOnce(const string& strAnim)
-{
-	// m_fAccTime = 0.f;
-	// m_pCurAnim->bLoop = false;
-	// std::sort(m_pCurAnim..begin(), vecFrame.end());
-}
-
 void CSkeletalCube::PlayAnimationOnce(CubeAnimFrame* frame)
 {
 	m_fAccTime = 0.f;
 	m_pCurAnim = frame;
 	m_pCurAnim->bLoop = false;
+}
+
+void CSkeletalCube::StopCurAnimation()
+{
+	if (m_pCurAnim)
+	{
+		m_fAccTime = 0.f;
+		m_pCurAnim = m_pIdleAnim;
+	}
 }
 
 void CSkeletalCube::LoadSkeletal(wstring wstrPath)
