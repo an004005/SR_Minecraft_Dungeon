@@ -32,6 +32,8 @@ private:
 
 	// normal mode
 	_float m_fDistance;
+	_float m_fSmoothSpeed;
+
 	// normal mode
 
 public:

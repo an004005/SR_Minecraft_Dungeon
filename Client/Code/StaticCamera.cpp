@@ -16,14 +16,13 @@ CStaticCamera::~CStaticCamera()
 HRESULT CStaticCamera::Ready_Object()
 {
 	m_fDistance = 16.f;
+	m_fSmoothSpeed = 0.125f;
 	m_pTransform = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
-	D3DXMatrixLookAtLH(&m_matView, &_vec3(0.f, 10.f, -10.f), &_vec3{0.f, 0.f, 0.f}, &_vec3{0.f, 1.f, 0.f});
-	m_pGraphicDev->SetTransform(D3DTS_VIEW, &m_matView);
 
 	SetMatProj();
 
-	// m_pTransform->Rotation(ROT_Y, D3DXToRadian(45.f));
-	// m_pTransform->Rotation(ROT_X, D3DXToRadian(45.f));
+	m_pTransform->Rotation(ROT_Y, D3DXToRadian(50.f));
+	m_pTransform->Rotation(ROT_X, D3DXToRadian(55.f));
 
 	return S_OK;
 }
@@ -40,11 +39,6 @@ Engine::_int CStaticCamera::Update_Object(const _float& fTimeDelta)
 	// pSkyBoxTransform->m_vInfo[INFO_POS] = m_vEye;
 
 	
-	// m_pTransform->m_vAngle.y += D3DXToRadian(Get_DIMouseMove(DIMS_X) / 10.f);
-	// m_pTransform->m_vAngle.x += D3DXToRadian(Get_DIMouseMove(DIMS_Y) / 10.f);
-
-	m_pTransform->m_vInfo[INFO_POS] = {0.f, 10.f, -10.f};
-
 	D3DXMatrixInverse(&m_matView, nullptr, &m_pTransform->m_matWorld);
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &m_matView);
 
@@ -69,13 +63,7 @@ void CStaticCamera::SetTarget(CGameObject* pTarget)
 	m_pTargetTrans->AddRef();
 
 
-	// m_pTransform->m_vInfo[INFO_POS] = m_pTargetTrans->m_vInfo[INFO_POS] + m_pTransform->m_vInfo[INFO_LOOK] * -m_fDistance;
-	m_pTransform->m_vInfo[INFO_POS] = {-5.f, 10.f, -5.f};
-
-
-	// m_vAt = m_pTargetTrans->m_vInfo[INFO_POS];
-	// m_vEye = m_vAt + (m_vCamAway * m_fDistance);
-	// m_vPreTargetPos = m_pTargetTrans->m_vInfo[INFO_POS];
+	m_pTransform->m_vInfo[INFO_POS] = m_pTargetTrans->m_vInfo[INFO_POS] + (m_pTransform->m_vInfo[INFO_LOOK] * -m_fDistance);
 }
 
 void CStaticCamera::LerpDistanceTo(_float fDistance)
@@ -105,23 +93,9 @@ void CStaticCamera::Update_DefaultFollow(const _float& fTimeDelta)
 {
 	if (m_pTargetTrans == nullptr) return;
 
-	// const _vec3& vCurTargetPos = m_pTargetTrans->m_vInfo[INFO_POS];
-	// const _vec3 vCurEyeDest = vCurTargetPos + (m_vCamAway * m_fDistance);
-	//
-	// if (CGameUtilMgr::Vec3Cmp(m_pTargetTrans->m_vInfo[INFO_POS], m_vPreTargetPos)) // 정지 하면
-	// {
-	// 	m_fTimeAcc += fTimeDelta;
-	// 	if (m_fTimeAcc > 1.f)
-	// 		m_fTimeAcc = 1.f;
-	// }
-	// else // 이동하면
-	// {
-	// 	m_fTimeAcc = 0.f;
-	// 	m_fTimeAcc += fTimeDelta;
-	// }
-	//
-	// D3DXVec3Lerp(&m_vEye, &m_vEye, &vCurEyeDest, m_fTimeAcc);
-	// m_vAt = m_vEye + (m_fDistance * m_vCamAway);
-	//
-	// m_vPreTargetPos = m_pTargetTrans->m_vInfo[INFO_POS];
+	_vec3 vDesiredPos = m_pTargetTrans->m_vInfo[INFO_POS] + (m_pTransform->m_vInfo[INFO_LOOK] * -m_fDistance);
+	_vec3 vSmoothPos;
+	D3DXVec3Lerp(&vSmoothPos, &m_pTransform->m_vInfo[INFO_POS], &vDesiredPos, m_fSmoothSpeed);
+
+	m_pTransform->m_vInfo[INFO_POS] = vSmoothPos;
 }
