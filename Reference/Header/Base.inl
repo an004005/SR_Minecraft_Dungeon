@@ -13,6 +13,12 @@ unsigned long		CBase::AddRef(void)
 	return ++m_dwRefCnt;
 }
 
+unsigned long		CBase::GetRef() const
+{
+	return m_dwRefCnt;
+}
+
+
 unsigned long		CBase::Release(void)
 {
 	if (0 == m_dwRefCnt)
