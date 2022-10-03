@@ -567,7 +567,11 @@ void CImGuiMgr::MapControl(Engine::MapTool& tMaptool, _float& _far, CTerrainCube
 		{
 
 			ImGui::Text("Set Block Texture");
-			ImGui::InputInt("input Index", &tMaptool.iTexIdx);
+			ImGui::InputInt("Cube Index", &tMaptool.iTexIdx);
+			ImGui::NewLine();
+
+			ImGui::Text("Set Plant Texture");
+			ImGui::InputInt("Plant Texture", &tMaptool.iPlantIdx);
 			ImGui::NewLine();
 
 			ImGui::Text("Set Height");
@@ -583,6 +587,7 @@ void CImGuiMgr::MapControl(Engine::MapTool& tMaptool, _float& _far, CTerrainCube
 		
 			ImGui::Text("Select Options");
 			ImGui::RadioButton("Cube", &tMaptool.iPickingOption, PICK_CUBE); ImGui::SameLine();
+			ImGui::RadioButton("Plant", &tMaptool.iPickingOption, PICK_PLANT); ImGui::SameLine();
 			ImGui::RadioButton("Delete", &tMaptool.iPickingOption, PICK_DELETE); ImGui::SameLine();
 
 			ImGui::NewLine();

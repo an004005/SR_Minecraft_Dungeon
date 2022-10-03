@@ -1,6 +1,5 @@
 #pragma once
 class CDynamicCamera;
-class CMapCube;
 class CTerrainCubeMap;
 
 class CMapTool : public Engine::CScene
@@ -18,12 +17,10 @@ public:
 private:
 	HRESULT			Ready_Layer_Environment();
 	HRESULT			Ready_Proto(void);
-	void			Create_Cube(_matrix& CubeWorld, MapTool& tMapTool);
 	void			Cube_DebugShow(void);
 
 
 public:
-	void			LoadMap(wstring wstrFileName);
 	_bool			PickingOnCube(_vec3& CubeCenter, int& iToDelIdx);
 
 public:
@@ -35,7 +32,6 @@ private:
 	MapTool			m_tMapTool;
 
 	CTerrainCubeMap* m_pCubeMap = nullptr;
-
 	//_float			m_fHeight[VTXCNTX][VTXCNTZ];
 
 	CDynamicCamera* m_pDCamera = nullptr;

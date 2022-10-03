@@ -70,4 +70,5 @@ inline void			Release_Utility(void)
 	CRenderer::GetInstance()->DestroyInstance();
 	CProtoMgr::GetInstance()->DestroyInstance();
 	CManagement::GetInstance()->DestroyInstance();
+	CCollider::GetInstance()->DestroyInstance();
 }
