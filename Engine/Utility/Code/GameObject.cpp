@@ -42,6 +42,23 @@ void CGameObject::Render_Object(void)
 {
 }
 
+void CGameObject::Delete_Component(const wstring& pComponentTag, COMPONENTID eID)
+{
+	auto	iter = m_mapComponent[eID].find(pComponentTag);
+
+	if (iter == m_mapComponent[eID].end())
+		return;
+
+	_ulong dwCnt = 0;
+
+	dwCnt = iter->second->Release();
+
+	if (dwCnt == 0)
+		iter->second = nullptr;
+
+	m_mapComponent[eID].erase(iter);
+}
+
 CComponent * CGameObject::Find_Component(const wstring& pComponentTag, COMPONENTID eID)
 {
 	auto	iter = m_mapComponent[eID].find(pComponentTag);

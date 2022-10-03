@@ -14,47 +14,20 @@ CTerrainCubeTex::~CTerrainCubeTex()
 {
 }
 
-HRESULT CTerrainCubeTex::Ready_Buffer(const wstring& wstrPath, _int iTex)
+HRESULT CTerrainCubeTex::Ready_Buffer(const vector<_matrix>& _vecmatworld)
 {
-	m_iTexIdx = iTex;
-	HANDLE hFile = CreateFile(wstrPath.c_str(), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
-
-	if (INVALID_HANDLE_VALUE == hFile)
-	{
-		MSG_BOX("Failed Load Map");
+	m_iCubeCnt = _vecmatworld.size();
+	if (m_iCubeCnt == 0)
 		return E_FAIL;
-	}
-	vector<_matrix> vecWorld;
 
-	DWORD	dwByte = 0;
-
-	size_t vecSize;
-	_matrix matCubeWorld;
-	MapTool tMapTool;
-
-	ReadFile(hFile, &vecSize, sizeof(size_t), &dwByte, nullptr);
-
-	while (vecSize--)
-	{
-		ReadFile(hFile, &matCubeWorld, sizeof(_matrix), &dwByte, nullptr);
-		ReadFile(hFile, &tMapTool, sizeof(MapTool), &dwByte, nullptr);
-
-		if (tMapTool.iTexIdx != iTex)
-			continue;
-		vecWorld.push_back(matCubeWorld);
-	}
-
-	CloseHandle(hFile);
-
-	m_dwVtxCnt = vecWorld.size() * 8;
-	m_dwTriCnt = vecWorld.size() * 12;
+	m_dwVtxCnt = _vecmatworld.size() * 8;
+	m_dwTriCnt = _vecmatworld.size() * 12;
 	m_dwVtxSize = sizeof(VTXCUBE);
 	m_dwFVF = FVF_CUBE;
 
 	m_dwIdxSize = sizeof(INDEX32);
 	m_IdxFmt = D3DFMT_INDEX32;
 	FAILED_CHECK_RETURN(CVIBuffer::Ready_Buffer(), E_FAIL);
-
 
 	VTXCUBE VtxTmp[8]{};
 	INDEX32 IdxTmp[12]{};
@@ -63,7 +36,7 @@ HRESULT CTerrainCubeTex::Ready_Buffer(const wstring& wstrPath, _int iTex)
 	vector<INDEX32> vecIdxTmps;
 
 
-	for (size_t i = 0; i < vecWorld.size(); ++i)
+	for (size_t i = 0; i < _vecmatworld.size(); ++i)
 	{
 		// vtx buffer init
 		VtxTmp[0].vPos = { -0.5f, 0.5f, -0.5f };
@@ -94,7 +67,7 @@ HRESULT CTerrainCubeTex::Ready_Buffer(const wstring& wstrPath, _int iTex)
 
 		for (int j = 0; j < 8; ++j)
 		{
-			D3DXVec3TransformCoord(&VtxTmp[j].vPos, &VtxTmp[j].vPos, &vecWorld[i]);
+			D3DXVec3TransformCoord(&VtxTmp[j].vPos, &VtxTmp[j].vPos, &_vecmatworld[i]);
 			vecVtxTmps.push_back(VtxTmp[j]);
 		}
 
@@ -154,7 +127,7 @@ HRESULT CTerrainCubeTex::Ready_Buffer(const wstring& wstrPath, _int iTex)
 			IdxTmp[11]._2 = 3;
 		}
 
-		int iVtxCnt = 8 * i;
+		size_t iVtxCnt = 8 * i;
 		for (int j = 0; j < 12; ++j)
 		{
 			IdxTmp[j]._0 += iVtxCnt;
@@ -180,20 +153,34 @@ HRESULT CTerrainCubeTex::Ready_Buffer(const wstring& wstrPath, _int iTex)
 	return S_OK;
 }
 
-CComponent * CTerrainCubeTex::Clone(void)
+void CTerrainCubeTex::ReCreateBuffer(const vector<_matrix>& _vecmatworld)
 {
-	return new CTerrainCubeTex(*this);
+	Safe_Release(m_pIB);
+	Safe_Release(m_pVB);
+
+	Ready_Buffer(_vecmatworld);
 }
 
-CTerrainCubeTex * CTerrainCubeTex::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring & wstrPath, _int iTex)
+CComponent * CTerrainCubeTex::Clone(void) // dont use
+{
+	NULL_CHECK_RETURN(nullptr, nullptr);
+	return nullptr;
+}
+
+CTerrainCubeTex * CTerrainCubeTex::Create(LPDIRECT3DDEVICE9 pGraphicDev, const vector<_matrix>& _vecmatworld)
 {
 	CTerrainCubeTex* pInstance = new CTerrainCubeTex(pGraphicDev);
 
-	if (FAILED(pInstance->Ready_Buffer(wstrPath, iTex)))
+	if (FAILED(pInstance->Ready_Buffer(_vecmatworld)))
 	{
 		Safe_Release(pInstance);
 		return nullptr;
 	}
 
 	return pInstance;
+}
+
+void CTerrainCubeTex::Free(void)
+{
+	CVIBuffer::Free();
 }
