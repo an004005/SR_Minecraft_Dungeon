@@ -22,6 +22,8 @@ public:
 	virtual void LateUpdate_Object(void) override;
 	void	Set_Far(_float _far) {  m_fFar = _far;}
 
+	_vec3 GetEys() const { return m_vEye; }
+
 	BOOL	Make();
 
 	BOOL	IsIn(_vec3* pv);

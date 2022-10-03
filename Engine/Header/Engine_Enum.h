@@ -26,8 +26,8 @@ namespace Engine
 	//Maptool enums
 	enum CubeFace {	FACE_LOOK,	FACE_BACK,	FACE_LEFT,	FACE_RIGHT,	FACE_UP, FACE_DOWN,	FACE_END};
 
-	enum PICKOPTION { PICK_TERRAIN, PICK_CUBE, PICK_DELETE, PICK_END};
-	enum CUBETYPE { TYPE_LAND = 104, TYPE_COLLISION, TYPE_DECO, TYPE_END };
+	enum PICKOPTION {  PICK_CUBE, PICK_DELETE, PICK_END};
+	enum CUBETYPE { TYPE_LAND, TYPE_COLLISION, TYPE_DECO, TYPE_END };
 	/////////////////////////////////////////////////////////////////
 
 	enum LAYERID
