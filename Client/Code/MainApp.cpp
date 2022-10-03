@@ -31,6 +31,8 @@ HRESULT CMainApp::Ready_MainApp(void)
 	// CClientServiceMgr::GetInstance()->ReadyClientService();
 
 
+
+
 	return S_OK;
 }
 
@@ -170,8 +172,8 @@ void CMainApp::Free(void)
 	Safe_Release(m_pDeviceClass);
 	Safe_Release(m_pManagementClass);
 
+
 	Engine::Release_Utility();
 	Engine::Release_System();
-
 	// CClientServiceMgr::GetInstance()->DestroyInstance();
 }

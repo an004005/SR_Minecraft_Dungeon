@@ -20,16 +20,16 @@ class ENGINE_DLL CCollider : public CBase
 private:
 	explicit CCollider();
 	virtual ~CCollider();
+	void Ready_Collider();
 
 public:
-	void Ready_Collider();
 	void Add_CollisionCom(CCollisionCom* pCollision);
 	void Add_StaticCollision(const _vec3& vCenter, _float fRadius);
 	// run at only late update
 	void GetOverlappedObject(OUT list<CGameObject*>& objList, const _vec3& vPos, _float fRadius);
 	void Check_Blocking();
 	void Clear_Dynamic();
-	void Clear_All();
+	void Clear_ColliderAll();
 
 	virtual void Free() override;
 

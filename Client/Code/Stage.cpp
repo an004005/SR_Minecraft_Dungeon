@@ -48,6 +48,8 @@ HRESULT CStage::Ready_Layer_Environment()
 {
 	CGameObject*		pGameObject = nullptr;
 
+	CEnvFactory::Create<CStaticCamera>("StaticCamera", L"StaticCamera");
+
 	// Terrain
 	CEnvFactory::Create<CTerrain>("DefaultTerrain", L"Terrain");
 
@@ -56,23 +58,15 @@ HRESULT CStage::Ready_Layer_Environment()
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", pGameObject), E_FAIL);
 	
-
+		
 	return S_OK;
 }
 
 HRESULT CStage::Ready_Layer_GameLogic()
 {
-	CGameObject*		pGameObject = nullptr;
-
-	pGameObject = CStaticCamera::Create(m_pGraphicDev, &_vec3(0.f, 10.f, -10.f), &_vec3(0.f, 0.f, 0.f), &_vec3(0.f, 1.f, 0.f));
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(m_arrLayer[LAYER_GAMEOBJ]->Add_GameObject(L"StaticCamera", pGameObject), E_FAIL);
-
-
 	_matrix matWorld;
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {1.f, 0.f ,1.f});
 	CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld);
-
 
 	return S_OK;
 }

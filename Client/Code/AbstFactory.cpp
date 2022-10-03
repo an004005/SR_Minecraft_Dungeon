@@ -2,6 +2,7 @@
 #include "AbstFactory.h"
 #include "Player.h"
 #include "Terrain.h"
+#include "StaticCamera.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -56,6 +57,10 @@ void CEnvFactory::Ready_EnvFactory()
 	s_mapEnvSpawner.insert({"DefaultTerrain", []()
 	{
 		return CTerrain::Create(s_pGraphicDev);
+	}});
+	s_mapEnvSpawner.insert({"StaticCamera", []()
+	{
+		return CStaticCamera::Create(s_pGraphicDev);
 	}});
 }
 
