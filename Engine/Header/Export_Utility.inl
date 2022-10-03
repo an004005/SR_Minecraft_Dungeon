@@ -65,9 +65,28 @@ void		Clear_RenderGroup(void)
 }
 
 
+void Add_CollisionCom(CCollisionCom* pCollision)
+{
+	CCollider::GetInstance()->Add_CollisionCom(pCollision);
+}
+void Add_StaticCollision(const _vec3& vCenter, _float fRadius)
+{
+	CCollider::GetInstance()->Add_StaticCollision(vCenter, fRadius);
+}
+void GetOverlappedObject(OUT list<CGameObject*>& objList, const _vec3& vPos, _float fRadius)
+{
+	CCollider::GetInstance()->GetOverlappedObject(objList, vPos, fRadius);
+}
+void Clear_ColliderAll()
+{
+	CCollider::GetInstance()->Clear_ColliderAll();
+}
+
+
 inline void			Release_Utility(void)
 {
 	CRenderer::GetInstance()->DestroyInstance();
 	CProtoMgr::GetInstance()->DestroyInstance();
 	CManagement::GetInstance()->DestroyInstance();
+	CCollider::GetInstance()->DestroyInstance();
 }

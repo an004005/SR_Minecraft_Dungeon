@@ -63,7 +63,6 @@ public:
 
 private:
 	static map<string, std::function<CGameObject*()>> s_mapEnemySpawner;
-	
 };
 
 class CEffectFactory : CAbstFactory

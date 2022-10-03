@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "..\Header\StaticCamera.h"
-
-#include "Export_Function.h"
+#include "Player.h"
 
 CStaticCamera::CStaticCamera(LPDIRECT3DDEVICE9 pGraphicDev)
-	: CCamera(pGraphicDev)
+	: CGameObject(pGraphicDev)
 {
+	D3DXMatrixIdentity(&m_matProj);
 }
 
 
@@ -13,60 +13,75 @@ CStaticCamera::~CStaticCamera()
 {
 }
 
-HRESULT CStaticCamera::Ready_Object(const _vec3* pEye, 
-	const _vec3* pAt, 
-	const _vec3* pUp,
-	const _float& fFov,
-	const _float& fAspect ,
-	const _float& fNear,
-	const _float& fFar)
+HRESULT CStaticCamera::Ready_Object()
 {
-	m_vEye = *pEye;
-	m_vAt = *pAt;
-	m_vUp = *pUp;
+	m_fDistance = 16.f;
+	m_fSmoothSpeed = 0.125f;
+	m_pTransform = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 
-	m_fFov = fFov;
-	m_fAspect = fAspect;
-	m_fNear = fNear;
-	m_fFar = fFar;
+	SetMatProj();
 
-	FAILED_CHECK_RETURN(CCamera::Ready_Object(), E_FAIL);
+	m_pTransform->Rotation(ROT_Y, D3DXToRadian(50.f));
+	m_pTransform->Rotation(ROT_X, D3DXToRadian(55.f));
 
 	return S_OK;
 }
 
 Engine::_int CStaticCamera::Update_Object(const _float& fTimeDelta)
 {
-	Key_Input(fTimeDelta);
+	CGameObject::Update_Object(fTimeDelta);
 
-	Target_Renewal();
-
-	_int iExit = CCamera::Update_Object(fTimeDelta);
+	Update_DefaultFollow(fTimeDelta);
 
 	// CTransform*	pSkyBoxTransform = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_Environment", L"SkyBox", L"Proto_TransformCom", ID_DYNAMIC));
 	// NULL_CHECK_RETURN(pSkyBoxTransform, -1);
 
 	// pSkyBoxTransform->m_vInfo[INFO_POS] = m_vEye;
 
-	return iExit;
+	
+	D3DXMatrixInverse(&m_matView, nullptr, &m_pTransform->m_matWorld);
+	m_pGraphicDev->SetTransform(D3DTS_VIEW, &m_matView);
+
+		return OBJ_NOEVENT;
 }
 
-void CStaticCamera::LateUpdate_Object(void)
+void CStaticCamera::SetMatProj(const _float& fFov, const _float& fAspect, const _float& fNear, const _float& fFar)
 {
+	D3DXMatrixPerspectiveFovLH(&m_matProj, fFov, fAspect, fNear, fFar);
+	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &m_matProj);
+}
 
-	CCamera::LateUpdate_Object();
+
+void CStaticCamera::SetTarget(CGameObject* pTarget)
+{
+	Safe_Release(m_pTarget);
+	Safe_Release(m_pTargetTrans);
+
+	m_pTarget = pTarget;
+	m_pTarget->AddRef();
+	m_pTargetTrans = m_pTarget->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC);
+	m_pTargetTrans->AddRef();
+
+
+	m_pTransform->m_vInfo[INFO_POS] = m_pTargetTrans->m_vInfo[INFO_POS] + (m_pTransform->m_vInfo[INFO_LOOK] * -m_fDistance);
+}
+
+void CStaticCamera::LerpDistanceTo(_float fDistance)
+{
 }
 
 void CStaticCamera::Free(void)
 {
-	CCamera::Free();
+	Safe_Release(m_pTarget);
+	Safe_Release(m_pTargetTrans);
+	CGameObject::Free();
 }
 
-CStaticCamera* CStaticCamera::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _vec3* pEye, const _vec3* pAt, const _vec3* pUp, const _float& fFov /*= D3DXToRadian(60.f)*/, const _float& fAspect /*= (float)WINCX / WINCY*/, const _float& fNear /*= 0.1f*/, const _float& fFar /*= 1000.f*/)
+CStaticCamera* CStaticCamera::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	CStaticCamera*		pInstance = new CStaticCamera(pGraphicDev);
 
-	if (FAILED(pInstance->Ready_Object(pEye, pAt, pUp, fFov, fAspect, fNear, fFar)))
+	if (FAILED(pInstance->Ready_Object()))
 	{
 		Safe_Release(pInstance);
 		return nullptr;
@@ -74,41 +89,13 @@ CStaticCamera* CStaticCamera::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _vec3*
 	return pInstance;
 }
 
-void CStaticCamera::Key_Input(const _float& fTimeDelta)
+void CStaticCamera::Update_DefaultFollow(const _float& fTimeDelta)
 {
-	if (Get_DIKeyState(DIK_W) & 0x80)
-		m_fDistance -= fTimeDelta * m_fSpeed;
-	
-	if(Get_DIKeyState(DIK_S) & 0x80)
-		m_fDistance += fTimeDelta * m_fSpeed;
-	
-	if (Get_DIKeyState(DIK_D) & 0x80)
-		m_fAngle -= D3DXToRadian(180.f) * fTimeDelta;
-	
-	if (Get_DIKeyState(DIK_A) & 0x80)
-		m_fAngle += D3DXToRadian(180.f) * fTimeDelta;
+	if (m_pTargetTrans == nullptr) return;
 
-	
-}
+	_vec3 vDesiredPos = m_pTargetTrans->m_vInfo[INFO_POS] + (m_pTransform->m_vInfo[INFO_LOOK] * -m_fDistance);
+	_vec3 vSmoothPos;
+	D3DXVec3Lerp(&vSmoothPos, &m_pTransform->m_vInfo[INFO_POS], &vDesiredPos, m_fSmoothSpeed);
 
-void CStaticCamera::Target_Renewal(void)
-{
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
-
-
-	m_vEye = _vec3{0.f, 1.f, -1.f};
-	D3DXVec3Normalize(&m_vEye, &m_vEye);
-
-	m_vEye.y = 1.f;
-	m_vEye *= m_fDistance;	// ¹æÇâ º¤ÅÍ
-
-	_vec3		vRight;
-	memcpy(&vRight, &pPlayerTransform->m_matWorld.m[0][0], sizeof(_vec3));
-
-	_matrix		matRot;
-	D3DXMatrixRotationAxis(&matRot, &vRight, m_fAngle);
-	D3DXVec3TransformNormal(&m_vEye, &m_vEye, &matRot);
-
-	m_vEye += pPlayerTransform->m_vInfo[INFO_POS];
-	m_vAt = pPlayerTransform->m_vInfo[INFO_POS];
+	m_pTransform->m_vInfo[INFO_POS] = vSmoothPos;
 }

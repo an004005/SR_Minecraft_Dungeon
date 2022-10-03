@@ -10,7 +10,6 @@
 #include "TerrainCubeTex.h"
 #include "CollisionCom.h"
 
-#include "Collider.h"
 
 #include "Transform.h"
 #include "Calculator.h"
@@ -21,6 +20,7 @@
 #include "Management.h"
 #include "Renderer.h"
 #include "GameUtilMgr.h"
+#include "Collider.h"
 
 
 BEGIN(Engine)
@@ -71,6 +71,13 @@ BEGIN(Engine)
 	inline void Add_RenderGroup(RENDERID eID, CGameObject* pGameObject);
 	inline void Render_GameObject(LPDIRECT3DDEVICE9& pGraphicDev);
 	inline void Clear_RenderGroup(void);
+
+	// collider
+	inline void Add_CollisionCom(CCollisionCom* pCollision);
+	inline void Add_StaticCollision(const _vec3& vCenter, _float fRadius);
+	// run at only late update
+	inline void GetOverlappedObject(OUT list<CGameObject*>& objList, const _vec3& vPos, _float fRadius);
+	inline void Clear_ColliderAll();
 
 
 	inline void Release_Utility(void);
