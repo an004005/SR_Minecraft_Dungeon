@@ -128,7 +128,16 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 		}		
 		else
 			iter->second->ReCreateBuffer(vecmatWorld);
-	}	
+	}
+
+	for (auto& coll : m_vecCollision)
+	{
+		_vec3 vCenter;
+		vCenter.x = coll.matWorld._41;
+		vCenter.y = coll.matWorld._42;
+		vCenter.z = coll.matWorld._43;
+		CCollider::GetInstance()->Add_StaticCollision(vCenter, 1.f);
+	}
 }
 
 void CTerrainCubeMap::SaveMap(const wstring & wstrPath)
