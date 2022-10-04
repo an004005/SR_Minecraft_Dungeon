@@ -100,7 +100,10 @@ CLayer* CLayer::Create(void)
 	CLayer*	pLayer = new CLayer;
 
 	if (FAILED(pLayer->Ready_Layer()))
+	{
 		Safe_Release(pLayer);
+		return nullptr;
+	}
 
 	return pLayer;
 }

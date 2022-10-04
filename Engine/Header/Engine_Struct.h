@@ -64,6 +64,7 @@ namespace Engine
 	typedef struct maptool
 	{
 		_int	iTexIdx;
+		_int	iPlantIdx;
 		_int	iCubeCount;
 		_int	iPickingOption;
 		_float	fHeight;

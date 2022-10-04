@@ -2,6 +2,7 @@
 #include "..\Header\TerrainCubeMap.h"
 #include <set>
 
+
 CTerrainCubeMap::CTerrainCubeMap(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CGameObject(pGraphicDev)
 {
@@ -15,7 +16,8 @@ CTerrainCubeMap::~CTerrainCubeMap()
 
 HRESULT CTerrainCubeMap::Ready_Object(const wstring& wstrPath)
 {
-	m_pTextureCom = Add_Component<CTexture>(L"Proto_MinecraftCubeTexture", L"Proto_MinecraftCubeTexture", ID_STATIC);
+	m_pCubeTextureCom = Add_Component<CTexture>(L"Proto_MinecraftCubeTexture", L"Proto_MinecraftCubeTexture", ID_STATIC);
+	m_pTextureCom = Add_Component<CTexture>(L"Proto_PlantTexture", L"Proto_PlantTexture", ID_STATIC);
 
 	if (!wstrPath.empty())
 	{
@@ -44,14 +46,33 @@ void CTerrainCubeMap::Render_Object(void)
 	D3DXMatrixIdentity(&matWorld);
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &matWorld);
 
-	for (auto& cubeTex : m_mapTerrainCom)
+	for (auto& cubeTex : m_mapTerrainCubeCom)
 	{
 		if (cubeTex.second->GetCubeCnt() > 0)
 		{
-			m_pTextureCom->Set_Texture(cubeTex.first);
+			m_pCubeTextureCom->Set_Texture(cubeTex.first);
 			cubeTex.second->Render_Buffer();
 		}
 
+	}
+
+	for (auto& cubeTex : m_mapTerrainRcCom)
+	{
+		if (cubeTex.second->GetTexCnt() > 0)
+		{		
+			m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+			m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+			m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+			m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+			m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0xcc);
+			m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+
+			m_pTextureCom->Set_Texture(cubeTex.first);
+			cubeTex.second->Render_Buffer();
+
+			m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+			m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+		}
 	}
 }
 
@@ -60,9 +81,8 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 	m_vecTotalCube.clear();
 	m_vecLand.clear();
 	m_vecCollision.clear();
+	m_vecTotalTex.clear();
 
-	//for_each(m_mapTerrainCom.begin(), m_mapTerrainCom.end(), CDeleteMap());
-	//m_mapTerrainCom.clear();
 
 	HANDLE hFile = CreateFile(wstrPath.c_str(), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
@@ -73,12 +93,14 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 	}
 	DWORD	dwByte = 0;
 
-	size_t vecSize;
+	size_t vecCubeSize;
+	size_t vecTexSize;
 	MapCubeInfo tMapCubeInfo;
 
-	ReadFile(hFile, &vecSize, sizeof(size_t), &dwByte, nullptr);
+	ReadFile(hFile, &vecCubeSize, sizeof(size_t), &dwByte, nullptr);
+	ReadFile(hFile, &vecTexSize, sizeof(size_t), &dwByte, nullptr);
 
-	while (vecSize--)
+	while (vecCubeSize--)
 	{
 		ReadFile(hFile, &tMapCubeInfo, sizeof(MapCubeInfo), &dwByte, nullptr);
 	
@@ -99,16 +121,22 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 		}
 	}
 
+	while (vecTexSize--)
+	{
+		ReadFile(hFile, &tMapCubeInfo, sizeof(MapCubeInfo), &dwByte, nullptr);
+		m_vecTotalTex.push_back(tMapCubeInfo);
+	}
+
 	ReadFile(hFile, &m_fHeight, sizeof(_float) * VTXCNTX * VTXCNTZ, &dwByte, nullptr);
 
 	CloseHandle(hFile);
 
 
-	set<_int> stexidx;
+	set<_int> Cubeidx;
 	for (auto i : m_vecTotalCube)
-		stexidx.insert(i.iTexIdx);
+		Cubeidx.insert(i.iTexIdx);
 
-	for (auto texidx : stexidx)
+	for (auto texidx : Cubeidx)
 	{
 		vector<_matrix> vecmatWorld;
 
@@ -119,26 +147,50 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 		}
 
 
-		auto iter = m_mapTerrainCom.find(texidx);
-		if (iter == m_mapTerrainCom.end())
+		auto iter = m_mapTerrainCubeCom.find(texidx);
+		if (iter == m_mapTerrainCubeCom.end())
 		{
 			CTerrainCubeTex* pTerrainTex = CTerrainCubeTex::Create(m_pGraphicDev, vecmatWorld);
-			m_mapTerrainCom.insert({ texidx, pTerrainTex });
+			m_mapTerrainCubeCom.insert({ texidx, pTerrainTex });
 			m_mapComponent[ID_STATIC].insert({ to_wstring(texidx), pTerrainTex });
 		}		
 		else
 			iter->second->ReCreateBuffer(vecmatWorld);
+	}	
+
+	set<_int> Texidx;
+	for (auto i : m_vecTotalTex)
+		Texidx.insert(i.iTexIdx);
+
+	for (auto texidx : Texidx)
+	{
+		vector<_matrix> vecmatWorld;
+
+		for (auto i : m_vecTotalTex)
+		{
+			if (texidx == i.iTexIdx)
+				vecmatWorld.push_back(i.matWorld);
+		}
+
+		auto iter = m_mapTerrainRcCom.find(texidx);
+		if (iter == m_mapTerrainRcCom.end())
+		{
+			CTerrainRcTex* pTerrainTex = CTerrainRcTex::Create(m_pGraphicDev, vecmatWorld);
+			m_mapTerrainRcCom.insert({ texidx, pTerrainTex });
+			m_mapComponent[ID_STATIC].insert({ to_wstring(texidx) + L"TEX", pTerrainTex });
+		}
+		else
+			iter->second->ReCreateBuffer(vecmatWorld);
 	}
 
-	for (auto& coll : m_vecCollision)
-	{
 		_vec3 vCenter;
 		vCenter.x = coll.matWorld._41;
 		vCenter.y = coll.matWorld._42;
 		vCenter.z = coll.matWorld._43;
 		Engine::Add_StaticCollision(vCenter, 0.5f);
-	}
 }
+
+
 
 void CTerrainCubeMap::SaveMap(const wstring & wstrPath)
 {
@@ -155,15 +207,17 @@ void CTerrainCubeMap::SaveMap(const wstring & wstrPath)
 	DWORD	dwByte = 0;
 	
 	size_t m_vecTotalCubeSize = m_vecTotalCube.size();
-
+	size_t m_vecTotalTexSize = m_vecTotalTex.size();
 
 	WriteFile(hFile, &m_vecTotalCubeSize, sizeof(size_t), &dwByte, nullptr);
+	WriteFile(hFile, &m_vecTotalTexSize, sizeof(size_t), &dwByte, nullptr);
 
 	for (auto iter : m_vecTotalCube)
-	{
 		WriteFile(hFile, &iter, sizeof(MapCubeInfo), &dwByte, nullptr);
-	}
-	
+
+	for (auto iter : m_vecTotalTex)
+		WriteFile(hFile, &iter, sizeof(MapCubeInfo), &dwByte, nullptr);
+
 	WriteFile(hFile, &m_fHeight, sizeof(_float) * VTXCNTX * VTXCNTZ, &dwByte, nullptr);
 		
 	CloseHandle(hFile);
@@ -221,18 +275,20 @@ void CTerrainCubeMap::AddCube(const MapCubeInfo& tInfo)
 		break;
 	case TYPE_DECO:
 		break;
+	case TYPE_TEX:
+		break;
 	default:
 		_CRASH("Invalid type");
 	}
 
-	auto itr = m_mapTerrainCom.find(tInfo.iTexIdx);
-	if (itr == m_mapTerrainCom.end())
+	auto itr = m_mapTerrainCubeCom.find(tInfo.iTexIdx);
+	if (itr == m_mapTerrainCubeCom.end())
 	{
 		vector<_matrix> vecTmp;
 		vecTmp.push_back(tInfo.matWorld);
 
 		CTerrainCubeTex* pTerrainTex = CTerrainCubeTex::Create(m_pGraphicDev, vecTmp);
-		m_mapTerrainCom.insert({tInfo.iTexIdx, pTerrainTex });
+		m_mapTerrainCubeCom.insert({tInfo.iTexIdx, pTerrainTex });
 		m_mapComponent[ID_STATIC].insert({ to_wstring(tInfo.iTexIdx), pTerrainTex });
 	}
 	else
@@ -254,8 +310,8 @@ void CTerrainCubeMap::DeleteCube(int iToDel)
 	int iTexId = m_vecTotalCube[iToDel].iTexIdx;
 	m_vecTotalCube.erase(m_vecTotalCube.begin() + iToDel);
 
-	auto itr = m_mapTerrainCom.find(iTexId);
-	if (itr == m_mapTerrainCom.end())
+	auto itr = m_mapTerrainCubeCom.find(iTexId);
+	if (itr == m_mapTerrainCubeCom.end())
 	{
 		_CRASH("Invalid");
 	}
@@ -268,6 +324,66 @@ void CTerrainCubeMap::DeleteCube(int iToDel)
 	}
 
 	
+	itr->second->ReCreateBuffer(vecTmp);
+}
+
+void CTerrainCubeMap::AddTex(const MapCubeInfo & tInfo)
+{
+	m_vecTotalTex.push_back(tInfo);
+
+	auto itr = m_mapTerrainRcCom.find(tInfo.iTexIdx);
+	if (itr == m_mapTerrainRcCom.end())
+	{
+		vector<_matrix> vecTmp;
+		vecTmp.push_back(tInfo.matWorld);
+		
+		CTerrainRcTex* pTerrainTex = CTerrainRcTex::Create(m_pGraphicDev, vecTmp);
+		m_mapTerrainRcCom.insert({ tInfo.iTexIdx, pTerrainTex });
+		m_mapComponent[ID_STATIC].insert({ to_wstring(tInfo.iTexIdx) + L"TEX", pTerrainTex });
+	}
+	else
+	{
+		vector<_matrix> vecTmp;
+		for (const auto& info : m_vecTotalTex)
+		{
+			if (info.iTexIdx == tInfo.iTexIdx)
+				vecTmp.push_back(info.matWorld);
+		}
+
+		itr->second->ReCreateBuffer(vecTmp);
+	}
+}
+
+void CTerrainCubeMap::DeleteTex(_vec3 PickPos)
+{
+	_int iCount = 0;
+	_int iTexId = 0;
+	for(size_t i=0; i<m_vecTotalTex.size(); )
+	{	
+		_vec3 vectemp = { m_vecTotalTex[i].matWorld._41, m_vecTotalTex[i].matWorld._42, m_vecTotalTex[i].matWorld._43 };
+		if (vectemp == PickPos)
+		{
+			iTexId = m_vecTotalTex[i].iTexIdx;
+			m_vecTotalTex.erase(m_vecTotalTex.begin() + iCount);
+		}
+		else
+		{
+			i++;
+			iCount++;
+		}
+		
+	}
+
+	auto itr = m_mapTerrainRcCom.find(iTexId);
+
+	vector<_matrix> vecTmp;
+	for (const auto& info : m_vecTotalTex)
+	{
+		if (info.iTexIdx == iTexId)
+			vecTmp.push_back(info.matWorld);
+	}
+
+
 	itr->second->ReCreateBuffer(vecTmp);
 }
 
@@ -292,5 +408,7 @@ void CTerrainCubeMap::Free(void)
 	m_vecTotalCube.clear();
 	m_vecLand.clear();
 	m_vecCollision.clear();
-	m_mapTerrainCom.clear();
+	m_vecTotalTex.clear();
+	m_mapTerrainCubeCom.clear();
+	m_mapTerrainRcCom.clear();
 }
