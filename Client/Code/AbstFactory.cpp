@@ -49,9 +49,9 @@ void CEnemyFactory::Ready_EnemyFactory()
 
 void CEffectFactory::Ready_EffectFactory()
 {
-	s_mapEffectSpawner.insert({ "Circle", []()
+	s_mapEffectSpawner.insert({ "Attack_Basic", []()
 	{
-		return CCircle::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/Corona.tga");
+		return CAttack_P::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/aac1e6-corona.png");
 	} });
 }
 

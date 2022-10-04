@@ -76,17 +76,6 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 	if (pTerrain->IsCollision(vPos.x, vPos.z))
 	{
 		IM_LOG("COLLISION!!");
-		//
-		// static _matrix matWorld;
-		// static CCircle* desk = CEffectFactory::Create<CCircle>("Circle", L"Effect", matWorld);
-		// //desk->reset();
-		//
-		// if (desk->IsEmpty())
-		// {
-		// 	desk->Add_Particle();
-		// }
-		// else
-		// 	desk->reset();
 	}
 	return 0;
 }
@@ -140,8 +129,6 @@ void CPlayer::SetTarget(CSkeletalCube* pTarget)
 
 void CPlayer::Attack()
 {
-	static _matrix matWorld;
-	static CCircle* tmp = CEffectFactory::Create<CCircle>("Circle", L"Effect", matWorld);
 
 	if (m_iAttackCnt == 0)
 	{
@@ -157,26 +144,7 @@ void CPlayer::Attack()
 	}
 	m_iAttackCnt = (m_iAttackCnt + 1) % 3;
 
-	// if(tmp->IsEmpty())
-	// {
-	// 	for (int i = 0; i < 10; ++i)
-	// 	{
-	tmp->Add_Particle(_vec3(3.0f,3.0f,3.0f),0.3f,RED, 3,0.3f);
-
-	// 	}
-	// }
-
-	//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 1.f, 0.f ,1.f });
-
-	// if (tmp->IsEmpty())
-	// {
-	// 	tmp->Add_Particle();
-	// }
-	// else
-	// 	tmp->reset();
-
-
-	
+	Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(_vec3(5.f, 5.f, 5.f), 1.f, RED, 10, 1.0f);
 
 }
 

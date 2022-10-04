@@ -75,6 +75,8 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld);
 
 
+	CEffectFactory::Create<CAttack_P>("Attack_Basic", L"Attack_Basic", matWorld);
+
 	return S_OK;
 }
 
