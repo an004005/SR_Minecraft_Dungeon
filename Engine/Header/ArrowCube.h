@@ -1,6 +1,8 @@
 #pragma once
 #include "VIBuffer.h"
-class CArrowCube : public CVIBuffer
+BEGIN(Engine)
+
+class ENGINE_DLL CArrowCube : public CVIBuffer
 {
 private:
 	explicit CArrowCube(LPDIRECT3DDEVICE9 pGraphicDev);
@@ -12,5 +14,7 @@ public:
 	virtual void Render_Buffer() override;
 	virtual CComponent* Clone() override;
 	virtual void Free() override;
+	static CArrowCube* Create(LPDIRECT3DDEVICE9 pGraphicDev);
 };
 
+END

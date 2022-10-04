@@ -184,6 +184,7 @@
     <ClInclude Include="..\Header\StatComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\Arrow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -291,6 +292,7 @@
     <ClCompile Include="..\Code\StatComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\Arrow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">

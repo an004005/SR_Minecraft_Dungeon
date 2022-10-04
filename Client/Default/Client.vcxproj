@@ -166,6 +166,7 @@
   <ItemGroup>
     <ClInclude Include="..\Header\AbstFactory.h" />
     <ClInclude Include="..\Header\AnimationTool.h" />
+    <ClInclude Include="..\Header\Arrow.h" />
     <ClInclude Include="..\Header\BackGround.h" />
     <ClInclude Include="..\Header\Controller.h" />
     <ClInclude Include="..\Header\DynamicCamera.h" />
@@ -209,6 +210,7 @@
   <ItemGroup>
     <ClCompile Include="..\Code\AbstFactory.cpp" />
     <ClCompile Include="..\Code\AnimationTool.cpp" />
+    <ClCompile Include="..\Code\Arrow.cpp" />
     <ClCompile Include="..\Code\BackGround.cpp" />
     <ClCompile Include="..\Code\Controller.cpp" />
     <ClCompile Include="..\Code\DynamicCamera.cpp" />

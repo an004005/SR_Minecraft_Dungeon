@@ -2,9 +2,52 @@
 
 USING(Engine);
 
+_float w2 = 0.5f;
+_float h2 = 0.5f;
+_float d2 = 0.5f;
+
 const _vec3 CGameUtilMgr::s_vZero = {0.f, 0.f, 0.f};
 const _vec3 CGameUtilMgr::s_vUp = {0.f, 1.f, 0.f};
 const _matrix CGameUtilMgr::s_matIdentity = {1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f,};
+const _vec3 CGameUtilMgr::s_vFaceCubeVtx[FACE_END][4]
+{
+	{// look
+		{-w2, -h2, +d2},
+		{+w2, -h2, +d2},
+		{+w2, +h2, +d2},
+		{-w2, +h2, +d2}
+	},// back
+	{
+		{-w2, -h2, -d2},
+		{-w2, +h2, -d2},
+		{+w2, +h2, -d2},
+		{+w2, -h2, -d2},
+	},
+	{// left
+		{-w2, -h2, +d2},
+		{-w2, +h2, +d2},
+		{-w2, +h2, -d2},
+		{-w2, -h2, -d2}
+	},
+	{//right
+		{+w2, -h2, -d2},
+		{+w2, +h2, -d2},
+		{+w2, +h2, +d2},
+		{+w2, -h2, +d2}
+	},
+	{// up
+		{-w2, +h2, -d2},
+		{-w2, +h2, +d2},
+		{+w2, +h2, +d2},
+		{+w2, +h2, -d2}
+	},
+	{// down
+		{-w2, -h2, -d2},
+		{+w2, -h2, -d2},
+		{+w2, -h2, +d2},
+		{-w2, -h2, +d2},
+	}
+};
 
 void CGameUtilMgr::WorldMatrixLerp(_matrix& matOut, const _matrix& matPrev, const _matrix& matNext, const _float fS)
 {
