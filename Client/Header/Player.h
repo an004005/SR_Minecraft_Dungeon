@@ -2,7 +2,7 @@
 #include "SkeletalCube.h"
 
 class CController;
-
+class CStatComponent;
 class CPlayer : public CSkeletalCube
 {
 protected:
@@ -33,6 +33,7 @@ private:
 public:
 	virtual HRESULT Ready_Object() override;
 	virtual _int Update_Object(const _float& fTimeDelta) override;
+	virtual void LateUpdate_Object() override;
 	virtual void Free() override;
 	virtual void AnimationEvent(const string& strEvent) override;
 
@@ -50,6 +51,7 @@ private:
 
 protected:
 	CController* m_pController;
+	CStatComponent* m_pStat;
 
 	array<CubeAnimFrame, LA_END> m_arrLoopAnim;
 	array<CubeAnimFrame, OA_END> m_arrOnceAnim;
@@ -66,6 +68,11 @@ protected:
 	_bool m_bAction = false;
 	_bool m_bRoll = false;
 	_bool m_bMeleeAttack = false;
+
+	_bool m_bApplyMeleeAttack = false;
+	_bool m_bApplyMeleeAttackNext = false;
+
+
 };
 
 

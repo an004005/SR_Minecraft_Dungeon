@@ -30,6 +30,14 @@ CGameObject* CManagement::Get_GameObject(LAYERID eLayerID, const wstring& pObjTa
 	return m_pScene->Get_GameObject(eLayerID, pObjTag);
 }
 
+void CManagement::Get_AllGameObject(LAYERID eLayerID, const wstring& pObjTag, list<CGameObject*>& outList)
+{
+	if (nullptr == m_pScene)
+		return;
+
+	m_pScene->Get_AllGameObject(eLayerID, pObjTag, outList);
+}
+
 CLayer* CManagement::Get_Layer(LAYERID eLayerID)
 {
 	NULL_CHECK_RETURN(m_pScene, nullptr);

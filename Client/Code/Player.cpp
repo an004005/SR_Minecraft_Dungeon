@@ -2,8 +2,10 @@
 #include "Player.h"
 #include "Controller.h"
 #include "GameUtilMgr.h"
+#include "StatComponent.h"
 #include "TerrainCubeMap.h"
 #include "StaticCamera.h"
+#include "Monster.h"
 
 /*-----------------------
  *    CCharacter
@@ -37,7 +39,12 @@ HRESULT CPlayer::Ready_Object()
 	CCollisionCom* pColl = Add_Component<CCollisionCom>(L"Proto_CollisionCom", L"Proto_CollisionCom", ID_DYNAMIC);
 	pColl->SetOwner(this);
 	pColl->SetOwnerTransform(m_pRootPart->pTrans);
+	pColl->SetCollOffset(_vec3{0.f, 1.f, 0.f});
+	pColl->SetRadius(0.5f);
 
+	m_pStat = Add_Component<CStatComponent>(L"Proto_StatCom", L"Proto_StatCom", ID_DYNAMIC);
+	m_pStat->SetMaxHP(100);
+	m_pStat->SetTransform(m_pRootPart->pTrans);
 
 	// 항상 카메라 먼저 만들고 플레이어 만들기!
 	Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")->SetTarget(this);
@@ -62,12 +69,42 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 		m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * m_fRollSpeed * fTimeDelta;
 	}
 
-	// set height
-	CTerrainCubeMap* pTerrain = Get_GameObject<CTerrainCubeMap>(LAYER_ENV, L"TerrainCubeMap");
-	_vec3& vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
-	vPos.y = pTerrain->GetHeight(vPos.x, vPos.z);
-
 	return OBJ_NOEVENT;
+}
+
+void CPlayer::LateUpdate_Object()
+{
+	{
+		if (m_bApplyMeleeAttackNext)
+		{
+			set<CGameObject*> objSet;
+			_vec3 vAttackPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + (m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 2.f);
+			Engine::GetOverlappedObject(OUT objSet, vAttackPos, 2.f);
+			for (auto& obj : objSet)
+			{
+				if (CMonster* monster = dynamic_cast<CMonster*>(obj))
+				{
+					DamageType eDT = DT_END;
+					if (m_iAttackCnt == 0) eDT = DT_KNOCK_BACK;
+					monster->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+					       ->TakeDamage(30, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, eDT);
+				}
+			}
+
+			
+			DEBUG_SPHERE(vAttackPos, 2.f, 1.f);
+
+			m_bApplyMeleeAttackNext = false;
+		}
+
+		if (m_bApplyMeleeAttack)
+		{
+			// RotateToCursor()로 회전하고, 이 회전값이 INFO_LOOK로 적용되려면 다음 update를 기다려야한다.
+			// attack이 발생하고 다음 프레임에서 실제 공격을 적용하기 위한 코드
+			m_bApplyMeleeAttack = false;
+			m_bApplyMeleeAttackNext = true;
+		}
+	}
 }
 
 void CPlayer::Free()
@@ -94,7 +131,8 @@ void CPlayer::SetMove(_float fX, _float fZ)
 
 	if (m_bAction) return;
 
-	_float fCamYaw = Engine::Get_Component<CTransform>(LAYER_ENV, L"StaticCamera", L"Proto_TransformCom", ID_DYNAMIC)->m_vAngle.y;
+	_float fCamYaw = Engine::Get_Component<CTransform>(LAYER_ENV, L"StaticCamera", L"Proto_TransformCom", ID_DYNAMIC)->
+	                 m_vAngle.y;
 	_matrix matYaw;
 	D3DXMatrixRotationY(&matYaw, fCamYaw);
 
@@ -105,7 +143,7 @@ void CPlayer::SetMove(_float fX, _float fZ)
 		const _vec2 v2Look{0.f, 1.f};
 		const _vec2 v2ToDest{m_vMoveDirNormal.x, m_vMoveDirNormal.z};
 		const _float fDot = D3DXVec2Dot(&v2Look, &v2ToDest);
-		
+
 
 		if (m_vMoveDirNormal.x < 0)
 			m_pRootPart->pTrans->m_vAngle.y = -acosf(fDot);
@@ -143,6 +181,7 @@ void CPlayer::MeleeAttack()
 		PlayAnimationOnce(&m_arrOnceAnim[ATTACK3]);
 	}
 	m_iAttackCnt = (m_iAttackCnt + 1) % 3;
+	m_bApplyMeleeAttack = true;
 }
 
 void CPlayer::Roll()
@@ -171,7 +210,7 @@ CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
 
 void CPlayer::RotateToCursor()
 {
-	POINT		ptMouse{};
+	POINT ptMouse{};
 
 	GetCursorPos(&ptMouse);
 	ScreenToClient(g_hWnd, &ptMouse);
@@ -179,7 +218,7 @@ void CPlayer::RotateToCursor()
 	_vec3 vPoint;
 	_vec3 vAt;
 
-	D3DVIEWPORT9		ViewPort;
+	D3DVIEWPORT9 ViewPort;
 	ZeroMemory(&ViewPort, sizeof(D3DVIEWPORT9));
 	m_pGraphicDev->GetViewport(&ViewPort);
 
@@ -191,13 +230,13 @@ void CPlayer::RotateToCursor()
 	vAt.y = vPoint.y;
 	vAt.z = 1.f;
 
-	_matrix		matProj;
+	_matrix matProj;
 	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &matProj);
 	D3DXMatrixInverse(&matProj, nullptr, &matProj);
 	D3DXVec3TransformCoord(&vPoint, &vPoint, &matProj);
 	D3DXVec3TransformCoord(&vAt, &vAt, &matProj);
 
-	_matrix		matView;
+	_matrix matView;
 	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
 	D3DXMatrixInverse(&matView, nullptr, &matView);
 	D3DXVec3TransformCoord(&vPoint, &vPoint, &matView);
@@ -214,9 +253,9 @@ void CPlayer::RotateToCursor()
 
 	const _vec2 v2Look{0.f, 1.f};
 	_vec2 v2ToDest{vLook.x, vLook.z};
-	
+
 	const _float fDot = D3DXVec2Dot(&v2Look, &v2ToDest);
-	
+
 	if (vLook.x < 0)
 		m_pRootPart->pTrans->m_vAngle.y = -acosf(fDot);
 	else

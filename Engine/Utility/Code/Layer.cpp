@@ -30,6 +30,13 @@ CGameObject* CLayer::Get_GameObject(const wstring& pObjTag)
 	return iter->second;
 }
 
+void CLayer::Get_AllGameObject(const wstring& pObjTag, list<CGameObject*>& outList)
+{
+	const auto range = m_mapObject.equal_range(pObjTag);
+	for (auto it = range.first; it != range.second; ++it)
+		outList.push_back(it->second);
+}
+
 HRESULT CLayer::Add_GameObject(const wstring& pObjTag, CGameObject * pInstance)
 {
 	if (nullptr == pInstance)

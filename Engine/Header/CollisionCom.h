@@ -2,8 +2,10 @@
 #include "Component.h"
 #include <functional>
 
+#include "Transform.h"
+
 BEGIN(Engine)
-class CGameObject;
+	class CGameObject;
 class CTransform;
 
 enum COLLISION_TYPE
@@ -43,6 +45,8 @@ public:
 	CGameObject* GetOwner() const { return m_pOwner; }
 	CTransform* GetTransform() const { return m_pOwnerTrans; }
 	_float GetRadius() const { return m_fRadius; }
+	void SetCollOffset(const _vec3& vOffset) { m_vOffset = vOffset; }
+	_vec3 GetCollPos() const { return m_pOwnerTrans->m_vInfo[INFO_POS] + m_vOffset; }
 	COLLISION_TYPE GetType() const { return m_eType; }
 	
 
@@ -51,6 +55,7 @@ public:
 protected:
 	CGameObject* m_pOwner = nullptr;
 	CTransform* m_pOwnerTrans = nullptr;
+	_vec3 m_vOffset{0.f, 0.f, 0.f};
 	_float m_fRadius = 1.f;
 	COLLISION_TYPE m_eType = COLL_END;
 

@@ -181,6 +181,9 @@
     <ClInclude Include="..\Header\AbstFactory.h">
       <Filter>Mgr</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\StatComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -284,6 +287,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\AbstFactory.cpp">
       <Filter>Mgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\StatComponent.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
