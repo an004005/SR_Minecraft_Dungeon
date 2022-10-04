@@ -21,7 +21,6 @@ _int CVoxelTex::Update_Component(const _float& fTimeDelta)
 
 HRESULT CVoxelTex::Ready_Buffer(const char* strTexPath, _float fCellSize)
 {
-	CVIBuffer::Ready_Buffer();
 	// ... x = width, y = height, n = # 8-bit components per pixel ...
 	// ... replace '0' with '1'..'4' to force that many components per pixel
 	// ... but 'n' will always be the number that it would have been if you said 0
@@ -50,7 +49,7 @@ HRESULT CVoxelTex::Ready_Buffer(const char* strTexPath, _float fCellSize)
 	_float h2 = 0.5f;
 	_float d2 = 0.5f;
 
-	VTXCUBE2 tVtxCubeDefault[FACE_END][4]
+	static VTXCUBE2 tVtxCubeDefault[FACE_END][4]
 	{
 		{
 			{{-w2, -h2, +d2}, {}},
