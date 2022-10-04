@@ -34,13 +34,13 @@ void CCollider::Add_CollisionCom(CCollisionCom* pCollision)
 	const _vec3 vPos = pCollision->GetTransform()->m_vInfo[INFO_POS];
 	const _float fRadius = pCollision->GetRadius();
 
-	_int iX_start = (_int)(vPos.x - fRadius / m_fGridCX);
-	_int iZ_start = (_int)(vPos.z - fRadius / m_fGridCZ);
+	_int iX_start = (_int)((vPos.x - fRadius) / m_fGridCX);
+	_int iZ_start = (_int)((vPos.z - fRadius) / m_fGridCZ);
 	if (iX_start < 0) iX_start = 0;
 	if (iZ_start < 0) iZ_start = 0;
 
-	_int iX_end = (_int)(vPos.x + fRadius / m_fGridCX);
-	_int iZ_end = (_int)(vPos.z + fRadius / m_fGridCZ);
+	_int iX_end = (_int)((vPos.x + fRadius) / m_fGridCX);
+	_int iZ_end = (_int)((vPos.z + fRadius) / m_fGridCZ);
 	if (iX_end >= COLL_GRID_X) iX_end = COLL_GRID_X - 1;
 	if (iZ_end >= COLL_GRID_X) iZ_end = COLL_GRID_Z - 1;
 
@@ -55,14 +55,13 @@ void CCollider::Add_CollisionCom(CCollisionCom* pCollision)
 
 void CCollider::Add_StaticCollision(const _vec3& vCenter, _float fRadius)
 {
-
-	_int iX_start = (_int)(vCenter.x - fRadius / m_fGridCX);
-	_int iZ_start = (_int)(vCenter.z - fRadius / m_fGridCZ);
+	_int iX_start = (_int)((vCenter.x - fRadius )/ m_fGridCX);
+	_int iZ_start = (_int)((vCenter.z - fRadius) / m_fGridCZ);
 	if (iX_start < 0) iX_start = 0;
 	if (iZ_start < 0) iZ_start = 0;
 
-	_int iX_end = (_int)(vCenter.x + fRadius / m_fGridCX);
-	_int iZ_end = (_int)(vCenter.z + fRadius / m_fGridCZ);
+	_int iX_end = (_int)((vCenter.x + fRadius) / m_fGridCX);
+	_int iZ_end = (_int)((vCenter.z + fRadius) / m_fGridCZ);
 	if (iX_end >= COLL_GRID_X) iX_end = COLL_GRID_X - 1;
 	if (iZ_end >= COLL_GRID_X) iZ_end = COLL_GRID_Z - 1;
 
@@ -75,16 +74,16 @@ void CCollider::Add_StaticCollision(const _vec3& vCenter, _float fRadius)
 	}
 }
 
-void CCollider::GetOverlappedObject(list<CGameObject*>& objList, const _vec3& vPos, _float fRadius)
+void CCollider::GetOverlappedObject(set<CGameObject*>& objList, const _vec3& vPos, _float fRadius)
 {
 	objList.clear();
-	_int iX_start = (_int)(vPos.x - fRadius / m_fGridCX);
-	_int iZ_start = (_int)(vPos.z - fRadius / m_fGridCZ);
+	_int iX_start = (_int)((vPos.x - fRadius) / m_fGridCX);
+	_int iZ_start = (_int)((vPos.z - fRadius) / m_fGridCZ);
 	if (iX_start < 0) iX_start = 0;
 	if (iZ_start < 0) iZ_start = 0;
 
-	_int iX_end = (_int)(vPos.x + fRadius / m_fGridCX);
-	_int iZ_end = (_int)(vPos.z + fRadius / m_fGridCZ);
+	_int iX_end = (_int)((vPos.x + fRadius) / m_fGridCX);
+	_int iZ_end = (_int)((vPos.z + fRadius) / m_fGridCZ);
 	if (iX_end >= COLL_GRID_X) iX_end = COLL_GRID_X - 1;
 	if (iZ_end >= COLL_GRID_X) iZ_end = COLL_GRID_Z - 1;
 
@@ -98,7 +97,7 @@ void CCollider::GetOverlappedObject(list<CGameObject*>& objList, const _vec3& vP
 					dynamic->GetTransform()->m_vInfo[INFO_POS], dynamic->GetRadius(),
 					vPos, fRadius))
 				{
-					objList.push_back(dynamic->GetOwner());
+					objList.insert(dynamic->GetOwner());
 				}
 			}
 		}
@@ -174,5 +173,5 @@ void CCollider::Free()
 bool CCollider::IsCollided(const _vec3& vPos1, _float fRadius1, const _vec3& vPos2, _float fRadius2)
 {
 	const _vec3 vDiff = vPos1 - vPos2;
-	return D3DXVec3Length(&vDiff) <= (fRadius1 + fRadius2) * (fRadius1 + fRadius2);
+	return D3DXVec3LengthSq(&vDiff) <= (fRadius1 + fRadius2) * (fRadius1 + fRadius2);
 }	

@@ -117,6 +117,9 @@
     <ClInclude Include="..\..\Header\TerrainRcTex.h">
       <Filter>00. Component\00. VIBuffer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Header\DebugSphere.h">
+      <Filter>01. GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\VIBuffer.cpp">
@@ -181,6 +184,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\TerrainRcTex.cpp">
       <Filter>00. Component\00. VIBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\DebugSphere.cpp">
+      <Filter>01. GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

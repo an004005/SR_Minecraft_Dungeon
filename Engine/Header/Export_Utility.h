@@ -15,7 +15,7 @@
 #include "Transform.h"
 #include "Calculator.h"
 #include "Camera.h"
-
+#include "DebugSphere.h"
 
 #include "ProtoMgr.h"
 #include "Management.h"
@@ -56,6 +56,7 @@ BEGIN(Engine)
 
 		return pCasted;
 	}
+	inline 	void Get_AllGameObject(LAYERID eLayerID, const wstring& pObjTag, list<CGameObject*>& outList);
 
 	inline CLayer* Get_Layer(LAYERID eLayerID);
 	inline void AddGameObject(LAYERID eLayerID, const wstring& pObjTag, CGameObject* pObject);
@@ -77,7 +78,7 @@ BEGIN(Engine)
 	inline void Add_CollisionCom(CCollisionCom* pCollision);
 	inline void Add_StaticCollision(const _vec3& vCenter, _float fRadius);
 	// run at only late update
-	inline void GetOverlappedObject(OUT list<CGameObject*>& objList, const _vec3& vPos, _float fRadius);
+	inline void GetOverlappedObject(OUT set<CGameObject*>& objList, const _vec3& vPos, _float fRadius);
 	inline void Clear_ColliderAll();
 
 

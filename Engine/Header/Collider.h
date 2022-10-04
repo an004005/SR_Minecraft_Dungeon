@@ -26,7 +26,7 @@ public:
 	void Add_CollisionCom(CCollisionCom* pCollision);
 	void Add_StaticCollision(const _vec3& vCenter, _float fRadius);
 	// run at only late update
-	void GetOverlappedObject(OUT list<CGameObject*>& objList, const _vec3& vPos, _float fRadius);
+	void GetOverlappedObject(OUT set<CGameObject*>& objList, const _vec3& vPos, _float fRadius);
 	void Check_Blocking();
 	void Clear_Dynamic();
 	void Clear_ColliderAll();

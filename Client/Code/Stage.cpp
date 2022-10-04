@@ -5,6 +5,8 @@
 #include "Terrain.h"
 #include "Player.h"
 #include "AbstFactory.h"
+#include "Monster.h"
+#include "StatComponent.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
@@ -68,6 +70,12 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {1.f, 0.f ,1.f});
 	CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld);
 
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {2.f, 0.f ,1.f});
+	CEnemyFactory::Create<CMonster>("TestZombie", L"TestZombie", matWorld);
+
+	// CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {3.f, 0.f ,1.f});
+	// CEnemyFactory::Create<CMonster>("TestZombie", L"TestZombie2", matWorld);
 	return S_OK;
 }
 
@@ -98,6 +106,7 @@ HRESULT CStage::Ready_Proto(void)
 
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CalculatorCom", CCalculator::Create(m_pGraphicDev)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CollisionCom", CCollisionCom::Create()), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_StatCom", CStatComponent::Create()), E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_PlantTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Plant/plant_%d.png", TEX_NORMAL, 3)), E_FAIL);
 

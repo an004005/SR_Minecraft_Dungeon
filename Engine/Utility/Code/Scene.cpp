@@ -25,6 +25,11 @@ CGameObject* CScene::Get_GameObject(LAYERID eLayerID, const wstring& pObjTag)
 	return m_arrLayer[eLayerID]->Get_GameObject(pObjTag);
 }
 
+void CScene::Get_AllGameObject(LAYERID eLayerID, const wstring& pObjTag, list<CGameObject*>& outList)
+{
+	m_arrLayer[eLayerID]->Get_AllGameObject(pObjTag, outList);
+}
+
 CLayer* CScene::Get_Layer(LAYERID eLayerID)
 {
 	return m_arrLayer[eLayerID];

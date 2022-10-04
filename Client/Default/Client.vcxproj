@@ -179,6 +179,7 @@
     <ClInclude Include="..\Header\Player.h" />
     <ClInclude Include="..\Header\SkeletalCube.h" />
     <ClInclude Include="..\Header\Stage.h" />
+    <ClInclude Include="..\Header\StatComponent.h" />
     <ClInclude Include="..\Header\StaticCamera.h" />
     <ClInclude Include="..\Header\Terrain.h" />
     <ClInclude Include="..\Header\TerrainCubeMap.h" />
@@ -221,6 +222,7 @@
     <ClCompile Include="..\Code\Player.cpp" />
     <ClCompile Include="..\Code\SkeletalCube.cpp" />
     <ClCompile Include="..\Code\Stage.cpp" />
+    <ClCompile Include="..\Code\StatComponent.cpp" />
     <ClCompile Include="..\Code\StaticCamera.cpp" />
     <ClCompile Include="..\Code\Terrain.cpp" />
     <ClCompile Include="..\Code\TerrainCubeMap.cpp" />
