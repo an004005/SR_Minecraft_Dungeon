@@ -19,10 +19,8 @@ HRESULT CTerrainCubeMap::Ready_Object(const wstring& wstrPath)
 	m_pCubeTextureCom = Add_Component<CTexture>(L"Proto_MinecraftCubeTexture", L"Proto_MinecraftCubeTexture", ID_STATIC);
 	m_pTextureCom = Add_Component<CTexture>(L"Proto_PlantTexture", L"Proto_PlantTexture", ID_STATIC);
 
-	if (!wstrPath.empty())
-	{
-		LoadMap(wstrPath);
-	}
+	LoadMap(wstrPath);
+	
 
 	return S_OK;
 }
@@ -42,38 +40,71 @@ void CTerrainCubeMap::LateUpdate_Object(void)
 
 void CTerrainCubeMap::Render_Object(void)
 {
+	vector<pair<_int, CTerrainCubeTex*>> vecAlphaTex;
+	vector<pair<_int, CTerrainCubeTex*>> vecNonAlphaTex;
+
 	_matrix matWorld;
 	D3DXMatrixIdentity(&matWorld);
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &matWorld);
+
+	
 
 	for (auto& cubeTex : m_mapTerrainCubeCom)
 	{
 		if (cubeTex.second->GetCubeCnt() > 0)
 		{
-			m_pCubeTextureCom->Set_Texture(cubeTex.first);
-			cubeTex.second->Render_Buffer();
+			if (cubeTex.first != 60)
+				vecAlphaTex.push_back(cubeTex);
+			else
+				vecNonAlphaTex.push_back(cubeTex);
 		}
-
 	}
 
+
+
+	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+
+
+	for (auto& cubeTex : vecNonAlphaTex)
+	{
+		m_pCubeTextureCom->Set_Texture(cubeTex.first);
+		cubeTex.second->Render_Buffer();
+	}
+
+
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0xcc);
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+
+
+	
+	for (auto& cubeTex : vecAlphaTex)
+	{
+
+		m_pCubeTextureCom->Set_Texture(cubeTex.first);
+		cubeTex.second->Render_Buffer();
+	}
+
+	
 	for (auto& cubeTex : m_mapTerrainRcCom)
 	{
 		if (cubeTex.second->GetTexCnt() > 0)
 		{		
-			m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-			m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-			m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-			m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-			m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0xcc);
-			m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
+			m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 			m_pTextureCom->Set_Texture(cubeTex.first);
 			cubeTex.second->Render_Buffer();
-
-			m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-			m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 		}
 	}
+
+
+	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
 }
 
 void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
@@ -114,6 +145,8 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 			break;
 		case TYPE_COLLISION:
 			m_vecCollision.push_back(tMapCubeInfo);
+			break;
+		case TYPE_DECO:
 			break;
 		default:
 			MSG_BOX("Invalid MapCubeInfo when load CTerrainCubeMap");
@@ -182,6 +215,19 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 		else
 			iter->second->ReCreateBuffer(vecmatWorld);
 	}
+
+	//충돌처리
+	for (auto& coll : m_vecCollision)
+	{
+		_vec3 vCenter;
+		vCenter.x = coll.matWorld._41;
+		vCenter.y = coll.matWorld._42;
+		vCenter.z = coll.matWorld._43;
+		Engine::Add_StaticCollision(vCenter, 1.f);
+	}
+
+	size_t i = m_vecTotalCube.size();
+	size_t j = m_vecTotalTex.size();
 }
 
 void CTerrainCubeMap::SaveMap(const wstring & wstrPath)
@@ -220,37 +266,23 @@ void CTerrainCubeMap::Set_CubeCoordinate(void)
 {
 	_ulong	dwIndex = 0;
 
-	for (_ulong i = 0; i < VTXCNTZ; ++i)
-	{
-		for (_ulong j = 0; j < VTXCNTX; ++j)
-		{
-			CubeHeight(_float(j) * VTXITV, _float(i) * VTXITV);
-		}
-	}
-}
-
-
-void CTerrainCubeMap::CubeHeight(_float x, _float z)
-{
-	_float fMostHeightValue = 0;
+	
 	_float fLength = 0;
-	for (auto iter : m_vecLand)
+
+	for (auto& itr : m_vecLand)
 	{
 		_vec3 vCenter{ 0.f, 0.f, 0.f };
-		D3DXVec3TransformCoord(&vCenter, &vCenter, &iter.matWorld);
+		D3DXVec3TransformCoord(&vCenter, &vCenter, &itr.matWorld);
+		_float fX = vCenter.x - 0.5f;
+		_float fZ = vCenter.z - 0.5f;
 
-		if ((vCenter.x - 0.5f) == x && (vCenter.z - 0.5f) == z)
-		{
-			if (fMostHeightValue < vCenter.y)
-			{
-				fMostHeightValue = vCenter.y;
-				fLength = iter.fHeight / 2.f;
-			}
-		}
+		fLength = itr.fHeight / 2.f + vCenter.y;
+
+		if (fLength > m_fHeight[(_int)fX][(_int)fZ])
+			m_fHeight[(_int)fX][(_int)fZ] = fLength;
 	}
-
-	m_fHeight[(_int)x][(_int)z] = fMostHeightValue + fLength;
 }
+
 
 
 void CTerrainCubeMap::AddCube(const MapCubeInfo& tInfo)
@@ -350,6 +382,11 @@ void CTerrainCubeMap::DeleteTex(_vec3 PickPos)
 {
 	_int iCount = 0;
 	_int iTexId = 0;
+
+	if (m_vecTotalTex.empty())
+		return;
+
+
 	for(size_t i=0; i<m_vecTotalTex.size(); )
 	{	
 		_vec3 vectemp = { m_vecTotalTex[i].matWorld._41, m_vecTotalTex[i].matWorld._42, m_vecTotalTex[i].matWorld._43 };
@@ -367,6 +404,8 @@ void CTerrainCubeMap::DeleteTex(_vec3 PickPos)
 	}
 
 	auto itr = m_mapTerrainRcCom.find(iTexId);
+	if (itr == m_mapTerrainRcCom.end())
+		return;
 
 	vector<_matrix> vecTmp;
 	for (const auto& info : m_vecTotalTex)

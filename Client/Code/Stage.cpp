@@ -54,7 +54,7 @@ HRESULT CStage::Ready_Layer_Environment()
 	CEnvFactory::Create<CTerrain>("DefaultTerrain", L"Terrain");
 
 	// TerrainCubeMap
-	pGameObject = CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/MapDialog.map");
+	pGameObject = CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/Stage1.map");
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", pGameObject), E_FAIL);
 	
@@ -65,8 +65,10 @@ HRESULT CStage::Ready_Layer_Environment()
 HRESULT CStage::Ready_Layer_GameLogic()
 {
 	_matrix matWorld;
-	CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {1.f, 0.f ,1.f});
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 1.f, 0.f ,1.f });
 	CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld);
+
 
 	return S_OK;
 }

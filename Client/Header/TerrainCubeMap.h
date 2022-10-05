@@ -39,18 +39,17 @@ public:
 	virtual void	Render_Object(void) override;
 
 
-private:
-	
 public:
 	void				 LoadMap(const wstring& wstrPath);
 	void				 SaveMap(const wstring& wstrPath);
 	void				Set_CubeCoordinate(void);
-	void				CubeHeight(_float x, _float z);
 	const vector<MapCubeInfo>& GetTotalCubes() { return m_vecTotalCube; }
 	void				 AddCube(const MapCubeInfo& tInfo);
 	void			     DeleteCube(int iToDel);
 	void				 AddTex(const MapCubeInfo& tInfo);
 	void			     DeleteTex(_vec3 PickPos);
+	
+
 private:
 
 	vector<MapCubeInfo> m_vecTotalCube;
@@ -67,6 +66,7 @@ private:
 
 public:
 	_float			m_fHeight[VTXCNTX][VTXCNTZ];
+	_bool			m_bRendState = false;
 
 public:
 	static CTerrainCubeMap*		Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath = L"");

@@ -36,7 +36,6 @@ HRESULT CPlayer::Ready_Object()
 	pColl->SetOwner(this);
 	pColl->SetOwnerTransform(m_pRootPart->pTrans);
 
-
 	// 항상 카메라 먼저 만들고 플레이어 만들기!
 	Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")->SetTarget(this);
 
