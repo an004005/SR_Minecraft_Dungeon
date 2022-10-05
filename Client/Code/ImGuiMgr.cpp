@@ -611,7 +611,7 @@ void CImGuiMgr::MapControl(Engine::MapTool& tMaptool, _float& _far, CTerrainCube
 			{
 				ImGui::SameLine();
 				ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Checked!!");
-				tMaptool.bRendState = true;
+				cubemap->m_bRendState = true;
 			}
 			else
 				tMaptool.bRendState = false;
