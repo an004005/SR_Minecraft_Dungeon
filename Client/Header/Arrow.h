@@ -1,5 +1,7 @@
 #pragma once
 #include "GameObject.h"
+
+class CArrowCube;
 class CArrow : public CGameObject
 {
 private:

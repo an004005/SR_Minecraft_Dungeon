@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "TerrainCubeMap.h"
 
+class CArrowCube;
 
 class CStage : public Engine::CScene
 {
@@ -23,6 +24,7 @@ private:
 	HRESULT			Ready_Layer_UI();
 	HRESULT			Ready_Proto(void);
 
+	CArrowCube* m_pTest;
 public:
 	static CStage*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
 

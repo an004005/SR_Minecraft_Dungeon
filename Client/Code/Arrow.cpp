@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "..\Header\Arrow.h"
-
+#include "ArrowCube.h"
 
 CArrow::CArrow(LPDIRECT3DDEVICE9 pGraphicDev): CGameObject(pGraphicDev)
 {

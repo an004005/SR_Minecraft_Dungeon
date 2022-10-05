@@ -10,7 +10,6 @@
 #include "TerrainCubeTex.h"
 #include "TerrainRcTex.h"
 #include "CollisionCom.h"
-#include "ArrowCube.h"
 
 #include "Transform.h"
 #include "Calculator.h"

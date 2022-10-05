@@ -120,7 +120,6 @@
     <ClInclude Include="..\..\Header\DebugSphere.h">
       <Filter>01. GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Header\ArrowCube.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\VIBuffer.cpp">
@@ -189,7 +188,6 @@
     <ClCompile Include="..\Code\DebugSphere.cpp">
       <Filter>01. GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\ArrowCube.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Header\Export_Utility.inl">

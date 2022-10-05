@@ -185,6 +185,9 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Arrow.h" />
+    <ClInclude Include="..\Header\ArrowCube.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -293,6 +296,9 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Arrow.cpp" />
+    <ClCompile Include="..\Code\ArrowCube.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
