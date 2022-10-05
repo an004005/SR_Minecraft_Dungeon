@@ -134,9 +134,9 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 	while (vecCubeSize--)
 	{
 		ReadFile(hFile, &tMapCubeInfo, sizeof(MapCubeInfo), &dwByte, nullptr);
-	
+
 		m_vecTotalCube.push_back(tMapCubeInfo);
-		
+
 		//divide cubetype
 		switch (tMapCubeInfo.eType)
 		{
@@ -176,7 +176,7 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 		for (auto i : m_vecTotalCube)
 		{
 			if (texidx == i.iTexIdx)
-				vecmatWorld.push_back(i.matWorld);	
+				vecmatWorld.push_back(i.matWorld);
 		}
 
 
@@ -186,10 +186,10 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 			CTerrainCubeTex* pTerrainTex = CTerrainCubeTex::Create(m_pGraphicDev, vecmatWorld);
 			m_mapTerrainCubeCom.insert({ texidx, pTerrainTex });
 			m_mapComponent[ID_STATIC].insert({ to_wstring(texidx), pTerrainTex });
-		}		
+		}
 		else
 			iter->second->ReCreateBuffer(vecmatWorld);
-	}	
+	}
 
 	set<_int> Texidx;
 	for (auto i : m_vecTotalTex)
@@ -226,7 +226,7 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 		Engine::Add_StaticCollision(vCenter, 1.f);
 	}
 
-
+}
 
 void CTerrainCubeMap::SaveMap(const wstring & wstrPath)
 {
