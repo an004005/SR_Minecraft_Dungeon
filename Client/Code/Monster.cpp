@@ -61,5 +61,24 @@ CMonster* CMonster::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPat
 
 void CMonster::Free()
 {
+	Safe_Release(m_pTarget);
 	CGameObject::Free();
+}
+
+void CMonster::SetRotationTo(const _vec3& vTargetPos, bool bReverse)
+{
+	_vec3 vLook = vTargetPos - m_pRootPart->pTrans->m_vInfo[INFO_POS];
+	if (bReverse) vLook = -vLook;
+
+	D3DXVec3Normalize(&vLook, &vLook);
+
+	const _vec2 v2Look{0.f, 1.f};
+	_vec2 v2ToDest{vLook.x, vLook.z};
+
+	const _float fDot = D3DXVec2Dot(&v2Look, &v2ToDest);
+
+	if (vLook.x < 0)
+		m_pRootPart->pTrans->m_vAngle.y = -acosf(fDot);
+	else
+		m_pRootPart->pTrans->m_vAngle.y = acosf(fDot);
 }

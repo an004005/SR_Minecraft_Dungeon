@@ -10,24 +10,28 @@ protected:
 	virtual ~CPlayer() override;
 
 private:
-	enum LoopAnim
+	enum LoopState
 	{
-		WALK,
-		IDLE,
-		DEAD,
-		LA_END
+		STATE_IDLE,
+		STATE_WALK,
+		STATE_STUN,
+		STATE_END
 	};
-	enum OnceAnim
-	{
-		ATTACK1,
-		ATTACK2, // 무기에서 가져와서 실행하게 구현
-		ATTACK3,
-		ROLL,
-		TELEPORT,
-		RESCUE,
 
-		OA_END
+	enum Animation
+	{
+		ANIM_WALK,
+		ANIM_IDLE,
+		ANIM_DEAD,
+		ANIM_ATTACK1,
+		ANIM_ATTACK2, // 무기에서 가져와서 실행하게 구현
+		ANIM_ATTACK3,
+		ANIM_ROLL,
+		ANIM_TELEPORT,
+		ANIM_RESCUE,
+		ANIM_END
 	};
+
 
 
 public:
@@ -53,8 +57,7 @@ protected:
 	CController* m_pController;
 	CStatComponent* m_pStat;
 
-	array<CubeAnimFrame, LA_END> m_arrLoopAnim;
-	array<CubeAnimFrame, OA_END> m_arrOnceAnim;
+	array<CubeAnimFrame, ANIM_END> m_arrAnim;
 
 	_float m_fVelocity;
 	_float m_fRollSpeed;

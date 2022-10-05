@@ -26,13 +26,14 @@ HRESULT CPlayer::Ready_Object()
 	CSkeletalCube::Ready_Object();
 	m_pController = CPlayerController::Create();
 
-	m_arrLoopAnim[IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_idle.anim");
-	m_arrLoopAnim[WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_walk.anim");
-	m_arrOnceAnim[ATTACK1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_a.anim");
-	m_arrOnceAnim[ATTACK2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_b.anim");
-	m_arrOnceAnim[ATTACK3] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_c.anim");
-	m_arrOnceAnim[ROLL] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/roll.anim");
-	m_pIdleAnim = &m_arrLoopAnim[IDLE];
+	m_arrAnim[ANIM_IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_idle.anim");
+	m_arrAnim[ANIM_WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_walk.anim");
+	m_arrAnim[ANIM_ATTACK1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_a.anim");
+	m_arrAnim[ANIM_ATTACK2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_b.anim");
+	m_arrAnim[ANIM_ATTACK3] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_c.anim");
+	m_arrAnim[ANIM_ROLL] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/roll.anim");
+
+	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 
 	m_pCurAnim = m_pIdleAnim;
 
@@ -150,12 +151,12 @@ void CPlayer::SetMove(_float fX, _float fZ)
 		else
 			m_pRootPart->pTrans->m_vAngle.y = acosf(fDot);
 
-		m_pIdleAnim = &m_arrLoopAnim[WALK];
+		m_pIdleAnim = &m_arrAnim[ANIM_WALK];
 		m_pCurAnim = m_pIdleAnim;
 	}
 	else
 	{
-		m_pIdleAnim = &m_arrLoopAnim[IDLE];
+		m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 		m_pCurAnim = m_pIdleAnim;
 	}
 }
@@ -170,15 +171,15 @@ void CPlayer::MeleeAttack()
 
 	if (m_iAttackCnt == 0)
 	{
-		PlayAnimationOnce(&m_arrOnceAnim[ATTACK1]);
+		PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK1]);
 	}
 	else if (m_iAttackCnt == 1)
 	{
-		PlayAnimationOnce(&m_arrOnceAnim[ATTACK2]);
+		PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK2]);
 	}
 	else
 	{
-		PlayAnimationOnce(&m_arrOnceAnim[ATTACK3]);
+		PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK3]);
 	}
 	m_iAttackCnt = (m_iAttackCnt + 1) % 3;
 	m_bApplyMeleeAttack = true;
@@ -189,7 +190,7 @@ void CPlayer::Roll()
 	RotateToCursor();
 	m_bAction = true;
 	m_bRoll = true;
-	PlayAnimationOnce(&m_arrOnceAnim[ROLL]);
+	PlayAnimationOnce(&m_arrAnim[ANIM_ROLL]);
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
@@ -261,6 +262,6 @@ void CPlayer::RotateToCursor()
 	else
 		m_pRootPart->pTrans->m_vAngle.y = acosf(fDot);
 
-	m_pIdleAnim = &m_arrLoopAnim[WALK];
+	m_pIdleAnim = &m_arrAnim[ANIM_WALK];
 	m_pCurAnim = m_pIdleAnim;
 }

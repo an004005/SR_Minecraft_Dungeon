@@ -4,6 +4,7 @@
 #include "Terrain.h"
 #include "StaticCamera.h"
 #include "Monster.h"
+#include "Geomancer.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -50,6 +51,10 @@ void CEnemyFactory::Ready_EnemyFactory()
 	s_mapEnemySpawner.insert({"TestZombie", []()
 	{
 		return CMonster::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Zombie.cube");
+	}});
+		s_mapEnemySpawner.insert({"Geomancer", []()
+	{
+		return CGeomancer::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Geomancer.cube");
 	}});
 }
 

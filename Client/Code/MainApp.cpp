@@ -137,7 +137,7 @@ HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement
 
 
 	// pScene = CLogo::Create(pGraphicDev);
-	//CAnimationTool::Create(pGraphicDev);
+	// CAnimationTool::Create(pGraphicDev);
 	//CMapTool::Create(pGraphicDev);
 	NULL_CHECK_RETURN(CStage::Create(pGraphicDev), E_FAIL);
 
