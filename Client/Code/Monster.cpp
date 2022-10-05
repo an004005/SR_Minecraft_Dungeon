@@ -38,9 +38,6 @@ _int CMonster::Update_Object(const _float& fTimeDelta)
 {
 	CSkeletalCube::Update_Object(fTimeDelta);
 
-	if (m_pStat->IsDead())
-		return OBJ_DEAD;
-
 	return OBJ_NOEVENT;
 }
 
@@ -61,11 +58,10 @@ CMonster* CMonster::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPat
 
 void CMonster::Free()
 {
-	Safe_Release(m_pTarget);
 	CGameObject::Free();
 }
 
-void CMonster::SetRotationTo(const _vec3& vTargetPos, bool bReverse)
+void CMonster::RotateToTargetPos(const _vec3& vTargetPos, bool bReverse)
 {
 	_vec3 vLook = vTargetPos - m_pRootPart->pTrans->m_vInfo[INFO_POS];
 	if (bReverse) vLook = -vLook;

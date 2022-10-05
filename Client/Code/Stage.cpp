@@ -76,7 +76,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	// CEnemyFactory::Create<CMonster>("TestZombie", L"TestZombie", matWorld);
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {3.f, 0.f ,3.f});
-	// CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
+	CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
 
 	// CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {3.f, 0.f ,1.f});
 	// CEnemyFactory::Create<CMonster>("TestZombie", L"TestZombie2", matWorld);

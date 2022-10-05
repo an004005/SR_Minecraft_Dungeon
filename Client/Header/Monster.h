@@ -20,18 +20,16 @@ public:
 	static CMonster* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
 	virtual void Free() override;
 
-	void SetTarget(CPlayer* pPlayer) { m_pTarget = pPlayer; m_pTarget->AddRef();}
-	void ReleaseTarget() { Safe_Release(m_pTarget); }
-
 protected:
-	void SetRotationTo(const _vec3& vTargetPos, bool bReverse = false);
+	void RotateToTargetPos(const _vec3& vTargetPos, bool bReverse = false);
 
 protected:
 	CCollisionCom* m_pColl = nullptr;
 	CStatComponent* m_pStat = nullptr;
 	CController* m_pController = nullptr;
 
-	CPlayer* m_pTarget = nullptr;
-	_bool m_bAction = false;
+	_float m_fSpeed; // ¼Óµµ
+	_bool m_bDelete = false;
+
 };
 

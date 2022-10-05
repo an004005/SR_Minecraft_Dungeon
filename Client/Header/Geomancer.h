@@ -5,18 +5,24 @@ class CController;
 
 class CGeomancer : public CMonster
 {
-	enum LoopAnim
+private:
+	enum GeomancerState
 	{
-		WALK,
 		IDLE,
+		WALK,
+		ATTACK,
+		STUN,
 		DEAD,
-		LA_END
+		STATE_END
 	};
 
-	enum OnceAnim
+	enum Animation
 	{
-		ATTACK,
-		OA_END
+		ANIM_WALK,
+		ANIM_IDLE,
+		ANIM_DEAD,
+		ANIM_ATTACK,
+		ANIM_END
 	};
 
 private:
@@ -32,22 +38,36 @@ public:
 	virtual void Free() override;
 	static CGeomancer* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
 
-	void SetIdle();
-	void SetAttack(CPlayer* pPlayer);
-	void Run(CPlayer* pPlayer);
+	virtual void StateChange();
 
-	bool CanAttack() { return m_fCurAttackCoolTime >= m_fAttackCoolTime; }
-
+	// controller 조종 함수
+	void SetMoveDir(_float fX, _float fZ);
+	void Run(const _vec3& vTargetPos) {m_bMove = true; m_vTargetPos = vTargetPos;}
+	void AttackPress(const _vec3& vTargetPos)
+	{
+		if (m_fAttackCoolTime <= m_fCurAttackCoolTime) // cool time done
+		{
+			m_bAttack = true;
+			m_vTargetPos = vTargetPos;
+		}
+	}
+	//
 
 private:
-	array<CubeAnimFrame, LA_END> m_arrLoopAnim;
-	array<CubeAnimFrame, OA_END> m_arrOnceAnim;
+	GeomancerState m_eState = STATE_END;
+	array<CubeAnimFrame, ANIM_END> m_arrAnim;
 
 	_float m_fCurAttackCoolTime = 0.f;
-	_float m_fAttackCoolTime = 4.f;
+	_float m_fAttackCoolTime = 3.f;
 
-	_vec3 m_vMoveDir = CGameUtilMgr::s_vZero;
+	_float m_fAttackRange = 15.f; // 사정거리
 
-	_vec3 m_vAttackDest;
-	_bool m_bAttack = false;
+	// true : PlayAnimationOnce 사용 가능 상태(동작 애니메이션 실행 가능), false: 다른 애니메이션 실행중
+	_bool m_bCanPlayAnim = true; // 현재 실행중인 애니메이션 끊고 애니메이션 실행 가능 여부
+
+	_vec3 m_vTargetPos = CGameUtilMgr::s_vZero; // controller 입력
+
+	_bool m_bMove = false; // controller 입력
+	_bool m_bAttack = false; // controller 입력
+	_bool m_bAttackFire = false; // anim event 입력
 };

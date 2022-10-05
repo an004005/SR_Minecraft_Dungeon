@@ -59,7 +59,7 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 	m_pController->Update(this);
 
 	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
-		m_bPlayAnim = true;
+		m_bCanPlayAnim = true;
 
 	// 상태 변경 조건 설정
 	StateChange();
@@ -136,7 +136,7 @@ void CPlayer::AnimationEvent(const string& strEvent)
 {
 	if (strEvent == "ActionEnd")
 	{
-		m_bPlayAnim = true;
+		m_bCanPlayAnim = true;
 		// SetMove(0.f, 0.f);
 		// m_bRoll = false;
 	}
@@ -157,9 +157,9 @@ void CPlayer::SetMoveDir(_float fX, _float fZ)
 
 void CPlayer::MeleeAttack()
 {
-	if (m_bPlayAnim == false) return;
+	if (m_bCanPlayAnim == false) return;
 
-	m_bPlayAnim = false;
+	m_bCanPlayAnim = false;
 	if (m_iAttackCnt == 0)
 	{
 		PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK1]);
@@ -180,6 +180,14 @@ void CPlayer::MeleeAttack()
 
 void CPlayer::StateChange()
 {
+	if (m_pStat->IsDead())
+	{
+		m_eState = DEAD;
+		PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
+		m_bRoll = false;
+		return;
+	}
+
 	if (m_pStat->IsStun())
 	{
 		m_eState = STUN;
@@ -191,20 +199,20 @@ void CPlayer::StateChange()
 	{
 		m_eState = ROLL;
 		RotateToCursor();
-		m_bPlayAnim = false;
+		m_bCanPlayAnim = false;
 		PlayAnimationOnce(&m_arrAnim[ANIM_ROLL]);
 		m_bRoll = false;
 		return;
 	}
 
-	if (m_bMeleeAttack && m_bPlayAnim)
+	if (m_bMeleeAttack && m_bCanPlayAnim)
 	{
 		m_eState = ATTACK;
 		RotateToCursor();
 		return;
 	}
 
-	if (m_bMove && m_bPlayAnim)
+	if (m_bMove && m_bCanPlayAnim)
 	{
 		m_eState = WALK;
 		RotateToMove();
@@ -213,13 +221,13 @@ void CPlayer::StateChange()
 		return;
 	}
 
-	if (m_bPlayAnim)
+	if (m_bCanPlayAnim)
 	{
 		m_eState = IDLE;
 		m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 		m_pCurAnim = &m_arrAnim[ANIM_IDLE];
+		return;
 	}
-
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)

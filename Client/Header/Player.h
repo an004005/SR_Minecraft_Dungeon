@@ -10,7 +10,6 @@ protected:
 	virtual ~CPlayer() override;
 
 private:
-
 	enum PlayerState
 	{
 		IDLE,
@@ -22,13 +21,6 @@ private:
 		DEAD,
 		STATE_END
 	};
-	// enum LoopState
-	// {
-	// 	STATE_IDLE,
-	// 	STATE_WALK,
-	// 	STATE_STUN,
-	// 	STATE_END
-	// };
 
 	enum Animation
 	{
@@ -43,8 +35,6 @@ private:
 		ANIM_RESCUE,
 		ANIM_END
 	};
-
-
 
 public:
 	virtual HRESULT Ready_Object() override;
@@ -83,7 +73,8 @@ protected:
 
 	_vec3 m_vMoveDirNormal{0.f, 0.f, 0.f}; // 이동 방향
 
-	_bool m_bPlayAnim = true; // 현재 실행중인 애니메이션 끊고 애니메이션 실행 가능 여부
+	// true : PlayAnimationOnce 사용 가능 상태(동작 애니메이션 실행 가능), false: 다른 애니메이션 실행중
+	_bool m_bCanPlayAnim = true; // 현재 실행중인 애니메이션 끊고 애니메이션 실행 가능 여부
 
 	_bool m_bRoll = false; // controller 입력
 	_bool m_bMeleeAttack = false; // controller 입력

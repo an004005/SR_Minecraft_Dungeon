@@ -120,11 +120,7 @@ CGeomancerController::~CGeomancerController()
 
 void CGeomancerController::Update(CSkeletalCube* m_pOwner)
 {
-	if (m_iTick++ > 5) 
-	{
-		m_iTick = 0;
-		return;
-	}
+	if (m_iTick++ < 20) return;
 
 	CGeomancer* pGeomancer = dynamic_cast<CGeomancer*>(m_pOwner);
 	NULL_CHECK(pGeomancer);
@@ -150,29 +146,31 @@ void CGeomancerController::Update(CSkeletalCube* m_pOwner)
 		}
 	}
 
-	if (pTargetPlayer == nullptr)
-	{
-		pGeomancer->SetIdle();
-		return;
-	}
+	// if (pTargetPlayer == nullptr)
+	// {
+	// 	pGeomancer->SetIdle();
+	// 	return;
+	// }
+	//
+	// if (pGeomancer->CanAttack())
+	// {
+	// 	pGeomancer->SetAttack(pTargetPlayer);
+	// 	return;
+	// }
+	//
+	// if (fTargetDist < 10.f && fTargetDist > 6.f)
+	// {
+	// 	pGeomancer->SetIdle();
+	// 	return;
+	// }
+	//
+	// if (fTargetDist < 4.f)
+	// {
+	// 	pGeomancer->Run(pTargetPlayer);
+	// 	return;
+	// }
 
-	if (pGeomancer->CanAttack())
-	{
-		pGeomancer->SetAttack(pTargetPlayer);
-		return;
-	}
-
-	if (fTargetDist < 10.f && fTargetDist > 6.f)
-	{
-		pGeomancer->SetIdle();
-		return;
-	}
-
-	if (fTargetDist < 4.f)
-	{
-		pGeomancer->Run(pTargetPlayer);
-		return;
-	}
+	m_iTick = 0;
 }
 
 CGeomancerController* CGeomancerController::Create()
