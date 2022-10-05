@@ -81,8 +81,13 @@ bool CGameUtilMgr::MatCmp(const _matrix& m1, const _matrix& m2, _float fEpsilon)
 	return true;
 }
 
+bool CGameUtilMgr::FloatCmp(const _float& f1, const _float f2, _float fEpsilon)
+{
+	return fabs(f1 - f2) < fEpsilon;
+}
+
 void CGameUtilMgr::MatWorldCompose(_matrix& matOut, const _vec3& vScale, const D3DXQUATERNION& qRot,
-	const _vec3& vPos)
+                                   const _vec3& vPos)
 {
 	_matrix matScale;
 	D3DXMatrixIdentity(&matOut);

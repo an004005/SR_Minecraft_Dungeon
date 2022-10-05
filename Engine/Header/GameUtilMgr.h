@@ -12,6 +12,7 @@ public:
 	static bool Vec3Cmp(const _vec3& v1, const _vec3& v2, _float fEpsilon = 0.000001f);
 	static bool QuatCmp(const D3DXQUATERNION& q1, const D3DXQUATERNION& q2, _float fEpsilon = 0.000001f);
 	static bool MatCmp(const _matrix& m1, const _matrix& m2, _float fEpsilon = 0.000001f);
+	static bool FloatCmp(const _float& f1, const _float f2, _float fEpsilon = 0.0000001f);
 	static void MatWorldCompose(OUT _matrix& matOut, const _vec3& vScale, const D3DXQUATERNION& qRot, const _vec3& vPos);
 	static void MatWorldComposeEuler(OUT _matrix& matOut, const _vec3& vScale, const _vec3& vAngle, const _vec3& vPos);
 	static void MatWorldDecompose(const _matrix& matWorld, OUT _vec3& vScale, OUT _vec3& vAngle, OUT _vec3& vPos);

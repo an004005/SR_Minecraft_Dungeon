@@ -34,6 +34,13 @@ public:
 
 public:
 	static CPlayerController* Create();
+
+private:
+	_vec3 m_vPressDir = CGameUtilMgr::s_vZero;
+	_vec3 m_vPrevPressDir = CGameUtilMgr::s_vZero;
+
+	_vec3 m_vMoveDir = CGameUtilMgr::s_vZero;
+
 };
 
 /*----------------

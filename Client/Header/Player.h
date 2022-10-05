@@ -10,13 +10,25 @@ protected:
 	virtual ~CPlayer() override;
 
 private:
-	enum LoopState
+
+	enum PlayerState
 	{
-		STATE_IDLE,
-		STATE_WALK,
-		STATE_STUN,
+		IDLE,
+		WALK,
+		ATTACK,
+		STUN,
+		ROLL,
+		LEGACY,
+		DEAD,
 		STATE_END
 	};
+	// enum LoopState
+	// {
+	// 	STATE_IDLE,
+	// 	STATE_WALK,
+	// 	STATE_STUN,
+	// 	STATE_END
+	// };
 
 	enum Animation
 	{
@@ -41,41 +53,45 @@ public:
 	virtual void Free() override;
 	virtual void AnimationEvent(const string& strEvent) override;
 
-	virtual void SetMove(_float fX, _float fZ);
-	void MeleeAttackOn(bool bOn) { m_bMeleeAttack = bOn; }
 	virtual void MeleeAttack();
-	virtual void Roll();
+	void StateChange();
 
+	// controller 입력함수
+	void SetMoveDir(_float fX, _float fZ);
+	void MeleeAttackPress(bool bOn) { m_bMeleeAttack = bOn; }
+	void RollPress() { m_bRoll = true; }
+	//
 
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
 
 private:
 	void RotateToCursor();
+	void RotateToMove();
 
 
 protected:
 	CController* m_pController;
 	CStatComponent* m_pStat;
 
+	PlayerState m_eState = STATE_END;
 	array<CubeAnimFrame, ANIM_END> m_arrAnim;
 
-	_float m_fVelocity;
-	_float m_fRollSpeed;
+	_float m_fSpeed; // 속도
+	_float m_fRollSpeed; // 구르기 속도
 
-	_uint m_iAttackCnt = 0;
+	_uint m_iAttackCnt = 0; // 콤보 번호
 
-	_vec3 m_vMoveDir{0.f, 0.f, 0.f};
-	_vec3 m_vMoveDirNormal{0.f, 0.f, 0.f};
+	_vec3 m_vMoveDirNormal{0.f, 0.f, 0.f}; // 이동 방향
 
+	_bool m_bPlayAnim = true; // 현재 실행중인 애니메이션 끊고 애니메이션 실행 가능 여부
 
-	_bool m_bAction = false;
-	_bool m_bRoll = false;
-	_bool m_bMeleeAttack = false;
+	_bool m_bRoll = false; // controller 입력
+	_bool m_bMeleeAttack = false; // controller 입력
+	_bool m_bRangeAttack = false; // controller 입력
+	_bool m_bMove = false; // controller 입력
 
 	_bool m_bApplyMeleeAttack = false;
 	_bool m_bApplyMeleeAttackNext = false;
-
-
 };
 
 
