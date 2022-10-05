@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "..\Header\Geomancer.h"
 #include "StatComponent.h"
-#include "Controller.h"
+#include "GeomancerController.h"
 
 CGeomancer::CGeomancer(LPDIRECT3DDEVICE9 pGraphicDev): CMonster(pGraphicDev)
 {
@@ -18,7 +18,6 @@ CGeomancer::~CGeomancer()
 HRESULT CGeomancer::Ready_Object()
 {
 	CMonster::Ready_Object();
-	m_pController = CGeomancerController::Create();
 
 	m_arrAnim[IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Geomancer/idle.anim");
 	m_arrAnim[WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Geomancer/walk.anim");
@@ -30,6 +29,9 @@ HRESULT CGeomancer::Ready_Object()
 	m_fSpeed = 3.f;
 
 	m_pStat->SetMaxHP(100);
+
+	CController* pController = Add_Component<CGeomancerController>(L"Proto_GeomancerController", L"Proto_GeomancerController", ID_DYNAMIC);
+	pController->SetOwner(this);
 
 	return S_OK;
 }
@@ -55,7 +57,6 @@ _int CGeomancer::Update_Object(const _float& fTimeDelta)
 	if (m_bDelete) return OBJ_DEAD;
 
 	CMonster::Update_Object(fTimeDelta);
-	m_pController->Update(this);
 
 	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
 		m_bCanPlayAnim = true;

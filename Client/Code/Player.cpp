@@ -6,6 +6,7 @@
 #include "TerrainCubeMap.h"
 #include "StaticCamera.h"
 #include "Monster.h"
+#include "PlayerController.h"
 
 /*-----------------------
  *    CCharacter
@@ -24,7 +25,6 @@ CPlayer::~CPlayer()
 HRESULT CPlayer::Ready_Object()
 {
 	CSkeletalCube::Ready_Object();
-	m_pController = CPlayerController::Create();
 
 	m_arrAnim[ANIM_IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_idle.anim");
 	m_arrAnim[ANIM_IDLE].bLoop = true;
@@ -36,6 +36,9 @@ HRESULT CPlayer::Ready_Object()
 	m_arrAnim[ANIM_ROLL] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/roll.anim");
 	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 	m_pCurAnim = m_pIdleAnim;
+
+	CController* pController = Add_Component<CPlayerController>(L"Proto_PlayerController", L"Proto_PlayerController", ID_DYNAMIC);
+	pController->SetOwner(this);
 
 	CCollisionCom* pColl = Add_Component<CCollisionCom>(L"Proto_CollisionCom", L"Proto_CollisionCom", ID_DYNAMIC);
 	pColl->SetOwner(this);
@@ -56,7 +59,6 @@ HRESULT CPlayer::Ready_Object()
 _int CPlayer::Update_Object(const _float& fTimeDelta)
 {
 	CSkeletalCube::Update_Object(fTimeDelta);
-	m_pController->Update(this);
 
 	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
 		m_bCanPlayAnim = true;

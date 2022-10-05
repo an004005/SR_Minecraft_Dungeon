@@ -60,7 +60,6 @@ private:
 
 
 protected:
-	CController* m_pController;
 	CStatComponent* m_pStat;
 
 	PlayerState m_eState = STATE_END;

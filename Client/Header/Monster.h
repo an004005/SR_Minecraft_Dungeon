@@ -26,7 +26,6 @@ protected:
 protected:
 	CCollisionCom* m_pColl = nullptr;
 	CStatComponent* m_pStat = nullptr;
-	CController* m_pController = nullptr;
 
 	_float m_fSpeed; // ¼Óµµ
 	_bool m_bDelete = false;

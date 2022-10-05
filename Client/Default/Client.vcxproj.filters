@@ -185,6 +185,12 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Geomancer.h" />
+    <ClInclude Include="..\Header\PlayerController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\GeomancerController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -293,6 +299,12 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Geomancer.cpp" />
+    <ClCompile Include="..\Code\PlayerController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GeomancerController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
