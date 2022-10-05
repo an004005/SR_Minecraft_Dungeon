@@ -15,6 +15,7 @@ protected:
 public:
 	CComponent*				Get_Component(LAYERID eLayerID, const wstring& pObjTag, const wstring& pComponentTag, COMPONENTID eID);
 	CGameObject* Get_GameObject(LAYERID eLayerID, const wstring& pObjTag);
+	void Get_AllGameObject(LAYERID eLayerID, const wstring& pObjTag, list<CGameObject*>& outList);
 	CLayer* Get_Layer(LAYERID eLayerID);
 	void AddGameObject(LAYERID eLayerID, const wstring& pObjTag, CGameObject* pObject);
 public:	

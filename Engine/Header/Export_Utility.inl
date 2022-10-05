@@ -26,6 +26,12 @@ void		Render_Scene(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	CManagement::GetInstance()->Render_Scene(pGraphicDev);
 }
+
+inline void Get_AllGameObject(LAYERID eLayerID, const wstring& pObjTag, list<CGameObject*>& outList)
+{
+	CManagement::GetInstance()->Get_AllGameObject(eLayerID, pObjTag, outList);
+}
+
 inline CLayer* Get_Layer(LAYERID eLayerID)
 {
 	return CManagement::GetInstance()->Get_Layer(eLayerID);
@@ -73,7 +79,7 @@ void Add_StaticCollision(const _vec3& vCenter, _float fRadius)
 {
 	CCollider::GetInstance()->Add_StaticCollision(vCenter, fRadius);
 }
-void GetOverlappedObject(OUT list<CGameObject*>& objList, const _vec3& vPos, _float fRadius)
+void GetOverlappedObject(OUT set<CGameObject*>& objList, const _vec3& vPos, _float fRadius)
 {
 	CCollider::GetInstance()->GetOverlappedObject(objList, vPos, fRadius);
 }

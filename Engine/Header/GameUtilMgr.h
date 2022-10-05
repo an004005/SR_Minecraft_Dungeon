@@ -2,6 +2,8 @@
 #include "Engine_Include.h"
 BEGIN(Engine)
 
+
+
 class ENGINE_DLL CGameUtilMgr
 {
 public:
@@ -14,6 +16,10 @@ public:
 	static void MatWorldComposeEuler(OUT _matrix& matOut, const _vec3& vScale, const _vec3& vAngle, const _vec3& vPos);
 	static void MatWorldDecompose(const _matrix& matWorld, OUT _vec3& vScale, OUT _vec3& vAngle, OUT _vec3& vPos);
 	static _float Vec3LenXZ(const _vec3& v1);
+
+	static const _vec3 s_vZero;
+	static const _vec3 s_vUp;
+	static const _matrix s_matIdentity;
 };
 
 END

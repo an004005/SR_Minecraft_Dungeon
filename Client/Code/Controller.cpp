@@ -34,22 +34,58 @@ CPlayerController::~CPlayerController()
 
 void CPlayerController::Update(CSkeletalCube* m_pOwner)
 {
-	if (MouseKeyDown(DIM_LB))
+	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pOwner);
+	NULL_CHECK(pPlayer);
+
+	// ¿òÁ÷ÀÓ
 	{
-		// move or attack melee
-		dynamic_cast<CPlayer*>(m_pOwner)->CheckCursor();
+		if (DIKeyDown(DIK_W))
+		{
+			pPlayer->SetMove(0.f, 1.f);
+		}
+		if (DIKeyUp(DIK_S))
+		{
+			pPlayer->SetMove(0.f, 1.f);
+		}
+
+		if (DIKeyDown(DIK_A))
+		{
+			pPlayer->SetMove(-1.f, 0.f);
+		}
+		if (DIKeyUp(DIK_D))
+		{
+			pPlayer->SetMove(-1.f, 0.f);
+		}
+
+		if (DIKeyDown(DIK_S))
+		{
+			pPlayer->SetMove(0.f, -1.f);
+		}
+		if (DIKeyUp(DIK_W))
+		{
+			pPlayer->SetMove(0.f, -1.f);
+		}
+
+		if (DIKeyDown(DIK_D))
+		{
+			pPlayer->SetMove(1.f, 0.f);
+		}
+		if (DIKeyUp(DIK_A))
+		{
+			pPlayer->SetMove(1.f, 0.f);
+		}
 	}
-	else if (MouseKeyDown(DIM_RB))
-	{
-		// attack arrow
-	}
+
 
 	if (DIKeyDown(DIK_SPACE))
 	{
-		// dotge
-		dynamic_cast<CPlayer*>(m_pOwner)->Attack();
-
+		pPlayer->Roll();
 	}
+
+	if (MouseKeyDown(DIM_LB))
+		pPlayer->MeleeAttackOn(true);
+	if (MouseKeyUp(DIM_LB))
+		pPlayer->MeleeAttackOn(false);
 }
 
 CPlayerController* CPlayerController::Create()

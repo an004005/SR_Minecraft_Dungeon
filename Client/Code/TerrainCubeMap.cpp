@@ -226,9 +226,7 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 		Engine::Add_StaticCollision(vCenter, 1.f);
 	}
 
-	size_t i = m_vecTotalCube.size();
-	size_t j = m_vecTotalTex.size();
-}
+
 
 void CTerrainCubeMap::SaveMap(const wstring & wstrPath)
 {

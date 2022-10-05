@@ -2,6 +2,10 @@
 
 USING(Engine);
 
+const _vec3 CGameUtilMgr::s_vZero = {0.f, 0.f, 0.f};
+const _vec3 CGameUtilMgr::s_vUp = {0.f, 1.f, 0.f};
+const _matrix CGameUtilMgr::s_matIdentity = {1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f,};
+
 void CGameUtilMgr::WorldMatrixLerp(_matrix& matOut, const _matrix& matPrev, const _matrix& matNext, const _float fS)
 {
 	_vec3 vPrevPos, vNextPos; // pos

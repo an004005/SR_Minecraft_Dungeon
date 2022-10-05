@@ -14,6 +14,8 @@ private:
 public:
 	CComponent*				Get_Component(const wstring& pObjTag, const wstring& pComponentTag, COMPONENTID eID);
 	CGameObject* Get_GameObject(const wstring& pObjTag);
+	void Get_AllGameObject(const wstring& pObjTag, list<CGameObject*>& outList);
+
 public:
 	HRESULT			Add_GameObject(const wstring& pObjTag, CGameObject* pInstance);
 	HRESULT			Ready_Layer(void);
@@ -22,7 +24,7 @@ public:
 	HRESULT			Delete_GameObject(const wstring& pObjTag);
 
 private:
-	unordered_map<wstring, CGameObject*>			m_mapObject;
+	unordered_multimap<wstring, CGameObject*>			m_mapObject;
 
 public:
 	static CLayer*		Create(void);

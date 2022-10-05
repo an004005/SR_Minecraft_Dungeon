@@ -4,10 +4,12 @@
 #define IM_LOG(...) CImGuiMgr::Logging(__VA_ARGS__)
 #define IM_BEGIN(win_name) ImGui::Begin(win_name)
 #define IM_END ImGui::End()
+#define DEBUG_SPHERE(vPos, fRadius, fAlive) Engine::AddGameObject(LAYER_GAMEOBJ, L"DebugSphere", CDebugSphere::Create(m_pGraphicDev, vPos, fRadius, fAlive))
 #else
 #define IM_LOG(...) 
 #define IM_BEGIN(win_name) 
 #define IM_END 
+#define DEBUG_SPHERE(vPos, fRadius, fAlive) 
 #endif
 
 
