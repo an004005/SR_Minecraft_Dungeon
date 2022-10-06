@@ -184,6 +184,7 @@ void CPlayer::MeleeAttack()
 	}
 	m_iAttackCnt = (m_iAttackCnt + 1) % 3;
 	m_bApplyMeleeAttack = true;
+	Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 1.f, RED, 5, 1.f);
 }
 
 void CPlayer::Roll()
