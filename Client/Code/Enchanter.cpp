@@ -138,6 +138,7 @@ void CEnchanter::StateChange()
 		PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
 		m_bAttack = false;
 		m_bMove = false;
+		m_bCanPlayAnim = false;
 		return;
 	}
 
@@ -146,6 +147,7 @@ void CEnchanter::StateChange()
 		m_eState = STUN;
 		m_bAttack = false;
 		m_bMove = false;
+		StopCurAnimation();
 		return;
 	}
 
@@ -157,6 +159,7 @@ void CEnchanter::StateChange()
 		m_bCanPlayAnim = false;
 		m_bMove = false;
 		m_bAttack = false;
+
 		return;
 	}
 

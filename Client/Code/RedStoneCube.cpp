@@ -1,42 +1,41 @@
 #include "stdafx.h"
-#include "..\Header\Geomancer.h"
+#include "..\Header\RedStoneCube.h"
 #include "StatComponent.h"
-#include "GeomancerController.h"
+#include "RedStoneCubeController.h"
 
-CGeomancer::CGeomancer(LPDIRECT3DDEVICE9 pGraphicDev): CMonster(pGraphicDev)
+CRedStoneCube::CRedStoneCube(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
 {
 }
 
-CGeomancer::CGeomancer(const CMonster& rhs): CMonster(rhs)
+CRedStoneCube::CRedStoneCube(const CMonster& rhs) : CMonster(rhs)
 {
 }
 
-CGeomancer::~CGeomancer()
+CRedStoneCube::~CRedStoneCube()
 {
 }
 
-HRESULT CGeomancer::Ready_Object()
+HRESULT CRedStoneCube::Ready_Object()
 {
 	CMonster::Ready_Object();
 
-	m_arrAnim[ANIM_IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Geomancer/idle.anim");
-	m_arrAnim[ANIM_WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Geomancer/walk.anim");
-	m_arrAnim[ANIM_DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Geomancer/dead.anim");
-	m_arrAnim[ANIM_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Geomancer/attack.anim");
-	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
+	m_arrAnim[ANIM_WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/RedStoneCube/walk.anim");
+	m_arrAnim[ANIM_DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/RedStoneCube/dead.anim");
+	m_arrAnim[ANIM_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/RedStoneCube/attack.anim");
+	m_pIdleAnim = &m_arrAnim[ANIM_WALK];
 	m_pCurAnim = m_pIdleAnim;
-	m_eState = IDLE;
-	m_fSpeed = 3.f;
+	m_eState = WALK;
+	m_fSpeed = 2.f;
 
 	m_pStat->SetMaxHP(100);
 
-	CController* pController = Add_Component<CGeomancerController>(L"Proto_GeomancerController", L"Proto_GeomancerController", ID_DYNAMIC);
+	CController* pController = Add_Component<CRedStoneCubeController>(L"Proto_RedStoneCubeController", L"Proto_RedStoneCubeController", ID_DYNAMIC);
 	pController->SetOwner(this);
 
 	return S_OK;
 }
 
-void CGeomancer::AnimationEvent(const string& strEvent)
+void CRedStoneCube::AnimationEvent(const string& strEvent)
 {
 	if (strEvent == "AttackFire")
 	{
@@ -52,7 +51,7 @@ void CGeomancer::AnimationEvent(const string& strEvent)
 	}
 }
 
-_int CGeomancer::Update_Object(const _float& fTimeDelta)
+_int CRedStoneCube::Update_Object(const _float& fTimeDelta)
 {
 	if (m_bDelete) return OBJ_DEAD;
 
@@ -67,8 +66,6 @@ _int CGeomancer::Update_Object(const _float& fTimeDelta)
 	// 각 상태에 따른 프레임 마다 실행할 함수 지정
 	switch (m_eState)
 	{
-	case IDLE:
-		break;
 	case WALK:
 		m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * m_fSpeed * fTimeDelta;
 		break;
@@ -86,38 +83,37 @@ _int CGeomancer::Update_Object(const _float& fTimeDelta)
 	return OBJ_NOEVENT;
 }
 
-void CGeomancer::LateUpdate_Object()
+void CRedStoneCube::LateUpdate_Object()
 {
 	CMonster::LateUpdate_Object();
-
 
 	if (m_bAttackFire)
 	{
 		set<CGameObject*> setObj;
-		Engine::GetOverlappedObject(setObj, m_vTargetPos, 3.f);
-	
+		_vec3 vAttackPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + (m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 2.f);
+		Engine::GetOverlappedObject(setObj, vAttackPos, 1.f);
+
 		for (auto& obj : setObj)
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				       ->TakeDamage(1, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_KNOCK_BACK);
-	
-			DEBUG_SPHERE(m_vTargetPos, 3.f, 1.f);
-			IM_LOG("Fire");
+				->TakeDamage(1, m_pRootPart->pTrans->m_vInfo[INFO_POS], this);
 		}
-	
+		DEBUG_SPHERE(vAttackPos, 1.f, 1.f);
+		IM_LOG("Fire");
+
 		m_bAttackFire = false;
 	}
 }
 
-void CGeomancer::Free()
+void CRedStoneCube::Free()
 {
 	CMonster::Free();
 }
 
-CGeomancer* CGeomancer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
+CRedStoneCube* CRedStoneCube::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
 {
-	CGeomancer* pInstance = new CGeomancer(pGraphicDev);
+	CRedStoneCube* pInstance = new CRedStoneCube(pGraphicDev);
 
 	if (FAILED(pInstance->Ready_Object()))
 	{
@@ -131,14 +127,13 @@ CGeomancer* CGeomancer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wst
 	return pInstance;
 }
 
-void CGeomancer::StateChange()
+void CRedStoneCube::StateChange()
 {
 	if (m_pStat->IsDead() && m_bReserveStop == false)
 	{
 		m_eState = DEAD;
 		PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
 		m_bAttack = false;
-		m_bMove = false;
 		m_bCanPlayAnim = false;
 		return;
 	}
@@ -147,7 +142,6 @@ void CGeomancer::StateChange()
 	{
 		m_eState = STUN;
 		m_bAttack = false;
-		m_bMove = false;
 		StopCurAnimation();
 		return;
 	}
@@ -158,25 +152,17 @@ void CGeomancer::StateChange()
 		RotateToTargetPos(m_vTargetPos);
 		PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK]);
 		m_bCanPlayAnim = false;
-		m_bMove = false;
 		m_bAttack = false;
-		return;
-	}
-
-	if (m_bMove && m_bCanPlayAnim)
-	{
-		m_eState = WALK;
-		RotateToTargetPos(m_vTargetPos, true);
-		m_pIdleAnim = &m_arrAnim[ANIM_WALK];
-		m_pCurAnim = &m_arrAnim[ANIM_WALK];
 		return;
 	}
 
 	if (m_bCanPlayAnim)
 	{
-		m_eState = IDLE;
-		m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
-		m_pCurAnim = &m_arrAnim[ANIM_IDLE];
+		m_eState = WALK;
+		RotateToTargetPos(m_vTargetPos);
+		m_pIdleAnim = &m_arrAnim[ANIM_WALK];
+		m_pCurAnim = &m_arrAnim[ANIM_WALK];
 		return;
 	}
+
 }

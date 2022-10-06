@@ -189,6 +189,7 @@ void CSkeletalCube::AnimFrameConsume(_float fTimeDelta)
 
 	if (m_pCurAnim == nullptr) return;
 
+	
 	for (const auto& animEvent : m_pCurAnim->vecEvent)
 	{
 		if (m_fAccTime <= animEvent.first && m_fAccTime + fTimeDelta >= animEvent.first)
@@ -203,7 +204,7 @@ void CSkeletalCube::AnimFrameConsume(_float fTimeDelta)
 	{
 		if (m_bReserveStop)
 		{
-			m_bStopAnim = true;;
+			m_bStopAnim = true;
 			AnimationEvent("AnimStopped");
 			return;
 		}
