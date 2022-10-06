@@ -152,10 +152,6 @@ void CPlayer::SetMoveDir(_float fX, _float fZ)
 
 	// x, z 중 하나가 0 이 아니면 움직임 요청
 	m_bMove = CGameUtilMgr::FloatCmp(fX, 0.f) == false || CGameUtilMgr::FloatCmp(fZ, 0.f) == false;
-	if (m_bMove)
-	{
-		int a= 3;
-	}
 }
 
 void CPlayer::MeleeAttack()
