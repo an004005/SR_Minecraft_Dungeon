@@ -8,6 +8,8 @@
 #include "Geomancer.h"
 #include "Zombie.h"
 #include "Creeper.h"
+#include "Skeleton.h"
+#include "Enchanter.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -62,6 +64,14 @@ void CEnemyFactory::Ready_EnemyFactory()
 	s_mapEnemySpawner.insert({ "Creeper", []()
 	{
 		return CCreeper::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Creeper.cube");
+	} });
+	s_mapEnemySpawner.insert({ "Skeleton", []()
+	{
+		return CSkeleton::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Skeleton.cube");
+	} });
+	s_mapEnemySpawner.insert({ "Enchanter", []()
+	{
+		return CEnchanter::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Enchanter.cube");
 	} });
 }
 

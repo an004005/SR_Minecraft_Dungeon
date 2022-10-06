@@ -15,12 +15,16 @@
 #include "GeomancerController.h"
 #include "ZombieController.h"
 #include "CreeperController.h"
+#include "SkeletonController.h"
+#include "EnchanterController.h"
 
 //monster
 #include "Monster.h"
 #include "Geomancer.h"
 #include "Zombie.h"
 #include "Creeper.h"
+#include "Skeleton.h"
+#include "Enchanter.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
@@ -95,14 +99,23 @@ HRESULT CStage::Ready_Layer_GameLogic()
 
 
 	//monsters
-	/*CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {3.f, 0.f ,3.f});
-	CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);*/
+	{
+		/*CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {3.f, 0.f ,3.f});
+		CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);*/
 
-	/*CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 3.f, 0.f ,6.f });
-	CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);*/
+		/*CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 3.f, 0.f ,6.f });
+		CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);*/
 
-	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 3.f, 0.f ,13.f });
-	CEnemyFactory::Create<CCreeper>("Creeper", L"Creeper", matWorld);
+		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 3.f, 0.f ,13.f });
+		//CEnemyFactory::Create<CCreeper>("Creeper", L"Creeper", matWorld);
+
+		/*CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 3.f, 0.f ,13.f });
+		CEnemyFactory::Create<CSkeleton>("Skeleton", L"Skeleton", matWorld);*/
+
+		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 3.f, 0.f ,13.f });
+		CEnemyFactory::Create<CEnchanter>("Enchanter", L"Enchanter", matWorld);
+	}
+	
 
 	return S_OK;
 }
@@ -160,6 +173,8 @@ HRESULT CStage::Ready_Proto(void)
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_GeomancerController", CGeomancerController::Create()), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_ZombieController", CZombieController::Create()), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CreeperController", CCreeperController::Create()), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_SkeletonController", CSkeletonController::Create()), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_EnchanterController", CEnchanterController::Create()), E_FAIL);
 
 
 	return S_OK;
