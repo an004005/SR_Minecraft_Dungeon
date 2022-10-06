@@ -23,7 +23,6 @@
 float4x4 gWorldMatrix : World;
 float4x4 gProjectionMatrix : Projection;
 float4x4 gViewMatrix : View;
-float4 	gColor : Color;
 
 float gTime : Time0_X;
 
@@ -40,14 +39,12 @@ struct VS_INPUT
 {
    float3 mPosition : POSITION;
    float2 mUV: TEXCOORD0;
-	float4 mColor : TEXCOORD1;
 };
 
 struct VS_OUTPUT 
 {
    float4 mPosition : POSITION;
    float2 mUV: TEXCOORD0;
-	float4 mColor : TEXCOORD1;
 };
 
 VS_OUTPUT UVAnimation_Pass_0_Vertex_Shader_vs_main( VS_INPUT Input )
@@ -58,15 +55,14 @@ VS_OUTPUT UVAnimation_Pass_0_Vertex_Shader_vs_main( VS_INPUT Input )
     
    Output.mPosition = mul(Output.mPosition, gViewMatrix);
    Output.mPosition = mul(Output.mPosition, gProjectionMatrix);
-
-   Output.mUV = Input.mUV + float2(gTime, gUVSpeed);
+   
+   Output.mUV = Input.mUV + float2(gTime , gUVSpeed);
    return Output;
 }
 
 struct PS_INPUT
 {
    float2 mUV : TEXCOORD0;
-	float4 mColor : TEXCOORD1;
 };
 
 texture2D DiffuseMap_Tex;
@@ -78,10 +74,9 @@ sampler2D DiffuseSampler = sampler_state
 float4 UVAnimation_Pass_0_Pixel_Shader_ps_main(PS_INPUT Input) : COLOR
 {
    float4 albedo = tex2D(DiffuseSampler, Input.mUV);
-	float4 OutColor = gColor;
    if (albedo.w > 0)
    {
-	   return OutColor.xyzw;
+	   return float4(0.32f, 0.24f, 0.21f, 1.0f);
    }
 
    return float4(0, 0, 0, 0);

@@ -62,6 +62,9 @@
     <Filter Include="02. GameObject\01. Monster">
       <UniqueIdentifier>{2d1d49c7-b7ce-4a7f-b76d-a9638914b221}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\Object">
+      <UniqueIdentifier>{d4c64e4c-660f-4b18-b3c9-37cd78b2fea4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\MainApp.h">
@@ -233,6 +236,9 @@
     <ClInclude Include="..\Header\RedStoneMonstrosity.h">
       <Filter>02. GameObject\01. Monster</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\GeomancerWall.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -385,6 +391,10 @@
     </ClCompile>
     <ClCompile Include="..\Code\RedStoneMonstrosity.cpp">
       <Filter>02. GameObject\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Particle.cpp" />
+    <ClCompile Include="..\Code\GeomancerWall.cpp">
+      <Filter>02. GameObject\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

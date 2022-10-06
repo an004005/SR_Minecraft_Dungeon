@@ -175,6 +175,7 @@
     <ClInclude Include="..\Header\EnchanterController.h" />
     <ClInclude Include="..\Header\Geomancer.h" />
     <ClInclude Include="..\Header\GeomancerController.h" />
+    <ClInclude Include="..\Header\GeomancerWall.h" />
     <ClInclude Include="..\Header\ImGuiMgr.h" />
     <ClInclude Include="..\Header\ImSequencerImpl.h" />
     <ClInclude Include="..\Header\Loading.h" />
@@ -234,6 +235,7 @@
     <ClCompile Include="..\Code\EnchanterController.cpp" />
     <ClCompile Include="..\Code\Geomancer.cpp" />
     <ClCompile Include="..\Code\GeomancerController.cpp" />
+    <ClCompile Include="..\Code\GeomancerWall.cpp" />
     <ClCompile Include="..\Code\ImGuiMgr.cpp" />
     <ClCompile Include="..\Code\ImSequencerImpl.cpp" />
     <ClCompile Include="..\Code\Loading.cpp" />

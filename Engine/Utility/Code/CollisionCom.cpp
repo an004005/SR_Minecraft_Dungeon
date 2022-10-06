@@ -2,6 +2,7 @@
 #include "Collider.h"
 #include "Transform.h"
 
+
 CCollisionCom::CCollisionCom()
 {
 }
@@ -41,21 +42,42 @@ CCollisionCom* CCollisionCom::Create()
 	return new CCollisionCom();
 }
 
-void CCollisionCom::CollisionDynamic(CCollisionCom* pOther)
+void CCollisionCom::CollisionDynamic(CCollisionCom* pOther, BLOCKING_TYPE eType)
 {
-	_vec3& vPos = m_pOwnerTrans->m_vInfo[INFO_POS];
-	_vec3 vCollPos = GetCollPos();
+	if (eType == PUSH_EACH_OTHER)
+	{
+		_vec3& vPos = m_pOwnerTrans->m_vInfo[INFO_POS];
+		_vec3 vCollPos = GetCollPos();
 
-	_vec3& vPosOther = pOther->GetTransform()->m_vInfo[INFO_POS];
-	_vec3 vCollPosOther = pOther->GetCollPos();
+		_vec3& vPosOther = pOther->GetTransform()->m_vInfo[INFO_POS];
+		_vec3 vCollPosOther = pOther->GetCollPos();
 
-	_vec3 vToMe = vCollPos - vCollPosOther;
-	_float fMoved = (m_fRadius + pOther->GetRadius() - D3DXVec3Length(&vToMe)) * 0.5f;
+		_vec3 vToMe = vCollPos - vCollPosOther;
+		_float fMoved = (m_fRadius + pOther->GetRadius() - D3DXVec3Length(&vToMe)) * 0.5f;
 
-	D3DXVec3Normalize(&vToMe, &vToMe);
+		D3DXVec3Normalize(&vToMe, &vToMe);
 
-	vPos += fMoved * vToMe;
-	vPosOther += -fMoved * vToMe;
+		vPos += fMoved * vToMe;
+		vPosOther += -fMoved * vToMe;
+	}
+	else if (eType == PUSH_OTHER_ONLY)
+	{
+		_vec3 vCollPos = GetCollPos();
+
+		_vec3& vPosOther = pOther->GetTransform()->m_vInfo[INFO_POS];
+		_vec3 vCollPosOther = pOther->GetCollPos();
+
+		_vec3 vToMe = vCollPos - vCollPosOther;
+		_float fMoved = (m_fRadius + pOther->GetRadius() - D3DXVec3Length(&vToMe));
+
+		D3DXVec3Normalize(&vToMe, &vToMe);
+
+		vPosOther += -fMoved * vToMe;
+	}
+	else if (eType == CUSTOM_EVENT)
+	{
+		
+	}
 }
 
 void CCollisionCom::CollisionStatic(const _vec3& vCenter, _float fRadius)
@@ -70,4 +92,3 @@ void CCollisionCom::CollisionStatic(const _vec3& vCenter, _float fRadius)
 
 	vPos += fMoved * vDiff;
 }
-

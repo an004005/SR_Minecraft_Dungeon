@@ -82,15 +82,26 @@ public:
 	template<typename T>
 	static T* Create(const string& strFactoryTag, const wstring& wstrObjTag, const _matrix& matWorld)
 	{
-		T* pCasted = dynamic_cast<T*>(s_mapEffectSpawner.find(strFactoryTag)->second());
-		_ASSERT_CRASH(pCasted != nullptr);
-		Engine::AddGameObject(LAYER_EFFECT, wstrObjTag, pCasted);
+		T* pCasted = Create<T>(strFactoryTag, wstrObjTag);
 
-		CTransform* pTrans = pCasted->Get_Component<CTransform>(L"Proto_TransformCom_Shock", ID_DYNAMIC);
+		CTransform* pTrans = pCasted->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
 		pTrans->Set_WorldDecompose(matWorld);
 
 		return pCasted;
 	}
+
+	template<typename T>
+	static T* Create(const string& strFactoryTag, const wstring& wstrObjTag, const _vec3& vPos)
+	{
+		T* pCasted = Create<T>(strFactoryTag, wstrObjTag);
+
+		CTransform* pTrans = pCasted->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+		pTrans->m_vInfo[INFO_POS] = vPos;
+		pTrans->Update_Component(0.f);
+
+		return pCasted;
+	}
+
 	static void Ready_EffectFactory();
 
 private:
@@ -136,4 +147,47 @@ public:
 private:
 	static map<string, std::function<CGameObject*()>> s_mapBulletSpawner;
 
+};
+
+class CObjectFactory : CAbstFactory
+{
+	friend class CImGuiMgr;
+public:
+	template<typename T>
+	static T* Create(const string& strFactoryTag, const wstring& wstrObjTag)
+	{
+		T* pCasted = dynamic_cast<T*>(s_mapObjectSpawner.find(strFactoryTag)->second());
+		_ASSERT_CRASH(pCasted != nullptr);
+		Engine::AddGameObject(LAYER_GAMEOBJ, wstrObjTag, pCasted);
+
+		return pCasted;
+	}
+
+	template<typename T>
+	static T* Create(const string& strFactoryTag, const wstring& wstrObjTag, const _matrix& matWorld)
+	{
+		T* pCasted = Create<T>(strFactoryTag, wstrObjTag);
+
+		CTransform* pTrans = pCasted->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+		pTrans->Set_WorldDecompose(matWorld);
+
+		return pCasted;
+	}
+
+	template<typename T>
+	static T* Create(const string& strFactoryTag, const wstring& wstrObjTag, const _vec3& vPos)
+	{
+		T* pCasted = Create<T>(strFactoryTag, wstrObjTag);
+
+		CTransform* pTrans = pCasted->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+		pTrans->m_vInfo[INFO_POS] = vPos;
+		pTrans->Update_Component(0.f);
+
+		return pCasted;
+	}
+
+	static void Ready_ObjectFactory();
+
+private:
+	static map<string, std::function<CGameObject*()>> s_mapObjectSpawner;
 };
