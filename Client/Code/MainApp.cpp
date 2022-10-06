@@ -33,6 +33,8 @@ HRESULT CMainApp::Ready_MainApp(void)
 	srand((unsigned)time(NULL));
 
 
+
+
 	return S_OK;
 }
 
@@ -137,8 +139,8 @@ HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement
 
 
 	// pScene = CLogo::Create(pGraphicDev);
-	// CAnimationTool::Create(pGraphicDev);
-	 // CMapTool::Create(pGraphicDev);
+	//CAnimationTool::Create(pGraphicDev);
+	//CMapTool::Create(pGraphicDev);
 	NULL_CHECK_RETURN(CStage::Create(pGraphicDev), E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Create_Management(pGraphicDev, ppManagement), E_FAIL);
@@ -172,8 +174,8 @@ void CMainApp::Free(void)
 	Safe_Release(m_pDeviceClass);
 	Safe_Release(m_pManagementClass);
 
+
 	Engine::Release_Utility();
 	Engine::Release_System();
-
 	// CClientServiceMgr::GetInstance()->DestroyInstance();
 }

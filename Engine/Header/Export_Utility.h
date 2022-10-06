@@ -8,6 +8,7 @@
 #include "CubeTex.h"
 #include "VoxelTex.h"
 #include "TerrainCubeTex.h"
+#include "TerrainRcTex.h"
 #include "CollisionCom.h"
 #include "ParticleSystem.h"
 #include "Collider.h"
@@ -16,12 +17,13 @@
 #include "Transform.h"
 #include "Calculator.h"
 #include "Camera.h"
-
+#include "DebugSphere.h"
 
 #include "ProtoMgr.h"
 #include "Management.h"
 #include "Renderer.h"
 #include "GameUtilMgr.h"
+#include "Collider.h"
 
 
 BEGIN(Engine)
@@ -56,6 +58,7 @@ BEGIN(Engine)
 
 		return pCasted;
 	}
+	inline 	void Get_AllGameObject(LAYERID eLayerID, const wstring& pObjTag, list<CGameObject*>& outList);
 
 	inline CLayer* Get_Layer(LAYERID eLayerID);
 	inline void AddGameObject(LAYERID eLayerID, const wstring& pObjTag, CGameObject* pObject);
@@ -72,6 +75,13 @@ BEGIN(Engine)
 	inline void Add_RenderGroup(RENDERID eID, CGameObject* pGameObject);
 	inline void Render_GameObject(LPDIRECT3DDEVICE9& pGraphicDev);
 	inline void Clear_RenderGroup(void);
+
+	// collider
+	inline void Add_CollisionCom(CCollisionCom* pCollision);
+	inline void Add_StaticCollision(const _vec3& vCenter, _float fRadius);
+	// run at only late update
+	inline void GetOverlappedObject(OUT set<CGameObject*>& objList, const _vec3& vPos, _float fRadius);
+	inline void Clear_ColliderAll();
 
 
 	inline void Release_Utility(void);

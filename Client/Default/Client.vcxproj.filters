@@ -157,9 +157,6 @@
     <ClInclude Include="..\Header\ImSequencerImpl.h">
       <Filter>Tool</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\MapCube.h">
-      <Filter>02. GameObject\04. MapCube</Filter>
-    </ClInclude>
     <ClInclude Include="stb\stb_image.h">
       <Filter>99. Default</Filter>
     </ClInclude>
@@ -183,6 +180,9 @@
     </ClInclude>
     <ClInclude Include="..\Header\AbstFactory.h">
       <Filter>Mgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\StatComponent.h">
+      <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Particle.h" />
   </ItemGroup>
@@ -262,9 +262,6 @@
     <ClCompile Include="..\Code\ImSequencerImpl.cpp">
       <Filter>Tool</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\MapCube.cpp">
-      <Filter>02. GameObject\04. MapCube</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\Monster.cpp">
       <Filter>02. GameObject\00. Player</Filter>
     </ClCompile>
@@ -291,6 +288,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\AbstFactory.cpp">
       <Filter>Mgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\StatComponent.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Particle.cpp" />
   </ItemGroup>

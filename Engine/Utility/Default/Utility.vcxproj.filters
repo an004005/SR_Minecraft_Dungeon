@@ -120,6 +120,12 @@
     <ClInclude Include="..\..\Header\Collider.h">
       <Filter>04. Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Header\TerrainRcTex.h">
+      <Filter>00. Component\00. VIBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Header\DebugSphere.h">
+      <Filter>01. GameObject</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Header\ParticleSystem.h">
       <Filter>01. GameObject</Filter>
     </ClInclude>
@@ -187,6 +193,12 @@
     </ClCompile>
     <ClCompile Include="..\Code\Collider.cpp">
       <Filter>04. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\TerrainRcTex.cpp">
+      <Filter>00. Component\00. VIBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\DebugSphere.cpp">
+      <Filter>01. GameObject</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\ParticleSystem.cpp">
       <Filter>01. GameObject</Filter>

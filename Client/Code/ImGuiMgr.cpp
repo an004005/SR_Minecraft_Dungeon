@@ -4,7 +4,7 @@
 #include "SkeletalCube.h"
 #include "ImGuiFileDialog.h"
 #include "ImSequencerImpl.h"
-#include "MapTool.h"
+#include "TerrainCubeMap.h"
 
 ImGuiTextBuffer CImGuiMgr::s_log;
 SkeletalPart* CImGuiMgr::s_SelectedPart = nullptr;
@@ -554,7 +554,7 @@ void CImGuiMgr::AnimationEditor(CSkeletalCube* pSkeletal)
 	}
 }
 
-void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapTool& CMapTool, size_t CubeCount, _float& _far)
+void CImGuiMgr::MapControl(Engine::MapTool& tMaptool, _float& _far, CTerrainCubeMap* cubemap)
 {
 #ifndef _DEBUG
 	return;
@@ -567,7 +567,11 @@ void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapTool& CMapTool, size_
 		{
 
 			ImGui::Text("Set Block Texture");
-			ImGui::InputInt("input Index", &tMaptool.iTexIdx);
+			ImGui::InputInt("Cube Index", &tMaptool.iTexIdx);
+			ImGui::NewLine();
+
+			ImGui::Text("Set Plant Texture");
+			ImGui::InputInt("Plant Texture", &tMaptool.iPlantIdx);
 			ImGui::NewLine();
 
 			ImGui::Text("Set Height");
@@ -580,14 +584,10 @@ void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapTool& CMapTool, size_
 			ImGui::InputFloat("Insert Far", &_far);
 			ImGui::NewLine();
 
-			ImGui::Text("Total Block Count :");
-			ImGui::SameLine();
-			ImGui::Text("%d", CubeCount);
-			ImGui::NewLine();
-
+		
 			ImGui::Text("Select Options");
-			ImGui::RadioButton("Terrain", &tMaptool.iPickingOption, PICK_TERRAIN); ImGui::SameLine();
 			ImGui::RadioButton("Cube", &tMaptool.iPickingOption, PICK_CUBE); ImGui::SameLine();
+			ImGui::RadioButton("Plant", &tMaptool.iPickingOption, PICK_PLANT); ImGui::SameLine();
 			ImGui::RadioButton("Delete", &tMaptool.iPickingOption, PICK_DELETE); ImGui::SameLine();
 
 			ImGui::NewLine();
@@ -611,7 +611,7 @@ void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapTool& CMapTool, size_
 			{
 				ImGui::SameLine();
 				ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Checked!!");
-				tMaptool.bRendState = true;
+				cubemap->m_bRendState = true;
 			}
 			else
 				tMaptool.bRendState = false;
@@ -650,7 +650,7 @@ void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapTool& CMapTool, size_
 
 					wstring tmp;
 					tmp.assign(filePathName.begin(), filePathName.end());
-					CMapTool.LoadMap(tmp);
+					cubemap->LoadMap(tmp);
 				}
 				ImGuiFileDialog::Instance()->Close();
 			}
@@ -669,7 +669,7 @@ void CImGuiMgr::MapControl(Engine::MapTool& tMaptool , CMapTool& CMapTool, size_
 
 					wstring tmp;
 					tmp.assign(filePathName.begin(), filePathName.end());
-					CMapTool.SaveMap(tmp);
+					cubemap->SaveMap(tmp);
 				}
 				ImGuiFileDialog::Instance()->Close();
 			}

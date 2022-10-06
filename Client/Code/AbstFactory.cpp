@@ -3,6 +3,9 @@
 #include "Player.h"
 #include "Terrain.h"
 #include "Particle.h"
+#include "StaticCamera.h"
+#include "Monster.h"
+
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
 map<string, std::function<CGameObject*()>> CPlayerFactory::s_mapPlayerSpawner;
@@ -45,6 +48,10 @@ void CPlayerFactory::Ready_PlayerFactory()
 
 void CEnemyFactory::Ready_EnemyFactory()
 {
+	s_mapEnemySpawner.insert({"TestZombie", []()
+	{
+		return CMonster::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Zombie.cube");
+	}});
 }
 
 void CEffectFactory::Ready_EffectFactory()
@@ -114,6 +121,10 @@ void CEnvFactory::Ready_EnvFactory()
 	s_mapEnvSpawner.insert({"DefaultTerrain", []()
 	{
 		return CTerrain::Create(s_pGraphicDev);
+	}});
+	s_mapEnvSpawner.insert({"StaticCamera", []()
+	{
+		return CStaticCamera::Create(s_pGraphicDev);
 	}});
 }
 

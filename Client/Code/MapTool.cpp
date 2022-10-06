@@ -6,11 +6,53 @@
 #include "ImGuiMgr.h"
 #include "TerrainCubeMap.h"
 
+
+_float fP = 0.5f;
+_float fM = -0.5f;
+const _vec3 CMapTool::s_vFaceVtx[FACE_END][4]
+{
+{
+	{ fM, fP, fP },
+	{ fP, fP, fP },
+	{ fP, fM, fP },
+	{ fM, fM, fP },
+},
+{
+	{ fM, fP, fM },
+	{ fP, fP, fM },
+	{ fP, fM, fM },
+	{ fM, fM, fM },
+},
+{
+	{ fP, fP, fP },
+	{ fP, fM, fP },
+	{ fP, fM, fM },
+	{ fP, fP, fM },
+},
+{
+	{ fM, fP,  fP },
+	{ fM, fM,  fP },
+	{ fM, fM,  fM },
+	{ fM, fP,  fM },
+},
+{
+	{ fP, fP, fP },
+	{ fP, fP, fM },
+	{ fM, fP, fM },
+	{ fM, fP, fP },
+},
+{
+	{ fP, fM, fP },
+	{ fP, fM, fM },
+	{ fM, fM, fM },
+	{ fM, fM, fP },
+}
+};
+
 CMapTool::CMapTool(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
 {
 	ZeroMemory(&m_tMapTool, sizeof(MapTool));
-	ZeroMemory(&m_fHeight, sizeof(_float) * VTXCNTX * VTXCNTZ);
 	m_tMapTool.fHeight = 1.f;
 }
 
@@ -25,87 +67,65 @@ HRESULT CMapTool::Ready_Scene(void)
 		return E_FAIL;
 
 	FAILED_CHECK_RETURN(Ready_Proto(), E_FAIL);
-
-	FAILED_CHECK_RETURN(Ready_Layer_Environment(L"Layer_Environment"), E_FAIL);
-
-	m_pLayer = Engine::CLayer::Create();
-	NULL_CHECK_RETURN(m_pLayer, E_FAIL);
+	FAILED_CHECK_RETURN(Ready_Layer_Environment(), E_FAIL);
 	
-	//LoadMap();
 	return S_OK;
 }
 
 _int CMapTool::Update_Scene(const _float & fTimeDelta)
 {
-	ImGui::ShowDemoWindow(nullptr);
+	//ImGui::ShowDemoWindow(nullptr);
 	IM_BEGIN("Map Editor Window");
 
 
-	CImGuiMgr::MapControl(m_tMapTool, *this, m_vecTotalCube.size(), m_fFar);
+	CImGuiMgr::MapControl(m_tMapTool,m_fFar, m_pCubeMap);
 	
 	m_pDCamera->Set_Far(m_fFar);
-
-
+	
 	//마우스 피킹 때 MapCube 생성
-	if (Engine::Get_DIMouseState(DIM_LB) & 0X80 && m_dwTime + 200 < GetTickCount())
+	if (MouseKeyDown(DIM_LB))
 	{
 		_vec3 PickPos;
-		CGameObject*		pGameObject = nullptr;
-		CMapCube* pCube;
+		int iToDelIdx = 0;
 
 		switch (m_tMapTool.iPickingOption)
 		{
 		case PICK_CUBE:
-			if (!PickingOnCube(PickPos))
+			if (!PickingOnCube(PickPos, iToDelIdx))
 				break;
-
-			pGameObject = pCube = CMapCube::Create(m_pGraphicDev, m_tMapTool, PickPos);
-			NULL_CHECK_RETURN(pGameObject, E_FAIL);
-
-			pCube->m_wstrName = L"MapCube_" + to_wstring(m_tMapTool.iCubeCount);
-			m_arrLayer[LAYER_ENV]->Add_GameObject(pCube->m_wstrName, pGameObject);
-			m_vecTotalCube.push_back(dynamic_cast<CMapCube*>(pGameObject));
-
-			
-			m_tMapTool.iCubeCount++;
-			break;
-
-		case PICK_TERRAIN:
-			pGameObject = pCube = CMapCube::Create(m_pGraphicDev, m_tMapTool, PickPos);
-			if (pGameObject == nullptr)
-				break;
-
-			pCube->m_wstrName = L"MapCube_" + to_wstring(m_tMapTool.iCubeCount);
-			m_arrLayer[LAYER_ENV]->Add_GameObject(pCube->m_wstrName, pGameObject);
-
-			m_vecTotalCube.push_back(dynamic_cast<CMapCube*>(pGameObject));
-
-			m_tMapTool.iCubeCount++;
-			break;
-
-		case PICK_DELETE:
-			if (!PickingOnCube(PickPos))
-				break;
-
-			m_vecTotalCube.erase(remove_if(m_vecTotalCube.begin(), m_vecTotalCube.end(),
-				[this](const CMapCube* mapCube)
 			{
-				return mapCube->m_wstrName == this->m_wDeleteName;
-			}), m_vecTotalCube.end());
-
-			if (FAILED(m_arrLayer[LAYER_ENV]->Delete_GameObject(m_wDeleteName)))
+				_matrix matWorld;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, m_tMapTool.fHeight, 1.f }, { 0.f, 0.f, 0.f }, PickPos);
+				m_pCubeMap->AddCube({ matWorld, m_tMapTool.iTexIdx, (CUBETYPE)m_tMapTool.iCubeType, m_tMapTool.fHeight });
+			}
+			break;
+		case PICK_PLANT:
+			if (!PickingOnCube(PickPos, iToDelIdx))
 				break;
 
-			break;
+			{
+				_matrix matWorld;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, m_tMapTool.fHeight, 1.f }, { 0.f, 0.f, 0.f }, PickPos);
+				m_pCubeMap->AddTex({ matWorld, m_tMapTool.iPlantIdx, TYPE_TEX, m_tMapTool.fHeight });
 
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, m_tMapTool.fHeight, 1.f }, { 0.f, D3DXToRadian(90), 0.f }, PickPos);
+				m_pCubeMap->AddTex({ matWorld, m_tMapTool.iPlantIdx, TYPE_TEX, m_tMapTool.fHeight });
+			}
+			break;
+		case PICK_DELETE:
+			if (!PickingOnCube(PickPos, iToDelIdx))
+				break;
+
+			m_pCubeMap->DeleteCube(iToDelIdx);
+			m_pCubeMap->DeleteTex(PickPos);
+		
+			break;
+		
 		default:
 			break;
 		}
-
-		m_dwTime = GetTickCount();
 	}
 
-	Cube_DebugShow();
 
 	IM_END;
 
@@ -121,13 +141,13 @@ void CMapTool::Render_Scene(void)
 {
 }
 
-HRESULT CMapTool::Ready_Layer_Environment(const _tchar * pLayerTag)
+HRESULT CMapTool::Ready_Layer_Environment()
 {
 
 	CGameObject*		pGameObject = nullptr;
 
 	// DynamicCamera
-	pGameObject = m_pDCamera = CDynamicCamera::Create(m_pGraphicDev, &_vec3(0.f, 10.f, -10.f), &_vec3(0.f, 0.f, 0.f), &_vec3(0.f, 1.f, 0.f), D3DXToDegree(60.f), (_float)WINCX/WINCY, 0.1f, m_fFar);
+	pGameObject = m_pDCamera = CDynamicCamera::Create(m_pGraphicDev, &_vec3(0.f, 10.f, -10.f), &_vec3(0.f, 0.f, 0.f), &_vec3(0.f, 1.f, 0.f), D3DXToDegree(60.f), (_float)WINCX/WINCY, 0.1f, 1000.f);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"DynamicCamera", pGameObject), E_FAIL);
 	g_cam = m_pDCamera;
@@ -137,24 +157,17 @@ HRESULT CMapTool::Ready_Layer_Environment(const _tchar * pLayerTag)
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"Terrain", pGameObject), E_FAIL);
 
-	//CMapCube* pCube;
-	//for (int i = 0; i < VTXCNTX; ++i)
-	//{
-	//	for (int j = 0; j < VTXCNTZ; ++j)
-	//	{
-	//		pGameObject = pCube = CMapCube::Create(m_pGraphicDev, m_tMapTool, _vec3((_float)i, 1.f, (_float)j));
-	//		NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	//TerrainCubeMap
+	m_pCubeMap = CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/Stage1.map");
+	NULL_CHECK_RETURN(m_pCubeMap, E_FAIL);
+	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", m_pCubeMap), E_FAIL);
 
-	//		pCube->m_wstrName = L"MapCube_" + to_wstring(m_tMapTool.iCubeCount);
-	//		FAILED_CHECK_RETURN(pLayer->Add_GameObject(pCube->m_wstrName.c_str(), pGameObject), E_FAIL);
-
-	//		m_vecTotalCube.push_back(dynamic_cast<CMapCube*>(pGameObject));
-	//		m_tMapTool.iCubeCount++;
-	//	}
-	//}
-	
-
-		
+	/*_matrix firstCube;
+	D3DXMatrixIdentity(&firstCube);
+	firstCube._41 = 0.5f;
+	firstCube._42 = 0.5f;
+	firstCube._43 = 0.5f;
+	m_pCubeMap->AddCube({firstCube, 0, TYPE_LAND, 1.f});*/
 
 	return S_OK;
 }
@@ -164,7 +177,8 @@ HRESULT CMapTool::Ready_Proto(void)
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_TerrainTexCom", CTerrainTex::Create(m_pGraphicDev, VTXCNTX, VTXCNTZ, VTXITV)), E_FAIL);
 	//FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_TerrainTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Terrain/Grass_%d.tga", TEX_NORMAL)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CubeTexCom", CCubeTex::Create(m_pGraphicDev)), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_MinecraftCubeTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/MinscraftCubeTile/CubeTile_%d.dds", TEX_CUBE, 107)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_MinecraftCubeTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/MinscraftCubeTile/CubeTile_%d.dds", TEX_CUBE, 153)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_PlantTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Plant/plant_%d.png", TEX_NORMAL, 3)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CalculatorCom", CCalculator::Create(m_pGraphicDev)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_TransformCom", CTransform::Create()), E_FAIL);
 	
@@ -172,120 +186,6 @@ HRESULT CMapTool::Ready_Proto(void)
 }
 
 
-
-void CMapTool::SaveMap(wstring wstrFileName)
-{
-	//input data in m_vecLand
-	for (auto iter : m_vecTotalCube)
-	{
-		if (iter->m_tMapTool.iCubeType == TYPE_LAND)
-			m_vecLand.push_back(iter);
-	}
-
-	//Set data in m_fHeight
-	Set_CubeCoordinate();
-
-	HANDLE hFile = CreateFile(wstrFileName.c_str(), GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
-	if (INVALID_HANDLE_VALUE == hFile)
-	{
-		MSG_BOX("Failed Save Map");
-		return;
-	}
-
-	DWORD	dwByte = 0;
-	
-	size_t m_vecTotalCubeSize = m_vecTotalCube.size();
-
-
-	WriteFile(hFile, &m_vecTotalCubeSize, sizeof(size_t), &dwByte, nullptr);
-
-	for (auto iter : m_vecTotalCube)
-	{
-		WriteFile(hFile, &iter->m_pTransCom->m_matWorld, sizeof(_matrix), &dwByte, nullptr);
-		WriteFile(hFile, &iter->m_tMapTool, sizeof(MapTool), &dwByte, nullptr);
-	}
-	
-
-	WriteFile(hFile, &m_fHeight, sizeof(_float) * VTXCNTX * VTXCNTZ, &dwByte, nullptr);
-		
-	CloseHandle(hFile);
-
-}
-
-void CMapTool::LoadMap(wstring wstrFileName)
-{
-
-	m_pLayer->Free();
-	m_vecTotalCube.clear();
-	m_vecLand.clear();
-	ZeroMemory(&m_fHeight, sizeof(_float) * VTXCNTX * VTXCNTZ);
-	m_tMapTool.iCubeCount = 0;
-
-	HANDLE hFile = CreateFile(wstrFileName.c_str(), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
-
-	if (INVALID_HANDLE_VALUE == hFile)
-	{
-		MSG_BOX("Failed Load Map");
-		return;
-	}
-	DWORD	dwByte = 0;
-
-	size_t vecSize;
-	_matrix matCubeWorld;
-	MapTool tMapTool;
-
-	ReadFile(hFile, &vecSize, sizeof(size_t), &dwByte, nullptr);
-
-	while (vecSize--)
-	{
-		
-		ReadFile(hFile, &matCubeWorld, sizeof(_matrix), &dwByte, nullptr);
-		ReadFile(hFile, &tMapTool, sizeof(MapTool), &dwByte, nullptr);
-		Create_Cube(matCubeWorld, tMapTool);
-	}
-
-	ReadFile(hFile, &m_fHeight, sizeof(_float) * VTXCNTX * VTXCNTZ, &dwByte, nullptr);
-
-	CloseHandle(hFile);
-}
-
-void CMapTool::Create_Cube(_matrix & CubeWorld, MapTool& tMapTool)
-{
-	CGameObject* pGameObject = nullptr;
-	CMapCube* pMapCube = nullptr;
-
-	pGameObject = pMapCube = CMapCube::Create(m_pGraphicDev, CubeWorld, tMapTool);
-
-	if (pGameObject == nullptr)
-		return;
-
-	m_pLayer->Add_GameObject(pMapCube->m_wstrName.c_str(), pGameObject);
-
-	m_vecTotalCube.push_back(dynamic_cast<CMapCube*>(pGameObject));
-	m_tMapTool.iCubeCount++;
-
-}
-
-void CMapTool::Cube_DebugShow(void)
-{
-	if (m_tMapTool.bRendState)
-	{
-		for (auto& iter : m_vecTotalCube)
-		{
-			iter->m_tMapTool.bRendState = true;
-		}
-
-	}
-	else
-	{
-		for (auto& iter : m_vecTotalCube)
-		{
-			iter->m_tMapTool.bRendState = false;
-		}
-	}
-
-
-}
 CMapTool * CMapTool::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	CMapTool *	pInstance = new CMapTool(pGraphicDev);
@@ -306,9 +206,11 @@ void CMapTool::Free(void)
 
 
 
-_bool CMapTool::PickingOnCube(_vec3& CubeCenter)
+_bool CMapTool::PickingOnCube(_vec3& CubeCenter, int& iToDelIdx)
 {
-	if (m_vecTotalCube.empty())
+	const vector<MapCubeInfo>& vecTotalCube = m_pCubeMap->GetTotalCubes();
+
+	if (vecTotalCube.empty())
 		return false;
 
 	POINT		ptMouse{};
@@ -356,23 +258,45 @@ _bool CMapTool::PickingOnCube(_vec3& CubeCenter)
 	_ulong iCurCube = 0;
 
 	
+	_vec3 vCam = m_pDCamera->GetEys();
+	_vec3 vFaceVtx[FACE_END][4];
 
-	for (_ulong i = 0; i < m_vecTotalCube.size(); ++i)
+
+	for (_ulong i = 0; i < vecTotalCube.size(); ++i)
 	{
+		_vec3 vPos;
+		vPos.x = vecTotalCube[i].matWorld._41;
+		vPos.y = vecTotalCube[i].matWorld._42;
+		vPos.z = vecTotalCube[i].matWorld._43;
+		_vec3 vDiff = vPos - vCam;
+
+		if (D3DXVec3LengthSq(&vDiff) > 900.f) continue; // 큐브 거리가 카메라부터 30 초과면 체크 안함
+
+		// 현재 큐브의 world를 통해 face 생성
+		memcpy(&vFaceVtx, &s_vFaceVtx, sizeof(vFaceVtx));
+		for (int j = 0; j < FACE_END; ++j)
+		{
+			for (int k = 0; k < 4; ++k)
+			{
+				D3DXVec3TransformCoord(&vFaceVtx[j][k], &vFaceVtx[j][k], &vecTotalCube[i].matWorld);
+			}
+		}
+
+
 		for (_ulong j = 0; j < FACE_END; ++j)
 		{
 				// 오른쪽 위
-				dwVtxIdxRU[0] = m_vecTotalCube[i]->vFaceVtx[j][0];
-				dwVtxIdxRU[1] = m_vecTotalCube[i]->vFaceVtx[j][1];
-				dwVtxIdxRU[2] = m_vecTotalCube[i]->vFaceVtx[j][2];
+				dwVtxIdxRU[0] = vFaceVtx[j][0];
+				dwVtxIdxRU[1] = vFaceVtx[j][1];
+				dwVtxIdxRU[2] = vFaceVtx[j][2];
 
 				// 왼쪽 아래
-				dwVtxIdxLD[0] = m_vecTotalCube[i]->vFaceVtx[j][0];
-				dwVtxIdxLD[1] = m_vecTotalCube[i]->vFaceVtx[j][2];
-				dwVtxIdxLD[2] = m_vecTotalCube[i]->vFaceVtx[j][3];
+				dwVtxIdxLD[0] = vFaceVtx[j][0];
+				dwVtxIdxLD[1] = vFaceVtx[j][2];
+				dwVtxIdxLD[2] = vFaceVtx[j][3];
 
 				//광선과 닿은 면이 있다면 vRayPos와의 거리가 최소값인지 확인한다.
-				_bool RUtriCheck = D3DXIntersectTri(&dwVtxIdxRU[1], &dwVtxIdxRU[2], &dwVtxIdxRU[0], &vRayPos, &vRayDir, &fU, &fV, &fDist);
+				bool RUtriCheck = D3DXIntersectTri(&dwVtxIdxRU[1], &dwVtxIdxRU[2], &dwVtxIdxRU[0], &vRayPos, &vRayDir, &fU, &fV, &fDist);
 				if (RUtriCheck && MinDist > fDist)
 				{
 					iCurCube = i;
@@ -381,7 +305,7 @@ _bool CMapTool::PickingOnCube(_vec3& CubeCenter)
 					continue;
 				}
 
-				_bool LDtriCheck = D3DXIntersectTri(&dwVtxIdxLD[0], &dwVtxIdxLD[1], &dwVtxIdxLD[2], &vRayPos, &vRayDir, &fU, &fV, &fDist);
+				bool LDtriCheck = D3DXIntersectTri(&dwVtxIdxLD[0], &dwVtxIdxLD[1], &dwVtxIdxLD[2], &vRayPos, &vRayDir, &fU, &fV, &fDist);
 				if (LDtriCheck && MinDist > fDist)
 				{				
 					iCurCube = i;
@@ -396,14 +320,27 @@ _bool CMapTool::PickingOnCube(_vec3& CubeCenter)
 	if (eFace == FACE_END)
 		return false;
 
-	_vec3& vCenter = m_vecTotalCube[iCurCube]->vCenter;
-	m_wDeleteName = m_vecTotalCube[iCurCube]->m_wstrName;
+	// 큐브 옆에 깔리지 않게 설정
+	if (m_tMapTool.iPickingOption == PICK_PLANT)
+	{
+		if (eFace != FACE_UP)
+			return false;
+	}
 
+	_vec3 vCenter{ 0.f, 0.f, 0.f };
+	D3DXVec3TransformCoord(&vCenter, &vCenter, &vecTotalCube[iCurCube].matWorld);
+	
 	//Block Height Option
-	_float fCurHeight = m_vecTotalCube[iCurCube]->m_tMapTool.fHeight;
+	_float fCurHeight = vecTotalCube[iCurCube].fHeight;
+	_float fCenterY = fCurHeight * 0.5f + m_tMapTool.fHeight * 0.5f + vCenter.y;
 
-	_float fCenterY = fCurHeight * 0.5f + m_tMapTool.fHeight * 0.5f;
 
+	if (m_tMapTool.iPickingOption == PICK_DELETE)
+	{
+		iToDelIdx = iCurCube;
+		CubeCenter = { vCenter.x, fCenterY, vCenter.z };
+		return true;
+	}
 
 	switch (eFace)
 	{
@@ -414,53 +351,25 @@ _bool CMapTool::PickingOnCube(_vec3& CubeCenter)
 		CubeCenter = _vec3(vCenter.x,	vCenter.y,vCenter.z - 1.f);
 		break;
 	case FACE_LEFT:
-		CubeCenter = _vec3(vCenter.x - 1.f, vCenter.y, vCenter.z );
+		CubeCenter = _vec3(vCenter.x + 1.f, vCenter.y, vCenter.z );
 		break;
 	case FACE_RIGHT:
-		CubeCenter = _vec3(vCenter.x + 1.f, vCenter.y, vCenter.z);
+		CubeCenter = _vec3(vCenter.x - 1.f, vCenter.y, vCenter.z);
 		break;
 	case FACE_UP:
-		CubeCenter = _vec3(vCenter.x, vCenter.y + fCenterY, vCenter.z);
+		CubeCenter = _vec3(vCenter.x, fCenterY, vCenter.z);
 		break;
 	case FACE_DOWN:
-		CubeCenter = _vec3(vCenter.x,	vCenter.y - fCenterY, vCenter.z);
+		CubeCenter = _vec3(vCenter.x, fCenterY, vCenter.z);
 		break;
 	default:
 		return false;
 	}
 
+	
+
 	return true;
 }
 
-void CMapTool::Set_CubeCoordinate(void)
-{
-	_ulong	dwIndex = 0;
-
-	for (_ulong i = 0; i < VTXCNTZ; ++i)
-	{
-		for (_ulong j = 0; j < VTXCNTX; ++j)
-		{
-			CubeHeight(_float(j) * VTXITV, _float(i) * VTXITV);		
-		}
-	}
-}
 
 
-void CMapTool::CubeHeight(_float x, _float z)
-{
-	_float fMostHeightValue = 0;
-	_float fLength = 0;
-	for (auto iter : m_vecLand)
-	{
-		if ((iter->vCenter.x - 0.5f) == x && (iter->vCenter.z - 0.5f) == z)
-		{
-			if (fMostHeightValue < iter->vCenter.y)
-			{
-				fMostHeightValue = iter->vCenter.y;
-				fLength = iter->m_tMapTool.fHeight / 2.f;
-			}
-		}
-	}
-
-	m_fHeight[(_int)x][(_int)z] = fMostHeightValue + fLength;
-}

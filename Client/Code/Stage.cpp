@@ -5,6 +5,8 @@
 #include "Terrain.h"
 #include "Player.h"
 #include "AbstFactory.h"
+#include "Monster.h"
+#include "StatComponent.h"
 #include "DynamicCamera.h"
 #include "Particle.h"
 
@@ -50,29 +52,27 @@ HRESULT CStage::Ready_Layer_Environment()
 {
 	CGameObject*		pGameObject = nullptr;
 
+	CEnvFactory::Create<CStaticCamera>("StaticCamera", L"StaticCamera");
+
 	// Terrain
 	CEnvFactory::Create<CTerrain>("DefaultTerrain", L"Terrain");
 
 	// TerrainCubeMap
-	pGameObject = CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/CollisionCheck.map");
+	pGameObject = CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/Stage1.map");
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", pGameObject), E_FAIL);
 	
-
+		
 	return S_OK;
 }
 
 HRESULT CStage::Ready_Layer_GameLogic()
 {
-	CGameObject*		pGameObject = nullptr;
-
-	pGameObject = CStaticCamera::Create(m_pGraphicDev, &_vec3(0.f, 10.f, -10.f), &_vec3(0.f, 0.f, 0.f), &_vec3(0.f, 1.f, 0.f));
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(m_arrLayer[LAYER_GAMEOBJ]->Add_GameObject(L"StaticCamera", pGameObject), E_FAIL);
-
 	_matrix matWorld;
-	CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {1.f, 0.f ,1.f});
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 1.f, 0.f ,1.f });
 	CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld);
+
 
 	CEffectFactory::Create<C3DBaseTexture>("3D_Base", L"3D_Base");
 	CEffectFactory::Create<CAttack_P>("Attack_Basic", L"Attack_Basic");
@@ -80,6 +80,8 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	CEffectFactory::Create<CFireWork>("FireWork", L"FireWork");
 	CEffectFactory::Create<CSpeedBoots>("Speed_Boots", L"Speed_Boots");
 	CEffectFactory::Create<CSpeedBoots_Particle>("Speed_Boots_Particle", L"Speed_Boots_Particle");
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {2.f, 0.f ,1.f});
+	CEnemyFactory::Create<CMonster>("TestZombie", L"TestZombie", matWorld);
 
 	return S_OK;
 }
@@ -127,7 +129,9 @@ HRESULT CStage::Ready_Proto(void)
 
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CalculatorCom", CCalculator::Create(m_pGraphicDev)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CollisionCom", CCollisionCom::Create()), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_StatCom", CStatComponent::Create()), E_FAIL);
 
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_PlantTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Plant/plant_%d.png", TEX_NORMAL, 3)), E_FAIL);
 
 
 	return S_OK;

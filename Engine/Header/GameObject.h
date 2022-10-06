@@ -6,7 +6,7 @@
 
 BEGIN(Engine)
 
-class ENGINE_DLL CGameObject :	public CBase
+class ENGINE_DLL CGameObject : public CBase
 {
 protected:
 	explicit CGameObject(LPDIRECT3DDEVICE9 pGraphicDev);
@@ -38,7 +38,7 @@ public:
 		T* pT = dynamic_cast<T*>(pComponent);
 		NULL_CHECK_RETURN(pT, nullptr); //"insert component fail : Fail to cast"
 
-		_bool bSuccess = m_mapComponent[eID].insert({pComponentTag, pComponent}).second;
+		_bool bSuccess = m_mapComponent[eID].insert({ pComponentTag, pComponent }).second;
 
 		// insert check(duplicated)
 		_ASSERT_CRASH(bSuccess == true); // "insert component fail : pComponentTag is duplicated"
@@ -52,6 +52,7 @@ public:
 	virtual		_int		Update_Object(const _float& fTimeDelta);
 	virtual		void		LateUpdate_Object(void);
 	virtual		void		Render_Object(void);
+	void		Delete_Component(const wstring& pComponentTag, COMPONENTID eID);
 
 private:
 	CComponent*		Find_Component(const wstring& pComponentTag, COMPONENTID eID);

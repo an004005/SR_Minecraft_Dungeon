@@ -83,8 +83,9 @@ public:
 	_bool DeleteSkeletalPart(const string& strPart);
 	static CSkeletalCube* Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrPath = L"");
 
-	virtual void PlayAnimationOnce(const string& strAnim);
 	virtual void PlayAnimationOnce(CubeAnimFrame* frame);
+	virtual void StopCurAnimation();
+	void SetAnimationSpeed(_float fAnimSpeed) { m_fAnimSpeed = fAnimSpeed; }
 
 	void LoadSkeletal(wstring wstrPath);
 	void SaveSkeletal(wstring wstrPath);
@@ -108,6 +109,7 @@ protected:
 	CubeAnimFrame* m_pCurAnim = nullptr;
 	CubeAnimFrame* m_pIdleAnim = nullptr;
 	_float m_fAccTime = 0.f;	  // 애니메이션 현재 시간
+	_float m_fAnimSpeed = 1.f;
 
 	_bool m_bStopAnim = false;
 };
