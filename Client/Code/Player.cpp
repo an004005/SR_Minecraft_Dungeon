@@ -131,7 +131,6 @@ void CPlayer::LateUpdate_Object()
 void CPlayer::Free()
 {
 	CSkeletalCube::Free();
-	Safe_Release(m_pController);
 }
 
 void CPlayer::AnimationEvent(const string& strEvent)

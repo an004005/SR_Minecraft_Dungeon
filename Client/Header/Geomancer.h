@@ -45,22 +45,14 @@ public:
 	void Run(const _vec3& vTargetPos) {m_bMove = true; m_vTargetPos = vTargetPos;}
 	void AttackPress(const _vec3& vTargetPos)
 	{
-		if (m_fAttackCoolTime <= m_fCurAttackCoolTime) // cool time done
-		{
-			m_bAttack = true;
-			m_vTargetPos = vTargetPos;
-		}
+		m_bAttack = true;
+		m_vTargetPos = vTargetPos;
 	}
 	//
 
 private:
 	GeomancerState m_eState = STATE_END;
 	array<CubeAnimFrame, ANIM_END> m_arrAnim;
-
-	_float m_fCurAttackCoolTime = 0.f;
-	_float m_fAttackCoolTime = 3.f;
-
-	_float m_fAttackRange = 15.f; // 사정거리
 
 	// true : PlayAnimationOnce 사용 가능 상태(동작 애니메이션 실행 가능), false: 다른 애니메이션 실행중
 	_bool m_bCanPlayAnim = true; // 현재 실행중인 애니메이션 끊고 애니메이션 실행 가능 여부
@@ -69,5 +61,6 @@ private:
 
 	_bool m_bMove = false; // controller 입력
 	_bool m_bAttack = false; // controller 입력
+
 	_bool m_bAttackFire = false; // anim event 입력
 };

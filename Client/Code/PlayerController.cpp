@@ -18,7 +18,7 @@ CPlayerController::~CPlayerController()
 _int CPlayerController::Update_Component(const _float& fTimeDelta)
 {
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pOwner);
-	NULL_CHECK(pPlayer);
+	NULL_CHECK_RETURN(pPlayer, 0);
 
 	// 움직임 입력
 	{

@@ -10,7 +10,7 @@ protected:
 
 public:
 	virtual CComponent* Clone() override;
-	void SetOwner(CGameObject* pOwner) { m_pOwner = pOwner; m_pOwner->AddRef(); }
+	void SetOwner(CGameObject* pOwner) { m_pOwner = pOwner;  }
 	virtual void Free() override;
 
 protected:

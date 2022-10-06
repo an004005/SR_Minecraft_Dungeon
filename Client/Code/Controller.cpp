@@ -20,7 +20,6 @@ CComponent* CController::Clone()
 
 void CController::Free()
 {
-	Safe_Release(m_pOwner);
 	CComponent::Free();
 }
 

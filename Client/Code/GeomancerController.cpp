@@ -11,27 +11,36 @@ CGeomancerController::CGeomancerController(const CGeomancerController& rhs)
 {
 }
 
+CGeomancerController::~CGeomancerController()
+{
+}
+
 _int CGeomancerController::Update_Component(const _float& fTimeDelta)
 {
-	if (m_iTick++ < 20) return;
+	// cooltime
+	if (m_fCurAttackCoolTime < m_fAttackCoolTime)
+		m_fCurAttackCoolTime += fTimeDelta;
+
+	if (m_iTick++ < 20) return 0;
+	m_iTick = 0;
 
 	CGeomancer* pGeomancer = dynamic_cast<CGeomancer*>(m_pOwner);
-	NULL_CHECK(pGeomancer);
+	NULL_CHECK_RETURN(pGeomancer, 0);
 
 	_vec3 vPos = pGeomancer->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
 	CPlayer* pTargetPlayer = nullptr;
+	_vec3 vTargetPos;
 	_float fTargetDist = 9999.f;
 
 	for (auto& ele : Get_Layer(LAYER_PLAYER)->Get_MapObject())
 	{
 		if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(ele.second))
 		{
-			_vec3 vPlayerPos = pPlayer->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[
-				INFO_POS];
-			_vec3 vDiff = vPos - vPlayerPos;
+			vTargetPos = pPlayer->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+			_vec3 vDiff = vPos - vTargetPos;
 			_float fDist = D3DXVec3Length(&vDiff);
 
-			if (fDist < 15.f && fTargetDist > fDist) // 화면 밖에서 공격할 수 있는 범위인듯
+			if (fDist < m_fAttackRange && fTargetDist > fDist) // 화면 밖에서 공격할 수 있는 범위인듯
 			{
 				pTargetPlayer = pPlayer;
 				fTargetDist = fDist;
@@ -39,31 +48,24 @@ _int CGeomancerController::Update_Component(const _float& fTimeDelta)
 		}
 	}
 
-	// if (pTargetPlayer == nullptr)
-	// {
-	// 	pGeomancer->SetIdle();
-	// 	return;
-	// }
-	//
-	// if (pGeomancer->CanAttack())
-	// {
-	// 	pGeomancer->SetAttack(pTargetPlayer);
-	// 	return;
-	// }
-	//
-	// if (fTargetDist < 10.f && fTargetDist > 6.f)
-	// {
-	// 	pGeomancer->SetIdle();
-	// 	return;
-	// }
-	//
-	// if (fTargetDist < 4.f)
-	// {
-	// 	pGeomancer->Run(pTargetPlayer);
-	// 	return;
-	// }
+	if (pTargetPlayer == nullptr) return 0;
 
-	m_iTick = 0;
+
+	// 공격 가능
+	if (m_fCurAttackCoolTime >= m_fAttackCoolTime)
+	{
+		m_fCurAttackCoolTime = 0.f;
+		pGeomancer->AttackPress(vTargetPos);
+		return 0;
+	}
+
+	if (fTargetDist < m_fRunDist)
+	{
+		pGeomancer->Run(vTargetPos);
+		return 0;
+	}
+	
+
 
 	return 0;
 }
@@ -71,6 +73,11 @@ _int CGeomancerController::Update_Component(const _float& fTimeDelta)
 CComponent* CGeomancerController::Clone()
 {
 	return new CGeomancerController(*this);
+}
+
+void CGeomancerController::Free()
+{
+	CController::Free();
 }
 
 CGeomancerController* CGeomancerController::Create()

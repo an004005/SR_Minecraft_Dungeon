@@ -19,11 +19,11 @@ HRESULT CGeomancer::Ready_Object()
 {
 	CMonster::Ready_Object();
 
-	m_arrAnim[IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Geomancer/idle.anim");
-	m_arrAnim[WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Geomancer/walk.anim");
-	m_arrAnim[DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Geomancer/dead.anim");
-	m_arrAnim[ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Geomancer/attack.anim");
-	m_pIdleAnim = &m_arrAnim[IDLE];
+	m_arrAnim[ANIM_IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Geomancer/idle.anim");
+	m_arrAnim[ANIM_WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Geomancer/walk.anim");
+	m_arrAnim[ANIM_DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Geomancer/dead.anim");
+	m_arrAnim[ANIM_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Geomancer/attack.anim");
+	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 	m_pCurAnim = m_pIdleAnim;
 	m_eState = IDLE;
 	m_fSpeed = 3.f;
@@ -82,8 +82,6 @@ _int CGeomancer::Update_Object(const _float& fTimeDelta)
 		break;
 	}
 
-	if (m_fCurAttackCoolTime < m_fAttackCoolTime)
-		m_fCurAttackCoolTime += fTimeDelta;
 
 	return OBJ_NOEVENT;
 }
@@ -91,23 +89,25 @@ _int CGeomancer::Update_Object(const _float& fTimeDelta)
 void CGeomancer::LateUpdate_Object()
 {
 	CMonster::LateUpdate_Object();
-	// if (m_bAttack)
-	// {
-	// 	set<CGameObject*> setObj;
-	// 	Engine::GetOverlappedObject(setObj, m_vAttackDest, 3.f);
-	//
-	// 	for (auto& obj : setObj)
-	// 	{
-	// 		if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
-	// 			pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-	// 			       ->TakeDamage(1, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_KNOCK_BACK);
-	//
-	// 		DEBUG_SPHERE(m_vAttackDest, 3.f, 1.f);
-	// 		IM_LOG("Fire");
-	// 	}
-	//
-	// 	m_bAttack = false;
-	// }
+
+
+	if (m_bAttackFire)
+	{
+		set<CGameObject*> setObj;
+		Engine::GetOverlappedObject(setObj, m_vTargetPos, 3.f);
+	
+		for (auto& obj : setObj)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+				       ->TakeDamage(1, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_KNOCK_BACK);
+	
+			DEBUG_SPHERE(m_vTargetPos, 3.f, 1.f);
+			IM_LOG("Fire");
+		}
+	
+		m_bAttackFire = false;
+	}
 }
 
 void CGeomancer::Free()
@@ -133,7 +133,7 @@ CGeomancer* CGeomancer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wst
 
 void CGeomancer::StateChange()
 {
-	if (m_pStat->IsDead())
+	if (m_pStat->IsDead() && m_bReserveStop == false)
 	{
 		m_eState = DEAD;
 		PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
