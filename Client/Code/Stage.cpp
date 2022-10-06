@@ -106,14 +106,14 @@ HRESULT CStage::Ready_Layer_GameLogic()
 		/*CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 3.f, 0.f ,6.f });
 		CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);*/
 
-		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 3.f, 0.f ,13.f });
-		//CEnemyFactory::Create<CCreeper>("Creeper", L"Creeper", matWorld);
+		// CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 3.f, 0.f ,13.f });
+		// CEnemyFactory::Create<CCreeper>("Creeper", L"Creeper", matWorld);
 
 		/*CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 3.f, 0.f ,13.f });
 		CEnemyFactory::Create<CSkeleton>("Skeleton", L"Skeleton", matWorld);*/
 
-		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 3.f, 0.f ,13.f });
-		CEnemyFactory::Create<CEnchanter>("Enchanter", L"Enchanter", matWorld);
+		// CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 3.f, 0.f ,13.f });
+		// CEnemyFactory::Create<CEnchanter>("Enchanter", L"Enchanter", matWorld);
 	}
 	
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {6.f, 0.f ,6.f});

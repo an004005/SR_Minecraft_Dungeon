@@ -200,6 +200,7 @@ public:
 	void LateUpdate_Object() override;
 	void PreRender_Particle();
 	void PostRender_Particle();
+
 public:
 	static CUVCircle* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size, CIRCLETYPE _type);
 	CRcShader*			m_pBufferCom = nullptr;
@@ -245,7 +246,6 @@ public:
 	CTransform*			m_pTransCom = nullptr;
 	CTexture*			m_pTexture = nullptr;
 	void Free() override;
-
 
 private:
 	_float m_fTime;

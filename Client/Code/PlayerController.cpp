@@ -83,6 +83,20 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 	if (MouseKeyUp(DIM_LB))
 		pPlayer->MeleeAttackPress(false);
 
+	if (MouseKeyDown(DIM_RB))
+		pPlayer->RangeAttackPress(true);
+	if (MouseKeyUp(DIM_RB))
+		pPlayer->RangeAttackPress(false);
+
+	if (DIKeyDown(DIK_1))
+	{
+		pPlayer->Legacy1Press();
+	}
+	if (DIKeyDown(DIK_2))
+	{
+		pPlayer->Legacy2Press();
+	}
+
 	return 0;
 }
 

@@ -457,7 +457,7 @@ void CFireWork_Fuze::Reset_Particle(Attribute* _Attribute)
 
 	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
 	pPlayerTransform->Get_Info(INFO_LOOK, &_Attribute->_vVelocity);
-	
+
 	D3DXVec3Normalize(
 		&_Attribute->_vVelocity,
 		&_Attribute->_vVelocity);
@@ -702,7 +702,7 @@ HRESULT CUVCircle::Ready_Object(_float _size, CIRCLETYPE _type)
 {
 	static _vec3 vv{ 0.f,0.f,0.f };
 	m_pBufferCom = Add_Component<CRcShader>(L"Proto_ShaderCircleCom", L"Proto_RcShaderCom", ID_STATIC);
-	m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransFormCom_ShockEffect", ID_DYNAMIC);
+	m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 	m_pTexture = Add_Component<CTexture>(L"Proto_Circle", L"Proto_Circle", ID_STATIC);
 	m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
 
@@ -728,10 +728,7 @@ HRESULT CUVCircle::Ready_Object(_float _size, CIRCLETYPE _type)
 	{
 		// 크리퍼 포인터로 바꿔야함
 		m_pBufferCom->Set_TextureOption(7, 4, 2);
-		CTransform*	pCreeper = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
-		_vec3 pPos;
-		pCreeper->Get_Info(INFO_POS, &pPos);
-		m_pTransCom->Set_Pos(pPos.x, pPos.y + 0.5f, pPos.z);
+		// m_pTransCom->Set_Pos(m_vPos.x, m_vPos.y + 0.5f, m_vPos.z);
 		m_pTransCom->Set_Scale(_size, _size, _size);
 	}
 	else if (_type == GOLEM)
@@ -822,7 +819,7 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 	if (_type == WALK)
 	{
 		m_pBufferCom = Add_Component<CRcShader>(L"Proto_WalkCloudCom", L"Proto_WalkCloudCom", ID_STATIC);
-		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransFormCom_CloudEffect", ID_DYNAMIC);
+		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 		
 		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture(0));
 		m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
@@ -905,16 +902,13 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 	else if (_type == CREEPEREX)
 	{
 		m_pBufferCom = Add_Component<CRcShader>(L"Proto_CreeperExCloudCom", L"Proto_CreeperExCloudCom", ID_STATIC);
-		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransFormCom_CloudEffect", ID_DYNAMIC);
+		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture(0));
 		m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
 		// 크리퍼 포인터로 바꿔야함
 		m_pBufferCom->Set_TextureOption(_uint(CGameUtilMgr::GetRandomFloat(10.f,15.f)), 4, 2);
-		CTransform*	pCreeper = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
-		_vec3 pPos;
-		pCreeper->Get_Info(INFO_POS, &pPos);
 
-		m_pTransCom->Set_Pos(pPos.x, pPos.y + 0.5f, pPos.z);
+		// m_pTransCom->Set_Pos(m_vPos.x, m_vPos.y + 0.5f, m_vPos.z);
 		m_pTransCom->Set_Scale(_size, _size, _size);
 		m_fTime = CGameUtilMgr::GetRandomFloat(0.5f, 2.f);
 		m_fTime = 1.2f;

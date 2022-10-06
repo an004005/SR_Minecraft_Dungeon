@@ -30,6 +30,10 @@ private:
 		ANIM_ATTACK1,
 		ANIM_ATTACK2, // 무기에서 가져와서 실행하게 구현
 		ANIM_ATTACK3,
+		ANIM_RANGE_ATTACK,
+		ANIM_LEGACY1,
+		ANIM_LEGACY2,
+		ANIM_LEGACY3,
 		ANIM_ROLL,
 		ANIM_TELEPORT,
 		ANIM_RESCUE,
@@ -43,13 +47,16 @@ public:
 	virtual void Free() override;
 	virtual void AnimationEvent(const string& strEvent) override;
 
-	virtual void MeleeAttack();
+	virtual void AttackState();
 	void StateChange();
 
 	// controller 입력함수
 	void SetMoveDir(_float fX, _float fZ);
+	void RangeAttackPress(bool bOn) { m_bRangeAttack = bOn; }
 	void MeleeAttackPress(bool bOn) { m_bMeleeAttack = bOn; }
 	void RollPress() { m_bRoll = true; }
+	void Legacy1Press() { m_bLegacy1 = true; }
+	void Legacy2Press() { m_bLegacy2 = true; }
 	//
 
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
@@ -65,6 +72,8 @@ protected:
 	PlayerState m_eState = STATE_END;
 	array<CubeAnimFrame, ANIM_END> m_arrAnim;
 
+	_float m_RollCoolTime;
+	_float m_CurRollCoolTime;
 	_float m_fSpeed; // 속도
 	_float m_fRollSpeed; // 구르기 속도
 
@@ -79,6 +88,9 @@ protected:
 	_bool m_bMeleeAttack = false; // controller 입력
 	_bool m_bRangeAttack = false; // controller 입력
 	_bool m_bMove = false; // controller 입력
+
+	_bool m_bLegacy1 = false;
+	_bool m_bLegacy2 = false;
 
 	_bool m_bApplyMeleeAttack = false;
 	_bool m_bApplyMeleeAttackNext = false;
