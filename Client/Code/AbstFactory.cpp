@@ -72,7 +72,7 @@ void CEffectFactory::Ready_EffectFactory()
 
 	s_mapEffectSpawner.insert({ "Attack_Basic", []()
 	{
-		return CAttack_P::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/aac1e6-corona.png");
+		return CAttack_P::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/flare_alpha.dds");
 	} });
 
 	
@@ -104,12 +104,29 @@ void CEffectFactory::Ready_EffectFactory()
 		return CShock_Powder::Create(s_pGraphicDev);
 	} });
 
-	s_mapEffectSpawner.insert({ "Texture_Cloud", []()
+	s_mapEffectSpawner.insert({ "ShockPowder_Cloud", []()
 	{
-		return CCloud::Create(s_pGraphicDev);
+		return CCloud::Create(s_pGraphicDev,1.3f,SHOCKPOWDER);
 	} });
 
-	s_mapEffectSpawner.insert({ "UV_Circle", []()
+	s_mapEffectSpawner.insert({ "Creeper_Cloud", []()
+	{
+		return CCloud::Create(s_pGraphicDev,1.3f,CREEPEREX);
+	} });
+
+	s_mapEffectSpawner.insert({ "Walk_Cloud", []()
+	{
+		return CCloud::Create(s_pGraphicDev,0.4f,WALK);
+	} });
+
+	s_mapEffectSpawner.insert({ "Roll_Cloud", []()
+	{
+		return CCloud::Create(s_pGraphicDev,0.7f,ROLL);
+	} });
+
+
+
+	s_mapEffectSpawner.insert({ "Shock_Circle", []()
 	{
 		return CUVCircle::Create(s_pGraphicDev,3.f, SHOCK);
 	} });
@@ -117,6 +134,16 @@ void CEffectFactory::Ready_EffectFactory()
 	s_mapEffectSpawner.insert({ "Firwork_Circle", []()
 	{
 		return CUVCircle::Create(s_pGraphicDev, 7.f, FIREWORK);
+	} });
+
+	s_mapEffectSpawner.insert({ "Creeper_Explosion", []()
+	{
+		return CUVCircle::Create(s_pGraphicDev, 3.5f, CREEPER);
+	} });
+
+	s_mapEffectSpawner.insert({ "Golem_Explosion", []()
+	{
+		return CUVCircle::Create(s_pGraphicDev, 7.f, GOLEM);
 	} });
 
 }

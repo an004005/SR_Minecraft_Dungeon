@@ -54,7 +54,8 @@ HRESULT CPlayer::Ready_Object()
 
 	// 항상 카메라 먼저 만들고 플레이어 만들기!
 	Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")->SetTarget(this);
-
+	m_dwWalkDust = GetTickCount();
+	m_dwRollDust = GetTickCount();
 	return S_OK;
 }
 
@@ -83,6 +84,11 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 		break;
 	case ROLL:
 		m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * m_fRollSpeed * fTimeDelta;
+		if (m_dwRollDust + 300 < GetTickCount())
+		{
+			CEffectFactory::Create<CCloud>("Roll_Cloud", L"Roll_Cloud");
+			m_dwRollDust = GetTickCount();
+		}
 		break;
 	case LEGACY:
 		break;
@@ -143,6 +149,14 @@ void CPlayer::AnimationEvent(const string& strEvent)
 		// SetMove(0.f, 0.f);
 		// m_bRoll = false;
 	}
+	else if (strEvent == "step")
+	{
+		if (m_dwWalkDust + 500 < GetTickCount())
+		{
+			CEffectFactory::Create<CCloud>("Walk_Cloud", L"Walk_Cloud");
+			m_dwWalkDust = GetTickCount();
+		}
+	}
 }
 
 void CPlayer::SetMoveDir(_float fX, _float fZ)
@@ -177,7 +191,41 @@ void CPlayer::MeleeAttack()
 	}
 	m_iAttackCnt = (m_iAttackCnt + 1) % 3;
 	m_bApplyMeleeAttack = true;
-	Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 1.f, RED, 5, 1.f);
+
+
+#pragma region Attack_Basic
+	//Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.3f, RED, 4, 0.2f);
+#pragma endregion
+
+#pragma region FireWork
+	// Get_GameObject<CFireWork_Fuze>(LAYER_EFFECT, L"FireWork_Fuze")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 1.f, WHITE, 1, 1.f);
+#pragma endregion
+
+#pragma region ShockPowder
+	// for (int j = 0; j < 10; j++)
+	// 	{
+	// 		CEffectFactory::Create<CShock_Powder>("Shock_Powder", L"UV_Shock_Powder");
+	// 		CEffectFactory::Create<CCloud>("ShockPowder_Cloud", L"ShockPowder_Cloud");
+	// 	}
+	// CEffectFactory::Create<CUVCircle>("Shock_Circle", L"Shock_Circle");
+#pragma endregion
+
+#pragma region SpeedBoots
+	// Get_GameObject<C3DBaseTexture>(LAYER_EFFECT, L"3D_Base")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 3.f, D3DXCOLOR(0.f,0.63f,0.82f,0.f), 1, 1.5f);
+	// Get_GameObject<CSpeedBoots>(LAYER_EFFECT, L"Speed_Boots")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 3.f, D3DXCOLOR(0.2f, 0.2f, 0.5f, 1.f), 1, 1.5f);
+	// Get_GameObject<CSpeedBoots_Particle>(LAYER_EFFECT, L"Speed_Boots_Particle")->Add_Particle(
+	// 	_vec3(m_pRootPart->pTrans->m_vInfo[INFO_POS].x, m_pRootPart->pTrans->m_vInfo[INFO_POS].y + 15.f, m_pRootPart->pTrans->m_vInfo[INFO_POS].z),
+	// 	1.f, D3DXCOLOR(0.3f, 0.4f, 0.7f, 1.f), 7, 20.f);
+#pragma endregion
+
+#pragma region Creeper Explosion
+	// Get_GameObject<CFireWork>(LAYER_EFFECT, L"FireWork")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.3f, D3DXCOLOR(1.f, 1.f, 0.2f, 0), 256, 0.4f);
+	// CEffectFactory::Create<CUVCircle>("Creeper_Explosion", L"Creeper_Explosion");
+	// Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.3f, RED, 30, 0.5f);
+	//  for (int i = 0; i < 5; i++)
+	//  {
+	// 	CEffectFactory::Create<CCloud>("Creeper_Cloud", L"Creeper_Cloud");
+	//  }
 }
 
 
@@ -302,6 +350,8 @@ void CPlayer::RotateToCursor()
 		m_pRootPart->pTrans->m_vAngle.y = -acosf(fDot);
 	else
 		m_pRootPart->pTrans->m_vAngle.y = acosf(fDot);
+
+	m_pRootPart->pTrans->Update_Component(0.f);
 
 	m_pIdleAnim = &m_arrAnim[ANIM_WALK];
 	m_pCurAnim = m_pIdleAnim;

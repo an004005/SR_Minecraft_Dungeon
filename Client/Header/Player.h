@@ -82,6 +82,10 @@ protected:
 
 	_bool m_bApplyMeleeAttack = false;
 	_bool m_bApplyMeleeAttackNext = false;
+
+	DWORD m_dwWalkDust;
+	DWORD m_dwRollDust;
+
 };
 
 

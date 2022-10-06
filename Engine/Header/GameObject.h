@@ -66,14 +66,14 @@ public:
 	virtual void	Free(void);
 
 public:
-	float GetRandomFloat(float lowBound, float highBound);
-
-	void GetRandomVector(
-		_vec3* out,
-		_vec3* min,
-		_vec3* max);
-
-	DWORD FtoDw(float f);
+	// float GetRandomFloat(float lowBound, float highBound);
+	//
+	// void GetRandomVector(
+	// 	_vec3* out,
+	// 	_vec3* min,
+	// 	_vec3* max);
+	//
+	// DWORD FtoDw(float f);
 
 };
 
