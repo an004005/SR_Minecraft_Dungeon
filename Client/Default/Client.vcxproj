@@ -168,6 +168,8 @@
     <ClInclude Include="..\Header\AnimationTool.h" />
     <ClInclude Include="..\Header\BackGround.h" />
     <ClInclude Include="..\Header\Controller.h" />
+    <ClInclude Include="..\Header\Creeper.h" />
+    <ClInclude Include="..\Header\CreeperController.h" />
     <ClInclude Include="..\Header\DynamicCamera.h" />
     <ClInclude Include="..\Header\Geomancer.h" />
     <ClInclude Include="..\Header\GeomancerController.h" />
@@ -188,6 +190,8 @@
     <ClInclude Include="..\Header\Terrain.h" />
     <ClInclude Include="..\Header\TerrainCubeMap.h" />
     <ClInclude Include="..\Header\TestCube.h" />
+    <ClInclude Include="..\Header\Zombie.h" />
+    <ClInclude Include="..\Header\ZombieController.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="GraphEditor.h" />
     <ClInclude Include="imconfig.h" />
@@ -215,6 +219,8 @@
     <ClCompile Include="..\Code\AnimationTool.cpp" />
     <ClCompile Include="..\Code\BackGround.cpp" />
     <ClCompile Include="..\Code\Controller.cpp" />
+    <ClCompile Include="..\Code\Creeper.cpp" />
+    <ClCompile Include="..\Code\CreeperController.cpp" />
     <ClCompile Include="..\Code\DynamicCamera.cpp" />
     <ClCompile Include="..\Code\Geomancer.cpp" />
     <ClCompile Include="..\Code\GeomancerController.cpp" />
@@ -235,6 +241,8 @@
     <ClCompile Include="..\Code\Terrain.cpp" />
     <ClCompile Include="..\Code\TerrainCubeMap.cpp" />
     <ClCompile Include="..\Code\TestCube.cpp" />
+    <ClCompile Include="..\Code\Zombie.cpp" />
+    <ClCompile Include="..\Code\ZombieController.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="GraphEditor.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>

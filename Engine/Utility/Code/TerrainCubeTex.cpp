@@ -20,8 +20,8 @@ HRESULT CTerrainCubeTex::Ready_Buffer(const vector<_matrix>& _vecmatworld)
 	if (m_iCubeCnt == 0)
 		return E_FAIL;
 
-	m_dwVtxCnt = _vecmatworld.size() * 8;
-	m_dwTriCnt = _vecmatworld.size() * 12;
+	m_dwVtxCnt = (_ulong)_vecmatworld.size() * 8;
+	m_dwTriCnt = (_ulong)_vecmatworld.size() * 12;
 	m_dwVtxSize = sizeof(VTXCUBE);
 	m_dwFVF = FVF_CUBE;
 
@@ -65,7 +65,7 @@ HRESULT CTerrainCubeTex::Ready_Buffer(const vector<_matrix>& _vecmatworld)
 		VtxTmp[7].vTexUV = VtxTmp[7].vPos * 2;
 
 
-		for (int j = 0; j < 8; ++j)
+		for (size_t j = 0; j < 8; ++j)
 		{
 			D3DXVec3TransformCoord(&VtxTmp[j].vPos, &VtxTmp[j].vPos, &_vecmatworld[i]);
 			vecVtxTmps.push_back(VtxTmp[j]);
@@ -128,11 +128,11 @@ HRESULT CTerrainCubeTex::Ready_Buffer(const vector<_matrix>& _vecmatworld)
 		}
 
 		size_t iVtxCnt = 8 * i;
-		for (int j = 0; j < 12; ++j)
+		for (_ulong j = 0; j < 12; ++j)
 		{
-			IdxTmp[j]._0 += iVtxCnt;
-			IdxTmp[j]._1 += iVtxCnt;
-			IdxTmp[j]._2 += iVtxCnt;
+			IdxTmp[j]._0 += (_ulong)iVtxCnt;
+			IdxTmp[j]._1 += (_ulong)iVtxCnt;
+			IdxTmp[j]._2 += (_ulong)iVtxCnt;
 			vecIdxTmps.push_back(IdxTmp[j]);
 		}
 	}
