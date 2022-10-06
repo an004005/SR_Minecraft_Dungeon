@@ -3,10 +3,10 @@
 
 class CController;
 
-class CGeomancer : public CMonster
+class CZombie : public CMonster
 {
 private:
-	enum GeomancerState
+	enum CZombieState
 	{
 		IDLE,
 		WALK,
@@ -26,9 +26,9 @@ private:
 	};
 
 private:
-	explicit CGeomancer(LPDIRECT3DDEVICE9 pGraphicDev);
-	explicit CGeomancer(const CMonster& rhs);
-	virtual ~CGeomancer() override;
+	explicit CZombie(LPDIRECT3DDEVICE9 pGraphicDev);
+	explicit CZombie(const CMonster& rhs);
+	virtual ~CZombie() override;
 
 public:
 	virtual HRESULT Ready_Object() override;
@@ -36,21 +36,22 @@ public:
 	virtual _int Update_Object(const _float& fTimeDelta) override;
 	virtual void LateUpdate_Object() override;
 	virtual void Free() override;
-	static CGeomancer* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
+	static CZombie* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
 
 	virtual void StateChange();
 
 	// controller 조종 함수
-	void Run(const _vec3& vTargetPos) {m_bMove = true; m_vTargetPos = vTargetPos;}
+	void WalkToTarget(const _vec3& vTargetPos) {m_bMove = true; m_vTargetPos = vTargetPos;}
 	void AttackPress(const _vec3& vTargetPos)
 	{
 		m_bAttack = true;
+		m_bMove = false;
 		m_vTargetPos = vTargetPos;
 	}
 	//
 
 private:
-	GeomancerState m_eState = STATE_END;
+	CZombieState m_eState = STATE_END;
 	array<CubeAnimFrame, ANIM_END> m_arrAnim;
 
 	// true : PlayAnimationOnce 사용 가능 상태(동작 애니메이션 실행 가능), false: 다른 애니메이션 실행중
@@ -60,6 +61,5 @@ private:
 
 	_bool m_bMove = false; // controller 입력
 	_bool m_bAttack = false; // controller 입력
-
 	_bool m_bAttackFire = false; // anim event 입력
 };
