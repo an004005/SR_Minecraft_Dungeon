@@ -6,6 +6,7 @@
 #include "StaticCamera.h"
 #include "Monster.h"
 #include "Geomancer.h"
+#include "GeomancerWall.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -14,6 +15,7 @@ map<string, std::function<CGameObject*()>> CEnemyFactory::s_mapEnemySpawner;
 map<string, std::function<CGameObject*()>> CEffectFactory::s_mapEffectSpawner;
 map<string, std::function<CGameObject*()>> CEnvFactory::s_mapEnvSpawner;
 map<string, std::function<CGameObject*()>> CBulletFactory::s_mapBulletSpawner;
+map<string, std::function<CGameObject*()>> CObjectFactory::s_mapObjectSpawner;
 
 void CAbstFactory::Ready_Factories(LPDIRECT3DDEVICE9 pGraphicDev)
 {
@@ -25,6 +27,7 @@ void CAbstFactory::Ready_Factories(LPDIRECT3DDEVICE9 pGraphicDev)
 	CEffectFactory::Ready_EffectFactory();
 	CEnvFactory::Ready_EnvFactory();
 	CBulletFactory::Ready_BulletFactory();
+	CObjectFactory::Ready_ObjectFactory();
 }
 
 void CPlayerFactory::Ready_PlayerFactory()
@@ -135,4 +138,16 @@ void CEnvFactory::Ready_EnvFactory()
 
 void CBulletFactory::Ready_BulletFactory()
 {
+}
+
+void CObjectFactory::Ready_ObjectFactory()
+{
+	s_mapObjectSpawner.insert({"GeoWall_Normal", []()
+	{
+		return CGeomancerWall::Create(s_pGraphicDev, false);
+	}});
+	s_mapObjectSpawner.insert({"GeoWall_Boom", []()
+	{
+		return CGeomancerWall::Create(s_pGraphicDev, true);
+	}});
 }

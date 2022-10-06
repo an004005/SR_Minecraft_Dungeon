@@ -58,6 +58,7 @@ void CCollider::Add_CollisionCom(CCollisionCom* pCollision)
 		for (int j = iX_start; j <= iX_end; ++j)
 		{
 			m_vecGrid[i][j].dynamicList.push_back(pCollision);
+			pCollision->AddRef();
 		}
 	}
 }
@@ -128,7 +129,8 @@ void CCollider::Check_Blocking()
 					CCollisionCom*& coll_2 = cell.dynamicList[j];
 
 					if (coll_1->GetOwner() == coll_2->GetOwner()) continue;
-
+					COLLISION_TYPE c1 = coll_1->GetType();
+					COLLISION_TYPE c2 = coll_2->GetType();
 					const BLOCKING_TYPE eType1To2 = s_BlockingTypeMatrix[coll_1->GetType()][coll_2->GetType()];
 					const BLOCKING_TYPE eType2To1 = s_BlockingTypeMatrix[coll_2->GetType()][coll_1->GetType()];
 					if (eType1To2 == BLOCKING_END && eType2To1 == BLOCKING_END)
@@ -163,6 +165,9 @@ void CCollider::Clear_Dynamic()
 	{
 		for (auto& cell : vecRow)
 		{
+			for (auto& collCom : cell.dynamicList)
+				Safe_Release(collCom);
+
 			cell.dynamicList.clear();
 		}
 	}

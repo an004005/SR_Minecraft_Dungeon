@@ -1,7 +1,10 @@
 #include "stdafx.h"
 #include "..\Header\Geomancer.h"
+
+#include "AbstFactory.h"
 #include "StatComponent.h"
 #include "GeomancerController.h"
+#include "GeomancerWall.h"
 
 CGeomancer::CGeomancer(LPDIRECT3DDEVICE9 pGraphicDev): CMonster(pGraphicDev)
 {
@@ -83,32 +86,28 @@ _int CGeomancer::Update_Object(const _float& fTimeDelta)
 	}
 
 
-	return OBJ_NOEVENT;
-}
-
-void CGeomancer::LateUpdate_Object()
-{
-	CMonster::LateUpdate_Object();
-
-
 	if (m_bAttackFire)
 	{
-		set<CGameObject*> setObj;
-		Engine::GetOverlappedObject(setObj, m_vTargetPos, 3.f);
-	
-		for (auto& obj : setObj)
+		size_t iSize = m_vecWallPos.size();
+
+		if (iSize <= 4)//bomb
 		{
-			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
-				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				       ->TakeDamage(1, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_KNOCK_BACK);
-	
-			DEBUG_SPHERE(m_vTargetPos, 3.f, 1.f);
-			IM_LOG("Fire");
+			for (auto& wallPos : m_vecWallPos)
+				CObjectFactory::Create<CGeomancerWall>("GeoWall_Boom", L"GeoWall_Boom", wallPos);
+		}
+		else // wall
+		{
+			for (auto& wallPos : m_vecWallPos)
+				CObjectFactory::Create<CGeomancerWall>("GeoWall_Normal", L"GeoWall_Normal", wallPos);
 		}
 	
 		m_bAttackFire = false;
 	}
+
+
+	return OBJ_NOEVENT;
 }
+
 
 void CGeomancer::Free()
 {
@@ -144,6 +143,8 @@ void CGeomancer::StateChange()
 
 	if (m_pStat->IsStun())
 	{
+		if (m_pCurAnim != m_pIdleAnim)
+			StopCurAnimation();
 		m_eState = STUN;
 		m_bAttack = false;
 		m_bMove = false;
