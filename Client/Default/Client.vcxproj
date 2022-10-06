@@ -186,6 +186,10 @@
     <ClInclude Include="..\Header\Particle.h" />
     <ClInclude Include="..\Header\Player.h" />
     <ClInclude Include="..\Header\PlayerController.h" />
+    <ClInclude Include="..\Header\RedStoneCube.h" />
+    <ClInclude Include="..\Header\RedStoneCubeController.h" />
+    <ClInclude Include="..\Header\RedStoneMonstrosity.h" />
+    <ClInclude Include="..\Header\RedStoneMonstrosityController.h" />
     <ClInclude Include="..\Header\SkeletalCube.h" />
     <ClInclude Include="..\Header\Skeleton.h" />
     <ClInclude Include="..\Header\SkeletonController.h" />
@@ -242,6 +246,10 @@
     <ClCompile Include="..\Code\Particle.cpp" />
     <ClCompile Include="..\Code\Player.cpp" />
     <ClCompile Include="..\Code\PlayerController.cpp" />
+    <ClCompile Include="..\Code\RedStoneCube.cpp" />
+    <ClCompile Include="..\Code\RedStoneCubeController.cpp" />
+    <ClCompile Include="..\Code\RedStoneMonstrosity.cpp" />
+    <ClCompile Include="..\Code\RedStoneMonstrosityController.cpp" />
     <ClCompile Include="..\Code\SkeletalCube.cpp" />
     <ClCompile Include="..\Code\Skeleton.cpp" />
     <ClCompile Include="..\Code\SkeletonController.cpp" />

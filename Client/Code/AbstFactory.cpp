@@ -10,6 +10,8 @@
 #include "Creeper.h"
 #include "Skeleton.h"
 #include "Enchanter.h"
+#include "RedStoneCube.h"
+#include "RedStoneMonstrosity.h"
 #include "GeomancerWall.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
@@ -75,6 +77,14 @@ void CEnemyFactory::Ready_EnemyFactory()
 	s_mapEnemySpawner.insert({ "Enchanter", []()
 	{
 		return CEnchanter::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Enchanter.cube");
+	} });
+	s_mapEnemySpawner.insert({ "RedStoneCube", []()
+	{
+		return CRedStoneCube::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/RedStoneCube.cube");
+	} });
+	s_mapEnemySpawner.insert({ "RedStoneMonstrosity", []()
+	{
+		return CRedStoneMonstrosity::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/RedStoneMonstrosity.cube");
 	} });
 }
 

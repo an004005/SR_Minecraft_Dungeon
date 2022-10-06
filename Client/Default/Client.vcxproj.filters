@@ -224,6 +224,18 @@
     <ClInclude Include="..\Header\EnchanterController.h">
       <Filter>Controller</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\RedStoneCubeController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\RedStoneCube.h">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\RedStoneMonstrosityController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\RedStoneMonstrosity.h">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClInclude>
     <ClInclude Include="..\Header\GeomancerWall.h">
       <Filter>02. GameObject\Object</Filter>
     </ClInclude>
@@ -367,6 +379,18 @@
     </ClCompile>
     <ClCompile Include="..\Code\EnchanterController.cpp">
       <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RedStoneCubeController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RedStoneCube.cpp">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RedStoneMonstrosityController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RedStoneMonstrosity.cpp">
+      <Filter>02. GameObject\01. Monster</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Particle.cpp" />
     <ClCompile Include="..\Code\GeomancerWall.cpp">

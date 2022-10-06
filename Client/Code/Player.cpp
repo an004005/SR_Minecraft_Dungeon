@@ -129,6 +129,7 @@ void CPlayer::LateUpdate_Object()
 				{
 					DamageType eDT = DT_END;
 					if (m_iAttackCnt == 0) eDT = DT_KNOCK_BACK;
+					if (monster->CheckCC()) eDT = DT_END;
 					monster->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
 					       ->TakeDamage(30, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, eDT);
 				}
@@ -228,6 +229,7 @@ void CPlayer::StateChange()
 		m_eState = DEAD;
 		PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
 		m_bRoll = false;
+		m_bCanPlayAnim = false;
 		return;
 	}
 

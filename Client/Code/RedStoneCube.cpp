@@ -1,42 +1,41 @@
 #include "stdafx.h"
-#include "..\Header\Enchanter.h"
+#include "..\Header\RedStoneCube.h"
 #include "StatComponent.h"
-#include "EnchanterController.h"
+#include "RedStoneCubeController.h"
 
-CEnchanter::CEnchanter(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
+CRedStoneCube::CRedStoneCube(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
 {
 }
 
-CEnchanter::CEnchanter(const CMonster& rhs) : CMonster(rhs)
+CRedStoneCube::CRedStoneCube(const CMonster& rhs) : CMonster(rhs)
 {
 }
 
-CEnchanter::~CEnchanter()
+CRedStoneCube::~CRedStoneCube()
 {
 }
 
-HRESULT CEnchanter::Ready_Object()
+HRESULT CRedStoneCube::Ready_Object()
 {
 	CMonster::Ready_Object();
 
-	m_arrAnim[ANIM_IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Enchanter/idle.anim");
-	m_arrAnim[ANIM_WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Enchanter/walk.anim");
-	m_arrAnim[ANIM_DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Enchanter/dead.anim");
-	m_arrAnim[ANIM_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Enchanter/attack.anim");
-	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
+	m_arrAnim[ANIM_WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/RedStoneCube/walk.anim");
+	m_arrAnim[ANIM_DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/RedStoneCube/dead.anim");
+	m_arrAnim[ANIM_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/RedStoneCube/attack.anim");
+	m_pIdleAnim = &m_arrAnim[ANIM_WALK];
 	m_pCurAnim = m_pIdleAnim;
-	m_eState = IDLE;
+	m_eState = WALK;
 	m_fSpeed = 2.f;
 
 	m_pStat->SetMaxHP(100);
 
-	CController* pController = Add_Component<CEnchanterController>(L"Proto_EnchanterController", L"Proto_EnchanterController", ID_DYNAMIC);
+	CController* pController = Add_Component<CRedStoneCubeController>(L"Proto_RedStoneCubeController", L"Proto_RedStoneCubeController", ID_DYNAMIC);
 	pController->SetOwner(this);
 
 	return S_OK;
 }
 
-void CEnchanter::AnimationEvent(const string& strEvent)
+void CRedStoneCube::AnimationEvent(const string& strEvent)
 {
 	if (strEvent == "AttackFire")
 	{
@@ -52,7 +51,7 @@ void CEnchanter::AnimationEvent(const string& strEvent)
 	}
 }
 
-_int CEnchanter::Update_Object(const _float& fTimeDelta)
+_int CRedStoneCube::Update_Object(const _float& fTimeDelta)
 {
 	if (m_bDelete) return OBJ_DEAD;
 
@@ -67,8 +66,6 @@ _int CEnchanter::Update_Object(const _float& fTimeDelta)
 	// 각 상태에 따른 프레임 마다 실행할 함수 지정
 	switch (m_eState)
 	{
-	case IDLE:
-		break;
 	case WALK:
 		m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * m_fSpeed * fTimeDelta;
 		break;
@@ -86,7 +83,7 @@ _int CEnchanter::Update_Object(const _float& fTimeDelta)
 	return OBJ_NOEVENT;
 }
 
-void CEnchanter::LateUpdate_Object()
+void CRedStoneCube::LateUpdate_Object()
 {
 	CMonster::LateUpdate_Object();
 
@@ -109,14 +106,14 @@ void CEnchanter::LateUpdate_Object()
 	}
 }
 
-void CEnchanter::Free()
+void CRedStoneCube::Free()
 {
 	CMonster::Free();
 }
 
-CEnchanter* CEnchanter::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
+CRedStoneCube* CRedStoneCube::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
 {
-	CEnchanter* pInstance = new CEnchanter(pGraphicDev);
+	CRedStoneCube* pInstance = new CRedStoneCube(pGraphicDev);
 
 	if (FAILED(pInstance->Ready_Object()))
 	{
@@ -130,14 +127,13 @@ CEnchanter* CEnchanter::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wst
 	return pInstance;
 }
 
-void CEnchanter::StateChange()
+void CRedStoneCube::StateChange()
 {
 	if (m_pStat->IsDead() && m_bReserveStop == false)
 	{
 		m_eState = DEAD;
 		PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
 		m_bAttack = false;
-		m_bMove = false;
 		m_bCanPlayAnim = false;
 		return;
 	}
@@ -146,7 +142,6 @@ void CEnchanter::StateChange()
 	{
 		m_eState = STUN;
 		m_bAttack = false;
-		m_bMove = false;
 		StopCurAnimation();
 		return;
 	}
@@ -157,13 +152,11 @@ void CEnchanter::StateChange()
 		RotateToTargetPos(m_vTargetPos);
 		PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK]);
 		m_bCanPlayAnim = false;
-		m_bMove = false;
 		m_bAttack = false;
-
 		return;
 	}
 
-	if (m_bMove && m_bCanPlayAnim)
+	if (m_bCanPlayAnim)
 	{
 		m_eState = WALK;
 		RotateToTargetPos(m_vTargetPos);
@@ -172,11 +165,4 @@ void CEnchanter::StateChange()
 		return;
 	}
 
-	if (m_bCanPlayAnim)
-	{
-		m_eState = IDLE;
-		m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
-		m_pCurAnim = &m_arrAnim[ANIM_IDLE];
-		return;
-	}
 }

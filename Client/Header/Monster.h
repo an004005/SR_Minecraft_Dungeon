@@ -20,6 +20,8 @@ public:
 	static CMonster* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
 	virtual void Free() override;
 
+	_bool CheckCC() { return m_bCantCC; }
+
 protected:
 	void RotateToTargetPos(const _vec3& vTargetPos, bool bReverse = false);
 
@@ -29,6 +31,7 @@ protected:
 
 	_float m_fSpeed; // ¼Óµµ
 	_bool m_bDelete = false;
+	_bool m_bCantCC = false;
 
 };
 
