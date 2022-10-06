@@ -182,7 +182,9 @@ private:
 enum CIRCLETYPE
 {
 	SHOCK = 0,
-	FIREWORK
+	FIREWORK,
+	CREEPER,
+	GOLEM
 };
 class CUVCircle : public CGameObject
 {
@@ -198,6 +200,7 @@ public:
 	void LateUpdate_Object() override;
 	void PreRender_Particle();
 	void PostRender_Particle();
+
 public:
 	static CUVCircle* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size, CIRCLETYPE _type);
 	CRcShader*			m_pBufferCom = nullptr;
@@ -214,6 +217,15 @@ private:
 	CFireWork_Fuze* m_pFuze;
 };
 
+enum CLOUDTYPE
+{
+	WALK=0,
+	ROLL,
+	SHOCKPOWDER,
+	CREEPEREX
+};
+
+
 class CCloud : public CGameObject
 {
 public:
@@ -221,7 +233,7 @@ public:
 	~CCloud() override;
 
 public:
-	virtual HRESULT Ready_Object() override;
+	virtual HRESULT Ready_Object(_float _size, CLOUDTYPE _type) ;
 	_int Update_Object(const _float& fTimeDelta) override;
 	void Render_Object() override;
 	void LateUpdate_Object() override;
@@ -229,17 +241,17 @@ public:
 	void PostRender_Particle();
 
 public:
-	static CCloud* Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CCloud* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size, CLOUDTYPE _type);
 	CRcShader*			m_pBufferCom = nullptr;
 	CTransform*			m_pTransCom = nullptr;
 	CTexture*			m_pTexture = nullptr;
 	void Free() override;
 
-
 private:
 	_float m_fTime;
 	_float m_fCurTime;
 	_vec3	m_vVelocity;
+	_float m_fSpeed;
 };
 #pragma endregion
 

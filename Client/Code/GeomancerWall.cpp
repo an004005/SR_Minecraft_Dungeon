@@ -1,5 +1,8 @@
 #include "stdafx.h"
 #include "GeomancerWall.h"
+
+#include "AbstFactory.h"
+#include "Particle.h"
 #include "TerrainCubeMap.h"
 #include "Player.h"
 #include "StatComponent.h"
@@ -120,6 +123,14 @@ void CGeomancerWall::LateUpdate_Object()
 				IM_LOG("damage");
 				break;
 			}
+		}
+		
+		Get_GameObject<CFireWork>(LAYER_EFFECT, L"FireWork")->Add_Particle(m_pTransform->m_vInfo[INFO_POS], 0.3f, D3DXCOLOR(1.f, 0.4f, 0.25f, 0), 256, 0.4f);
+		CEffectFactory::Create<CUVCircle>("Creeper_Explosion", L"Creeper_Explosion", m_pTransform->m_vInfo[INFO_POS]);
+		Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(m_pTransform->m_vInfo[INFO_POS], 0.3f, BLACK, 30, 0.5f);
+		for (int i = 0; i < 5; i++)
+		{
+			CEffectFactory::Create<CCloud>("Creeper_Cloud", L"Creeper_Cloud", m_pTransform->m_vInfo[INFO_POS]);
 		}
 
 		DEBUG_SPHERE(vPos, 3.5f, 1.f);

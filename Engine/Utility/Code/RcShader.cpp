@@ -94,18 +94,22 @@ void CRcShader::Render_Buffer()
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0xcc);
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
+	m_pGraphicDev->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+	m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
+	m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	// m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, false);
 	m_iPlayOnFrameCnt++;
 
 	if (m_iPlayOnFrameCnt == m_iFrameCnt)
 	{
 		m_iWidthTextureCnt++;
-
+	
 		if (m_iWidthTextureCnt == m_iTextureCnt_W)
 		{
 			m_iWidthTextureCnt = 0;
 			m_iHeightTextureCnt++;
 		}
-
+	
 		if (m_iHeightTextureCnt == m_iTextureCnt_H)
 		{
 			m_iHeightTextureCnt = 0;
@@ -138,8 +142,6 @@ void CRcShader::Render_Buffer()
 		{
 			m_pEffect->BeginPass(i);
 			{
-				
-
 				m_pGraphicDev->SetIndices(m_pIB);
 				m_pGraphicDev->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, m_dwVtxCnt, 0, m_dwTriCnt);
 				//m_pEffect->CommitChanges();

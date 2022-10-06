@@ -7,6 +7,7 @@ typedef struct tagParticleVtx
 {
 	_vec3		vPos;
 	_vec2		vUV;
+	D3DXCOLOR	Color;
 } VTXUVPARTICLE;
 
 

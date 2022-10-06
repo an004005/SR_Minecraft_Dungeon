@@ -1,11 +1,14 @@
 #include "stdafx.h"
 #include "..\Header\Particle.h"
-
+#include "Export_Utility.h"
 #include "AbstFactory.h"
 
 #pragma region
 
 #pragma endregion
+
+
+
 
 #pragma region Particle System
 
@@ -46,8 +49,8 @@ void CAttack_P::Reset_Particle(Attribute* _Attribute)
 {
 	_Attribute->_bIsAlive = true;
 	m_fSize = _Attribute->_fSize;
-	_vec3 min = _vec3(-3.0f, 0.0f, -3.0f);
-	_vec3 max = _vec3(3.0f, 1.0f, 3.0f);
+	_vec3 min = _vec3(-3.0f, -3.0f, -3.0f);
+	_vec3 max = _vec3(3.0f, 3.0f, 3.0f);
 
 	GetRandomVector(
 		&_Attribute->_vVelocity,
@@ -57,17 +60,17 @@ void CAttack_P::Reset_Particle(Attribute* _Attribute)
 	D3DXVec3Normalize(
 		&_Attribute->_vVelocity,
 		&_Attribute->_vVelocity);
-	_Attribute->_vVelocity *= 20.f;
-
-	_Attribute->_vVelocity.y =GetRandomFloat(0.0f, 1.0f) * -2.f;
+	_Attribute->_vVelocity *= 10.f;
+	
+	
 	_Attribute->_fAge = 0.0f;
 }
 
 void CAttack_P::PreRender_Particle()
 {
 	CParticleSystem::PreRender_Particle();
-	m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
-	m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	//m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
+	// m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 	m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, false);
 }
 
@@ -296,6 +299,13 @@ _int CSpeedBoots_Particle::Update_Object(const _float& fTimeDelta)
 			i->_vPosition += i->_vVelocity * fTimeDelta;
 			i->_fAge += fTimeDelta;
 
+			if (_int(i->_fAge) % 2 == 0)
+			{
+				CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+				pPlayerTransform->Get_Info(INFO_POS, &i->_vPosition);
+				i->_vPosition.y += 4.f;
+			}
+
 			if (i->_fAge > i->_fLifeTime)
 			{
 				i->_bIsAlive = false;
@@ -336,11 +346,11 @@ void CSpeedBoots_Particle::Reset_Particle(Attribute* _Attribute)
 		&_Attribute->_vVelocity,
 		&_Attribute->_vVelocity);
 
-	
-	_Attribute->_vVelocity.x *= -5.f;
-	
-	_Attribute->_vVelocity.z *= -5.f;
-	_Attribute->_vVelocity.y *= -2.f;
+	_Attribute->_vVelocity *= -10.f;
+	// _Attribute->_vVelocity.x *= -5.f;
+	//
+	// _Attribute->_vVelocity.z *= -5.f;
+	// _Attribute->_vVelocity.y *= -2.f;
 
 
 
@@ -447,7 +457,7 @@ void CFireWork_Fuze::Reset_Particle(Attribute* _Attribute)
 
 	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
 	pPlayerTransform->Get_Info(INFO_LOOK, &_Attribute->_vVelocity);
-	
+
 	D3DXVec3Normalize(
 		&_Attribute->_vVelocity,
 		&_Attribute->_vVelocity);
@@ -540,7 +550,7 @@ void CFireWork::Reset_Particle(Attribute* _Attribute)
 		&_Attribute->_vVelocity,
 		&_Attribute->_vVelocity);
 
-		_Attribute->_vVelocity *= 15.f;
+		_Attribute->_vVelocity *= 10.f;
 
 	_Attribute->_fAge = 0.0f;
 }
@@ -601,10 +611,10 @@ HRESULT CShock_Powder::Ready_Object()
 	m_pBufferCom = Add_Component<CRcShader>(L"Proto_RcShaderCom", L"Proto_RcShaderCom",ID_STATIC);
 	m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom",L"Proto_TransFormCom_ShockEffect",ID_DYNAMIC);
 	m_pTexture = Add_Component<CTexture>(L"Proto_Electric", L"Proto_Electric", ID_STATIC);
-	m_pBufferCom->Set_TextureOption(GetRandomFloat(10, 15), 4, 4);
+	m_pBufferCom->Set_TextureOption(CGameUtilMgr::GetRandomFloat(10, 15), 4, 4);
 
 
-	m_pTransCom->Rotation(ROT_X, D3DXToDegree(90.f));
+	m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
 
 	m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
 
@@ -612,8 +622,8 @@ HRESULT CShock_Powder::Ready_Object()
 	_vec3 pPos;
 	pPlayerTransform->Get_Info(INFO_POS, &pPos);
 	
-	m_pTransCom->Set_Pos(pPos.x + GetRandomFloat(-3.f, 3.f),
-		pPos.y + 0.5f, pPos.z + GetRandomFloat(-3.f, 3.f));
+	m_pTransCom->Set_Pos(pPos.x + CGameUtilMgr::GetRandomFloat(-3.f, 3.f),
+		pPos.y + 0.5f, pPos.z + CGameUtilMgr::GetRandomFloat(-3.f, 3.f));
 	IM_LOG("%f, %f", m_pTransCom->m_vInfo[INFO_POS].x,  m_pTransCom->m_vInfo[INFO_POS].z);
 	//m_pTransCom->Set_Scale(_float(rand() % 2)  + 1, _float(rand() % 2) + 1, _float(rand() % 2 ) + 1);
 
@@ -630,10 +640,10 @@ _int CShock_Powder::Update_Object(const _float& fTimeDelta)
 	CGameObject::Update_Object(fTimeDelta);
 	m_pBufferCom->m_matWorld = m_pTransCom->m_matWorld;
 
-	m_pTransCom->Set_Scale(_float(rand() % 2) + 0.5f, _float(rand() % 2) + 0.5f, _float(rand() % 2) + 0.5f);
+	m_pTransCom->Set_Scale(CGameUtilMgr::GetRandomFloat(0.7f,2.5f), CGameUtilMgr::GetRandomFloat(0.7f, 2.5f), CGameUtilMgr::GetRandomFloat(0.7f, 2.5f));
 
-	_float fY = 1.0f;
-	m_pTransCom->Rotation(ROT_Y, D3DXToDegree(fY * fTimeDelta));
+	_float fY = CGameUtilMgr::GetRandomFloat(0.f, 2.f);
+	m_pTransCom->Rotation(ROT_Y, D3DXToRadian(fY * fTimeDelta));
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
 
@@ -692,26 +702,43 @@ HRESULT CUVCircle::Ready_Object(_float _size, CIRCLETYPE _type)
 {
 	static _vec3 vv{ 0.f,0.f,0.f };
 	m_pBufferCom = Add_Component<CRcShader>(L"Proto_ShaderCircleCom", L"Proto_RcShaderCom", ID_STATIC);
-	m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransFormCom_ShockEffect", ID_DYNAMIC);
+	m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 	m_pTexture = Add_Component<CTexture>(L"Proto_Circle", L"Proto_Circle", ID_STATIC);
-	m_pTransCom->Rotation(ROT_X, D3DXToDegree(90.f));
+	m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
 
 	m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
 
 	if (_type == SHOCK)
 	{
-		m_pBufferCom->Set_TextureOption(1, 4, 2);
+		m_pBufferCom->Set_TextureOption(2, 4, 2);
 		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
 		_vec3 pPos;
 		pPlayerTransform->Get_Info(INFO_POS, &pPos);
 		m_pTransCom->Set_Pos(pPos.x, pPos.y + 0.5f, pPos.z);
 		m_pTransCom->Set_Scale(_size, _size, _size);
 	}
-	else
+	else if (_type == FIREWORK)
 	{
 		m_pBufferCom->Set_TextureOption(3, 4, 2);
 		_vec3 vPos = Get_GameObject<CFireWork_Fuze>(LAYER_EFFECT, L"FireWork_Fuze")->Get_FuzePos();
 		m_pTransCom->Set_Pos(vPos.x, vPos.y + 0.5f, vPos.z);
+		m_pTransCom->Set_Scale(_size, _size, _size);
+	}
+	else if (_type == CREEPER)
+	{
+		// 크리퍼 포인터로 바꿔야함
+		m_pBufferCom->Set_TextureOption(7, 4, 2);
+		// m_pTransCom->Set_Pos(m_vPos.x, m_vPos.y + 0.5f, m_vPos.z);
+		m_pTransCom->Set_Scale(_size, _size, _size);
+	}
+	else if (_type == GOLEM)
+	{
+		//골렘 포인터로 바꿔야함 손 위치 받아오기 
+		m_pBufferCom->Set_TextureOption(3, 4, 2);
+		CTransform*	pGolem = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+		_vec3 pPos;
+		pGolem->Get_Info(INFO_POS, &pPos);
+		m_pTransCom->Set_Pos(pPos.x, pPos.y + 0.5f, pPos.z);
 		m_pTransCom->Set_Scale(_size, _size, _size);
 	}
 
@@ -778,34 +805,139 @@ void CUVCircle::Free()
 #pragma region UV Cloud
 CCloud::~CCloud() = default;
 
-HRESULT CCloud::Ready_Object()
+HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 {
-	static _vec3 vv{ 0.f,0.f,0.f };
-	m_pBufferCom = Add_Component<CRcShader>(L"Proto_ShaderCloudCom", L"Proto_ShaderCloudCom", ID_STATIC);
-	m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransFormCom_CloudEffect", ID_DYNAMIC);
+	
 	m_pTexture = Add_Component<CTexture>(L"Proto_Cloud", L"Proto_Cloud_Cloud", ID_STATIC);
-	m_pBufferCom->Set_TextureOption(15, 4, 2);
 
-	m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture(0));
-	m_pTransCom->Rotation(ROT_X, D3DXToDegree(90.f));
+	
 
 	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
 	_vec3 pPos;
 	pPlayerTransform->Get_Info(INFO_POS, &pPos);
 
+	if (_type == WALK)
+	{
+		m_pBufferCom = Add_Component<CRcShader>(L"Proto_WalkCloudCom", L"Proto_WalkCloudCom", ID_STATIC);
+		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
+		
+		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture(0));
+		m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
+		m_pBufferCom->Set_TextureOption(5, 4, 2);
+		CTransform*	pPlayer = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+		_vec3 pPos;
+		pPlayer->Get_Info(INFO_POS, &pPos);
+		m_pTransCom->Set_Pos(pPos.x, pPos.y, pPos.z);
+		m_pTransCom->Set_Scale(_size, _size, _size);
+		m_fTime = 0.5f;
+		m_fCurTime = 0.f;
+		m_fSpeed = 1.5f;
 
-	m_pTransCom->Set_Pos(pPos.x,
-		pPos.y, pPos.z);
-	IM_LOG("%f, %f", m_pTransCom->m_vInfo[INFO_POS].x, m_pTransCom->m_vInfo[INFO_POS].z);
+		_vec3 min = _vec3(-1.0f, 1.0f, -1.0f);
+		_vec3 max = _vec3(1.0f, 1.0f, 1.0f);
 
-	_vec3 min = _vec3(-1.0f, 1.0f, -1.0f);
-	_vec3 max = _vec3(1.0f, 1.0f, 1.0f);
+		CGameUtilMgr::GetRandomVector(
+			&m_vVelocity,
+			&min,
+			&max);
 
-	GetRandomVector(
-		&m_vVelocity,
-		&min,
-		&max);
+		D3DXVec3Normalize(&m_vVelocity, &m_vVelocity);
+		m_vVelocity.x = 0.f;
+		m_vVelocity.z = 0.f;
 
+	}
+	else if (_type == ROLL)
+	{
+		m_pBufferCom = Add_Component<CRcShader>(L"Proto_RollCloudCom", L"Proto_RollCloudCom", ID_STATIC);
+		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransFormCom_CloudEffect", ID_DYNAMIC);
+		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture(0));
+		m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
+		m_pBufferCom->Set_TextureOption(15, 4, 2);
+		CTransform*	pPlayer = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+		_vec3 pPos;
+		pPlayer->Get_Info(INFO_POS, &pPos);
+		m_pTransCom->Set_Pos(pPos.x, pPos.y + 0.5f, pPos.z);
+		m_pTransCom->Set_Scale(_size, _size, _size);
+		m_fTime = 1.5f;
+		m_fCurTime = 0.f;
+		m_fSpeed = 0.f;
+
+		_vec3 min = _vec3(-1.0f, 1.0f, -1.0f);
+		_vec3 max = _vec3(1.0f, 1.0f, 1.0f);
+
+		CGameUtilMgr::GetRandomVector(
+			&m_vVelocity,
+			&min,
+			&max);
+
+		D3DXVec3Normalize(&m_vVelocity, &m_vVelocity);
+	}
+	else if (_type == SHOCKPOWDER)
+	{
+		m_pBufferCom = Add_Component<CRcShader>(L"Proto_ShockPowderCloudCom", L"Proto_ShockPowderCloudCom", ID_STATIC);
+		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransFormCom_CloudEffect", ID_DYNAMIC);
+		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture(0));
+		m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
+		m_pBufferCom->Set_TextureOption(20, 4, 2);
+		CTransform*	pPlayer = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+		_vec3 pPos;
+		pPlayer->Get_Info(INFO_POS, &pPos);
+		m_pTransCom->Set_Pos(pPos.x, pPos.y + 0.5f, pPos.z);
+		m_pTransCom->Set_Scale(_size, _size, _size);
+		m_fTime = 1.8f;
+		m_fCurTime = 0.f;
+		m_fSpeed = 7.f;
+
+		_vec3 min = _vec3(-1.0f, 1.0f, -1.0f);
+		_vec3 max = _vec3(1.0f, 1.0f, 1.0f);
+
+		CGameUtilMgr::GetRandomVector(
+			&m_vVelocity,
+			&min,
+			&max);
+
+		D3DXVec3Normalize(&m_vVelocity, &m_vVelocity);
+		m_vVelocity.y = 0.f;
+	}
+	else if (_type == CREEPEREX)
+	{
+		m_pBufferCom = Add_Component<CRcShader>(L"Proto_CreeperExCloudCom", L"Proto_CreeperExCloudCom", ID_STATIC);
+		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
+		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture(0));
+		m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
+		// 크리퍼 포인터로 바꿔야함
+		m_pBufferCom->Set_TextureOption(_uint(CGameUtilMgr::GetRandomFloat(10.f,15.f)), 4, 2);
+
+		// m_pTransCom->Set_Pos(m_vPos.x, m_vPos.y + 0.5f, m_vPos.z);
+		m_pTransCom->Set_Scale(_size, _size, _size);
+		m_fTime = CGameUtilMgr::GetRandomFloat(0.5f, 2.f);
+		m_fTime = 1.2f;
+		m_fCurTime = 0.f;
+		m_fSpeed = 7.f;
+
+		_vec3 min = _vec3(-1.0f, 1.0f, -1.0f);
+		_vec3 max = _vec3(1.0f, 1.0f, 1.0f);
+
+		CGameUtilMgr::GetRandomVector(
+			&m_vVelocity,
+			&min,
+			&max);
+
+		D3DXVec3Normalize(&m_vVelocity, &m_vVelocity);
+	}
+	
+	// m_pTransCom->Set_Pos(pPos.x,
+	// 	pPos.y, pPos.z);
+	// IM_LOG("%f, %f", m_pTransCom->m_vInfo[INFO_POS].x, m_pTransCom->m_vInfo[INFO_POS].z);
+
+	// _vec3 min = _vec3(-1.0f, 1.0f, -1.0f);
+	// _vec3 max = _vec3(1.0f, 1.0f, 1.0f);
+
+	// CGameUtilMgr::GetRandomVector(
+	// 	&m_vVelocity,
+	// 	&min,
+	// 	&max);
+	m_fSpeed = m_fSpeed / 2;
 	D3DXVec3Normalize(&m_vVelocity, &m_vVelocity);
 
 	m_pTransCom->Update_Component(0.f);
@@ -817,11 +949,11 @@ void CCloud::LateUpdate_Object()
 	CGameObject::LateUpdate_Object();
 }
 
-CCloud* CCloud::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CCloud* CCloud::Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size, CLOUDTYPE _type)
 {
 	CCloud* Inst = new CCloud(pGraphicDev);
 
-	if (FAILED(Inst->Ready_Object()))
+	if (FAILED(Inst->Ready_Object(_size, _type)))
 	{
 		return nullptr;
 	}
@@ -830,17 +962,19 @@ CCloud* CCloud::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 
 _int CCloud::Update_Object(const _float& fTimeDelta)
 {
-	if (m_pBufferCom->Check_TextureCnt(3, 1))
+	if (m_fCurTime > m_fTime)
 		return OBJ_DEAD;
+	m_fCurTime += fTimeDelta;
 
 	CGameObject::Update_Object(fTimeDelta);
+
 	m_pBufferCom->m_matWorld = m_pTransCom->m_matWorld;
 	
 	_vec3& vPos = m_pTransCom->m_vInfo[INFO_POS];
-
-	m_vVelocity.y = GetRandomFloat(0.0f, 1.0f) * 0.5f;
+	// 삼각함수 적용해보기
+	// m_vVelocity.y = GetRandomFloat(0.5f, 1.0f) * 1.f;
 	
-	vPos += m_vVelocity * fTimeDelta * 5;
+	vPos += m_vVelocity * fTimeDelta * m_fSpeed;
 	
 	Add_RenderGroup(RENDER_NONALPHA, this);
 
@@ -857,8 +991,8 @@ void CCloud::Render_Object()
 
 void CCloud::PreRender_Particle()
 {
-	m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
-	m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	// m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
+	// m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 	m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, false);
 }
 
