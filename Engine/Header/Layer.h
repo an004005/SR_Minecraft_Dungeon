@@ -15,6 +15,7 @@ public:
 	CComponent*				Get_Component(const wstring& pObjTag, const wstring& pComponentTag, COMPONENTID eID);
 	CGameObject* Get_GameObject(const wstring& pObjTag);
 	void Get_AllGameObject(const wstring& pObjTag, list<CGameObject*>& outList);
+	const unordered_multimap<wstring, CGameObject*>& Get_MapObject() const { return m_mapObject; }
 
 public:
 	HRESULT			Add_GameObject(const wstring& pObjTag, CGameObject* pInstance);

@@ -8,13 +8,14 @@
 #include "Particle.h"
 #include "StaticCamera.h"
 #include "Monster.h"
+#include "PlayerController.h"
 
 /*-----------------------
  *    CCharacter
  ----------------------*/
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev) : CSkeletalCube(pGraphicDev)
 {
-	m_fVelocity = 5.f;
+	m_fSpeed = 4.f;
 	m_fRollSpeed = 12.f;
 }
 
@@ -26,17 +27,20 @@ CPlayer::~CPlayer()
 HRESULT CPlayer::Ready_Object()
 {
 	CSkeletalCube::Ready_Object();
-	m_pController = CPlayerController::Create();
 
-	m_arrLoopAnim[IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_idle.anim");
-	m_arrLoopAnim[WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_walk.anim");
-	m_arrOnceAnim[ATTACK1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_a.anim");
-	m_arrOnceAnim[ATTACK2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_b.anim");
-	m_arrOnceAnim[ATTACK3] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_c.anim");
-	m_arrOnceAnim[ROLL] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/roll.anim");
-	m_pIdleAnim = &m_arrLoopAnim[IDLE];
-
+	m_arrAnim[ANIM_IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_idle.anim");
+	m_arrAnim[ANIM_IDLE].bLoop = true;
+	m_arrAnim[ANIM_WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_walk.anim");
+	m_arrAnim[ANIM_WALK].bLoop = true;
+	m_arrAnim[ANIM_ATTACK1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_a.anim");
+	m_arrAnim[ANIM_ATTACK2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_b.anim");
+	m_arrAnim[ANIM_ATTACK3] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_c.anim");
+	m_arrAnim[ANIM_ROLL] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/roll.anim");
+	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 	m_pCurAnim = m_pIdleAnim;
+
+	CController* pController = Add_Component<CPlayerController>(L"Proto_PlayerController", L"Proto_PlayerController", ID_DYNAMIC);
+	pController->SetOwner(this);
 
 	CCollisionCom* pColl = Add_Component<CCollisionCom>(L"Proto_CollisionCom", L"Proto_CollisionCom", ID_DYNAMIC);
 	pColl->SetOwner(this);
@@ -57,18 +61,35 @@ HRESULT CPlayer::Ready_Object()
 _int CPlayer::Update_Object(const _float& fTimeDelta)
 {
 	CSkeletalCube::Update_Object(fTimeDelta);
-	m_pController->Update(this);
 
-	MeleeAttack();
+	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
+		m_bCanPlayAnim = true;
 
-	if (!m_bAction)
+	// 상태 변경 조건 설정
+	StateChange();
+
+	// 각 상태에 따른 프레임 마다 실행할 함수 지정
+	switch (m_eState)
 	{
-		m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_vMoveDirNormal * m_fVelocity * fTimeDelta;
-	}
-
-	if (m_bRoll)
-	{
+	case IDLE:
+		break;
+	case WALK:
+		m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_vMoveDirNormal * m_fSpeed * fTimeDelta;
+		break;
+	case ATTACK:
+		MeleeAttack(); // 근접, 원거리 분기하기
+		break;
+	case STUN:
+		break;
+	case ROLL:
 		m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * m_fRollSpeed * fTimeDelta;
+		break;
+	case LEGACY:
+		break;
+	case DEAD:
+		break;
+	default:
+		break;;
 	}
 
 	return OBJ_NOEVENT;
@@ -93,7 +114,7 @@ void CPlayer::LateUpdate_Object()
 				}
 			}
 
-			
+
 			DEBUG_SPHERE(vAttackPos, 2.f, 1.f);
 
 			m_bApplyMeleeAttackNext = false;
@@ -112,87 +133,105 @@ void CPlayer::LateUpdate_Object()
 void CPlayer::Free()
 {
 	CSkeletalCube::Free();
-	Safe_Release(m_pController);
 }
 
 void CPlayer::AnimationEvent(const string& strEvent)
 {
 	if (strEvent == "ActionEnd")
 	{
-		m_bAction = false;
-		SetMove(0.f, 0.f);
-		m_bRoll = false;
+		m_bCanPlayAnim = true;
+		// SetMove(0.f, 0.f);
+		// m_bRoll = false;
 	}
 }
 
-void CPlayer::SetMove(_float fX, _float fZ)
+void CPlayer::SetMoveDir(_float fX, _float fZ)
 {
-	m_vMoveDir.x += fX;
-	m_vMoveDir.z += fZ;
-	D3DXVec3Normalize(&m_vMoveDirNormal, &m_vMoveDir);
+	m_vMoveDirNormal.x = fX;
+	m_vMoveDirNormal.z = fZ;
 
-	if (m_bAction) return;
-
-	_float fCamYaw = Engine::Get_Component<CTransform>(LAYER_ENV, L"StaticCamera", L"Proto_TransformCom", ID_DYNAMIC)->
-	                 m_vAngle.y;
-	_matrix matYaw;
-	D3DXMatrixRotationY(&matYaw, fCamYaw);
-
-	D3DXVec3TransformNormal(&m_vMoveDirNormal, &m_vMoveDirNormal, &matYaw);
-
-	if (!CGameUtilMgr::Vec3Cmp(m_vMoveDir, CGameUtilMgr::s_vZero))
+	// x, z 중 하나가 0 이 아니면 움직임 요청
+	m_bMove = CGameUtilMgr::FloatCmp(fX, 0.f) == false || CGameUtilMgr::FloatCmp(fZ, 0.f) == false;
+	if (m_bMove)
 	{
-		const _vec2 v2Look{0.f, 1.f};
-		const _vec2 v2ToDest{m_vMoveDirNormal.x, m_vMoveDirNormal.z};
-		const _float fDot = D3DXVec2Dot(&v2Look, &v2ToDest);
-
-
-		if (m_vMoveDirNormal.x < 0)
-			m_pRootPart->pTrans->m_vAngle.y = -acosf(fDot);
-		else
-			m_pRootPart->pTrans->m_vAngle.y = acosf(fDot);
-
-		m_pIdleAnim = &m_arrLoopAnim[WALK];
-		m_pCurAnim = m_pIdleAnim;
-	}
-	else
-	{
-		m_pIdleAnim = &m_arrLoopAnim[IDLE];
-		m_pCurAnim = m_pIdleAnim;
+		int a= 3;
 	}
 }
 
 void CPlayer::MeleeAttack()
 {
-	if (m_bMeleeAttack == false) return;
-	if (m_bAction == true) return;
+	if (m_bCanPlayAnim == false) return;
 
-	m_bAction = true;
-	RotateToCursor();
-
+	m_bCanPlayAnim = false;
 	if (m_iAttackCnt == 0)
 	{
-		PlayAnimationOnce(&m_arrOnceAnim[ATTACK1]);
+		PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK1]);
 	}
 	else if (m_iAttackCnt == 1)
 	{
-		PlayAnimationOnce(&m_arrOnceAnim[ATTACK2]);
+		PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK2]);
 	}
 	else
 	{
-		PlayAnimationOnce(&m_arrOnceAnim[ATTACK3]);
+		PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK3]);
 	}
 	m_iAttackCnt = (m_iAttackCnt + 1) % 3;
 	m_bApplyMeleeAttack = true;
 	Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 1.f, RED, 5, 1.f);
 }
 
-void CPlayer::Roll()
+
+
+void CPlayer::StateChange()
 {
-	RotateToCursor();
-	m_bAction = true;
-	m_bRoll = true;
-	PlayAnimationOnce(&m_arrOnceAnim[ROLL]);
+	if (m_pStat->IsDead())
+	{
+		m_eState = DEAD;
+		PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
+		m_bRoll = false;
+		return;
+	}
+
+	if (m_pStat->IsStun())
+	{
+		m_eState = STUN;
+		m_bRoll = false;
+		return;
+	}
+
+	if (m_bRoll)
+	{
+		m_eState = ROLL;
+		RotateToCursor();
+		m_bCanPlayAnim = false;
+		PlayAnimationOnce(&m_arrAnim[ANIM_ROLL]);
+		m_bRoll = false;
+		return;
+	}
+
+	if (m_bMeleeAttack && m_bCanPlayAnim)
+	{
+		m_eState = ATTACK;
+		RotateToCursor();
+		return;
+	}
+
+	if (m_bMove && m_bCanPlayAnim)
+	{
+		m_eState = WALK;
+		RotateToMove();
+		m_pIdleAnim = &m_arrAnim[ANIM_WALK];
+		m_pCurAnim = &m_arrAnim[ANIM_WALK];
+		return;
+	}
+
+	if (m_bCanPlayAnim)
+	{
+		m_eState = IDLE;
+		m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
+		m_pCurAnim = &m_arrAnim[ANIM_IDLE];
+		return;
+	}
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
@@ -264,6 +303,19 @@ void CPlayer::RotateToCursor()
 	else
 		m_pRootPart->pTrans->m_vAngle.y = acosf(fDot);
 
-	m_pIdleAnim = &m_arrLoopAnim[WALK];
+	m_pIdleAnim = &m_arrAnim[ANIM_WALK];
 	m_pCurAnim = m_pIdleAnim;
+}
+
+void CPlayer::RotateToMove()
+{
+	const _vec2 v2Look{0.f, 1.f};
+	const _vec2 v2ToDest{m_vMoveDirNormal.x, m_vMoveDirNormal.z};
+	const _float fDot = D3DXVec2Dot(&v2Look, &v2ToDest);
+
+
+	if (m_vMoveDirNormal.x < 0)
+		m_pRootPart->pTrans->m_vAngle.y = -acosf(fDot);
+	else
+		m_pRootPart->pTrans->m_vAngle.y = acosf(fDot);
 }

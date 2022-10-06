@@ -1,7 +1,10 @@
 #pragma once
+#include "Player.h"
 #include "SkeletalCube.h"
 
 class CStatComponent;
+class CPlayer;
+class CController;
 
 class CMonster : public CSkeletalCube
 {
@@ -18,9 +21,14 @@ public:
 	virtual void Free() override;
 
 protected:
+	void RotateToTargetPos(const _vec3& vTargetPos, bool bReverse = false);
+
+protected:
 	CCollisionCom* m_pColl = nullptr;
 	CStatComponent* m_pStat = nullptr;
 
+	_float m_fSpeed; // ¼Óµµ
+	_bool m_bDelete = false;
 
 };
 

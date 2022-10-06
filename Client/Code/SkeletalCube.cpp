@@ -182,10 +182,9 @@ CSkeletalCube* CSkeletalCube::Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstr
 
 void CSkeletalCube::AnimFrameConsume(_float fTimeDelta)
 {
-#ifdef _DEBUG
-	if (m_bStopAnim)  // for imgui
+	if (m_bStopAnim)
 		return;
-#endif
+
 	fTimeDelta *= m_fAnimSpeed;
 
 	if (m_pCurAnim == nullptr) return;
@@ -202,6 +201,13 @@ void CSkeletalCube::AnimFrameConsume(_float fTimeDelta)
 	m_fAccTime += fTimeDelta;
 	if (m_pCurAnim->fTotalTime < m_fAccTime)
 	{
+		if (m_bReserveStop)
+		{
+			m_bStopAnim = true;;
+			AnimationEvent("AnimStopped");
+			return;
+		}
+
 		m_fAccTime = 0.f;
 		if (m_pCurAnim->bLoop == false) // loop 가 아니면 다 실행하고 loop로 변경
 		{
@@ -256,11 +262,12 @@ void CSkeletalCube::AnimFrameConsume(_float fTimeDelta)
 	}
 }
 
-void CSkeletalCube::PlayAnimationOnce(CubeAnimFrame* frame)
+void CSkeletalCube::PlayAnimationOnce(CubeAnimFrame* frame, bool bReserveStop)
 {
 	m_fAccTime = 0.f;
 	m_pCurAnim = frame;
 	m_pCurAnim->bLoop = false;
+	m_bReserveStop = bReserveStop;
 }
 
 void CSkeletalCube::StopCurAnimation()

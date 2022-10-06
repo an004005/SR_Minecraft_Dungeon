@@ -9,6 +9,9 @@
 #include "StatComponent.h"
 #include "DynamicCamera.h"
 #include "Particle.h"
+#include "Geomancer.h"
+#include "PlayerController.h"
+#include "GeomancerController.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
@@ -80,8 +83,10 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	CEffectFactory::Create<CFireWork>("FireWork", L"FireWork");
 	CEffectFactory::Create<CSpeedBoots>("Speed_Boots", L"Speed_Boots");
 	CEffectFactory::Create<CSpeedBoots_Particle>("Speed_Boots_Particle", L"Speed_Boots_Particle");
-	CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {2.f, 0.f ,1.f});
-	CEnemyFactory::Create<CMonster>("TestZombie", L"TestZombie", matWorld);
+
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {3.f, 0.f ,3.f});
+	CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
 
 	return S_OK;
 }
@@ -132,6 +137,11 @@ HRESULT CStage::Ready_Proto(void)
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_StatCom", CStatComponent::Create()), E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_PlantTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Plant/plant_%d.png", TEX_NORMAL, 3)), E_FAIL);
+
+
+	// controller
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_PlayerController", CPlayerController::Create()), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_GeomancerController", CGeomancerController::Create()), E_FAIL);
 
 
 	return S_OK;
