@@ -47,6 +47,7 @@ HRESULT CPlayer::Ready_Object()
 	pColl->SetOwnerTransform(m_pRootPart->pTrans);
 	pColl->SetCollOffset(_vec3{0.f, 1.f, 0.f});
 	pColl->SetRadius(0.5f);
+	pColl->SetCollType(COLL_PLAYER);
 
 	m_pStat = Add_Component<CStatComponent>(L"Proto_StatCom", L"Proto_StatCom", ID_DYNAMIC);
 	m_pStat->SetMaxHP(100);
