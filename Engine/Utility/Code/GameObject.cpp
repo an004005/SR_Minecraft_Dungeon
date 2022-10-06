@@ -79,3 +79,25 @@ void Engine::CGameObject::Free(void)
 
 	Safe_Release(m_pGraphicDev);
 }
+
+float CGameObject::GetRandomFloat(float lowBound, float highBound)
+{
+	if (lowBound >= highBound) // 잘못된 입력
+		return lowBound;
+
+	float f = (rand() % 10000) * 0.0001f;
+
+	return (f * (highBound - lowBound)) + lowBound;
+}
+
+void CGameObject::GetRandomVector(_vec3* out, _vec3* min, _vec3* max)
+{
+	out->x = GetRandomFloat(min->x, max->x);
+	out->y = GetRandomFloat(min->y, max->y);
+	out->z = GetRandomFloat(min->z, max->z);
+}
+
+DWORD CGameObject::FtoDw(float f)
+{
+	return *((DWORD*)&f);
+}

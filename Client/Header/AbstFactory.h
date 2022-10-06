@@ -70,18 +70,27 @@ class CEffectFactory : CAbstFactory
 	friend class CImGuiMgr;
 public:
 	template<typename T>
+	static T* Create(const string& strFactoryTag, const wstring& wstrObjTag)
+	{
+		T* pCasted = dynamic_cast<T*>(s_mapEffectSpawner.find(strFactoryTag)->second());
+		_ASSERT_CRASH(pCasted != nullptr);
+		Engine::AddGameObject(LAYER_EFFECT, wstrObjTag, pCasted);
+
+		return pCasted;
+	}
+
+	template<typename T>
 	static T* Create(const string& strFactoryTag, const wstring& wstrObjTag, const _matrix& matWorld)
 	{
 		T* pCasted = dynamic_cast<T*>(s_mapEffectSpawner.find(strFactoryTag)->second());
 		_ASSERT_CRASH(pCasted != nullptr);
 		Engine::AddGameObject(LAYER_EFFECT, wstrObjTag, pCasted);
 
-		// CTransform* pTrans = pCasted->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC);
-		// pTrans->Set_WorldDecompose(matWorld);
+		CTransform* pTrans = pCasted->Get_Component<CTransform>(L"Proto_TransformCom_Shock", ID_DYNAMIC);
+		pTrans->Set_WorldDecompose(matWorld);
 
 		return pCasted;
 	}
-
 	static void Ready_EffectFactory();
 
 private:

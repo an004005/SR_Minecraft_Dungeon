@@ -2,6 +2,7 @@
 #include "AbstFactory.h"
 #include "Player.h"
 #include "Terrain.h"
+#include "Particle.h"
 #include "StaticCamera.h"
 #include "Monster.h"
 
@@ -55,6 +56,64 @@ void CEnemyFactory::Ready_EnemyFactory()
 
 void CEffectFactory::Ready_EffectFactory()
 {
+	/**********************
+	*	-ParticleSystem
+	**********************/
+	s_mapEffectSpawner.insert({ "3D_Base", []()
+	{
+		return C3DBaseTexture::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/3DView_Spotlight_Pattern.png");
+	} });
+
+
+	s_mapEffectSpawner.insert({ "Attack_Basic", []()
+	{
+		return CAttack_P::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/aac1e6-corona.png");
+	} });
+
+	
+	s_mapEffectSpawner.insert({ "Speed_Boots", []()
+	{
+		return CSpeedBoots::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/SpeedBoots_Particle.bmp");
+	} });
+
+	s_mapEffectSpawner.insert({ "Speed_Boots_Particle", []()
+	{
+		return CSpeedBoots_Particle::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/SpeedBoots_Particle.bmp");
+	} });
+
+	s_mapEffectSpawner.insert({ "FireWork_Fuze", []()
+	{
+		return CFireWork_Fuze::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/T_LinearGradient.png");
+	} });
+
+	s_mapEffectSpawner.insert({ "FireWork", []()
+	{
+		return CFireWork::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/bump.png");
+	} });
+
+	/**********************
+	*		-Shader
+	**********************/
+	s_mapEffectSpawner.insert({ "Shock_Powder", []()
+	{
+		return CShock_Powder::Create(s_pGraphicDev);
+	} });
+
+	s_mapEffectSpawner.insert({ "Texture_Cloud", []()
+	{
+		return CCloud::Create(s_pGraphicDev);
+	} });
+
+	s_mapEffectSpawner.insert({ "UV_Circle", []()
+	{
+		return CUVCircle::Create(s_pGraphicDev,3.f, SHOCK);
+	} });
+
+	s_mapEffectSpawner.insert({ "Firwork_Circle", []()
+	{
+		return CUVCircle::Create(s_pGraphicDev, 7.f, FIREWORK);
+	} });
+
 }
 
 void CEnvFactory::Ready_EnvFactory()
