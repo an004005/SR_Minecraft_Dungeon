@@ -21,8 +21,8 @@ HRESULT CTerrainRcTex::Ready_Buffer(const vector<_matrix>& _vecmatworld)
 	m_iTexCnt = _vecmatworld.size();
 	if (m_iTexCnt == 0)
 		return E_FAIL;
-	m_dwVtxCnt = _vecmatworld.size() * 4;
-	m_dwTriCnt = _vecmatworld.size() * 2;
+	m_dwVtxCnt = (_ulong)_vecmatworld.size() * 4;
+	m_dwTriCnt = (_ulong)_vecmatworld.size() * 2;
 	m_dwVtxSize = sizeof(VTXTEX);
 	m_dwFVF = FVF_TEX;
 
@@ -67,11 +67,11 @@ HRESULT CTerrainRcTex::Ready_Buffer(const vector<_matrix>& _vecmatworld)
 		IdxTmp[1]._2 = 3;
 
 		size_t iVtxCnt = 4 * i;
-		for (int j = 0; j < 2; ++j)
+		for (size_t j = 0; j < 2; ++j)
 		{
-			IdxTmp[j]._0 += iVtxCnt;
-			IdxTmp[j]._1 += iVtxCnt;
-			IdxTmp[j]._2 += iVtxCnt;
+			IdxTmp[j]._0 += (_ulong)iVtxCnt;
+			IdxTmp[j]._1 += (_ulong)iVtxCnt;
+			IdxTmp[j]._2 += (_ulong)iVtxCnt;
 			vecIdxTmps.push_back(IdxTmp[j]);
 		}
 	}

@@ -6,6 +6,10 @@
 #include "StaticCamera.h"
 #include "Monster.h"
 #include "Geomancer.h"
+#include "Zombie.h"
+#include "Creeper.h"
+#include "Skeleton.h"
+#include "Enchanter.h"
 #include "GeomancerWall.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
@@ -52,14 +56,26 @@ void CPlayerFactory::Ready_PlayerFactory()
 
 void CEnemyFactory::Ready_EnemyFactory()
 {
-	s_mapEnemySpawner.insert({"TestZombie", []()
+	s_mapEnemySpawner.insert({"Zombie", []()
 	{
-		return CMonster::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Zombie.cube");
-	}});
-		s_mapEnemySpawner.insert({"Geomancer", []()
+		return CZombie::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Zombie.cube");
+	} });
+	s_mapEnemySpawner.insert({ "Geomancer", []()
 	{
-		return CGeomancer::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Geomancer.cube");
-	}});
+	return CGeomancer::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Geomancer.cube");
+	} });
+	s_mapEnemySpawner.insert({ "Creeper", []()
+	{
+		return CCreeper::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Creeper.cube");
+	} });
+	s_mapEnemySpawner.insert({ "Skeleton", []()
+	{
+		return CSkeleton::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Skeleton.cube");
+	} });
+	s_mapEnemySpawner.insert({ "Enchanter", []()
+	{
+		return CEnchanter::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Enchanter.cube");
+	} });
 }
 
 void CEffectFactory::Ready_EffectFactory()
