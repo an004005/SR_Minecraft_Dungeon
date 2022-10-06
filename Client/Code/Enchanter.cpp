@@ -1,41 +1,42 @@
 #include "stdafx.h"
-#include "..\Header\Creeper.h"
+#include "..\Header\Enchanter.h"
 #include "StatComponent.h"
-#include "CreeperController.h"
+#include "EnchanterController.h"
 
-CCreeper::CCreeper(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
+CEnchanter::CEnchanter(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
 {
 }
 
-CCreeper::CCreeper(const CMonster& rhs) : CMonster(rhs)
+CEnchanter::CEnchanter(const CMonster& rhs) : CMonster(rhs)
 {
 }
 
-CCreeper::~CCreeper()
+CEnchanter::~CEnchanter()
 {
 }
 
-HRESULT CCreeper::Ready_Object()
+HRESULT CEnchanter::Ready_Object()
 {
 	CMonster::Ready_Object();
 
-	m_arrAnim[ANIM_IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Creeper/idle.anim");
-	m_arrAnim[ANIM_WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Creeper/walk.anim");
-	m_arrAnim[ANIM_DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Creeper/dead.anim");
+	m_arrAnim[ANIM_IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Enchanter/idle.anim");
+	m_arrAnim[ANIM_WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Enchanter/walk.anim");
+	m_arrAnim[ANIM_DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Enchanter/dead.anim");
+	m_arrAnim[ANIM_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Enchanter/attack.anim");
 	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 	m_pCurAnim = m_pIdleAnim;
 	m_eState = IDLE;
-	m_fSpeed = 2.5f;
+	m_fSpeed = 2.f;
 
 	m_pStat->SetMaxHP(100);
 
-	CController* pController = Add_Component<CCreeperController>(L"Proto_CreeperController", L"Proto_CreeperController", ID_DYNAMIC);
+	CController* pController = Add_Component<CEnchanterController>(L"Proto_EnchanterController", L"Proto_EnchanterController", ID_DYNAMIC);
 	pController->SetOwner(this);
 
 	return S_OK;
 }
 
-void CCreeper::AnimationEvent(const string& strEvent)
+void CEnchanter::AnimationEvent(const string& strEvent)
 {
 	if (strEvent == "AttackFire")
 	{
@@ -51,7 +52,7 @@ void CCreeper::AnimationEvent(const string& strEvent)
 	}
 }
 
-_int CCreeper::Update_Object(const _float& fTimeDelta)
+_int CEnchanter::Update_Object(const _float& fTimeDelta)
 {
 	if (m_bDelete) return OBJ_DEAD;
 
@@ -71,12 +72,9 @@ _int CCreeper::Update_Object(const _float& fTimeDelta)
 	case WALK:
 		m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * m_fSpeed * fTimeDelta;
 		break;
-	case STUN:
-		break;
 	case ATTACK:
-		//폭발 애니메이션 실행
-		//if 폭발 애니메이션이 끝나면 
-		m_bAttackFire = true;
+		break;
+	case STUN:
 		break;
 	case DEAD:
 		break;
@@ -88,16 +86,15 @@ _int CCreeper::Update_Object(const _float& fTimeDelta)
 	return OBJ_NOEVENT;
 }
 
-void CCreeper::LateUpdate_Object()
+void CEnchanter::LateUpdate_Object()
 {
 	CMonster::LateUpdate_Object();
 
-	
 	if (m_bAttackFire)
 	{
 		set<CGameObject*> setObj;
-		_vec3 vAttackPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
-		Engine::GetOverlappedObject(setObj, vAttackPos, 3.5f);
+		_vec3 vAttackPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + (m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 2.f);
+		Engine::GetOverlappedObject(setObj, vAttackPos, 1.f);
 
 		for (auto& obj : setObj)
 		{
@@ -105,22 +102,21 @@ void CCreeper::LateUpdate_Object()
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
 				->TakeDamage(1, m_pRootPart->pTrans->m_vInfo[INFO_POS], this);
 		}
-		DEBUG_SPHERE(vAttackPos, 3.5f, 1.f);
+		DEBUG_SPHERE(vAttackPos, 1.f, 1.f);
 		IM_LOG("Fire");
 
 		m_bAttackFire = false;
-		m_bDelete = true;
 	}
 }
 
-void CCreeper::Free()
+void CEnchanter::Free()
 {
 	CMonster::Free();
 }
 
-CCreeper* CCreeper::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
+CEnchanter* CEnchanter::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
 {
-	CCreeper* pInstance = new CCreeper(pGraphicDev);
+	CEnchanter* pInstance = new CEnchanter(pGraphicDev);
 
 	if (FAILED(pInstance->Ready_Object()))
 	{
@@ -134,7 +130,7 @@ CCreeper* CCreeper::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPat
 	return pInstance;
 }
 
-void CCreeper::StateChange()
+void CEnchanter::StateChange()
 {
 	if (m_pStat->IsDead() && m_bReserveStop == false)
 	{
@@ -156,6 +152,8 @@ void CCreeper::StateChange()
 	if (m_bAttack && m_bCanPlayAnim)
 	{
 		m_eState = ATTACK;
+		RotateToTargetPos(m_vTargetPos);
+		PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK]);
 		m_bCanPlayAnim = false;
 		m_bMove = false;
 		m_bAttack = false;

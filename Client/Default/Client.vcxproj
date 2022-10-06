@@ -171,6 +171,8 @@
     <ClInclude Include="..\Header\Creeper.h" />
     <ClInclude Include="..\Header\CreeperController.h" />
     <ClInclude Include="..\Header\DynamicCamera.h" />
+    <ClInclude Include="..\Header\Enchanter.h" />
+    <ClInclude Include="..\Header\EnchanterController.h" />
     <ClInclude Include="..\Header\Geomancer.h" />
     <ClInclude Include="..\Header\GeomancerController.h" />
     <ClInclude Include="..\Header\ImGuiMgr.h" />
@@ -184,6 +186,8 @@
     <ClInclude Include="..\Header\Player.h" />
     <ClInclude Include="..\Header\PlayerController.h" />
     <ClInclude Include="..\Header\SkeletalCube.h" />
+    <ClInclude Include="..\Header\Skeleton.h" />
+    <ClInclude Include="..\Header\SkeletonController.h" />
     <ClInclude Include="..\Header\Stage.h" />
     <ClInclude Include="..\Header\StatComponent.h" />
     <ClInclude Include="..\Header\StaticCamera.h" />
@@ -222,6 +226,8 @@
     <ClCompile Include="..\Code\Creeper.cpp" />
     <ClCompile Include="..\Code\CreeperController.cpp" />
     <ClCompile Include="..\Code\DynamicCamera.cpp" />
+    <ClCompile Include="..\Code\Enchanter.cpp" />
+    <ClCompile Include="..\Code\EnchanterController.cpp" />
     <ClCompile Include="..\Code\Geomancer.cpp" />
     <ClCompile Include="..\Code\GeomancerController.cpp" />
     <ClCompile Include="..\Code\ImGuiMgr.cpp" />
@@ -235,6 +241,8 @@
     <ClCompile Include="..\Code\Player.cpp" />
     <ClCompile Include="..\Code\PlayerController.cpp" />
     <ClCompile Include="..\Code\SkeletalCube.cpp" />
+    <ClCompile Include="..\Code\Skeleton.cpp" />
+    <ClCompile Include="..\Code\SkeletonController.cpp" />
     <ClCompile Include="..\Code\Stage.cpp" />
     <ClCompile Include="..\Code\StatComponent.cpp" />
     <ClCompile Include="..\Code\StaticCamera.cpp" />
