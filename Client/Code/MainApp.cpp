@@ -88,7 +88,7 @@ void CMainApp::Render_MainApp(void)
 HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 * ppGraphicDev)
 {
 	// 디바이스 초기화
-	FAILED_CHECK_RETURN(Engine::Ready_GraphicDev(g_hWnd, MODE_WIN, 1280, 720, &m_pDeviceClass), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_GraphicDev(g_hWnd, MODE_WIN, WINCX, WINCY, &m_pDeviceClass), E_FAIL);
 	m_pDeviceClass->AddRef();
 
 	(*ppGraphicDev) = m_pDeviceClass->Get_GraphicDev();
@@ -141,7 +141,7 @@ HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement
 	// pScene = CLogo::Create(pGraphicDev);
 	// CAnimationTool::Create(pGraphicDev);
 	//CMapTool::Create(pGraphicDev);
-	NULL_CHECK_RETURN(CStage::Create(pGraphicDev), E_FAIL);
+	 NULL_CHECK_RETURN(CStage::Create(pGraphicDev), E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Create_Management(pGraphicDev, ppManagement), E_FAIL);
 	(*ppManagement)->AddRef();

@@ -47,6 +47,7 @@ HRESULT CPlayer::Ready_Object()
 	pColl->SetOwnerTransform(m_pRootPart->pTrans);
 	pColl->SetCollOffset(_vec3{0.f, 1.f, 0.f});
 	pColl->SetRadius(0.5f);
+	pColl->SetCollType(COLL_PLAYER);
 
 	m_pStat = Add_Component<CStatComponent>(L"Proto_StatCom", L"Proto_StatCom", ID_DYNAMIC);
 	m_pStat->SetMaxHP(100);
@@ -166,10 +167,6 @@ void CPlayer::SetMoveDir(_float fX, _float fZ)
 
 	// x, z 중 하나가 0 이 아니면 움직임 요청
 	m_bMove = CGameUtilMgr::FloatCmp(fX, 0.f) == false || CGameUtilMgr::FloatCmp(fZ, 0.f) == false;
-	if (m_bMove)
-	{
-		int a= 3;
-	}
 }
 
 void CPlayer::MeleeAttack()

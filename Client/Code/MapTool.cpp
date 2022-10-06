@@ -296,7 +296,7 @@ _bool CMapTool::PickingOnCube(_vec3& CubeCenter, int& iToDelIdx)
 				dwVtxIdxLD[2] = vFaceVtx[j][3];
 
 				//광선과 닿은 면이 있다면 vRayPos와의 거리가 최소값인지 확인한다.
-				bool RUtriCheck = D3DXIntersectTri(&dwVtxIdxRU[1], &dwVtxIdxRU[2], &dwVtxIdxRU[0], &vRayPos, &vRayDir, &fU, &fV, &fDist);
+				BOOL RUtriCheck = D3DXIntersectTri(&dwVtxIdxRU[1], &dwVtxIdxRU[2], &dwVtxIdxRU[0], &vRayPos, &vRayDir, &fU, &fV, &fDist);
 				if (RUtriCheck && MinDist > fDist)
 				{
 					iCurCube = i;
@@ -305,7 +305,7 @@ _bool CMapTool::PickingOnCube(_vec3& CubeCenter, int& iToDelIdx)
 					continue;
 				}
 
-				bool LDtriCheck = D3DXIntersectTri(&dwVtxIdxLD[0], &dwVtxIdxLD[1], &dwVtxIdxLD[2], &vRayPos, &vRayDir, &fU, &fV, &fDist);
+				BOOL LDtriCheck = D3DXIntersectTri(&dwVtxIdxLD[0], &dwVtxIdxLD[1], &dwVtxIdxLD[2], &vRayPos, &vRayDir, &fU, &fV, &fDist);
 				if (LDtriCheck && MinDist > fDist)
 				{				
 					iCurCube = i;

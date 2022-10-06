@@ -33,10 +33,15 @@ public:
 
 	virtual void Free() override;
 
+
+
 private:
 	static bool IsCollided(const _vec3& vPos1, _float fRadius1, const _vec3& vPos2, _float fRadius2);
 
 private:
+			                                       // [this][other] 일 때 밀어내는 방법 결정
+	static const BLOCKING_TYPE s_BlockingTypeMatrix[COLL_END][COLL_END];
+
 	vector<vector<CollisionGrid>> m_vecGrid;
 
 	_float m_fGridCX = 0;

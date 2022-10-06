@@ -1,31 +1,28 @@
 #include "stdafx.h"
-#include "..\Header\Geomancer.h"
-
-#include "AbstFactory.h"
+#include "..\Header\Skeleton.h"
 #include "StatComponent.h"
-#include "GeomancerController.h"
-#include "GeomancerWall.h"
+#include "SkeletonController.h"
 
-CGeomancer::CGeomancer(LPDIRECT3DDEVICE9 pGraphicDev): CMonster(pGraphicDev)
+CSkeleton::CSkeleton(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
 {
 }
 
-CGeomancer::CGeomancer(const CMonster& rhs): CMonster(rhs)
+CSkeleton::CSkeleton(const CMonster& rhs) : CMonster(rhs)
 {
 }
 
-CGeomancer::~CGeomancer()
+CSkeleton::~CSkeleton()
 {
 }
 
-HRESULT CGeomancer::Ready_Object()
+HRESULT CSkeleton::Ready_Object()
 {
 	CMonster::Ready_Object();
 
-	m_arrAnim[ANIM_IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Geomancer/idle.anim");
-	m_arrAnim[ANIM_WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Geomancer/walk.anim");
-	m_arrAnim[ANIM_DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Geomancer/dead.anim");
-	m_arrAnim[ANIM_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Geomancer/attack.anim");
+	m_arrAnim[ANIM_IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Skeleton/idle.anim");
+	m_arrAnim[ANIM_WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Skeleton/walk.anim");
+	m_arrAnim[ANIM_DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Skeleton/dead.anim");
+	m_arrAnim[ANIM_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Skeleton/attack.anim");
 	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 	m_pCurAnim = m_pIdleAnim;
 	m_eState = IDLE;
@@ -33,17 +30,17 @@ HRESULT CGeomancer::Ready_Object()
 
 	m_pStat->SetMaxHP(100);
 
-	CController* pController = Add_Component<CGeomancerController>(L"Proto_GeomancerController", L"Proto_GeomancerController", ID_DYNAMIC);
+	CController* pController = Add_Component<CSkeletonController>(L"Proto_SkeletonController", L"Proto_SkeletonController", ID_DYNAMIC);
 	pController->SetOwner(this);
 
 	return S_OK;
 }
 
-void CGeomancer::AnimationEvent(const string& strEvent)
+void CSkeleton::AnimationEvent(const string& strEvent)
 {
 	if (strEvent == "AttackFire")
 	{
-		m_bAttackFire = true;
+		//m_bAttackFire = true;
 	}
 	else if (strEvent == "ActionEnd")
 	{
@@ -55,7 +52,7 @@ void CGeomancer::AnimationEvent(const string& strEvent)
 	}
 }
 
-_int CGeomancer::Update_Object(const _float& fTimeDelta)
+_int CSkeleton::Update_Object(const _float& fTimeDelta)
 {
 	if (m_bDelete) return OBJ_DEAD;
 
@@ -86,37 +83,25 @@ _int CGeomancer::Update_Object(const _float& fTimeDelta)
 	}
 
 
-	if (m_bAttackFire)
-	{
-		size_t iSize = m_vecWallPos.size();
-
-		if (iSize <= 4)//bomb
-		{
-			for (auto& wallPos : m_vecWallPos)
-				CObjectFactory::Create<CGeomancerWall>("GeoWall_Boom", L"GeoWall_Boom", wallPos);
-		}
-		else // wall
-		{
-			for (auto& wallPos : m_vecWallPos)
-				CObjectFactory::Create<CGeomancerWall>("GeoWall_Normal", L"GeoWall_Normal", wallPos);
-		}
-	
-		m_bAttackFire = false;
-	}
-
-
 	return OBJ_NOEVENT;
 }
 
+void CSkeleton::LateUpdate_Object()
+{
+	CMonster::LateUpdate_Object();
 
-void CGeomancer::Free()
+	IM_LOG("Fire");
+	
+}
+
+void CSkeleton::Free()
 {
 	CMonster::Free();
 }
 
-CGeomancer* CGeomancer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
+CSkeleton* CSkeleton::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
 {
-	CGeomancer* pInstance = new CGeomancer(pGraphicDev);
+	CSkeleton* pInstance = new CSkeleton(pGraphicDev);
 
 	if (FAILED(pInstance->Ready_Object()))
 	{
@@ -130,7 +115,7 @@ CGeomancer* CGeomancer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wst
 	return pInstance;
 }
 
-void CGeomancer::StateChange()
+void CSkeleton::StateChange()
 {
 	if (m_pStat->IsDead() && m_bReserveStop == false)
 	{
@@ -143,8 +128,6 @@ void CGeomancer::StateChange()
 
 	if (m_pStat->IsStun())
 	{
-		if (m_pCurAnim != m_pIdleAnim)
-			StopCurAnimation();
 		m_eState = STUN;
 		m_bAttack = false;
 		m_bMove = false;
