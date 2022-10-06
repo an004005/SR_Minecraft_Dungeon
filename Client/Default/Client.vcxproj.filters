@@ -184,6 +184,7 @@
     <ClInclude Include="..\Header\StatComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\Particle.h" />
     <ClInclude Include="..\Header\Geomancer.h" />
     <ClInclude Include="..\Header\PlayerController.h">
       <Filter>Controller</Filter>
