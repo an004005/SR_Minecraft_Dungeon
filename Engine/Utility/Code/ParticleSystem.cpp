@@ -43,10 +43,6 @@ CParticleSystem::CParticleSystem(LPDIRECT3DDEVICE9 pGraphicDev)
 
 CParticleSystem::~CParticleSystem()
 {
-	Safe_Release(m_pVtxBf);
-	Safe_Release(m_pTexture);
-
-	Free();
 }
 
 
@@ -122,7 +118,7 @@ void CParticleSystem::Render_Object()
 		{
 			if (i->_bIsAlive)
 			{
-				v->_Pos = i->_vPosition;
+ 				v->_Pos = i->_vPosition;
 				v->_Color = (D3DCOLOR)i->_color;
 				v++; 
 

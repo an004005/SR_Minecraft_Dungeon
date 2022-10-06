@@ -100,6 +100,11 @@ CLayer* CLayer::Create(void)
 
 void CLayer::Free(void)
 {
+	for (auto& e: m_mapObject)
+	{
+		_uint gg = e.second->GetRef();
+		int a = 3;
+	}
 	for_each(m_mapObject.begin(), m_mapObject.end(), CDeleteMap());
 	m_mapObject.clear();
 }

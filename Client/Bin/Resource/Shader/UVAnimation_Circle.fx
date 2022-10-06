@@ -56,7 +56,7 @@ VS_OUTPUT UVAnimation_Pass_0_Vertex_Shader_vs_main( VS_INPUT Input )
    Output.mPosition = mul(Output.mPosition, gViewMatrix);
    Output.mPosition = mul(Output.mPosition, gProjectionMatrix);
    
-   Output.mUV = Input.mUV + float2(gTime , gUVSpeed);
+   Output.mUV = Input.mUV + float2(gTime, gUVSpeed);
    return Output;
 }
 
@@ -76,7 +76,7 @@ float4 UVAnimation_Pass_0_Pixel_Shader_ps_main(PS_INPUT Input) : COLOR
    float4 albedo = tex2D(DiffuseSampler, Input.mUV);
    if (albedo.w > 0)
    {
-	   return float4(1.f, 1.0f, 0, 1);
+	   return float4(1.f, 1.f, 1.f, 1);
    }
 
    return float4(0, 0, 0, 0);

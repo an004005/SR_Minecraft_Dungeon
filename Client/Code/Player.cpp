@@ -129,7 +129,6 @@ void CPlayer::SetTarget(CSkeletalCube* pTarget)
 
 void CPlayer::Attack()
 {
-
 	if (m_iAttackCnt == 0)
 	{
 		PlayAnimationOnce(&m_arrOnceAnim[ATTACK1]);
@@ -144,7 +143,30 @@ void CPlayer::Attack()
 	}
 	m_iAttackCnt = (m_iAttackCnt + 1) % 3;
 
-	Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(_vec3(5.f, 5.f, 5.f), 1.f, RED, 10, 1.0f);
+#pragma region Attack Basic
+	// Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(_vec3(5.f, 5.f, 5.f), 1.f, RED, 10, 1.0f);
+#pragma endregion
+
+#pragma region ShockPowder
+	// for (int j = 0; j < 10; j++)
+	// {
+	// 	static int i = 0;
+	// 	CEffectFactory::Create<CShock_Powder>("Shock_Powder", L"UV_Shock_Powder" + to_wstring(i++));
+	// 	CEffectFactory::Create<CCloud>("Texture_Cloud", L"Texture_Cloud" + to_wstring(i++));
+	// }
+	// CEffectFactory::Create<CUVCircle>("UV_Circle", L"UV_Circle");
+#pragma endregion
+
+#pragma region SpeedBoots
+	// Get_GameObject<C3DBaseTexture>(LAYER_EFFECT, L"3D_Base")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 3.f, D3DXCOLOR(0.f,0.63f,0.82f,0.f), 1, 1.5f);
+	// Get_GameObject<CSpeedBoots>(LAYER_EFFECT, L"Speed_Boots")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 3.f, D3DXCOLOR(0.2f, 0.2f, 0.5f, 1.f), 1, 1.5f);
+	// Get_GameObject<CSpeedBoots_Particle>(LAYER_EFFECT, L"Speed_Boots_Particle")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 1.f, D3DXCOLOR(0.3f, 0.4f, 0.7f, 1.f), 7, 1.5f);
+
+#pragma endregion 
+
+	Get_GameObject<CFireWork_Fuze>(LAYER_EFFECT, L"FireWork_Fuze")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 1.f, D3DXCOLOR(0.3f, 0.4f, 0.7f, 1.f), 1, 0.5f);
+	 // Get_GameObject<CFireWork>(LAYER_EFFECT, L"FireWork")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 1.f, D3DXCOLOR(0.3f, 0.4f, 0.7f, 1.f), 256, 1.f);
+
 
 }
 

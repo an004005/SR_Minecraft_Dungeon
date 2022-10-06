@@ -76,7 +76,7 @@ float4 UVAnimation_Pass_0_Pixel_Shader_ps_main(PS_INPUT Input) : COLOR
    float4 albedo = tex2D(DiffuseSampler, Input.mUV);
    if (albedo.w > 0)
    {
-	   return float4(1.f, 1.0f, 0, 1);
+	   return float4(0.64f, 0.48f, 0.42f, 1);
    }
 
    return float4(0, 0, 0, 0);

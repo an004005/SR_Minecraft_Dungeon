@@ -7,8 +7,7 @@ typedef struct tagParticleVtx
 {
 	_vec3		vPos;
 	_vec2		vUV;
-	// _vec3		vNormal;
-} VTXPARTICLE;
+} VTXUVPARTICLE;
 
 
 class ENGINE_DLL CRcShader :public CVIBuffer
@@ -19,18 +18,40 @@ private:
 	virtual ~CRcShader() override;
 
 public:
-	virtual HRESULT Ready_Buffer() override;
+	virtual HRESULT Ready_Buffer(const wstring& _shaderfile, _vec2 _uv0, _vec2 _uv1, _vec2 _uv2, _vec2 _uv3);
 	virtual void Render_Buffer() override;
 	virtual CComponent* Clone() override;
 	virtual void Free() override;
-	static CRcShader* Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CRcShader* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& _shaderfile, _vec2 _uv0, _vec2 _uv1, _vec2 _uv2, _vec2 _uv3);
+
+	void Set_Texture(IDirect3DBaseTexture9* _ptexture)
+	{
+		m_pTexture = _ptexture;
+		m_pTexture->AddRef();
+	}
+
+	void Set_TextureOption(_uint _framecnt, _uint _texturecntw, _uint _texturecnth)
+	{
+		m_iFrameCnt = _framecnt;
+		m_iTextureCnt_W = _texturecntw;
+		m_iTextureCnt_H = _texturecnth;
+	}
+
+	_bool Check_TextureCnt(_uint _widthtexturecnt, _uint heighttexturecnt)
+	{
+		if (m_iWidthTextureCnt == _widthtexturecnt && m_iHeightTextureCnt == heighttexturecnt)
+			return true;
+		else
+			return false;
+	}
+
+
 
 	_matrix					 m_matWorld;
 	_matrix					 m_ViewMatrix;
 	_matrix					 m_PrjMatrix;
 	_vec4					 m_WorldCamPos;
 	_vec4					 m_WorldLightPos{ 100.f, 0.f, 100.f, 1.f };
-	//IDirect3DBaseTexture9*	 m_pTexture;
 
 public:
 	void LoadTexture(const wstring& filename);
@@ -41,12 +62,24 @@ private:
 
 
 private:
-	static _int m_i;
-	static _int m_j;
-	static _int m_k;
-	 
 
-	_float fTime =0.f;
+	_uint m_iPlayOnFrameCnt = 0;
+	_uint m_iWidthTextureCnt = 0;
+	_uint m_iHeightTextureCnt= 0;
+
+	_uint m_iFrameCnt = 0;
+	_uint m_iTextureCnt_W = 0;
+	_uint m_iTextureCnt_H= 0;
+
+	_float m_fUSize = 0.f;
+	_float m_fVSize = 0.f;
+
+	_vec2 UV_0;
+	_vec2 UV_1;
+	_vec2 UV_2;
+	_vec2 UV_3;
+
+
 
 };
 

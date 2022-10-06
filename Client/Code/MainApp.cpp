@@ -7,6 +7,7 @@
 #include "MapTool.h"
 #include "TerrainCubeMap.h"
 #include "Stage.h"
+#include "time.h"
 
 USING(Engine)
 
@@ -29,6 +30,7 @@ HRESULT CMainApp::Ready_MainApp(void)
 	FAILED_CHECK_RETURN(Ready_Scene(m_pGraphicDev, &m_pManagementClass), E_FAIL);
 
 	// CClientServiceMgr::GetInstance()->ReadyClientService();
+	srand((unsigned)time(NULL));
 
 
 	return S_OK;

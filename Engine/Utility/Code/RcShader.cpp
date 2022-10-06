@@ -1,38 +1,32 @@
 #include "..\..\Header\RcShader.h"
 
-D3DXVECTOR4				gLightColor(0.7f, 0.7f, 1.0f, 1.0f);
-
-_int CRcShader::m_i = 0;
-_int CRcShader::m_j = 0;
-_int CRcShader::m_k = 0;
-
+// D3DXVECTOR4				gLightColor(0.7f, 0.7f, 1.0f, 1.0f);
 
 CRcShader::CRcShader(LPDIRECT3DDEVICE9 pGraphicDev)
-	:CVIBuffer(pGraphicDev)
+	:CVIBuffer(pGraphicDev), m_iPlayOnFrameCnt(0), m_iWidthTextureCnt(0), m_iHeightTextureCnt(0)
 {
 }
 
-CRcShader::CRcShader(const CRcShader& rhs) : CVIBuffer(rhs)
+CRcShader::CRcShader(const CRcShader& rhs) : CVIBuffer(rhs), m_iPlayOnFrameCnt(0),m_iWidthTextureCnt(0),m_iHeightTextureCnt(0)
 {
 	m_pEffect = rhs.m_pEffect;
 	m_pVtxDeclare = rhs.m_pVtxDeclare;
-	m_pTexture = rhs.m_pTexture;
-
+	UV_2 = rhs.UV_2;
 	m_pEffect->AddRef();
 	m_pVtxDeclare->AddRef();
-	m_pTexture->AddRef();
 }
 
-CRcShader::~CRcShader()
-{
-}
+CRcShader::~CRcShader() = default;
 
-HRESULT CRcShader::Ready_Buffer()
+HRESULT CRcShader::Ready_Buffer(const wstring& _shaderfile, _vec2 _uv0, _vec2 _uv1, _vec2 _uv2, _vec2 _uv3)
 {
-
+	m_iPlayOnFrameCnt = 0;
+	m_iWidthTextureCnt = 0;
+	m_iHeightTextureCnt= 0;
+	UV_2 = _uv2;
 	ID3DXBuffer *pCompilationErrors = 0;
 	DWORD dwShaderFlags = 0;
-	HRESULT hr = D3DXCreateEffectFromFile(m_pGraphicDev, L"../Bin/Resource/Shader/UVAnimation.fx", 0, 0,
+	HRESULT hr = D3DXCreateEffectFromFile(m_pGraphicDev, _shaderfile.c_str(), 0, 0,
 		dwShaderFlags, 0, &m_pEffect, &pCompilationErrors);
 
 	NULL_CHECK_RETURN(m_pEffect, E_FAIL);
@@ -49,7 +43,7 @@ HRESULT CRcShader::Ready_Buffer()
 
 	m_dwVtxCnt = 4;
 	m_dwTriCnt = 2;
-	m_dwVtxSize = sizeof(VTXPARTICLE);
+	m_dwVtxSize = sizeof(VTXUVPARTICLE);
 	m_dwFVF = FVF_COL; // for use vtx declareation
 
 	m_dwIdxSize = sizeof(INDEX16);
@@ -57,14 +51,14 @@ HRESULT CRcShader::Ready_Buffer()
 
 	FAILED_CHECK_RETURN(CVIBuffer::Ready_Buffer(), E_FAIL);
 
-	VTXPARTICLE*		pVertex = nullptr;
+	VTXUVPARTICLE*		pVertex = nullptr;
 
 	m_pVB->Lock(0, 0, (void**)&pVertex, 0);
 
-	pVertex[0] = { _vec3(-1.f, 1.f, 0.f), _vec2(0.0f, 0.0f) };
-	pVertex[1] = { _vec3(1.f, 1.f, 0.f), _vec2(0.25f, 0.0f) };
-	pVertex[2] = { _vec3(1.f, -1.f, 0.f), _vec2(0.25f, 0.5f) };
-	pVertex[3] = { _vec3(-1.f, -1.f, 0.f), _vec2(0.f, 0.5f) };
+	pVertex[0] = { _vec3(-1.f, 1.f, 0.f), _uv0};
+	pVertex[1] = { _vec3(1.f, 1.f, 0.f), _uv1};
+	pVertex[2] = { _vec3(1.f, -1.f, 0.f), _uv2};
+	pVertex[3] = { _vec3(-1.f, -1.f, 0.f), _uv3};
 
 	m_pVB->Unlock();
 
@@ -85,7 +79,7 @@ HRESULT CRcShader::Ready_Buffer()
 
 	m_pIB->Unlock();
 
-	LoadTexture(L"T_fullcircle_explosion_124_spritesheet.png");
+	//LoadTexture(L"T_ElectricArcs.png");
 
 	return S_OK;
 }
@@ -100,27 +94,28 @@ void CRcShader::Render_Buffer()
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0xcc);
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
-	m_i++;
+	m_iPlayOnFrameCnt++;
 
-	if (m_i == 10)
+	if (m_iPlayOnFrameCnt == m_iFrameCnt)
 	{
-		m_j++;
+		m_iWidthTextureCnt++;
 
-		if (m_j == 4)
+		if (m_iWidthTextureCnt == m_iTextureCnt_W)
 		{
-			m_j = 0;
-			m_k++;
+			m_iWidthTextureCnt = 0;
+			m_iHeightTextureCnt++;
 		}
 
-		if (m_k == 2)
+		if (m_iHeightTextureCnt == m_iTextureCnt_H)
 		{
-			m_k = 0;
+			m_iHeightTextureCnt = 0;
 		}
 
-		m_pEffect->SetFloat("gTime", 0.25f * m_j);
-		m_pEffect->SetFloat("gUVSpeed", 0.5f * m_k);
-		m_i = 0;
+		m_pEffect->SetFloat("gTime", UV_2.x * m_iWidthTextureCnt);
+		m_pEffect->SetFloat("gUVSpeed", UV_2.y * m_iHeightTextureCnt);
+		m_iPlayOnFrameCnt = 0;
 	}
+	
 
 	//Matrix
 	m_pEffect->SetMatrix("gWorldMatrix", &m_matWorld);
@@ -173,15 +168,18 @@ void CRcShader::Free()
 	CVIBuffer::Free();
 }
 
-CRcShader * CRcShader::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CRcShader * CRcShader::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& _shaderfile,_vec2 _uv0, _vec2 _uv1, _vec2 _uv2, _vec2 _uv3)
 {
 	CRcShader*	pInstance = new CRcShader(pGraphicDev);
 
-	if (FAILED(pInstance->Ready_Buffer()))
+	if (FAILED(pInstance->Ready_Buffer(_shaderfile,_uv0,_uv1,_uv2,_uv3)))
 	{
 		Safe_Release(pInstance);
 		return nullptr;
 	}
+
+	
+	
 
 	return pInstance;
 }
