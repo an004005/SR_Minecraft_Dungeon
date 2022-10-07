@@ -124,8 +124,13 @@ bool CGameUtilMgr::MatCmp(const _matrix& m1, const _matrix& m2, _float fEpsilon)
 	return true;
 }
 
+bool CGameUtilMgr::FloatCmp(const _float& f1, const _float f2, _float fEpsilon)
+{
+	return fabs(f1 - f2) < fEpsilon;
+}
+
 void CGameUtilMgr::MatWorldCompose(_matrix& matOut, const _vec3& vScale, const D3DXQUATERNION& qRot,
-	const _vec3& vPos)
+                                   const _vec3& vPos)
 {
 	_matrix matScale;
 	D3DXMatrixIdentity(&matOut);
@@ -167,7 +172,29 @@ void CGameUtilMgr::MatWorldDecompose(const _matrix& matWorld, _vec3& vScale, _ve
 	QuatToPitchYawRoll(qRot, vAngle.x, vAngle.y, vAngle.z);
 }
 
+void CGameUtilMgr::GetRandomVector(_vec3* out, _vec3* min, _vec3* max)
+{
+	out->x = GetRandomFloat(min->x, max->x);
+	out->y = GetRandomFloat(min->y, max->y);
+	out->z = GetRandomFloat(min->z, max->z);
+}
+
 _float CGameUtilMgr::Vec3LenXZ(const _vec3& v1)
 {
 	return sqrtf(v1.x * v1.x + v1.z * v1.z);
+}
+
+_float CGameUtilMgr::GetRandomFloat(_float lowBound, _float highBound)
+{
+	if (lowBound >= highBound) 
+		return lowBound;
+
+	float f = (rand() % 10000) * 0.0001f;
+
+	return (f * (highBound - lowBound)) + lowBound;
+}
+
+DWORD CGameUtilMgr::FtoDw(_float f)
+{
+	return *((DWORD*)&f);
 }

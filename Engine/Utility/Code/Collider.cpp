@@ -6,6 +6,15 @@
 USING(Engine)
 IMPLEMENT_SINGLETON(CCollider)
 
+const BLOCKING_TYPE CCollider::s_BlockingTypeMatrix[COLL_END][COLL_END]
+{    // {player ,eneymy, player bullet, enemy bullet,  wall
+	{BLOCKING_END, BLOCKING_END, BLOCKING_END, BLOCKING_END, BLOCKING_END},
+	{PUSH_OTHER_ONLY, PUSH_EACH_OTHER, BLOCKING_END, BLOCKING_END, BLOCKING_END},
+	{BLOCKING_END, CUSTOM_EVENT, BLOCKING_END, BLOCKING_END, CUSTOM_EVENT},
+	{CUSTOM_EVENT, BLOCKING_END, BLOCKING_END, BLOCKING_END, CUSTOM_EVENT},
+	{PUSH_OTHER_ONLY, PUSH_OTHER_ONLY, BLOCKING_END, BLOCKING_END, BLOCKING_END},
+};
+
 CCollider::CCollider()
 {
 	Ready_Collider();
@@ -49,6 +58,7 @@ void CCollider::Add_CollisionCom(CCollisionCom* pCollision)
 		for (int j = iX_start; j <= iX_end; ++j)
 		{
 			m_vecGrid[i][j].dynamicList.push_back(pCollision);
+			pCollision->AddRef();
 		}
 	}
 }
@@ -119,12 +129,19 @@ void CCollider::Check_Blocking()
 					CCollisionCom*& coll_2 = cell.dynamicList[j];
 
 					if (coll_1->GetOwner() == coll_2->GetOwner()) continue;
+					COLLISION_TYPE c1 = coll_1->GetType();
+					COLLISION_TYPE c2 = coll_2->GetType();
+					const BLOCKING_TYPE eType1To2 = s_BlockingTypeMatrix[coll_1->GetType()][coll_2->GetType()];
+					const BLOCKING_TYPE eType2To1 = s_BlockingTypeMatrix[coll_2->GetType()][coll_1->GetType()];
+					if (eType1To2 == BLOCKING_END && eType2To1 == BLOCKING_END)
+						continue;
+
 					if (IsCollided(
 						coll_1->GetTransform()->m_vInfo[INFO_POS], coll_1->GetRadius(),
 						coll_2->GetTransform()->m_vInfo[INFO_POS], coll_2->GetRadius()))
 					{
-						coll_1->CollisionDynamic(coll_2);
-						coll_2->CollisionDynamic(coll_1);
+						coll_1->CollisionDynamic(coll_2, eType1To2);
+						coll_2->CollisionDynamic(coll_1, eType2To1);
 					}
 				}
 
@@ -148,6 +165,9 @@ void CCollider::Clear_Dynamic()
 	{
 		for (auto& cell : vecRow)
 		{
+			for (auto& collCom : cell.dynamicList)
+				Safe_Release(collCom);
+
 			cell.dynamicList.clear();
 		}
 	}

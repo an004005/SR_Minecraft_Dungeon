@@ -191,6 +191,10 @@ void CImGuiMgr::LoggerWindow()
 	ImGui::Begin("Logger");
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
+	_vec3 vpos = Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+	ImGui::Text("x : %f, z : %f", vpos.x, vpos.z);
+
+
 	if (ImGui::Button("Clear")) { s_log.clear(); }
 	ImGui::SameLine();
 
@@ -611,7 +615,7 @@ void CImGuiMgr::MapControl(Engine::MapTool& tMaptool, _float& _far, CTerrainCube
 			{
 				ImGui::SameLine();
 				ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Checked!!");
-				tMaptool.bRendState = true;
+				cubemap->m_bRendState = true;
 			}
 			else
 				tMaptool.bRendState = false;

@@ -1,34 +1,20 @@
 #pragma once
-#include "Base.h"
+#include "Component.h"
 
-class CSkeletalCube;
-
-/*----------------
- *	Controller
- ----------------*/
-class CController : public CBase
+class CController : public CComponent
 {
 protected:
-	explicit CController();
+	explicit CController(void);
+	explicit CController(const CController& rhs);
 	virtual ~CController();
 
 public:
-	virtual void Update(CSkeletalCube* m_pOwner) PURE;
+	virtual CComponent* Clone() override;
+	void SetOwner(CGameObject* pOwner) { m_pOwner = pOwner;  }
 	virtual void Free() override;
+
+protected:
+	_uint m_iTick = 0;
+	CGameObject* m_pOwner = nullptr;
 };
 
-/*----------------
- *	CPlayerController
- ----------------*/
-class CPlayerController : public CController
-{
-private:
-	CPlayerController();
-	virtual ~CPlayerController() override;
-
-public:
-	virtual void Update(CSkeletalCube* m_pOwner) override;
-
-public:
-	static CPlayerController* Create();
-};

@@ -50,7 +50,7 @@ struct TransFrame
 struct CubeAnimFrame
 {
 	_bool bLoop = false;			// 반복 여부
-	_bool bCancen = false;			// 중간 취소 가능 여부
+	_bool bCancen = false;			// 중간 취소 가능 여부(폐기, deprecated)
 	_float fTotalTime = 0.f;		// 총 재생 시간
 	// part이름,     part의 시간별 transform정보
 	map<string, vector<TransFrame>> mapFrame; // (float기준으로 정렬상태여야 한다.)
@@ -83,7 +83,7 @@ public:
 	_bool DeleteSkeletalPart(const string& strPart);
 	static CSkeletalCube* Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrPath = L"");
 
-	virtual void PlayAnimationOnce(CubeAnimFrame* frame);
+	virtual void PlayAnimationOnce(CubeAnimFrame* frame, bool bReserveStop = false);
 	virtual void StopCurAnimation();
 	void SetAnimationSpeed(_float fAnimSpeed) { m_fAnimSpeed = fAnimSpeed; }
 
@@ -112,4 +112,5 @@ protected:
 	_float m_fAnimSpeed = 1.f;
 
 	_bool m_bStopAnim = false;
+	_bool m_bReserveStop = false;
 };

@@ -10,6 +10,9 @@
 #include "TerrainCubeTex.h"
 #include "TerrainRcTex.h"
 #include "CollisionCom.h"
+#include "ParticleSystem.h"
+#include "Collider.h"
+#include "RcShader.h"
 
 #include "Transform.h"
 #include "Calculator.h"

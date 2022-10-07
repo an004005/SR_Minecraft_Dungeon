@@ -26,6 +26,7 @@ HRESULT CMonster::Ready_Object()
 	m_pColl->SetOwnerTransform(m_pRootPart->pTrans);
 	m_pColl->SetCollOffset(_vec3{0.f, 1.f, 0.f});
 	m_pColl->SetRadius(0.5f);
+	m_pColl->SetCollType(COLL_ENEMY);
 
 	m_pStat = Add_Component<CStatComponent>(L"Proto_StatCom", L"Proto_StatCom", ID_DYNAMIC);
 	m_pStat->SetMaxHP(100);
@@ -38,8 +39,10 @@ _int CMonster::Update_Object(const _float& fTimeDelta)
 {
 	CSkeletalCube::Update_Object(fTimeDelta);
 
-	if (m_pStat->IsDead())
-		return OBJ_DEAD;
+	// 테스트 코드
+	// _vec3 diff = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS] - m_pRootPart->pTrans->m_vInfo[INFO_POS];
+	// D3DXVec3Normalize(&diff, &diff);
+	// m_pRootPart->pTrans->m_vInfo[INFO_POS] += diff * fTimeDelta * 2.f;
 
 	return OBJ_NOEVENT;
 }
@@ -62,4 +65,22 @@ CMonster* CMonster::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPat
 void CMonster::Free()
 {
 	CGameObject::Free();
+}
+
+void CMonster::RotateToTargetPos(const _vec3& vTargetPos, bool bReverse)
+{
+	_vec3 vLook = vTargetPos - m_pRootPart->pTrans->m_vInfo[INFO_POS];
+	if (bReverse) vLook = -vLook;
+
+	D3DXVec3Normalize(&vLook, &vLook);
+
+	const _vec2 v2Look{0.f, 1.f};
+	_vec2 v2ToDest{vLook.x, vLook.z};
+
+	const _float fDot = D3DXVec2Dot(&v2Look, &v2ToDest);
+
+	if (vLook.x < 0)
+		m_pRootPart->pTrans->m_vAngle.y = -acosf(fDot);
+	else
+		m_pRootPart->pTrans->m_vAngle.y = acosf(fDot);
 }

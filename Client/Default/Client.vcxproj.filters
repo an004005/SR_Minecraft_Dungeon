@@ -59,6 +59,12 @@
     <Filter Include="Controller">
       <UniqueIdentifier>{5c61c5e2-69c8-4019-8fef-662f80fc6b31}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. Monster">
+      <UniqueIdentifier>{2d1d49c7-b7ce-4a7f-b76d-a9638914b221}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\Object">
+      <UniqueIdentifier>{d4c64e4c-660f-4b18-b3c9-37cd78b2fea4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\MainApp.h">
@@ -160,9 +166,6 @@
     <ClInclude Include="stb\stb_image.h">
       <Filter>99. Default</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\Monster.h">
-      <Filter>02. GameObject\00. Player</Filter>
-    </ClInclude>
     <ClInclude Include="..\Header\Player.h">
       <Filter>02. GameObject\00. Player</Filter>
     </ClInclude>
@@ -184,9 +187,57 @@
     <ClInclude Include="..\Header\StatComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\Arrow.h" />
-    <ClInclude Include="..\Header\ArrowCube.h">
-      <Filter>Component</Filter>
+    <ClInclude Include="..\Header\Particle.h" />
+    <ClInclude Include="..\Header\PlayerController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\GeomancerController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ZombieController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Geomancer.h">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Zombie.h">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Monster.h">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Creeper.h">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\CreeperController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Skeleton.h">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\SkeletonController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Enchanter.h">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\EnchanterController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\RedStoneCubeController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\RedStoneCube.h">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\RedStoneMonstrosityController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\RedStoneMonstrosity.h">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\GeomancerWall.h">
+      <Filter>02. GameObject\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -265,9 +316,6 @@
     <ClCompile Include="..\Code\ImSequencerImpl.cpp">
       <Filter>Tool</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Monster.cpp">
-      <Filter>02. GameObject\00. Player</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\Player.cpp">
       <Filter>02. GameObject\00. Player</Filter>
     </ClCompile>
@@ -295,9 +343,58 @@
     <ClCompile Include="..\Code\StatComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Arrow.cpp" />
-    <ClCompile Include="..\Code\ArrowCube.cpp">
-      <Filter>Component</Filter>
+    <ClCompile Include="..\Code\PlayerController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GeomancerController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Particle.cpp" />
+    <ClCompile Include="..\Code\ZombieController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Monster.cpp">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Geomancer.cpp">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Zombie.cpp">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Creeper.cpp">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\CreeperController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Skeleton.cpp">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SkeletonController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Enchanter.cpp">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\EnchanterController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RedStoneCubeController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RedStoneCube.cpp">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RedStoneMonstrosityController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RedStoneMonstrosity.cpp">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Particle.cpp" />
+    <ClCompile Include="..\Code\GeomancerWall.cpp">
+      <Filter>02. GameObject\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

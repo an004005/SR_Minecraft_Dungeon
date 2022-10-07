@@ -4,8 +4,8 @@
 namespace Engine
 {
 
-#define		WINCX		800
-#define		WINCY		600
+#define		WINCX		1280
+#define		WINCY		720
 
 #define		VTXCNTX		129
 #define		VTXCNTZ		129
@@ -19,6 +19,8 @@ namespace Engine
 
 #define		COLL_GRID_X 16
 #define		COLL_GRID_Z 16
+
+#define     MAT_I _matrix{ 1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f }
 
 #ifndef			MSG_BOX
 #define			MSG_BOX(_message)			MessageBox(NULL, TEXT(_message), L"System Message", MB_OK)

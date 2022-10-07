@@ -10,25 +10,35 @@ protected:
 	virtual ~CPlayer() override;
 
 private:
-	enum LoopAnim
+	enum PlayerState
 	{
-		WALK,
 		IDLE,
-		DEAD,
-		LA_END
-	};
-	enum OnceAnim
-	{
-		ATTACK1,
-		ATTACK2, // 무기에서 가져와서 실행하게 구현
-		ATTACK3,
+		WALK,
+		ATTACK,
+		STUN,
 		ROLL,
-		TELEPORT,
-		RESCUE,
-
-		OA_END
+		LEGACY,
+		DEAD,
+		STATE_END
 	};
 
+	enum Animation
+	{
+		ANIM_WALK,
+		ANIM_IDLE,
+		ANIM_DEAD,
+		ANIM_ATTACK1,
+		ANIM_ATTACK2, // 무기에서 가져와서 실행하게 구현
+		ANIM_ATTACK3,
+		ANIM_RANGE_ATTACK,
+		ANIM_LEGACY1,
+		ANIM_LEGACY2,
+		ANIM_LEGACY3,
+		ANIM_ROLL,
+		ANIM_TELEPORT,
+		ANIM_RESCUE,
+		ANIM_END
+	};
 
 public:
 	virtual HRESULT Ready_Object() override;
@@ -37,41 +47,56 @@ public:
 	virtual void Free() override;
 	virtual void AnimationEvent(const string& strEvent) override;
 
-	virtual void SetMove(_float fX, _float fZ);
-	void MeleeAttackOn(bool bOn) { m_bMeleeAttack = bOn; }
-	virtual void MeleeAttack();
-	virtual void Roll();
+	virtual void AttackState();
+	void StateChange();
 
+	// controller 입력함수
+	void SetMoveDir(_float fX, _float fZ);
+	void RangeAttackPress(bool bOn) { m_bRangeAttack = bOn; }
+	void MeleeAttackPress(bool bOn) { m_bMeleeAttack = bOn; }
+	void RollPress() { m_bRoll = true; }
+	void Legacy1Press() { m_bLegacy1 = true; }
+	void Legacy2Press() { m_bLegacy2 = true; }
+	//
 
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
 
 private:
 	void RotateToCursor();
+	void RotateToMove();
 
 
 protected:
-	CController* m_pController;
 	CStatComponent* m_pStat;
 
-	array<CubeAnimFrame, LA_END> m_arrLoopAnim;
-	array<CubeAnimFrame, OA_END> m_arrOnceAnim;
+	PlayerState m_eState = STATE_END;
+	array<CubeAnimFrame, ANIM_END> m_arrAnim;
 
-	_float m_fVelocity;
-	_float m_fRollSpeed;
+	_float m_RollCoolTime;
+	_float m_CurRollCoolTime;
+	_float m_fSpeed; // 속도
+	_float m_fRollSpeed; // 구르기 속도
 
-	_uint m_iAttackCnt = 0;
+	_uint m_iAttackCnt = 0; // 콤보 번호
 
-	_vec3 m_vMoveDir{0.f, 0.f, 0.f};
-	_vec3 m_vMoveDirNormal{0.f, 0.f, 0.f};
+	_vec3 m_vMoveDirNormal{0.f, 0.f, 0.f}; // 이동 방향
 
+	// true : PlayAnimationOnce 사용 가능 상태(동작 애니메이션 실행 가능), false: 다른 애니메이션 실행중
+	_bool m_bCanPlayAnim = true; // 현재 실행중인 애니메이션 끊고 애니메이션 실행 가능 여부
 
-	_bool m_bAction = false;
-	_bool m_bRoll = false;
-	_bool m_bMeleeAttack = false;
+	_bool m_bRoll = false; // controller 입력
+	_bool m_bMeleeAttack = false; // controller 입력
+	_bool m_bRangeAttack = false; // controller 입력
+	_bool m_bMove = false; // controller 입력
+
+	_bool m_bLegacy1 = false;
+	_bool m_bLegacy2 = false;
 
 	_bool m_bApplyMeleeAttack = false;
 	_bool m_bApplyMeleeAttackNext = false;
 
+	DWORD m_dwWalkDust;
+	DWORD m_dwRollDust;
 
 };
 

@@ -126,7 +126,6 @@ _int CMapTool::Update_Scene(const _float & fTimeDelta)
 		}
 	}
 
-	Cube_DebugShow();
 
 	IM_END;
 
@@ -148,7 +147,7 @@ HRESULT CMapTool::Ready_Layer_Environment()
 	CGameObject*		pGameObject = nullptr;
 
 	// DynamicCamera
-	pGameObject = m_pDCamera = CDynamicCamera::Create(m_pGraphicDev, &_vec3(0.f, 10.f, -10.f), &_vec3(0.f, 0.f, 0.f), &_vec3(0.f, 1.f, 0.f), D3DXToDegree(60.f), (_float)WINCX/WINCY, 0.1f, m_fFar);
+	pGameObject = m_pDCamera = CDynamicCamera::Create(m_pGraphicDev, &_vec3(0.f, 10.f, -10.f), &_vec3(0.f, 0.f, 0.f), &_vec3(0.f, 1.f, 0.f), D3DXToDegree(60.f), (_float)WINCX/WINCY, 0.1f, 1000.f);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"DynamicCamera", pGameObject), E_FAIL);
 	g_cam = m_pDCamera;
@@ -159,16 +158,16 @@ HRESULT CMapTool::Ready_Layer_Environment()
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"Terrain", pGameObject), E_FAIL);
 
 	//TerrainCubeMap
-	m_pCubeMap = CTerrainCubeMap::Create(m_pGraphicDev);
+	m_pCubeMap = CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/Stage1.map");
 	NULL_CHECK_RETURN(m_pCubeMap, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", m_pCubeMap), E_FAIL);
 
-	_matrix firstCube;
+	/*_matrix firstCube;
 	D3DXMatrixIdentity(&firstCube);
 	firstCube._41 = 0.5f;
 	firstCube._42 = 0.5f;
 	firstCube._43 = 0.5f;
-	m_pCubeMap->AddCube({firstCube, 0, TYPE_LAND, 1.f});
+	m_pCubeMap->AddCube({firstCube, 0, TYPE_LAND, 1.f});*/
 
 	return S_OK;
 }
@@ -178,7 +177,7 @@ HRESULT CMapTool::Ready_Proto(void)
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_TerrainTexCom", CTerrainTex::Create(m_pGraphicDev, VTXCNTX, VTXCNTZ, VTXITV)), E_FAIL);
 	//FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_TerrainTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Terrain/Grass_%d.tga", TEX_NORMAL)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CubeTexCom", CCubeTex::Create(m_pGraphicDev)), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_MinecraftCubeTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/MinscraftCubeTile/CubeTile_%d.dds", TEX_CUBE, 107)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_MinecraftCubeTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/MinscraftCubeTile/CubeTile_%d.dds", TEX_CUBE, 153)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_PlantTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Plant/plant_%d.png", TEX_NORMAL, 3)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CalculatorCom", CCalculator::Create(m_pGraphicDev)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_TransformCom", CTransform::Create()), E_FAIL);
@@ -186,26 +185,7 @@ HRESULT CMapTool::Ready_Proto(void)
 	return S_OK;
 }
 
-void CMapTool::Cube_DebugShow(void)
-{
-	//if (m_tMapTool.bRendState)
-	//{
-	//	for (auto& iter : m_vecTotalCube)
-	//	{
-	//		iter->m_tMapTool.bRendState = true;
-	//	}
 
-	//}
-	//else
-	//{
-	//	for (auto& iter : m_vecTotalCube)
-	//	{
-	//		iter->m_tMapTool.bRendState = false;
-	//	}
-	//}
-
-
-}
 CMapTool * CMapTool::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	CMapTool *	pInstance = new CMapTool(pGraphicDev);
@@ -316,7 +296,7 @@ _bool CMapTool::PickingOnCube(_vec3& CubeCenter, int& iToDelIdx)
 				dwVtxIdxLD[2] = vFaceVtx[j][3];
 
 				//광선과 닿은 면이 있다면 vRayPos와의 거리가 최소값인지 확인한다.
-				bool RUtriCheck = D3DXIntersectTri(&dwVtxIdxRU[1], &dwVtxIdxRU[2], &dwVtxIdxRU[0], &vRayPos, &vRayDir, &fU, &fV, &fDist);
+				BOOL RUtriCheck = D3DXIntersectTri(&dwVtxIdxRU[1], &dwVtxIdxRU[2], &dwVtxIdxRU[0], &vRayPos, &vRayDir, &fU, &fV, &fDist);
 				if (RUtriCheck && MinDist > fDist)
 				{
 					iCurCube = i;
@@ -325,7 +305,7 @@ _bool CMapTool::PickingOnCube(_vec3& CubeCenter, int& iToDelIdx)
 					continue;
 				}
 
-				bool LDtriCheck = D3DXIntersectTri(&dwVtxIdxLD[0], &dwVtxIdxLD[1], &dwVtxIdxLD[2], &vRayPos, &vRayDir, &fU, &fV, &fDist);
+				BOOL LDtriCheck = D3DXIntersectTri(&dwVtxIdxLD[0], &dwVtxIdxLD[1], &dwVtxIdxLD[2], &vRayPos, &vRayDir, &fU, &fV, &fDist);
 				if (LDtriCheck && MinDist > fDist)
 				{				
 					iCurCube = i;

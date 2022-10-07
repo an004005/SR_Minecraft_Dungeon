@@ -51,7 +51,7 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 	{
 		// ณหน้ ป๓ลย
 		vPos += m_vKnockBackVelocity * fTimeDelta;
-		m_vKnockBackVelocity.y -= 50.f * fTimeDelta;
+		m_vKnockBackVelocity.y -= 120.f * fTimeDelta;
 
 		if (vPos.y < m_pCubeMap->GetHeight(vPos.x, vPos.z))
 		{
@@ -87,7 +87,7 @@ void CStatComponent::ModifyHP(_int iModifyingHP)
 	{
 		m_bDamaged = true;
 		m_fCurDamagedTime = 0.f;
-		IM_LOG("Damaged : %d", iModifyingHP);
+		// IM_LOG("Damaged : %d", iModifyingHP);
 	}
 
 
@@ -97,6 +97,8 @@ void CStatComponent::ModifyHP(_int iModifyingHP)
 
 void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCauser, DamageType eType)
 {
+	if (m_bDead) return ;
+
 	switch (eType)
 	{
 	case DT_STUN:
@@ -110,7 +112,7 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 		m_vKnockBackVelocity = m_pOwnerTrans->m_vInfo[INFO_POS] - vFromPos;
 		D3DXVec3Normalize(&m_vKnockBackVelocity, &m_vKnockBackVelocity);
 		m_vKnockBackVelocity *= 15.f;
-		m_vKnockBackVelocity.y = 3.f;
+		m_vKnockBackVelocity.y = 10.f;
 		break;
 	case DT_END:
 		break;
