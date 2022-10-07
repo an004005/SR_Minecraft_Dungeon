@@ -2,12 +2,23 @@
 #include "ArrowCube.h"
 #include "GameUtilMgr.h"
 
+// D3DVERTEXELEMENT9 BoxVTXInstance_Elements[] =
+// {
+// 	{0, 0, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION, 0},
+// 	{0, 12, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, 0},
+// 	{0, 20, D3DDECLTYPE_FLOAT1, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, 1},
+// 	D3DDECL_END()
+// };
+
 D3DVERTEXELEMENT9 BoxVTXInstance_Elements[] =
 {
-	{0, 0, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION, 0},
-	{0, 12, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, 0},
-	{0, 20, D3DDECLTYPE_FLOAT1, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, 1},
-	D3DDECL_END()
+    { 0, 0,     D3DDECLTYPE_FLOAT3,     D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_POSITION,  0 },
+    { 0, 12, D3DDECLTYPE_FLOAT2,     D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_TEXCOORD,  0 },
+    { 1, 0,     D3DDECLTYPE_FLOAT4,   D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_BLENDWEIGHT,     0 },
+    { 1, 16,     D3DDECLTYPE_FLOAT4,   D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_BLENDWEIGHT,     1 },
+    { 1, 32,     D3DDECLTYPE_FLOAT4,   D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_BLENDWEIGHT,     2 },
+    { 1, 48,     D3DDECLTYPE_FLOAT4,   D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_BLENDWEIGHT,     3 },
+    D3DDECL_END()
 };
 
 CArrowCube::CArrowCube(LPDIRECT3DDEVICE9 pGraphicDev): CVIBuffer(pGraphicDev)
@@ -24,15 +35,13 @@ CArrowCube::~CArrowCube()
 
 HRESULT CArrowCube::Ready_Buffer(float fSize)
 {
-	for (_uint i = 0; i < INST_CNT; ++i)
-	{
-		D3DXMatrixIdentity(&m_pMatWorlds[i]);
-	CGameUtilMgr::MatWorldComposeEuler(m_pMatWorlds[i], {1.f, 1.f, 1.f}, {0.f, 0.f, 0.f}, {(_float)i, 0.f, 0.f});
-
-	}
-
 	ID3DXBuffer* pCompilationErrors = 0;
 	DWORD dwShaderFlags = 0;
+
+	m_vecArrowWorld.resize(10);
+	
+	for(int i = 0; i< m_vecArrowWorld.size(); ++i)
+		CGameUtilMgr::MatWorldComposeEuler(m_vecArrowWorld[i], {1.f, 1.f, 1.f}, {0.f, 0.f, 0.f}, {_float(i), 0.f, 0.f});
 
 #if _DEBUG
 	dwShaderFlags |= D3DXSHADER_DEBUG;
@@ -60,8 +69,7 @@ HRESULT CArrowCube::Ready_Buffer(float fSize)
 	FAILED_CHECK_RETURN(
 		D3DXCreateTextureFromFile(m_pGraphicDev, L"../Bin/Resource/Texture/arrow/arrow_color.png", (LPDIRECT3DTEXTURE9*)
 			&m_pTexture), E_FAIL);
-	FAILED_CHECK_RETURN(m_pGraphicDev->CreateVertexDeclaration(BoxVTXInstance_Elements, &m_pVtxDeclare), E_FAIL);
-
+		FAILED_CHECK_RETURN(m_pGraphicDev->CreateVertexDeclaration(BoxVTXInstance_Elements, &m_pVtxDeclare), E_FAIL);
 
 	m_dwVtxCnt = 0;
 	m_dwTriCnt = 0;
@@ -172,22 +180,18 @@ HRESULT CArrowCube::Ready_Buffer(float fSize)
 		}
 	}
 
-	for (_uint c = 0; c < INST_CNT; ++c) // 개수
+	for (int k = 0; k < 5; ++k) // arrow의 각 큐브 부품
 	{
-		for (int k = 0; k < 5; ++k) // arrow의 각 큐브 부품
+		for (int i = 0; i < FACE_END; ++i) // 각 큐브 면
 		{
-			for (int i = 0; i < FACE_END; ++i) // 각 큐브 면
+			for (int j = 0; j < 4; ++j) // 면에 있는 버텍스
 			{
-				for (int j = 0; j < 4; ++j) // 면에 있는 버텍스
-				{
-					ArrowVtx[k][i][j].vInstNum = (_float)c;
-					vecVTXInst.push_back(ArrowVtx[k][i][j]);
-				}
-				vecIdx.push_back({m_dwVtxCnt, m_dwVtxCnt + 1, m_dwVtxCnt + 2});
-				vecIdx.push_back({m_dwVtxCnt, m_dwVtxCnt + 2, m_dwVtxCnt + 3});
-				m_dwVtxCnt += 4;
-				m_dwTriCnt += 2;
+				vecVTXInst.push_back(ArrowVtx[k][i][j]);
 			}
+			vecIdx.push_back({m_dwVtxCnt, m_dwVtxCnt + 1, m_dwVtxCnt + 2});
+			vecIdx.push_back({m_dwVtxCnt, m_dwVtxCnt + 2, m_dwVtxCnt + 3});
+			m_dwVtxCnt += 4;
+			m_dwTriCnt += 2;
 		}
 	}
 
@@ -212,24 +216,33 @@ HRESULT CArrowCube::Ready_Buffer(float fSize)
 
 void CArrowCube::Render_Buffer()
 {
+	if (m_iPreSize != m_vecArrowWorld.size())
+	{
+		m_pGraphicDev->CreateVertexBuffer( m_vecArrowWorld.size() * sizeof(_matrix), 0, 0,
+                                                  D3DPOOL_MANAGED, &m_pVBMatrix, 0 );
+		_matrix* pIPos;
+		m_pVBMatrix->Lock(0, NULL, ( void** )&pIPos, 0);
+		memcpy(pIPos, m_vecArrowWorld.data(), sizeof(_matrix) * m_vecArrowWorld.size());
+		m_pVBMatrix->Unlock();
 
-	_matrix view, proj, world;
+		m_iPreSize = m_vecArrowWorld.size();
+	}
+
+	_matrix view, proj;
 	m_pGraphicDev->GetTransform(D3DTS_VIEW, &view);
 	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &proj);
-	CGameUtilMgr::MatWorldComposeEuler(world, {1.f, 1.f, 1.f}, {0.f, 0.f, 0.f}, {0.f, 0.f, 0.f});
+	m_pEffect->SetTexture("g_txScene", m_pTexture);
+	m_pEffect->SetMatrix("g_mView", &view);
+	m_pEffect->SetMatrix("g_mProj", &proj);
 
 	m_pGraphicDev->SetVertexDeclaration(m_pVtxDeclare);
 	m_pGraphicDev->SetStreamSource(0, m_pVB, 0, m_dwVtxSize);
+	m_pGraphicDev->SetStreamSourceFreq( 0, D3DSTREAMSOURCE_INDEXEDDATA | m_iPreSize );
+
+	m_pGraphicDev->SetStreamSource( 1, m_pVBMatrix, 0, sizeof(_matrix));
+	m_pGraphicDev->SetStreamSourceFreq( 1, D3DSTREAMSOURCE_INSTANCEDATA | 1ul);
+
 	m_pGraphicDev->SetIndices(m_pIB);
-
-	m_pEffect->SetTexture("g_txScene", m_pTexture);
-	m_pEffect->SetMatrix("g_mWorld", &world);
-	m_pEffect->SetMatrix("g_mView", &view);
-	m_pEffect->SetMatrix("g_mProj", &proj);
-	// m_pEffect->SetMatrixArray(m_hMat, m_pMatWorlds, s_iCnt);
-	m_pEffect->SetMatrixArray("g_vBoxInstance_Position", m_pMatWorlds, INST_CNT);
-	
-
 
 	UINT numPasses = 0;
 	m_pEffect->Begin(&numPasses, NULL);
@@ -244,6 +257,9 @@ void CArrowCube::Render_Buffer()
 		}
 	}
 	m_pEffect->End();
+
+	m_pGraphicDev->SetStreamSourceFreq( 0, 1 );
+	m_pGraphicDev->SetStreamSourceFreq( 1, 1 );
 }
 
 CComponent* CArrowCube::Clone()
@@ -257,6 +273,7 @@ void CArrowCube::Free()
 	Safe_Release(m_pTexture);
 	Safe_Release(m_pEffect);
 	Safe_Release(m_pVtxDeclare);
+	Safe_Release(m_pVBMatrix);
 	CVIBuffer::Free();
 }
 

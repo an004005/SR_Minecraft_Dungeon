@@ -5,11 +5,7 @@ struct BoxVTXInstance
 {
 	_vec3		vPos;
 	_vec2		vTexUV;
-	_float      vInstNum;
-	// _vec2      vInstNum;
 };
-
-#define INST_CNT 100
 
 class CArrowCube : public CVIBuffer
 {
@@ -30,6 +26,9 @@ private:
 	LPD3DXEFFECT m_pEffect = nullptr;
 	LPDIRECT3DVERTEXDECLARATION9 m_pVtxDeclare = nullptr;
 
-	_matrix m_pMatWorlds[INST_CNT];
+	LPDIRECT3DVERTEXBUFFER9		m_pVBMatrix; // 정점 위치 보관용
+
+	vector<_matrix> m_vecArrowWorld;
+	size_t m_iPreSize = 0;
 
 };
