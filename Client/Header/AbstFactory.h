@@ -191,3 +191,46 @@ public:
 private:
 	static map<string, std::function<CGameObject*()>> s_mapObjectSpawner;
 };
+
+class CItemFactory : CAbstFactory
+{
+	friend class CImGuiMgr;
+public:
+	template<typename T>
+	static T* Create(const string& strFactoryTag, const wstring& wstrObjTag)
+	{
+		T* pCasted = dynamic_cast<T*>(s_mapItemSpawner.find(strFactoryTag)->second());
+		_ASSERT_CRASH(pCasted != nullptr);
+		Engine::AddGameObject(LAYER_ITEM, wstrObjTag, pCasted);
+
+		return pCasted;
+	}
+
+	template<typename T>
+	static T* Create(const string& strFactoryTag, const wstring& wstrObjTag, const _matrix& matWorld)
+	{
+		T* pCasted = Create<T>(strFactoryTag, wstrObjTag);
+
+		Engine::CTransform* pTrans = pCasted->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+		pTrans->Set_WorldDecompose(matWorld);
+
+		return pCasted;
+	}
+
+	template<typename T>
+	static T* Create(const string& strFactoryTag, const wstring& wstrObjTag, const _vec3& vPos)
+	{
+		T* pCasted = Create<T>(strFactoryTag, wstrObjTag);
+
+		CTransform* pTrans = pCasted->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+		pTrans->m_vInfo[INFO_POS] = vPos;
+		pTrans->Update_Component(0.f);
+
+		return pCasted;
+	}
+
+	static void Ready_ItemFactory();
+
+private:
+	static map<string, std::function<CGameObject*()>> s_mapItemSpawner;
+};
