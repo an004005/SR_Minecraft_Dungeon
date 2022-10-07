@@ -124,6 +124,7 @@ void CSkeleton::StateChange()
 		m_bAttack = false;
 		m_bMove = false;
 		m_bCanPlayAnim = false;
+		m_pColl->SetStop();
 		return;
 	}
 

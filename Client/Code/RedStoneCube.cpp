@@ -135,6 +135,7 @@ void CRedStoneCube::StateChange()
 		PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
 		m_bAttack = false;
 		m_bCanPlayAnim = false;
+		m_pColl->SetStop();
 		return;
 	}
 
