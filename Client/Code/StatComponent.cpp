@@ -97,6 +97,8 @@ void CStatComponent::ModifyHP(_int iModifyingHP)
 
 void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCauser, DamageType eType)
 {
+	if (m_bDead) return ;
+
 	switch (eType)
 	{
 	case DT_STUN:
