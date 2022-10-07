@@ -191,8 +191,8 @@ void CImGuiMgr::LoggerWindow()
 	ImGui::Begin("Logger");
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
-	_vec3 vpos = Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
-	ImGui::Text("x : %f, z : %f", vpos.x, vpos.z);
+	//_vec3 vpos = Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+	//ImGui::Text("x : %f, z : %f", vpos.x, vpos.z);
 
 
 	if (ImGui::Button("Clear")) { s_log.clear(); }

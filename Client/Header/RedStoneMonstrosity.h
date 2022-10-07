@@ -1,5 +1,31 @@
 #pragma once
 #include "Monster.h"
+#include <functional>
+
+//struct Time77
+//{
+//public:
+//	_float fTime = 0.f;
+//
+//private:
+//	_float fCurTime = 0.f;
+//	std::function<void()> callBack;
+//
+//public:
+//	void Tick(_float fTimeDelta)
+//	{
+//		if (fCurTime > 0.f)
+//			fCurTime -= fTimeDelta;
+//		else
+//		{
+//			fCurTime = fTime;
+//			callBack();
+//		}
+//	}
+//
+//	Time77(_float fTime, std::function<void()> callBack)
+//		: fTime(fTime), callBack(callBack) {}
+//};
 
 class CController;
 
@@ -35,6 +61,7 @@ public:
 	virtual void StateChange();
 
 	// controller 조종 함수
+	_vec3 Get_TargetPos() { return m_vTargetPos; }
 	void WalkToTarget(const _vec3& vTargetPos) { m_vTargetPos = vTargetPos; }
 	void Chop(const _vec3& vTargetPos)
 	{
@@ -80,5 +107,15 @@ private:
 	_bool m_bSpit = false; // controller 입력
 	_bool m_bSummon = false; // controller 입력
 	_bool m_bWindmill = false; // controller 입력
-	_bool m_bAttackFire = false; // anim event 입력
+
+
+	_bool m_bChopFire = false; // anim event 입력
+	//_bool m_bSummonFire = false; // anim event 입력
+	_bool m_bWindmillFire = false; // anim event 입력
+
+
+	
+	
+
 };
+

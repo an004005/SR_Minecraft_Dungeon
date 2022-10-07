@@ -13,6 +13,7 @@
 #include "RedStoneCube.h"
 #include "RedStoneMonstrosity.h"
 #include "GeomancerWall.h"
+#include "RedStoneMonstrosityBullet.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -203,4 +204,8 @@ void CObjectFactory::Ready_ObjectFactory()
 	{
 		return CGeomancerWall::Create(s_pGraphicDev, true);
 	}});
+	s_mapObjectSpawner.insert({ "RedStoneMonstrosityBullet", []()
+	{	
+		return CRedStoneMonstrosityBullet::Create(s_pGraphicDev);
+	} });
 }

@@ -186,6 +186,7 @@
     <ClInclude Include="..\Header\Particle.h" />
     <ClInclude Include="..\Header\Player.h" />
     <ClInclude Include="..\Header\PlayerController.h" />
+    <ClInclude Include="..\Header\RedStoneMonstrosityBullet.h" />
     <ClInclude Include="..\Header\RedStoneCube.h" />
     <ClInclude Include="..\Header\RedStoneCubeController.h" />
     <ClInclude Include="..\Header\RedStoneMonstrosity.h" />
@@ -246,6 +247,7 @@
     <ClCompile Include="..\Code\Particle.cpp" />
     <ClCompile Include="..\Code\Player.cpp" />
     <ClCompile Include="..\Code\PlayerController.cpp" />
+    <ClCompile Include="..\Code\RedStoneMonstrosityBullet.cpp" />
     <ClCompile Include="..\Code\RedStoneCube.cpp" />
     <ClCompile Include="..\Code\RedStoneCubeController.cpp" />
     <ClCompile Include="..\Code\RedStoneMonstrosity.cpp" />

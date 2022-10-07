@@ -56,6 +56,9 @@ _int CRedStoneMonstrosityController::Update_Component(const _float& fTimeDelta)
 		}
 
 		m_fCurTargetingCoolTime = 0.f;
+
+		if (fTargetDist > 20.f)
+			m_pTargetPlayer = nullptr;
 	}
 	else
 	{
