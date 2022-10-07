@@ -4,7 +4,7 @@
 #include "RedStoneMonstrosityController.h"
 #include "AbstFactory.h"
 #include "RedStoneCube.h"
-#include <ctime>
+#include "RedStoneMonstrosityBullet.h"
 
 CRedStoneMonstrosity::CRedStoneMonstrosity(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
 {
@@ -20,8 +20,6 @@ CRedStoneMonstrosity::~CRedStoneMonstrosity()
 
 HRESULT CRedStoneMonstrosity::Ready_Object()
 {
-	srand(_uint(time(NULL)));
-
 	CMonster::Ready_Object();
 
 	m_arrAnim[INTRO] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/RedStoneMonstrosity/intro.anim");
@@ -37,7 +35,7 @@ HRESULT CRedStoneMonstrosity::Ready_Object()
 	m_eState = INTRO;
 	m_fSpeed = 2.f;
 
-	m_pStat->SetMaxHP(100);
+	m_pStat->SetMaxHP(1000);
 
 	CController* pController = Add_Component<CRedStoneMonstrosityController>(L"Proto_RedStoneMonstrosityController", L"Proto_RedStoneMonstrosityController", ID_DYNAMIC);
 	pController->SetOwner(this);
@@ -47,14 +45,15 @@ HRESULT CRedStoneMonstrosity::Ready_Object()
 
 	m_bCanPlayAnim = false;
 	PlayAnimationOnce(&m_arrAnim[INTRO]);
+
 	return S_OK;
 }
 
 void CRedStoneMonstrosity::AnimationEvent(const string& strEvent)
 {
-	if (strEvent == "AttackFire")
+	if (strEvent == "ChopFire")
 	{
-		m_bAttackFire = true;
+		m_bChopFire = true;
 	}
 	else if (strEvent == "ActionEnd")
 	{
@@ -63,6 +62,13 @@ void CRedStoneMonstrosity::AnimationEvent(const string& strEvent)
 	else if (strEvent == "AnimStopped")
 	{
 		m_bDelete = true;
+	}
+	else if (strEvent == "SpitFire")
+	{
+		_matrix matWorld;
+		_vec3 vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { vPos.x, vPos.y + 5.f , vPos.z });
+		CObjectFactory::Create<CRedStoneMonstrosityBullet>("RedStoneMonstrosityBullet", L"RedStoneMonstrosityBullet", matWorld);
 	}
 }
 
@@ -126,22 +132,22 @@ void CRedStoneMonstrosity::LateUpdate_Object()
 {
 	CMonster::LateUpdate_Object();
 
-	if (m_bAttackFire)
+	if (m_bChopFire)
 	{
 		set<CGameObject*> setObj;
 		_vec3 vAttackPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + (m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 2.f);
-		Engine::GetOverlappedObject(setObj, vAttackPos, 1.f);
+		Engine::GetOverlappedObject(setObj, vAttackPos, 6.f);
 
 		for (auto& obj : setObj)
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(1, m_pRootPart->pTrans->m_vInfo[INFO_POS], this);
+				->TakeDamage(1, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_KNOCK_BACK);
 		}
-		DEBUG_SPHERE(vAttackPos, 1.f, 1.f);
+		DEBUG_SPHERE(vAttackPos, 6.f, 1.f);
 		IM_LOG("Fire");
 
-		m_bAttackFire = false;
+		m_bChopFire = false;
 	}
 }
 

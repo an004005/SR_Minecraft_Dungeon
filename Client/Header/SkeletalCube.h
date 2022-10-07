@@ -19,7 +19,7 @@ struct SkeletalPart
 	wstring strTexCom;
 	wstring strTexProto;
 
-	CTransform* pTrans = nullptr;
+	Engine::CTransform* pTrans = nullptr;
 	wstring strTransCom;
 	wstring strTransProto;
 

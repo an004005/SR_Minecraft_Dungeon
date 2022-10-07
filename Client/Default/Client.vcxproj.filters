@@ -239,6 +239,9 @@
     <ClInclude Include="..\Header\GeomancerWall.h">
       <Filter>02. GameObject\Object</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\RedStoneMonstrosityBullet.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -394,6 +397,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\Particle.cpp" />
     <ClCompile Include="..\Code\GeomancerWall.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RedStoneMonstrosityBullet.cpp">
       <Filter>02. GameObject\Object</Filter>
     </ClCompile>
   </ItemGroup>

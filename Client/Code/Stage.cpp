@@ -122,8 +122,8 @@ HRESULT CStage::Ready_Layer_GameLogic()
 		//CEnemyFactory::Create<CEnchanter>("Enchanter", L"Enchanter", matWorld);
 
 	
-		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 96.f, 0.f ,26.f });
-		//CEnemyFactory::Create<CRedStoneMonstrosity>("RedStoneMonstrosity", L"RedStoneMonstrosity", matWorld);
+		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 4.f, 0.f ,10.f });
+		CEnemyFactory::Create<CRedStoneMonstrosity>("RedStoneMonstrosity", L"RedStoneMonstrosity", matWorld);
 	}
 	
 
