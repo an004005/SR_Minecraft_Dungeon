@@ -65,9 +65,6 @@
     <Filter Include="02. GameObject\Object">
       <UniqueIdentifier>{d4c64e4c-660f-4b18-b3c9-37cd78b2fea4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\05. Item">
-      <UniqueIdentifier>{682eaaad-d655-4457-b398-c657b010fb78}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\MainApp.h">
@@ -245,21 +242,6 @@
     <ClInclude Include="..\Header\RedStoneMonstrosityBullet.h">
       <Filter>02. GameObject\Object</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\Item.h">
-      <Filter>02. GameObject\05. Item</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\EquipItem.h">
-      <Filter>02. GameObject\05. Item</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\Crossbow.h">
-      <Filter>02. GameObject\05. Item</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\Sword.h">
-      <Filter>02. GameObject\05. Item</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\Glaive.h">
-      <Filter>02. GameObject\05. Item</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -419,21 +401,6 @@
     </ClCompile>
     <ClCompile Include="..\Code\RedStoneMonstrosityBullet.cpp">
       <Filter>02. GameObject\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\Item.cpp">
-      <Filter>02. GameObject\05. Item</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\EquipItem.cpp">
-      <Filter>02. GameObject\05. Item</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\Crossbow.cpp">
-      <Filter>02. GameObject\05. Item</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\Sword.cpp">
-      <Filter>02. GameObject\05. Item</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\Glaive.cpp">
-      <Filter>02. GameObject\05. Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

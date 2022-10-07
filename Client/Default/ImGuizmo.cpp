@@ -1565,8 +1565,8 @@ namespace IMGUIZMO_NAMESPACE
       ImDrawList* drawList = gContext.mDrawList;
 
       // compute best projection axis
-      vec_t axeSwordDirections[3];
-      vec_t bestAxiSwordDirection = { 0.0f, 0.0f, 0.0f, 0.0f };
+      vec_t axesWorldDirections[3];
+      vec_t bestAxisWorldDirection = { 0.0f, 0.0f, 0.0f, 0.0f };
       int axes[3];
       unsigned int numAxes = 1;
       axes[0] = gContext.mBoundsBestAxis;
@@ -1586,13 +1586,13 @@ namespace IMGUIZMO_NAMESPACE
             {
                bestDot = dt;
                bestAxis = i;
-               bestAxiSwordDirection = dirPlaneNormalWorld;
+               bestAxisWorldDirection = dirPlaneNormalWorld;
             }
 
             if (dt >= 0.1f)
             {
                axes[numAxes] = i;
-               axeSwordDirections[numAxes] = dirPlaneNormalWorld;
+               axesWorldDirections[numAxes] = dirPlaneNormalWorld;
                ++numAxes;
             }
          }
@@ -1601,7 +1601,7 @@ namespace IMGUIZMO_NAMESPACE
       if (numAxes == 0)
       {
          axes[0] = bestAxis;
-         axeSwordDirections[0] = bestAxiSwordDirection;
+         axesWorldDirections[0] = bestAxisWorldDirection;
          numAxes = 1;
       }
 
@@ -1619,15 +1619,15 @@ namespace IMGUIZMO_NAMESPACE
          int tempAxis = axes[0];
          axes[0] = axes[bestIndex];
          axes[bestIndex] = tempAxis;
-         vec_t tempDirection = axeSwordDirections[0];
-         axeSwordDirections[0] = axeSwordDirections[bestIndex];
-         axeSwordDirections[bestIndex] = tempDirection;
+         vec_t tempDirection = axesWorldDirections[0];
+         axesWorldDirections[0] = axesWorldDirections[bestIndex];
+         axesWorldDirections[bestIndex] = tempDirection;
       }
 
       for (unsigned int axisIndex = 0; axisIndex < numAxes; ++axisIndex)
       {
          bestAxis = axes[axisIndex];
-         bestAxiSwordDirection = axeSwordDirections[axisIndex];
+         bestAxisWorldDirection = axesWorldDirections[axisIndex];
 
          // corners
          vec_t aabb[4];
@@ -1710,7 +1710,7 @@ namespace IMGUIZMO_NAMESPACE
             {
                gContext.mBoundsPivot.TransformPoint(aabb[(i + 2) % 4], gContext.mModelSource);
                gContext.mBoundsAnchor.TransformPoint(aabb[i], gContext.mModelSource);
-               gContext.mBoundsPlan = BuildPlan(gContext.mBoundsAnchor, bestAxiSwordDirection);
+               gContext.mBoundsPlan = BuildPlan(gContext.mBoundsAnchor, bestAxisWorldDirection);
                gContext.mBoundsBestAxis = bestAxis;
                gContext.mBoundsAxis[0] = secondAxis;
                gContext.mBoundsAxis[1] = thirdAxis;
@@ -1729,7 +1729,7 @@ namespace IMGUIZMO_NAMESPACE
                vec_t midPointOpposite = (aabb[(i + 2) % 4] + aabb[(i + 3) % 4]) * 0.5f;
                gContext.mBoundsPivot.TransformPoint(midPointOpposite, gContext.mModelSource);
                gContext.mBoundsAnchor.TransformPoint(midPoint, gContext.mModelSource);
-               gContext.mBoundsPlan = BuildPlan(gContext.mBoundsAnchor, bestAxiSwordDirection);
+               gContext.mBoundsPlan = BuildPlan(gContext.mBoundsAnchor, bestAxisWorldDirection);
                gContext.mBoundsBestAxis = bestAxis;
                int indices[] = { secondAxis , thirdAxis };
                gContext.mBoundsAxis[0] = indices[i % 2];

@@ -90,7 +90,6 @@ public:
 	void LoadSkeletal(wstring wstrPath);
 	void SaveSkeletal(wstring wstrPath);
 
-	SkeletalPart* Get_SkeletalPart() { return m_pRootPart; }
 
 private:
 	virtual void SaveRecursive(HANDLE hFile, SkeletalPart* pPart);

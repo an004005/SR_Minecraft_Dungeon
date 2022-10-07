@@ -47,8 +47,6 @@ namespace Engine
 		LAYER_EFFECT,
 		// effect
 		LAYER_BULLET,
-		//item
-		LAYER_ITEM,
 		LAYER_END
 	};
 
