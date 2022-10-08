@@ -25,10 +25,10 @@ private:
 
 private:
 	_matrix m_matView, m_matProj;
-	CTransform* m_pTransform = nullptr;
+	Engine::CTransform* m_pTransform = nullptr;
 
 	CGameObject* m_pTarget = nullptr;
-	CTransform* m_pTargetTrans = nullptr;
+	Engine::CTransform* m_pTargetTrans = nullptr;
 
 	// normal mode
 	_float m_fDistance;

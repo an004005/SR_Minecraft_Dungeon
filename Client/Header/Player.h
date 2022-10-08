@@ -1,8 +1,15 @@
 #pragma once
 #include "SkeletalCube.h"
+#include "EquipItem.h"
+
 
 class CController;
 class CStatComponent;
+class CCrossbow;
+class CSword;
+class CGlaive;
+
+
 class CPlayer : public CSkeletalCube
 {
 protected:
@@ -28,7 +35,7 @@ private:
 		ANIM_IDLE,
 		ANIM_DEAD,
 		ANIM_ATTACK1,
-		ANIM_ATTACK2, // 무기에서 가져와서 실행하게 구현
+		ANIM_ATTACK2,
 		ANIM_ATTACK3,
 		ANIM_RANGE_ATTACK,
 		ANIM_LEGACY1,
@@ -49,6 +56,7 @@ public:
 
 	virtual void AttackState();
 	void StateChange();
+	_vec3 GetInfo(INFOID eID) { return m_pRootPart->pTrans->m_vInfo[eID]; }
 
 	// controller 입력함수
 	void SetMoveDir(_float fX, _float fZ);
@@ -57,6 +65,21 @@ public:
 	void RollPress() { m_bRoll = true; }
 	void Legacy1Press() { m_bLegacy1 = true; }
 	void Legacy2Press() { m_bLegacy2 = true; }
+	void Legacy3Press();
+	void Legacy4Press();
+	void WeaponChange(CEquipItem* pItem)
+	{
+		if (m_pWeaponPart == nullptr)
+		{
+			auto& itr = m_mapParts.find("weapon_r");
+			if (itr == m_mapParts.end())
+				return;
+			m_pWeaponPart = itr->second;
+		}
+
+		pItem->Equipment(m_pWeaponPart);
+
+	}
 	//
 
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
@@ -64,9 +87,16 @@ public:
 private:
 	void RotateToCursor();
 	void RotateToMove();
+	
+	//근거리 ,원거리 상관없이 다 넣음, AttackState()에서 문제 생길 수 있음.
+	CEquipItem* m_pCurWeapon = nullptr;
 
+	CCrossbow* m_pCrossbow = nullptr;
+	CSword* m_pSword = nullptr;
+	CGlaive* m_pGlaive = nullptr;
 
 protected:
+	SkeletalPart* m_pWeaponPart = nullptr;
 	CStatComponent* m_pStat;
 
 	PlayerState m_eState = STATE_END;
@@ -77,7 +107,7 @@ protected:
 	_float m_fSpeed; // 속도
 	_float m_fRollSpeed; // 구르기 속도
 
-	_uint m_iAttackCnt = 0; // 콤보 번호
+	_int  m_iAttackCnt = 0;
 
 	_vec3 m_vMoveDirNormal{0.f, 0.f, 0.f}; // 이동 방향
 
@@ -98,6 +128,7 @@ protected:
 	DWORD m_dwWalkDust;
 	DWORD m_dwRollDust;
 
+	
 };
 
 

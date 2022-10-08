@@ -16,7 +16,7 @@ public:
 	static CGeomancerWall* Create(LPDIRECT3DDEVICE9 pGraphicDev, _bool bBomb);
 
 private:
-	CTransform* m_pTransform = nullptr;
+	Engine::CTransform* m_pTransform = nullptr;
 	CTexture* m_pTexture = nullptr;
 	CCubeTex* m_pBuffer = nullptr;
 

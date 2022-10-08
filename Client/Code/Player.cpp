@@ -9,10 +9,16 @@
 #include "StaticCamera.h"
 #include "Monster.h"
 #include "PlayerController.h"
+#include "Crossbow.h"
+#include "Sword.h"
+#include "Glaive.h"
 
 /*-----------------------
  *    CCharacter
  ----------------------*/
+
+
+
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev) : CSkeletalCube(pGraphicDev)
 {
 	m_fSpeed = 4.f;
@@ -28,19 +34,9 @@ HRESULT CPlayer::Ready_Object()
 {
 	CSkeletalCube::Ready_Object();
 
-	m_arrAnim[ANIM_IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_idle.anim");
-	m_arrAnim[ANIM_IDLE].bLoop = true;
-	m_arrAnim[ANIM_WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_walk.anim");
-	m_arrAnim[ANIM_WALK].bLoop = true;
-	m_arrAnim[ANIM_ATTACK1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_a.anim");
-	m_arrAnim[ANIM_ATTACK2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_b.anim");
-	m_arrAnim[ANIM_ATTACK3] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_c.anim");
-	m_arrAnim[ANIM_RANGE_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/crossbow_attack_start.anim");
-	m_arrAnim[ANIM_LEGACY1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/shock_powder.anim");
-	m_arrAnim[ANIM_LEGACY2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/shock_powder.anim");
-	m_arrAnim[ANIM_LEGACY3] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_c.anim");
+	
+	
 
-	m_arrAnim[ANIM_ROLL] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/roll.anim");
 	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 	m_pCurAnim = m_pIdleAnim;
 
@@ -66,6 +62,13 @@ HRESULT CPlayer::Ready_Object()
 	m_RollCoolTime = 3.f;
 	m_CurRollCoolTime = 0.f;
 
+	m_pCrossbow = Get_GameObject<CCrossbow>(LAYER_ITEM, L"Crossbow");
+	m_pSword = Get_GameObject<CSword>(LAYER_ITEM, L"Sword");
+	m_pGlaive = Get_GameObject<CGlaive>(LAYER_ITEM, L"Glaive");
+
+	m_pCurWeapon = m_pSword;
+
+	m_arrAnim = m_pSword->SetarrAnim();
 	return S_OK;
 }
 
@@ -120,24 +123,7 @@ void CPlayer::LateUpdate_Object()
 	{
 		if (m_bApplyMeleeAttackNext)
 		{
-			set<CGameObject*> objSet;
-			_vec3 vAttackPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + (m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 2.f);
-			Engine::GetOverlappedObject(OUT objSet, vAttackPos, 2.f);
-			for (auto& obj : objSet)
-			{
-				if (CMonster* monster = dynamic_cast<CMonster*>(obj))
-				{
-					DamageType eDT = DT_END;
-					if (m_iAttackCnt == 0) eDT = DT_KNOCK_BACK;
-					if (monster->CheckCC()) eDT = DT_END;
-					monster->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-					       ->TakeDamage(30, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, eDT);
-				}
-			}
-
-
-			DEBUG_SPHERE(vAttackPos, 2.f, 1.f);
-
+			m_pCurWeapon->Collision();
 			m_bApplyMeleeAttackNext = false;
 		}
 
@@ -190,19 +176,9 @@ void CPlayer::AttackState()
 	if (m_bMeleeAttack)
 	{
 		m_bCanPlayAnim = false;
-		if (m_iAttackCnt == 0)
-		{
-			PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK1]);
-		}
-		else if (m_iAttackCnt == 1)
-		{
-			PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK2]);
-		}
-		else
-		{
-			PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK3]);
-		}
-		m_iAttackCnt = (m_iAttackCnt + 1) % 3;
+		
+		//원거리 무기는 생략.
+		m_iAttackCnt = m_pCurWeapon->Attack();
 		m_bApplyMeleeAttack = true;
 	}
 	else if (m_bRangeAttack)
@@ -210,6 +186,8 @@ void CPlayer::AttackState()
 		m_bCanPlayAnim = false;
 		PlayAnimationOnce(&m_arrAnim[ANIM_RANGE_ATTACK]);
 		Get_GameObject<CFireWork_Fuze>(LAYER_EFFECT, L"FireWork_Fuze")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 1.f, WHITE, 1, 0.5f);
+
+		WeaponChange(m_pCrossbow);
 	}
 
 
@@ -310,6 +288,7 @@ void CPlayer::StateChange()
 		m_eState = IDLE;
 		m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 		m_pCurAnim = &m_arrAnim[ANIM_IDLE];
+		WeaponChange(m_pCurWeapon);
 		return;
 	}
 }
@@ -400,4 +379,16 @@ void CPlayer::RotateToMove()
 		m_pRootPart->pTrans->m_vAngle.y = -acosf(fDot);
 	else
 		m_pRootPart->pTrans->m_vAngle.y = acosf(fDot);
+}
+
+void CPlayer::Legacy3Press()
+{ 
+	m_arrAnim = m_pGlaive->SetarrAnim();
+	m_pCurWeapon = m_pGlaive;
+}
+void CPlayer::Legacy4Press() 
+{ 
+	m_arrAnim = m_pSword->SetarrAnim();
+	m_pCurWeapon = m_pSword;
+	
 }
