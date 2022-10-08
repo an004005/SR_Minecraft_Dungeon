@@ -62,7 +62,7 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 	if (false == CGameUtilMgr::Vec3Cmp(m_vPressDir, m_vPrevPressDir)) // 이동 입력 없으면 방향 계산 안하기
 	{
 		D3DXVec3Normalize(&m_vMoveDir, &m_vPressDir);
-		_float fCamYaw = Engine::Get_Component<CTransform>(LAYER_ENV, L"StaticCamera", L"Proto_TransformCom", ID_DYNAMIC)->
+		_float fCamYaw = Engine::Get_Component<Engine::CTransform>(LAYER_ENV, L"StaticCamera", L"Proto_TransformCom", ID_DYNAMIC)->
 		                 m_vAngle.y;
 		_matrix matYaw;
 		D3DXMatrixRotationY(&matYaw, fCamYaw);
@@ -97,6 +97,14 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 	if (DIKeyDown(DIK_2))
 	{
 		pPlayer->Legacy2Press();
+	}
+	if (DIKeyDown(DIK_3))
+	{
+		pPlayer->Legacy3Press();
+	}
+	if (DIKeyDown(DIK_4))
+	{
+		pPlayer->Legacy4Press();
 	}
 
 	return 0;

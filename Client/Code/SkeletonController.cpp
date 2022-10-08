@@ -27,7 +27,7 @@ _int CSkeletonController::Update_Component(const _float& fTimeDelta)
 	CSkeleton* pSkeleton = dynamic_cast<CSkeleton*>(m_pOwner);
 	NULL_CHECK_RETURN(pSkeleton, 0);
 
-	_vec3 vPos = pSkeleton->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+	_vec3 vPos = pSkeleton->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
 	CPlayer* pTargetPlayer = nullptr;
 	_vec3 vTargetPos;
 	_float fTargetDist = 9999.f;
@@ -36,7 +36,7 @@ _int CSkeletonController::Update_Component(const _float& fTimeDelta)
 	{
 		if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(ele.second))
 		{
-			vTargetPos = pPlayer->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+			vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
 			_vec3 vDiff = vPos - vTargetPos;
 			_float fDist = D3DXVec3Length(&vDiff);
 

@@ -17,7 +17,7 @@ HRESULT CStaticCamera::Ready_Object()
 {
 	m_fDistance = 16.f;
 	m_fSmoothSpeed = 0.125f;
-	m_pTransform = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
+	m_pTransform = Add_Component<Engine::CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 
 	SetMatProj();
 
@@ -59,7 +59,7 @@ void CStaticCamera::SetTarget(CGameObject* pTarget)
 
 	m_pTarget = pTarget;
 	m_pTarget->AddRef();
-	m_pTargetTrans = m_pTarget->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC);
+	m_pTargetTrans = m_pTarget->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC);
 	m_pTargetTrans->AddRef();
 
 	m_pTransform->m_vInfo[INFO_POS] = m_pTargetTrans->m_vInfo[INFO_POS] + (m_pTransform->m_vInfo[INFO_LOOK] * -m_fDistance);

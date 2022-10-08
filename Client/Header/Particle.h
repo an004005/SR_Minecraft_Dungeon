@@ -170,7 +170,7 @@ public:
 public:
 	static CShock_Powder* Create(LPDIRECT3DDEVICE9 pGraphicDev);
 	CRcShader*			m_pBufferCom = nullptr;
-	CTransform*			m_pTransCom = nullptr;
+	Engine::CTransform*			m_pTransCom = nullptr;
 	CTexture*			m_pTexture = nullptr;
 	void Free() override;
 
@@ -204,7 +204,7 @@ public:
 public:
 	static CUVCircle* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size, CIRCLETYPE _type);
 	CRcShader*			m_pBufferCom = nullptr;
-	CTransform*			m_pTransCom = nullptr;
+	Engine::CTransform*			m_pTransCom = nullptr;
 	CTexture*			m_pTexture = nullptr;
 	void Free() override;
 
@@ -243,7 +243,7 @@ public:
 public:
 	static CCloud* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size, CLOUDTYPE _type);
 	CRcShader*			m_pBufferCom = nullptr;
-	CTransform*			m_pTransCom = nullptr;
+	Engine::CTransform*			m_pTransCom = nullptr;
 	CTexture*			m_pTexture = nullptr;
 	void Free() override;
 

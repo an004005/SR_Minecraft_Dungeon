@@ -60,7 +60,9 @@ void CSkeletalCube::Render_Object()
 	m_pRootPart->matParents = m_pRootPart->pTrans->m_matWorld;
 	for (const auto& child : m_pRootPart->vecChild)
 	{
+	
 		RenderObjectRecur(child);
+		
 	}
 
    // m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
