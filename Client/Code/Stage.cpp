@@ -57,7 +57,6 @@ HRESULT CStage::Ready_Scene(void)
 	FAILED_CHECK_RETURN(Ready_Layer_Environment(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_GameLogic(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_UI(), E_FAIL);
-	// m_pTest = CArrowCube::Create(m_pGraphicDev);
 
 	return S_OK;
 }
@@ -74,7 +73,6 @@ void CStage::LateUpdate_Scene(void)
 
 void CStage::Render_Scene(void)
 {
-	// m_pTest->Render_Buffer();
 	CArrowCubeMgr::GetInst().Render_Buffer(); // todo : 렌더러에서 동작하게 바꾸기
 
 }
@@ -94,7 +92,6 @@ HRESULT CStage::Ready_Layer_Environment()
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", pGameObject), E_FAIL);
 
 
-	// CArrow* pArrow = CArrow::Create(m_pGraphicDev);
 	// m_arrLayer[LAYER_BULLET]->Add_GameObject(L"Arrow", pArrow);
 
 

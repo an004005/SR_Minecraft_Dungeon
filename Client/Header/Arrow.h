@@ -30,7 +30,7 @@ public:
 	void StaticCallBack(_vec3 vCenter, _float fRadius);
 	//
 private:
-	CTransform* m_pTransform = nullptr;
+	Engine::CTransform* m_pTransform = nullptr;
 	CCollisionCom* m_pCollCom = nullptr;
 	ArrowMoveType m_eMoveType = ARROW_MOVE_NORMAL;
 
@@ -43,7 +43,7 @@ private:
 	_float m_fLife;
 
 	// dangling
-	CTransform* m_pParentTrans = nullptr;
+	Engine::CTransform* m_pParentTrans = nullptr;
 	CStatComponent* m_pParentStat = nullptr;
 	_matrix m_matDanglingLocal;
 	// dangling

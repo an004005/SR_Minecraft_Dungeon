@@ -23,7 +23,7 @@ HRESULT CArrow::Ready_Object()
 {
 	CGameObject::Ready_Object();
 
-	m_pTransform = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
+	m_pTransform = Add_Component<Engine::CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 	m_pCollCom = Add_Component<CCollisionCom>(L"Proto_CollisionCom", L"Proto_CollisionCom", ID_DYNAMIC);
 	m_pCollCom->SetOwner(this);
 	m_pCollCom->SetOwnerTransform(m_pTransform);
