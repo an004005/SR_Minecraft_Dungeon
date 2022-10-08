@@ -70,6 +70,14 @@ namespace Engine
 		CUSTOM_EVENT,
 		BLOCKING_END // ignore
 	};
+
+	enum ArrowType
+	{
+		ARROW_NORMAL,
+		ARROW_FIREWORK,
+		ARROW_END
+	};
+
 }
 
 #endif // Engine_Enum_h__

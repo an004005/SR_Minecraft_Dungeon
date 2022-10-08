@@ -260,6 +260,8 @@
     <ClInclude Include="..\Header\Glaive.h">
       <Filter>02. GameObject\05. Item</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\Arrow.h" />
+    <ClInclude Include="..\Header\ArrowCubeMgr.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -435,6 +437,8 @@
     <ClCompile Include="..\Code\Glaive.cpp">
       <Filter>02. GameObject\05. Item</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\Arrow.cpp" />
+    <ClCompile Include="..\Code\ArrowCubeMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">

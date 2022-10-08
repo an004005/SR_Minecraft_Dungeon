@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "..\Header\StatComponent.h"
+
+#include "Particle.h"
 #include "TerrainCubeMap.h"
 
 
@@ -87,9 +89,11 @@ void CStatComponent::ModifyHP(_int iModifyingHP)
 	{
 		m_bDamaged = true;
 		m_fCurDamagedTime = 0.f;
-		// IM_LOG("Damaged : %d", iModifyingHP);
-	}
 
+		// 피타격 이펙트
+		Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")
+			->Add_Particle(m_pOwnerTrans->m_vInfo[INFO_POS] +_vec3{0.f, 1.2f, 0.f}, CGameUtilMgr::GetRandomFloat(0.15f,0.3f), RED, 20, 0.2f);
+	}
 
 	if (m_iHP <= 0)
 		m_bDead = true;

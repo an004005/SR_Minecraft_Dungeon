@@ -73,6 +73,10 @@ void CSkeletalCube::RenderObjectRecur(SkeletalPart* pPart)
 {
 	const _matrix matPartWorld = pPart->GetWorldMat();
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &matPartWorld);
+	if (pPart->strName == "bow")
+	{
+		int a= 3;
+	}
 	if (pPart->pTex)
 		pPart->pTex->Set_Texture(pPart->iTexIdx);
 	if (pPart->pBuf)
@@ -389,7 +393,6 @@ void CSkeletalCube::SaveRecursive(HANDLE hFile, SkeletalPart* pPart)
 {
 	DWORD dwByte = 0;
 	DWORD dwStrByte = 0;
-
 	// parent name
 	dwStrByte = (DWORD)pPart->pParent->strName.size();
 	WriteFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
@@ -401,9 +404,22 @@ void CSkeletalCube::SaveRecursive(HANDLE hFile, SkeletalPart* pPart)
 	WriteFile(hFile, pPart->strName.c_str(), dwStrByte, &dwByte, nullptr);
 
 	// Buf proto name
+	if (pPart->strName == "bow")
+	{
+		wstring pro = L"Proto_VoxelTex_Bow";
+	
+	dwStrByte = (DWORD)pro.size() * sizeof(_tchar);
+	WriteFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
+	WriteFile(hFile, pro.c_str(), dwStrByte, &dwByte, nullptr);
+	}
+	else
+	{
 	dwStrByte = (DWORD)pPart->strBufProto.size() * sizeof(_tchar);
 	WriteFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
 	WriteFile(hFile, pPart->strBufProto.c_str(), dwStrByte, &dwByte, nullptr);
+	}
+
+
 
 	// Tex proto name, idx
 	dwStrByte = (DWORD)pPart->strTexProto.size() * sizeof(_tchar);

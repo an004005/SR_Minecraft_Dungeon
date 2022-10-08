@@ -92,6 +92,10 @@ inline bool MouseKeyUp(MOUSEKEYSTATE byMouseID)
 {
 	return CInputDev::GetInstance()->MouseKeyUp(byMouseID);
 }
+inline bool MouseKeyPress(MOUSEKEYSTATE byMouseID)
+{
+	return CInputDev::GetInstance()->MouseKeyPress(byMouseID);
+}
 
 /*--------------------
  *		FontMgr

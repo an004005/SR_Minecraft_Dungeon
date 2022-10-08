@@ -43,12 +43,12 @@ HRESULT CPlayer::Ready_Object()
 	CController* pController = Add_Component<CPlayerController>(L"Proto_PlayerController", L"Proto_PlayerController", ID_DYNAMIC);
 	pController->SetOwner(this);
 
-	CCollisionCom* pColl = Add_Component<CCollisionCom>(L"Proto_CollisionCom", L"Proto_CollisionCom", ID_DYNAMIC);
-	pColl->SetOwner(this);
-	pColl->SetOwnerTransform(m_pRootPart->pTrans);
-	pColl->SetCollOffset(_vec3{0.f, 1.f, 0.f});
-	pColl->SetRadius(0.5f);
-	pColl->SetCollType(COLL_PLAYER);
+	m_pColl = Add_Component<CCollisionCom>(L"Proto_CollisionCom", L"Proto_CollisionCom", ID_DYNAMIC);
+	m_pColl->SetOwner(this);
+	m_pColl->SetOwnerTransform(m_pRootPart->pTrans);
+	m_pColl->SetCollOffset(_vec3{0.f, 1.5f, 0.f});
+	m_pColl->SetRadius(0.8f);
+	m_pColl->SetCollType(COLL_PLAYER);
 
 	m_pStat = Add_Component<CStatComponent>(L"Proto_StatCom", L"Proto_StatCom", ID_DYNAMIC);
 	m_pStat->SetMaxHP(100);
@@ -75,6 +75,7 @@ HRESULT CPlayer::Ready_Object()
 _int CPlayer::Update_Object(const _float& fTimeDelta)
 {
 	CSkeletalCube::Update_Object(fTimeDelta);
+	DEBUG_SPHERE(m_pColl->GetCollPos(), m_pColl->GetRadius(), 0.1f);
 
 	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
 		m_bCanPlayAnim = true;
@@ -185,11 +186,10 @@ void CPlayer::AttackState()
 	{
 		m_bCanPlayAnim = false;
 		PlayAnimationOnce(&m_arrAnim[ANIM_RANGE_ATTACK]);
-		Get_GameObject<CFireWork_Fuze>(LAYER_EFFECT, L"FireWork_Fuze")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 1.f, WHITE, 1, 0.5f);
-
-		WeaponChange(m_pCrossbow);
+		
+		const _vec3 vLookAt = m_pRootPart->pTrans->m_vInfo[INFO_POS] + _vec3{0.f, 1.3f, 0.f} + m_pRootPart->pTrans->m_vInfo[INFO_LOOK]; 
+		CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 10.f, m_pRootPart->pTrans->m_vInfo[INFO_POS] + _vec3{0.f, 1.3f, 0.f}, vLookAt);
 	}
-
 
 
 #pragma region Attack_Basic

@@ -76,7 +76,7 @@ void CCollisionCom::CollisionDynamic(CCollisionCom* pOther, BLOCKING_TYPE eType)
 	}
 	else if (eType == CUSTOM_EVENT)
 	{
-		
+		if (m_pCollisionDynamic) m_pCollisionDynamic(pOther);
 	}
 }
 
@@ -91,4 +91,7 @@ void CCollisionCom::CollisionStatic(const _vec3& vCenter, _float fRadius)
 	D3DXVec3Normalize(&vDiff, &vDiff);
 
 	vPos += fMoved * vDiff;
+
+	if ((m_eType == COLL_ENEMY_BULLET || m_eType == COLL_PLAYER_BULLET) && m_pCollisionStatic)
+		m_pCollisionStatic(vCenter, fRadius);
 }

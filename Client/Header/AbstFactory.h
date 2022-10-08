@@ -133,11 +133,23 @@ class CBulletFactory : CAbstFactory
 	friend class CImGuiMgr;
 public:
 	template<typename T>
-	static T* Create(const string& strFactoryTag, const wstring& wstrObjTag, const _matrix& matWorld)
+	static T* Create(const string& strFactoryTag, const wstring& wstrObjTag, _float fDamage)
 	{
-		T* pCasted = dynamic_cast<T*>(s_mapBulletSpawner.find(strFactoryTag)->second());
+		T* pCasted = dynamic_cast<T*>(s_mapBulletSpawner.find(strFactoryTag)->second(fDamage));
 		_ASSERT_CRASH(pCasted != nullptr);
 		Engine::AddGameObject(LAYER_BULLET, wstrObjTag, pCasted);
+
+		return pCasted;
+	}
+
+	template<typename T>
+	static T* Create(const string& strFactoryTag, const wstring& wstrObjTag, _float fDamage, const _vec3& vPos, const _vec3& vLookAt)
+	{
+		T* pCasted = Create<T>(strFactoryTag, wstrObjTag, fDamage);
+
+		CTransform* pTrans = pCasted->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+		pTrans->m_vInfo[INFO_POS] = vPos;
+		pTrans->RotateToLookAt(vLookAt);
 
 		return pCasted;
 	}
@@ -145,7 +157,7 @@ public:
 	static void Ready_BulletFactory();
 
 private:
-	static map<string, std::function<CGameObject*()>> s_mapBulletSpawner;
+	static map<string, std::function<CGameObject*(_float)>> s_mapBulletSpawner;
 
 };
 

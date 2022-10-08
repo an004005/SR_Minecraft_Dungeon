@@ -17,6 +17,7 @@
 #include "Crossbow.h"
 #include "Sword.h"
 #include "Glaive.h"
+#include "Arrow.h"
 
 
 
@@ -26,7 +27,7 @@ map<string, std::function<CGameObject*()>> CPlayerFactory::s_mapPlayerSpawner;
 map<string, std::function<CGameObject*()>> CEnemyFactory::s_mapEnemySpawner;
 map<string, std::function<CGameObject*()>> CEffectFactory::s_mapEffectSpawner;
 map<string, std::function<CGameObject*()>> CEnvFactory::s_mapEnvSpawner;
-map<string, std::function<CGameObject*()>> CBulletFactory::s_mapBulletSpawner;
+map<string, std::function<CGameObject*(_float)>> CBulletFactory::s_mapBulletSpawner;
 map<string, std::function<CGameObject*()>> CObjectFactory::s_mapObjectSpawner;
 map<string, std::function<CGameObject*()>> CItemFactory::s_mapItemSpawner;
 
@@ -201,6 +202,18 @@ void CEnvFactory::Ready_EnvFactory()
 
 void CBulletFactory::Ready_BulletFactory()
 {
+	s_mapBulletSpawner.insert({"PlayerNormalArrow", [](_float fDamage)
+	{
+		return CArrow::Create(s_pGraphicDev, fDamage, COLL_PLAYER_BULLET);
+	}});
+	s_mapBulletSpawner.insert({"EnemyNormalArrow", [](_float fDamage)
+	{
+		return CArrow::Create(s_pGraphicDev, fDamage, COLL_ENEMY_BULLET);
+	}});
+	s_mapBulletSpawner.insert({"PlayerFireWorkArrow", [](_float fDamage)
+	{
+		return CArrow::Create(s_pGraphicDev, fDamage, COLL_PLAYER_BULLET, ARROW_FIREWORK);
+	}});
 }
 
 void CObjectFactory::Ready_ObjectFactory()

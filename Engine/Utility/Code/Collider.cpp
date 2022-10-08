@@ -131,8 +131,8 @@ void CCollider::Check_Blocking()
 					if (coll_1->GetOwner() == coll_2->GetOwner()) continue;
 					COLLISION_TYPE c1 = coll_1->GetType();
 					COLLISION_TYPE c2 = coll_2->GetType();
-					const BLOCKING_TYPE eType1To2 = s_BlockingTypeMatrix[coll_1->GetType()][coll_2->GetType()];
-					const BLOCKING_TYPE eType2To1 = s_BlockingTypeMatrix[coll_2->GetType()][coll_1->GetType()];
+					const BLOCKING_TYPE eType1To2 = s_BlockingTypeMatrix[c1][c2];
+					const BLOCKING_TYPE eType2To1 = s_BlockingTypeMatrix[c2][c1];
 					if (eType1To2 == BLOCKING_END && eType2To1 == BLOCKING_END)
 						continue;
 

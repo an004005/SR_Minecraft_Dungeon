@@ -8,6 +8,7 @@
 
 ImGuiTextBuffer CImGuiMgr::s_log;
 SkeletalPart* CImGuiMgr::s_SelectedPart = nullptr;
+_bool CImGuiMgr::s_bShowColl = false;
 
 void CImGuiMgr::TransformEditor(CCamera* pCamera, CTransform* pTransform)
 {
@@ -191,16 +192,17 @@ void CImGuiMgr::LoggerWindow()
 	ImGui::Begin("Logger");
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
-	//_vec3 vpos = Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
-	//ImGui::Text("x : %f, z : %f", vpos.x, vpos.z);
-
+	// _vec3 vpos = Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+	// ImGui::Text("x : %f, z : %f", vpos.x, vpos.z);
+	if (ImGui::Checkbox("Show Collision", &s_bShowColl))
 
 	if (ImGui::Button("Clear")) { s_log.clear(); }
 	ImGui::SameLine();
 
 	ImGui::BeginChild("Log");
 	ImGui::SetWindowFontScale(1.1f);
-	ImGui::TextUnformatted(s_log.begin(), s_log.end());
+	ImGui::TextUnformatted(s_log.begin());
+	ImGui::SetScrollHereY(1.f);
 
 	ImGui::EndChild();
 	ImGui::End();
@@ -413,6 +415,7 @@ void CImGuiMgr::VIBufferSelector(wstring& strBuf)
 	static const vector<wstring> vecBufName{
 		L"Proto_CubeTexCom",
 		L"Proto_VoxelTex_Sword",
+		L"Proto_VoxelTex_Bow",
 	};
 	static size_t iCurIdx = 0;
 
