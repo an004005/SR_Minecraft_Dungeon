@@ -22,6 +22,8 @@ enum Animation
 	ANIM_END
 };
 
+
+
 class CEquipItem :
 	public CItem
 {
@@ -44,6 +46,7 @@ public:
 
 public:
 	const array<CubeAnimFrame, ANIM_END>& SetarrAnim(){ return m_arrAnim; }
+	ITEMTYPE GetItemType() { return m_eItemType; }
 
 protected:
 	Engine::CTexture*	m_pTextureCom = nullptr;
@@ -51,5 +54,6 @@ protected:
 	
 	array<CubeAnimFrame, ANIM_END> m_arrAnim;
 	_uint m_iAttackCnt = 0; // ÄÞº¸ ¹øÈ£
+	ITEMTYPE	m_eItemType;
 };
 

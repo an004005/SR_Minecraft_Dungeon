@@ -24,12 +24,14 @@ HRESULT CGlaive::Ready_Object()
 	m_arrAnim[ANIM_WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/glaive_walk.anim");
 	m_arrAnim[ANIM_WALK].bLoop = true;
 	m_arrAnim[ANIM_ATTACK1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/glaive_attack_a.anim");
-	m_arrAnim[ANIM_ATTACK2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/glavie_attack_b.anim");
+	m_arrAnim[ANIM_ATTACK2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/glaive_attack_a.anim");
+	m_arrAnim[ANIM_ATTACK3] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/glavie_attack_b.anim");
 	m_arrAnim[ANIM_ROLL] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/roll.anim");
 	m_arrAnim[ANIM_RANGE_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/crossbow_attack_start.anim");
 	m_arrAnim[ANIM_LEGACY1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/shock_powder.anim");
 	m_arrAnim[ANIM_LEGACY2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/shock_powder.anim");
 
+	m_eItemType = IT_MELEE;
 	return S_OK;
 }
 
@@ -58,15 +60,18 @@ _int CGlaive::Attack()
 
 	if (m_iAttackCnt == 0)
 	{
-
 		pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK1]);
+	}
+	else if(m_iAttackCnt == 1)
+	{
+		pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK2]);
 	}
 	else
 	{
 		pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK2]);
 	}
 
-	m_iAttackCnt = (m_iAttackCnt + 1) % 2;
+	m_iAttackCnt = (m_iAttackCnt + 1) % 3;
 
 	return m_iAttackCnt;
 }

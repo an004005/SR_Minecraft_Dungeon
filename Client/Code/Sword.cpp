@@ -32,6 +32,8 @@ HRESULT CSword::Ready_Object()
 	m_arrAnim[ANIM_LEGACY1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/shock_powder.anim");
 	m_arrAnim[ANIM_LEGACY2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/shock_powder.anim");
 
+	m_eItemType = IT_MELEE;
+
 	return S_OK;
 }
 

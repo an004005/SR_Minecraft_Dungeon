@@ -1,7 +1,7 @@
 #pragma once
 #include "SkeletalCube.h"
 #include "EquipItem.h"
-
+#include "Inventory.h"
 
 class CController;
 class CStatComponent;

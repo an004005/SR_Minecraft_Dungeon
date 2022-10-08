@@ -17,6 +17,8 @@
 #include "Crossbow.h"
 #include "Sword.h"
 #include "Glaive.h"
+#include "Box.h"
+#include "Inventory.h"
 
 
 
@@ -216,6 +218,14 @@ void CObjectFactory::Ready_ObjectFactory()
 	s_mapObjectSpawner.insert({ "RedStoneMonstrosityBullet", []()
 	{	
 		return CRedStoneMonstrosityBullet::Create(s_pGraphicDev);
+	} });
+	s_mapObjectSpawner.insert({ "Box", []()
+	{
+		return CBox::Create(s_pGraphicDev);
+	} });
+	s_mapObjectSpawner.insert({ "Inventory", []()
+	{
+		return CInventory::Create(s_pGraphicDev);
 	} });
 
 }

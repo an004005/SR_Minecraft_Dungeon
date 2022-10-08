@@ -167,11 +167,13 @@
     <ClInclude Include="..\Header\AbstFactory.h" />
     <ClInclude Include="..\Header\AnimationTool.h" />
     <ClInclude Include="..\Header\BackGround.h" />
+    <ClInclude Include="..\Header\Box.h" />
     <ClInclude Include="..\Header\Controller.h" />
     <ClInclude Include="..\Header\Creeper.h" />
     <ClInclude Include="..\Header\CreeperController.h" />
     <ClInclude Include="..\Header\Crossbow.h" />
     <ClInclude Include="..\Header\DynamicCamera.h" />
+    <ClInclude Include="..\Header\Dynamite.h" />
     <ClInclude Include="..\Header\Enchanter.h" />
     <ClInclude Include="..\Header\EnchanterController.h" />
     <ClInclude Include="..\Header\EquipItem.h" />
@@ -181,6 +183,7 @@
     <ClInclude Include="..\Header\Glaive.h" />
     <ClInclude Include="..\Header\ImGuiMgr.h" />
     <ClInclude Include="..\Header\ImSequencerImpl.h" />
+    <ClInclude Include="..\Header\Inventory.h" />
     <ClInclude Include="..\Header\Item.h" />
     <ClInclude Include="..\Header\Loading.h" />
     <ClInclude Include="..\Header\MapTool.h" />
@@ -233,11 +236,13 @@
     <ClCompile Include="..\Code\AbstFactory.cpp" />
     <ClCompile Include="..\Code\AnimationTool.cpp" />
     <ClCompile Include="..\Code\BackGround.cpp" />
+    <ClCompile Include="..\Code\Box.cpp" />
     <ClCompile Include="..\Code\Controller.cpp" />
     <ClCompile Include="..\Code\Creeper.cpp" />
     <ClCompile Include="..\Code\CreeperController.cpp" />
     <ClCompile Include="..\Code\Crossbow.cpp" />
     <ClCompile Include="..\Code\DynamicCamera.cpp" />
+    <ClCompile Include="..\Code\Dynamite.cpp" />
     <ClCompile Include="..\Code\Enchanter.cpp" />
     <ClCompile Include="..\Code\EnchanterController.cpp" />
     <ClCompile Include="..\Code\EquipItem.cpp" />
@@ -247,6 +252,7 @@
     <ClCompile Include="..\Code\Glaive.cpp" />
     <ClCompile Include="..\Code\ImGuiMgr.cpp" />
     <ClCompile Include="..\Code\ImSequencerImpl.cpp" />
+    <ClCompile Include="..\Code\Inventory.cpp" />
     <ClCompile Include="..\Code\Item.cpp" />
     <ClCompile Include="..\Code\Loading.cpp" />
     <ClCompile Include="..\Code\Logo.cpp" />

@@ -7,6 +7,8 @@
 CEquipItem::CEquipItem(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CItem(pGraphicDev)
 {
+	ZeroMemory(&m_arrAnim, sizeof(CubeAnimFrame) * ANIM_END);
+	m_eItemType = IT_END;
 }
 
 CEquipItem::~CEquipItem()

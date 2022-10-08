@@ -23,6 +23,9 @@ HRESULT CCrossbow::Ready_Object()
 	m_arrAnim[ANIM_ATTACK2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/crossbow_attack_loop.anim");
 	//Attack_end
 	m_arrAnim[ANIM_ATTACK3] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/crossbow_attack_end.anim");
+
+	m_eItemType = IT_RANGE;
+
 	return S_OK;
 }
 

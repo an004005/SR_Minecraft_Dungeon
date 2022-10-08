@@ -34,8 +34,6 @@ HRESULT CPlayer::Ready_Object()
 {
 	CSkeletalCube::Ready_Object();
 
-	
-	
 
 	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 	m_pCurAnim = m_pIdleAnim;
@@ -62,13 +60,13 @@ HRESULT CPlayer::Ready_Object()
 	m_RollCoolTime = 3.f;
 	m_CurRollCoolTime = 0.f;
 
-	m_pCrossbow = Get_GameObject<CCrossbow>(LAYER_ITEM, L"Crossbow");
+	/*m_pCrossbow = Get_GameObject<CCrossbow>(LAYER_ITEM, L"Crossbow");
 	m_pSword = Get_GameObject<CSword>(LAYER_ITEM, L"Sword");
 	m_pGlaive = Get_GameObject<CGlaive>(LAYER_ITEM, L"Glaive");
 
 	m_pCurWeapon = m_pSword;
 
-	m_arrAnim = m_pSword->SetarrAnim();
+	m_arrAnim = m_pSword->SetarrAnim();*/
 	return S_OK;
 }
 
@@ -288,7 +286,7 @@ void CPlayer::StateChange()
 		m_eState = IDLE;
 		m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 		m_pCurAnim = &m_arrAnim[ANIM_IDLE];
-		WeaponChange(m_pCurWeapon);
+		//WeaponChange(m_pCurWeapon);
 		return;
 	}
 }

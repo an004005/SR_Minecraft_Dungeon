@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PlayerController.h"
 #include "Player.h"
+#include "Box.h"
 
 CPlayerController::CPlayerController() : CController()
 {
@@ -57,6 +58,12 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 		{
 			m_vPressDir.x += 1.f;
 		}
+	}
+	
+	//box open
+	if (DIKeyDown(DIK_F))
+	{
+		Get_GameObject<CBox>(LAYER_GAMEOBJ, L"Box")->BoxOpen();
 	}
 
 	if (false == CGameUtilMgr::Vec3Cmp(m_vPressDir, m_vPrevPressDir)) // 이동 입력 없으면 방향 계산 안하기
