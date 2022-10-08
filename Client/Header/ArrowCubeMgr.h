@@ -27,7 +27,7 @@ private:
 	virtual void Free() override;
 
 public:
-	void Add_Arrow(CTransform* pArrowTransform)
+	void Add_Arrow(Engine::CTransform* pArrowTransform)
 	{
 		m_vecArrowTrans.push_back(pArrowTransform);
 	}
@@ -43,5 +43,5 @@ private:
 
 	LPDIRECT3DVERTEXBUFFER9		m_pVBMatrix = nullptr; // 정점 위치 보관용
 
-	vector<CTransform*> m_vecArrowTrans;
+	vector<Engine::CTransform*> m_vecArrowTrans;
 };

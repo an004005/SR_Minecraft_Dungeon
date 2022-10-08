@@ -147,7 +147,7 @@ public:
 	{
 		T* pCasted = Create<T>(strFactoryTag, wstrObjTag, fDamage);
 
-		CTransform* pTrans = pCasted->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+		Engine::CTransform* pTrans = pCasted->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
 		pTrans->m_vInfo[INFO_POS] = vPos;
 		pTrans->RotateToLookAt(vLookAt);
 
