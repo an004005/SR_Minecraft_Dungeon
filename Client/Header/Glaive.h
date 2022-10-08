@@ -16,7 +16,7 @@ public:
 	virtual void Free() override;
 	virtual _int Attack() override;
 	virtual void Equipment(SkeletalPart* pSkeletalPart) override;
-
+	virtual void Collision() override;
 
 };
 

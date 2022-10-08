@@ -2,7 +2,7 @@
 #include "..\Header\EquipItem.h"
 #include "Player.h"
 #include "SkeletalCube.h"
-
+#include "Transform.h"
 
 CEquipItem::CEquipItem(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CItem(pGraphicDev)
@@ -15,7 +15,6 @@ CEquipItem::~CEquipItem()
 
 HRESULT CEquipItem::Ready_Object()
 {
-
 	return S_OK;
 }
 

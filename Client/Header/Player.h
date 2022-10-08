@@ -2,6 +2,7 @@
 #include "SkeletalCube.h"
 #include "EquipItem.h"
 
+
 class CController;
 class CStatComponent;
 class CCrossbow;
@@ -55,6 +56,7 @@ public:
 
 	virtual void AttackState();
 	void StateChange();
+	_vec3 GetInfo(INFOID eID) { return m_pRootPart->pTrans->m_vInfo[eID]; }
 
 	// controller 입력함수
 	void SetMoveDir(_float fX, _float fZ);

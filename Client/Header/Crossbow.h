@@ -16,8 +16,9 @@ public:
 	virtual void Render_Object() override;
 	static CCrossbow* Create(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual void Free() override;
-
+	virtual _int Attack() override;
 	virtual void Equipment(SkeletalPart* pSkeletalPart) override;
+	//virtual void Collision() override;
 
 };
 

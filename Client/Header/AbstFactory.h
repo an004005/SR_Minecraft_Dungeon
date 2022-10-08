@@ -30,7 +30,7 @@ public:
 		_ASSERT_CRASH(pCasted != nullptr);
 		Engine::AddGameObject(LAYER_PLAYER, wstrObjTag, pCasted);
 
-		CTransform* pTrans = pCasted->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC);
+		Engine::CTransform* pTrans = pCasted->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC);
 		pTrans->Set_WorldDecompose(matWorld);
 
 		return pCasted;
@@ -95,7 +95,7 @@ public:
 	{
 		T* pCasted = Create<T>(strFactoryTag, wstrObjTag);
 
-		CTransform* pTrans = pCasted->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+		Engine::CTransform* pTrans = pCasted->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
 		pTrans->m_vInfo[INFO_POS] = vPos;
 		pTrans->Update_Component(0.f);
 
@@ -179,7 +179,7 @@ public:
 	{
 		T* pCasted = Create<T>(strFactoryTag, wstrObjTag);
 
-		CTransform* pTrans = pCasted->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+		Engine::CTransform* pTrans = pCasted->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
 		pTrans->m_vInfo[INFO_POS] = vPos;
 		pTrans->Update_Component(0.f);
 

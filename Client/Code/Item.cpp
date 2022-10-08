@@ -13,7 +13,7 @@ CItem::~CItem()
 
 HRESULT CItem::Ready_Object()
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 _int CItem::Update_Object(const _float & fTimeDelta)

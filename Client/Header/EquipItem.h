@@ -2,6 +2,8 @@
 #include "Item.h"
 #include "SkeletalCube.h"
 
+class CTransform;
+
 enum Animation
 {
 	ANIM_WALK,
@@ -35,7 +37,7 @@ public:
 	static CEquipItem* Create(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual void Free() override;
 	virtual void Equipment(SkeletalPart* pSkeletalPart) {}
-
+	virtual void Collision() {}
 	//현제 플레이어 한명일때만 가정해서 구현. 서버되면 수정
 	virtual _int Attack() { return 0; }
 
@@ -47,10 +49,7 @@ protected:
 	Engine::CTexture*	m_pTextureCom = nullptr;
 	Engine::CVoxelTex*	m_pBufferCom = nullptr;
 	
-
 	array<CubeAnimFrame, ANIM_END> m_arrAnim;
 	_uint m_iAttackCnt = 0; // 콤보 번호
-
-	//CubeAnimFrame m_arrAnim[ANIM_END];
 };
 

@@ -2,7 +2,8 @@
 #include "..\Header\Sword.h"
 #include "SkeletalCube.h"
 #include "Player.h"
-
+#include "Monster.h"
+#include "StatComponent.h"
 
 CSword::CSword(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CEquipItem(pGraphicDev)
@@ -15,6 +16,7 @@ CSword::~CSword()
 
 HRESULT CSword::Ready_Object()
 {
+	CEquipItem::Ready_Object();
 	m_pBufferCom = Add_Component<CVoxelTex>(L"Proto_VoxelTex_Sword", L"Proto_VoxelTex_Sword", ID_STATIC);
 	m_pTextureCom = Add_Component<CTexture>(L"Proto_WeaponTexture", L"Proto_WeaponTexture", ID_STATIC);
 
@@ -36,18 +38,17 @@ HRESULT CSword::Ready_Object()
 _int CSword::Update_Object(const _float & fTimeDelta)
 {
 	CEquipItem::Update_Object(fTimeDelta);
+	
 	return 0;
 }
 
 void CSword::LateUpdate_Object()
 {
 	CEquipItem::LateUpdate_Object();
-
 }
 
 void CSword::Render_Object()
 {
-	
 }
 
 CSword * CSword::Create(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -71,6 +72,7 @@ void CSword::Free()
 _int CSword::Attack()
 {
 	CPlayer* pPlayer = Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");
+
 	if (pPlayer == nullptr)
 		return 0;
 
@@ -97,4 +99,29 @@ void CSword::Equipment(SkeletalPart * pSkeletalPart)
 	pSkeletalPart->pBuf = m_pBufferCom;
 	pSkeletalPart->pTex = m_pTextureCom;
 	pSkeletalPart->iTexIdx = 0;
+}
+
+void CSword::Collision()
+{
+	set<CGameObject*> objSet;
+
+	CPlayer* pPlayer =Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");
+	_vec3 vPos = pPlayer->GetInfo(INFO_POS);
+	_vec3 vLook = pPlayer->GetInfo(INFO_LOOK);
+	
+	_vec3 vAttackPos = vPos + (vLook * 2.f);
+	Engine::GetOverlappedObject(OUT objSet, vAttackPos, 2.f);
+	for (auto& obj : objSet)
+	{
+		if (CMonster* monster = dynamic_cast<CMonster*>(obj))
+		{
+			DamageType eDT = DT_END;
+			if (m_iAttackCnt == 0) eDT = DT_KNOCK_BACK;
+			if (monster->CheckCC()) eDT = DT_END;
+			monster->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+				->TakeDamage(30, vPos, this, eDT);
+		}
+	}
+
+	DEBUG_SPHERE(vAttackPos, 2.f, 1.f);
 }

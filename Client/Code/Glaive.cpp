@@ -2,7 +2,8 @@
 #include "..\Header\Glaive.h"
 #include "SkeletalCube.h"
 #include "Player.h"
-
+#include "StatComponent.h"
+#include "Monster.h"
 
 CGlaive::CGlaive(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CEquipItem(pGraphicDev)
@@ -93,4 +94,29 @@ void CGlaive::Equipment(SkeletalPart * pSkeletalPart)
 	pSkeletalPart->pBuf = m_pBufferCom;
 	pSkeletalPart->pTex = m_pTextureCom;
 	pSkeletalPart->iTexIdx = 1;
+}
+
+void CGlaive::Collision()
+{
+	set<CGameObject*> objSet;
+
+	CPlayer* pPlayer = Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");
+	_vec3 vPos = pPlayer->GetInfo(INFO_POS);
+	_vec3 vLook = pPlayer->GetInfo(INFO_LOOK);
+
+	_vec3 vAttackPos = vPos + (vLook * 2.5f);
+	Engine::GetOverlappedObject(OUT objSet, vAttackPos, 2.5f);
+	for (auto& obj : objSet)
+	{
+		if (CMonster* monster = dynamic_cast<CMonster*>(obj))
+		{
+			DamageType eDT = DT_END;
+			if (m_iAttackCnt == 0) eDT = DT_KNOCK_BACK;
+			if (monster->CheckCC()) eDT = DT_END;
+			monster->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+				->TakeDamage(30, vPos, this, eDT);
+		}
+	}
+
+	DEBUG_SPHERE(vAttackPos, 2.5f, 1.f);
 }

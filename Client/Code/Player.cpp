@@ -123,24 +123,7 @@ void CPlayer::LateUpdate_Object()
 	{
 		if (m_bApplyMeleeAttackNext)
 		{
-			set<CGameObject*> objSet;
-			_vec3 vAttackPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + (m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 2.f);
-			Engine::GetOverlappedObject(OUT objSet, vAttackPos, 2.f);
-			for (auto& obj : objSet)
-			{
-				if (CMonster* monster = dynamic_cast<CMonster*>(obj))
-				{
-					DamageType eDT = DT_END;
-					if (m_iAttackCnt == 0) eDT = DT_KNOCK_BACK;
-					if (monster->CheckCC()) eDT = DT_END;
-					monster->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-					       ->TakeDamage(30, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, eDT);
-				}
-			}
-
-
-			DEBUG_SPHERE(vAttackPos, 2.f, 1.f);
-
+			m_pCurWeapon->Collision();
 			m_bApplyMeleeAttackNext = false;
 		}
 
