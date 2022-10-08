@@ -1,5 +1,8 @@
 #include "stdafx.h"
 #include "..\Header\StatComponent.h"
+
+#include "AbstFactory.h"
+#include "Particle.h"
 #include "TerrainCubeMap.h"
 
 
