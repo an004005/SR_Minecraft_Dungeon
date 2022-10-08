@@ -75,6 +75,7 @@ public:
 	virtual void LateUpdate_Object() override;
 	virtual void Render_Object() override;
 	virtual void RenderObjectRecur(SkeletalPart* pPart);
+	void RenderInstanceRecur(SkeletalPart* pPart);
 	virtual void Free() override;
 
 
@@ -97,7 +98,7 @@ private:
 	virtual void DeleteRecursive(const string& strPart);
 	static void TransFrameLerp(_matrix& matOut, const TransFrame& PrevFrame, const TransFrame& NextFrame, const _float fS);
 	virtual void AnimFrameConsume(_float fTimeDelta);
-
+	static const map<string, PartOrder> s_mapNeedPart;
 
 protected:
 	static string s_strRoot;
@@ -114,4 +115,7 @@ protected:
 
 	_bool m_bStopAnim = false;
 	_bool m_bReserveStop = false;
+
+	_bool m_bInstancing = false;
+	CCubeTex6* m_pCubeTex6 = nullptr;
 };

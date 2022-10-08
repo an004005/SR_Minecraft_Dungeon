@@ -55,7 +55,6 @@ namespace Engine
 
 	const _ulong		FVF_CUBE2 = D3DFVF_XYZ | D3DFVF_TEX1;
 
-
 	//MapImGuiTool
 	typedef struct maptool
 	{

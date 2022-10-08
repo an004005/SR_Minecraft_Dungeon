@@ -13,6 +13,7 @@
 #include "ParticleSystem.h"
 #include "Collider.h"
 #include "RcShader.h"
+#include "CubeTex6.h"
 
 #include "Transform.h"
 #include "Calculator.h"

@@ -3,6 +3,10 @@
 #include "GameUtilMgr.h"
 
 string CSkeletalCube::s_strRoot = "root";
+const map<string, PartOrder> CSkeletalCube::s_mapNeedPart
+{
+	{"head", HEAD}, {"body", BODY}, {"arm_l", ARM_L}, {"arm_r", ARM_R}, {"leg_l", LEG_L}, {"leg_r", LEG_R}
+};
 
 CSkeletalCube::CSkeletalCube(LPDIRECT3DDEVICE9 pGraphicDev): CGameObject(pGraphicDev)
 {
@@ -50,33 +54,40 @@ void CSkeletalCube::LateUpdate_Object()
 void CSkeletalCube::Render_Object()
 {
 	// // m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
- //   m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
- //   m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
- //   m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
- //   m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
- //   m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0xcc);
- //   m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+	//   m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	//   m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	//   m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	//   m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	//   m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0xcc);
+	//   m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
-	m_pRootPart->matParents = m_pRootPart->pTrans->m_matWorld;
-	for (const auto& child : m_pRootPart->vecChild)
+	if (m_bInstancing)
 	{
-	
-		RenderObjectRecur(child);
-		
+		m_pRootPart->matParents = m_pRootPart->pTrans->m_matWorld;
+		for (const auto& child : m_pRootPart->vecChild)
+		{
+			RenderInstanceRecur(child);
+		}
+		m_pCubeTex6->Render_Buffer();
+	}
+	else
+	{
+		m_pRootPart->matParents = m_pRootPart->pTrans->m_matWorld;
+		for (const auto& child : m_pRootPart->vecChild)
+		{
+			RenderObjectRecur(child);
+		}
 	}
 
-   // m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-   // m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
+	// m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+	// m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 }
 
 void CSkeletalCube::RenderObjectRecur(SkeletalPart* pPart)
 {
 	const _matrix matPartWorld = pPart->GetWorldMat();
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &matPartWorld);
-	if (pPart->strName == "bow")
-	{
-		int a= 3;
-	}
 	if (pPart->pTex)
 		pPart->pTex->Set_Texture(pPart->iTexIdx);
 	if (pPart->pBuf)
@@ -84,6 +95,20 @@ void CSkeletalCube::RenderObjectRecur(SkeletalPart* pPart)
 
 	for (const auto& child : pPart->vecChild)
 		RenderObjectRecur(child);
+}
+
+void CSkeletalCube::RenderInstanceRecur(SkeletalPart* pPart)
+{
+	const auto itr = s_mapNeedPart.find(pPart->strName);
+	if (itr == s_mapNeedPart.end())
+	{
+		RenderObjectRecur(pPart);
+		return;
+	}
+
+	m_pCubeTex6->SetPartWorldMatrix(pPart->GetWorldMat(), itr->second);
+	for (const auto& child : pPart->vecChild)
+		RenderInstanceRecur(child);
 }
 
 void CSkeletalCube::Free()
@@ -195,7 +220,7 @@ void CSkeletalCube::AnimFrameConsume(_float fTimeDelta)
 
 	if (m_pCurAnim == nullptr) return;
 
-	
+
 	for (const auto& animEvent : m_pCurAnim->vecEvent)
 	{
 		if (m_fAccTime <= animEvent.first && m_fAccTime + fTimeDelta >= animEvent.first)
@@ -234,7 +259,7 @@ void CSkeletalCube::AnimFrameConsume(_float fTimeDelta)
 
 		const TransFrame* pPrevFrame = nullptr;
 		const TransFrame* pNextFrame = nullptr;
-		
+
 		for (auto& frame : vecTransFrame)
 		{
 			const _float fTime = frame.fTime;
@@ -259,12 +284,12 @@ void CSkeletalCube::AnimFrameConsume(_float fTimeDelta)
 				pPrevFrame->vPos);
 			continue;
 		}
-		
+
 		const _float fS = (m_fAccTime - pPrevFrame->fTime) / (pNextFrame->fTime - pPrevFrame->fTime);
 		TransFrameLerp(
-			OUT Part.second->pTrans->m_matWorld, 
-			*pPrevFrame, 
-			*pNextFrame, 
+			OUT Part.second->pTrans->m_matWorld,
+			*pPrevFrame,
+			*pNextFrame,
 			fS);
 	}
 }
@@ -354,7 +379,7 @@ void CSkeletalCube::LoadSkeletal(wstring wstrPath)
 		// local, world mat
 		ReadFile(hFile, &matLocal, sizeof(_matrix), &dwByte, nullptr);
 		ReadFile(hFile, &matWorld, sizeof(_matrix), &dwByte, nullptr);
-		
+
 		const auto itr_part = m_mapParts.find(strPart);
 		if (itr_part != m_mapParts.end())
 		{
@@ -364,6 +389,28 @@ void CSkeletalCube::LoadSkeletal(wstring wstrPath)
 	}
 
 	CloseHandle(hFile);
+	// return;
+	size_t iCnt = 0;
+	for (const auto& part : m_mapParts)
+	{
+		if (s_mapNeedPart.find(part.second->strName) != s_mapNeedPart.end())
+			++iCnt;
+	}
+
+	if (iCnt != s_mapNeedPart.size()) return;
+
+	m_bInstancing = true;
+	m_pCubeTex6 = Add_Component<CCubeTex6>(L"Proto_CubeTexCom6", L"Proto_CubeTexCom6", ID_STATIC);
+
+	for (const auto& part : m_mapParts)
+	{
+		SkeletalPart* pPart = part.second;
+		if (s_mapNeedPart.find(part.second->strName) == s_mapNeedPart.end())
+			continue;
+
+		PartOrder eOrder = s_mapNeedPart.find(pPart->strName)->second;
+		m_pCubeTex6->SetPartTexture(pPart->pTex->GetDXTexture(pPart->iTexIdx), eOrder);
+	}
 }
 
 void CSkeletalCube::SaveSkeletal(wstring wstrPath)
@@ -407,18 +454,17 @@ void CSkeletalCube::SaveRecursive(HANDLE hFile, SkeletalPart* pPart)
 	if (pPart->strName == "bow")
 	{
 		wstring pro = L"Proto_VoxelTex_Bow";
-	
-	dwStrByte = (DWORD)pro.size() * sizeof(_tchar);
-	WriteFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
-	WriteFile(hFile, pro.c_str(), dwStrByte, &dwByte, nullptr);
+
+		dwStrByte = (DWORD)pro.size() * sizeof(_tchar);
+		WriteFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
+		WriteFile(hFile, pro.c_str(), dwStrByte, &dwByte, nullptr);
 	}
 	else
 	{
-	dwStrByte = (DWORD)pPart->strBufProto.size() * sizeof(_tchar);
-	WriteFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
-	WriteFile(hFile, pPart->strBufProto.c_str(), dwStrByte, &dwByte, nullptr);
+		dwStrByte = (DWORD)pPart->strBufProto.size() * sizeof(_tchar);
+		WriteFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
+		WriteFile(hFile, pPart->strBufProto.c_str(), dwStrByte, &dwByte, nullptr);
 	}
-
 
 
 	// Tex proto name, idx
@@ -481,7 +527,7 @@ void CSkeletalCube::DeleteRecursive(const string& strPart)
 }
 
 void CSkeletalCube::TransFrameLerp(_matrix& matOut, const TransFrame& PrevFrame, const TransFrame& NextFrame,
-	const _float fS)
+                                   const _float fS)
 {
 	const _vec3 vPrevScale = PrevFrame.vScale;
 	const D3DXQUATERNION qPrevQuat = PrevFrame.qRot;
@@ -569,6 +615,7 @@ CubeAnimFrame CubeAnimFrame::Load(const wstring& wstrPath)
 
 	CloseHandle(hFile);
 
+
 	return tmp;
 }
 
@@ -614,14 +661,12 @@ void CubeAnimFrame::Save(const wstring& wstrPath)
 	WriteFile(hFile, &eventSize, sizeof(size_t), &dwByte, nullptr);
 	for (size_t i = 0; i < eventSize; ++i)
 	{
-		
 		WriteFile(hFile, &vecEvent[i].first, sizeof(_float), &dwByte, nullptr);
 		dwStrByte = (DWORD)vecEvent[i].second.size();
 		WriteFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
 		WriteFile(hFile, vecEvent[i].second.c_str(), dwStrByte, &dwByte, nullptr);
-		
 	}
-	
+
 	CloseHandle(hFile);
 }
 

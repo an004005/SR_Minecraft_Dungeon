@@ -132,6 +132,9 @@
     <ClInclude Include="..\..\Header\RcShader.h">
       <Filter>00. Component\00. VIBuffer\RcShader</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Header\CubeTex6.h">
+      <Filter>00. Component\00. VIBuffer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\VIBuffer.cpp">
@@ -205,6 +208,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\RcShader.cpp">
       <Filter>00. Component\00. VIBuffer\RcShader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\CubeTex6.cpp">
+      <Filter>00. Component\00. VIBuffer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
