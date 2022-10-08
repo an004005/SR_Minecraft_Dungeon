@@ -49,7 +49,7 @@ HRESULT CVoxelTex::Ready_Buffer(const char* strTexPath, _float fCellSize)
 	_float h2 = 0.5f;
 	_float d2 = 0.5f;
 
-	static VTXCUBE2 tVtxCubeDefault[FACE_END][4]
+	VTXCUBE2 tVtxCubeDefault[FACE_END][4]
 	{
 		{
 			{{-w2, -h2, +d2}, {}},

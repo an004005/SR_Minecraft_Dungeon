@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "TerrainCubeMap.h"
 
+class CArrowCubeMgr;
 class CArrowCube;
 
 class CStage : public Engine::CScene

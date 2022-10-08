@@ -17,7 +17,7 @@ public:
 	static void MatWorldComposeEuler(OUT _matrix& matOut, const _vec3& vScale, const _vec3& vAngle, const _vec3& vPos);
 	static void MatWorldDecompose(const _matrix& matWorld, OUT _vec3& vScale, OUT _vec3& vAngle, OUT _vec3& vPos);
 	static void GetRandomVector(_vec3* out, _vec3* min, _vec3* max);
-
+	static void RemoveScale(_matrix& matOut);
 	static _float Vec3LenXZ(const _vec3& v1);
 	static _float GetRandomFloat(_float lowBound, _float highBound);
 

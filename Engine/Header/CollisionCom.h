@@ -31,6 +31,11 @@ public:
 	void SetRadius(_float fRadius) { m_fRadius = fRadius; }
 	void SetCollType(COLLISION_TYPE eType) { m_eType = eType; }
 	void SetCollOffset(const _vec3& vOffset) { m_vOffset = vOffset; }
+	void SetCallBack(std::function<void(CCollisionCom*)> pDynamicCallBack, std::function<void(_vec3, _float)> pStaticCallBack)
+	{
+		m_pCollisionDynamic = pDynamicCallBack;
+		m_pCollisionStatic = pStaticCallBack;
+	}
 	//
 
 	CGameObject* GetOwner() const { return m_pOwner; }

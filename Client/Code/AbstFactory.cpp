@@ -13,6 +13,7 @@
 #include "RedStoneCube.h"
 #include "RedStoneMonstrosity.h"
 #include "GeomancerWall.h"
+#include "Arrow.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -20,7 +21,7 @@ map<string, std::function<CGameObject*()>> CPlayerFactory::s_mapPlayerSpawner;
 map<string, std::function<CGameObject*()>> CEnemyFactory::s_mapEnemySpawner;
 map<string, std::function<CGameObject*()>> CEffectFactory::s_mapEffectSpawner;
 map<string, std::function<CGameObject*()>> CEnvFactory::s_mapEnvSpawner;
-map<string, std::function<CGameObject*()>> CBulletFactory::s_mapBulletSpawner;
+map<string, std::function<CGameObject*(_float)>> CBulletFactory::s_mapBulletSpawner;
 map<string, std::function<CGameObject*()>> CObjectFactory::s_mapObjectSpawner;
 
 void CAbstFactory::Ready_Factories(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -191,6 +192,18 @@ void CEnvFactory::Ready_EnvFactory()
 
 void CBulletFactory::Ready_BulletFactory()
 {
+	s_mapBulletSpawner.insert({"PlayerNormalArrow", [](_float fDamage)
+	{
+		return CArrow::Create(s_pGraphicDev, fDamage, COLL_PLAYER_BULLET);
+	}});
+	s_mapBulletSpawner.insert({"EnemyNormalArrow", [](_float fDamage)
+	{
+		return CArrow::Create(s_pGraphicDev, fDamage, COLL_ENEMY_BULLET);
+	}});
+	s_mapBulletSpawner.insert({"PlayerFireWorkArrow", [](_float fDamage)
+	{
+		return CArrow::Create(s_pGraphicDev, fDamage, COLL_PLAYER_BULLET, ARROW_FIREWORK);
+	}});
 }
 
 void CObjectFactory::Ready_ObjectFactory()

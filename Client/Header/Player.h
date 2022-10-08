@@ -67,7 +67,8 @@ private:
 
 
 protected:
-	CStatComponent* m_pStat;
+	CStatComponent* m_pStat = nullptr;
+	CCollisionCom* m_pColl = nullptr;
 
 	PlayerState m_eState = STATE_END;
 	array<CubeAnimFrame, ANIM_END> m_arrAnim;

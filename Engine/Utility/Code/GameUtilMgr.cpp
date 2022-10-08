@@ -179,6 +179,13 @@ void CGameUtilMgr::GetRandomVector(_vec3* out, _vec3* min, _vec3* max)
 	out->z = GetRandomFloat(min->z, max->z);
 }
 
+void CGameUtilMgr::RemoveScale(_matrix& matOut)
+{
+	D3DXVec3Normalize((_vec3*)(&matOut[0]), (_vec3*)(&matOut[0]));
+	D3DXVec3Normalize((_vec3*)(&matOut[1]), (_vec3*)(&matOut[1]));
+	D3DXVec3Normalize((_vec3*)(&matOut[2]), (_vec3*)(&matOut[2]));
+}
+
 _float CGameUtilMgr::Vec3LenXZ(const _vec3& v1)
 {
 	return sqrtf(v1.x * v1.x + v1.z * v1.z);

@@ -1,16 +1,10 @@
 #include "stdafx.h"
-#include "ArrowCube.h"
+#include "ArrowCubeMgr.h"
 #include "GameUtilMgr.h"
 
-// D3DVERTEXELEMENT9 BoxVTXInstance_Elements[] =
-// {
-// 	{0, 0, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION, 0},
-// 	{0, 12, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, 0},
-// 	{0, 20, D3DDECLTYPE_FLOAT1, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, 1},
-// 	D3DDECL_END()
-// };
+CArrowCubeMgr* CArrowCubeMgr::s_pInst = nullptr;
 
-D3DVERTEXELEMENT9 BoxVTXInstance_Elements[] =
+D3DVERTEXELEMENT9 BoxVTXInstance_Elements2[] =
 {
     { 0, 0,     D3DDECLTYPE_FLOAT3,     D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_POSITION,  0 },
     { 0, 12, D3DDECLTYPE_FLOAT2,     D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_TEXCOORD,  0 },
@@ -21,27 +15,28 @@ D3DVERTEXELEMENT9 BoxVTXInstance_Elements[] =
     D3DDECL_END()
 };
 
-CArrowCube::CArrowCube(LPDIRECT3DDEVICE9 pGraphicDev): CVIBuffer(pGraphicDev)
+CArrowCubeMgr::CArrowCubeMgr() : CVIBuffer(nullptr)
+{
+	
+}
+
+CArrowCubeMgr::CArrowCubeMgr(LPDIRECT3DDEVICE9 pGraphicDev): CVIBuffer(pGraphicDev)
 {
 }
 
-CArrowCube::CArrowCube(const CArrowCube& rhs): CVIBuffer(rhs)
+CArrowCubeMgr::~CArrowCubeMgr()
 {
 }
 
-CArrowCube::~CArrowCube()
-{
-}
-
-HRESULT CArrowCube::Ready_Buffer(float fSize)
+HRESULT CArrowCubeMgr::Ready_Buffer(float fSize)
 {
 	ID3DXBuffer* pCompilationErrors = 0;
 	DWORD dwShaderFlags = 0;
 
-	m_vecArrowWorld.resize(10);
-	
-	for(int i = 0; i< m_vecArrowWorld.size(); ++i)
-		CGameUtilMgr::MatWorldComposeEuler(m_vecArrowWorld[i], {1.f, 1.f, 1.f}, {0.f, 0.f, 0.f}, {_float(i), 0.f, 0.f});
+	// m_vecArrowWorld.resize(10);
+	//
+	// for(int i = 0; i< m_vecArrowWorld.size(); ++i)
+	// 	CGameUtilMgr::MatWorldComposeEuler(m_vecArrowWorld[i], {1.f, 1.f, 1.f}, {0.f, 0.f, 0.f}, {_float(i), 0.f, 0.f});
 
 #if _DEBUG
 	dwShaderFlags |= D3DXSHADER_DEBUG;
@@ -69,17 +64,17 @@ HRESULT CArrowCube::Ready_Buffer(float fSize)
 	FAILED_CHECK_RETURN(
 		D3DXCreateTextureFromFile(m_pGraphicDev, L"../Bin/Resource/Texture/arrow/arrow_color.png", (LPDIRECT3DTEXTURE9*)
 			&m_pTexture), E_FAIL);
-		FAILED_CHECK_RETURN(m_pGraphicDev->CreateVertexDeclaration(BoxVTXInstance_Elements, &m_pVtxDeclare), E_FAIL);
+		FAILED_CHECK_RETURN(m_pGraphicDev->CreateVertexDeclaration(BoxVTXInstance_Elements2, &m_pVtxDeclare), E_FAIL);
 
 	m_dwVtxCnt = 0;
 	m_dwTriCnt = 0;
-	m_dwVtxSize = sizeof(BoxVTXInstance);
+	m_dwVtxSize = sizeof(tagVertexCubeTex2);
 	m_dwFVF = 0;
 
 	m_dwIdxSize = sizeof(INDEX32);
 	m_IdxFmt = D3DFMT_INDEX32;
 
-	vector<BoxVTXInstance> vecVTXInst;
+	vector<tagVertexCubeTex2> vecVTXInst;
 	vector<INDEX32> vecIdx;
 
 	static _vec2 vBodyUV[4]
@@ -95,8 +90,8 @@ HRESULT CArrowCube::Ready_Buffer(float fSize)
 		{2.f / 3.f, 0.f}, {1.f, 0.f}, {2.f / 3.f, 1.f}, {1.f, 1.f}
 	};
 
-	BoxVTXInstance DefaultCubeVtx[FACE_END][4]{};
-	BoxVTXInstance ArrowVtx[5][FACE_END][4]{};
+	tagVertexCubeTex2 DefaultCubeVtx[FACE_END][4]{};
+	tagVertexCubeTex2 ArrowVtx[5][FACE_END][4]{};
 	_matrix matTrans;
 
 	// make arrow vtx
@@ -197,36 +192,35 @@ HRESULT CArrowCube::Ready_Buffer(float fSize)
 
 	FAILED_CHECK_RETURN(CVIBuffer::Ready_Buffer(), E_FAIL);
 
-	BoxVTXInstance* pVertex = nullptr;
+	tagVertexCubeTex2* pVertex = nullptr;
 	INDEX32* pIndex = nullptr;
 
 	m_pVB->Lock(0, 0, (void**)&pVertex, 0);
-	memcpy(pVertex, vecVTXInst.data(), sizeof(BoxVTXInstance) * vecVTXInst.size());
+	memcpy(pVertex, vecVTXInst.data(), sizeof(tagVertexCubeTex2) * vecVTXInst.size());
 	m_pVB->Unlock();
 
 	m_pIB->Lock(0, 0, (void**)&pIndex, 0);
 	memcpy(pIndex, vecIdx.data(), sizeof(INDEX32) * vecIdx.size());
 	m_pIB->Unlock();
 
-    // m_hMat = m_pEffect->GetParameterBySemantic( NULL, "BOXINSTANCEARRAY_POSITION" );
-
-
+	m_pGraphicDev->CreateVertexBuffer( ARROW_SIZE * sizeof(_matrix), 0, 0,
+                                              D3DPOOL_MANAGED, &m_pVBMatrix, 0 );
 	return S_OK;
 }
 
-void CArrowCube::Render_Buffer()
+void CArrowCubeMgr::Render_Buffer()
 {
-	if (m_iPreSize != m_vecArrowWorld.size())
-	{
-		m_pGraphicDev->CreateVertexBuffer( m_vecArrowWorld.size() * sizeof(_matrix), 0, 0,
-                                                  D3DPOOL_MANAGED, &m_pVBMatrix, 0 );
-		_matrix* pIPos;
-		m_pVBMatrix->Lock(0, NULL, ( void** )&pIPos, 0);
-		memcpy(pIPos, m_vecArrowWorld.data(), sizeof(_matrix) * m_vecArrowWorld.size());
-		m_pVBMatrix->Unlock();
+	if (m_vecArrowTrans.empty()) return;
 
-		m_iPreSize = m_vecArrowWorld.size();
-	}
+	const size_t iMaxRenderCnt = m_vecArrowTrans.size() > ARROW_SIZE ? ARROW_SIZE : m_vecArrowTrans.size();
+
+	_matrix* pIPos;
+	m_pVBMatrix->Lock(0, NULL, ( void** )&pIPos, 0);
+	ZeroMemory(pIPos, sizeof(_matrix) * ARROW_SIZE);
+	for (size_t i = 0; i < iMaxRenderCnt; ++i)
+		pIPos[i] = m_vecArrowTrans[i]->m_matWorld;
+	m_pVBMatrix->Unlock();
+
 
 	_matrix view, proj;
 	m_pGraphicDev->GetTransform(D3DTS_VIEW, &view);
@@ -237,7 +231,7 @@ void CArrowCube::Render_Buffer()
 
 	m_pGraphicDev->SetVertexDeclaration(m_pVtxDeclare);
 	m_pGraphicDev->SetStreamSource(0, m_pVB, 0, m_dwVtxSize);
-	m_pGraphicDev->SetStreamSourceFreq( 0, D3DSTREAMSOURCE_INDEXEDDATA | m_iPreSize );
+	m_pGraphicDev->SetStreamSourceFreq( 0, D3DSTREAMSOURCE_INDEXEDDATA | ARROW_SIZE );
 
 	m_pGraphicDev->SetStreamSource( 1, m_pVBMatrix, 0, sizeof(_matrix));
 	m_pGraphicDev->SetStreamSourceFreq( 1, D3DSTREAMSOURCE_INSTANCEDATA | 1ul);
@@ -260,33 +254,38 @@ void CArrowCube::Render_Buffer()
 
 	m_pGraphicDev->SetStreamSourceFreq( 0, 1 );
 	m_pGraphicDev->SetStreamSourceFreq( 1, 1 );
+
+	m_vecArrowTrans.clear();
 }
 
-CComponent* CArrowCube::Clone()
+CComponent* CArrowCubeMgr::Clone()
 {
-	// _CRASH("Dont clone this");
+	_CRASH("Dont clone this");
 	return nullptr;
 }
 
-void CArrowCube::Free()
+void CArrowCubeMgr::Free()
 {
 	Safe_Release(m_pTexture);
 	Safe_Release(m_pEffect);
 	Safe_Release(m_pVtxDeclare);
 	Safe_Release(m_pVBMatrix);
+
 	CVIBuffer::Free();
+
+	delete s_pInst;
+	s_pInst = nullptr;
 }
 
-CArrowCube* CArrowCube::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+void CArrowCubeMgr::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
-	CArrowCube* pInstance = new CArrowCube(pGraphicDev);
-
-	if (FAILED(pInstance->Ready_Buffer()))
+	if (s_pInst == nullptr)
 	{
-		Safe_Release(pInstance);
-		return nullptr;
+		s_pInst = new CArrowCubeMgr(pGraphicDev);
+		if (FAILED(s_pInst->Ready_Buffer()))
+		{
+			Safe_Release(s_pInst);
+			_CRASH("Fail cube arrow mgr");
+		}
 	}
-
-
-	return pInstance;
 }
