@@ -2,7 +2,6 @@
 #include "..\Header\MainApp.h"
 #include "AbstFactory.h"
 #include "ImGuiMgr.h"
-#include "Logo.h"
 #include "AnimationTool.h"
 #include "MapTool.h"
 #include "UItool.h"
@@ -163,7 +162,7 @@ HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement
 	 // CAnimationTool::Create(pGraphicDev);
 	//CMapTool::Create(pGraphicDev);
 	 // Engine::Set_Scene(CStage::Create(pGraphicDev));
-	CSceneFactory::LoadScene("IU", "Stage_Default");
+	CSceneFactory::LoadScene("Loading1", "Stage_Default");
 
 
 
@@ -252,8 +251,9 @@ HRESULT CMainApp::Ready_Proto()
 
 	// UI
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_RcTexCom", CRcTex::Create(m_pGraphicDev)), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_UI_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/UI/UI_%d.png", TEX_NORMAL, 14)), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_LogoTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Logo/IU.jpg", TEX_NORMAL)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_HPHeart", CRcTex::Create(m_pGraphicDev)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_UI_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/UI/UI_%d.png", TEX_NORMAL, 15)), E_FAIL);
+	// FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Loading", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Loading/loading%d.png", TEX_NORMAL, 1)), E_FAIL);
 
 	return S_OK;
 }

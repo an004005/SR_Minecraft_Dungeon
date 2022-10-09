@@ -25,7 +25,6 @@ private:
 	CRcTex*				m_pBufferCom = nullptr;
 	CTransform*			m_pTransCom = nullptr;
 	CTexture*			m_pTextureCom = nullptr;
-	CFontMgr*			m_pFontCom = nullptr;
 
 private: /* 직교투영행렬. */
 	_matrix				m_ProjMatrix;

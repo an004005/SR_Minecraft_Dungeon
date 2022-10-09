@@ -24,9 +24,11 @@
 #include "Inventory.h"
 #include "Dynamite.h"
 #include "UI.h"
-#include "Logo.h"
 #include "Stage.h"
 #include "AnimationTool.h"
+#include "Loading.h"
+#include "MapTool.h"
+#include "TerrainCubeMap.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -37,7 +39,7 @@ map<string, std::function<CGameObject*()>> CEnvFactory::s_mapEnvSpawner;
 map<string, std::function<CGameObject*(_float)>> CBulletFactory::s_mapBulletSpawner;
 map<string, std::function<CGameObject*()>> CObjectFactory::s_mapObjectSpawner;
 map<string, std::function<CGameObject*()>> CItemFactory::s_mapItemSpawner;
-map<string, std::function<CGameObject*()>> CUIFactory::s_mapUISpawner;
+map<string, std::function<CGameObject*(_uint)>> CUIFactory::s_mapUISpawner;
 
 map<string, std::function<CScene*()>> CSceneFactory::s_mapLoadingSpawner;
 map<string, std::function<CScene*()>> CSceneFactory::s_mapSceneSpawner;
@@ -361,95 +363,99 @@ void CItemFactory::Ready_ItemFactory()
 
 void CUIFactory::Ready_UIFactory()
 {
-	s_mapUISpawner.insert({ "UITexture", []()
-	{
-		return CUI::Create(s_pGraphicDev, 0);
-	} });
-
-	s_mapUISpawner.insert({ "UI_HP", []()
-	{
-		return CUI::Create(s_pGraphicDev, 1);
-	} });
-
-	s_mapUISpawner.insert({ "UI_MinusHP", []()
-	{
-		return CUI::Create(s_pGraphicDev, 1);
-	} });
-
-	s_mapUISpawner.insert({ "Inven", []()
-	{
-		return CUI::Create(s_pGraphicDev, 2);
-	} });
-
-	s_mapUISpawner.insert({ "InvenTool", []()
-	{
-		return CUI::Create(s_pGraphicDev, 4);
-	} });
-
-	s_mapUISpawner.insert({ "InvenToolPos", []()
-	{
-		return CUI::Create(s_pGraphicDev, 13);
-	} });
-
-	s_mapUISpawner.insert({ "arrowTool", []()
-	{
-		return CUI::Create(s_pGraphicDev, 3);
-	} });
-
-	s_mapUISpawner.insert({ "arrow", []()
-	{
-		return CUI::Create(s_pGraphicDev, 9);
-	} });
-
-	s_mapUISpawner.insert({ "Buffe1", []()
-	{
-		return CUI::Create(s_pGraphicDev, 4);
-	} });
-
-	s_mapUISpawner.insert({ "Buffe2", []()
-	{
-		return CUI::Create(s_pGraphicDev, 4);
-	} });
-
-	s_mapUISpawner.insert({ "Buffe3", []()
-	{
-		return CUI::Create(s_pGraphicDev, 4);
-	} });
-
-	s_mapUISpawner.insert({ "Buffe4", []()
-	{
-		return CUI::Create(s_pGraphicDev, 4);
-	} });
-
-	s_mapUISpawner.insert({ "RollTool", []()
-	{
-		return CUI::Create(s_pGraphicDev,10);
-	} });
-
-	s_mapUISpawner.insert({ "Roll", []()
-	{
-		return CUI::Create(s_pGraphicDev,5);
-	} });
-
-	s_mapUISpawner.insert({ "map", []()
-	{
-		return CUI::Create(s_pGraphicDev, 6);
-	} });
-
-	s_mapUISpawner.insert({ "mapTool", []()
-	{
-		return CUI::Create(s_pGraphicDev, 4);
-	} });
-
-	s_mapUISpawner.insert({ "emerald", []()
-	{
-		return CUI::Create(s_pGraphicDev, 8);
-	} });
-
-	s_mapUISpawner.insert({ "enchant", []()
-	{
-		return CUI::Create(s_pGraphicDev, 11);
-	} });
+	 s_mapUISpawner.insert({ "DefaultUI", [](_uint iTexNum)
+	 {
+	 	return CUI::Create(s_pGraphicDev, iTexNum);
+	 } });
+	// s_mapUISpawner.insert({ "UITexture", []()
+	// {
+	// 	return CUI::Create(s_pGraphicDev, 0);
+	// } });
+	//
+	// s_mapUISpawner.insert({ "UI_HP", []()
+	// {
+	// 	return CUI::Create(s_pGraphicDev, 1);
+	// } });
+	//
+	// s_mapUISpawner.insert({ "UI_MinusHP", []()
+	// {
+	// 	return CUI::Create(s_pGraphicDev, 1);
+	// } });
+	//
+	// s_mapUISpawner.insert({ "Inven", []()
+	// {
+	// 	return CUI::Create(s_pGraphicDev, 2);
+	// } });
+	//
+	// s_mapUISpawner.insert({ "InvenTool", []()
+	// {
+	// 	return CUI::Create(s_pGraphicDev, 4);
+	// } });
+	//
+	// s_mapUISpawner.insert({ "InvenToolPos", []()
+	// {
+	// 	return CUI::Create(s_pGraphicDev, 13);
+	// } });
+	//
+	// s_mapUISpawner.insert({ "arrowTool", []()
+	// {
+	// 	return CUI::Create(s_pGraphicDev, 3);
+	// } });
+	//
+	// s_mapUISpawner.insert({ "arrow", []()
+	// {
+	// 	return CUI::Create(s_pGraphicDev, 9);
+	// } });
+	//
+	// s_mapUISpawner.insert({ "Buffe1", []()
+	// {
+	// 	return CUI::Create(s_pGraphicDev, 4);
+	// } });
+	//
+	// s_mapUISpawner.insert({ "Buffe2", []()
+	// {
+	// 	return CUI::Create(s_pGraphicDev, 4);
+	// } });
+	//
+	// s_mapUISpawner.insert({ "Buffe3", []()
+	// {
+	// 	return CUI::Create(s_pGraphicDev, 4);
+	// } });
+	//
+	// s_mapUISpawner.insert({ "Buffe4", []()
+	// {
+	// 	return CUI::Create(s_pGraphicDev, 4);
+	// } });
+	//
+	// s_mapUISpawner.insert({ "RollTool", []()
+	// {
+	// 	return CUI::Create(s_pGraphicDev,10);
+	// } });
+	//
+	// s_mapUISpawner.insert({ "Roll", []()
+	// {
+	// 	return CUI::Create(s_pGraphicDev,5);
+	// } });
+	//
+	// s_mapUISpawner.insert({ "map", []()
+	// {
+	// 	return CUI::Create(s_pGraphicDev, 6);
+	// } });
+	//
+	// s_mapUISpawner.insert({ "mapTool", []()
+	// {
+	// 	return CUI::Create(s_pGraphicDev, 4);
+	// } });
+	//
+	// s_mapUISpawner.insert({ "emerald", []()
+	// {
+	// 	return CUI::Create(s_pGraphicDev, 8);
+	// } });
+	//
+	// s_mapUISpawner.insert({ "enchant", []()
+	// {
+	// 	return CUI::Create(s_pGraphicDev, 11);
+	// } });
 
 }
 
@@ -457,9 +463,9 @@ void CSceneFactory::Ready_SceneFactory()
 {
 	// loading scene
 	{
-		s_mapLoadingSpawner.insert({"IU", []()
+		s_mapLoadingSpawner.insert({"Loading1", []()
 		{
-			return CLogo::Create(s_pGraphicDev);
+			return CLoading::Create(s_pGraphicDev);
 		}});
 	}
 
@@ -472,6 +478,10 @@ void CSceneFactory::Ready_SceneFactory()
 		s_mapSceneSpawner.insert({"Animation Tool", []()
 		{
 			return CAnimationTool::Create(s_pGraphicDev);
+		}});
+		s_mapSceneSpawner.insert({"Map Tool", []()
+		{
+			return CMapTool::Create(s_pGraphicDev);
 		}});
 	}
 }
