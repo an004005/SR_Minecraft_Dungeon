@@ -21,6 +21,5 @@ public:
 	virtual _int Attack() override;
 	virtual void Equipment(SkeletalPart* pSkeletalPart) override;
 	virtual void Collision() override;
-
 };
 

@@ -19,6 +19,7 @@
 #include "Glaive.h"
 #include "Box.h"
 #include "Inventory.h"
+#include "Dynamite.h"
 
 
 
@@ -226,6 +227,10 @@ void CObjectFactory::Ready_ObjectFactory()
 	s_mapObjectSpawner.insert({ "Inventory", []()
 	{
 		return CInventory::Create(s_pGraphicDev);
+	} });
+	s_mapObjectSpawner.insert({ "Dynamite", []()
+	{
+		return CDynamite::Create(s_pGraphicDev);
 	} });
 
 }

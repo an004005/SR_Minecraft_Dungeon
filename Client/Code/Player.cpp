@@ -12,6 +12,7 @@
 #include "Crossbow.h"
 #include "Sword.h"
 #include "Glaive.h"
+#include "Inventory.h"
 
 /*-----------------------
  *    CCharacter
@@ -60,13 +61,11 @@ HRESULT CPlayer::Ready_Object()
 	m_RollCoolTime = 3.f;
 	m_CurRollCoolTime = 0.f;
 
-	/*m_pCrossbow = Get_GameObject<CCrossbow>(LAYER_ITEM, L"Crossbow");
-	m_pSword = Get_GameObject<CSword>(LAYER_ITEM, L"Sword");
-	m_pGlaive = Get_GameObject<CGlaive>(LAYER_ITEM, L"Glaive");
+	m_pInventory = CObjectFactory::Create<CInventory>("Inventory", L"Inventory");
+	m_pInventory->AddRef();
+	m_pCurWeapon = m_pInventory->CurWeapon(IT_MELEE);
+	m_arrAnim = m_pCurWeapon->SetarrAnim();
 
-	m_pCurWeapon = m_pSword;
-
-	m_arrAnim = m_pSword->SetarrAnim();*/
 	return S_OK;
 }
 
@@ -121,7 +120,7 @@ void CPlayer::LateUpdate_Object()
 	{
 		if (m_bApplyMeleeAttackNext)
 		{
-			m_pCurWeapon->Collision();
+			m_pInventory->CurWeapon(IT_MELEE)->Collision();
 			m_bApplyMeleeAttackNext = false;
 		}
 
@@ -137,6 +136,7 @@ void CPlayer::LateUpdate_Object()
 
 void CPlayer::Free()
 {
+	Safe_Release(m_pInventory);
 	CSkeletalCube::Free();
 }
 
@@ -181,11 +181,11 @@ void CPlayer::AttackState()
 	}
 	else if (m_bRangeAttack)
 	{
+	
+		//m_arrAnim = m_pInventory->CurWeapon(IT_RANGE)->SetarrAnim();
 		m_bCanPlayAnim = false;
 		PlayAnimationOnce(&m_arrAnim[ANIM_RANGE_ATTACK]);
-		Get_GameObject<CFireWork_Fuze>(LAYER_EFFECT, L"FireWork_Fuze")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 1.f, WHITE, 1, 0.5f);
-
-		WeaponChange(m_pCrossbow);
+		Get_GameObject<CFireWork_Fuze>(LAYER_EFFECT, L"FireWork_Fuze")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 1.f, WHITE, 1, 0.5f);	
 	}
 
 
@@ -286,7 +286,7 @@ void CPlayer::StateChange()
 		m_eState = IDLE;
 		m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 		m_pCurAnim = &m_arrAnim[ANIM_IDLE];
-		//WeaponChange(m_pCurWeapon);
+		m_arrAnim = m_pCurWeapon->SetarrAnim();
 		return;
 	}
 }
@@ -379,14 +379,22 @@ void CPlayer::RotateToMove()
 		m_pRootPart->pTrans->m_vAngle.y = acosf(fDot);
 }
 
-void CPlayer::Legacy3Press()
+void CPlayer::Legacy4Press()
 { 
-	m_arrAnim = m_pGlaive->SetarrAnim();
-	m_pCurWeapon = m_pGlaive;
+	WeaponChange(IT_MELEE);
 }
-void CPlayer::Legacy4Press() 
-{ 
-	m_arrAnim = m_pSword->SetarrAnim();
-	m_pCurWeapon = m_pSword;
+
+void CPlayer::WeaponChange(ITEMTYPE eIT)
+{
+	if (m_pWeaponPart == nullptr)
+	{
+		auto& itr = m_mapParts.find("weapon_r");
+		if (itr == m_mapParts.end())
+			return;
+		m_pWeaponPart = itr->second;
+	}
 	
+	m_pInventory->Equip_Item(m_pWeaponPart, eIT);
+	m_pCurWeapon = m_pInventory->CurWeapon(eIT);
+	m_arrAnim = m_pCurWeapon->SetarrAnim();
 }

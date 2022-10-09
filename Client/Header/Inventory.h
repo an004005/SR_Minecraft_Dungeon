@@ -2,7 +2,7 @@
 #include "GameObject.h"
 
 class CEquipItem;
-
+class SkeletalCube;
 
 class CInventory :
 	public CGameObject
@@ -24,8 +24,14 @@ public:
 	void Put(CEquipItem* pItem);
 	void TakeOut(CEquipItem* pItem);
 
+	//아이템 장착(임시로 가장 최근에 먹은 아이템 장착되게 함)
+	void Equip_Item(SkeletalPart* pSkeletalPart, ITEMTYPE eIT);
+	CEquipItem* CurWeapon(ITEMTYPE eIT);
+
 private:
 	vector<CEquipItem*> m_vecItem;
-
+	CEquipItem* m_pCurMelee = nullptr;
+	CEquipItem* m_pCurRange = nullptr;
+	CEquipItem* m_pCurLegacy = nullptr;
 };
 

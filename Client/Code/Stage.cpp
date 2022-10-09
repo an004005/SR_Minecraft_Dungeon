@@ -10,7 +10,7 @@
 #include "DynamicCamera.h"
 #include "Particle.h"
 #include "Box.h"
-#include "Inventory.h"
+#include "Dynamite.h"
 
 //controller
 #include "PlayerController.h"
@@ -96,11 +96,9 @@ HRESULT CStage::Ready_Layer_GameLogic()
 {
 	_matrix matWorld;
 
-	//CItemFactory::Create<CCrossbow>("Crossbow", L"Crossbow");
-	//CItemFactory::Create<CSword>("Sword", L"Sword");
-	CItemFactory::Create<CGlaive>("Glaive", L"Glaive");
 
-	CObjectFactory::Create<CBox>("Box", L"Box");
+	//CObjectFactory::Create<CBox>("Box", L"Box");
+	//CObjectFactory::Create<CDynamite>("Dynamite", L"Dynamite");
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 1.f, 0.f ,3.f });
 	CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld);
@@ -116,8 +114,8 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	
 	//monsters
 	{	
-		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 50.f - i, 0.f ,26.f - i });
-		//CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 50.f, 0.f ,26.f});
+		CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
 	
 		//
 		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 55.f, 0.f ,28.f });

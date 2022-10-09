@@ -28,10 +28,10 @@ private:
 	CubeAnimFrame m_AnimPlay;
 	CubeAnimFrame m_AnimOpened;
 
-	void AnimationEvent(const string& strEvent);
+	virtual void AnimationEvent(const string& strEvent);
 
 	_bool m_bOpened = false;
-
+	
 
 };
 

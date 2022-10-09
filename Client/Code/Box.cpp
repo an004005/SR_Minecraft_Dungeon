@@ -2,6 +2,8 @@
 #include "..\Header\Box.h"
 #include "Player.h"
 #include "SkeletalCube.h"
+#include "AbstFactory.h"
+#include"Glaive.h"
 
 CBox::CBox(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CSkeletalCube(pGraphicDev)
@@ -15,10 +17,21 @@ CBox::~CBox()
 void CBox::AnimationEvent(const string& strEvent)
 {
 	if (strEvent == "ActionEnd")
-	{
-		m_pIdleAnim = &m_AnimOpened;
-		m_pCurAnim = m_pIdleAnim;
+	{		
+		CGlaive* pGlaive = CItemFactory::Create<CGlaive>("Glaive", L"Glaive", m_pRootPart->pTrans->m_vInfo[INFO_POS], IS_DROP);
+		pGlaive->SetVelocity(m_pRootPart->pTrans->m_vInfo[INFO_LOOK], 10.f);
+		/*pGlaive = CItemFactory::Create<CGlaive>("Glaive", L"Glaive", m_pRootPart->pTrans->m_vInfo[INFO_POS], IS_DROP);
+		pGlaive->SetVelocity(m_pRootPart->pTrans->m_vInfo[INFO_LOOK], 10.f);
+		 pGlaive = CItemFactory::Create<CGlaive>("Glaive", L"Glaive", m_pRootPart->pTrans->m_vInfo[INFO_POS], IS_DROP);
+		pGlaive->SetVelocity(m_pRootPart->pTrans->m_vInfo[INFO_LOOK], 10.f);
+		 pGlaive = CItemFactory::Create<CGlaive>("Glaive", L"Glaive", m_pRootPart->pTrans->m_vInfo[INFO_POS], IS_DROP);
+		pGlaive->SetVelocity(m_pRootPart->pTrans->m_vInfo[INFO_LOOK], 10.f);
+		 pGlaive = CItemFactory::Create<CGlaive>("Glaive", L"Glaive", m_pRootPart->pTrans->m_vInfo[INFO_POS], IS_DROP);
+		pGlaive->SetVelocity(m_pRootPart->pTrans->m_vInfo[INFO_LOOK], 10.f);
+		pGlaive = CItemFactory::Create<CGlaive>("Glaive", L"Glaive", m_pRootPart->pTrans->m_vInfo[INFO_POS], IS_DROP);
+		pGlaive->SetVelocity(m_pRootPart->pTrans->m_vInfo[INFO_LOOK], 10.f);*/
 	}
+	
 }
 
 HRESULT CBox::Ready_Object()
@@ -29,8 +42,7 @@ HRESULT CBox::Ready_Object()
 	m_AnimClosen = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Box/box_closen.anim");
 	m_AnimClosen.bLoop = true;
 	m_AnimPlay = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Box/box_play.anim");
-	m_AnimOpened = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Box/box_opened.anim");
-	m_AnimOpened.bLoop = true;
+
 
 	m_pIdleAnim = &m_AnimClosen;
 	m_pCurAnim = m_pIdleAnim;
@@ -47,7 +59,7 @@ _int CBox::Update_Object(const _float & fTimeDelta)
 
 	_int iResult = Engine::CGameObject::Update_Object(fTimeDelta);
 
-	Add_RenderGroup(RENDER_NONALPHA, this);
+	Engine::Add_RenderGroup(RENDER_NONALPHA, this);
 
 	
 

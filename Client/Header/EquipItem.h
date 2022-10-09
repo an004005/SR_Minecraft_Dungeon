@@ -51,9 +51,11 @@ public:
 protected:
 	Engine::CTexture*	m_pTextureCom = nullptr;
 	Engine::CVoxelTex*	m_pBufferCom = nullptr;
+	Engine::CTransform*	m_pTransCom = nullptr;
 	
-	array<CubeAnimFrame, ANIM_END> m_arrAnim;
+	array<CubeAnimFrame, ANIM_END> m_arrAnim{};
 	_uint m_iAttackCnt = 0; // ÄÞº¸ ¹øÈ£
 	ITEMTYPE	m_eItemType;
+	
 };
 

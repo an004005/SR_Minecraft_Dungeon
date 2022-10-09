@@ -4,7 +4,7 @@
 #include "Player.h"
 #include "Monster.h"
 #include "StatComponent.h"
-
+#include "TerrainCubeMap.h"
 CSword::CSword(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CEquipItem(pGraphicDev)
 {
@@ -16,7 +16,7 @@ CSword::~CSword()
 
 HRESULT CSword::Ready_Object()
 {
-	CEquipItem::Ready_Object();
+	m_pTransCom = Add_Component<Engine::CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 	m_pBufferCom = Add_Component<CVoxelTex>(L"Proto_VoxelTex_Sword", L"Proto_VoxelTex_Sword", ID_STATIC);
 	m_pTextureCom = Add_Component<CTexture>(L"Proto_WeaponTexture", L"Proto_WeaponTexture", ID_STATIC);
 
@@ -39,6 +39,15 @@ HRESULT CSword::Ready_Object()
 
 _int CSword::Update_Object(const _float & fTimeDelta)
 {
+	if (m_eItemState == IS_TAKE)
+		return 0;
+
+	_vec3& vPos = m_pTransCom->m_vInfo[INFO_POS];
+	CTerrainCubeMap* pCubeMap = Get_GameObject<CTerrainCubeMap>(LAYER_ENV, L"TerrainCubeMap");
+	_float fHeight = pCubeMap->GetHeight(vPos.x, vPos.z);
+
+	Parabola(vPos, fHeight, fTimeDelta);
+
 	CEquipItem::Update_Object(fTimeDelta);
 	
 	return 0;
@@ -51,6 +60,12 @@ void CSword::LateUpdate_Object()
 
 void CSword::Render_Object()
 {
+	if (m_eItemState == IS_TAKE)
+		return;
+
+	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
+	m_pTextureCom->Set_Texture(0);
+	m_pBufferCom->Render_Buffer();
 }
 
 CSword * CSword::Create(LPDIRECT3DDEVICE9 pGraphicDev)
