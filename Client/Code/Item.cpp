@@ -4,6 +4,8 @@
 
 CItem::CItem(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CGameObject(pGraphicDev)
+	, m_fPower(0.f)
+	, m_fTime(0.f)
 {
 }
 
@@ -34,20 +36,23 @@ void CItem::Render_Object()
 {
 }
 
-//CItem * CItem::Create(LPDIRECT3DDEVICE9 pGraphicDev)
-//{
-//	CItem* pInstance = new CItem(pGraphicDev);
-//
-//	if (FAILED(pInstance->Ready_Object()))
-//	{
-//		Safe_Release(pInstance);
-//		return nullptr;
-//	}
-//
-//	return pInstance;
-//}
 
 void CItem::Free()
 {
 	CGameObject::Free();
+}
+
+void CItem::Parabola(_vec3 & vPos,const _float& fHeight,const _float& fTimeDelta)
+{
+	if (vPos.y <= fHeight)
+	{
+		vPos.y = fHeight;
+	}
+	else
+	{
+		vPos.y += 15.f * m_fTime * fTimeDelta - (9.8f * m_fTime * m_fTime * fTimeDelta * 0.5f);
+		vPos.x += 3.f * m_vVelocity.x * fTimeDelta;
+		vPos.z += 3.f * m_vVelocity.z * fTimeDelta;
+		m_fTime += 7.f * fTimeDelta;
+	}
 }

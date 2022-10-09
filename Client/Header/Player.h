@@ -1,15 +1,12 @@
 #pragma once
 #include "SkeletalCube.h"
-#include "EquipItem.h"
+
 
 
 class CController;
 class CStatComponent;
-class CCrossbow;
-class CSword;
-class CGlaive;
+class CInventory;
 class CAxe;
-
 
 class CPlayer : public CSkeletalCube
 {
@@ -66,24 +63,14 @@ public:
 	void RollPress() { m_bRoll = true; }
 	void Legacy1Press() { m_bLegacy1 = true; }
 	void Legacy2Press() { m_bLegacy2 = true; }
-	void Legacy3Press();
 	void Legacy4Press();
-	void WeaponChange(CEquipItem* pItem)
-	{
-		if (m_pWeaponPart == nullptr)
-		{
-			auto& itr = m_mapParts.find("weapon_r");
-			if (itr == m_mapParts.end())
-				return;
-			m_pWeaponPart = itr->second;
-		}
 
-		pItem->Equipment(m_pWeaponPart);
-
-	}
 	void UsePotion();
 	//
+	//아이템 변경(임시)
+	void WeaponChange(ITEMTYPE eIT);
 
+	CInventory* GetInventory() { return m_pInventory; }
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
 
 private:
@@ -91,11 +78,7 @@ private:
 	void RotateToMove();
 	
 	//근거리 ,원거리 상관없이 다 넣음, AttackState()에서 문제 생길 수 있음.
-	CEquipItem* m_pCurWeapon = nullptr;
-	CEquipItem* m_pRangeWeapon = nullptr;
-
-	CSword* m_pSword = nullptr;
-	CGlaive* m_pGlaive = nullptr;
+	CInventory* m_pInventory = nullptr;
 	CAxe* m_pAxe = nullptr;
 
 protected:

@@ -20,6 +20,9 @@
 #include "Glaive.h"
 #include "Arrow.h"
 #include "Axe.h"
+#include "Box.h"
+#include "Inventory.h"
+#include "Dynamite.h"
 
 
 
@@ -311,6 +314,18 @@ void CObjectFactory::Ready_ObjectFactory()
 	s_mapObjectSpawner.insert({ "RedStoneMonstrosityBullet", []()
 	{	
 		return CRedStoneMonstrosityBullet::Create(s_pGraphicDev);
+	} });
+	s_mapObjectSpawner.insert({ "Box", []()
+	{
+		return CBox::Create(s_pGraphicDev);
+	} });
+	s_mapObjectSpawner.insert({ "Inventory", []()
+	{
+		return CInventory::Create(s_pGraphicDev);
+	} });
+	s_mapObjectSpawner.insert({ "Dynamite", []()
+	{
+		return CDynamite::Create(s_pGraphicDev);
 	} });
 
 }

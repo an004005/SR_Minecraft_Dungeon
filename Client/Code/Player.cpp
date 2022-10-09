@@ -14,6 +14,7 @@
 #include "Glaive.h"
 #include "Axe.h"
 #include "SphereEffect.h"
+#include "Inventory.h"
 
 /*-----------------------
  *    CCharacter
@@ -37,6 +38,7 @@ HRESULT CPlayer::Ready_Object()
 {
 	CSkeletalCube::Ready_Object();
 
+
 	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 	m_pCurAnim = m_pIdleAnim;
 
@@ -50,6 +52,9 @@ HRESULT CPlayer::Ready_Object()
 	m_pColl->SetRadius(0.8f);
 	m_pColl->SetCollType(COLL_PLAYER);
 
+	m_CurRollCoolTime = 3.f;
+	m_CurPotionCoolTime = 20.f;
+
 	m_pStat = Add_Component<CStatComponent>(L"Proto_StatCom", L"Proto_StatCom", ID_DYNAMIC);
 	m_pStat->SetMaxHP(100);
 	m_pStat->SetTransform(m_pRootPart->pTrans);
@@ -60,17 +65,10 @@ HRESULT CPlayer::Ready_Object()
 	m_dwRollDust = GetTickCount();
 
 
-	m_CurRollCoolTime = 3.f;
-	m_CurPotionCoolTime = 0.f;
-
-	m_pRangeWeapon = Get_GameObject<CCrossbow>(LAYER_ITEM, L"Crossbow");
-	m_pSword = Get_GameObject<CSword>(LAYER_ITEM, L"Sword");
-	m_pGlaive = Get_GameObject<CGlaive>(LAYER_ITEM, L"Glaive");
+	m_pInventory = CObjectFactory::Create<CInventory>("Inventory", L"Inventory");
+	m_pInventory->AddRef();
+	m_arrAnim = m_pInventory->CurWeapon(IT_MELEE)->SetarrAnim();
 	m_pAxe = Get_GameObject<CAxe>(LAYER_ITEM, L"Axe");
-
-	m_pCurWeapon = m_pSword;
-
-	m_arrAnim = m_pGlaive->SetarrAnim();
 	return S_OK;
 }
 
@@ -125,9 +123,10 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 
 void CPlayer::LateUpdate_Object()
 {
+	
 	if (m_bApplyMeleeAttackNext)
 	{
-		m_pCurWeapon->Collision();
+		m_pInventory->CurWeapon(IT_MELEE)->Collision();
 		m_bApplyMeleeAttackNext = false;
 	}
 
@@ -142,6 +141,7 @@ void CPlayer::LateUpdate_Object()
 
 void CPlayer::Free()
 {
+	Safe_Release(m_pInventory);
 	CSkeletalCube::Free();
 }
 
@@ -183,12 +183,14 @@ void CPlayer::AttackState()
 		m_bCanPlayAnim = false;
 		
 		//원거리 무기는 생략.
-		m_iAttackCnt = m_pCurWeapon->Attack();// 애니메이션 실행
+		m_iAttackCnt = m_pInventory->CurWeapon(IT_MELEE)->Attack();// 애니메이션 실행
 	}
 	else if (m_bRangeAttack)
 	{
+		
+		WeaponChange(IT_RANGE);
 		m_bCanPlayAnim = false;
-		m_pRangeWeapon->Attack();
+		m_iAttackCnt = m_pInventory->CurWeapon(IT_RANGE)->Attack();
 	}
 
 #pragma region GolemSmash
@@ -311,7 +313,6 @@ void CPlayer::StateChange()
 	{
 		m_eState = ATTACK;
 		RotateToCursor();
-		WeaponChange(m_pCurWeapon);
 		return;
 	}
 
@@ -319,7 +320,6 @@ void CPlayer::StateChange()
 	{
 		m_eState = ATTACK;
 		RotateToCursor();
-		WeaponChange(m_pRangeWeapon);
 		m_bDelay = true;
 		return;
 	}
@@ -332,7 +332,6 @@ void CPlayer::StateChange()
 		m_pCurAnim = &m_arrAnim[ANIM_WALK];
 
 		if (m_bDelay) m_bDelay = false;
-		else WeaponChange(m_pCurWeapon);
 		return;
 	}
 
@@ -343,7 +342,7 @@ void CPlayer::StateChange()
 		m_pCurAnim = &m_arrAnim[ANIM_IDLE];
 
 		if (m_bDelay) m_bDelay = false;
-		else WeaponChange(m_pCurWeapon);
+		else WeaponChange(IT_MELEE);
 		return;
 	}
 }
@@ -444,15 +443,21 @@ void CPlayer::RotateToMove()
 		m_pRootPart->pTrans->m_vAngle.y = acosf(fDot);
 }
 
-void CPlayer::Legacy3Press()
+void CPlayer::Legacy4Press()
 { 
-	m_arrAnim = m_pGlaive->SetarrAnim();
-	m_pCurWeapon = m_pGlaive;
+	WeaponChange(IT_MELEE);
 }
-void CPlayer::Legacy4Press() 
-{ 
-	m_arrAnim = m_pAxe->SetarrAnim();
-	m_pCurWeapon = m_pAxe;
-	// m_arrAnim = m_pSword->SetarrAnim();
-	// m_pCurWeapon = m_pSword;	
+
+void CPlayer::WeaponChange(ITEMTYPE eIT)
+{
+	if (m_pWeaponPart == nullptr)
+	{
+		auto& itr = m_mapParts.find("weapon_r");
+		if (itr == m_mapParts.end())
+			return;
+		m_pWeaponPart = itr->second;
+	}
+	
+	m_pInventory->Equip_Item(m_pWeaponPart, eIT);
+	m_arrAnim = m_pInventory->CurWeapon(eIT)->SetarrAnim();
 }

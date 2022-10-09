@@ -34,6 +34,7 @@ public:
 	const _matrix* Compute_LookAtTarget(const _vec3* pTargetPos);
 	void RotateToLookAt(const _vec3& vLookAt);
 
+
 public:
 	HRESULT Ready_Transform(void);
 	virtual _int Update_Component(const _float& fTimeDelta);

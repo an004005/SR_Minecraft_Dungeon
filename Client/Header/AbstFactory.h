@@ -241,7 +241,30 @@ public:
 		return pCasted;
 	}
 
+	template<typename T>
+	static T* Create(const string& strFactoryTag, const wstring& wstrObjTag, const ITEMSTATE& eState)
+	{
+		T* pCasted = Create<T>(strFactoryTag, wstrObjTag);
+
+		pCasted->SetState(eState);
+		return pCasted;
+	}
+
 	static void Ready_ItemFactory();
+
+	template<typename T>
+	static T* Create(const string& strFactoryTag, const wstring& wstrObjTag, const _vec3& vPos, const ITEMSTATE& eState)
+	{
+		T* pCasted = Create<T>(strFactoryTag, wstrObjTag);
+
+		pCasted->SetState(eState);
+		Engine::CTransform* pTrans = pCasted->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+		pTrans->m_vInfo[INFO_POS] = vPos;
+		pTrans->Update_Component(0.f);
+
+		return pCasted;
+	}
+
 
 private:
 	static map<string, std::function<CGameObject*()>> s_mapItemSpawner;
