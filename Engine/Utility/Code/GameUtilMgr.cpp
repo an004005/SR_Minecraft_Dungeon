@@ -201,6 +201,39 @@ _float CGameUtilMgr::GetRandomFloat(_float lowBound, _float highBound)
 	return (f * (highBound - lowBound)) + lowBound;
 }
 
+void CGameUtilMgr::GetPickingRay(_vec3& vOrigin, _vec3& vRayDir, HWND hWnd, const _matrix& matView,
+	const _matrix& matProj, const D3DVIEWPORT9& ViewPort)
+{
+	POINT ptMouse{};
+
+	GetCursorPos(&ptMouse);
+	ScreenToClient(hWnd, &ptMouse);
+
+	_vec3 vAt;
+
+	vOrigin.x = (_float)ptMouse.x / ((_float)ViewPort.Width * 0.5f) - 1.f;
+	vOrigin.y = (_float)ptMouse.y / -((_float)ViewPort.Height * 0.5f) + 1.f;
+	vOrigin.z = 0.f;
+	vAt.x = vOrigin.x;
+	vAt.y = vOrigin.y;
+	vAt.z = 1.f;
+
+	_matrix matProjInverse;
+	D3DXMatrixInverse(&matProjInverse, nullptr, &matProj);
+	D3DXVec3TransformCoord(&vOrigin, &vOrigin, &matProjInverse);
+	D3DXVec3TransformCoord(&vAt, &vAt, &matProjInverse);
+
+	_matrix matViewInverse;
+	D3DXMatrixInverse(&matViewInverse, nullptr, &matView);
+	D3DXVec3TransformCoord(&vOrigin, &vOrigin, &matViewInverse);
+	D3DXVec3TransformCoord(&vAt, &vAt, &matViewInverse);
+
+	vRayDir = vAt - vOrigin;
+	D3DXVec3Normalize(&vRayDir, &vRayDir);
+}
+
+
+
 DWORD CGameUtilMgr::FtoDw(_float f)
 {
 	return *((DWORD*)&f);

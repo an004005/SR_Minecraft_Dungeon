@@ -106,6 +106,10 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 	{
 		pPlayer->Legacy4Press();
 	}
+	if (DIKeyDown(DIK_E))
+	{
+		pPlayer->UsePotion();
+	}
 
 	return 0;
 }

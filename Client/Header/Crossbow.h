@@ -20,5 +20,7 @@ public:
 	virtual void Equipment(SkeletalPart* pSkeletalPart) override;
 	//virtual void Collision() override;
 
+private:
+	_bool PickTargetEnemy(OUT _vec3& vLookAt);
 };
 
