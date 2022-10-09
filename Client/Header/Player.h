@@ -6,7 +6,6 @@
 class CController;
 class CStatComponent;
 class CInventory;
-class CEquipItem;
 class CAxe;
 
 class CPlayer : public CSkeletalCube
@@ -66,7 +65,6 @@ public:
 	void Legacy2Press() { m_bLegacy2 = true; }
 	void Legacy4Press();
 
-	}
 	void UsePotion();
 	//
 	//아이템 변경(임시)
@@ -80,7 +78,6 @@ private:
 	void RotateToMove();
 	
 	//근거리 ,원거리 상관없이 다 넣음, AttackState()에서 문제 생길 수 있음.
-	CEquipItem* m_pCurWeapon = nullptr;
 	CInventory* m_pInventory = nullptr;
 	CAxe* m_pAxe = nullptr;
 

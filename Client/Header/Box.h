@@ -2,9 +2,7 @@
 #include "GameObject.h"
 #include "SkeletalCube.h"
 
-class CTransform;
-class CCubeTex;
-class CTexture;
+
 
 class CBox : public CSkeletalCube
 {

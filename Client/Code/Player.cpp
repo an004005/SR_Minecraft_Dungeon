@@ -52,6 +52,9 @@ HRESULT CPlayer::Ready_Object()
 	m_pColl->SetRadius(0.8f);
 	m_pColl->SetCollType(COLL_PLAYER);
 
+	m_CurRollCoolTime = 3.f;
+	m_CurPotionCoolTime = 20.f;
+
 	m_pStat = Add_Component<CStatComponent>(L"Proto_StatCom", L"Proto_StatCom", ID_DYNAMIC);
 	m_pStat->SetMaxHP(100);
 	m_pStat->SetTransform(m_pRootPart->pTrans);
@@ -64,8 +67,7 @@ HRESULT CPlayer::Ready_Object()
 
 	m_pInventory = CObjectFactory::Create<CInventory>("Inventory", L"Inventory");
 	m_pInventory->AddRef();
-	m_pCurWeapon = m_pInventory->CurWeapon(IT_MELEE);
-	m_arrAnim = m_pCurWeapon->SetarrAnim();
+	m_arrAnim = m_pInventory->CurWeapon(IT_MELEE)->SetarrAnim();
 	m_pAxe = Get_GameObject<CAxe>(LAYER_ITEM, L"Axe");
 	return S_OK;
 }
@@ -121,12 +123,12 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 
 void CPlayer::LateUpdate_Object()
 {
+	
+	if (m_bApplyMeleeAttackNext)
 	{
-		if (m_bApplyMeleeAttackNext)
-		{
-			m_pInventory->CurWeapon(IT_MELEE)->Collision();
-			m_bApplyMeleeAttackNext = false;
-		}
+		m_pInventory->CurWeapon(IT_MELEE)->Collision();
+		m_bApplyMeleeAttackNext = false;
+	}
 
 	if (m_bApplyMeleeAttack)
 	{
@@ -181,14 +183,14 @@ void CPlayer::AttackState()
 		m_bCanPlayAnim = false;
 		
 		//원거리 무기는 생략.
-		m_iAttackCnt = m_pCurWeapon->Attack();// 애니메이션 실행
+		m_iAttackCnt = m_pInventory->CurWeapon(IT_MELEE)->Attack();// 애니메이션 실행
 	}
 	else if (m_bRangeAttack)
 	{
-	
-		//m_arrAnim = m_pInventory->CurWeapon(IT_RANGE)->SetarrAnim();
+		
+		WeaponChange(IT_RANGE);
 		m_bCanPlayAnim = false;
-		m_pRangeWeapon->Attack();
+		m_iAttackCnt = m_pInventory->CurWeapon(IT_RANGE)->Attack();
 	}
 
 #pragma region GolemSmash
@@ -311,7 +313,6 @@ void CPlayer::StateChange()
 	{
 		m_eState = ATTACK;
 		RotateToCursor();
-		WeaponChange(m_pCurWeapon);
 		return;
 	}
 
@@ -319,7 +320,6 @@ void CPlayer::StateChange()
 	{
 		m_eState = ATTACK;
 		RotateToCursor();
-		WeaponChange(m_pRangeWeapon);
 		m_bDelay = true;
 		return;
 	}
@@ -332,7 +332,6 @@ void CPlayer::StateChange()
 		m_pCurAnim = &m_arrAnim[ANIM_WALK];
 
 		if (m_bDelay) m_bDelay = false;
-		else WeaponChange(m_pCurWeapon);
 		return;
 	}
 
@@ -343,7 +342,7 @@ void CPlayer::StateChange()
 		m_pCurAnim = &m_arrAnim[ANIM_IDLE];
 
 		if (m_bDelay) m_bDelay = false;
-		else m_arrAnim = m_pCurWeapon->SetarrAnim();
+		else WeaponChange(IT_MELEE);
 		return;
 	}
 }
@@ -460,6 +459,5 @@ void CPlayer::WeaponChange(ITEMTYPE eIT)
 	}
 	
 	m_pInventory->Equip_Item(m_pWeaponPart, eIT);
-	m_pCurWeapon = m_pInventory->CurWeapon(eIT);
-	m_arrAnim = m_pCurWeapon->SetarrAnim();
+	m_arrAnim = m_pInventory->CurWeapon(eIT)->SetarrAnim();
 }

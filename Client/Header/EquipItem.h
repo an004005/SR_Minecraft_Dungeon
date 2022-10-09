@@ -2,8 +2,6 @@
 #include "Item.h"
 #include "SkeletalCube.h"
 
-class CTransform;
-
 enum Animation
 {
 	ANIM_WALK,

@@ -1,9 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
-class CTexture;
-class CCubeTex;
-class CTransform;
+
 
 class CDynamite :
 	public CGameObject
