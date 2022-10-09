@@ -27,6 +27,9 @@ public:
 	void SetTransform(Engine::CTransform* pOwnerTrans) { NULL_CHECK(pOwnerTrans); m_pOwnerTrans = pOwnerTrans; m_pOwnerTrans->AddRef(); };
 	void SetMaxHP(_uint iMaxHP) { m_iMaxHP = iMaxHP; m_iHP = static_cast<_int>(m_iMaxHP); }
 
+	_int GetHP() const { return m_iHP; }
+	_uint GetMaxHP() const { return m_iMaxHP;}
+
 	void ModifyHP(_int iModifyingHP);
 	void TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCauser, DamageType eType = DT_END);
 

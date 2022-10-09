@@ -46,6 +46,11 @@ public:
 		return pT;
 	}
 
+	bool Has_Component(const wstring& pComponentTag, COMPONENTID eID)
+	{
+		return Find_Component(pComponentTag, eID) != nullptr;
+	}
+
 
 public:
 	virtual		HRESULT		Ready_Object(void);

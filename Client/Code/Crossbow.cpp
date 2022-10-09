@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "..\Header\Crossbow.h"
-#include "SkeletalCube.h"
+#include "AbstFactory.h"
 #include "Player.h"
 #include "TerrainCubeMap.h"
 
@@ -88,17 +88,28 @@ _int CCrossbow::Attack()
 	if (pPlayer == nullptr)
 		return 0;
 
-	if (m_iAttackCnt == 0)
-	{
+	pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK1]);
 
-		pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK1]);
-	}
-	else
+	// if (m_iAttackCnt == 0)
+	// {
+	//
+	// }
+	// else
+	// {
+	// 	pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK1]);
+	// }
+
+	// todo : 임시 설정, 이후 피킹한 몬스터 방향으로 쏘게 하기
+	Engine::CTransform* pPlayerTrans = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC);
+	const _vec3 vPos = pPlayerTrans->m_vInfo[INFO_POS] + _vec3{0.f, 1.3f, 0.f};
+	_vec3 vLookAt;
+	if (PickTargetEnemy(OUT vLookAt) == false)
 	{
-		pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK2]);
+		vLookAt = vPos + pPlayerTrans->m_vInfo[INFO_LOOK];
 	}
 
-	m_iAttackCnt = (m_iAttackCnt + 1) % 2;
+	CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 10.f, vPos, vLookAt);
+	// m_iAttackCnt = (m_iAttackCnt + 1) % 2;
 
 	return m_iAttackCnt;
 }
@@ -108,4 +119,33 @@ void CCrossbow::Equipment(SkeletalPart* pSkeletalPart)
 	pSkeletalPart->pBuf = m_pBufferCom;
 	pSkeletalPart->pTex = m_pTextureCom;
 	pSkeletalPart->iTexIdx = 2;
+}
+
+_bool CCrossbow::PickTargetEnemy(_vec3& vLookAt)
+{
+	// https://gohen.tistory.com/79 참조(광선과 직선 교차판정)
+
+	_vec3 vOrigin, vRayDir;
+	_matrix matView, matProj;
+	D3DVIEWPORT9 ViewPort;
+
+	ZeroMemory(&ViewPort, sizeof(D3DVIEWPORT9));
+	m_pGraphicDev->GetViewport(&ViewPort);
+	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &matProj);
+	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
+	CGameUtilMgr::GetPickingRay(vOrigin, vRayDir, g_hWnd, matView, matProj, ViewPort);
+
+	for (const auto& enemy : Engine::Get_Layer(LAYER_ENEMY)->Get_MapObject())
+	{
+		const auto pColl = enemy.second->Get_Component<CCollisionCom>(L"Proto_CollisionCom", ID_DYNAMIC);
+		const _vec3 vSubject = vOrigin - pColl->GetCollPos();
+		const _float fB = D3DXVec3Dot(&vRayDir, &vSubject);
+		const _float fC = D3DXVec3Dot(&vSubject, &vSubject) - pColl->GetRadius();
+		if (fB * fB  - fC >= 0.f)
+		{
+			vLookAt = pColl->GetCollPos();
+			return true;
+		}
+	}
+	return false;
 }

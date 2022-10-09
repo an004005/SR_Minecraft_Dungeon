@@ -37,6 +37,7 @@ inline bool DIKeyDown(_ubyte byKeyID);
 inline bool DIKeyUp(_ubyte byKeyID);
 inline bool MouseKeyDown(MOUSEKEYSTATE byMouseID);
 inline bool MouseKeyUp(MOUSEKEYSTATE byMouseID);
+inline bool MouseKeyPress(MOUSEKEYSTATE byMouseID);
 
 // FontMgr
 

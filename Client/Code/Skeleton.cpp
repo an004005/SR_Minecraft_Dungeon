@@ -2,6 +2,7 @@
 #include "..\Header\Skeleton.h"
 #include "StatComponent.h"
 #include "SkeletonController.h"
+#include "AbstFactory.h"
 
 CSkeleton::CSkeleton(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
 {
@@ -15,9 +16,12 @@ CSkeleton::~CSkeleton()
 {
 }
 
-HRESULT CSkeleton::Ready_Object()
+HRESULT CSkeleton::Ready_Object(const wstring& wstrPath)
 {
 	CMonster::Ready_Object();
+
+	if (!wstrPath.empty())
+		LoadSkeletal(wstrPath);
 
 	m_arrAnim[ANIM_IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Skeleton/idle.anim");
 	m_arrAnim[ANIM_WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Skeleton/walk.anim");
@@ -33,6 +37,10 @@ HRESULT CSkeleton::Ready_Object()
 	CController* pController = Add_Component<CSkeletonController>(L"Proto_SkeletonController", L"Proto_SkeletonController", ID_DYNAMIC);
 	pController->SetOwner(this);
 
+	auto pPart = m_mapParts.find("bow")->second;
+	pPart->pBuf = Add_Component<CVoxelTex>(L"Proto_VoxelTex_Bow", L"Proto_VoxelTex_Bow_Bow", ID_STATIC);
+	pPart->iTexIdx = 4;
+
 	return S_OK;
 }
 
@@ -41,7 +49,9 @@ void CSkeleton::AnimationEvent(const string& strEvent)
 	if (strEvent == "AttackFire")
 	{
 		//m_bAttackFire = true;
+		CBulletFactory::Create<CGameObject>("EnemyNormalArrow", L"SkeletonArrow", 10.f, m_pRootPart->pTrans->m_vInfo[INFO_POS] + _vec3{0.f, 1.f, 0.f}, m_vTargetPos);
 	}
+
 	else if (strEvent == "ActionEnd")
 	{
 		m_bCanPlayAnim = true;
@@ -89,9 +99,6 @@ _int CSkeleton::Update_Object(const _float& fTimeDelta)
 void CSkeleton::LateUpdate_Object()
 {
 	CMonster::LateUpdate_Object();
-
-	IM_LOG("Fire");
-	
 }
 
 void CSkeleton::Free()
@@ -103,14 +110,11 @@ CSkeleton* CSkeleton::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrP
 {
 	CSkeleton* pInstance = new CSkeleton(pGraphicDev);
 
-	if (FAILED(pInstance->Ready_Object()))
+	if (FAILED(pInstance->Ready_Object(wstrPath)))
 	{
 		Safe_Release(pInstance);
 		return nullptr;
 	}
-
-	if (!wstrPath.empty())
-		pInstance->LoadSkeletal(wstrPath);
 
 	return pInstance;
 }

@@ -65,8 +65,8 @@
     <Filter Include="02. GameObject\Object">
       <UniqueIdentifier>{d4c64e4c-660f-4b18-b3c9-37cd78b2fea4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\05. Item">
-      <UniqueIdentifier>{682eaaad-d655-4457-b398-c657b010fb78}</UniqueIdentifier>
+    <Filter Include="02. GameObject\05. Effect">
+      <UniqueIdentifier>{7425b919-b28f-45e4-b86a-38d983e757b3}</UniqueIdentifier>
     </Filter>
     <Filter Include="02. GameObject\06. Inventory">
       <UniqueIdentifier>{fcce4791-e493-43f9-b897-5adda5582bb6}</UniqueIdentifier>
@@ -193,7 +193,6 @@
     <ClInclude Include="..\Header\StatComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\Particle.h" />
     <ClInclude Include="..\Header\PlayerController.h">
       <Filter>Controller</Filter>
     </ClInclude>
@@ -245,23 +244,20 @@
     <ClInclude Include="..\Header\GeomancerWall.h">
       <Filter>02. GameObject\Object</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\RedStoneMonstrosityBullet.h">
-      <Filter>02. GameObject\Object</Filter>
+    <ClInclude Include="..\Header\Arrow.h" />
+    <ClInclude Include="..\Header\ArrowCubeMgr.h" />
+    <ClInclude Include="..\Header\Crossbow.h" />
+    <ClInclude Include="..\Header\EquipItem.h" />
+    <ClInclude Include="..\Header\Glaive.h" />
+    <ClInclude Include="..\Header\Item.h" />
+    <ClInclude Include="..\Header\RedStoneMonstrosityBullet.h" />
+    <ClInclude Include="..\Header\Sword.h" />
+    <ClInclude Include="..\Header\Axe.h" />
+    <ClInclude Include="..\Header\Particle.h">
+      <Filter>02. GameObject\05. Effect</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\Item.h">
-      <Filter>02. GameObject\05. Item</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\EquipItem.h">
-      <Filter>02. GameObject\05. Item</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\Crossbow.h">
-      <Filter>02. GameObject\05. Item</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\Sword.h">
-      <Filter>02. GameObject\05. Item</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\Glaive.h">
-      <Filter>02. GameObject\05. Item</Filter>
+    <ClInclude Include="..\Header\SphereEffect.h">
+      <Filter>02. GameObject\05. Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Inventory.h">
       <Filter>02. GameObject\06. Inventory</Filter>
@@ -382,7 +378,6 @@
     <ClCompile Include="..\Code\GeomancerController.cpp">
       <Filter>Controller</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Particle.cpp" />
     <ClCompile Include="..\Code\ZombieController.cpp">
       <Filter>Controller</Filter>
     </ClCompile>
@@ -429,12 +424,21 @@
     <ClCompile Include="..\Code\GeomancerWall.cpp">
       <Filter>02. GameObject\Object</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\RedStoneMonstrosityBullet.cpp">
-      <Filter>02. GameObject\Object</Filter>
+    <ClCompile Include="..\Code\Particle.cpp">
+      <Filter>02. GameObject\05. Effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Item.cpp">
-      <Filter>02. GameObject\05. Item</Filter>
+    <ClCompile Include="..\Code\SphereEffect.cpp">
+      <Filter>02. GameObject\05. Effect</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\Arrow.cpp" />
+    <ClCompile Include="..\Code\ArrowCubeMgr.cpp" />
+    <ClCompile Include="..\Code\Crossbow.cpp" />
+    <ClCompile Include="..\Code\EquipItem.cpp" />
+    <ClCompile Include="..\Code\Glaive.cpp" />
+    <ClCompile Include="..\Code\Item.cpp" />
+    <ClCompile Include="..\Code\RedStoneMonstrosityBullet.cpp" />
+    <ClCompile Include="..\Code\Sword.cpp" />
+    <ClCompile Include="..\Code\Axe.cpp" />
     <ClCompile Include="..\Code\EquipItem.cpp">
       <Filter>02. GameObject\05. Item</Filter>
     </ClCompile>

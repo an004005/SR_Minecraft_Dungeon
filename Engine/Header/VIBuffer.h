@@ -7,6 +7,7 @@ BEGIN(Engine)
 class ENGINE_DLL CVIBuffer : public CComponent
 {
 protected:
+	explicit CVIBuffer();
 	explicit CVIBuffer(LPDIRECT3DDEVICE9 pGraphicDev);
 	explicit CVIBuffer(const CVIBuffer& rhs);
 	virtual ~CVIBuffer();

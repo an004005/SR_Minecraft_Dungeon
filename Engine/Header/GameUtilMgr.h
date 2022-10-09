@@ -17,14 +17,16 @@ public:
 	static void MatWorldComposeEuler(OUT _matrix& matOut, const _vec3& vScale, const _vec3& vAngle, const _vec3& vPos);
 	static void MatWorldDecompose(const _matrix& matWorld, OUT _vec3& vScale, OUT _vec3& vAngle, OUT _vec3& vPos);
 	static void GetRandomVector(_vec3* out, _vec3* min, _vec3* max);
-
+	static void RemoveScale(_matrix& matOut);
 	static _float Vec3LenXZ(const _vec3& v1);
 	static _float GetRandomFloat(_float lowBound, _float highBound);
+	static void GetPickingRay(OUT _vec3& vOrigin, OUT _vec3& vRayDir, HWND hWnd, const _matrix& matView, const _matrix& matProj, const D3DVIEWPORT9& ViewPort);
 
 	static DWORD FtoDw(_float f);
 	static const _vec3 s_vZero;
 	static const _vec3 s_vUp;
 	static const _matrix s_matIdentity;
+	static const _vec3 s_vFaceCubeVtx[FACE_END][4];
 };
 
 END

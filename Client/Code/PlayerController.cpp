@@ -124,10 +124,12 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 	if (MouseKeyUp(DIM_LB))
 		pPlayer->MeleeAttackPress(false);
 
-	if (MouseKeyDown(DIM_RB))
-		pPlayer->RangeAttackPress(true);
 	if (MouseKeyUp(DIM_RB))
 		pPlayer->RangeAttackPress(false);
+	if (MouseKeyPress(DIM_RB) == false)
+		pPlayer->RangeAttackPress(false);
+	if (MouseKeyDown(DIM_RB))
+		pPlayer->RangeAttackPress(true);
 
 	if (DIKeyDown(DIK_1))
 	{
@@ -141,6 +143,10 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 	if (DIKeyDown(DIK_4))
 	{
 		pPlayer->Legacy4Press();
+	}
+	if (DIKeyDown(DIK_E))
+	{
+		pPlayer->UsePotion();
 	}
 
 	return 0;

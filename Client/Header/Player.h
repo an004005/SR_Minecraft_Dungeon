@@ -7,7 +7,7 @@ class CController;
 class CStatComponent;
 class CInventory;
 class CEquipItem;
-
+class CAxe;
 
 class CPlayer : public CSkeletalCube
 {
@@ -66,6 +66,9 @@ public:
 	void Legacy2Press() { m_bLegacy2 = true; }
 	void Legacy4Press();
 
+	}
+	void UsePotion();
+	//
 	//아이템 변경(임시)
 	void WeaponChange(ITEMTYPE eIT);
 
@@ -79,16 +82,20 @@ private:
 	//근거리 ,원거리 상관없이 다 넣음, AttackState()에서 문제 생길 수 있음.
 	CEquipItem* m_pCurWeapon = nullptr;
 	CInventory* m_pInventory = nullptr;
+	CAxe* m_pAxe = nullptr;
 
 protected:
 	SkeletalPart* m_pWeaponPart = nullptr;
-	CStatComponent* m_pStat;
+	CStatComponent* m_pStat = nullptr;
+	CCollisionCom* m_pColl = nullptr;
 
 	PlayerState m_eState = STATE_END;
 	array<CubeAnimFrame, ANIM_END> m_arrAnim;
 
-	_float m_RollCoolTime;
+	const static _float s_RollCoolTime;
 	_float m_CurRollCoolTime;
+	const static _float s_PotionCollTime;
+	_float m_CurPotionCoolTime;
 	_float m_fSpeed; // 속도
 	_float m_fRollSpeed; // 구르기 속도
 
@@ -112,6 +119,9 @@ protected:
 
 	DWORD m_dwWalkDust;
 	DWORD m_dwRollDust;
+
+	// 원거리에서 근거리 무기로 다시 돌아올 때 1프레임동안 근거리 무기 위치가 이상한 현상을 막기 위함.
+	_bool m_bDelay = false;
 
 	
 };

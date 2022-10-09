@@ -63,7 +63,12 @@ const _matrix* CTransform::Compute_LookAtTarget(const _vec3* pTargetPos)
 												D3DXVec3Normalize(&vUp, &m_vInfo[INFO_UP]))));
 }
 
-
+void CTransform::RotateToLookAt(const _vec3& vLookAt)
+{
+	D3DXMatrixLookAtLH(&m_matWorld, &m_vInfo[INFO_POS], &vLookAt, &CGameUtilMgr::s_vUp);
+	D3DXMatrixInverse(&m_matWorld, nullptr, &m_matWorld);
+	CGameUtilMgr::MatWorldDecompose(m_matWorld, m_vScale, m_vAngle, m_vInfo[INFO_POS]);
+}
 
 HRESULT CTransform::Ready_Transform(void)
 {
@@ -77,6 +82,8 @@ HRESULT CTransform::Ready_Transform(void)
 
 _int CTransform::Update_Component(const _float & fTimeDelta)
 {
+	if (m_bStopUpdate) return 0;
+
 	D3DXMatrixIdentity(&m_matWorld);
 
 	// info √ ±‚»≠

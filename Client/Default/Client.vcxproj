@@ -166,6 +166,9 @@
   <ItemGroup>
     <ClInclude Include="..\Header\AbstFactory.h" />
     <ClInclude Include="..\Header\AnimationTool.h" />
+    <ClInclude Include="..\Header\Arrow.h" />
+    <ClInclude Include="..\Header\ArrowCubeMgr.h" />
+    <ClInclude Include="..\Header\Axe.h" />
     <ClInclude Include="..\Header\BackGround.h" />
     <ClInclude Include="..\Header\Box.h" />
     <ClInclude Include="..\Header\Controller.h" />
@@ -201,6 +204,7 @@
     <ClInclude Include="..\Header\SkeletalCube.h" />
     <ClInclude Include="..\Header\Skeleton.h" />
     <ClInclude Include="..\Header\SkeletonController.h" />
+    <ClInclude Include="..\Header\SphereEffect.h" />
     <ClInclude Include="..\Header\Stage.h" />
     <ClInclude Include="..\Header\StatComponent.h" />
     <ClInclude Include="..\Header\StaticCamera.h" />
@@ -235,6 +239,9 @@
   <ItemGroup>
     <ClCompile Include="..\Code\AbstFactory.cpp" />
     <ClCompile Include="..\Code\AnimationTool.cpp" />
+    <ClCompile Include="..\Code\Arrow.cpp" />
+    <ClCompile Include="..\Code\ArrowCubeMgr.cpp" />
+    <ClCompile Include="..\Code\Axe.cpp" />
     <ClCompile Include="..\Code\BackGround.cpp" />
     <ClCompile Include="..\Code\Box.cpp" />
     <ClCompile Include="..\Code\Controller.cpp" />
@@ -270,6 +277,7 @@
     <ClCompile Include="..\Code\SkeletalCube.cpp" />
     <ClCompile Include="..\Code\Skeleton.cpp" />
     <ClCompile Include="..\Code\SkeletonController.cpp" />
+    <ClCompile Include="..\Code\SphereEffect.cpp" />
     <ClCompile Include="..\Code\Stage.cpp" />
     <ClCompile Include="..\Code\StatComponent.cpp" />
     <ClCompile Include="..\Code\StaticCamera.cpp" />
