@@ -14,9 +14,6 @@
     <Filter Include="01. Scene">
       <UniqueIdentifier>{51abecec-9fb8-4a32-b8b8-3291df53ea13}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Scene\00. Logo">
-      <UniqueIdentifier>{019cda08-d1b3-446a-a55c-95aea3c45ddf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Scene\01. Stage">
       <UniqueIdentifier>{89694268-cdb2-4de5-8f07-5d50beb56bc6}</UniqueIdentifier>
     </Filter>
@@ -85,9 +82,6 @@
     <ClInclude Include="..\Header\MainApp.h">
       <Filter>00. MainApp</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\Logo.h">
-      <Filter>01. Scene\00. Logo</Filter>
-    </ClInclude>
     <ClInclude Include="Client.h">
       <Filter>99. Default</Filter>
     </ClInclude>
@@ -99,9 +93,6 @@
     </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>99. Default</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\BackGround.h">
-      <Filter>02. GameObject</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Terrain.h">
       <Filter>02. GameObject</Filter>
@@ -202,6 +193,7 @@
     <ClInclude Include="..\Header\StatComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\Particle.h" />
     <ClInclude Include="..\Header\PlayerController.h">
       <Filter>Controller</Filter>
     </ClInclude>
@@ -255,6 +247,11 @@
     </ClInclude>
     <ClInclude Include="..\Header\ArrowCubeMgr.h" />
     <ClInclude Include="..\Header\RedStoneMonstrosityBullet.h" />
+    <ClInclude Include="..\Header\Sword.h" />
+    <ClInclude Include="..\Header\Axe.h" />
+    <ClInclude Include="..\Header\ObjectStoreMgr.h">
+      <Filter>Mgr</Filter>
+    </ClInclude>
     <ClInclude Include="..\Header\Particle.h">
       <Filter>02. GameObject\05. Effect</Filter>
     </ClInclude>
@@ -297,6 +294,12 @@
     <ClInclude Include="..\Header\ConsumeItem.h">
       <Filter>02. GameObject\07. Item\Consume</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\Box.h" />
+    <ClInclude Include="..\Header\Dynamite.h" />
+    <ClInclude Include="..\Header\Inventory.h" />
+    <ClInclude Include="..\Header\SphereEffect.h" />
+    <ClInclude Include="..\Header\UI.h" />
+    <ClInclude Include="..\Header\UITool.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -304,9 +307,6 @@
     </ClCompile>
     <ClCompile Include="Client.cpp">
       <Filter>99. Default</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\BackGround.cpp">
-      <Filter>02. GameObject</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Loading.cpp">
       <Filter>01. Scene</Filter>
@@ -380,9 +380,6 @@
     <ClCompile Include="..\Code\MainApp.cpp">
       <Filter>00. MainApp</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Logo.cpp">
-      <Filter>01. Scene\00. Logo</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\AnimationTool.cpp">
       <Filter>01. Scene\ToolScene</Filter>
     </ClCompile>
@@ -407,6 +404,7 @@
     <ClCompile Include="..\Code\GeomancerController.cpp">
       <Filter>Controller</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\Particle.cpp" />
     <ClCompile Include="..\Code\ZombieController.cpp">
       <Filter>Controller</Filter>
     </ClCompile>
@@ -459,8 +457,14 @@
     <ClCompile Include="..\Code\SphereEffect.cpp">
       <Filter>02. GameObject\05. Effect</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\Arrow.cpp" />
     <ClCompile Include="..\Code\ArrowCubeMgr.cpp" />
     <ClCompile Include="..\Code\RedStoneMonstrosityBullet.cpp" />
+    <ClCompile Include="..\Code\Sword.cpp" />
+    <ClCompile Include="..\Code\Axe.cpp" />
+    <ClCompile Include="..\Code\ObjectStoreMgr.cpp">
+      <Filter>Mgr</Filter>
+    </ClCompile>
     <ClCompile Include="..\Code\EquipItem.cpp">
       <Filter>02. GameObject\05. Item</Filter>
     </ClCompile>
@@ -509,6 +513,12 @@
     <ClCompile Include="..\Code\ConsumeItem.cpp">
       <Filter>02. GameObject\07. Item\Consume</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\Box.cpp" />
+    <ClCompile Include="..\Code\Dynamite.cpp" />
+    <ClCompile Include="..\Code\Inventory.cpp" />
+    <ClCompile Include="..\Code\SphereEffect.cpp" />
+    <ClCompile Include="..\Code\UI.cpp" />
+    <ClCompile Include="..\Code\UITool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">

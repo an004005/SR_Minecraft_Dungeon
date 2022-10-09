@@ -1,4 +1,13 @@
 
+void SwitchSceneLoading(CScene* pLoading, std::function<CScene*()>& pSceneCreate, long long delay)
+{
+	CManagement::GetInstance()->SwitchSceneLoading(pLoading, pSceneCreate, delay);
+}
+void SwitchSceneLoadingDeletePrev(CScene* pLoading, std::function<CScene*()>& pSceneCreate, long long delay)
+{
+	CManagement::GetInstance()->SwitchSceneLoadingDeletePrev(pLoading, pSceneCreate, delay);
+}
+
 HRESULT	Create_Management(LPDIRECT3DDEVICE9& pGraphicDev, CManagement** ppManagement)
 {
 	CManagement*		pManagement = CManagement::GetInstance();

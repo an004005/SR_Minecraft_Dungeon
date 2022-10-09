@@ -1,5 +1,5 @@
 #include "RcTex.h"
-
+#include "GameUtilMgr.h"
 
 CRcTex::CRcTex(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CVIBuffer(pGraphicDev)
@@ -15,7 +15,7 @@ CRcTex::~CRcTex() = default;
 
 HRESULT CRcTex::Ready_Buffer()
 {
-m_dwVtxCnt = 4;
+	m_dwVtxCnt = 4;
 	m_dwTriCnt = 2;
 	m_dwVtxSize = sizeof(VTXTEX);
 	m_dwFVF = FVF_TEX;
@@ -67,6 +67,26 @@ m_dwVtxCnt = 4;
 
 void CRcTex::Render_Buffer()
 {
+	if (false == CGameUtilMgr::FloatCmp(m_fPreProfress, m_fProgress))
+	{
+		VTXTEX*		pVertex = nullptr;
+		m_pVB->Lock(0, 0, (void**)&pVertex, 0);
+		pVertex[0].vPos = { -0.5f, m_fProgress - 0.5f , 0.f };
+		pVertex[0].vTexUV = { 0.f, 1.f - m_fProgress };
+
+		pVertex[1].vPos = { 0.5f, m_fProgress - 0.5f, 0.f };
+		pVertex[1].vTexUV = { 1.f, 1.f - m_fProgress };
+
+		pVertex[2].vPos = { 0.5f, -0.5f, 0.f };
+		pVertex[2].vTexUV = { 1.f, 1.f };
+
+		pVertex[3].vPos = { -0.5f, -0.5f, 0.f };
+		pVertex[3].vTexUV = { 0.f, 1.f };
+		m_pVB->Unlock();
+
+		m_fPreProfress = m_fProgress;
+	}
+
 	CVIBuffer::Render_Buffer();
 }
 

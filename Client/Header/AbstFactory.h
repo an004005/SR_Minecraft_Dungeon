@@ -269,3 +269,74 @@ public:
 private:
 	static map<string, std::function<CGameObject*()>> s_mapItemSpawner;
 };
+
+class CUIFactory : CAbstFactory
+{
+	friend class CImGuiMgr;
+public:
+	template<typename T>
+	static T* Create(const string& strFactoryTag, const wstring& wstrObjTag, _uint iTexNum)
+	{
+		T* pCasted = dynamic_cast<T*>(s_mapUISpawner.find(strFactoryTag)->second(iTexNum));
+		_ASSERT_CRASH(pCasted != nullptr);
+		Engine::AddGameObject(LAYER_UI, wstrObjTag, pCasted);
+
+		return pCasted;
+	}
+
+	template<typename T>
+	static T* Create(const string& strFactoryTag, const wstring& wstrObjTag, _uint iTexNum, const _float& fX, const _float& fY, const _float& fSizeX, const _float& fSizeY)
+	{
+		T* pCasted = Create<T>(strFactoryTag, wstrObjTag, iTexNum);
+
+		CTransform* pTrans = pCasted->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+		pTrans->Set_Scale(fSizeX, fSizeY, 1.f);
+		pTrans->Set_Pos(fX - WINCX * 0.5f, -fY + WINCY * 0.5f, 0.f);
+		return pCasted;
+	}
+
+	template<typename T>
+	static T* CreateNoLayer(const string& strFactoryTag, _uint iTexNum, const _float& fX, const _float& fY, const _float& fSizeX, const _float& fSizeY)
+	{
+		T* pCasted = dynamic_cast<T*>(s_mapUISpawner.find(strFactoryTag)->second(iTexNum));
+		_ASSERT_CRASH(pCasted != nullptr);
+
+		CTransform* pTrans = pCasted->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+		pTrans->Set_Scale(fSizeX, fSizeY, 1.f);
+		pTrans->Set_Pos(fX - WINCX * 0.5f, -fY + WINCY * 0.5f, 0.f);
+		pTrans->Update_Component(0.f);
+		return pCasted;
+	}
+
+
+	static void Ready_UIFactory();
+
+private:
+	static map<string, std::function<CGameObject*(_uint)>> s_mapUISpawner;
+};
+
+class CSceneFactory : CAbstFactory
+{
+	friend class CImGuiMgr;
+public:
+	static void LoadScene(const string& strLoadingTag, const string& strSceneTag, bool bDeletePrev = true, long long delay = 1000)
+	{
+		CScene* pLoading = s_mapLoadingSpawner.find(strLoadingTag)->second();
+
+		if (bDeletePrev)
+		{
+			Engine::SwitchSceneLoadingDeletePrev(pLoading, s_mapSceneSpawner.find(strSceneTag)->second, delay);
+		}
+		else
+		{
+			Engine::SwitchSceneLoading(pLoading, s_mapSceneSpawner.find(strSceneTag)->second, delay);
+		}
+	}
+
+	static void Ready_SceneFactory();
+
+private:
+	static map<string, std::function<CScene*()>> s_mapLoadingSpawner;
+	static map<string, std::function<CScene*()>> s_mapSceneSpawner;
+
+};
