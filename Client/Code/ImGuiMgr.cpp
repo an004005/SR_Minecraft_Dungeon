@@ -5,6 +5,7 @@
 #include "ImGuiFileDialog.h"
 #include "ImSequencerImpl.h"
 #include "TerrainCubeMap.h"
+#include "AbstFactory.h"
 
 ImGuiTextBuffer CImGuiMgr::s_log;
 SkeletalPart* CImGuiMgr::s_SelectedPart = nullptr;
@@ -690,86 +691,152 @@ void CImGuiMgr::MapControl(Engine::MapTool& tMaptool, _float& _far, CTerrainCube
 	
 }
 
-void CImGuiMgr::UiEditor(Engine::UiTool& tUitool, CTerrainCubeMap* cubemap)
+void CImGuiMgr::SceneSwitcher()
 {
 #ifndef _DEBUG
 	return;
 #endif
-	ImGui::Separator();
 
-	if (ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None))
+	ImGui::Begin("Scene Switcher");
+	static string strLoadingTag;
+	static int iCurLoadingTagIdx = 0;
+
+	static string strSceneTag;
+	static int iCurSceneTagIdx = 0;
+
+	static int iDelay = 1000;
+
+	if (ImGui::BeginListBox("Loading Tag"))
 	{
-		if (ImGui::BeginTabItem("Set Texture"))
+		int iIdx = 0;
+		for (auto& loading : CSceneFactory::s_mapLoadingSpawner)
 		{
+			const bool bSelected = iCurLoadingTagIdx == iIdx;
+			if (ImGui::Selectable(loading.first.c_str(), bSelected))
+			{
+				iCurLoadingTagIdx = iIdx;
+				strLoadingTag = loading.first;
+			}
 
-			ImGui::Text("Set UI Texture");
-			ImGui::InputInt("UI Index", &tUitool.iTexIdx);
-			ImGui::NewLine();
+			if (bSelected)
+				ImGui::SetItemDefaultFocus();
+			++iIdx;
+		}
+		ImGui::EndListBox();
+	}
+	if (ImGui::BeginListBox("Scene Tag"))
+	{
+		int iIdx = 0;
+		for (auto& scene : CSceneFactory::s_mapSceneSpawner)
+		{
+			const bool bSelected = iCurSceneTagIdx == iIdx;
+			if (ImGui::Selectable(scene.first.c_str(), bSelected))
+			{
+				iCurSceneTagIdx = iIdx;
+				strSceneTag = scene.first;
+			}
 
-			ImGui::Text("Set Scale");
-			ImGui::SliderFloat("X", &tUitool.fX, 1.f, 2.f, "ratio = %.3f");
-			ImGui::SliderFloat("Y", &tUitool.fY, 1.f, 2.f, "ratio = %.3f");
-			ImGui::SliderFloat("Z", &tUitool.fZ, 1.f, 2.f, "ratio = %.3f");
-			ImGui::InputFloat("Insert X", &tUitool.fX);
-			ImGui::InputFloat("Insert Y", &tUitool.fY);
-			ImGui::InputFloat("Insert Z", &tUitool.fZ);
-			ImGui::NewLine();
+			if (bSelected)
+				ImGui::SetItemDefaultFocus();
+			++iIdx;
+		}
+		ImGui::EndListBox();
+	}
+	ImGui::SliderInt("Loading Min Delay", &iDelay, 0, 3000);
 
-			ImGui::Text("Select Options");
-			ImGui::RadioButton("PicKing", &tUitool.iPickingOption, PICK_CUBE); ImGui::SameLine();
-			ImGui::RadioButton("Delete", &tUitool.iPickingOption, PICK_DELETE); ImGui::SameLine();
-
-			ImGui::NewLine();
-			ImGui::NewLine();
-
-			ImGui::EndTabItem();
+	if (ImGui::Button("Scene Load"))
+	{
+		CSceneFactory::LoadScene(strLoadingTag, strSceneTag, false, iDelay);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Scene Load delete prev"))
+	{
+		CSceneFactory::LoadScene(strLoadingTag, strSceneTag, true, iDelay);
 	}
 
-		if (ImGui::BeginTabItem("Save / Load"))
-		{
-			if (ImGui::Button("Load UI"))
-			{
-				ImGuiFileDialog::Instance()->OpenDialog("ChooseFileToLoadUI", "Choose File", ".UI",
-					"../Bin/Resource/UI/");
-			}
-			if (ImGuiFileDialog::Instance()->Display("ChooseFileToLoadUI"))
-			{
-				if (ImGuiFileDialog::Instance()->IsOk())
-				{
-					std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-
-					wstring tmp;
-					tmp.assign(filePathName.begin(), filePathName.end());
-					cubemap->LoadMap(tmp);
-				}
-				ImGuiFileDialog::Instance()->Close();
-			}
-			ImGui::SameLine();
-
-			if (ImGui::Button("Save UI"))
-			{
-				ImGuiFileDialog::Instance()->OpenDialog("ChooseFileToSaveUI", "Choose File", ".UI",
-					"../Bin/Resource/UI/");
-			}
-			if (ImGuiFileDialog::Instance()->Display("ChooseFileToSaveUI"))
-			{
-				if (ImGuiFileDialog::Instance()->IsOk())
-				{
-					std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-
-					wstring tmp;
-					tmp.assign(filePathName.begin(), filePathName.end());
-					cubemap->SaveMap(tmp);
-				}
-				ImGuiFileDialog::Instance()->Close();
-			}
-
-			ImGui::EndTabItem();
-		}
-
-		ImGui::EndTabBar();
+	ImGui::End();
 }
-}
+
+// void CImGuiMgr::UiEditor(Engine::UiTool& tUitool, CTerrainCubeMap* cubemap)
+// {
+// #ifndef _DEBUG
+// 	return;
+// #endif
+// 	ImGui::Separator();
+//
+// 	if (ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None))
+// 	{
+// 		if (ImGui::BeginTabItem("Set Texture"))
+// 		{
+//
+// 			ImGui::Text("Set UI Texture");
+// 			ImGui::InputInt("UI Index", &tUitool.iTexIdx);
+// 			ImGui::NewLine();
+//
+// 			ImGui::Text("Set Scale");
+// 			ImGui::SliderFloat("X", &tUitool.fX, 1.f, 2.f, "ratio = %.3f");
+// 			ImGui::SliderFloat("Y", &tUitool.fY, 1.f, 2.f, "ratio = %.3f");
+// 			ImGui::SliderFloat("Z", &tUitool.fZ, 1.f, 2.f, "ratio = %.3f");
+// 			ImGui::InputFloat("Insert X", &tUitool.fX);
+// 			ImGui::InputFloat("Insert Y", &tUitool.fY);
+// 			ImGui::InputFloat("Insert Z", &tUitool.fZ);
+// 			ImGui::NewLine();
+//
+// 			ImGui::Text("Select Options");
+// 			ImGui::RadioButton("PicKing", &tUitool.iPickingOption, PICK_CUBE); ImGui::SameLine();
+// 			ImGui::RadioButton("Delete", &tUitool.iPickingOption, PICK_DELETE); ImGui::SameLine();
+//
+// 			ImGui::NewLine();
+// 			ImGui::NewLine();
+//
+// 			ImGui::EndTabItem();
+// 	}
+//
+// 		if (ImGui::BeginTabItem("Save / Load"))
+// 		{
+// 			if (ImGui::Button("Load UI"))
+// 			{
+// 				ImGuiFileDialog::Instance()->OpenDialog("ChooseFileToLoadUI", "Choose File", ".UI",
+// 					"../Bin/Resource/UI/");
+// 			}
+// 			if (ImGuiFileDialog::Instance()->Display("ChooseFileToLoadUI"))
+// 			{
+// 				if (ImGuiFileDialog::Instance()->IsOk())
+// 				{
+// 					std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+//
+// 					wstring tmp;
+// 					tmp.assign(filePathName.begin(), filePathName.end());
+// 					cubemap->LoadMap(tmp);
+// 				}
+// 				ImGuiFileDialog::Instance()->Close();
+// 			}
+// 			ImGui::SameLine();
+//
+// 			if (ImGui::Button("Save UI"))
+// 			{
+// 				ImGuiFileDialog::Instance()->OpenDialog("ChooseFileToSaveUI", "Choose File", ".UI",
+// 					"../Bin/Resource/UI/");
+// 			}
+// 			if (ImGuiFileDialog::Instance()->Display("ChooseFileToSaveUI"))
+// 			{
+// 				if (ImGuiFileDialog::Instance()->IsOk())
+// 				{
+// 					std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+//
+// 					wstring tmp;
+// 					tmp.assign(filePathName.begin(), filePathName.end());
+// 					cubemap->SaveMap(tmp);
+// 				}
+// 				ImGuiFileDialog::Instance()->Close();
+// 			}
+//
+// 			ImGui::EndTabItem();
+// 		}
+//
+// 		ImGui::EndTabBar();
+// }
+// }
 
 void CImGuiMgr::SkeletalRecursive(SkeletalPart* Part, string& strSelected, ImGuiTreeNodeFlags baseFlags)
 {

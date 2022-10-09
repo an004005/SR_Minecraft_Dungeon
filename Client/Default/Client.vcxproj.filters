@@ -272,6 +272,9 @@
     <ClInclude Include="..\Header\UITool.h">
       <Filter>01. Scene\ToolScene</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\ObjectStoreMgr.h">
+      <Filter>Mgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -443,6 +446,9 @@
     <ClCompile Include="..\Code\RedStoneMonstrosityBullet.cpp" />
     <ClCompile Include="..\Code\Sword.cpp" />
     <ClCompile Include="..\Code\Axe.cpp" />
+    <ClCompile Include="..\Code\ObjectStoreMgr.cpp">
+      <Filter>Mgr</Filter>
+    </ClCompile>
     <ClCompile Include="..\Code\EquipItem.cpp">
       <Filter>02. GameObject\05. Item</Filter>
     </ClCompile>

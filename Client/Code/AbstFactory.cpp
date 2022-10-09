@@ -24,8 +24,9 @@
 #include "Inventory.h"
 #include "Dynamite.h"
 #include "UI.h"
-
-
+#include "Logo.h"
+#include "Stage.h"
+#include "AnimationTool.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -36,8 +37,11 @@ map<string, std::function<CGameObject*()>> CEnvFactory::s_mapEnvSpawner;
 map<string, std::function<CGameObject*(_float)>> CBulletFactory::s_mapBulletSpawner;
 map<string, std::function<CGameObject*()>> CObjectFactory::s_mapObjectSpawner;
 map<string, std::function<CGameObject*()>> CItemFactory::s_mapItemSpawner;
-map<string, std::function<CGameObject*()>> CBulletFactory::s_mapBulletSpawner;
 map<string, std::function<CGameObject*()>> CUIFactory::s_mapUISpawner;
+
+map<string, std::function<CScene*()>> CSceneFactory::s_mapLoadingSpawner;
+map<string, std::function<CScene*()>> CSceneFactory::s_mapSceneSpawner;
+
 
 
 void CAbstFactory::Ready_Factories(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -53,6 +57,7 @@ void CAbstFactory::Ready_Factories(LPDIRECT3DDEVICE9 pGraphicDev)
 	CObjectFactory::Ready_ObjectFactory();
 	CItemFactory::Ready_ItemFactory();
 	CUIFactory::Ready_UIFactory();
+	CSceneFactory::Ready_SceneFactory();
 }
 
 void CPlayerFactory::Ready_PlayerFactory()
@@ -446,4 +451,27 @@ void CUIFactory::Ready_UIFactory()
 		return CUI::Create(s_pGraphicDev, 11);
 	} });
 
+}
+
+void CSceneFactory::Ready_SceneFactory()
+{
+	// loading scene
+	{
+		s_mapLoadingSpawner.insert({"IU", []()
+		{
+			return CLogo::Create(s_pGraphicDev);
+		}});
+	}
+
+	// scene
+	{
+		s_mapSceneSpawner.insert({"Stage_Default", []()
+		{
+			return CStage::Create(s_pGraphicDev);
+		}});
+		s_mapSceneSpawner.insert({"Animation Tool", []()
+		{
+			return CAnimationTool::Create(s_pGraphicDev);
+		}});
+	}
 }

@@ -30,6 +30,8 @@
 
 BEGIN(Engine)
 	// Management
+	inline void SwitchSceneLoading(CScene* pLoading, std::function<CScene*()>& pSceneCreate, long long delay = 1000/*0.5√ */);
+	inline void SwitchSceneLoadingDeletePrev(CScene* pLoading, std::function<CScene*()>& pSceneCreate, long long delay = 1000/*0.5√ */);
 
 
 	inline HRESULT Create_Management(LPDIRECT3DDEVICE9& pGraphicDev, CManagement** ppManagement);
