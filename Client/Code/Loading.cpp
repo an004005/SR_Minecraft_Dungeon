@@ -1,87 +1,49 @@
 #include "stdafx.h"
 #include "..\Header\Loading.h"
+#include "AbstFactory.h"
+#include "UI.h"
 
-CLoading::CLoading(LPDIRECT3DDEVICE9 pGraphicDev)
-	: m_pGraphicDev(pGraphicDev)
-	, m_bFinish(false)
-	, m_eID(LOADING_END)	
+CLoading::CLoading(LPDIRECT3DDEVICE9 pGraphicDev) : CScene(pGraphicDev)
 {
-	m_pGraphicDev->AddRef();
 }
-
 
 CLoading::~CLoading()
 {
 }
 
-HRESULT CLoading::Ready_Loading(LOADINGID eID)
+// 주의사항 : 로딩 씬 만들때는  CScene::Ready_Scene() 실행하면 안됩니다.
+// 또한 팩토리 사용 불가
+HRESULT CLoading::Ready_Scene()
 {
-	InitializeCriticalSection(&m_Crt);
-
-	m_hThread = (HANDLE)_beginthreadex(nullptr, 0, Thread_Main, this, 0, nullptr);
-
-	m_eID = eID;
+	m_pImage = CUIFactory::CreateNoLayer<CUI>("DefaultUI", 14, WINCX/2, WINCY/2, WINCX, WINCY);
+	m_arrLayer[LAYER_UI]->Add_GameObject(L"LoadingUI", m_pImage);
 
 	return S_OK;
 }
 
-_uint CLoading::Loading_ForStage(void)
+_int CLoading::Update_Scene(const _float& fTimeDelta)
 {
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_TerrainTexCom", CTerrainTex::Create(m_pGraphicDev, VTXCNTX, VTXCNTZ, VTXITV)), E_FAIL);
-
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_TerrainTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Terrain/Terrain0.png", TEX_NORMAL)), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_PlayerTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Player/Ma.jpg", TEX_NORMAL)), E_FAIL);
-	//FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_RcShaderCom", CRcShader::Create(m_pGraphicDev,L"../Bin/Resource/Shader/UVAnimation.fx")), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_TransformCom", CTransform::Create()), E_FAIL);
-
-	//For Map
-	//FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_RcTexCom", CRcTex::Create(m_pGraphicDev)), E_FAIL);
-	//FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_TerrainTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Terrain/Grass_%d.tga", TEX_NORMAL)), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CubeTexCom", CCubeTex::Create(m_pGraphicDev)), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_MinecraftCubeTexture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/MinscraftCubeTile/CubeTile_%d.dds", TEX_CUBE, 107)), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CalculatorCom", CCalculator::Create(m_pGraphicDev)), E_FAIL);
-
-	m_bFinish = true;
-
-	return _uint();
+	CTransform* pTrans = m_pImage->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+	pTrans->m_vScale += fTimeDelta * _vec3{1.f, 1.f, 1.f} * 20.f;
+	return CScene::Update_Scene(fTimeDelta);
 }
 
-_uint CLoading::Loading_ForBoss(void)
+void CLoading::LateUpdate_Scene()
 {
-	return _uint();
+	CScene::LateUpdate_Scene();
 }
 
-unsigned int CLoading::Thread_Main(void * pArg)
+void CLoading::Render_Scene()
 {
-	CLoading*		pLoading = (CLoading*)pArg;
+	CScene::Render_Scene();
+}
 
-	_uint iFlag = 0;
+CLoading* CLoading::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+{
+	CLoading *	pInstance = new CLoading(pGraphicDev);
 
-	EnterCriticalSection(&(pLoading->Get_Crt()));
-
-	switch (pLoading->Get_LoadingID())
+	if (FAILED(pInstance->Ready_Scene()))
 	{
-	case LOADING_STAGE:
-		iFlag = pLoading->Loading_ForStage();
-		break;
-
-	case LOADING_BOSS:
-		// iFlag = pLoading->Loading_ForBoss();
-		break;
-	}
-	
-	LeaveCriticalSection(&(pLoading->Get_Crt()));
-
-	return iFlag;
-}
-
-CLoading * CLoading::Create(LPDIRECT3DDEVICE9 pGraphicDev, LOADINGID eID)
-{
-	CLoading*		pInstance = new CLoading(pGraphicDev);
-
-	if (FAILED(pInstance->Ready_Loading(eID)))
-	{
-		MSG_BOX("Loading Create Failed");
 		Safe_Release(pInstance);
 		return nullptr;
 	}
@@ -89,11 +51,7 @@ CLoading * CLoading::Create(LPDIRECT3DDEVICE9 pGraphicDev, LOADINGID eID)
 	return pInstance;
 }
 
-void CLoading::Free(void)
+void CLoading::Free()
 {
-	WaitForSingleObject(m_hThread, INFINITE);
-	CloseHandle(m_hThread);
-	DeleteCriticalSection(&m_Crt);
-
-	Safe_Release(m_pGraphicDev);
+	CScene::Free();
 }

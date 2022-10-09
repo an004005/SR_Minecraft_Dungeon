@@ -1,9 +1,6 @@
 #include "stdafx.h"
 #include "..\Header\UI.h"
 
-#include "Export_Function.h"
-
-
 CUI::CUI(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CGameObject(pGraphicDev)
 {
@@ -28,20 +25,6 @@ _int CUI::Update_Object(const _float & fTimeDelta)
 {
 	Engine::CGameObject::Update_Object(fTimeDelta);
 
-
-	if (DIKeyPressing(DIK_Q))
-	{
-		m_pBufferCom->Progress(+fTimeDelta);
-
-	}
-
-	if (DIKeyPressing(DIK_E))
-	{
-		m_pBufferCom->Progress(-fTimeDelta);
-
-	}
-
-
 	Add_RenderGroup(RENDER_UI, this);
 
 	return 0;
@@ -53,8 +36,8 @@ void CUI::LateUpdate_Object(void)
 
 void CUI::Render_Object(void)
 {
-	Render_Font(L"Font_Jinji", L"10", &_vec2(955.f, 630.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
-	Render_Font(L"Font_Jinji", L"0", &_vec2(1110.f, 640.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
+	// Render_Font(L"Font_Jinji", L"10", &_vec2(955.f, 630.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
+	// Render_Font(L"Font_Jinji", L"0", &_vec2(1110.f, 640.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
 	
 	_matrix			OldViewMatrix, OldProjMatrix;

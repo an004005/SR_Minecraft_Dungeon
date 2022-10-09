@@ -154,8 +154,8 @@ HRESULT CStage::Ready_Layer_UI()
 	
 	//CUIFactory::Create<CUI>("Buffe4", L"UI", 700.f, 650.f, 40.f, 40.f);
 	//CUIFactory::Create<CUI>("Buffe3", L"UI", 503.f, 650.f, 40.f, 40.f);
-	CUIFactory::Create<CUI>("UITexture", L"UI", 600.f, 650.f, 130.f, 110.f);
-	CUIFactory::Create<CUI>("UI_HP", L"UI_HP", 600.f, 650.f, 110.f, 85.f);
+	// CUIFactory::Create<CUI>("UITexture", L"UI", 600.f, 650.f, 130.f, 110.f);
+	// CUIFactory::Create<CUI>("UI_HP", L"UI_HP", 600.f, 650.f, 110.f, 85.f);
 	//CUIFactory::Create<CUI>("InvenTool", L"UI", 230.f, 655.f, 35.f, 35.f);
 	//CUIFactory::Create<CUI>("Inven", L"UI", 230.f, 655.f, 25.f, 25.f);
 	//CUIFactory::Create<CUI>("Buffe1", L"UI", 325.f, 650.f, 40.f, 40.f);
@@ -164,9 +164,9 @@ HRESULT CStage::Ready_Layer_UI()
 	//CUIFactory::Create<CUI>("map", L"UI", 800.f, 655.f, 35.f, 35.f);
 	//CUIFactory::Create<CUI>("RollTool", L"UI", 880.f, 655.f, 30.f, 30.f);
 	//CUIFactory::Create<CUI>("Roll", L"UI", 880.f, 657.f, 25.f, 20.f);
-	CUIFactory::Create<CUI>("arrowTool", L"UI", 980.f, 655.f, 40.f, 50.f);
-	CUIFactory::Create<CUI>("arrow", L"UI", 980.f, 655.f, 30.f, 30.f);
-	CUIFactory::Create<CUI>("emerald", L"UI", 1100.f, 655.f, 20.f, 25.f);
+	// CUIFactory::Create<CUI>("arrowTool", L"UI", 980.f, 655.f, 40.f, 50.f);
+	// CUIFactory::Create<CUI>("arrow", L"UI", 980.f, 655.f, 30.f, 30.f);
+	// CUIFactory::Create<CUI>("emerald", L"UI", 1100.f, 655.f, 20.f, 25.f);
 	//CUIFactory::Create<CUI>("enchant", L"UI", 150.f, 655.f, 20.f, 20.f);
 
 
