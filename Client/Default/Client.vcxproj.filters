@@ -65,6 +65,9 @@
     <Filter Include="02. GameObject\Object">
       <UniqueIdentifier>{d4c64e4c-660f-4b18-b3c9-37cd78b2fea4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\05. Effect">
+      <UniqueIdentifier>{7425b919-b28f-45e4-b86a-38d983e757b3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\MainApp.h">
@@ -187,7 +190,6 @@
     <ClInclude Include="..\Header\StatComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\Particle.h" />
     <ClInclude Include="..\Header\PlayerController.h">
       <Filter>Controller</Filter>
     </ClInclude>
@@ -248,6 +250,12 @@
     <ClInclude Include="..\Header\RedStoneMonstrosityBullet.h" />
     <ClInclude Include="..\Header\Sword.h" />
     <ClInclude Include="..\Header\Axe.h" />
+    <ClInclude Include="..\Header\Particle.h">
+      <Filter>02. GameObject\05. Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\SphereEffect.h">
+      <Filter>02. GameObject\05. Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -358,7 +366,6 @@
     <ClCompile Include="..\Code\GeomancerController.cpp">
       <Filter>Controller</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Particle.cpp" />
     <ClCompile Include="..\Code\ZombieController.cpp">
       <Filter>Controller</Filter>
     </ClCompile>
@@ -404,6 +411,12 @@
     <ClCompile Include="..\Code\Particle.cpp" />
     <ClCompile Include="..\Code\GeomancerWall.cpp">
       <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Particle.cpp">
+      <Filter>02. GameObject\05. Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SphereEffect.cpp">
+      <Filter>02. GameObject\05. Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Arrow.cpp" />
     <ClCompile Include="..\Code\ArrowCubeMgr.cpp" />

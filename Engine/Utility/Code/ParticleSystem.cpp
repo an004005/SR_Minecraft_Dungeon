@@ -192,7 +192,7 @@ void CParticleSystem::Add_Particle(const _vec3& _pos, const _float& _size,
 	attribute._fSize = _size;
 	attribute._color = _color;
 	attribute._fLifeTime = _lifetime;
-	for (int i = 0; i < _numParticle; ++i)
+	for (_uint i = 0; i < _numParticle; ++i)
 	{
 		Reset_Particle(&attribute);
 		m_ParticlesList.push_back(attribute);

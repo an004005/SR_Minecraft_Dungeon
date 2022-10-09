@@ -13,6 +13,7 @@
 #include "Sword.h"
 #include "Glaive.h"
 #include "Axe.h"
+#include "SphereEffect.h"
 
 /*-----------------------
  *    CCharacter
@@ -190,6 +191,53 @@ void CPlayer::AttackState()
 		m_pRangeWeapon->Attack();
 	}
 
+#pragma region GolemSmash
+	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_Shpere_L", L"Golem_Melee_Shpere_L");
+	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_Shpere_M", L"Golem_Melee_Shpere_M");
+	//
+	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_L", L"Golem_Melee_L");
+	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_M", L"Golem_Melee_M");
+	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_S", L"Golem_Melee_S");
+	// 	for (int i = 0; i < 15; i++)
+	// 	{
+	// 		CEffectFactory::Create<CCloud>("ShockPowder_Cloud", L"ShockPowder_Cloud");
+	// 	}
+	// //완전히 찍을 때
+	// 	Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.5f, D3DXCOLOR(0.88f,0.35f,0.24f,1.0f), 12, 0.8f);
+#pragma endregion
+
+#pragma region GolemSpit
+	// for (int i = 0; i < 10; i++)
+	// {
+		// CEffectFactory::Create<CGolemSpit>("Golem_Spit", L"Golem_Spit");
+	//}
+#pragma endregion
+
+#pragma region RedCube_Spawn
+		// CEffectFactory::Create<CCrack>("Red_Cube_Crack", L"Red_Cube_Crack");
+#pragma endregion
+
+#pragma region Lava_Paticle
+	// CEffectFactory::Create<CLava_Particle>("Lava_Particle", L"Lava_Particle");
+#pragma endregion
+
+#pragma region Heal Effect
+	// CEffectFactory::Create<CHealCircle>("Heal_Circle_L", L"Heal_Circle_L");
+	//
+	// for (int i = 0; i < 12; i++)
+	// {
+	// 	CEffectFactory::Create<CHeartParticle>("HeartParticle", L"HeartParticle");
+	// }
+#pragma endregion
+
+#pragma region Decal
+	CEffectFactory::Create<CCrack>("Exe_Decal", L"Exe_Decal");
+	for (int i = 0; i < 5; i++)
+	{
+		CEffectFactory::Create<CCloud>("Decal_Cloud", L"Decal_Cloud");
+	}
+#pragma endregion
+
 
 #pragma region Attack_Basic
 	// Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.3f, RED, 4, 0.2f);
@@ -255,7 +303,7 @@ void CPlayer::StateChange()
 		Get_GameObject<CSpeedBoots>(LAYER_EFFECT, L"Speed_Boots")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 3.f, D3DXCOLOR(0.2f, 0.2f, 0.5f, 1.f), 1, 1.5f);
 		Get_GameObject<CSpeedBoots_Particle>(LAYER_EFFECT, L"Speed_Boots_Particle")->Add_Particle(
 			_vec3(m_pRootPart->pTrans->m_vInfo[INFO_POS].x, m_pRootPart->pTrans->m_vInfo[INFO_POS].y + 15.f, m_pRootPart->pTrans->m_vInfo[INFO_POS].z),
-			1.f, D3DXCOLOR(0.3f, 0.4f, 0.7f, 1.f), 7, 20.f);
+			1.f, D3DXCOLOR(0.3f, 0.4f, 0.7f, 1.f), 18, 20.f);
 		return;
 	}
 

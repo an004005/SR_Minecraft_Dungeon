@@ -13,6 +13,7 @@
 #include "RedStoneCube.h"
 #include "RedStoneMonstrosity.h"
 #include "GeomancerWall.h"
+#include "SphereEffect.h"
 #include "RedStoneMonstrosityBullet.h"
 #include "Crossbow.h"
 #include "Sword.h"
@@ -159,12 +160,53 @@ void CEffectFactory::Ready_EffectFactory()
 		return CCloud::Create(s_pGraphicDev,0.4f,WALK);
 	} });
 
+	s_mapEffectSpawner.insert({ "Decal_Cloud", []()
+	{
+		return CCloud::Create(s_pGraphicDev,0.4f,DECAL);
+	} });
+
 	s_mapEffectSpawner.insert({ "Roll_Cloud", []()
 	{
 		return CCloud::Create(s_pGraphicDev,0.7f,ROLL);
 	} });
 
+	//
 
+	s_mapEffectSpawner.insert({ "Golem_Spit_Sphere",[]()
+	{
+		return CSphereEffect::Create(s_pGraphicDev, 0.03f, GOLEM_SPIT);
+	} });
+
+	s_mapEffectSpawner.insert({ "Golem_Melee_L",[]()
+	{
+		return CSphereEffect::Create(s_pGraphicDev, 0.03f, GOLEM_MELEE_L);
+	} });
+
+	s_mapEffectSpawner.insert({ "Golem_Melee_M",[]()
+	{
+		return CSphereEffect::Create(s_pGraphicDev, 0.025f, GOLEM_MELEE_M);
+	} });
+
+	s_mapEffectSpawner.insert({ "Golem_Melee_S",[]()
+	{
+		return CSphereEffect::Create(s_pGraphicDev, 0.015f, GOLEM_MELEE_S);
+	} });
+
+	s_mapEffectSpawner.insert({ "Golem_Melee_Shpere_L",[]()
+	{
+		return CSphereEffect::Create(s_pGraphicDev, 0.02f, SPHERE_L);
+	} });
+	s_mapEffectSpawner.insert({ "Golem_Melee_Shpere_M",[]()
+	{
+		return CSphereEffect::Create(s_pGraphicDev, 0.0185f, SPHERE_M);
+	} });
+
+	//
+
+	s_mapEffectSpawner.insert({ "Golem_Spit",[]()
+	{
+		return CGolemSpit::Create(s_pGraphicDev, 1.f);
+	} });
 
 	s_mapEffectSpawner.insert({ "Shock_Circle", []()
 	{
@@ -178,7 +220,7 @@ void CEffectFactory::Ready_EffectFactory()
 
 	s_mapEffectSpawner.insert({ "Creeper_Explosion", []()
 	{
-		return CUVCircle::Create(s_pGraphicDev, 3.5f, CREEPER);
+		return CUVCircle::Create(s_pGraphicDev, 3.7f, CREEPER);
 	} });
 
 	s_mapEffectSpawner.insert({ "Golem_Explosion", []()
@@ -186,6 +228,45 @@ void CEffectFactory::Ready_EffectFactory()
 		return CUVCircle::Create(s_pGraphicDev, 7.f, GOLEM);
 	} });
 
+	s_mapEffectSpawner.insert({ "Red_Cube_Crack", []()
+	{
+		return CCrack::Create(s_pGraphicDev, 1.f, GOLEM_SPIT_CRACK);
+	} });
+
+	s_mapEffectSpawner.insert({ "Monster_Stun",[]()
+	{
+		return CStun::Create(s_pGraphicDev, 1.f);
+	} });
+
+	s_mapEffectSpawner.insert({ "Heal_Circle_R",[]()
+	{
+		return CHealCircle::Create(s_pGraphicDev, 1.4f, 90.f);
+	} });
+
+	s_mapEffectSpawner.insert({ "Heal_Circle_L",[]()
+	{
+		return CHealCircle::Create(s_pGraphicDev, 1.4f, 90.f);
+	} });
+
+	s_mapEffectSpawner.insert({ "Lava_Particle",[]()
+	{
+		return CLava_Particle::Create(s_pGraphicDev, 1.f, FALLINLAVA);
+	} });
+
+	s_mapEffectSpawner.insert({ "Fuze_Particle",[]()
+	{
+		return CLava_Particle::Create(s_pGraphicDev, 1.f, FUZEPARTICLE);
+	} });
+
+	s_mapEffectSpawner.insert({ "Exe_Decal",[]()
+	{
+		return CCrack::Create(s_pGraphicDev, 2.f, EXE_DECAL);
+	} });
+
+	s_mapEffectSpawner.insert({ "HeartParticle",[]()
+	{
+		return CHeartParticle::Create(s_pGraphicDev, 1.f);
+	} });
 }
 
 void CEnvFactory::Ready_EnvFactory()
