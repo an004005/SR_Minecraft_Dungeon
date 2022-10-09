@@ -31,6 +31,8 @@ public:
 	static void AnimationEditor(CSkeletalCube* pSkeletal);
 	static void MapControl(Engine::MapTool& tMaptool, _float& _far, CTerrainCubeMap* cubemap);
 
+	static void SceneSwitcher();
+
 	static _bool IsShowColl() { return s_bShowColl; };
 
 private:

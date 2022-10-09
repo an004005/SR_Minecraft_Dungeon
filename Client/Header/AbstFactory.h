@@ -246,3 +246,29 @@ public:
 private:
 	static map<string, std::function<CGameObject*()>> s_mapItemSpawner;
 };
+	
+class CSceneFactory : CAbstFactory
+{
+	friend class CImGuiMgr;
+public:
+	static void LoadScene(const string& strLoadingTag, const string& strSceneTag, bool bDeletePrev = true, long long delay = 1000)
+	{
+		CScene* pLoading = s_mapLoadingSpawner.find(strLoadingTag)->second();
+
+		if (bDeletePrev)
+		{
+			Engine::SwitchSceneLoadingDeletePrev(pLoading, s_mapSceneSpawner.find(strSceneTag)->second, delay);
+		}
+		else
+		{
+			Engine::SwitchSceneLoading(pLoading, s_mapSceneSpawner.find(strSceneTag)->second, delay);
+		}
+	}
+
+	static void Ready_SceneFactory();
+
+private:
+	static map<string, std::function<CScene*()>> s_mapLoadingSpawner;
+	static map<string, std::function<CScene*()>> s_mapSceneSpawner;
+
+};

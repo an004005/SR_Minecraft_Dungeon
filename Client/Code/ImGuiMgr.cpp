@@ -5,6 +5,7 @@
 #include "ImGuiFileDialog.h"
 #include "ImSequencerImpl.h"
 #include "TerrainCubeMap.h"
+#include "AbstFactory.h"
 
 ImGuiTextBuffer CImGuiMgr::s_log;
 SkeletalPart* CImGuiMgr::s_SelectedPart = nullptr;
@@ -688,6 +689,72 @@ void CImGuiMgr::MapControl(Engine::MapTool& tMaptool, _float& _far, CTerrainCube
 	}
 
 	
+}
+
+void CImGuiMgr::SceneSwitcher()
+{
+#ifndef _DEBUG
+	return;
+#endif
+
+	ImGui::Begin("Scene Switcher");
+	static string strLoadingTag;
+	static int iCurLoadingTagIdx = 0;
+
+	static string strSceneTag;
+	static int iCurSceneTagIdx = 0;
+
+	static int iDelay = 1000;
+
+	if (ImGui::BeginListBox("Loading Tag"))
+	{
+		int iIdx = 0;
+		for (auto& loading : CSceneFactory::s_mapLoadingSpawner)
+		{
+			const bool bSelected = iCurLoadingTagIdx == iIdx;
+			if (ImGui::Selectable(loading.first.c_str(), bSelected))
+			{
+				iCurLoadingTagIdx = iIdx;
+				strLoadingTag = loading.first;
+			}
+
+			if (bSelected)
+				ImGui::SetItemDefaultFocus();
+			++iIdx;
+		}
+		ImGui::EndListBox();
+	}
+	if (ImGui::BeginListBox("Scene Tag"))
+	{
+		int iIdx = 0;
+		for (auto& scene : CSceneFactory::s_mapSceneSpawner)
+		{
+			const bool bSelected = iCurSceneTagIdx == iIdx;
+			if (ImGui::Selectable(scene.first.c_str(), bSelected))
+			{
+				iCurSceneTagIdx = iIdx;
+				strSceneTag = scene.first;
+			}
+
+			if (bSelected)
+				ImGui::SetItemDefaultFocus();
+			++iIdx;
+		}
+		ImGui::EndListBox();
+	}
+	ImGui::SliderInt("Loading Min Delay", &iDelay, 0, 3000);
+
+	if (ImGui::Button("Scene Load"))
+	{
+		CSceneFactory::LoadScene(strLoadingTag, strSceneTag, false, iDelay);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Scene Load delete prev"))
+	{
+		CSceneFactory::LoadScene(strLoadingTag, strSceneTag, true, iDelay);
+	}
+
+	ImGui::End();
 }
 
 void CImGuiMgr::SkeletalRecursive(SkeletalPart* Part, string& strSelected, ImGuiTreeNodeFlags baseFlags)

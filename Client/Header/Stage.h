@@ -22,7 +22,6 @@ private:
 	HRESULT			Ready_Layer_Environment();
 	HRESULT			Ready_Layer_GameLogic();
 	HRESULT			Ready_Layer_UI();
-	HRESULT			Ready_Proto(void);
 
 public:
 	static CStage*		Create(LPDIRECT3DDEVICE9 pGraphicDev);

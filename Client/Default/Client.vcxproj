@@ -190,6 +190,7 @@
     <ClInclude Include="..\Header\Logo.h" />
     <ClInclude Include="..\Header\MainApp.h" />
     <ClInclude Include="..\Header\Monster.h" />
+    <ClInclude Include="..\Header\ObjectStoreMgr.h" />
     <ClInclude Include="..\Header\Particle.h" />
     <ClInclude Include="..\Header\Player.h" />
     <ClInclude Include="..\Header\PlayerController.h" />
@@ -259,6 +260,7 @@
     <ClCompile Include="..\Code\MainApp.cpp" />
     <ClCompile Include="..\Code\MapTool.cpp" />
     <ClCompile Include="..\Code\Monster.cpp" />
+    <ClCompile Include="..\Code\ObjectStoreMgr.cpp" />
     <ClCompile Include="..\Code\Particle.cpp" />
     <ClCompile Include="..\Code\Player.cpp" />
     <ClCompile Include="..\Code\PlayerController.cpp" />
