@@ -95,9 +95,6 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 
 		pPlayer->GetInventory()->Put(pEquipItem);
 
-
-		
-
 	}
 
 	if (false == CGameUtilMgr::Vec3Cmp(m_vPressDir, m_vPrevPressDir)) // 이동 입력 없으면 방향 계산 안하기

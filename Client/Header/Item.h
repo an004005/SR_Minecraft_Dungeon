@@ -1,8 +1,7 @@
-
+#pragma once
 #include "GameObject.h"
 
-class CItem :
-	public CGameObject
+class CItem : public CGameObject
 {
 public:
 	explicit CItem(LPDIRECT3DDEVICE9 pGraphicDev);
@@ -22,7 +21,7 @@ public:
 		D3DXVec3Normalize(&vLook, &vLook);
 		vLook.x = cosf(D3DXToRadian(fAngle)) * vLook.x - sinf(D3DXToRadian(fAngle)) * vLook.z;
 		vLook.z = sinf(D3DXToRadian(fAngle)) * vLook.x + cosf(D3DXToRadian(fAngle)) * vLook.z;
-
+		
 		m_vVelocity = vLook;	
 		m_fPower = fPower;
 	
@@ -34,6 +33,7 @@ protected:
 	_vec3 m_vVelocity;
 	_float m_fPower;
 	_float m_fTime;
+	_bool m_bIdle;
 	CCollisionCom* m_pColl = nullptr;
 
 	virtual void Parabola(_vec3 & vPos,const _float& fHeight,const _float& fTimeDelta);

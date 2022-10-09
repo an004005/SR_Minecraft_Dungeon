@@ -4,7 +4,7 @@
 #include "SkeletalCube.h"
 #include "AbstFactory.h"
 #include"Glaive.h"
-
+#include "Emerald.h"
 CBox::CBox(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CSkeletalCube(pGraphicDev)
 {
@@ -18,18 +18,17 @@ void CBox::AnimationEvent(const string& strEvent)
 {
 	if (strEvent == "ActionEnd")
 	{		
+
 		CGlaive* pGlaive = CItemFactory::Create<CGlaive>("Glaive", L"Glaive", m_pRootPart->pTrans->m_vInfo[INFO_POS], IS_DROP);
-		pGlaive->SetVelocity(m_pRootPart->pTrans->m_vInfo[INFO_LOOK], 10.f);
-		/*pGlaive = CItemFactory::Create<CGlaive>("Glaive", L"Glaive", m_pRootPart->pTrans->m_vInfo[INFO_POS], IS_DROP);
-		pGlaive->SetVelocity(m_pRootPart->pTrans->m_vInfo[INFO_LOOK], 10.f);
-		 pGlaive = CItemFactory::Create<CGlaive>("Glaive", L"Glaive", m_pRootPart->pTrans->m_vInfo[INFO_POS], IS_DROP);
-		pGlaive->SetVelocity(m_pRootPart->pTrans->m_vInfo[INFO_LOOK], 10.f);
-		 pGlaive = CItemFactory::Create<CGlaive>("Glaive", L"Glaive", m_pRootPart->pTrans->m_vInfo[INFO_POS], IS_DROP);
-		pGlaive->SetVelocity(m_pRootPart->pTrans->m_vInfo[INFO_LOOK], 10.f);
-		 pGlaive = CItemFactory::Create<CGlaive>("Glaive", L"Glaive", m_pRootPart->pTrans->m_vInfo[INFO_POS], IS_DROP);
-		pGlaive->SetVelocity(m_pRootPart->pTrans->m_vInfo[INFO_LOOK], 10.f);
-		pGlaive = CItemFactory::Create<CGlaive>("Glaive", L"Glaive", m_pRootPart->pTrans->m_vInfo[INFO_POS], IS_DROP);
-		pGlaive->SetVelocity(m_pRootPart->pTrans->m_vInfo[INFO_LOOK], 10.f);*/
+		pGlaive->SetVelocity(m_pRootPart->pTrans->m_vInfo[INFO_LOOK], 15.f);
+
+		for (_int i = 0; i < 7; ++i)
+		{
+			_float fPower = _float(rand() % 5 + 15);
+			CEmerald* pEmerald = CItemFactory::Create<CEmerald>("Emerald", L"Emerald", m_pRootPart->pTrans->m_vInfo[INFO_POS], IS_DROP);
+			pEmerald->SetVelocity(m_pRootPart->pTrans->m_vInfo[INFO_LOOK], fPower);
+		}
+	
 	}
 	
 }

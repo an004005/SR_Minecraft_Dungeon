@@ -1,8 +1,6 @@
 #pragma once
 #include "GameObject.h"
 
-class CTransform;
-
 class CRedStoneMonstrosityBullet :
 	public CGameObject
 {

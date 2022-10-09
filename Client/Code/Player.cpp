@@ -15,6 +15,7 @@
 #include "Axe.h"
 #include "SphereEffect.h"
 #include "Inventory.h"
+#include "Emerald.h"
 
 /*-----------------------
  *    CCharacter
@@ -68,7 +69,7 @@ HRESULT CPlayer::Ready_Object()
 	m_pInventory = CObjectFactory::Create<CInventory>("Inventory", L"Inventory");
 	m_pInventory->AddRef();
 	m_arrAnim = m_pInventory->CurWeapon(IT_MELEE)->SetarrAnim();
-	m_pAxe = Get_GameObject<CAxe>(LAYER_ITEM, L"Axe");
+
 	return S_OK;
 }
 
@@ -136,6 +137,24 @@ void CPlayer::LateUpdate_Object()
 		// attack이 발생하고 다음 프레임에서 실제 공격을 적용하기 위한 코드
 		m_bApplyMeleeAttack = false;
 		m_bApplyMeleeAttackNext = true;
+	}
+
+	//에메랄드가 땅에 떨어졌을 때, 플레이어쪽으로 오게 한다
+	for (auto& ele : Get_Layer(LAYER_ITEM)->Get_MapObject())
+	{
+		if (CEmerald* pItem = dynamic_cast<CEmerald*>(ele.second))
+		{
+			_float fDist = D3DXVec3Length(&(m_pRootPart->pTrans->m_vInfo[INFO_POS] - pItem->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS]));
+
+			if (fDist < 5.f && pItem->OnGround())
+				pItem->GoToPlayer();
+
+
+			if (fDist < 0.5f && pItem->OnGround())
+			{
+				m_pInventory->Put(pItem);
+			}
+		}
 	}
 }
 

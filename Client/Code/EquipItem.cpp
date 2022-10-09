@@ -8,7 +8,6 @@ CEquipItem::CEquipItem(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CItem(pGraphicDev)
 {
 	m_eItemType = IT_END;
-	
 }
 
 
@@ -25,6 +24,8 @@ HRESULT CEquipItem::Ready_Object()
 _int CEquipItem::Update_Object(const _float & fTimeDelta)
 {
 	CItem::Update_Object(fTimeDelta);
+
+	Add_RenderGroup(RENDER_NONALPHA, this);
 	return 0;
 }
 
@@ -37,18 +38,6 @@ void CEquipItem::Render_Object()
 {
 }
 
-CEquipItem * CEquipItem::Create(LPDIRECT3DDEVICE9 pGraphicDev)
-{
-	CEquipItem* pInstance = new CEquipItem(pGraphicDev);
-	
-	if (FAILED(pInstance->Ready_Object()))
-	{
-		Safe_Release(pInstance);
-		return nullptr;
-	}
-
-	return pInstance;
-}
 
 void CEquipItem::Free()
 {

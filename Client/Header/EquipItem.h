@@ -30,12 +30,14 @@ public:
 	virtual ~CEquipItem();
 
 public:
+	//gameobj function
 	virtual HRESULT Ready_Object();
 	virtual _int Update_Object(const _float& fTimeDelta) override;
 	virtual void LateUpdate_Object() override;
 	virtual void Render_Object() override;
-	static CEquipItem* Create(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual void Free() override;
+
+	// equipitem function
 	virtual void Equipment(SkeletalPart* pSkeletalPart) {}
 	virtual void Collision() {}
 	//현제 플레이어 한명일때만 가정해서 구현. 서버되면 수정

@@ -23,6 +23,7 @@
 #include "Box.h"
 #include "Inventory.h"
 #include "Dynamite.h"
+#include "Emerald.h"
 
 
 
@@ -347,5 +348,9 @@ void CItemFactory::Ready_ItemFactory()
 	s_mapItemSpawner.insert({ "Axe", []()
 	{
 		return CAxe::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "Emerald", []()
+	{
+		return CEmerald::Create(s_pGraphicDev);
 	} });
 }
