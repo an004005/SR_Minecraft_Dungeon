@@ -20,6 +20,7 @@ public:
 	static void RemoveScale(_matrix& matOut);
 	static _float Vec3LenXZ(const _vec3& v1);
 	static _float GetRandomFloat(_float lowBound, _float highBound);
+	static void GetPickingRay(OUT _vec3& vOrigin, OUT _vec3& vRayDir, HWND hWnd, const _matrix& matView, const _matrix& matProj, const D3DVIEWPORT9& ViewPort);
 
 	static DWORD FtoDw(_float f);
 	static const _vec3 s_vZero;

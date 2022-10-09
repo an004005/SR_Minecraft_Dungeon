@@ -18,6 +18,7 @@
 #include "Sword.h"
 #include "Glaive.h"
 #include "Arrow.h"
+#include "Axe.h"
 
 
 
@@ -246,5 +247,9 @@ void CItemFactory::Ready_ItemFactory()
 	s_mapItemSpawner.insert({ "Glaive", []()
 	{
 		return CGlaive::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "Axe", []()
+	{
+		return CAxe::Create(s_pGraphicDev);
 	} });
 }

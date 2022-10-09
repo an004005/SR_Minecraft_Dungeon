@@ -5,6 +5,7 @@
 #define IM_BEGIN(win_name) ImGui::Begin(win_name)
 #define IM_END ImGui::End()
 #define DEBUG_SPHERE(vPos, fRadius, fAlive) if (CImGuiMgr::IsShowColl()) Engine::AddGameObject(LAYER_GAMEOBJ, L"DebugSphere", CDebugSphere::Create(m_pGraphicDev, vPos, fRadius, fAlive))
+#define DEBUG_LINE(vOrigin, vDir, fLen, fAlive) if (CImGuiMgr::IsShowColl()) Engine::AddGameObject(LAYER_GAMEOBJ, L"DebugLine", CDebugLine::Create(m_pGraphicDev, vOrigin, vDir, fLen, fAlive))
 #else
 #define IM_LOG(...) 
 #define IM_BEGIN(win_name) 

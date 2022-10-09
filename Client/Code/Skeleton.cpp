@@ -99,9 +99,6 @@ _int CSkeleton::Update_Object(const _float& fTimeDelta)
 void CSkeleton::LateUpdate_Object()
 {
 	CMonster::LateUpdate_Object();
-
-	IM_LOG("Fire");
-	
 }
 
 void CSkeleton::Free()
