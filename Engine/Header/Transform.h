@@ -27,10 +27,13 @@ public:
 	void	Get_WorldMatrix(_matrix* pWorld) const { *pWorld = m_matWorld; }
 	void	Set_WorldMatrix(_matrix* pWorld) { m_matWorld = *pWorld; }
 	void    Set_WorldDecompose(const _matrix& matWorld);
+	void    Set_StopUpdate() { m_bStopUpdate = true; }
 
 public:
 	void Chase_Target(const _vec3* pTargetPos, const _float& fSpeed, const _float& fTimeDelta);
 	const _matrix* Compute_LookAtTarget(const _vec3* pTargetPos);
+	void RotateToLookAt(const _vec3& vLookAt);
+
 
 public:
 	HRESULT Ready_Transform(void);
@@ -43,6 +46,8 @@ public:
 	_vec3 m_vAngle;
 	_matrix m_matWorld;
 	_float m_fX, m_fY, m_fSizeX, m_fSizeY;
+
+	_bool m_bStopUpdate = false;
 
 
 public:

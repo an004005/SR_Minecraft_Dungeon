@@ -98,6 +98,13 @@ public:
 	static CSpeedBoots_Particle* Create(LPDIRECT3DDEVICE9 pGraphicDev, LPCWSTR _TexFileName);
 
 	void Free() override;
+
+private:
+	_float m_fSpeed;
+	_float m_fRotAngle;
+	_float m_fRotSpeed;
+	_float m_fDiagonal;
+	_float m_fScale;
 };
 
 class CFireWork_Fuze : public CParticleSystem
@@ -170,7 +177,7 @@ public:
 public:
 	static CShock_Powder* Create(LPDIRECT3DDEVICE9 pGraphicDev);
 	CRcShader*			m_pBufferCom = nullptr;
-	CTransform*			m_pTransCom = nullptr;
+	Engine::CTransform*			m_pTransCom = nullptr;
 	CTexture*			m_pTexture = nullptr;
 	void Free() override;
 
@@ -182,7 +189,9 @@ private:
 enum CIRCLETYPE
 {
 	SHOCK = 0,
-	FIREWORK
+	FIREWORK,
+	CREEPER,
+	GOLEM
 };
 class CUVCircle : public CGameObject
 {
@@ -198,10 +207,11 @@ public:
 	void LateUpdate_Object() override;
 	void PreRender_Particle();
 	void PostRender_Particle();
+
 public:
 	static CUVCircle* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size, CIRCLETYPE _type);
 	CRcShader*			m_pBufferCom = nullptr;
-	CTransform*			m_pTransCom = nullptr;
+	Engine::CTransform*			m_pTransCom = nullptr;
 	CTexture*			m_pTexture = nullptr;
 	void Free() override;
 
@@ -214,6 +224,16 @@ private:
 	CFireWork_Fuze* m_pFuze;
 };
 
+enum CLOUDTYPE
+{
+	WALK=0,
+	ROLL,
+	SHOCKPOWDER,
+	CREEPEREX,
+	DECAL
+};
+
+
 class CCloud : public CGameObject
 {
 public:
@@ -221,7 +241,7 @@ public:
 	~CCloud() override;
 
 public:
-	virtual HRESULT Ready_Object() override;
+	virtual HRESULT Ready_Object(_float _size, CLOUDTYPE _type) ;
 	_int Update_Object(const _float& fTimeDelta) override;
 	void Render_Object() override;
 	void LateUpdate_Object() override;
@@ -229,17 +249,201 @@ public:
 	void PostRender_Particle();
 
 public:
-	static CCloud* Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CCloud* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size, CLOUDTYPE _type);
 	CRcShader*			m_pBufferCom = nullptr;
-	CTransform*			m_pTransCom = nullptr;
+	Engine::CTransform*			m_pTransCom = nullptr;
 	CTexture*			m_pTexture = nullptr;
 	void Free() override;
-
 
 private:
 	_float m_fTime;
 	_float m_fCurTime;
 	_vec3	m_vVelocity;
+	_float m_fSpeed;
+};
+
+enum CRACKTYPE
+{
+	GOLEM_SPIT_CRACK = 0,
+	EXE_DECAL
+};
+
+class CCrack : public CGameObject
+{
+public:
+	explicit CCrack(LPDIRECT3DDEVICE9 pGraphicDev) : CGameObject(pGraphicDev) {}
+	~CCrack() override;
+
+public:
+	virtual HRESULT Ready_Object( _float _size, CRACKTYPE _type);
+	_int Update_Object(const _float& fTimeDelta) override;
+	void Render_Object() override;
+	void LateUpdate_Object() override;
+	void PreRender_Particle();
+	void PostRender_Particle();
+
+public:
+	static CCrack* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size, CRACKTYPE _type);
+	CRcShader*			m_pBufferCom = nullptr;
+	CTransform*			m_pTransCom = nullptr;
+	CTexture*			m_pTexture = nullptr;
+	void Free() override;
+
+private:
+	_float m_fTime;
+	_float m_fCurTime;
+	_uint m_iCrackType;
+
+	//_vec3	m_vVelocity;
+	//_float m_fSpeed;
+};
+
+class CGolemSpit : public CGameObject
+{
+public:
+	explicit CGolemSpit(LPDIRECT3DDEVICE9 pGraphicDev) : CGameObject(pGraphicDev) {}
+	~CGolemSpit() override;
+
+public:
+	virtual HRESULT Ready_Object(_float _size);
+	_int Update_Object(const _float& fTimeDelta) override;
+	void Render_Object() override;
+	void LateUpdate_Object() override;
+	void PreRender_Particle();
+	void PostRender_Particle();
+
+public:
+	static CGolemSpit* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size);
+	CRcShader*			m_pBufferCom = nullptr;
+	CTransform*			m_pTransCom = nullptr;
+	CTexture*			m_pTexture = nullptr;
+	void Free() override;
+
+private:
+	_float m_fTime;
+	_float m_fCurTime;
+	_vec3	m_vVelocity;
+	_float m_fSpeed;
+};
+
+class CStun : public CGameObject
+{
+public:
+	explicit CStun(LPDIRECT3DDEVICE9 pGraphicDev) : CGameObject(pGraphicDev) {}
+	~CStun() override;
+
+public:
+	virtual HRESULT Ready_Object(_float _size);
+	_int Update_Object(const _float& fTimeDelta) override;
+	void Render_Object() override;
+	void LateUpdate_Object() override;
+	void PreRender_Particle();
+	void PostRender_Particle();
+
+public:
+	static CStun* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size);
+	CRcShader*			m_pBufferCom = nullptr;
+	CTransform*			m_pTransCom = nullptr;
+	CTexture*			m_pTexture = nullptr;
+	void Free() override;
+
+private:
+	_float m_fTime;
+	_float m_fCurTime;
+	_float m_fSpeed;
+};
+
+class CHealCircle : public CGameObject
+{
+public:
+	explicit CHealCircle(LPDIRECT3DDEVICE9 pGraphicDev) : CGameObject(pGraphicDev) {}
+	~CHealCircle() override;
+
+public:
+	virtual HRESULT Ready_Object(_float _size,_float _rad);
+	_int Update_Object(const _float& fTimeDelta) override;
+	void Render_Object() override;
+	void LateUpdate_Object() override;
+	void PreRender_Particle();
+	void PostRender_Particle();
+
+public:
+	static CHealCircle* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size, _float _rad);
+	CRcShader*			m_pBufferCom = nullptr;
+	CTransform*			m_pTransCom = nullptr;
+	CTexture*			m_pTexture = nullptr;
+	void Free() override;
+
+private:
+	_float m_fTime;
+	_float m_fCurTime;
+	_float m_fSpeed;
+	_float m_fRad;
+};
+
+class CHeartParticle : public CGameObject
+{
+public:
+	explicit CHeartParticle(LPDIRECT3DDEVICE9 pGraphicDev) : CGameObject(pGraphicDev) {}
+	~CHeartParticle() override;
+
+public:
+	virtual HRESULT Ready_Object(_float _size);
+	_int Update_Object(const _float& fTimeDelta) override;
+	void Render_Object() override;
+	void LateUpdate_Object() override;
+	void PreRender_Particle();
+	void PostRender_Particle();
+
+public:
+	static CHeartParticle* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size);
+	CRcShader*			m_pBufferCom = nullptr;
+	CTransform*			m_pTransCom = nullptr;
+	CTexture*			m_pTexture = nullptr;
+	void				Free() override;
+
+private:
+	_float m_fTime;
+	_float m_fCurTime;
+	_float m_fSpeed;
+	_vec3	m_vOrigin;
+
+	_float tmp;
+	_float desk;
+};
+
+
+enum LAVATYPE
+{
+	FALLINLAVA=0,
+	FUZEPARTICLE
+};
+
+class CLava_Particle : public CGameObject
+{
+public:
+	explicit CLava_Particle(LPDIRECT3DDEVICE9 pGraphicDev) : CGameObject(pGraphicDev) {}
+	~CLava_Particle() override;
+
+public:
+	virtual HRESULT Ready_Object(_float _size, LAVATYPE _type);
+	_int Update_Object(const _float& fTimeDelta) override;
+	void Render_Object() override;
+	void LateUpdate_Object() override;
+	void PreRender_Particle();
+	void PostRender_Particle();
+
+public:
+		static CLava_Particle* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size,LAVATYPE _type);
+	CRcShader*			m_pBufferCom = nullptr;
+	CTransform*			m_pTransCom = nullptr;
+	CTexture*			m_pTexture = nullptr;
+	void Free() override;
+
+private:
+	_float m_fTime;
+	_float m_fCurTime;
+	_float m_fSpeed;
 };
 #pragma endregion
 

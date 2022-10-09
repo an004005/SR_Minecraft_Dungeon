@@ -1,21 +1,11 @@
 #pragma once
 #include "Component.h"
 #include <functional>
-
 #include "Transform.h"
 
 BEGIN(Engine)
-	class CGameObject;
+class CGameObject;
 class CTransform;
-
-enum COLLISION_TYPE
-{
-	COLL_PLAYER,
-	COLL_ENEMY,
-	COLL_PLAYER_BULLET,
-	COLL_ENEMY_BULLET,
-	COLL_END
-};
 
 class ENGINE_DLL CCollisionCom : public CComponent
 {
@@ -32,7 +22,7 @@ public:
 
 	static CCollisionCom* Create();
 
-	virtual void CollisionDynamic(CCollisionCom* pOther);
+	virtual void CollisionDynamic(CCollisionCom* pOther, BLOCKING_TYPE eType);
 	virtual void CollisionStatic(const _vec3& vCenter, _float fRadius);
 
 	// collision사용시 꼭 호출하기
@@ -40,17 +30,23 @@ public:
 	void SetOwnerTransform(CTransform* pOwnerTrans) { m_pOwnerTrans = pOwnerTrans; }
 	void SetRadius(_float fRadius) { m_fRadius = fRadius; }
 	void SetCollType(COLLISION_TYPE eType) { m_eType = eType; }
+	void SetCollOffset(const _vec3& vOffset) { m_vOffset = vOffset; }
+	void SetCallBack(std::function<void(CCollisionCom*)> pDynamicCallBack, std::function<void(_vec3, _float)> pStaticCallBack)
+	{
+		m_pCollisionDynamic = pDynamicCallBack;
+		m_pCollisionStatic = pStaticCallBack;
+	}
 	//
 
 	CGameObject* GetOwner() const { return m_pOwner; }
 	CTransform* GetTransform() const { return m_pOwnerTrans; }
 	_float GetRadius() const { return m_fRadius; }
-	void SetCollOffset(const _vec3& vOffset) { m_vOffset = vOffset; }
 	_vec3 GetCollPos() const { return m_pOwnerTrans->m_vInfo[INFO_POS] + m_vOffset; }
 	COLLISION_TYPE GetType() const { return m_eType; }
 	
 
 	void SetStop() { m_bStop = true; }
+
 
 protected:
 	CGameObject* m_pOwner = nullptr;

@@ -2,9 +2,52 @@
 
 USING(Engine);
 
+_float w2 = 0.5f;
+_float h2 = 0.5f;
+_float d2 = 0.5f;
+
 const _vec3 CGameUtilMgr::s_vZero = {0.f, 0.f, 0.f};
 const _vec3 CGameUtilMgr::s_vUp = {0.f, 1.f, 0.f};
 const _matrix CGameUtilMgr::s_matIdentity = {1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f,};
+const _vec3 CGameUtilMgr::s_vFaceCubeVtx[FACE_END][4]
+{
+	{// look
+		{-w2, -h2, +d2},
+		{+w2, -h2, +d2},
+		{+w2, +h2, +d2},
+		{-w2, +h2, +d2}
+	},// back
+	{
+		{-w2, -h2, -d2},
+		{-w2, +h2, -d2},
+		{+w2, +h2, -d2},
+		{+w2, -h2, -d2},
+	},
+	{// left
+		{-w2, -h2, +d2},
+		{-w2, +h2, +d2},
+		{-w2, +h2, -d2},
+		{-w2, -h2, -d2}
+	},
+	{//right
+		{+w2, -h2, -d2},
+		{+w2, +h2, -d2},
+		{+w2, +h2, +d2},
+		{+w2, -h2, +d2}
+	},
+	{// up
+		{-w2, +h2, -d2},
+		{-w2, +h2, +d2},
+		{+w2, +h2, +d2},
+		{+w2, +h2, -d2}
+	},
+	{// down
+		{-w2, -h2, -d2},
+		{+w2, -h2, -d2},
+		{+w2, -h2, +d2},
+		{-w2, -h2, +d2},
+	}
+};
 
 void CGameUtilMgr::WorldMatrixLerp(_matrix& matOut, const _matrix& matPrev, const _matrix& matNext, const _float fS)
 {
@@ -129,7 +172,69 @@ void CGameUtilMgr::MatWorldDecompose(const _matrix& matWorld, _vec3& vScale, _ve
 	QuatToPitchYawRoll(qRot, vAngle.x, vAngle.y, vAngle.z);
 }
 
+void CGameUtilMgr::GetRandomVector(_vec3* out, _vec3* min, _vec3* max)
+{
+	out->x = GetRandomFloat(min->x, max->x);
+	out->y = GetRandomFloat(min->y, max->y);
+	out->z = GetRandomFloat(min->z, max->z);
+}
+
+void CGameUtilMgr::RemoveScale(_matrix& matOut)
+{
+	D3DXVec3Normalize((_vec3*)(&matOut[0]), (_vec3*)(&matOut[0]));
+	D3DXVec3Normalize((_vec3*)(&matOut[1]), (_vec3*)(&matOut[1]));
+	D3DXVec3Normalize((_vec3*)(&matOut[2]), (_vec3*)(&matOut[2]));
+}
+
 _float CGameUtilMgr::Vec3LenXZ(const _vec3& v1)
 {
 	return sqrtf(v1.x * v1.x + v1.z * v1.z);
+}
+
+_float CGameUtilMgr::GetRandomFloat(_float lowBound, _float highBound)
+{
+	if (lowBound >= highBound) 
+		return lowBound;
+
+	float f = (rand() % 10000) * 0.0001f;
+
+	return (f * (highBound - lowBound)) + lowBound;
+}
+
+void CGameUtilMgr::GetPickingRay(_vec3& vOrigin, _vec3& vRayDir, HWND hWnd, const _matrix& matView,
+	const _matrix& matProj, const D3DVIEWPORT9& ViewPort)
+{
+	POINT ptMouse{};
+
+	GetCursorPos(&ptMouse);
+	ScreenToClient(hWnd, &ptMouse);
+
+	_vec3 vAt;
+
+	vOrigin.x = (_float)ptMouse.x / ((_float)ViewPort.Width * 0.5f) - 1.f;
+	vOrigin.y = (_float)ptMouse.y / -((_float)ViewPort.Height * 0.5f) + 1.f;
+	vOrigin.z = 0.f;
+	vAt.x = vOrigin.x;
+	vAt.y = vOrigin.y;
+	vAt.z = 1.f;
+
+	_matrix matProjInverse;
+	D3DXMatrixInverse(&matProjInverse, nullptr, &matProj);
+	D3DXVec3TransformCoord(&vOrigin, &vOrigin, &matProjInverse);
+	D3DXVec3TransformCoord(&vAt, &vAt, &matProjInverse);
+
+	_matrix matViewInverse;
+	D3DXMatrixInverse(&matViewInverse, nullptr, &matView);
+	D3DXVec3TransformCoord(&vOrigin, &vOrigin, &matViewInverse);
+	D3DXVec3TransformCoord(&vAt, &vAt, &matViewInverse);
+
+	vRayDir = vAt - vOrigin;
+	D3DXVec3Normalize(&vRayDir, &vRayDir);
+}
+
+
+
+DWORD CGameUtilMgr::FtoDw(_float f)
+{
+	return *((DWORD*)&f);
 }

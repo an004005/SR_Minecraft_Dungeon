@@ -9,6 +9,7 @@
 #include "TerrainCubeMap.h"
 #include "Stage.h"
 #include "time.h"
+#include "ArrowCubeMgr.h"
 
 USING(Engine)
 
@@ -32,8 +33,6 @@ HRESULT CMainApp::Ready_MainApp(void)
 
 	// CClientServiceMgr::GetInstance()->ReadyClientService();
 	srand((unsigned)time(NULL));
-
-
 
 
 	return S_OK;
@@ -63,7 +62,6 @@ void CMainApp::LateUpdate_MainApp(void)
 	m_pManagementClass->LateUpdate_Scene();
 
 
-	ImGui::EndFrame();
 }
 
 void CMainApp::Render_MainApp(void)
@@ -73,6 +71,8 @@ void CMainApp::Render_MainApp(void)
 	Engine::Render_Begin(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.f));
 
 	m_pManagementClass->Render_Scene(m_pGraphicDev);
+
+	ImGui::EndFrame();
 
     ImGui::Render();
     ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
@@ -129,6 +129,11 @@ HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 * ppGraphicDev)
     ImGui_ImplWin32_Init(g_hWnd);
     ImGui_ImplDX9_Init(m_pGraphicDev);
 
+	// 매니저 초기화
+	CArrowCubeMgr::Create(m_pGraphicDev);
+
+	
+
 	return S_OK;
 }
 
@@ -140,9 +145,8 @@ HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement
 
 
 	// pScene = CLogo::Create(pGraphicDev);
-	// CAnimationTool::Create(pGraphicDev);
-	// CMapTool::Create(pGraphicDev);
-	//CUItool::Create(pGraphicDev);
+	 // CAnimationTool::Create(pGraphicDev);
+	//CMapTool::Create(pGraphicDev);
 	 NULL_CHECK_RETURN(CStage::Create(pGraphicDev), E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Create_Management(pGraphicDev, ppManagement), E_FAIL);
@@ -171,6 +175,7 @@ void CMainApp::Free(void)
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
 
+	CArrowCubeMgr::DeleteInst();
 	CAbstFactory::ReleaseGraphicDev();
 	Safe_Release(m_pGraphicDev);
 	Safe_Release(m_pDeviceClass);

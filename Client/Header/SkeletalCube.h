@@ -19,7 +19,7 @@ struct SkeletalPart
 	wstring strTexCom;
 	wstring strTexProto;
 
-	CTransform* pTrans = nullptr;
+	Engine::CTransform* pTrans = nullptr;
 	wstring strTransCom;
 	wstring strTransProto;
 
@@ -90,6 +90,7 @@ public:
 	void LoadSkeletal(wstring wstrPath);
 	void SaveSkeletal(wstring wstrPath);
 
+	SkeletalPart* Get_SkeletalPart() { return m_pRootPart; }
 
 private:
 	virtual void SaveRecursive(HANDLE hFile, SkeletalPart* pPart);

@@ -70,6 +70,18 @@ public:
 		}
 		return false;
 	}
+	bool MouseKeyPress(MOUSEKEYSTATE byMouseID)
+	{
+		if (byMouseID == DIM_LB)
+		{
+			return m_MouseLeftState == KEY_STATE::PRESS;
+		}
+		else if (byMouseID == DIM_RB)
+		{
+			return m_MouseRightState == KEY_STATE::PRESS;
+		}
+		return false;
+	}
 
 public:
 	HRESULT			Ready_InputDev(HINSTANCE hInst, HWND hWnd);

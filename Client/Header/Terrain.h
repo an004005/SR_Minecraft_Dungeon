@@ -25,7 +25,7 @@ private:
 
 private:
 	CTerrainTex*		m_pBufferCom = nullptr;
-	CTransform*			m_pTransCom = nullptr;
+	Engine::CTransform*			m_pTransCom = nullptr;
 	CTexture*			m_pTextureCom = nullptr;
 
 public:

@@ -24,8 +24,9 @@ HRESULT CMonster::Ready_Object()
 	m_pColl = Add_Component<CCollisionCom>(L"Proto_CollisionCom", L"Proto_CollisionCom", ID_DYNAMIC);
 	m_pColl->SetOwner(this);
 	m_pColl->SetOwnerTransform(m_pRootPart->pTrans);
-	m_pColl->SetCollOffset(_vec3{0.f, 1.f, 0.f});
-	m_pColl->SetRadius(0.5f);
+	m_pColl->SetCollOffset(_vec3{0.f, 1.5f, 0.f});
+	m_pColl->SetRadius(1.f);
+	m_pColl->SetCollType(COLL_ENEMY);
 
 	m_pStat = Add_Component<CStatComponent>(L"Proto_StatCom", L"Proto_StatCom", ID_DYNAMIC);
 	m_pStat->SetMaxHP(100);
@@ -37,6 +38,11 @@ HRESULT CMonster::Ready_Object()
 _int CMonster::Update_Object(const _float& fTimeDelta)
 {
 	CSkeletalCube::Update_Object(fTimeDelta);
+	DEBUG_SPHERE(m_pColl->GetCollPos(), m_pColl->GetRadius(), 0.1f);
+	// 테스트 코드
+	// _vec3 diff = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS] - m_pRootPart->pTrans->m_vInfo[INFO_POS];
+	// D3DXVec3Normalize(&diff, &diff);
+	// m_pRootPart->pTrans->m_vInfo[INFO_POS] += diff * fTimeDelta * 2.f;
 
 	return OBJ_NOEVENT;
 }

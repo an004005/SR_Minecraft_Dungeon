@@ -6,7 +6,26 @@
 #include "StaticCamera.h"
 #include "Monster.h"
 #include "Geomancer.h"
+#include "Zombie.h"
+#include "Creeper.h"
+#include "Skeleton.h"
+#include "Enchanter.h"
+#include "RedStoneCube.h"
+#include "RedStoneMonstrosity.h"
+#include "GeomancerWall.h"
+#include "SphereEffect.h"
+#include "RedStoneMonstrosityBullet.h"
+#include "Crossbow.h"
+#include "Sword.h"
+#include "Glaive.h"
+#include "Arrow.h"
+#include "Axe.h"
+#include "Box.h"
+#include "Inventory.h"
+#include "Dynamite.h"
 #include "UI.h"
+
+
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -14,8 +33,12 @@ map<string, std::function<CGameObject*()>> CPlayerFactory::s_mapPlayerSpawner;
 map<string, std::function<CGameObject*()>> CEnemyFactory::s_mapEnemySpawner;
 map<string, std::function<CGameObject*()>> CEffectFactory::s_mapEffectSpawner;
 map<string, std::function<CGameObject*()>> CEnvFactory::s_mapEnvSpawner;
+map<string, std::function<CGameObject*(_float)>> CBulletFactory::s_mapBulletSpawner;
+map<string, std::function<CGameObject*()>> CObjectFactory::s_mapObjectSpawner;
+map<string, std::function<CGameObject*()>> CItemFactory::s_mapItemSpawner;
 map<string, std::function<CGameObject*()>> CBulletFactory::s_mapBulletSpawner;
 map<string, std::function<CGameObject*()>> CUIFactory::s_mapUISpawner;
+
 
 void CAbstFactory::Ready_Factories(LPDIRECT3DDEVICE9 pGraphicDev)
 {
@@ -27,6 +50,8 @@ void CAbstFactory::Ready_Factories(LPDIRECT3DDEVICE9 pGraphicDev)
 	CEffectFactory::Ready_EffectFactory();
 	CEnvFactory::Ready_EnvFactory();
 	CBulletFactory::Ready_BulletFactory();
+	CObjectFactory::Ready_ObjectFactory();
+	CItemFactory::Ready_ItemFactory();
 	CUIFactory::Ready_UIFactory();
 }
 
@@ -52,14 +77,34 @@ void CPlayerFactory::Ready_PlayerFactory()
 
 void CEnemyFactory::Ready_EnemyFactory()
 {
-	s_mapEnemySpawner.insert({"TestZombie", []()
+	s_mapEnemySpawner.insert({"Zombie", []()
 	{
-		return CMonster::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Zombie.cube");
-	}});
-		s_mapEnemySpawner.insert({"Geomancer", []()
+		return CZombie::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Zombie.cube");
+	} });
+	s_mapEnemySpawner.insert({ "Geomancer", []()
 	{
-		return CGeomancer::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Geomancer.cube");
-	}});
+	return CGeomancer::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Geomancer.cube");
+	} });
+	s_mapEnemySpawner.insert({ "Creeper", []()
+	{
+		return CCreeper::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Creeper.cube");
+	} });
+	s_mapEnemySpawner.insert({ "Skeleton", []()
+	{
+		return CSkeleton::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Skeleton.cube");
+	} });
+	s_mapEnemySpawner.insert({ "Enchanter", []()
+	{
+		return CEnchanter::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Enchanter.cube");
+	} });
+	s_mapEnemySpawner.insert({ "RedStoneCube", []()
+	{
+		return CRedStoneCube::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/RedStoneCube.cube");
+	} });
+	s_mapEnemySpawner.insert({ "RedStoneMonstrosity", []()
+	{
+		return CRedStoneMonstrosity::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/RedStoneMonstrosity.cube");
+	} });
 }
 
 void CEffectFactory::Ready_EffectFactory()
@@ -75,7 +120,7 @@ void CEffectFactory::Ready_EffectFactory()
 
 	s_mapEffectSpawner.insert({ "Attack_Basic", []()
 	{
-		return CAttack_P::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/aac1e6-corona.png");
+		return CAttack_P::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/flare_alpha.dds");
 	} });
 
 	
@@ -107,12 +152,70 @@ void CEffectFactory::Ready_EffectFactory()
 		return CShock_Powder::Create(s_pGraphicDev);
 	} });
 
-	s_mapEffectSpawner.insert({ "Texture_Cloud", []()
+	s_mapEffectSpawner.insert({ "ShockPowder_Cloud", []()
 	{
-		return CCloud::Create(s_pGraphicDev);
+		return CCloud::Create(s_pGraphicDev,1.3f,SHOCKPOWDER);
 	} });
 
-	s_mapEffectSpawner.insert({ "UV_Circle", []()
+	s_mapEffectSpawner.insert({ "Creeper_Cloud", []()
+	{
+		return CCloud::Create(s_pGraphicDev,1.3f,CREEPEREX);
+	} });
+
+	s_mapEffectSpawner.insert({ "Walk_Cloud", []()
+	{
+		return CCloud::Create(s_pGraphicDev,0.4f,WALK);
+	} });
+
+	s_mapEffectSpawner.insert({ "Decal_Cloud", []()
+	{
+		return CCloud::Create(s_pGraphicDev,0.4f,DECAL);
+	} });
+
+	s_mapEffectSpawner.insert({ "Roll_Cloud", []()
+	{
+		return CCloud::Create(s_pGraphicDev,0.7f,ROLL);
+	} });
+
+	//
+
+	s_mapEffectSpawner.insert({ "Golem_Spit_Sphere",[]()
+	{
+		return CSphereEffect::Create(s_pGraphicDev, 0.03f, GOLEM_SPIT);
+	} });
+
+	s_mapEffectSpawner.insert({ "Golem_Melee_L",[]()
+	{
+		return CSphereEffect::Create(s_pGraphicDev, 0.03f, GOLEM_MELEE_L);
+	} });
+
+	s_mapEffectSpawner.insert({ "Golem_Melee_M",[]()
+	{
+		return CSphereEffect::Create(s_pGraphicDev, 0.025f, GOLEM_MELEE_M);
+	} });
+
+	s_mapEffectSpawner.insert({ "Golem_Melee_S",[]()
+	{
+		return CSphereEffect::Create(s_pGraphicDev, 0.015f, GOLEM_MELEE_S);
+	} });
+
+	s_mapEffectSpawner.insert({ "Golem_Melee_Shpere_L",[]()
+	{
+		return CSphereEffect::Create(s_pGraphicDev, 0.02f, SPHERE_L);
+	} });
+	s_mapEffectSpawner.insert({ "Golem_Melee_Shpere_M",[]()
+	{
+		return CSphereEffect::Create(s_pGraphicDev, 0.0185f, SPHERE_M);
+	} });
+
+	//
+
+	s_mapEffectSpawner.insert({ "Golem_Spit",[]()
+	{
+		return CGolemSpit::Create(s_pGraphicDev, 1.f);
+	} });
+
+	s_mapEffectSpawner.insert({ "Shock_Circle", []()
 	{
 		return CUVCircle::Create(s_pGraphicDev,3.f, SHOCK);
 	} });
@@ -122,6 +225,55 @@ void CEffectFactory::Ready_EffectFactory()
 		return CUVCircle::Create(s_pGraphicDev, 7.f, FIREWORK);
 	} });
 
+	s_mapEffectSpawner.insert({ "Creeper_Explosion", []()
+	{
+		return CUVCircle::Create(s_pGraphicDev, 3.7f, CREEPER);
+	} });
+
+	s_mapEffectSpawner.insert({ "Golem_Explosion", []()
+	{
+		return CUVCircle::Create(s_pGraphicDev, 7.f, GOLEM);
+	} });
+
+	s_mapEffectSpawner.insert({ "Red_Cube_Crack", []()
+	{
+		return CCrack::Create(s_pGraphicDev, 1.f, GOLEM_SPIT_CRACK);
+	} });
+
+	s_mapEffectSpawner.insert({ "Monster_Stun",[]()
+	{
+		return CStun::Create(s_pGraphicDev, 1.f);
+	} });
+
+	s_mapEffectSpawner.insert({ "Heal_Circle_R",[]()
+	{
+		return CHealCircle::Create(s_pGraphicDev, 1.4f, 90.f);
+	} });
+
+	s_mapEffectSpawner.insert({ "Heal_Circle_L",[]()
+	{
+		return CHealCircle::Create(s_pGraphicDev, 1.4f, 90.f);
+	} });
+
+	s_mapEffectSpawner.insert({ "Lava_Particle",[]()
+	{
+		return CLava_Particle::Create(s_pGraphicDev, 1.f, FALLINLAVA);
+	} });
+
+	s_mapEffectSpawner.insert({ "Fuze_Particle",[]()
+	{
+		return CLava_Particle::Create(s_pGraphicDev, 1.f, FUZEPARTICLE);
+	} });
+
+	s_mapEffectSpawner.insert({ "Exe_Decal",[]()
+	{
+		return CCrack::Create(s_pGraphicDev, 2.f, EXE_DECAL);
+	} });
+
+	s_mapEffectSpawner.insert({ "HeartParticle",[]()
+	{
+		return CHeartParticle::Create(s_pGraphicDev, 1.f);
+	} });
 }
 
 void CEnvFactory::Ready_EnvFactory()
@@ -134,10 +286,72 @@ void CEnvFactory::Ready_EnvFactory()
 	{
 		return CStaticCamera::Create(s_pGraphicDev);
 	}});
+	
 }
 
 void CBulletFactory::Ready_BulletFactory()
 {
+	s_mapBulletSpawner.insert({"PlayerNormalArrow", [](_float fDamage)
+	{
+		return CArrow::Create(s_pGraphicDev, fDamage, COLL_PLAYER_BULLET);
+	}});
+	s_mapBulletSpawner.insert({"EnemyNormalArrow", [](_float fDamage)
+	{
+		return CArrow::Create(s_pGraphicDev, fDamage, COLL_ENEMY_BULLET);
+	}});
+	s_mapBulletSpawner.insert({"PlayerFireWorkArrow", [](_float fDamage)
+	{
+		return CArrow::Create(s_pGraphicDev, fDamage, COLL_PLAYER_BULLET, ARROW_FIREWORK);
+	}});
+}
+
+void CObjectFactory::Ready_ObjectFactory()
+{
+	s_mapObjectSpawner.insert({"GeoWall_Normal", []()
+	{
+		return CGeomancerWall::Create(s_pGraphicDev, false);
+	}});
+	s_mapObjectSpawner.insert({"GeoWall_Boom", []()
+	{
+		return CGeomancerWall::Create(s_pGraphicDev, true);
+	}});
+	s_mapObjectSpawner.insert({ "RedStoneMonstrosityBullet", []()
+	{	
+		return CRedStoneMonstrosityBullet::Create(s_pGraphicDev);
+	} });
+	s_mapObjectSpawner.insert({ "Box", []()
+	{
+		return CBox::Create(s_pGraphicDev);
+	} });
+	s_mapObjectSpawner.insert({ "Inventory", []()
+	{
+		return CInventory::Create(s_pGraphicDev);
+	} });
+	s_mapObjectSpawner.insert({ "Dynamite", []()
+	{
+		return CDynamite::Create(s_pGraphicDev);
+	} });
+
+}
+
+void CItemFactory::Ready_ItemFactory()
+{
+	s_mapItemSpawner.insert({ "Crossbow", []()
+	{
+		return CCrossbow::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "Sword", []()
+	{
+		return CSword::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "Glaive", []()
+	{
+		return CGlaive::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "Axe", []()
+	{
+		return CAxe::Create(s_pGraphicDev);
+	} });
 }
 
 void CUIFactory::Ready_UIFactory()
