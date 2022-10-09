@@ -214,6 +214,8 @@
     <ClInclude Include="..\Header\TestCube.h" />
     <ClInclude Include="..\Header\Zombie.h" />
     <ClInclude Include="..\Header\ZombieController.h" />
+    <ClInclude Include="..\Header\UI.h" />
+    <ClInclude Include="..\Header\UITool.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="GraphEditor.h" />
     <ClInclude Include="imconfig.h" />
@@ -287,6 +289,8 @@
     <ClCompile Include="..\Code\TestCube.cpp" />
     <ClCompile Include="..\Code\Zombie.cpp" />
     <ClCompile Include="..\Code\ZombieController.cpp" />
+    <ClCompile Include="..\Code\UI.cpp" />
+    <ClCompile Include="..\Code\UITool.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="GraphEditor.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>

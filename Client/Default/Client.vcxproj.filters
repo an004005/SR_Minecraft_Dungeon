@@ -268,6 +268,10 @@
     <ClInclude Include="..\Header\Box.h">
       <Filter>02. GameObject\Object</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\UI.h" />
+    <ClInclude Include="..\Header\UITool.h">
+      <Filter>01. Scene\ToolScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -459,6 +463,11 @@
     </ClCompile>
     <ClCompile Include="..\Code\Dynamite.cpp">
       <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Particle.cpp" />
+    <ClCompile Include="..\Code\UI.cpp" />
+    <ClCompile Include="..\Code\UITool.cpp">
+      <Filter>01. Scene\ToolScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

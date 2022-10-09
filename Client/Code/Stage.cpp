@@ -33,6 +33,7 @@
 #include "Enchanter.h"
 #include "RedStoneCube.h"
 #include "RedStoneMonstrosity.h"
+#include "UI.h"
 
 //item
 #include "Crossbow.h"
@@ -59,12 +60,20 @@ HRESULT CStage::Ready_Scene(void)
 	FAILED_CHECK_RETURN(Ready_Layer_Environment(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_GameLogic(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_UI(), E_FAIL);
-
+	
 	return S_OK;
 }
 
 _int CStage::Update_Scene(const _float & fTimeDelta)
 {
+	// m_pTransform->Get_Info(INFO_POS, &_vec3(0.f, -0.5f, 0.f));
+	// m_pTransform->Set_Scale(0.f, 1.f, 0.f);
+	//CUIFactory::Create<CUI>("UI_HP", L"UI", 600.f, 650.f - fY, 55.f, 40.f);
+	//Engine::Get_Component<CTransform>(LAYER_UI, L"UI_HP", L"Proto_TransformCom", ID_DYNAMIC)
+	//	->m_vAngle.y += D3DXToRadian(40.f) * fTimeDelta;
+
+	Engine::GetFont();
+
 	return Engine::CScene::Update_Scene(fTimeDelta);
 }
 
@@ -112,7 +121,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 1.f, 0.f ,3.f });
 	CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld);
 
-
+	
 	CEffectFactory::Create<C3DBaseTexture>("3D_Base", L"3D_Base");
 	CEffectFactory::Create<CAttack_P>("Attack_Basic", L"Attack_Basic");
 	CEffectFactory::Create<CFireWork_Fuze>("FireWork_Fuze", L"FireWork_Fuze");
@@ -154,7 +163,26 @@ HRESULT CStage::Ready_Layer_GameLogic()
 
 HRESULT CStage::Ready_Layer_UI()
 {
-	CGameObject*		pGameObject = nullptr;
+	// CGameObject*		pGameObject = nullptr;
+	
+	//CUIFactory::Create<CUI>("Buffe4", L"UI", 700.f, 650.f, 40.f, 40.f);
+	//CUIFactory::Create<CUI>("Buffe3", L"UI", 503.f, 650.f, 40.f, 40.f);
+	CUIFactory::Create<CUI>("UITexture", L"UI", 600.f, 650.f, 130.f, 110.f);
+	CUIFactory::Create<CUI>("UI_HP", L"UI_HP", 600.f, 650.f, 110.f, 85.f);
+	//CUIFactory::Create<CUI>("InvenTool", L"UI", 230.f, 655.f, 35.f, 35.f);
+	//CUIFactory::Create<CUI>("Inven", L"UI", 230.f, 655.f, 25.f, 25.f);
+	//CUIFactory::Create<CUI>("Buffe1", L"UI", 325.f, 650.f, 40.f, 40.f);
+	//CUIFactory::Create<CUI>("Buffe2", L"UI", 415.f, 650.f, 40.f, 40.f);
+	//CUIFactory::Create<CUI>("mapTool", L"UI", 800.f, 655.f, 35.f, 35.f);
+	//CUIFactory::Create<CUI>("map", L"UI", 800.f, 655.f, 35.f, 35.f);
+	//CUIFactory::Create<CUI>("RollTool", L"UI", 880.f, 655.f, 30.f, 30.f);
+	//CUIFactory::Create<CUI>("Roll", L"UI", 880.f, 657.f, 25.f, 20.f);
+	CUIFactory::Create<CUI>("arrowTool", L"UI", 980.f, 655.f, 40.f, 50.f);
+	CUIFactory::Create<CUI>("arrow", L"UI", 980.f, 655.f, 30.f, 30.f);
+	CUIFactory::Create<CUI>("emerald", L"UI", 1100.f, 655.f, 20.f, 25.f);
+	//CUIFactory::Create<CUI>("enchant", L"UI", 150.f, 655.f, 20.f, 20.f);
+
+
 
 	return S_OK;
 }
@@ -238,6 +266,9 @@ HRESULT CStage::Ready_Proto(void)
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_RedStoneCubeController", CRedStoneCubeController::Create()), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_RedStoneMonstrosityController", CRedStoneMonstrosityController::Create()), E_FAIL);
 
+	// UI
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_RcTexCom", CRcTex::Create(m_pGraphicDev)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_UI_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/UI/UI_%d.png", TEX_NORMAL, 14)), E_FAIL);
 
 	return S_OK;
 }
