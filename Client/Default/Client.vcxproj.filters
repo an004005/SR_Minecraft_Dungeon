@@ -246,9 +246,6 @@
       <Filter>02. GameObject\Object</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\ArrowCubeMgr.h" />
-    <ClInclude Include="..\Header\RedStoneMonstrosityBullet.h" />
-    <ClInclude Include="..\Header\Sword.h" />
-    <ClInclude Include="..\Header\Axe.h" />
     <ClInclude Include="..\Header\ObjectStoreMgr.h">
       <Filter>Mgr</Filter>
     </ClInclude>
@@ -291,15 +288,24 @@
     <ClInclude Include="..\Header\Emerald.h">
       <Filter>02. GameObject\07. Item\Consume</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\ConsumeItem.h">
-      <Filter>02. GameObject\07. Item\Consume</Filter>
-    </ClInclude>
     <ClInclude Include="..\Header\Box.h" />
     <ClInclude Include="..\Header\Dynamite.h" />
     <ClInclude Include="..\Header\Inventory.h" />
     <ClInclude Include="..\Header\SphereEffect.h" />
     <ClInclude Include="..\Header\UI.h" />
     <ClInclude Include="..\Header\UITool.h" />
+    <ClInclude Include="..\Header\RedStoneMonstrosityBullet.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Sword.h">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Axe.h">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ConsumeItem.h">
+      <Filter>02. GameObject\07. Item\Consume</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -457,24 +463,11 @@
     <ClCompile Include="..\Code\SphereEffect.cpp">
       <Filter>02. GameObject\05. Effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Arrow.cpp" />
     <ClCompile Include="..\Code\ArrowCubeMgr.cpp" />
-    <ClCompile Include="..\Code\RedStoneMonstrosityBullet.cpp" />
-    <ClCompile Include="..\Code\Sword.cpp" />
-    <ClCompile Include="..\Code\Axe.cpp" />
     <ClCompile Include="..\Code\ObjectStoreMgr.cpp">
       <Filter>Mgr</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\EquipItem.cpp">
-      <Filter>02. GameObject\05. Item</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\Crossbow.cpp">
-      <Filter>02. GameObject\05. Item</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\Sword.cpp">
-      <Filter>02. GameObject\05. Item</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\Glaive.cpp">
       <Filter>02. GameObject\05. Item</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Inventory.cpp">
@@ -510,15 +503,36 @@
     <ClCompile Include="..\Code\Emerald.cpp">
       <Filter>02. GameObject\07. Item\Consume</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\ConsumeItem.cpp">
-      <Filter>02. GameObject\07. Item\Consume</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\Box.cpp" />
     <ClCompile Include="..\Code\Dynamite.cpp" />
     <ClCompile Include="..\Code\Inventory.cpp" />
     <ClCompile Include="..\Code\SphereEffect.cpp" />
     <ClCompile Include="..\Code\UI.cpp" />
     <ClCompile Include="..\Code\UITool.cpp" />
+    <ClCompile Include="..\Code\RedStoneMonstrosityBullet.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Sword.cpp">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Axe.cpp">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Arrow.cpp">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\EquipItem.cpp">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Glaive.cpp">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Crossbow.cpp">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ConsumeItem.cpp">
+      <Filter>02. GameObject\07. Item\Consume</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">

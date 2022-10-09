@@ -255,6 +255,9 @@ HRESULT CMainApp::Ready_Proto()
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_UI_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/UI/UI_%d.png", TEX_NORMAL, 15)), E_FAIL);
 	// FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Loading", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Loading/loading%d.png", TEX_NORMAL, 1)), E_FAIL);
 
+
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Emerald", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/SingleTex/Emerald.png", TEX_NORMAL)), E_FAIL);
+
 	return S_OK;
 }
 
