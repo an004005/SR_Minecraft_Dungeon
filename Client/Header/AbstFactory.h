@@ -137,3 +137,35 @@ private:
 	static map<string, std::function<CGameObject*()>> s_mapBulletSpawner;
 
 };
+
+class CUIFactory : CAbstFactory
+{
+	friend class CImGuiMgr;
+public:
+	template<typename T>
+	static T* Create(const string& strFactoryTag, const wstring& wstrObjTag)
+	{
+		T* pCasted = dynamic_cast<T*>(s_mapUISpawner.find(strFactoryTag)->second());
+		_ASSERT_CRASH(pCasted != nullptr);
+		Engine::AddGameObject(LAYER_UI, wstrObjTag, pCasted);
+
+		return pCasted;
+	}
+
+	template<typename T>
+	static T* Create(const string& strFactoryTag, const wstring& wstrObjTag, const _float& fX, const _float& fY, const _float& fSizeX, const _float& fSizeY)
+	{
+		T* pCasted = dynamic_cast<T*>(s_mapUISpawner.find(strFactoryTag)->second());
+		_ASSERT_CRASH(pCasted != nullptr);
+		Engine::AddGameObject(LAYER_UI, wstrObjTag, pCasted);
+
+		CTransform* pTrans = pCasted->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+		pTrans->Set_Scale(fSizeX, fSizeY, 1.f);
+		pTrans->Set_Pos(fX - WINCX * 0.5f, -fY + WINCY * 0.5f, 0.f);
+		return pCasted;
+	}
+	static void Ready_UIFactory();
+
+private:
+	static map<string, std::function<CGameObject*()>> s_mapUISpawner;
+};

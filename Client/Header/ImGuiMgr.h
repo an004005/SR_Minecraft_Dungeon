@@ -29,7 +29,7 @@ public:
 	static void VIBufferSelector(wstring& strBuf);
 	static void AnimationEditor(CSkeletalCube* pSkeletal);
 	static void MapControl(Engine::MapTool& tMaptool, _float& _far, CTerrainCubeMap* cubemap);
-
+	static void UiEditor(Engine::UiTool& tUitool, CTerrainCubeMap* cubemap);
 
 private:
 	static void SkeletalRecursive(SkeletalPart* Part, string& strSelected, ImGuiTreeNodeFlags baseFlags);

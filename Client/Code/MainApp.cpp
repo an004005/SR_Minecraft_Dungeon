@@ -5,6 +5,7 @@
 #include "Logo.h"
 #include "AnimationTool.h"
 #include "MapTool.h"
+#include "UItool.h"
 #include "TerrainCubeMap.h"
 #include "Stage.h"
 #include "time.h"
@@ -99,7 +100,7 @@ HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 * ppGraphicDev)
 
 	// Font
 	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Font_Default", L"¹ÙÅÁ", 15, 20, FW_HEAVY), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Font_Jinji", L"±Ã¼­", 30, 30, FW_NORMAL), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Font_Jinji", L"±Ã¼­", 15, 15, FW_NORMAL), E_FAIL);
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -140,8 +141,9 @@ HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement
 
 	// pScene = CLogo::Create(pGraphicDev);
 	// CAnimationTool::Create(pGraphicDev);
-	//CMapTool::Create(pGraphicDev);
-	NULL_CHECK_RETURN(CStage::Create(pGraphicDev), E_FAIL);
+	// CMapTool::Create(pGraphicDev);
+	//CUItool::Create(pGraphicDev);
+	 NULL_CHECK_RETURN(CStage::Create(pGraphicDev), E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Create_Management(pGraphicDev, ppManagement), E_FAIL);
 	(*ppManagement)->AddRef();

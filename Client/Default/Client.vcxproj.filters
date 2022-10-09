@@ -192,6 +192,10 @@
     <ClInclude Include="..\Header\GeomancerController.h">
       <Filter>Controller</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\UI.h" />
+    <ClInclude Include="..\Header\UITool.h">
+      <Filter>01. Scene\ToolScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -305,6 +309,11 @@
     </ClCompile>
     <ClCompile Include="..\Code\GeomancerController.cpp">
       <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Particle.cpp" />
+    <ClCompile Include="..\Code\UI.cpp" />
+    <ClCompile Include="..\Code\UITool.cpp">
+      <Filter>01. Scene\ToolScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

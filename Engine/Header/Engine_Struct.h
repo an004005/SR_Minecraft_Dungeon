@@ -68,7 +68,6 @@ namespace Engine
 		_bool	bRendState;
 
 	}MapTool;
-
 #pragma region Particle Struct
 	
 
