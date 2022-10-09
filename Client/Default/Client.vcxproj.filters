@@ -65,6 +65,12 @@
     <Filter Include="02. GameObject\Object">
       <UniqueIdentifier>{d4c64e4c-660f-4b18-b3c9-37cd78b2fea4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\05. Effect">
+      <UniqueIdentifier>{7425b919-b28f-45e4-b86a-38d983e757b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\06. Inventory">
+      <UniqueIdentifier>{fcce4791-e493-43f9-b897-5adda5582bb6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\MainApp.h">
@@ -187,7 +193,6 @@
     <ClInclude Include="..\Header\StatComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\Particle.h" />
     <ClInclude Include="..\Header\PlayerController.h">
       <Filter>Controller</Filter>
     </ClInclude>
@@ -248,6 +253,25 @@
     <ClInclude Include="..\Header\RedStoneMonstrosityBullet.h" />
     <ClInclude Include="..\Header\Sword.h" />
     <ClInclude Include="..\Header\Axe.h" />
+    <ClInclude Include="..\Header\Particle.h">
+      <Filter>02. GameObject\05. Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\SphereEffect.h">
+      <Filter>02. GameObject\05. Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Inventory.h">
+      <Filter>02. GameObject\06. Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Dynamite.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Box.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\UI.h" />
+    <ClInclude Include="..\Header\UITool.h">
+      <Filter>01. Scene\ToolScene</Filter>
+    </ClInclude>
     <ClInclude Include="..\Header\ObjectStoreMgr.h">
       <Filter>Mgr</Filter>
     </ClInclude>
@@ -361,7 +385,6 @@
     <ClCompile Include="..\Code\GeomancerController.cpp">
       <Filter>Controller</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Particle.cpp" />
     <ClCompile Include="..\Code\ZombieController.cpp">
       <Filter>Controller</Filter>
     </ClCompile>
@@ -408,6 +431,12 @@
     <ClCompile Include="..\Code\GeomancerWall.cpp">
       <Filter>02. GameObject\Object</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\Particle.cpp">
+      <Filter>02. GameObject\05. Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SphereEffect.cpp">
+      <Filter>02. GameObject\05. Effect</Filter>
+    </ClCompile>
     <ClCompile Include="..\Code\Arrow.cpp" />
     <ClCompile Include="..\Code\ArrowCubeMgr.cpp" />
     <ClCompile Include="..\Code\Crossbow.cpp" />
@@ -419,6 +448,32 @@
     <ClCompile Include="..\Code\Axe.cpp" />
     <ClCompile Include="..\Code\ObjectStoreMgr.cpp">
       <Filter>Mgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\EquipItem.cpp">
+      <Filter>02. GameObject\05. Item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Crossbow.cpp">
+      <Filter>02. GameObject\05. Item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Sword.cpp">
+      <Filter>02. GameObject\05. Item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Glaive.cpp">
+      <Filter>02. GameObject\05. Item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Inventory.cpp">
+      <Filter>02. GameObject\06. Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Box.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Dynamite.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Particle.cpp" />
+    <ClCompile Include="..\Code\UI.cpp" />
+    <ClCompile Include="..\Code\UITool.cpp">
+      <Filter>01. Scene\ToolScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

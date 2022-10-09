@@ -13,12 +13,17 @@
 #include "RedStoneCube.h"
 #include "RedStoneMonstrosity.h"
 #include "GeomancerWall.h"
+#include "SphereEffect.h"
 #include "RedStoneMonstrosityBullet.h"
 #include "Crossbow.h"
 #include "Sword.h"
 #include "Glaive.h"
 #include "Arrow.h"
 #include "Axe.h"
+#include "Box.h"
+#include "Inventory.h"
+#include "Dynamite.h"
+#include "UI.h"
 #include "Logo.h"
 #include "Stage.h"
 #include "AnimationTool.h"
@@ -32,6 +37,7 @@ map<string, std::function<CGameObject*()>> CEnvFactory::s_mapEnvSpawner;
 map<string, std::function<CGameObject*(_float)>> CBulletFactory::s_mapBulletSpawner;
 map<string, std::function<CGameObject*()>> CObjectFactory::s_mapObjectSpawner;
 map<string, std::function<CGameObject*()>> CItemFactory::s_mapItemSpawner;
+map<string, std::function<CGameObject*()>> CUIFactory::s_mapUISpawner;
 
 map<string, std::function<CScene*()>> CSceneFactory::s_mapLoadingSpawner;
 map<string, std::function<CScene*()>> CSceneFactory::s_mapSceneSpawner;
@@ -50,6 +56,7 @@ void CAbstFactory::Ready_Factories(LPDIRECT3DDEVICE9 pGraphicDev)
 	CBulletFactory::Ready_BulletFactory();
 	CObjectFactory::Ready_ObjectFactory();
 	CItemFactory::Ready_ItemFactory();
+	CUIFactory::Ready_UIFactory();
 	CSceneFactory::Ready_SceneFactory();
 }
 
@@ -165,12 +172,53 @@ void CEffectFactory::Ready_EffectFactory()
 		return CCloud::Create(s_pGraphicDev,0.4f,WALK);
 	} });
 
+	s_mapEffectSpawner.insert({ "Decal_Cloud", []()
+	{
+		return CCloud::Create(s_pGraphicDev,0.4f,DECAL);
+	} });
+
 	s_mapEffectSpawner.insert({ "Roll_Cloud", []()
 	{
 		return CCloud::Create(s_pGraphicDev,0.7f,ROLL);
 	} });
 
+	//
 
+	s_mapEffectSpawner.insert({ "Golem_Spit_Sphere",[]()
+	{
+		return CSphereEffect::Create(s_pGraphicDev, 0.03f, GOLEM_SPIT);
+	} });
+
+	s_mapEffectSpawner.insert({ "Golem_Melee_L",[]()
+	{
+		return CSphereEffect::Create(s_pGraphicDev, 0.03f, GOLEM_MELEE_L);
+	} });
+
+	s_mapEffectSpawner.insert({ "Golem_Melee_M",[]()
+	{
+		return CSphereEffect::Create(s_pGraphicDev, 0.025f, GOLEM_MELEE_M);
+	} });
+
+	s_mapEffectSpawner.insert({ "Golem_Melee_S",[]()
+	{
+		return CSphereEffect::Create(s_pGraphicDev, 0.015f, GOLEM_MELEE_S);
+	} });
+
+	s_mapEffectSpawner.insert({ "Golem_Melee_Shpere_L",[]()
+	{
+		return CSphereEffect::Create(s_pGraphicDev, 0.02f, SPHERE_L);
+	} });
+	s_mapEffectSpawner.insert({ "Golem_Melee_Shpere_M",[]()
+	{
+		return CSphereEffect::Create(s_pGraphicDev, 0.0185f, SPHERE_M);
+	} });
+
+	//
+
+	s_mapEffectSpawner.insert({ "Golem_Spit",[]()
+	{
+		return CGolemSpit::Create(s_pGraphicDev, 1.f);
+	} });
 
 	s_mapEffectSpawner.insert({ "Shock_Circle", []()
 	{
@@ -184,7 +232,7 @@ void CEffectFactory::Ready_EffectFactory()
 
 	s_mapEffectSpawner.insert({ "Creeper_Explosion", []()
 	{
-		return CUVCircle::Create(s_pGraphicDev, 3.5f, CREEPER);
+		return CUVCircle::Create(s_pGraphicDev, 3.7f, CREEPER);
 	} });
 
 	s_mapEffectSpawner.insert({ "Golem_Explosion", []()
@@ -192,6 +240,45 @@ void CEffectFactory::Ready_EffectFactory()
 		return CUVCircle::Create(s_pGraphicDev, 7.f, GOLEM);
 	} });
 
+	s_mapEffectSpawner.insert({ "Red_Cube_Crack", []()
+	{
+		return CCrack::Create(s_pGraphicDev, 1.f, GOLEM_SPIT_CRACK);
+	} });
+
+	s_mapEffectSpawner.insert({ "Monster_Stun",[]()
+	{
+		return CStun::Create(s_pGraphicDev, 1.f);
+	} });
+
+	s_mapEffectSpawner.insert({ "Heal_Circle_R",[]()
+	{
+		return CHealCircle::Create(s_pGraphicDev, 1.4f, 90.f);
+	} });
+
+	s_mapEffectSpawner.insert({ "Heal_Circle_L",[]()
+	{
+		return CHealCircle::Create(s_pGraphicDev, 1.4f, 90.f);
+	} });
+
+	s_mapEffectSpawner.insert({ "Lava_Particle",[]()
+	{
+		return CLava_Particle::Create(s_pGraphicDev, 1.f, FALLINLAVA);
+	} });
+
+	s_mapEffectSpawner.insert({ "Fuze_Particle",[]()
+	{
+		return CLava_Particle::Create(s_pGraphicDev, 1.f, FUZEPARTICLE);
+	} });
+
+	s_mapEffectSpawner.insert({ "Exe_Decal",[]()
+	{
+		return CCrack::Create(s_pGraphicDev, 2.f, EXE_DECAL);
+	} });
+
+	s_mapEffectSpawner.insert({ "HeartParticle",[]()
+	{
+		return CHeartParticle::Create(s_pGraphicDev, 1.f);
+	} });
 }
 
 void CEnvFactory::Ready_EnvFactory()
@@ -237,6 +324,18 @@ void CObjectFactory::Ready_ObjectFactory()
 	{	
 		return CRedStoneMonstrosityBullet::Create(s_pGraphicDev);
 	} });
+	s_mapObjectSpawner.insert({ "Box", []()
+	{
+		return CBox::Create(s_pGraphicDev);
+	} });
+	s_mapObjectSpawner.insert({ "Inventory", []()
+	{
+		return CInventory::Create(s_pGraphicDev);
+	} });
+	s_mapObjectSpawner.insert({ "Dynamite", []()
+	{
+		return CDynamite::Create(s_pGraphicDev);
+	} });
 
 }
 
@@ -258,6 +357,100 @@ void CItemFactory::Ready_ItemFactory()
 	{
 		return CAxe::Create(s_pGraphicDev);
 	} });
+}
+
+void CUIFactory::Ready_UIFactory()
+{
+	s_mapUISpawner.insert({ "UITexture", []()
+	{
+		return CUI::Create(s_pGraphicDev, 0);
+	} });
+
+	s_mapUISpawner.insert({ "UI_HP", []()
+	{
+		return CUI::Create(s_pGraphicDev, 1);
+	} });
+
+	s_mapUISpawner.insert({ "UI_MinusHP", []()
+	{
+		return CUI::Create(s_pGraphicDev, 1);
+	} });
+
+	s_mapUISpawner.insert({ "Inven", []()
+	{
+		return CUI::Create(s_pGraphicDev, 2);
+	} });
+
+	s_mapUISpawner.insert({ "InvenTool", []()
+	{
+		return CUI::Create(s_pGraphicDev, 4);
+	} });
+
+	s_mapUISpawner.insert({ "InvenToolPos", []()
+	{
+		return CUI::Create(s_pGraphicDev, 13);
+	} });
+
+	s_mapUISpawner.insert({ "arrowTool", []()
+	{
+		return CUI::Create(s_pGraphicDev, 3);
+	} });
+
+	s_mapUISpawner.insert({ "arrow", []()
+	{
+		return CUI::Create(s_pGraphicDev, 9);
+	} });
+
+	s_mapUISpawner.insert({ "Buffe1", []()
+	{
+		return CUI::Create(s_pGraphicDev, 4);
+	} });
+
+	s_mapUISpawner.insert({ "Buffe2", []()
+	{
+		return CUI::Create(s_pGraphicDev, 4);
+	} });
+
+	s_mapUISpawner.insert({ "Buffe3", []()
+	{
+		return CUI::Create(s_pGraphicDev, 4);
+	} });
+
+	s_mapUISpawner.insert({ "Buffe4", []()
+	{
+		return CUI::Create(s_pGraphicDev, 4);
+	} });
+
+	s_mapUISpawner.insert({ "RollTool", []()
+	{
+		return CUI::Create(s_pGraphicDev,10);
+	} });
+
+	s_mapUISpawner.insert({ "Roll", []()
+	{
+		return CUI::Create(s_pGraphicDev,5);
+	} });
+
+	s_mapUISpawner.insert({ "map", []()
+	{
+		return CUI::Create(s_pGraphicDev, 6);
+	} });
+
+	s_mapUISpawner.insert({ "mapTool", []()
+	{
+		return CUI::Create(s_pGraphicDev, 4);
+	} });
+
+	s_mapUISpawner.insert({ "emerald", []()
+	{
+		return CUI::Create(s_pGraphicDev, 8);
+	} });
+
+	s_mapUISpawner.insert({ "enchant", []()
+	{
+		return CUI::Create(s_pGraphicDev, 11);
+	} });
+
 }
 
 void CSceneFactory::Ready_SceneFactory()

@@ -13,6 +13,8 @@
 #include "Sword.h"
 #include "Glaive.h"
 #include "Axe.h"
+#include "SphereEffect.h"
+#include "Inventory.h"
 
 /*-----------------------
  *    CCharacter
@@ -36,6 +38,7 @@ HRESULT CPlayer::Ready_Object()
 {
 	CSkeletalCube::Ready_Object();
 
+
 	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 	m_pCurAnim = m_pIdleAnim;
 
@@ -49,6 +52,9 @@ HRESULT CPlayer::Ready_Object()
 	m_pColl->SetRadius(0.8f);
 	m_pColl->SetCollType(COLL_PLAYER);
 
+	m_CurRollCoolTime = 3.f;
+	m_CurPotionCoolTime = 20.f;
+
 	m_pStat = Add_Component<CStatComponent>(L"Proto_StatCom", L"Proto_StatCom", ID_DYNAMIC);
 	m_pStat->SetMaxHP(100);
 	m_pStat->SetTransform(m_pRootPart->pTrans);
@@ -59,17 +65,10 @@ HRESULT CPlayer::Ready_Object()
 	m_dwRollDust = GetTickCount();
 
 
-	m_CurRollCoolTime = 3.f;
-	m_CurPotionCoolTime = 0.f;
-
-	m_pRangeWeapon = Get_GameObject<CCrossbow>(LAYER_ITEM, L"Crossbow");
-	m_pSword = Get_GameObject<CSword>(LAYER_ITEM, L"Sword");
-	m_pGlaive = Get_GameObject<CGlaive>(LAYER_ITEM, L"Glaive");
+	m_pInventory = CObjectFactory::Create<CInventory>("Inventory", L"Inventory");
+	m_pInventory->AddRef();
+	m_arrAnim = m_pInventory->CurWeapon(IT_MELEE)->SetarrAnim();
 	m_pAxe = Get_GameObject<CAxe>(LAYER_ITEM, L"Axe");
-
-	m_pCurWeapon = m_pSword;
-
-	m_arrAnim = m_pGlaive->SetarrAnim();
 	return S_OK;
 }
 
@@ -124,9 +123,10 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 
 void CPlayer::LateUpdate_Object()
 {
+	
 	if (m_bApplyMeleeAttackNext)
 	{
-		m_pCurWeapon->Collision();
+		m_pInventory->CurWeapon(IT_MELEE)->Collision();
 		m_bApplyMeleeAttackNext = false;
 	}
 
@@ -141,6 +141,7 @@ void CPlayer::LateUpdate_Object()
 
 void CPlayer::Free()
 {
+	Safe_Release(m_pInventory);
 	CSkeletalCube::Free();
 }
 
@@ -182,13 +183,62 @@ void CPlayer::AttackState()
 		m_bCanPlayAnim = false;
 		
 		//원거리 무기는 생략.
-		m_iAttackCnt = m_pCurWeapon->Attack();// 애니메이션 실행
+		m_iAttackCnt = m_pInventory->CurWeapon(IT_MELEE)->Attack();// 애니메이션 실행
 	}
 	else if (m_bRangeAttack)
 	{
+		
+		WeaponChange(IT_RANGE);
 		m_bCanPlayAnim = false;
-		m_pRangeWeapon->Attack();
+		m_iAttackCnt = m_pInventory->CurWeapon(IT_RANGE)->Attack();
 	}
+
+#pragma region GolemSmash
+	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_Shpere_L", L"Golem_Melee_Shpere_L");
+	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_Shpere_M", L"Golem_Melee_Shpere_M");
+	//
+	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_L", L"Golem_Melee_L");
+	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_M", L"Golem_Melee_M");
+	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_S", L"Golem_Melee_S");
+	// 	for (int i = 0; i < 15; i++)
+	// 	{
+	// 		CEffectFactory::Create<CCloud>("ShockPowder_Cloud", L"ShockPowder_Cloud");
+	// 	}
+	// //완전히 찍을 때
+	// 	Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.5f, D3DXCOLOR(0.88f,0.35f,0.24f,1.0f), 12, 0.8f);
+#pragma endregion
+
+#pragma region GolemSpit
+	// for (int i = 0; i < 10; i++)
+	// {
+		// CEffectFactory::Create<CGolemSpit>("Golem_Spit", L"Golem_Spit");
+	//}
+#pragma endregion
+
+#pragma region RedCube_Spawn
+		// CEffectFactory::Create<CCrack>("Red_Cube_Crack", L"Red_Cube_Crack");
+#pragma endregion
+
+#pragma region Lava_Paticle
+	// CEffectFactory::Create<CLava_Particle>("Lava_Particle", L"Lava_Particle");
+#pragma endregion
+
+#pragma region Heal Effect
+	// CEffectFactory::Create<CHealCircle>("Heal_Circle_L", L"Heal_Circle_L");
+	//
+	// for (int i = 0; i < 12; i++)
+	// {
+	// 	CEffectFactory::Create<CHeartParticle>("HeartParticle", L"HeartParticle");
+	// }
+#pragma endregion
+
+#pragma region Decal
+	CEffectFactory::Create<CCrack>("Exe_Decal", L"Exe_Decal");
+	for (int i = 0; i < 5; i++)
+	{
+		CEffectFactory::Create<CCloud>("Decal_Cloud", L"Decal_Cloud");
+	}
+#pragma endregion
 
 
 #pragma region Attack_Basic
@@ -255,7 +305,7 @@ void CPlayer::StateChange()
 		Get_GameObject<CSpeedBoots>(LAYER_EFFECT, L"Speed_Boots")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 3.f, D3DXCOLOR(0.2f, 0.2f, 0.5f, 1.f), 1, 1.5f);
 		Get_GameObject<CSpeedBoots_Particle>(LAYER_EFFECT, L"Speed_Boots_Particle")->Add_Particle(
 			_vec3(m_pRootPart->pTrans->m_vInfo[INFO_POS].x, m_pRootPart->pTrans->m_vInfo[INFO_POS].y + 15.f, m_pRootPart->pTrans->m_vInfo[INFO_POS].z),
-			1.f, D3DXCOLOR(0.3f, 0.4f, 0.7f, 1.f), 7, 20.f);
+			1.f, D3DXCOLOR(0.3f, 0.4f, 0.7f, 1.f), 18, 20.f);
 		return;
 	}
 
@@ -263,7 +313,6 @@ void CPlayer::StateChange()
 	{
 		m_eState = ATTACK;
 		RotateToCursor();
-		WeaponChange(m_pCurWeapon);
 		return;
 	}
 
@@ -271,7 +320,6 @@ void CPlayer::StateChange()
 	{
 		m_eState = ATTACK;
 		RotateToCursor();
-		WeaponChange(m_pRangeWeapon);
 		m_bDelay = true;
 		return;
 	}
@@ -284,7 +332,6 @@ void CPlayer::StateChange()
 		m_pCurAnim = &m_arrAnim[ANIM_WALK];
 
 		if (m_bDelay) m_bDelay = false;
-		else WeaponChange(m_pCurWeapon);
 		return;
 	}
 
@@ -295,7 +342,7 @@ void CPlayer::StateChange()
 		m_pCurAnim = &m_arrAnim[ANIM_IDLE];
 
 		if (m_bDelay) m_bDelay = false;
-		else WeaponChange(m_pCurWeapon);
+		else WeaponChange(IT_MELEE);
 		return;
 	}
 }
@@ -396,15 +443,21 @@ void CPlayer::RotateToMove()
 		m_pRootPart->pTrans->m_vAngle.y = acosf(fDot);
 }
 
-void CPlayer::Legacy3Press()
+void CPlayer::Legacy4Press()
 { 
-	m_arrAnim = m_pGlaive->SetarrAnim();
-	m_pCurWeapon = m_pGlaive;
+	WeaponChange(IT_MELEE);
 }
-void CPlayer::Legacy4Press() 
-{ 
-	m_arrAnim = m_pAxe->SetarrAnim();
-	m_pCurWeapon = m_pAxe;
-	// m_arrAnim = m_pSword->SetarrAnim();
-	// m_pCurWeapon = m_pSword;	
+
+void CPlayer::WeaponChange(ITEMTYPE eIT)
+{
+	if (m_pWeaponPart == nullptr)
+	{
+		auto& itr = m_mapParts.find("weapon_r");
+		if (itr == m_mapParts.end())
+			return;
+		m_pWeaponPart = itr->second;
+	}
+	
+	m_pInventory->Equip_Item(m_pWeaponPart, eIT);
+	m_arrAnim = m_pInventory->CurWeapon(eIT)->SetarrAnim();
 }

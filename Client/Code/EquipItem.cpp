@@ -7,7 +7,11 @@
 CEquipItem::CEquipItem(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CItem(pGraphicDev)
 {
+	m_eItemType = IT_END;
+	
 }
+
+
 
 CEquipItem::~CEquipItem()
 {

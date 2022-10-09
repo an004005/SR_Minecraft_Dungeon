@@ -170,11 +170,13 @@
     <ClInclude Include="..\Header\ArrowCubeMgr.h" />
     <ClInclude Include="..\Header\Axe.h" />
     <ClInclude Include="..\Header\BackGround.h" />
+    <ClInclude Include="..\Header\Box.h" />
     <ClInclude Include="..\Header\Controller.h" />
     <ClInclude Include="..\Header\Creeper.h" />
     <ClInclude Include="..\Header\CreeperController.h" />
     <ClInclude Include="..\Header\Crossbow.h" />
     <ClInclude Include="..\Header\DynamicCamera.h" />
+    <ClInclude Include="..\Header\Dynamite.h" />
     <ClInclude Include="..\Header\Enchanter.h" />
     <ClInclude Include="..\Header\EnchanterController.h" />
     <ClInclude Include="..\Header\EquipItem.h" />
@@ -184,6 +186,7 @@
     <ClInclude Include="..\Header\Glaive.h" />
     <ClInclude Include="..\Header\ImGuiMgr.h" />
     <ClInclude Include="..\Header\ImSequencerImpl.h" />
+    <ClInclude Include="..\Header\Inventory.h" />
     <ClInclude Include="..\Header\Item.h" />
     <ClInclude Include="..\Header\Loading.h" />
     <ClInclude Include="..\Header\MapTool.h" />
@@ -202,6 +205,7 @@
     <ClInclude Include="..\Header\SkeletalCube.h" />
     <ClInclude Include="..\Header\Skeleton.h" />
     <ClInclude Include="..\Header\SkeletonController.h" />
+    <ClInclude Include="..\Header\SphereEffect.h" />
     <ClInclude Include="..\Header\Stage.h" />
     <ClInclude Include="..\Header\StatComponent.h" />
     <ClInclude Include="..\Header\StaticCamera.h" />
@@ -211,6 +215,8 @@
     <ClInclude Include="..\Header\TestCube.h" />
     <ClInclude Include="..\Header\Zombie.h" />
     <ClInclude Include="..\Header\ZombieController.h" />
+    <ClInclude Include="..\Header\UI.h" />
+    <ClInclude Include="..\Header\UITool.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="GraphEditor.h" />
     <ClInclude Include="imconfig.h" />
@@ -240,11 +246,13 @@
     <ClCompile Include="..\Code\ArrowCubeMgr.cpp" />
     <ClCompile Include="..\Code\Axe.cpp" />
     <ClCompile Include="..\Code\BackGround.cpp" />
+    <ClCompile Include="..\Code\Box.cpp" />
     <ClCompile Include="..\Code\Controller.cpp" />
     <ClCompile Include="..\Code\Creeper.cpp" />
     <ClCompile Include="..\Code\CreeperController.cpp" />
     <ClCompile Include="..\Code\Crossbow.cpp" />
     <ClCompile Include="..\Code\DynamicCamera.cpp" />
+    <ClCompile Include="..\Code\Dynamite.cpp" />
     <ClCompile Include="..\Code\Enchanter.cpp" />
     <ClCompile Include="..\Code\EnchanterController.cpp" />
     <ClCompile Include="..\Code\EquipItem.cpp" />
@@ -254,6 +262,7 @@
     <ClCompile Include="..\Code\Glaive.cpp" />
     <ClCompile Include="..\Code\ImGuiMgr.cpp" />
     <ClCompile Include="..\Code\ImSequencerImpl.cpp" />
+    <ClCompile Include="..\Code\Inventory.cpp" />
     <ClCompile Include="..\Code\Item.cpp" />
     <ClCompile Include="..\Code\Loading.cpp" />
     <ClCompile Include="..\Code\Logo.cpp" />
@@ -272,6 +281,7 @@
     <ClCompile Include="..\Code\SkeletalCube.cpp" />
     <ClCompile Include="..\Code\Skeleton.cpp" />
     <ClCompile Include="..\Code\SkeletonController.cpp" />
+    <ClCompile Include="..\Code\SphereEffect.cpp" />
     <ClCompile Include="..\Code\Stage.cpp" />
     <ClCompile Include="..\Code\StatComponent.cpp" />
     <ClCompile Include="..\Code\StaticCamera.cpp" />
@@ -281,6 +291,8 @@
     <ClCompile Include="..\Code\TestCube.cpp" />
     <ClCompile Include="..\Code\Zombie.cpp" />
     <ClCompile Include="..\Code\ZombieController.cpp" />
+    <ClCompile Include="..\Code\UI.cpp" />
+    <ClCompile Include="..\Code\UITool.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="GraphEditor.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>

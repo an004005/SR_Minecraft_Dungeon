@@ -30,6 +30,12 @@ namespace Engine
 
 	enum CUBETYPE { TYPE_LAND, TYPE_COLLISION, TYPE_DECO, TYPE_TEX, TYPE_END };
 
+
+	//ITEM
+
+	enum ITEMTYPE { IT_MELEE, IT_RANGE, IT_LEGACY, IT_END };
+	
+	enum ITEMSTATE { IS_TAKE, IS_DROP, IS_END};
 	/////////////////////////////////////////////////////////////////
 
 	enum LAYERID

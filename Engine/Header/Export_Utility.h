@@ -14,6 +14,7 @@
 #include "Collider.h"
 #include "RcShader.h"
 #include "DebugLine.h"
+#include "SphereMesh.h"
 
 #include "Transform.h"
 #include "Calculator.h"

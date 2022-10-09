@@ -135,6 +135,9 @@
     <ClInclude Include="..\..\Header\DebugLine.h">
       <Filter>01. GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Header\SphereMesh.h">
+      <Filter>00. Component\00. VIBuffer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\VIBuffer.cpp">
@@ -211,6 +214,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\DebugLine.cpp">
       <Filter>01. GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SphereMesh.cpp">
+      <Filter>00. Component\00. VIBuffer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -2,11 +2,14 @@
 #include "..\Header\Crossbow.h"
 #include "AbstFactory.h"
 #include "Player.h"
+#include "TerrainCubeMap.h"
 
 CCrossbow::CCrossbow(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CEquipItem(pGraphicDev)
+	
 {
 }
+
 
 CCrossbow::~CCrossbow()
 {
@@ -14,6 +17,7 @@ CCrossbow::~CCrossbow()
 
 HRESULT CCrossbow::Ready_Object()
 {
+	m_pTransCom = Add_Component<Engine::CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 	m_pBufferCom = Add_Component<CVoxelTex>(L"Proto_VoxelTex_Crossbow", L"Proto_VoxelTex_Crossbow", ID_STATIC);
 	m_pTextureCom = Add_Component<CTexture>(L"Proto_WeaponTexture", L"Proto_WeaponTexture", ID_STATIC);
 
@@ -23,11 +27,24 @@ HRESULT CCrossbow::Ready_Object()
 	m_arrAnim[ANIM_ATTACK2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/crossbow_attack_loop.anim");
 	//Attack_end
 	m_arrAnim[ANIM_ATTACK3] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/crossbow_attack_end.anim");
+	m_arrAnim[ANIM_RANGE_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/crossbow_attack_start.anim");
+
+	m_eItemType = IT_RANGE;
+
 	return S_OK;
 }
 
 _int CCrossbow::Update_Object(const _float & fTimeDelta)
 {
+	if (m_eItemState == IS_TAKE)
+		return 0;
+
+	_vec3& vPos = m_pTransCom->m_vInfo[INFO_POS];
+	CTerrainCubeMap* pCubeMap = Get_GameObject<CTerrainCubeMap>(LAYER_ENV, L"TerrainCubeMap");
+	_float fHeight = pCubeMap->GetHeight(vPos.x, vPos.z);
+
+	Parabola(vPos, fHeight, fTimeDelta);
+
 	CEquipItem::Update_Object(fTimeDelta);
 	return 0;
 }
@@ -39,8 +56,12 @@ void CCrossbow::LateUpdate_Object()
 
 void CCrossbow::Render_Object()
 {
-	/*m_pTextureCom->Set_Texture(2);
-	m_pBufferCom->Render_Buffer();*/
+	if (m_eItemState == IS_TAKE)
+		return;
+
+	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
+	m_pTextureCom->Set_Texture(2);
+	m_pBufferCom->Render_Buffer();
 }
 
 CCrossbow * CCrossbow::Create(LPDIRECT3DDEVICE9 pGraphicDev)

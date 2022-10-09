@@ -5,6 +5,7 @@
 #include "Logo.h"
 #include "AnimationTool.h"
 #include "MapTool.h"
+#include "UItool.h"
 #include "TerrainCubeMap.h"
 #include "Stage.h"
 #include "time.h"
@@ -112,7 +113,7 @@ HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 * ppGraphicDev)
 
 	// Font
 	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Font_Default", L"πŸ≈¡", 15, 20, FW_HEAVY), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Font_Jinji", L"±√º≠", 30, 30, FW_NORMAL), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Font_Jinji", L"±√º≠", 15, 15, FW_NORMAL), E_FAIL);
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();

@@ -4,11 +4,14 @@
 #include "Player.h"
 #include "StatComponent.h"
 #include "Monster.h"
+#include "TerrainCubeMap.h"
 
 CGlaive::CGlaive(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CEquipItem(pGraphicDev)
 {
 }
+
+
 
 CGlaive::~CGlaive()
 {
@@ -16,25 +19,40 @@ CGlaive::~CGlaive()
 
 HRESULT CGlaive::Ready_Object()
 {
+	m_pTransCom = Add_Component<Engine::CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 	m_pBufferCom = Add_Component<CVoxelTex>(L"Proto_VoxelTex_Glaive", L"Proto_VoxelTex_Glaive", ID_STATIC);
-	m_pTextureCom = Add_Component<CTexture>(L"Proto_WeaponTexture", L"Proto_WeaponTexture", ID_STATIC);
+	m_pTextureCom = Add_Component<Engine::CTexture>(L"Proto_WeaponTexture", L"Proto_WeaponTexture", ID_STATIC);
 
 	m_arrAnim[ANIM_IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/glaive_idle.anim");
 	m_arrAnim[ANIM_IDLE].bLoop = true;
 	m_arrAnim[ANIM_WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/glaive_walk.anim");
 	m_arrAnim[ANIM_WALK].bLoop = true;
 	m_arrAnim[ANIM_ATTACK1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/glaive_attack_a.anim");
-	m_arrAnim[ANIM_ATTACK2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/glavie_attack_b.anim");
+	m_arrAnim[ANIM_ATTACK2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/glaive_attack_a.anim");
+	m_arrAnim[ANIM_ATTACK3] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/glavie_attack_b.anim");
 	m_arrAnim[ANIM_ROLL] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/roll.anim");
 	m_arrAnim[ANIM_RANGE_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/crossbow_attack_start.anim");
 	m_arrAnim[ANIM_LEGACY1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/shock_powder.anim");
 	m_arrAnim[ANIM_LEGACY2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/shock_powder.anim");
+
+	m_eItemType = IT_MELEE;
+
 
 	return S_OK;
 }
 
 _int CGlaive::Update_Object(const _float & fTimeDelta)
 {
+	if (m_eItemState == IS_TAKE)
+		return 0;
+
+	_vec3& vPos = m_pTransCom->m_vInfo[INFO_POS];
+	CTerrainCubeMap* pCubeMap = Get_GameObject<CTerrainCubeMap>(LAYER_ENV, L"TerrainCubeMap");
+	_float fHeight = pCubeMap->GetHeight(vPos.x, vPos.z);
+
+	Parabola(vPos, fHeight, fTimeDelta);
+
+	
 	CEquipItem::Update_Object(fTimeDelta);
 	return 0;
 }
@@ -47,7 +65,12 @@ void CGlaive::LateUpdate_Object()
 
 void CGlaive::Render_Object()
 {
+	if (m_eItemState == IS_TAKE)
+		return;
 
+	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
+	m_pTextureCom->Set_Texture(1);
+	m_pBufferCom->Render_Buffer();
 }
 
 _int CGlaive::Attack()
@@ -57,6 +80,10 @@ _int CGlaive::Attack()
 		return 0;
 
 	if (m_iAttackCnt == 2)
+	{
+		pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK2]);
+	}
+	else if(m_iAttackCnt == 1)
 	{
 		pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK2]);
 	}

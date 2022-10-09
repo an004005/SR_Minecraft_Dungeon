@@ -2,8 +2,6 @@
 #include "Item.h"
 #include "SkeletalCube.h"
 
-class CTransform;
-
 enum Animation
 {
 	ANIM_WALK,
@@ -21,6 +19,8 @@ enum Animation
 	ANIM_RESCUE,
 	ANIM_END
 };
+
+
 
 class CEquipItem :
 	public CItem
@@ -44,12 +44,16 @@ public:
 
 public:
 	const array<CubeAnimFrame, ANIM_END>& SetarrAnim(){ return m_arrAnim; }
+	ITEMTYPE GetItemType() { return m_eItemType; }
 
 protected:
 	Engine::CTexture*	m_pTextureCom = nullptr;
 	Engine::CVoxelTex*	m_pBufferCom = nullptr;
+	Engine::CTransform*	m_pTransCom = nullptr;
 	
-	array<CubeAnimFrame, ANIM_END> m_arrAnim;
+	array<CubeAnimFrame, ANIM_END> m_arrAnim{};
 	_uint m_iAttackCnt = 0; // ÄÞº¸ ¹øÈ£
+	ITEMTYPE	m_eItemType;
+	
 };
 

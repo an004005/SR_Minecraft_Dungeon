@@ -2,6 +2,10 @@
 
 USING(Engine)
 
+CVIBuffer::CVIBuffer()
+{
+}
+
 CVIBuffer::CVIBuffer(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CComponent(pGraphicDev)
 	, m_pVB(nullptr)
