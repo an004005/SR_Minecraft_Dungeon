@@ -132,6 +132,9 @@
     <ClInclude Include="..\..\Header\RcShader.h">
       <Filter>00. Component\00. VIBuffer\RcShader</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Header\DebugLine.h">
+      <Filter>01. GameObject</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Header\SphereMesh.h">
       <Filter>00. Component\00. VIBuffer</Filter>
     </ClInclude>
@@ -208,6 +211,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\RcShader.cpp">
       <Filter>00. Component\00. VIBuffer\RcShader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\DebugLine.cpp">
+      <Filter>01. GameObject</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\SphereMesh.cpp">
       <Filter>00. Component\00. VIBuffer</Filter>

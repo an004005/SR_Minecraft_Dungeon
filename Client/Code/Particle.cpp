@@ -50,7 +50,9 @@ void CAttack_P::Render_Object()
 void CAttack_P::Reset_Particle(Attribute* _Attribute)
 {
 	_Attribute->_bIsAlive = true;
-	m_fSize = _Attribute->_fSize;
+	//m_fSize = _Attribute->_fSize;
+
+	m_fSize = GetRandomFloat(_Attribute->_fSize-0.1f,_Attribute->_fSize+0.1f);
 	_vec3 min = _vec3(-3.0f, -3.0f, -3.0f);
 	_vec3 max = _vec3(3.0f, 3.0f, 3.0f);
 

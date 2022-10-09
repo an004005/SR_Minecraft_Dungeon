@@ -31,7 +31,7 @@ private:
 	virtual ~CSkeleton() override;
 
 public:
-	virtual HRESULT Ready_Object() override;
+	virtual HRESULT Ready_Object(const wstring& wstrPath);
 	virtual void AnimationEvent(const string& strEvent) override;
 	virtual _int Update_Object(const _float& fTimeDelta) override;
 	virtual void LateUpdate_Object() override;

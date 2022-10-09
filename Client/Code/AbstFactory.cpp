@@ -10,8 +10,18 @@
 #include "Creeper.h"
 #include "Skeleton.h"
 #include "Enchanter.h"
+#include "RedStoneCube.h"
+#include "RedStoneMonstrosity.h"
 #include "GeomancerWall.h"
 #include "SphereEffect.h"
+#include "RedStoneMonstrosityBullet.h"
+#include "Crossbow.h"
+#include "Sword.h"
+#include "Glaive.h"
+#include "Arrow.h"
+#include "Axe.h"
+
+
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -19,8 +29,10 @@ map<string, std::function<CGameObject*()>> CPlayerFactory::s_mapPlayerSpawner;
 map<string, std::function<CGameObject*()>> CEnemyFactory::s_mapEnemySpawner;
 map<string, std::function<CGameObject*()>> CEffectFactory::s_mapEffectSpawner;
 map<string, std::function<CGameObject*()>> CEnvFactory::s_mapEnvSpawner;
-map<string, std::function<CGameObject*()>> CBulletFactory::s_mapBulletSpawner;
+map<string, std::function<CGameObject*(_float)>> CBulletFactory::s_mapBulletSpawner;
 map<string, std::function<CGameObject*()>> CObjectFactory::s_mapObjectSpawner;
+map<string, std::function<CGameObject*()>> CItemFactory::s_mapItemSpawner;
+
 
 void CAbstFactory::Ready_Factories(LPDIRECT3DDEVICE9 pGraphicDev)
 {
@@ -33,6 +45,7 @@ void CAbstFactory::Ready_Factories(LPDIRECT3DDEVICE9 pGraphicDev)
 	CEnvFactory::Ready_EnvFactory();
 	CBulletFactory::Ready_BulletFactory();
 	CObjectFactory::Ready_ObjectFactory();
+	CItemFactory::Ready_ItemFactory();
 }
 
 void CPlayerFactory::Ready_PlayerFactory()
@@ -76,6 +89,14 @@ void CEnemyFactory::Ready_EnemyFactory()
 	s_mapEnemySpawner.insert({ "Enchanter", []()
 	{
 		return CEnchanter::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Enchanter.cube");
+	} });
+	s_mapEnemySpawner.insert({ "RedStoneCube", []()
+	{
+		return CRedStoneCube::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/RedStoneCube.cube");
+	} });
+	s_mapEnemySpawner.insert({ "RedStoneMonstrosity", []()
+	{
+		return CRedStoneMonstrosity::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/RedStoneMonstrosity.cube");
 	} });
 }
 
@@ -258,10 +279,23 @@ void CEnvFactory::Ready_EnvFactory()
 	{
 		return CStaticCamera::Create(s_pGraphicDev);
 	}});
+	
 }
 
 void CBulletFactory::Ready_BulletFactory()
 {
+	s_mapBulletSpawner.insert({"PlayerNormalArrow", [](_float fDamage)
+	{
+		return CArrow::Create(s_pGraphicDev, fDamage, COLL_PLAYER_BULLET);
+	}});
+	s_mapBulletSpawner.insert({"EnemyNormalArrow", [](_float fDamage)
+	{
+		return CArrow::Create(s_pGraphicDev, fDamage, COLL_ENEMY_BULLET);
+	}});
+	s_mapBulletSpawner.insert({"PlayerFireWorkArrow", [](_float fDamage)
+	{
+		return CArrow::Create(s_pGraphicDev, fDamage, COLL_PLAYER_BULLET, ARROW_FIREWORK);
+	}});
 }
 
 void CObjectFactory::Ready_ObjectFactory()
@@ -274,4 +308,29 @@ void CObjectFactory::Ready_ObjectFactory()
 	{
 		return CGeomancerWall::Create(s_pGraphicDev, true);
 	}});
+	s_mapObjectSpawner.insert({ "RedStoneMonstrosityBullet", []()
+	{	
+		return CRedStoneMonstrosityBullet::Create(s_pGraphicDev);
+	} });
+
+}
+
+void CItemFactory::Ready_ItemFactory()
+{
+	s_mapItemSpawner.insert({ "Crossbow", []()
+	{
+		return CCrossbow::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "Sword", []()
+	{
+		return CSword::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "Glaive", []()
+	{
+		return CGlaive::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "Axe", []()
+	{
+		return CAxe::Create(s_pGraphicDev);
+	} });
 }

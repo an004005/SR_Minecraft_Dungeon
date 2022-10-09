@@ -21,7 +21,6 @@ _int CVoxelTex::Update_Component(const _float& fTimeDelta)
 
 HRESULT CVoxelTex::Ready_Buffer(const char* strTexPath, _float fCellSize)
 {
-	CVIBuffer::Ready_Buffer();
 	// ... x = width, y = height, n = # 8-bit components per pixel ...
 	// ... replace '0' with '1'..'4' to force that many components per pixel
 	// ... but 'n' will always be the number that it would have been if you said 0

@@ -10,7 +10,6 @@ CRenderer::CRenderer()
 
 CRenderer::~CRenderer()
 {
-	Free();
 }
 
 void CRenderer::Add_RenderGroup(RENDERID eID, CGameObject * pGameObject)
@@ -48,4 +47,5 @@ void CRenderer::Clear_RenderGroup(void)
 void Engine::CRenderer::Free(void)
 {
 	Clear_RenderGroup();
+	CComponent::Free();
 }

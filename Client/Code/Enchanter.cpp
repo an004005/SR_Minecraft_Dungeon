@@ -132,12 +132,17 @@ CEnchanter* CEnchanter::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wst
 
 void CEnchanter::StateChange()
 {
-	if (m_pStat->IsDead() && m_bReserveStop == false)
+	if (m_pStat->IsDead())
 	{
-		m_eState = DEAD;
-		PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
-		m_bAttack = false;
-		m_bMove = false;
+		if (m_bReserveStop == false)
+		{
+			m_eState = DEAD;
+			PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
+			m_bAttack = false;
+			m_bMove = false;
+			m_bCanPlayAnim = false;
+			m_pColl->SetStop();
+		}
 		return;
 	}
 
@@ -146,6 +151,7 @@ void CEnchanter::StateChange()
 		m_eState = STUN;
 		m_bAttack = false;
 		m_bMove = false;
+		StopCurAnimation();
 		return;
 	}
 
@@ -157,6 +163,7 @@ void CEnchanter::StateChange()
 		m_bCanPlayAnim = false;
 		m_bMove = false;
 		m_bAttack = false;
+
 		return;
 	}
 

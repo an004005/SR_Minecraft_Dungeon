@@ -9,14 +9,22 @@
 #include "StaticCamera.h"
 #include "Monster.h"
 #include "PlayerController.h"
+#include "Crossbow.h"
+#include "Sword.h"
+#include "Glaive.h"
+#include "Axe.h"
 #include "SphereEffect.h"
 
 /*-----------------------
  *    CCharacter
  ----------------------*/
+
+const _float CPlayer::s_PotionCollTime = 20.f;
+const _float CPlayer::s_RollCoolTime = 3.f;
+
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev) : CSkeletalCube(pGraphicDev)
 {
-	m_fSpeed = 4.f;
+	m_fSpeed = 4.5f;
 	m_fRollSpeed = 12.f;
 }
 
@@ -29,31 +37,18 @@ HRESULT CPlayer::Ready_Object()
 {
 	CSkeletalCube::Ready_Object();
 
-	m_arrAnim[ANIM_IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_idle.anim");
-	m_arrAnim[ANIM_IDLE].bLoop = true;
-	m_arrAnim[ANIM_WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_walk.anim");
-	m_arrAnim[ANIM_WALK].bLoop = true;
-	m_arrAnim[ANIM_ATTACK1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_a.anim");
-	m_arrAnim[ANIM_ATTACK2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_b.anim");
-	m_arrAnim[ANIM_ATTACK3] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_c.anim");
-	m_arrAnim[ANIM_RANGE_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/crossbow_attack_start.anim");
-	m_arrAnim[ANIM_LEGACY1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/shock_powder.anim");
-	m_arrAnim[ANIM_LEGACY2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/shock_powder.anim");
-	m_arrAnim[ANIM_LEGACY3] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_attack_c.anim");
-
-	m_arrAnim[ANIM_ROLL] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/roll.anim");
 	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 	m_pCurAnim = m_pIdleAnim;
 
 	CController* pController = Add_Component<CPlayerController>(L"Proto_PlayerController", L"Proto_PlayerController", ID_DYNAMIC);
 	pController->SetOwner(this);
 
-	CCollisionCom* pColl = Add_Component<CCollisionCom>(L"Proto_CollisionCom", L"Proto_CollisionCom", ID_DYNAMIC);
-	pColl->SetOwner(this);
-	pColl->SetOwnerTransform(m_pRootPart->pTrans);
-	pColl->SetCollOffset(_vec3{0.f, 1.f, 0.f});
-	pColl->SetRadius(0.5f);
-	pColl->SetCollType(COLL_PLAYER);
+	m_pColl = Add_Component<CCollisionCom>(L"Proto_CollisionCom", L"Proto_CollisionCom", ID_DYNAMIC);
+	m_pColl->SetOwner(this);
+	m_pColl->SetOwnerTransform(m_pRootPart->pTrans);
+	m_pColl->SetCollOffset(_vec3{0.f, 1.5f, 0.f});
+	m_pColl->SetRadius(0.8f);
+	m_pColl->SetCollType(COLL_PLAYER);
 
 	m_pStat = Add_Component<CStatComponent>(L"Proto_StatCom", L"Proto_StatCom", ID_DYNAMIC);
 	m_pStat->SetMaxHP(100);
@@ -64,21 +59,33 @@ HRESULT CPlayer::Ready_Object()
 	m_dwWalkDust = GetTickCount();
 	m_dwRollDust = GetTickCount();
 
-	m_RollCoolTime = 3.f;
-	m_CurRollCoolTime = 0.f;
 
+	m_CurRollCoolTime = 3.f;
+	m_CurPotionCoolTime = 0.f;
+
+	m_pRangeWeapon = Get_GameObject<CCrossbow>(LAYER_ITEM, L"Crossbow");
+	m_pSword = Get_GameObject<CSword>(LAYER_ITEM, L"Sword");
+	m_pGlaive = Get_GameObject<CGlaive>(LAYER_ITEM, L"Glaive");
+	m_pAxe = Get_GameObject<CAxe>(LAYER_ITEM, L"Axe");
+
+	m_pCurWeapon = m_pSword;
+
+	m_arrAnim = m_pGlaive->SetarrAnim();
 	return S_OK;
 }
 
 _int CPlayer::Update_Object(const _float& fTimeDelta)
 {
 	CSkeletalCube::Update_Object(fTimeDelta);
+	DEBUG_SPHERE(m_pColl->GetCollPos(), m_pColl->GetRadius(), 0.1f);
 
 	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
 		m_bCanPlayAnim = true;
 
-	if (m_RollCoolTime > m_CurRollCoolTime)
+	if (s_RollCoolTime > m_CurRollCoolTime)
 		m_CurRollCoolTime += fTimeDelta;
+	if (s_PotionCollTime > m_CurPotionCoolTime)
+		m_CurPotionCoolTime += fTimeDelta;
 
 	// 상태 변경 조건 설정
 	StateChange();
@@ -118,36 +125,18 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 
 void CPlayer::LateUpdate_Object()
 {
+	if (m_bApplyMeleeAttackNext)
 	{
-		if (m_bApplyMeleeAttackNext)
-		{
-			set<CGameObject*> objSet;
-			_vec3 vAttackPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + (m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 2.f);
-			Engine::GetOverlappedObject(OUT objSet, vAttackPos, 2.f);
-			for (auto& obj : objSet)
-			{
-				if (CMonster* monster = dynamic_cast<CMonster*>(obj))
-				{
-					DamageType eDT = DT_END;
-					if (m_iAttackCnt == 0) eDT = DT_KNOCK_BACK;
-					monster->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-					       ->TakeDamage(30, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, eDT);
-				}
-			}
+		m_pCurWeapon->Collision();
+		m_bApplyMeleeAttackNext = false;
+	}
 
-
-			DEBUG_SPHERE(vAttackPos, 2.f, 1.f);
-
-			m_bApplyMeleeAttackNext = false;
-		}
-
-		if (m_bApplyMeleeAttack)
-		{
-			// RotateToCursor()로 회전하고, 이 회전값이 INFO_LOOK로 적용되려면 다음 update를 기다려야한다.
-			// attack이 발생하고 다음 프레임에서 실제 공격을 적용하기 위한 코드
-			m_bApplyMeleeAttack = false;
-			m_bApplyMeleeAttackNext = true;
-		}
+	if (m_bApplyMeleeAttack)
+	{
+		// RotateToCursor()로 회전하고, 이 회전값이 INFO_LOOK로 적용되려면 다음 update를 기다려야한다.
+		// attack이 발생하고 다음 프레임에서 실제 공격을 적용하기 위한 코드
+		m_bApplyMeleeAttack = false;
+		m_bApplyMeleeAttackNext = true;
 	}
 }
 
@@ -161,8 +150,10 @@ void CPlayer::AnimationEvent(const string& strEvent)
 	if (strEvent == "ActionEnd")
 	{
 		m_bCanPlayAnim = true;
-		// SetMove(0.f, 0.f);
-		// m_bRoll = false;
+	}
+	else if (strEvent == "MeleeAttackFire")
+	{
+		m_bApplyMeleeAttack = true;
 	}
 	else if (strEvent == "step")
 	{
@@ -190,26 +181,14 @@ void CPlayer::AttackState()
 	if (m_bMeleeAttack)
 	{
 		m_bCanPlayAnim = false;
-		if (m_iAttackCnt == 0)
-		{
-			PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK1]);
-		}
-		else if (m_iAttackCnt == 1)
-		{
-			PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK2]);
-		}
-		else
-		{
-			PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK3]);
-		}
-		m_iAttackCnt = (m_iAttackCnt + 1) % 3;
-		m_bApplyMeleeAttack = true;
+		
+		//원거리 무기는 생략.
+		m_iAttackCnt = m_pCurWeapon->Attack();// 애니메이션 실행
 	}
 	else if (m_bRangeAttack)
 	{
 		m_bCanPlayAnim = false;
-		PlayAnimationOnce(&m_arrAnim[ANIM_RANGE_ATTACK]);
-		Get_GameObject<CFireWork_Fuze>(LAYER_EFFECT, L"FireWork_Fuze")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 1.f, WHITE, 1, 0.5f);
+		m_pRangeWeapon->Attack();
 	}
 
 #pragma region GolemSmash
@@ -260,7 +239,6 @@ void CPlayer::AttackState()
 #pragma endregion
 
 
-
 #pragma region Attack_Basic
 	// Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.3f, RED, 4, 0.2f);
 #pragma endregion
@@ -276,6 +254,7 @@ void CPlayer::StateChange()
 		m_eState = DEAD;
 		PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
 		m_bRoll = false;
+		m_bCanPlayAnim = false;
 		return;
 	}
 
@@ -286,7 +265,7 @@ void CPlayer::StateChange()
 		return;
 	}
 
-	if (m_bRoll && m_RollCoolTime <= m_CurRollCoolTime)
+	if (m_bRoll && s_RollCoolTime <= m_CurRollCoolTime)
 	{
 		m_eState = ROLL;
 		RotateToCursor();
@@ -332,6 +311,7 @@ void CPlayer::StateChange()
 	{
 		m_eState = ATTACK;
 		RotateToCursor();
+		WeaponChange(m_pCurWeapon);
 		return;
 	}
 
@@ -339,6 +319,8 @@ void CPlayer::StateChange()
 	{
 		m_eState = ATTACK;
 		RotateToCursor();
+		WeaponChange(m_pRangeWeapon);
+		m_bDelay = true;
 		return;
 	}
 
@@ -348,6 +330,9 @@ void CPlayer::StateChange()
 		RotateToMove();
 		m_pIdleAnim = &m_arrAnim[ANIM_WALK];
 		m_pCurAnim = &m_arrAnim[ANIM_WALK];
+
+		if (m_bDelay) m_bDelay = false;
+		else WeaponChange(m_pCurWeapon);
 		return;
 	}
 
@@ -356,7 +341,18 @@ void CPlayer::StateChange()
 		m_eState = IDLE;
 		m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 		m_pCurAnim = &m_arrAnim[ANIM_IDLE];
+
+		if (m_bDelay) m_bDelay = false;
+		else WeaponChange(m_pCurWeapon);
 		return;
+	}
+}
+
+void CPlayer::UsePotion()
+{
+	if (s_PotionCollTime <= m_CurPotionCoolTime)
+	{
+		m_pStat->ModifyHP(_int(_float(m_pStat->GetMaxHP()) * 0.7f));
 	}
 }
 
@@ -391,8 +387,8 @@ void CPlayer::RotateToCursor()
 	m_pGraphicDev->GetViewport(&ViewPort);
 
 	// 뷰포트 -> 투영
-	vPoint.x = ptMouse.x / (ViewPort.Width * 0.5f) - 1.f;
-	vPoint.y = ptMouse.y / -(ViewPort.Height * 0.5f) + 1.f;
+	vPoint.x = (_float)ptMouse.x / ((_float)ViewPort.Width * 0.5f) - 1.f;
+	vPoint.y = (_float)ptMouse.y / -((_float)ViewPort.Height * 0.5f) + 1.f;
 	vPoint.z = 0.f;
 	vAt.x = vPoint.x;
 	vAt.y = vPoint.y;
@@ -446,4 +442,17 @@ void CPlayer::RotateToMove()
 		m_pRootPart->pTrans->m_vAngle.y = -acosf(fDot);
 	else
 		m_pRootPart->pTrans->m_vAngle.y = acosf(fDot);
+}
+
+void CPlayer::Legacy3Press()
+{ 
+	m_arrAnim = m_pGlaive->SetarrAnim();
+	m_pCurWeapon = m_pGlaive;
+}
+void CPlayer::Legacy4Press() 
+{ 
+	m_arrAnim = m_pAxe->SetarrAnim();
+	m_pCurWeapon = m_pAxe;
+	// m_arrAnim = m_pSword->SetarrAnim();
+	// m_pCurWeapon = m_pSword;	
 }

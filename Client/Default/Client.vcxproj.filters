@@ -226,9 +226,30 @@
     <ClInclude Include="..\Header\EnchanterController.h">
       <Filter>Controller</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\RedStoneCubeController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\RedStoneCube.h">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\RedStoneMonstrosityController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\RedStoneMonstrosity.h">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClInclude>
     <ClInclude Include="..\Header\GeomancerWall.h">
       <Filter>02. GameObject\Object</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\Arrow.h" />
+    <ClInclude Include="..\Header\ArrowCubeMgr.h" />
+    <ClInclude Include="..\Header\Crossbow.h" />
+    <ClInclude Include="..\Header\EquipItem.h" />
+    <ClInclude Include="..\Header\Glaive.h" />
+    <ClInclude Include="..\Header\Item.h" />
+    <ClInclude Include="..\Header\RedStoneMonstrosityBullet.h" />
+    <ClInclude Include="..\Header\Sword.h" />
+    <ClInclude Include="..\Header\Axe.h" />
     <ClInclude Include="..\Header\Particle.h">
       <Filter>02. GameObject\05. Effect</Filter>
     </ClInclude>
@@ -375,6 +396,18 @@
     <ClCompile Include="..\Code\EnchanterController.cpp">
       <Filter>Controller</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\RedStoneCubeController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RedStoneCube.cpp">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RedStoneMonstrosityController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RedStoneMonstrosity.cpp">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClCompile>
     <ClCompile Include="..\Code\Particle.cpp" />
     <ClCompile Include="..\Code\GeomancerWall.cpp">
       <Filter>02. GameObject\Object</Filter>
@@ -385,6 +418,15 @@
     <ClCompile Include="..\Code\SphereEffect.cpp">
       <Filter>02. GameObject\05. Effect</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\Arrow.cpp" />
+    <ClCompile Include="..\Code\ArrowCubeMgr.cpp" />
+    <ClCompile Include="..\Code\Crossbow.cpp" />
+    <ClCompile Include="..\Code\EquipItem.cpp" />
+    <ClCompile Include="..\Code\Glaive.cpp" />
+    <ClCompile Include="..\Code\Item.cpp" />
+    <ClCompile Include="..\Code\RedStoneMonstrosityBullet.cpp" />
+    <ClCompile Include="..\Code\Sword.cpp" />
+    <ClCompile Include="..\Code\Axe.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
