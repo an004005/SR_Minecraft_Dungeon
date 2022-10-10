@@ -1,5 +1,5 @@
 #pragma once
-#include "C:\Users\Lenovo\Desktop\SR_Minecraft_Dungeon\Client\Header\EquipItem.h"
+#include "EquipItem.h"
 class CBootsOfSwiftness :
 	public CEquipItem
 {

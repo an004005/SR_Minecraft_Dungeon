@@ -81,7 +81,7 @@ void CStaticCamera::LerpDistanceTo(_float fDistance)
 {
 }
 
-void CStaticCamera::PlayeShake(_float fDuration, _float fMagnitude)
+void CStaticCamera::PlayShake(_float fDuration, _float fMagnitude)
 {
 	m_fCurShakeTime = 0.f;
 	m_fShakeTime = fDuration;

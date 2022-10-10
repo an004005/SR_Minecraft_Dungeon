@@ -19,7 +19,7 @@ public:
 
 	void SetTarget(CGameObject* pTarget);
 	void LerpDistanceTo(_float fDistance);
-	void PlayeShake(_float fDuration, _float fMagnitude);
+	void PlayShake(_float fDuration, _float fMagnitude);
 
 private:
 	void Update_DefaultFollow(const _float& fTimeDelta);

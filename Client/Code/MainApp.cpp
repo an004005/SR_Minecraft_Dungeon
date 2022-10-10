@@ -159,7 +159,7 @@ HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement
 	FAILED_CHECK_RETURN(Engine::Create_Management(pGraphicDev, ppManagement), E_FAIL);
 	(*ppManagement)->AddRef();
 
-	CSceneFactory::LoadScene("Loading1", "Stage_Default", true ,0);
+	CSceneFactory::LoadScene("Loading1", "Batch Tool", true ,0);
 
 	return S_OK;
 }

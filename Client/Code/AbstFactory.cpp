@@ -36,6 +36,7 @@
 #include "ArrowBundle.h"
 #include "HPUI.h"
 #include "CoolTimeUI.h"
+#include "BatchTool.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -453,6 +454,10 @@ void CSceneFactory::Ready_SceneFactory()
 		s_mapSceneSpawner.insert({"Map Tool", []()
 		{
 			return CMapTool::Create(s_pGraphicDev);
+		}});
+		s_mapSceneSpawner.insert({"Batch Tool", []()
+		{
+			return CBatchTool::Create(s_pGraphicDev);
 		}});
 	}
 }
