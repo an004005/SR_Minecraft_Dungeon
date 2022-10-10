@@ -292,6 +292,8 @@ public:
 		CTransform* pTrans = pCasted->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
 		pTrans->Set_Scale(fSizeX, fSizeY, 1.f);
 		pTrans->Set_Pos(fX - WINCX * 0.5f, -fY + WINCY * 0.5f, 0.f);
+		pTrans->Update_Component(0.f);
+
 		return pCasted;
 	}
 

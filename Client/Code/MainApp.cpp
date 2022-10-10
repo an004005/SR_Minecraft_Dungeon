@@ -157,16 +157,8 @@ HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement
 	FAILED_CHECK_RETURN(Engine::Create_Management(pGraphicDev, ppManagement), E_FAIL);
 	(*ppManagement)->AddRef();
 
+	CSceneFactory::LoadScene("Loading1", "Stage_Default", true ,0);
 
-	// pScene = CLogo::Create(pGraphicDev);
-	 // CAnimationTool::Create(pGraphicDev);
-	//CMapTool::Create(pGraphicDev);
-	 // Engine::Set_Scene(CStage::Create(pGraphicDev));
-	CSceneFactory::LoadScene("Loading1", "Stage_Default");
-
-
-
-	// FAILED_CHECK_RETURN((*ppManagement)->Set_Scene(pScene), E_FAIL);
 	return S_OK;
 }
 
@@ -251,8 +243,7 @@ HRESULT CMainApp::Ready_Proto()
 
 	// UI
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_RcTexCom", CRcTex::Create(m_pGraphicDev)), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_HPHeart", CRcTex::Create(m_pGraphicDev)), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_UI_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/UI/UI_%d.png", TEX_NORMAL, 15)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_UI_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/UI/UI_%d.png", TEX_NORMAL, 18)), E_FAIL);
 	// FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Loading", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Loading/loading%d.png", TEX_NORMAL, 1)), E_FAIL);
 
 	return S_OK;

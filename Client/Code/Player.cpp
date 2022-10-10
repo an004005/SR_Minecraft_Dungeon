@@ -352,6 +352,7 @@ void CPlayer::UsePotion()
 	if (s_PotionCollTime <= m_CurPotionCoolTime)
 	{
 		m_pStat->ModifyHP(_int(_float(m_pStat->GetMaxHP()) * 0.7f));
+		m_CurPotionCoolTime = 0.f;
 	}
 }
 

@@ -29,6 +29,8 @@
 #include "Loading.h"
 #include "MapTool.h"
 #include "TerrainCubeMap.h"
+#include "HPUI.h"
+#include "CoolTimeUI.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -367,6 +369,19 @@ void CUIFactory::Ready_UIFactory()
 	 {
 	 	return CUI::Create(s_pGraphicDev, iTexNum);
 	 } });
+	 s_mapUISpawner.insert({ "HPUI", [](_uint iTexNum)
+	 {
+	 	return CHPUI::Create(s_pGraphicDev, -1);//not used
+	 } });
+	 s_mapUISpawner.insert({ "PotionCoolTime", [](_uint iTexNum)
+	 {
+	 	return CCoolTimeUI::Create(s_pGraphicDev, -1, CoolTimeTarget::POTION);
+	 } });
+	 s_mapUISpawner.insert({ "RollCoolTime", [](_uint iTexNum)
+	 {
+	 	return CCoolTimeUI::Create(s_pGraphicDev, -1, CoolTimeTarget::ROLL);
+	 } });
+
 	// s_mapUISpawner.insert({ "UITexture", []()
 	// {
 	// 	return CUI::Create(s_pGraphicDev, 0);

@@ -29,6 +29,9 @@
 #include "Sword.h"
 #include "Glaive.h"
 #include "Axe.h"
+
+#include "CoolTimeUI.h"
+
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
 {
@@ -129,9 +132,9 @@ HRESULT CStage::Ready_Layer_GameLogic()
 
 		// CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 43.f, 0.f , 21.f });
 		// CEnemyFactory::Create<CCreeper>("Creeper", L"Creeper", matWorld);
-
-		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 3.f, 0.f ,13.f });
-		CEnemyFactory::Create<CSkeleton>("Skeleton", L"Skeleton", matWorld);
+		//
+		// CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 3.f, 0.f ,13.f });
+		// CEnemyFactory::Create<CSkeleton>("Skeleton", L"Skeleton", matWorld);
 
 		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 47.f, 0.f ,17.f });
 		//CEnemyFactory::Create<CEnchanter>("Enchanter", L"Enchanter", matWorld);
@@ -169,7 +172,10 @@ HRESULT CStage::Ready_Layer_UI()
 	// CUIFactory::Create<CUI>("emerald", L"UI", 1100.f, 655.f, 20.f, 25.f);
 	//CUIFactory::Create<CUI>("enchant", L"UI", 150.f, 655.f, 20.f, 20.f);
 
-
+	// 플레이어 생성하고 생성하기
+	CUIFactory::Create<CUI>("HPUI", L"HPUI", -1, WINCX/2, WINCY - 50, 100, 80);
+	CUIFactory::Create<CCoolTimeUI>("PotionCoolTime", L"PotionCoolTime", -1, WINCX/2 + 80, WINCY - 40, 50, 50);
+	CUIFactory::Create<CCoolTimeUI>("RollCoolTime", L"RollCoolTime", -1, WINCX/2 + 130, WINCY - 30, 30, 30);
 
 	return S_OK;
 }
