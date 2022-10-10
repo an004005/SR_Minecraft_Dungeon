@@ -1,36 +1,28 @@
 #pragma once
+
 #include "Engine_Include.h"
-#include "Base.h" 
-class CLoading : public CBase
+#include "Scene.h"
+
+class CUI;
+class CLoading : public Engine::CScene
 {
 private:
 	explicit CLoading(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual ~CLoading();
 
 public:
-	CRITICAL_SECTION		Get_Crt()		{ return m_Crt;	}
-	_bool					Get_Finish()	{ return m_bFinish; }
-	LOADINGID				Get_LoadingID() { return m_eID; }
+	virtual HRESULT Ready_Scene(void) override;
+	virtual _int Update_Scene(const _float& fTimeDelta) override;
+	virtual void LateUpdate_Scene(void) override;
+	virtual void Render_Scene(void) override;
+
 
 public:
-	HRESULT		Ready_Loading(LOADINGID eID);
-
-	_uint		Loading_ForStage(void);
-	_uint		Loading_ForBoss(void);
-
-public:
-	static unsigned int	CALLBACK Thread_Main(void* pArg);
+	static CLoading*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
 private:
-	HANDLE					m_hThread;
-	CRITICAL_SECTION		m_Crt;
-	LPDIRECT3DDEVICE9		m_pGraphicDev;
-	LOADINGID				m_eID;
-	_bool					m_bFinish;
-
-public:
-	static CLoading*		Create(LPDIRECT3DDEVICE9 pGraphicDev, LOADINGID eID);
-	virtual void			Free(void);
+	virtual void	Free(void);
+	CUI* m_pImage = nullptr;
 
 };
 

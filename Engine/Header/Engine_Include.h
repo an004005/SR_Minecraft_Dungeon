@@ -17,6 +17,7 @@
 #include <tuple>
 #include <unordered_map>
 #include <set>
+#include <functional>
 
 
 #define DIRECTINPUT_VERSION	0x0800

@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "PlayerController.h"
 #include "Player.h"
+#include "Box.h"
+#include "Inventory.h"
+#include "EquipItem.h"
+#include "ConsumeItem.h"
 
 CPlayerController::CPlayerController() : CController()
 {
@@ -58,6 +62,59 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 			m_vPressDir.x += 1.f;
 		}
 	}
+	
+	//box open
+	if (DIKeyDown(DIK_F))
+	{
+		//박스 상호작용 (임시)
+		Get_GameObject<CBox>(LAYER_GAMEOBJ, L"Box")->BoxOpen();
+		Get_GameObject<CBox>(LAYER_GAMEOBJ, L"Box2")->BoxOpen();
+		//아이템 먹기
+		_vec3 vTargetPos;
+		_float fEquipItemDist = 3.f;
+		_float fConsumItemDist = 3.f;
+		CEquipItem* pEquipItem = nullptr;
+		CConsumeItem* pConsumItem = nullptr;
+
+		for (auto& ele : Get_Layer(LAYER_ITEM)->Get_MapObject())
+		{
+			vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+
+			if (CEquipItem* pItem = dynamic_cast<CEquipItem*>(ele.second))
+			{
+				_vec3 vDiff = vTargetPos - pItem->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
+				_float fDist = D3DXVec3Length(&vDiff);
+
+				if (fDist < fEquipItemDist)
+				{
+					pEquipItem = pItem;
+					fEquipItemDist = fDist;
+				}
+
+			}
+
+			if (CConsumeItem* pItem = dynamic_cast<CConsumeItem*>(ele.second))
+			{
+				_vec3 vDiff = vTargetPos - pItem->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
+				_float fDist = D3DXVec3Length(&vDiff);
+
+				if (fDist < fConsumItemDist)
+				{
+					pConsumItem = pItem;
+					fConsumItemDist = fDist;
+				}
+
+			}
+		}
+
+		if (!pEquipItem && !pConsumItem)
+			return 0;
+
+		fEquipItemDist >= fConsumItemDist ? pPlayer->GetInventory()->Put(pConsumItem) : pPlayer->GetInventory()->Put(pEquipItem);
+
+		
+
+	}
 
 	if (false == CGameUtilMgr::Vec3Cmp(m_vPressDir, m_vPrevPressDir)) // 이동 입력 없으면 방향 계산 안하기
 	{
@@ -98,10 +155,7 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 	{
 		pPlayer->Legacy2Press();
 	}
-	if (DIKeyDown(DIK_3))
-	{
-		pPlayer->Legacy3Press();
-	}
+	
 	if (DIKeyDown(DIK_4))
 	{
 		pPlayer->Legacy4Press();

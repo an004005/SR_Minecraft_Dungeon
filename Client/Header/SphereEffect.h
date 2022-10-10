@@ -1,5 +1,5 @@
 #pragma once
-#include "C:\Users\Jihoon\Desktop\SR\SR_Minecraft_Dungeon\Reference\Header\GameObject.h"
+#include "GameObject.h"
 
 enum SPHERETYPE
 {
@@ -35,7 +35,7 @@ public:
 private:
 
 	CSphereMesh*			m_pBufferCom = nullptr;
-	CTransform*				m_pTransCom = nullptr;
+	Engine::CTransform*		m_pTransCom = nullptr;
 	_float m_fSpeed;
 	_float m_fTime;
 	_float m_fCurTime;
