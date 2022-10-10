@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "..\Header\FireworksArrow.h"
-
+#include "Crossbow.h"
 
 CFireworksArrow::CFireworksArrow(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CEquipItem(pGraphicDev)
@@ -14,19 +14,23 @@ CFireworksArrow::~CFireworksArrow()
 
 HRESULT CFireworksArrow::Ready_Object()
 {
+	
 
 	return S_OK;
 }
 
 _int CFireworksArrow::Update_Object(const _float & fTimeDelta)
 {
-	return OBJ_DEAD;
+	if (!m_bUse)
+		return 0;
 
+	CCrossbow* pCrossbow = Get_GameObject<CCrossbow>(LAYER_ITEM, L"Crossbow");
+	pCrossbow->LoadFireWork();
 
+	m_bUse = false;
 
-
-	return OBJ_NOEVENT;
 	CEquipItem::Update_Object(fTimeDelta);
+	return OBJ_NOEVENT;
 }
 
 void CFireworksArrow::LateUpdate_Object()

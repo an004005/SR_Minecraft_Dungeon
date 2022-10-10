@@ -108,9 +108,15 @@ _int CCrossbow::Attack()
 	{
 		vLookAt = vPos + pPlayerTrans->m_vInfo[INFO_LOOK];
 	}
-
-	CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 10.f, vPos, vLookAt);
-	// m_iAttackCnt = (m_iAttackCnt + 1) % 2;
+	
+	if (m_bFireWork)
+	{
+		CBulletFactory::Create<CGameObject>("PlayerFireWorkArrow", L"PlayerFireWorkArrow", 10.f, vPos, vLookAt);
+		m_bFireWork = false;
+	}
+	else
+		CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 10.f, vPos, vLookAt);
+	
 
 	return m_iAttackCnt;
 }

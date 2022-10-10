@@ -19,9 +19,9 @@ public:
 	void Use() { m_bUse = true; }
 	// equipitem function
 	virtual void Equipment(SkeletalPart* pSkeletalPart);
-	//virtual void Collision();
-
+	
 private:
 	_bool m_bUse = false;
+	_bool m_bColl = false;
 };
 

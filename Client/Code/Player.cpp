@@ -293,6 +293,16 @@ void CPlayer::StateChange()
 		return;
 	}
 
+	if (m_bLegacy3 && m_bCanPlayAnim)
+	{
+		m_eState = LEGACY;
+		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY2]);
+		m_bLegacy3 = false;
+		m_bCanPlayAnim = false;
+		m_pInventory->CurWeapon(IT_LEGACY3)->Use();
+		return;
+	}
+
 	if (m_bMeleeAttack && m_bCanPlayAnim)
 	{
 		m_eState = ATTACK;
