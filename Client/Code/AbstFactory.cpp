@@ -39,6 +39,7 @@
 #include "ShockPowder.h"
 #include "BootsOfSwiftness.h"
 #include "FireworksArrow.h"
+#include "CameraTool.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -299,6 +300,11 @@ void CEnvFactory::Ready_EnvFactory()
 	{
 		return CTerrain::Create(s_pGraphicDev);
 	}});
+	s_mapEnvSpawner.insert({ "WaterTerrain", []()
+	{
+		return CTerrainWater::Create(s_pGraphicDev);
+	} });
+
 	s_mapEnvSpawner.insert({"StaticCamera", []()
 	{
 		return CStaticCamera::Create(s_pGraphicDev);
@@ -469,5 +475,10 @@ void CSceneFactory::Ready_SceneFactory()
 		{
 			return CMapTool::Create(s_pGraphicDev);
 		}});
+
+		s_mapSceneSpawner.insert({ "Camera Tool", []()
+		{
+			return CCameraTool::Create(s_pGraphicDev);
+		} });
 	}
 }

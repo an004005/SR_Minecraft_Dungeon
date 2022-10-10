@@ -62,6 +62,19 @@ _int CStage::Update_Scene(const _float & fTimeDelta)
 
 void CStage::LateUpdate_Scene(void)
 {
+	
+	//IM_BEGIN("cam");
+	//if (ImGui::Button("Play Anim"))
+	//{
+	//	// m_pCamAnim->GetCamWorld(pStaticCamTransform->m_matWorld);
+
+	//	_matrix matView;
+	//	Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+	//		->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/WorldTest.anim");
+	//	//m_pCam->m_bStop = true;
+	//}
+
+	//IM_END;
 	Engine::CScene::LateUpdate_Scene();
 }
 
@@ -78,7 +91,7 @@ HRESULT CStage::Ready_Layer_Environment()
 	CEnvFactory::Create<CStaticCamera>("StaticCamera", L"StaticCamera");
 
 	// Terrain
-	CEnvFactory::Create<CTerrain>("DefaultTerrain", L"Terrain");
+	CEnvFactory::Create<CTerrainWater>("WaterTerrain", L"WaterTerrain");
 
 	// TerrainCubeMap
 	pGameObject = CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/Stage1.map");
@@ -126,8 +139,8 @@ HRESULT CStage::Ready_Layer_GameLogic()
 		// CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 43.f, 0.f , 21.f });
 		// CEnemyFactory::Create<CCreeper>("Creeper", L"Creeper", matWorld);
 
-		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 3.f, 0.f ,13.f });
-		//CEnemyFactory::Create<CSkeleton>("Skeleton", L"Skeleton", matWorld);
+		// CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 3.f, 0.f ,13.f });
+		// CEnemyFactory::Create<CSkeleton>("Skeleton", L"Skeleton", matWorld);
 
 		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 47.f, 0.f ,17.f });
 		//CEnemyFactory::Create<CEnchanter>("Enchanter", L"Enchanter", matWorld);
@@ -161,6 +174,7 @@ HRESULT CStage::Ready_Layer_UI()
 
 	return S_OK;
 }
+
 
 
 CStage * CStage::Create(LPDIRECT3DDEVICE9 pGraphicDev)
