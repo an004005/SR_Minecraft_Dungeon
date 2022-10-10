@@ -77,6 +77,9 @@
     <Filter Include="02. GameObject\07. Item\Consume">
       <UniqueIdentifier>{668c2bd9-3d07-49be-853c-076e93334e1c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\05. UI">
+      <UniqueIdentifier>{ccd7142e-0ace-4ebb-a0fa-ab4858a4884e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\MainApp.h">
@@ -245,7 +248,6 @@
     <ClInclude Include="..\Header\GeomancerWall.h">
       <Filter>02. GameObject\Object</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\ArrowCubeMgr.h" />
     <ClInclude Include="..\Header\ObjectStoreMgr.h">
       <Filter>Mgr</Filter>
     </ClInclude>
@@ -292,7 +294,6 @@
     <ClInclude Include="..\Header\Dynamite.h" />
     <ClInclude Include="..\Header\Inventory.h" />
     <ClInclude Include="..\Header\SphereEffect.h" />
-    <ClInclude Include="..\Header\UI.h" />
     <ClInclude Include="..\Header\UITool.h" />
     <ClInclude Include="..\Header\RedStoneMonstrosityBullet.h">
       <Filter>02. GameObject\Object</Filter>
@@ -318,9 +319,29 @@
     <ClInclude Include="..\Header\Posion.h">
       <Filter>02. GameObject\07. Item\Consume</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\CamAnimation.h" />
-    <ClInclude Include="..\Header\CameraTool.h">
-      <Filter>01. Scene\ToolScene</Filter>
+    <ClInclude Include="..\Header\ArrowCubeMgr.h">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="BootsOfSwiftness.h">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\FireworksArrow.h">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ShockPowder.h">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\UI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\HPUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\CoolTimeUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ArrowCubeMgr.h">
+      <Filter>Mgr</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -479,7 +500,6 @@
     <ClCompile Include="..\Code\SphereEffect.cpp">
       <Filter>02. GameObject\05. Effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\ArrowCubeMgr.cpp" />
     <ClCompile Include="..\Code\ObjectStoreMgr.cpp">
       <Filter>Mgr</Filter>
     </ClCompile>
@@ -520,7 +540,6 @@
     <ClCompile Include="..\Code\Dynamite.cpp" />
     <ClCompile Include="..\Code\Inventory.cpp" />
     <ClCompile Include="..\Code\SphereEffect.cpp" />
-    <ClCompile Include="..\Code\UI.cpp" />
     <ClCompile Include="..\Code\UITool.cpp" />
     <ClCompile Include="..\Code\RedStoneMonstrosityBullet.cpp">
       <Filter>02. GameObject\Object</Filter>
@@ -558,10 +577,35 @@
     <ClCompile Include="..\Code\Posion.cpp">
       <Filter>02. GameObject\07. Item\Consume</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Sword.cpp" />
-    <ClCompile Include="..\Code\CamAnimation.cpp" />
-    <ClCompile Include="..\Code\CameraTool.cpp">
-      <Filter>01. Scene\ToolScene</Filter>
+    <ClCompile Include="..\Code\ArrowCubeMgr.cpp">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="BootsOfSwiftness.cpp">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\FireworksArrow.cpp">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ShockPowder.cpp">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Sword.cpp">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\UI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\HPUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\CoolTimeUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Sword.cpp">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ArrowCubeMgr.cpp">
+      <Filter>Mgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

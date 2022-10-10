@@ -3,6 +3,7 @@
 
 class CSkeletalCube;
 class CPlayer;
+class CDynamite;
 
 
 class CPlayerController : public CController
@@ -24,5 +25,8 @@ private:
 
 	_vec3 m_vMoveDir = CGameUtilMgr::s_vZero;
 
+	void putItem(CPlayer* pPlayer,const  _vec3& vTargetPos);
+	void pickGameObj(CPlayer* pPlayer, const  _vec3& vTargetPos);
+	CDynamite* m_pDynamite = nullptr;
 };
 

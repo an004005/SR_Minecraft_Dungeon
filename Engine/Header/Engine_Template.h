@@ -137,11 +137,13 @@ namespace Engine
 	public:
 		~BaseDelegater()
 		{
+			for (auto& e : m_vecBinds)
+				Safe_Release(e.first);
 			m_vecBinds.clear();
 			m_vecBinds.shrink_to_fit();
 		}
 
-		void broadcast(Args&&... args)
+		void broadcast(Args&... args)
 		{
 			for (auto itr = m_vecBinds.begin(); itr != m_vecBinds.end();)
 			{

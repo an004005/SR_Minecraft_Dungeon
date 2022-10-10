@@ -26,9 +26,14 @@ public:
 	void Put(CConsumeItem* pItem);
 	void TakeOut(CEquipItem* pItem);
 
-	//아이템 장착(임시로 가장 최근에 먹은 아이템 장착되게 함)
+
+	//아이템 장착
 	void Equip_Item(SkeletalPart* pSkeletalPart, ITEMTYPE eIT);
+
 	CEquipItem* CurWeapon(ITEMTYPE eIT);
+
+	_uint GetEmeraldCnt() const { return m_iEmerald; }
+	_uint GetArrowCnt() const { return m_iEmerald; }
 
 private:
 	vector<CEquipItem*> m_vecItem;

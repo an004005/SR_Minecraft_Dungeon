@@ -5,6 +5,7 @@
 #include "Inventory.h"
 #include "EquipItem.h"
 #include "ConsumeItem.h"
+#include "Dynamite.h"
 
 CPlayerController::CPlayerController() : CController()
 {
@@ -66,54 +67,13 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 	//box open
 	if (DIKeyDown(DIK_F))
 	{
-		//박스 상호작용 (임시)
-		Get_GameObject<CBox>(LAYER_GAMEOBJ, L"Box")->BoxOpen();
-		Get_GameObject<CBox>(LAYER_GAMEOBJ, L"Box2")->BoxOpen();
+		_vec3 vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+		//박스 열기 , 폭탄 줍기
+		pickGameObj(pPlayer, vTargetPos);
 		//아이템 먹기
-		_vec3 vTargetPos;
-		_float fEquipItemDist = 3.f;
-		_float fConsumItemDist = 3.f;
-		CEquipItem* pEquipItem = nullptr;
-		CConsumeItem* pConsumItem = nullptr;
-
-		for (auto& ele : Get_Layer(LAYER_ITEM)->Get_MapObject())
-		{
-			vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
-
-			if (CEquipItem* pItem = dynamic_cast<CEquipItem*>(ele.second))
-			{
-				_vec3 vDiff = vTargetPos - pItem->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
-				_float fDist = D3DXVec3Length(&vDiff);
-
-				if (fDist < fEquipItemDist)
-				{
-					pEquipItem = pItem;
-					fEquipItemDist = fDist;
-				}
-
-			}
-
-			if (CConsumeItem* pItem = dynamic_cast<CConsumeItem*>(ele.second))
-			{
-				_vec3 vDiff = vTargetPos - pItem->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
-				_float fDist = D3DXVec3Length(&vDiff);
-
-				if (fDist < fConsumItemDist)
-				{
-					pConsumItem = pItem;
-					fConsumItemDist = fDist;
-				}
-
-			}
-		}
-
-		if (!pEquipItem && !pConsumItem)
-			return 0;
-
-		fEquipItemDist >= fConsumItemDist ? pPlayer->GetInventory()->Put(pConsumItem) : pPlayer->GetInventory()->Put(pEquipItem);
-
+		putItem(pPlayer, vTargetPos);
+	
 		
-
 	}
 
 	if (false == CGameUtilMgr::Vec3Cmp(m_vPressDir, m_vPrevPressDir)) // 이동 입력 없으면 방향 계산 안하기
@@ -140,12 +100,22 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 	if (MouseKeyUp(DIM_LB))
 		pPlayer->MeleeAttackPress(false);
 
+	if (MouseKeyDown(DIM_RB))
+	{
+		if (m_pDynamite && m_pDynamite->GetState() == DYNAMITE_PICK)
+		{
+			m_pDynamite->SetState(DYNAMITE_THROW);
+			m_pDynamite = nullptr;
+			return OBJ_NOEVENT;
+		}
+	}
 	if (MouseKeyUp(DIM_RB))
 		pPlayer->RangeAttackPress(false);
 	if (MouseKeyPress(DIM_RB) == false)
 		pPlayer->RangeAttackPress(false);
 	if (MouseKeyDown(DIM_RB))
 		pPlayer->RangeAttackPress(true);
+
 
 	if (DIKeyDown(DIK_1))
 	{
@@ -176,4 +146,96 @@ CComponent* CPlayerController::Clone()
 CPlayerController* CPlayerController::Create()
 {
 	return new CPlayerController;
+}
+
+void CPlayerController::putItem(CPlayer* pPlayer, const  _vec3& vTargetPos)
+{
+	_float fEquipItemDist = 3.f;
+	_float fConsumItemDist = 3.f;
+	CEquipItem* pEquipItem = nullptr;
+	CConsumeItem* pConsumItem = nullptr;
+
+	for (auto& ele : Get_Layer(LAYER_ITEM)->Get_MapObject())
+	{
+		if (CEquipItem* pItem = dynamic_cast<CEquipItem*>(ele.second))
+		{
+			if (pItem->GetItemState() == IS_DROP)
+			{
+				_vec3 vDiff = vTargetPos - pItem->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
+				_float fDist = D3DXVec3Length(&vDiff);
+
+				if (fDist < fEquipItemDist)
+				{
+					pEquipItem = pItem;
+					fEquipItemDist = fDist;
+				}
+			}
+			
+		}
+
+		if (CConsumeItem* pItem = dynamic_cast<CConsumeItem*>(ele.second))
+		{
+			_vec3 vDiff = vTargetPos - pItem->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
+			_float fDist = D3DXVec3Length(&vDiff);
+
+			if (pItem->GetItemState() == IS_DROP)
+			{
+				if (fDist < fConsumItemDist)
+				{
+					pConsumItem = pItem;
+					fConsumItemDist = fDist;
+				}
+			}
+		}
+	}
+
+	if (!pEquipItem && !pConsumItem)
+		return;
+
+	fEquipItemDist >= fConsumItemDist ? pPlayer->GetInventory()->Put(pConsumItem) : pPlayer->GetInventory()->Put(pEquipItem);
+
+}
+
+void CPlayerController::pickGameObj(CPlayer* pPlayer, const  _vec3& vTargetPos)
+{
+	_float fDynamiteDist = 3.f;
+	_float fBoxDist = 3.f;
+	CBox*	pBox = nullptr;
+	CDynamite* pDynamite = nullptr;
+
+	for (auto& ele : Get_Layer(LAYER_GAMEOBJ)->Get_MapObject())
+	{
+		if (CDynamite* pGameObj = dynamic_cast<CDynamite*>(ele.second))
+		{
+			_vec3 vDiff = vTargetPos - pGameObj->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
+			_float fDist = D3DXVec3Length(&vDiff);
+
+			if (fDist < fDynamiteDist)
+			{
+				pDynamite = pGameObj;
+				fDynamiteDist = fDist;
+			}
+		}
+
+		if (CBox* pGameObj = dynamic_cast<CBox*>(ele.second))
+		{
+			_vec3 vDiff = vTargetPos - pGameObj->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+			_float fDist = D3DXVec3Length(&vDiff);
+
+			if (fDist < fBoxDist)
+			{
+				pBox = pGameObj;
+				fBoxDist = fDist;
+			}
+		}
+	}
+
+	if (pBox)
+		pBox->BoxOpen();
+
+	if (pDynamite)
+	{
+		pDynamite->SetState(DYNAMITE_PICK);
+		m_pDynamite = pDynamite;
+	}
 }

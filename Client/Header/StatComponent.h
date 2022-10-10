@@ -37,6 +37,9 @@ public:
 	_bool IsDead() const { return m_bDead; }
 	_bool IsDamaged() const { return m_bDamaged; }
 
+	// cur hp, max hp, damage
+	BaseDelegater<_int, _uint, _int> m_DamageDelegater;
+
 private:
 	Engine::CTransform* m_pOwnerTrans = nullptr;
 	CTerrainCubeMap* m_pCubeMap = nullptr;

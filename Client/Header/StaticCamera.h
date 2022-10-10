@@ -26,6 +26,7 @@ public:
 
 	void SetTarget(CGameObject* pTarget);
 	void LerpDistanceTo(_float fDistance);
+	void PlayeShake(_float fDuration, _float fMagnitude);
 
 	void PlayeCamAnimation(const wstring& wstrAnim);
 
@@ -40,6 +41,13 @@ private:
 
 	CGameObject* m_pTarget = nullptr;
 	Engine::CTransform* m_pTargetTrans = nullptr;
+
+	// shake
+	_float m_fShakeTime;
+	_float m_fCurShakeTime;
+	_float m_fMagnitude;
+	// shake
+
 	// normal mode
 	_float m_fDistance;
 	_float m_fSmoothSpeed;

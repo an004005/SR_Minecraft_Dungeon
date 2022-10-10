@@ -25,6 +25,8 @@ HRESULT CStaticCamera::Ready_Object()
 	m_pTransform->Rotation(ROT_Y, D3DXToRadian(50.f));
 	m_pTransform->Rotation(ROT_X, D3DXToRadian(55.f));
 
+	m_fShakeTime = 0.f;
+	m_fCurShakeTime = 0.f;
 	return S_OK;
 }
 
@@ -53,6 +55,16 @@ Engine::_int CStaticCamera::Update_Object(const _float& fTimeDelta)
 
 	// pSkyBoxTransform->m_vInfo[INFO_POS] = m_vEye;
 
+	if (m_fShakeTime > m_fCurShakeTime)
+	{
+		m_fCurShakeTime += fTimeDelta;
+		_float fX = CGameUtilMgr::GetRandomFloat(-1.f, 1.f) * m_fMagnitude;
+		_float fY = CGameUtilMgr::GetRandomFloat(-1.f, 1.f) * m_fMagnitude;
+
+		_matrix matLocal;
+		D3DXMatrixTranslation(&matLocal, fX, fY, 0.f);
+		m_pTransform->m_matWorld = matLocal * m_pTransform->m_matWorld;
+	}
 
 	D3DXMatrixInverse(&m_matView, nullptr, &m_pTransform->m_matWorld);
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &m_matView);
@@ -91,6 +103,13 @@ void CStaticCamera::PlayeCamAnimation(const wstring& wstrAnim)
 	Engine::Get_Layer(LAYER_GAMEOBJ)->Add_GameObject(L"CamAnim", m_pCamAnim);
 	m_pCamAnim->AddRef();
 	m_eMode = CAM_ANIMATION;
+}
+
+void CStaticCamera::PlayeShake(_float fDuration, _float fMagnitude)
+{
+	m_fCurShakeTime = 0.f;
+	m_fShakeTime = fDuration;
+	m_fMagnitude = fMagnitude;
 }
 
 void CStaticCamera::Free(void)

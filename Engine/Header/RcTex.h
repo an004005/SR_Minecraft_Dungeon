@@ -20,6 +20,12 @@ public:
 			m_fProgress = m_fPreProfress;
 		}
 	}
+	void SetProgress(_float fProgress)
+	{
+		if (m_fProgress < 0.f || m_fProgress > 1.f)
+			return;
+		m_fProgress = fProgress;
+	}
 
 public:
 	static CRcTex* Create(LPDIRECT3DDEVICE9 pGraphicDev);

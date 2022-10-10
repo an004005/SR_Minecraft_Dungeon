@@ -23,6 +23,7 @@
 #include "RedStoneCube.h"
 #include "RedStoneMonstrosity.h"
 #include "UI.h"
+#include "CoolTimeUI.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
@@ -108,7 +109,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 {
 	_matrix matWorld;
 
-	//CObjectFactory::Create<CBox>("Box", L"Box" , { 2.f, 7.5f, 6.f });
+	CObjectFactory::Create<CBox>("Box", L"Box" , { 2.f, 7.5f, 6.f });
 	//CObjectFactory::Create<CBox>("Box", L"Box2", { 4.f, 9.f, 15.f });
 	CObjectFactory::Create<CDynamite>("Dynamite", L"Dynamite");
 
@@ -157,7 +158,18 @@ HRESULT CStage::Ready_Layer_GameLogic()
 
 HRESULT CStage::Ready_Layer_UI()
 {
-	CGameObject*		pGameObject = nullptr;
+	// 플레이어 생성하고 생성하기
+	CUIFactory::Create<CUI>("HPUI", L"HPUI", -1, WINCX/2, WINCY - 50, 100, 80);
+	CUIFactory::Create<CCoolTimeUI>("PotionCoolTime", L"PotionCoolTime", -1, WINCX/2 + 90, WINCY - 40, 50, 50);
+	CUIFactory::Create<CCoolTimeUI>("RollCoolTime", L"RollCoolTime", -1, WINCX/2 + 140, WINCY - 30, 30, 30);
+	CUIFactory::Create<CCoolTimeUI>("Legacy1CoolTime", L"Legacy1CoolTime", -1, WINCX/2 - 90, WINCY - 40, 50, 50);
+	CUIFactory::Create<CCoolTimeUI>("Legacy2CoolTime", L"Legacy2CoolTime", -1, WINCX/2 - 150, WINCY - 40, 50, 50);
+	CUIFactory::Create<CCoolTimeUI>("Legacy3CoolTime", L"Legacy3CoolTime", -1, WINCX/2 - 210, WINCY - 40, 50, 50);
+
+	CUIFactory::Create<CCountUI>("ArrowUI", L"ArrowUI", -1, WINCX/2 + 190, WINCY - 30, 50, 50);
+	CUIFactory::Create<CCountUI>("EmeraldUI", L"EmeraldUI", -1, WINCX/2 + 250, WINCY - 30, 20, 30);
+
+	// 플레이어 생성하고 생성하기
 
 	return S_OK;
 }

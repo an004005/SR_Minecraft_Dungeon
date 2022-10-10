@@ -1130,9 +1130,7 @@ HRESULT CCrack::Ready_Object(_float _size, CRACKTYPE _type)
 		_vec3 pLook;
 		pPlayerTransform->Get_Info(INFO_POS, &pPos);
 		pPlayerTransform->Get_Info(INFO_LOOK, &pLook);
-		m_pTransCom->m_vInfo[INFO_POS] = pPos + pLook * 4.f;
-		m_pTransCom->m_vInfo[INFO_POS].y = pPos.y + 0.3f;
-
+		m_pTransCom->m_vInfo[INFO_POS] = pPos + pLook * 2.f;
 		// m_pTransCom->Set_Pos(pPos.x, pPos.y, pPos.z);
 	
 		m_pTransCom->Set_Scale(_size, _size, _size);
@@ -1561,6 +1559,8 @@ HRESULT CHealCircle::Ready_Object(_float _size, _float _rad)
 	// _vec3 pPos;
 	// pPlayerTransform->Get_Info(INFO_POS, &pPos);
 	// m_pTransCom->Set_Pos(pPos.x, pPos.y+1.5f, pPos.z);
+	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	m_pTransCom->m_vInfo[INFO_POS].y = pPlayerTransform->m_vInfo[INFO_POS].y;
 
 	m_pTransCom->Set_Scale(_size, _size, _size);
 	m_fSpeed = 4.f;
@@ -1668,6 +1668,9 @@ HRESULT CHeartParticle::Ready_Object(_float _size)
 	m_fSpeed = CGameUtilMgr::GetRandomFloat(3.f, 7.f);
 	m_fTime = 1.5f;
 	m_fCurTime = 0.f;
+
+	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	m_pTransCom->m_vInfo[INFO_POS].y = pPlayerTransform->m_vInfo[INFO_POS].y;
 
 	m_pTransCom->Update_Component(0.f);
 	return S_OK;

@@ -1,8 +1,11 @@
 #include "stdafx.h"
 #include "..\Header\Axe.h"
+
+#include "AbstFactory.h"
 #include "SkeletalCube.h"
 #include "Player.h"
 #include "Monster.h"
+#include "Particle.h"
 #include "StatComponent.h"
 #include "TerrainCubeMap.h"
 
@@ -16,6 +19,7 @@ CAxe::~CAxe()
 
 HRESULT CAxe::Ready_Object()
 {
+	m_pTransCom = Add_Component<Engine::CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 	m_pBufferCom = Add_Component<CVoxelTex>(L"Proto_VoxelTex_Axe", L"Proto_VoxelTex_Axe", ID_STATIC);
 	m_pTextureCom = Add_Component<CTexture>(L"Proto_WeaponTexture", L"Proto_WeaponTexture", ID_STATIC);
 	
@@ -52,6 +56,12 @@ _int CAxe::Update_Object(const _float& fTimeDelta)
 
 void CAxe::Render_Object()
 {
+	if (m_eItemState == IS_TAKE)
+		return;
+
+	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
+	m_pTextureCom->Set_Texture(3);
+	m_pBufferCom->Render_Buffer();
 }
 
 CAxe* CAxe::Create(LPDIRECT3DDEVICE9 pGraphicDev)

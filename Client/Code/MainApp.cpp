@@ -115,6 +115,7 @@ HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 * ppGraphicDev)
 
 	// Font
 	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Font_Default", L"¹ÙÅÁ", 15, 20, FW_HEAVY), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Font_Default_Normal", L"¹ÙÅÁ", 10, 13, FW_HEAVY), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Font_Jinji", L"±Ã¼­", 15, 15, FW_NORMAL), E_FAIL);
 
     // Setup Dear ImGui context
@@ -160,16 +161,8 @@ HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement
 	FAILED_CHECK_RETURN(Engine::Create_Management(pGraphicDev, ppManagement), E_FAIL);
 	(*ppManagement)->AddRef();
 
+	CSceneFactory::LoadScene("Loading1", "Stage_Default", true ,0);
 
-	// pScene = CLogo::Create(pGraphicDev);
-	 // CAnimationTool::Create(pGraphicDev);
-	//CMapTool::Create(pGraphicDev);
-	 // Engine::Set_Scene(CStage::Create(pGraphicDev));
-	CSceneFactory::LoadScene("Loading1", "Camera Tool");
-
-
-
-	// FAILED_CHECK_RETURN((*ppManagement)->Set_Scene(pScene), E_FAIL);
 	return S_OK;
 }
 
@@ -260,8 +253,7 @@ HRESULT CMainApp::Ready_Proto()
 
 	// UI
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_RcTexCom", CRcTex::Create(m_pGraphicDev)), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_HPHeart", CRcTex::Create(m_pGraphicDev)), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_UI_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/UI/UI_%d.png", TEX_NORMAL, 15)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_UI_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/UI/UI_%d.png", TEX_NORMAL, 18)), E_FAIL);
 	// FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Loading", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Loading/loading%d.png", TEX_NORMAL, 1)), E_FAIL);
 
 	//items
@@ -269,6 +261,7 @@ HRESULT CMainApp::Ready_Proto()
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Apple", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/SingleTex/Apple.png", TEX_NORMAL)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Bread", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/SingleTex/Bread.png", TEX_NORMAL)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_DenseBrew", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/SingleTex/DenseBrew.png", TEX_NORMAL)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_ArrowBundle", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/SingleTex/ArrowBundle.png", TEX_NORMAL)), E_FAIL);
 
 	
 	return S_OK;

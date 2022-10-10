@@ -70,6 +70,8 @@ void CTransform::RotateToLookAt(const _vec3& vLookAt)
 	CGameUtilMgr::MatWorldDecompose(m_matWorld, m_vScale, m_vAngle, m_vInfo[INFO_POS]);
 }
 
+
+
 HRESULT CTransform::Ready_Transform(void)
 {
 	D3DXMatrixIdentity(&m_matWorld);

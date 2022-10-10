@@ -37,6 +37,8 @@ public:
 
 private:
 	static bool IsCollided(const _vec3& vPos1, _float fRadius1, const _vec3& vPos2, _float fRadius2);
+	static bool IsCollidedXZ(const _vec3& vPos1, _float fRadius1, const _vec3& vPos2, _float fRadius2);
+	static bool IsCollided_AABB(const _vec3& vPos1, _float fRadius1, const _vec3& vPos2, _float fRadius2);
 
 private:
 			                                       // [this][other] 일 때 밀어내는 방법 결정
