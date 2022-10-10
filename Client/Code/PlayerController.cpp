@@ -159,14 +159,18 @@ void CPlayerController::putItem(CPlayer* pPlayer, const  _vec3& vTargetPos)
 	{
 		if (CEquipItem* pItem = dynamic_cast<CEquipItem*>(ele.second))
 		{
-			_vec3 vDiff = vTargetPos - pItem->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
-			_float fDist = D3DXVec3Length(&vDiff);
-
-			if (fDist < fEquipItemDist)
+			if (pItem->GetItemState() == IS_DROP)
 			{
-				pEquipItem = pItem;
-				fEquipItemDist = fDist;
+				_vec3 vDiff = vTargetPos - pItem->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
+				_float fDist = D3DXVec3Length(&vDiff);
+
+				if (fDist < fEquipItemDist)
+				{
+					pEquipItem = pItem;
+					fEquipItemDist = fDist;
+				}
 			}
+			
 		}
 
 		if (CConsumeItem* pItem = dynamic_cast<CConsumeItem*>(ele.second))
@@ -174,10 +178,13 @@ void CPlayerController::putItem(CPlayer* pPlayer, const  _vec3& vTargetPos)
 			_vec3 vDiff = vTargetPos - pItem->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 			_float fDist = D3DXVec3Length(&vDiff);
 
-			if (fDist < fConsumItemDist)
+			if (pItem->GetItemState() == IS_DROP)
 			{
-				pConsumItem = pItem;
-				fConsumItemDist = fDist;
+				if (fDist < fConsumItemDist)
+				{
+					pConsumItem = pItem;
+					fConsumItemDist = fDist;
+				}
 			}
 		}
 	}
