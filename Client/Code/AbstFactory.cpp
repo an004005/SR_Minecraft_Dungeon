@@ -34,6 +34,9 @@
 #include "Bread.h"
 #include "Posion.h"
 #include "ArrowBundle.h"
+#include "ShockPowder.h"
+#include "BootsOfSwiftness.h"
+#include "FireworksArrow.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -383,6 +386,18 @@ void CItemFactory::Ready_ItemFactory()
 	s_mapItemSpawner.insert({ "Posion", []()
 	{
 		return CPosion::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "ShockPowder", []()
+	{
+		return CShockPowder::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "BootsOfSwiftness", []()
+	{
+		return CBootsOfSwiftness::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "FireworksArrow", []()
+	{
+		return CFireworksArrow::Create(s_pGraphicDev);
 	} });
 }
 
