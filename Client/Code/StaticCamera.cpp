@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Header\StaticCamera.h"
 #include "Player.h"
+#include "CamAnimation.h"
 
 CStaticCamera::CStaticCamera(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CGameObject(pGraphicDev)
@@ -33,7 +34,21 @@ Engine::_int CStaticCamera::Update_Object(const _float& fTimeDelta)
 {
 	CGameObject::Update_Object(fTimeDelta);
 
-	Update_DefaultFollow(fTimeDelta);
+	switch (m_eMode)
+	{
+	case CAM_NORMAL:
+		Update_DefaultFollow(fTimeDelta);
+		break;
+	case CAM_ANIMATION:
+		m_pCamAnim->GetCamWorld(m_pTransform->m_matWorld);
+		if (m_pCamAnim->IsFinish())
+		{
+			Safe_Release(m_pCamAnim);
+			m_eMode = CAM_NORMAL;
+		}
+		break;
+	default: ;
+	}
 
 	// CTransform*	pSkyBoxTransform = dynamic_cast<CTransform*>(Engine::Get_Component(L"Layer_Environment", L"SkyBox", L"Proto_TransformCom", ID_DYNAMIC));
 	// NULL_CHECK_RETURN(pSkyBoxTransform, -1);
@@ -74,11 +89,20 @@ void CStaticCamera::SetTarget(CGameObject* pTarget)
 	m_pTargetTrans = m_pTarget->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC);
 	m_pTargetTrans->AddRef();
 
-	m_pTransform->m_vInfo[INFO_POS] = m_pTargetTrans->m_vInfo[INFO_POS] + (m_pTransform->m_vInfo[INFO_LOOK] * -m_fDistance);
+	m_pTransform->m_vInfo[INFO_POS] = m_pTargetTrans->m_vInfo[INFO_POS] + (m_pTransform->m_vInfo[INFO_LOOK] * -
+		m_fDistance);
 }
 
 void CStaticCamera::LerpDistanceTo(_float fDistance)
 {
+}
+
+void CStaticCamera::PlayeCamAnimation(const wstring& wstrAnim)
+{
+	m_pCamAnim = CCamAnimation::Create(m_pGraphicDev, wstrAnim);
+	Engine::Get_Layer(LAYER_GAMEOBJ)->Add_GameObject(L"CamAnim", m_pCamAnim);
+	m_pCamAnim->AddRef();
+	m_eMode = CAM_ANIMATION;
 }
 
 void CStaticCamera::PlayeShake(_float fDuration, _float fMagnitude)
@@ -90,6 +114,8 @@ void CStaticCamera::PlayeShake(_float fDuration, _float fMagnitude)
 
 void CStaticCamera::Free(void)
 {
+	Safe_Release(m_pCamAnim);
+
 	Safe_Release(m_pTarget);
 	Safe_Release(m_pTargetTrans);
 	CGameObject::Free();
@@ -97,7 +123,7 @@ void CStaticCamera::Free(void)
 
 CStaticCamera* CStaticCamera::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
-	CStaticCamera*		pInstance = new CStaticCamera(pGraphicDev);
+	CStaticCamera* pInstance = new CStaticCamera(pGraphicDev);
 
 	if (FAILED(pInstance->Ready_Object()))
 	{

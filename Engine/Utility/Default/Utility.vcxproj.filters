@@ -55,6 +55,9 @@
     <Filter Include="00. Component\00. VIBuffer\RcShader">
       <UniqueIdentifier>{1df7bfaf-33af-412f-a353-762c485f5679}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00. Component\00. VIBuffer\RC_Terrain">
+      <UniqueIdentifier>{6277abe9-8ef9-46c4-9d8c-449f4dc0cbae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Header\Export_Utility.h">
@@ -90,9 +93,6 @@
     <ClInclude Include="..\..\Header\RcTex.h">
       <Filter>00. Component\00. VIBuffer\RcTex</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Header\TerrainTex.h">
-      <Filter>00. Component\00. VIBuffer</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Header\Texture.h">
       <Filter>00. Component\02. Texture</Filter>
     </ClInclude>
@@ -108,9 +108,6 @@
     <ClInclude Include="..\..\Header\VoxelTex.h">
       <Filter>00. Component\00. VIBuffer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Header\TerrainCubeTex.h">
-      <Filter>00. Component\00. VIBuffer</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Header\GameUtilMgr.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -119,9 +116,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Header\Collider.h">
       <Filter>04. Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Header\TerrainRcTex.h">
-      <Filter>00. Component\00. VIBuffer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Header\DebugSphere.h">
       <Filter>01. GameObject</Filter>
@@ -137,6 +131,18 @@
     </ClInclude>
     <ClInclude Include="..\..\Header\SphereMesh.h">
       <Filter>00. Component\00. VIBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Header\TerrainTex.h">
+      <Filter>00. Component\00. VIBuffer\RC_Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Header\TerrainCubeTex.h">
+      <Filter>00. Component\00. VIBuffer\RC_Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Header\TerrainRcTex.h">
+      <Filter>00. Component\00. VIBuffer\RC_Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Header\TerrainShader.h">
+      <Filter>00. Component\00. VIBuffer\RC_Terrain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -170,9 +176,6 @@
     <ClCompile Include="..\Code\RcTex.cpp">
       <Filter>00. Component\00. VIBuffer\RcTex</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\TerrainTex.cpp">
-      <Filter>00. Component\00. VIBuffer</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\Texture.cpp">
       <Filter>00. Component\02. Texture</Filter>
     </ClCompile>
@@ -188,9 +191,6 @@
     <ClCompile Include="..\Code\VoxelTex.cpp">
       <Filter>00. Component\00. VIBuffer</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\TerrainCubeTex.cpp">
-      <Filter>00. Component\00. VIBuffer</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\GameUtilMgr.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -199,9 +199,6 @@
     </ClCompile>
     <ClCompile Include="..\Code\Collider.cpp">
       <Filter>04. Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\TerrainRcTex.cpp">
-      <Filter>00. Component\00. VIBuffer</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\DebugSphere.cpp">
       <Filter>01. GameObject</Filter>
@@ -217,6 +214,18 @@
     </ClCompile>
     <ClCompile Include="..\Code\SphereMesh.cpp">
       <Filter>00. Component\00. VIBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\TerrainCubeTex.cpp">
+      <Filter>00. Component\00. VIBuffer\RC_Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\TerrainRcTex.cpp">
+      <Filter>00. Component\00. VIBuffer\RC_Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\TerrainTex.cpp">
+      <Filter>00. Component\00. VIBuffer\RC_Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\TerrainShader.cpp">
+      <Filter>00. Component\00. VIBuffer\RC_Terrain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

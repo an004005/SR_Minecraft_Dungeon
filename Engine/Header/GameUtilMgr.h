@@ -27,6 +27,8 @@ public:
 	static const _vec3 s_vUp;
 	static const _matrix s_matIdentity;
 	static const _vec3 s_vFaceCubeVtx[FACE_END][4];
+
+	static _float s_fTimeDelta;
 };
 
 END
