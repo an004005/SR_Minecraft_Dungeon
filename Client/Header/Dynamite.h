@@ -37,6 +37,7 @@ private:
 	_float m_fPower = 16.f;
 	_float m_fAngle = 0.f;
 	_bool m_bDead = false;
+	_bool m_bExplosion = false;
 
 	CCollisionCom* m_pColl = nullptr;
 	void RotateToCursor();

@@ -4,6 +4,8 @@
 #include "StatComponent.h"
 #include "TerrainCubeMap.h"
 #include "Monster.h"
+#include "Particle.h"
+#include "AbstFactory.h"
 
 CDynamite::CDynamite(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CGameObject(pGraphicDev)
@@ -45,7 +47,7 @@ _int CDynamite::Update_Object(const _float & fTimeDelta)
 		CPlayer* pPlayer = Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");
 		_vec3 vPlayerPos = pPlayer->GetInfo(INFO_POS);
 
-		m_pTransCom->Set_Pos(vPlayerPos.x, vPlayerPos.y + 3.f, vPlayerPos.z);
+		m_pTransCom->Set_Pos(vPlayerPos.x, vPlayerPos.y + 3.5f, vPlayerPos.z);
 	}
 		break;
 	case DYNAMITE_THROW:
@@ -72,21 +74,8 @@ _int CDynamite::Update_Object(const _float & fTimeDelta)
 		if (m_fTime < 2.f)
 			break;
 
-		set<CGameObject*> objSet;
-		Engine::GetOverlappedObject(OUT objSet, m_pTransCom->m_vInfo[INFO_POS], 5.f);
-		for (auto& obj : objSet)
-		{
-			
-			if (obj->Has_Component(L"Proto_StatCom", ID_DYNAMIC))
-			{
-				DamageType eDT = DT_KNOCK_BACK;	
-				obj->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-					->TakeDamage(30, m_pTransCom->m_vInfo[INFO_POS], this, eDT);
-			}
-		}
-
-		DEBUG_SPHERE(m_pTransCom->m_vInfo[INFO_POS], 5.f, 1.f);
-		m_bDead = true;
+		m_bExplosion = true;
+		
 	}
 		break;
 	case DYNAMITE_END:	
@@ -105,6 +94,36 @@ _int CDynamite::Update_Object(const _float & fTimeDelta)
 
 void CDynamite::LateUpdate_Object()
 {
+
+	if (m_bExplosion)
+	{
+		set<CGameObject*> objSet;
+		Engine::GetOverlappedObject(OUT objSet, m_pTransCom->m_vInfo[INFO_POS], 5.f);
+		for (auto& obj : objSet)
+		{
+
+			if (obj->Has_Component(L"Proto_StatCom", ID_DYNAMIC))
+			{
+				DamageType eDT = DT_KNOCK_BACK;
+				obj->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+					->TakeDamage(30, m_pTransCom->m_vInfo[INFO_POS], this, eDT);
+			}
+		}
+
+		DEBUG_SPHERE(m_pTransCom->m_vInfo[INFO_POS], 5.f, 1.f);
+
+		Get_GameObject<CFireWork>(LAYER_EFFECT, L"FireWork")->Add_Particle(m_pTransCom->m_vInfo[INFO_POS], 3.f, D3DXCOLOR(1.f, 1.f, 0.2f, 0), 256, 0.4f);
+		CEffectFactory::Create<CUVCircle>("Creeper_Explosion", L"Creeper_Explosion", m_pTransCom->m_vInfo[INFO_POS]);
+		Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(m_pTransCom->m_vInfo[INFO_POS], 0.3f, RED, 30, 0.5f);
+		for (int i = 0; i < 5; i++)
+		{
+			CEffectFactory::Create<CCloud>("Creeper_Cloud", L"Creeper_Cloud", m_pTransCom->m_vInfo[INFO_POS]);
+		}
+
+		m_bDead = true;
+	}
+	
+	CGameObject::LateUpdate_Object();
 }
 
 void CDynamite::Render_Object()
