@@ -177,6 +177,7 @@
     <ClInclude Include="..\Header\Bread.h" />
     <ClInclude Include="..\Header\ConsumeItem.h" />
     <ClInclude Include="..\Header\Controller.h" />
+    <ClInclude Include="..\Header\CoolTimeUI.h" />
     <ClInclude Include="..\Header\Creeper.h" />
     <ClInclude Include="..\Header\CreeperController.h" />
     <ClInclude Include="..\Header\Crossbow.h" />
@@ -190,6 +191,7 @@
     <ClInclude Include="..\Header\GeomancerController.h" />
     <ClInclude Include="..\Header\GeomancerWall.h" />
     <ClInclude Include="..\Header\Glaive.h" />
+    <ClInclude Include="..\Header\HPUI.h" />
     <ClInclude Include="..\Header\ImGuiMgr.h" />
     <ClInclude Include="..\Header\ImSequencerImpl.h" />
     <ClInclude Include="..\Header\Inventory.h" />
@@ -260,6 +262,7 @@
     <ClCompile Include="..\Code\Bread.cpp" />
     <ClCompile Include="..\Code\ConsumeItem.cpp" />
     <ClCompile Include="..\Code\Controller.cpp" />
+    <ClCompile Include="..\Code\CoolTimeUI.cpp" />
     <ClCompile Include="..\Code\Creeper.cpp" />
     <ClCompile Include="..\Code\CreeperController.cpp" />
     <ClCompile Include="..\Code\Crossbow.cpp" />
@@ -273,6 +276,7 @@
     <ClCompile Include="..\Code\GeomancerController.cpp" />
     <ClCompile Include="..\Code\GeomancerWall.cpp" />
     <ClCompile Include="..\Code\Glaive.cpp" />
+    <ClCompile Include="..\Code\HPUI.cpp" />
     <ClCompile Include="..\Code\ImGuiMgr.cpp" />
     <ClCompile Include="..\Code\ImSequencerImpl.cpp" />
     <ClCompile Include="..\Code\Inventory.cpp" />

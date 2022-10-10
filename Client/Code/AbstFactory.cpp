@@ -34,6 +34,8 @@
 #include "Bread.h"
 #include "Posion.h"
 #include "ArrowBundle.h"
+#include "HPUI.h"
+#include "CoolTimeUI.h"
 #include "ShockPowder.h"
 #include "BootsOfSwiftness.h"
 #include "FireworksArrow.h"
@@ -407,96 +409,40 @@ void CUIFactory::Ready_UIFactory()
 	 {
 	 	return CUI::Create(s_pGraphicDev, iTexNum);
 	 } });
-	// s_mapUISpawner.insert({ "UITexture", []()
-	// {
-	// 	return CUI::Create(s_pGraphicDev, 0);
-	// } });
-	//
-	// s_mapUISpawner.insert({ "UI_HP", []()
-	// {
-	// 	return CUI::Create(s_pGraphicDev, 1);
-	// } });
-	//
-	// s_mapUISpawner.insert({ "UI_MinusHP", []()
-	// {
-	// 	return CUI::Create(s_pGraphicDev, 1);
-	// } });
-	//
-	// s_mapUISpawner.insert({ "Inven", []()
-	// {
-	// 	return CUI::Create(s_pGraphicDev, 2);
-	// } });
-	//
-	// s_mapUISpawner.insert({ "InvenTool", []()
-	// {
-	// 	return CUI::Create(s_pGraphicDev, 4);
-	// } });
-	//
-	// s_mapUISpawner.insert({ "InvenToolPos", []()
-	// {
-	// 	return CUI::Create(s_pGraphicDev, 13);
-	// } });
-	//
-	// s_mapUISpawner.insert({ "arrowTool", []()
-	// {
-	// 	return CUI::Create(s_pGraphicDev, 3);
-	// } });
-	//
-	// s_mapUISpawner.insert({ "arrow", []()
-	// {
-	// 	return CUI::Create(s_pGraphicDev, 9);
-	// } });
-	//
-	// s_mapUISpawner.insert({ "Buffe1", []()
-	// {
-	// 	return CUI::Create(s_pGraphicDev, 4);
-	// } });
-	//
-	// s_mapUISpawner.insert({ "Buffe2", []()
-	// {
-	// 	return CUI::Create(s_pGraphicDev, 4);
-	// } });
-	//
-	// s_mapUISpawner.insert({ "Buffe3", []()
-	// {
-	// 	return CUI::Create(s_pGraphicDev, 4);
-	// } });
-	//
-	// s_mapUISpawner.insert({ "Buffe4", []()
-	// {
-	// 	return CUI::Create(s_pGraphicDev, 4);
-	// } });
-	//
-	// s_mapUISpawner.insert({ "RollTool", []()
-	// {
-	// 	return CUI::Create(s_pGraphicDev,10);
-	// } });
-	//
-	// s_mapUISpawner.insert({ "Roll", []()
-	// {
-	// 	return CUI::Create(s_pGraphicDev,5);
-	// } });
-	//
-	// s_mapUISpawner.insert({ "map", []()
-	// {
-	// 	return CUI::Create(s_pGraphicDev, 6);
-	// } });
-	//
-	// s_mapUISpawner.insert({ "mapTool", []()
-	// {
-	// 	return CUI::Create(s_pGraphicDev, 4);
-	// } });
-	//
-	// s_mapUISpawner.insert({ "emerald", []()
-	// {
-	// 	return CUI::Create(s_pGraphicDev, 8);
-	// } });
-	//
-	// s_mapUISpawner.insert({ "enchant", []()
-	// {
-	// 	return CUI::Create(s_pGraphicDev, 11);
-	// } });
+	 s_mapUISpawner.insert({ "HPUI", [](_uint iTexNum)
+	 {
+	 	return CHPUI::Create(s_pGraphicDev, -1);//not used
+	 } });
+	 s_mapUISpawner.insert({ "PotionCoolTime", [](_uint iTexNum)
+	 {
+	 	return CCoolTimeUI::Create(s_pGraphicDev, -1, CoolTimeTarget::POTION);
+	 } });
+	 s_mapUISpawner.insert({ "RollCoolTime", [](_uint iTexNum)
+	 {
+	 	return CCoolTimeUI::Create(s_pGraphicDev, -1, CoolTimeTarget::ROLL);
+	 } });
 
+	 s_mapUISpawner.insert({ "Legacy1CoolTime", [](_uint iTexNum)
+	 {
+	 	return CCoolTimeUI::Create(s_pGraphicDev, -1, CoolTimeTarget::LEGACY1);
+	 } });
+	 s_mapUISpawner.insert({ "Legacy2CoolTime", [](_uint iTexNum)
+	 {
+	 	return CCoolTimeUI::Create(s_pGraphicDev, -1, CoolTimeTarget::LEGACY2);
+	 } });
+	 s_mapUISpawner.insert({ "Legacy3CoolTime", [](_uint iTexNum)
+	 {
+	 	return CCoolTimeUI::Create(s_pGraphicDev, -1, CoolTimeTarget::LEGACY3);
+	 } });
+
+	 s_mapUISpawner.insert({ "ArrowUI", [](_uint iTexNum)
+	 {
+	 	return CCountUI::Create(s_pGraphicDev, CNT_ARROW);
+	 } });
+	 s_mapUISpawner.insert({ "EmeraldUI", [](_uint iTexNum)
+	 {
+	 	return CCountUI::Create(s_pGraphicDev, CNT_EMERALD);
+	 } });
 }
 
 void CSceneFactory::Ready_SceneFactory()

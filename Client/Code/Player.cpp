@@ -50,7 +50,7 @@ HRESULT CPlayer::Ready_Object()
 	m_pColl->SetOwner(this);
 	m_pColl->SetOwnerTransform(m_pRootPart->pTrans);
 	m_pColl->SetCollOffset(_vec3{0.f, 1.5f, 0.f});
-	m_pColl->SetRadius(0.8f);
+	m_pColl->SetRadius(0.5f);
 	m_pColl->SetCollType(COLL_PLAYER);
 
 	m_CurRollCoolTime = 3.f;	
@@ -69,7 +69,6 @@ HRESULT CPlayer::Ready_Object()
 	m_pInventory = CObjectFactory::Create<CInventory>("Inventory", L"Inventory");
 	m_pInventory->AddRef();
 	m_arrAnim = m_pInventory->CurWeapon(IT_MELEE)->SetarrAnim();
-
 	return S_OK;
 }
 
@@ -155,6 +154,19 @@ void CPlayer::AnimationEvent(const string& strEvent)
 	else if (strEvent == "MeleeAttackFire")
 	{
 		m_bApplyMeleeAttack = true;
+
+		// axe crack
+		if (m_iAttackCnt == 0 && dynamic_cast<CAxe*>(m_pInventory->CurWeapon(IT_MELEE)))
+		{
+			Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+				->PlayeShake(0.15f, 0.4f);
+			CEffectFactory::Create<CCrack>("Exe_Decal", L"Exe_Decal");
+			for (int i = 0; i < 5; i++)
+			{
+				CEffectFactory::Create<CCloud>("Decal_Cloud", L"Decal_Cloud");
+			}
+		}
+		// axe crack
 	}
 	else if (strEvent == "step")
 	{
@@ -183,6 +195,8 @@ void CPlayer::AttackState()
 	{
 		m_bCanPlayAnim = false;
 		m_iAttackCnt = m_pInventory->CurWeapon(IT_MELEE)->Attack();// 애니메이션 실행
+
+
 	}
 	else if (m_bRangeAttack)
 	{
@@ -221,24 +235,6 @@ void CPlayer::AttackState()
 #pragma region Lava_Paticle
 	// CEffectFactory::Create<CLava_Particle>("Lava_Particle", L"Lava_Particle");
 #pragma endregion
-
-#pragma region Heal Effect
-	// CEffectFactory::Create<CHealCircle>("Heal_Circle_L", L"Heal_Circle_L");
-	//
-	// for (int i = 0; i < 12; i++)
-	// {
-	// 	CEffectFactory::Create<CHeartParticle>("HeartParticle", L"HeartParticle");
-	// }
-#pragma endregion
-
-#pragma region Decal
-	CEffectFactory::Create<CCrack>("Exe_Decal", L"Exe_Decal");
-	for (int i = 0; i < 5; i++)
-	{
-		CEffectFactory::Create<CCloud>("Decal_Cloud", L"Decal_Cloud");
-	}
-#pragma endregion
-
 
 #pragma region Attack_Basic
 	// Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.3f, RED, 4, 0.2f);
@@ -344,6 +340,15 @@ void CPlayer::UsePotion()
 	if (s_PotionCollTime <= m_CurPotionCoolTime)
 	{
 		m_pStat->ModifyHP(_int(_float(m_pStat->GetMaxHP()) * 0.7f));
+		m_CurPotionCoolTime = 0.f;
+
+		// particle
+		CEffectFactory::Create<CHealCircle>("Heal_Circle_L", L"Heal_Circle_L");
+		for (int i = 0; i < 12; i++)
+		{
+			CEffectFactory::Create<CHeartParticle>("HeartParticle", L"HeartParticle");
+		}
+		// particle
 	}
 }
 

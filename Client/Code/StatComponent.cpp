@@ -98,6 +98,11 @@ void CStatComponent::ModifyHP(_int iModifyingHP)
 
 	if (m_iHP <= 0)
 		m_bDead = true;
+
+	if (m_iHP > (_int)m_iMaxHP)
+		m_iHP = (_int)m_iMaxHP;
+
+	m_DamageDelegater.broadcast(m_iHP, m_iMaxHP, iModifyingHP);
 }
 
 void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCauser, DamageType eType)

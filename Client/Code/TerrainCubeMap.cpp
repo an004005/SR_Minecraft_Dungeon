@@ -223,7 +223,7 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 		vCenter.x = coll.matWorld._41;
 		vCenter.y = coll.matWorld._42;
 		vCenter.z = coll.matWorld._43;
-		Engine::Add_StaticCollision(vCenter, 1.f);
+		Engine::Add_StaticCollision(vCenter, 0.5f);
 	}
 
 }
