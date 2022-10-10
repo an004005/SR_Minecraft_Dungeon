@@ -15,6 +15,7 @@
 #include "Axe.h"
 #include "SphereEffect.h"
 #include "Inventory.h"
+#include "Emerald.h"
 
 /*-----------------------
  *    CCharacter
@@ -136,6 +137,24 @@ void CPlayer::LateUpdate_Object()
 		m_bApplyMeleeAttack = false;
 		m_bApplyMeleeAttackNext = true;
 	}
+
+	//에메랄드가 땅에 떨어졌을 때, 플레이어쪽으로 오게 한다
+	for (auto& ele : Get_Layer(LAYER_ITEM)->Get_MapObject())
+	{
+		if (CEmerald* pItem = dynamic_cast<CEmerald*>(ele.second))
+		{
+			_float fDist = D3DXVec3Length(&(m_pRootPart->pTrans->m_vInfo[INFO_POS] - pItem->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS]));
+
+			if (fDist < 5.f && pItem->OnGround())
+				pItem->GoToPlayer();
+
+
+			if (fDist < 0.5f && pItem->OnGround())
+			{
+				m_pInventory->Put(pItem);
+			}
+		}
+	}
 }
 
 void CPlayer::Free()
@@ -191,13 +210,11 @@ void CPlayer::AttackState()
 	if (m_bMeleeAttack)
 	{
 		m_bCanPlayAnim = false;
-		
-		//원거리 무기는 생략.
 		m_iAttackCnt = m_pInventory->CurWeapon(IT_MELEE)->Attack();// 애니메이션 실행
 	}
 	else if (m_bRangeAttack)
 	{
-		
+		//기본이 근거리라 원거리로 바꿔줘야 텍스처가 나옴
 		WeaponChange(IT_RANGE);
 		m_bCanPlayAnim = false;
 		m_iAttackCnt = m_pInventory->CurWeapon(IT_RANGE)->Attack();
@@ -305,6 +322,7 @@ void CPlayer::StateChange()
 	{
 		m_eState = ATTACK;
 		RotateToCursor();
+		WeaponChange(IT_MELEE);
 		return;
 	}
 
@@ -313,6 +331,7 @@ void CPlayer::StateChange()
 		m_eState = ATTACK;
 		RotateToCursor();
 		m_bDelay = true;
+		WeaponChange(IT_MELEE);
 		return;
 	}
 
@@ -324,6 +343,7 @@ void CPlayer::StateChange()
 		m_pCurAnim = &m_arrAnim[ANIM_WALK];
 
 		if (m_bDelay) m_bDelay = false;
+		else WeaponChange(IT_MELEE);
 		return;
 	}
 

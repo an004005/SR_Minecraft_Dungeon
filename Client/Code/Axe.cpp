@@ -7,6 +7,7 @@
 #include "Monster.h"
 #include "Particle.h"
 #include "StatComponent.h"
+#include "TerrainCubeMap.h"
 
 CAxe::CAxe(LPDIRECT3DDEVICE9 pGraphicDev): CEquipItem(pGraphicDev)
 {
@@ -18,7 +19,6 @@ CAxe::~CAxe()
 
 HRESULT CAxe::Ready_Object()
 {
-	CEquipItem::Ready_Object();
 	m_pBufferCom = Add_Component<CVoxelTex>(L"Proto_VoxelTex_Axe", L"Proto_VoxelTex_Axe", ID_STATIC);
 	m_pTextureCom = Add_Component<CTexture>(L"Proto_WeaponTexture", L"Proto_WeaponTexture", ID_STATIC);
 	
@@ -33,11 +33,22 @@ HRESULT CAxe::Ready_Object()
 	m_arrAnim[ANIM_LEGACY1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/shock_powder.anim");
 	m_arrAnim[ANIM_LEGACY2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/shock_powder.anim");
 
+	m_eItemType = IT_MELEE;
 	return S_OK;
 }
 
 _int CAxe::Update_Object(const _float& fTimeDelta)
 {
+
+	if (m_eItemState == IS_TAKE)
+		return 0;
+
+	_vec3& vPos = m_pTransCom->m_vInfo[INFO_POS];
+	CTerrainCubeMap* pCubeMap = Get_GameObject<CTerrainCubeMap>(LAYER_ENV, L"TerrainCubeMap");
+	_float fHeight = pCubeMap->GetHeight(vPos.x, vPos.z);
+
+	Parabola(vPos, fHeight, fTimeDelta);
+
 	CEquipItem::Update_Object(fTimeDelta);
 	return OBJ_NOEVENT;
 }

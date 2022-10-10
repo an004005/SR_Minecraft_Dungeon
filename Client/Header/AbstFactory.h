@@ -191,9 +191,20 @@ public:
 	{
 		T* pCasted = Create<T>(strFactoryTag, wstrObjTag);
 
-		Engine::CTransform* pTrans = pCasted->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
-		pTrans->m_vInfo[INFO_POS] = vPos;
-		pTrans->Update_Component(0.f);
+		if (strFactoryTag == "Box")
+		{
+			Engine::CTransform* pTrans = pCasted->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC);
+			pTrans->m_vInfo[INFO_POS] = vPos;
+			pTrans->Update_Component(0.f);
+		}
+		else
+		{
+			Engine::CTransform* pTrans = pCasted->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+			pTrans->m_vInfo[INFO_POS] = vPos;
+			pTrans->Update_Component(0.f);
+		}
+
+		
 
 		return pCasted;
 	}
