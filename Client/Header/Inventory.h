@@ -32,6 +32,9 @@ public:
 
 	CEquipItem* CurWeapon(ITEMTYPE eIT);
 
+	_uint GetEmeraldCnt() const { return m_iEmerald; }
+	_uint GetArrowCnt() const { return m_iEmerald; }
+
 private:
 	vector<CEquipItem*> m_vecItem;
 	CEquipItem* m_pCurMelee = nullptr;
