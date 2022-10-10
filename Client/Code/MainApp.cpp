@@ -39,6 +39,8 @@ HRESULT CMainApp::Ready_MainApp(void)
 
 _int CMainApp::Update_MainApp(const _float & fTimeDelta)
 {
+	CGameUtilMgr::s_fTimeDelta = fTimeDelta;
+
 	Engine::SetUp_InputDev();
 
 	NULL_CHECK_RETURN(m_pManagementClass, -1);

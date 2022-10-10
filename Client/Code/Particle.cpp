@@ -1130,7 +1130,9 @@ HRESULT CCrack::Ready_Object(_float _size, CRACKTYPE _type)
 		_vec3 pLook;
 		pPlayerTransform->Get_Info(INFO_POS, &pPos);
 		pPlayerTransform->Get_Info(INFO_LOOK, &pLook);
-		m_pTransCom->m_vInfo[INFO_POS] = pPos + pLook * 2.f;
+		m_pTransCom->m_vInfo[INFO_POS] = pPos + pLook * 4.f;
+		m_pTransCom->m_vInfo[INFO_POS].y = pPos.y + 0.3f;
+
 		// m_pTransCom->Set_Pos(pPos.x, pPos.y, pPos.z);
 	
 		m_pTransCom->Set_Scale(_size, _size, _size);
@@ -1571,6 +1573,7 @@ HRESULT CHealCircle::Ready_Object(_float _size, _float _rad)
 
 _int CHealCircle::Update_Object(const _float& fTimeDelta)
 {
+	CGameObject::Update_Object(fTimeDelta);
 
 	if (m_fCurTime >= m_fTime)
 	{
@@ -1603,7 +1606,6 @@ _int CHealCircle::Update_Object(const _float& fTimeDelta)
 	m_pBufferCom->m_matWorld = m_pTransCom->m_matWorld;
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
-	CGameObject::Update_Object(fTimeDelta);
 	return OBJ_NOEVENT;
 }
 
@@ -1663,7 +1665,7 @@ HRESULT CHeartParticle::Ready_Object(_float _size)
 	tmp = CGameUtilMgr::GetRandomFloat(-1.5f, 1.5f);
 	desk = CGameUtilMgr::GetRandomFloat(-1.5f, 1.5f);
 	m_pTransCom->Set_Scale(_size, _size, _size);
-	m_fSpeed = _uint(CGameUtilMgr::GetRandomFloat(3.f, 7.f));
+	m_fSpeed = CGameUtilMgr::GetRandomFloat(3.f, 7.f);
 	m_fTime = 1.5f;
 	m_fCurTime = 0.f;
 

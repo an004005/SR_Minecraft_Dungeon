@@ -29,7 +29,7 @@ private:
 
 	CGameObject* m_pTarget = nullptr;
 	Engine::CTransform* m_pTargetTrans = nullptr;
-
+	CTerrainShader* m_pWaterTerCom = nullptr;
 	// normal mode
 	_float m_fDistance;
 	_float m_fSmoothSpeed;

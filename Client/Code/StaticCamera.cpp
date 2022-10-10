@@ -18,6 +18,7 @@ HRESULT CStaticCamera::Ready_Object()
 	m_fDistance = 16.f;
 	m_fSmoothSpeed = 0.125f;
 	m_pTransform = Add_Component<Engine::CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
+	m_pWaterTerCom = Add_Component<CTerrainShader>(L"Proto_Terrain_WaterCom", L"Proto_Terrain_WaterCom", ID_STATIC);
 
 	SetMatProj();
 
@@ -38,7 +39,8 @@ Engine::_int CStaticCamera::Update_Object(const _float& fTimeDelta)
 
 	// pSkyBoxTransform->m_vInfo[INFO_POS] = m_vEye;
 
-	
+	m_pWaterTerCom->m_matWorld = m_pWaterTerCom->m_matWorld;
+
 	D3DXMatrixInverse(&m_matView, nullptr, &m_pTransform->m_matWorld);
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &m_matView);
 

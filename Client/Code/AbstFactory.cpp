@@ -275,6 +275,11 @@ void CEnvFactory::Ready_EnvFactory()
 	{
 		return CTerrain::Create(s_pGraphicDev);
 	}});
+	s_mapEnvSpawner.insert({ "WaterTerrain", []()
+	{
+		return CTerrainWater::Create(s_pGraphicDev);
+	} });
+
 	s_mapEnvSpawner.insert({"StaticCamera", []()
 	{
 		return CStaticCamera::Create(s_pGraphicDev);
