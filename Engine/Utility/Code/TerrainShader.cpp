@@ -87,7 +87,7 @@ HRESULT CTerrainShader::Ready_Buffer(const wstring& _shaderfile, const _ulong& d
 			dwIndex = i * dwCntX + j;
 
 			pVertex[dwIndex].vPos = { _float(j) * dwVtxItv, 0.f,  _float(i) * dwVtxItv };
-			pVertex[dwIndex].vUV = { _float(j) / (dwCntX - 1) * 20.f, _float(i) / (dwCntZ - 1)* 20.f};
+			pVertex[dwIndex].vUV = { _float(j) / (dwCntX - 1) * 36.f, _float(i) / (dwCntZ - 1)* 36.f};
 		}
 	}
 

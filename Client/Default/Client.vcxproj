@@ -165,6 +165,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\AbstFactory.h" />
+    <ClInclude Include="..\Header\CamAnimation.h" />
+    <ClInclude Include="..\Header\CameraTool.h" />
     <ClInclude Include="..\Header\Posion.h" />
     <ClInclude Include="..\Header\AnimationTool.h" />
     <ClInclude Include="..\Header\Apple.h" />
@@ -245,6 +247,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\AbstFactory.cpp" />
+    <ClCompile Include="..\Code\CamAnimation.cpp" />
+    <ClCompile Include="..\Code\CameraTool.cpp" />
     <ClCompile Include="..\Code\Posion.cpp" />
     <ClCompile Include="..\Code\AnimationTool.cpp" />
     <ClCompile Include="..\Code\Apple.cpp" />

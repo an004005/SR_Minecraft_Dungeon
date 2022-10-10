@@ -318,6 +318,8 @@
     <ClInclude Include="..\Header\Posion.h">
       <Filter>02. GameObject\07. Item\Consume</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\CamAnimation.h" />
+    <ClInclude Include="..\Header\CameraTool.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -479,9 +481,6 @@
     <ClCompile Include="..\Code\ObjectStoreMgr.cpp">
       <Filter>Mgr</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Sword.cpp">
-      <Filter>02. GameObject\05. Item</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\Inventory.cpp">
       <Filter>02. GameObject\06. Inventory</Filter>
     </ClCompile>
@@ -557,6 +556,9 @@
     <ClCompile Include="..\Code\Posion.cpp">
       <Filter>02. GameObject\07. Item\Consume</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\Sword.cpp" />
+    <ClCompile Include="..\Code\CamAnimation.cpp" />
+    <ClCompile Include="..\Code\CameraTool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">

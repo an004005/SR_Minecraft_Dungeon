@@ -34,6 +34,7 @@
 #include "Bread.h"
 #include "Posion.h"
 #include "ArrowBundle.h"
+#include "CameraTool.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -513,5 +514,10 @@ void CSceneFactory::Ready_SceneFactory()
 		{
 			return CMapTool::Create(s_pGraphicDev);
 		}});
+
+		s_mapSceneSpawner.insert({ "Camera Tool", []()
+		{
+			return CCameraTool::Create(s_pGraphicDev);
+		} });
 	}
 }
