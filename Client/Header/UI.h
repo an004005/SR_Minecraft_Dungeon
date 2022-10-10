@@ -24,5 +24,7 @@ protected:
  /* 직교투영행렬. */
 	_matrix				m_ProjMatrix;
 
+	wstring m_wstrText;
+
 };
 

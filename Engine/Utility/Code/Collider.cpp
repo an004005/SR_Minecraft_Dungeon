@@ -147,7 +147,7 @@ void CCollider::Check_Blocking()
 
 				for (auto& coll_static : cell.staticList)
 				{
-					if (IsCollided(
+					if (IsCollidedXZ(
 						coll_1->GetTransform()->m_vInfo[INFO_POS], coll_1->GetRadius(),
 						coll_static.first, coll_static.second))
 					{
@@ -194,4 +194,24 @@ bool CCollider::IsCollided(const _vec3& vPos1, _float fRadius1, const _vec3& vPo
 {
 	const _vec3 vDiff = vPos1 - vPos2;
 	return D3DXVec3LengthSq(&vDiff) <= (fRadius1 + fRadius2) * (fRadius1 + fRadius2);
+}
+
+bool CCollider::IsCollidedXZ(const _vec3& vPos1, _float fRadius1, const _vec3& vPos2, _float fRadius2)
+{
+	const _vec3 vDiff = vPos1 - vPos2;
+	const _vec2 vXZDiff{vDiff.x, vDiff.z};
+	return D3DXVec2LengthSq(&vXZDiff) <= (fRadius1 + fRadius2) * (fRadius1 + fRadius2);
+}
+
+bool CCollider::IsCollided_AABB(const _vec3& vPos1, _float fRadius1, const _vec3& vPos2, _float fRadius2)
+{
+	const _vec3 vMax1 = vPos1 + _vec3{fRadius1, fRadius1, fRadius1};
+	const _vec3 vMin1 = vPos1 - _vec3{fRadius1, fRadius1, fRadius1};
+
+	const _vec3 vMax2 = vPos2 + _vec3{fRadius2, fRadius2, fRadius2};
+	const _vec3 vMin2 = vPos2 - _vec3{fRadius2, fRadius2, fRadius2};
+
+	if (vMax1.x < vMin2.x || vMin1.x > vMax2.x) return false;
+	if (vMax1.z < vMin2.z || vMin1.z > vMax2.z) return false;
+	return true;
 }	

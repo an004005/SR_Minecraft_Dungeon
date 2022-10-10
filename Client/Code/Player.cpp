@@ -49,7 +49,7 @@ HRESULT CPlayer::Ready_Object()
 	m_pColl->SetOwner(this);
 	m_pColl->SetOwnerTransform(m_pRootPart->pTrans);
 	m_pColl->SetCollOffset(_vec3{0.f, 1.5f, 0.f});
-	m_pColl->SetRadius(0.8f);
+	m_pColl->SetRadius(0.5f);
 	m_pColl->SetCollType(COLL_PLAYER);
 
 	m_CurRollCoolTime = 3.f;

@@ -82,16 +82,19 @@ void CCollisionCom::CollisionDynamic(CCollisionCom* pOther, BLOCKING_TYPE eType)
 
 void CCollisionCom::CollisionStatic(const _vec3& vCenter, _float fRadius)
 {
-	_vec3& vPos = m_pOwnerTrans->m_vInfo[INFO_POS];
-	_vec3 vCollPos = GetCollPos();
-
-	_vec3 vDiff = vCollPos - vCenter;
-	_float fMoved = m_fRadius + fRadius - D3DXVec3Length(&vDiff);
-
-	D3DXVec3Normalize(&vDiff, &vDiff);
-
-	vPos += fMoved * vDiff;
-
 	if ((m_eType == COLL_ENEMY_BULLET || m_eType == COLL_PLAYER_BULLET) && m_pCollisionStatic)
 		m_pCollisionStatic(vCenter, fRadius);
+	else
+	{
+		_vec3& vPos = m_pOwnerTrans->m_vInfo[INFO_POS];
+		_vec3 vCollPos = GetCollPos();
+		
+		_vec3 vDiff = vCollPos - vCenter;
+		const _vec2 vXZDiff{vDiff.x, vDiff.z};
+		_float fMoved = m_fRadius + fRadius - D3DXVec2Length(&vXZDiff);
+		
+		D3DXVec3Normalize(&vDiff, &vDiff);
+		
+		vPos += fMoved * vDiff;
+	}
 }

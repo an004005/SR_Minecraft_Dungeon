@@ -382,6 +382,18 @@ void CUIFactory::Ready_UIFactory()
 	 	return CCoolTimeUI::Create(s_pGraphicDev, -1, CoolTimeTarget::ROLL);
 	 } });
 
+	 s_mapUISpawner.insert({ "Legacy1CoolTime", [](_uint iTexNum)
+	 {
+	 	return CCoolTimeUI::Create(s_pGraphicDev, -1, CoolTimeTarget::LEGACY1);
+	 } });
+	 s_mapUISpawner.insert({ "Legacy2CoolTime", [](_uint iTexNum)
+	 {
+	 	return CCoolTimeUI::Create(s_pGraphicDev, -1, CoolTimeTarget::LEGACY2);
+	 } });
+	 s_mapUISpawner.insert({ "Legacy3CoolTime", [](_uint iTexNum)
+	 {
+	 	return CCoolTimeUI::Create(s_pGraphicDev, -1, CoolTimeTarget::LEGACY3);
+	 } });
 	// s_mapUISpawner.insert({ "UITexture", []()
 	// {
 	// 	return CUI::Create(s_pGraphicDev, 0);

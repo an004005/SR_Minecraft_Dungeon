@@ -36,7 +36,7 @@ void CUI::LateUpdate_Object(void)
 
 void CUI::Render_Object(void)
 {
-	// Render_Font(L"Font_Jinji", L"10", &_vec2(955.f, 630.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
+	// Render_Font(L"Font_Jinji", m_wstrText.c_str(), &_vec2(955.f, 630.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
 	// Render_Font(L"Font_Jinji", L"0", &_vec2(1110.f, 640.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
 	// old view, proj 복원은 renderer에 있음
 	
