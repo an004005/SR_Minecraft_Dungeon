@@ -5,6 +5,7 @@
 #include "Crossbow.h"
 #include "SkeletalCube.h"
 #include "AbstFactory.h"
+#include "Emerald.h"
 
 CInventory::CInventory(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CGameObject(pGraphicDev)
@@ -89,6 +90,33 @@ void CInventory::Put(CEquipItem * pItem)
 		_CRASH("wrong access");
 		break;
 	}
+}
+
+void CInventory::Put(CConsumeItem * pItem)
+{
+	if (pItem == nullptr || pItem->GetItemState() == IS_TAKE)
+		return;
+	
+	switch (pItem->GetItemEffect())
+	{
+	case IE_MONEY:
+		m_iEmerald++;
+		break;
+	case IE_ARROW:
+		m_iArrow++;
+		break;
+	case IE_HEAL:
+		//플레이어 체력 증가
+		break;
+	case IE_POSION:
+		//플레이어 투명
+		break;
+	default:
+		_CRASH("worng access");
+	}
+
+	pItem->ItemDelete();
+
 }
 
 void CInventory::TakeOut(CEquipItem * pItem)

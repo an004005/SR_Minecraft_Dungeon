@@ -6,7 +6,7 @@
 
 class CBox : public CSkeletalCube
 {
-public:
+private:
 	explicit CBox(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual ~CBox();
 

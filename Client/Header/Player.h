@@ -6,7 +6,6 @@
 class CController;
 class CStatComponent;
 class CInventory;
-class CAxe;
 
 class CPlayer : public CSkeletalCube
 {
@@ -76,10 +75,7 @@ public:
 private:
 	void RotateToCursor();
 	void RotateToMove();
-	
-	//근거리 ,원거리 상관없이 다 넣음, AttackState()에서 문제 생길 수 있음.
 	CInventory* m_pInventory = nullptr;
-	CAxe* m_pAxe = nullptr;
 
 protected:
 	SkeletalPart* m_pWeaponPart = nullptr;

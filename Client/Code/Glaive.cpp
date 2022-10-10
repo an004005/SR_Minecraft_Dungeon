@@ -81,7 +81,7 @@ _int CGlaive::Attack()
 
 	if (m_iAttackCnt == 2)
 	{
-		pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK2]);
+		pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK3]);
 	}
 	else if(m_iAttackCnt == 1)
 	{

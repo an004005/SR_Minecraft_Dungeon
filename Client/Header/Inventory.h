@@ -3,6 +3,7 @@
 
 class CEquipItem;
 class SkeletalCube;
+class CConsumeItem;
 
 class CInventory :
 	public CGameObject
@@ -22,6 +23,7 @@ public:
 
 	// 인벤토리에 아이템 넣기
 	void Put(CEquipItem* pItem);
+	void Put(CConsumeItem* pItem);
 	void TakeOut(CEquipItem* pItem);
 
 	//아이템 장착(임시로 가장 최근에 먹은 아이템 장착되게 함)
@@ -33,5 +35,7 @@ private:
 	CEquipItem* m_pCurMelee = nullptr;
 	CEquipItem* m_pCurRange = nullptr;
 	CEquipItem* m_pCurLegacy = nullptr;
+	_uint m_iEmerald = 0;
+	_uint m_iArrow = 0;
 };
 
