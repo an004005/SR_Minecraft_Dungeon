@@ -18,7 +18,7 @@ HRESULT CDynamite::Ready_Object()
 	m_pTextureCom = Add_Component<Engine::CTexture>(L"Proto_MinecraftCubeTexture", L"Proto_MinecraftCubeTexture", ID_STATIC);
 
 	m_pTransCom->m_vInfo[INFO_POS] = { 3.f, 7.5f, 4.f };
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 _int CDynamite::Update_Object(const _float & fTimeDelta)
@@ -37,7 +37,7 @@ void CDynamite::LateUpdate_Object()
 void CDynamite::Render_Object()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
-	m_pTextureCom->Set_Texture(104);
+	m_pTextureCom->Set_Texture(59);
 	m_pBufferCom->Render_Buffer();
 }
 

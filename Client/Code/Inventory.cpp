@@ -101,17 +101,21 @@ void CInventory::Put(CConsumeItem * pItem)
 	{
 	case IE_MONEY:
 		m_iEmerald++;
-		pItem->ItemDelete();
 		break;
 	case IE_ARROW:
+		m_iArrow++;
 		break;
 	case IE_HEAL:
+		//플레이어 체력 증가
 		break;
-	case IE_DAMAGE:
+	case IE_POSION:
+		//플레이어 투명
 		break;
 	default:
 		_CRASH("worng access");
 	}
+
+	pItem->ItemDelete();
 
 }
 

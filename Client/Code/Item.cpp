@@ -53,7 +53,7 @@ void CItem::Parabola(_vec3 & vPos,const _float& fHeight,const _float& fTimeDelta
 		}
 		
 
-		if (vPos.y <= (1.5f + fHeight) && vPos.y >= (1.f + +fHeight))
+		if (vPos.y <= (1.5f + fHeight) && vPos.y >= (1.f + fHeight))
 		{
 			vPos.y += m_fTime * fTimeDelta;
 		}
@@ -62,7 +62,7 @@ void CItem::Parabola(_vec3 & vPos,const _float& fHeight,const _float& fTimeDelta
 			if (vPos.y >= 1.25f + fHeight)
 				vPos.y = 1.5f + fHeight;
 			else
-				vPos.y = 1.f + +fHeight;
+				vPos.y = 1.f + fHeight;
 
 			m_fTime *= -1.f;
 		}

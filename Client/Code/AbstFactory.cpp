@@ -30,6 +30,10 @@
 #include "MapTool.h"
 #include "TerrainCubeMap.h"
 #include "Emerald.h"
+#include "Apple.h"
+#include "Bread.h"
+#include "Posion.h"
+#include "ArrowBundle.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -363,6 +367,22 @@ void CItemFactory::Ready_ItemFactory()
 	s_mapItemSpawner.insert({ "Emerald", []()
 	{
 		return CEmerald::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "Apple", []()
+	{
+		return CApple::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "Bread", []()
+	{
+		return CBread::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "ArrowBundle", []()
+	{
+		return CArrowBundle::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "Posion", []()
+	{
+		return CPosion::Create(s_pGraphicDev);
 	} });
 }
 

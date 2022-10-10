@@ -306,6 +306,18 @@
     <ClInclude Include="..\Header\ConsumeItem.h">
       <Filter>02. GameObject\07. Item\Consume</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\Apple.h">
+      <Filter>02. GameObject\07. Item\Consume</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ArrowBundle.h">
+      <Filter>02. GameObject\07. Item\Consume</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Bread.h">
+      <Filter>02. GameObject\07. Item\Consume</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Posion.h">
+      <Filter>02. GameObject\07. Item\Consume</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -531,6 +543,18 @@
       <Filter>02. GameObject\07. Item\Equip</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\ConsumeItem.cpp">
+      <Filter>02. GameObject\07. Item\Consume</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Apple.cpp">
+      <Filter>02. GameObject\07. Item\Consume</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ArrowBundle.cpp">
+      <Filter>02. GameObject\07. Item\Consume</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Bread.cpp">
+      <Filter>02. GameObject\07. Item\Consume</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Posion.cpp">
       <Filter>02. GameObject\07. Item\Consume</Filter>
     </ClCompile>
   </ItemGroup>

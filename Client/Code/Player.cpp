@@ -332,6 +332,7 @@ void CPlayer::StateChange()
 	{
 		m_eState = ATTACK;
 		RotateToCursor();
+		WeaponChange(IT_MELEE);
 		return;
 	}
 
@@ -340,6 +341,7 @@ void CPlayer::StateChange()
 		m_eState = ATTACK;
 		RotateToCursor();
 		m_bDelay = true;
+		WeaponChange(IT_MELEE);
 		return;
 	}
 
@@ -351,6 +353,7 @@ void CPlayer::StateChange()
 		m_pCurAnim = &m_arrAnim[ANIM_WALK];
 
 		if (m_bDelay) m_bDelay = false;
+		else WeaponChange(IT_MELEE);
 		return;
 	}
 

@@ -95,8 +95,9 @@ HRESULT CStage::Ready_Layer_GameLogic()
 {
 	_matrix matWorld;
 
-	CObjectFactory::Create<CBox>("Box", L"Box");
-	//CObjectFactory::Create<CDynamite>("Dynamite", L"Dynamite");
+	//CObjectFactory::Create<CBox>("Box", L"Box" , { 2.f, 7.5f, 6.f });
+	//CObjectFactory::Create<CBox>("Box", L"Box2", { 4.f, 9.f, 15.f });
+	CObjectFactory::Create<CDynamite>("Dynamite", L"Dynamite");
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 1.f, 0.f ,3.f });
 	CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld);

@@ -165,11 +165,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\AbstFactory.h" />
+    <ClInclude Include="..\Header\Posion.h" />
     <ClInclude Include="..\Header\AnimationTool.h" />
+    <ClInclude Include="..\Header\Apple.h" />
     <ClInclude Include="..\Header\Arrow.h" />
+    <ClInclude Include="..\Header\ArrowBundle.h" />
     <ClInclude Include="..\Header\ArrowCubeMgr.h" />
     <ClInclude Include="..\Header\Axe.h" />
     <ClInclude Include="..\Header\Box.h" />
+    <ClInclude Include="..\Header\Bread.h" />
     <ClInclude Include="..\Header\ConsumeItem.h" />
     <ClInclude Include="..\Header\Controller.h" />
     <ClInclude Include="..\Header\Creeper.h" />
@@ -241,11 +245,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\AbstFactory.cpp" />
+    <ClCompile Include="..\Code\Posion.cpp" />
     <ClCompile Include="..\Code\AnimationTool.cpp" />
+    <ClCompile Include="..\Code\Apple.cpp" />
     <ClCompile Include="..\Code\Arrow.cpp" />
+    <ClCompile Include="..\Code\ArrowBundle.cpp" />
     <ClCompile Include="..\Code\ArrowCubeMgr.cpp" />
     <ClCompile Include="..\Code\Axe.cpp" />
     <ClCompile Include="..\Code\Box.cpp" />
+    <ClCompile Include="..\Code\Bread.cpp" />
     <ClCompile Include="..\Code\ConsumeItem.cpp" />
     <ClCompile Include="..\Code\Controller.cpp" />
     <ClCompile Include="..\Code\Creeper.cpp" />

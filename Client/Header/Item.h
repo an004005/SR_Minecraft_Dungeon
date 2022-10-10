@@ -3,7 +3,7 @@
 
 class CItem : public CGameObject
 {
-public:
+protected:
 	explicit CItem(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual ~CItem();
 

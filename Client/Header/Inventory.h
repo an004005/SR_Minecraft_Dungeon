@@ -36,5 +36,6 @@ private:
 	CEquipItem* m_pCurRange = nullptr;
 	CEquipItem* m_pCurLegacy = nullptr;
 	_uint m_iEmerald = 0;
+	_uint m_iArrow = 0;
 };
 

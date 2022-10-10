@@ -37,7 +37,7 @@ namespace Engine
 	
 	enum ITEMSTATE { IS_TAKE, IS_DROP, IS_END};
 
-	enum ITEMEFFECT { IE_MONEY, IE_HEAL, IE_ARROW, IE_DAMAGE, IE_END};
+	enum ITEMEFFECT { IE_MONEY, IE_HEAL, IE_ARROW, IE_POSION, IE_END};
 	/////////////////////////////////////////////////////////////////
 
 	enum LAYERID

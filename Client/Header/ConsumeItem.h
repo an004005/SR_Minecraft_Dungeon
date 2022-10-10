@@ -3,7 +3,7 @@
 class CConsumeItem :
 	public CItem
 {
-public:
+protected:
 	explicit CConsumeItem(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual ~CConsumeItem();
 
@@ -15,6 +15,7 @@ public:
 	virtual void Render_Object() override;
 	virtual void Free() override;
 
+	//consume function
 	ITEMEFFECT GetItemEffect() { return m_eItemEffect; }
 	void	ItemDelete() { m_bDead = true; }
 protected:

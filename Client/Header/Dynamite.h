@@ -6,7 +6,7 @@
 class CDynamite :
 	public CGameObject
 {
-public:
+private:
 	explicit CDynamite(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual ~CDynamite();
 

@@ -2,30 +2,29 @@
 #include "Item.h"
 #include "SkeletalCube.h"
 
-enum Animation
-{
-	ANIM_WALK,
-	ANIM_IDLE,
-	ANIM_DEAD,
-	ANIM_ATTACK1,
-	ANIM_ATTACK2,
-	ANIM_ATTACK3,
-	ANIM_RANGE_ATTACK,
-	ANIM_LEGACY1,
-	ANIM_LEGACY2,
-	ANIM_LEGACY3,
-	ANIM_ROLL,
-	ANIM_TELEPORT,
-	ANIM_RESCUE,
-	ANIM_END
-};
-
-
-
 class CEquipItem :
 	public CItem
 {
-public:
+protected:
+
+	enum Animation
+	{
+		ANIM_WALK,
+		ANIM_IDLE,
+		ANIM_DEAD,
+		ANIM_ATTACK1,
+		ANIM_ATTACK2,
+		ANIM_ATTACK3,
+		ANIM_RANGE_ATTACK,
+		ANIM_LEGACY1,
+		ANIM_LEGACY2,
+		ANIM_LEGACY3,
+		ANIM_ROLL,
+		ANIM_TELEPORT,
+		ANIM_RESCUE,
+		ANIM_END
+	};
+
 	explicit CEquipItem(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual ~CEquipItem();
 

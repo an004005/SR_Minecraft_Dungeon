@@ -5,6 +5,12 @@
 #include "AbstFactory.h"
 #include"Glaive.h"
 #include "Emerald.h"
+#include "Axe.h"
+#include "ArrowBundle.h"
+#include "Apple.h"
+#include "Bread.h"
+#include "Posion.h"
+
 CBox::CBox(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CSkeletalCube(pGraphicDev)
 {
@@ -29,6 +35,8 @@ void CBox::AnimationEvent(const string& strEvent)
 			pEmerald->SetVelocity(m_pRootPart->pTrans->m_vInfo[INFO_LOOK], fPower);
 		}
 	
+		CApple* pApple = CItemFactory::Create<CApple>("Apple", L"Apple", m_pRootPart->pTrans->m_vInfo[INFO_POS], IS_DROP);
+		pApple->SetVelocity(m_pRootPart->pTrans->m_vInfo[INFO_LOOK], 15.f);
 	}
 	
 }
@@ -45,7 +53,6 @@ HRESULT CBox::Ready_Object()
 
 	m_pIdleAnim = &m_AnimClosen;
 	m_pCurAnim = m_pIdleAnim;
-	m_pRootPart->pTrans->m_vInfo[INFO_POS] = { 3.f, 8.f, 6.f };
 
 	Engine::Add_StaticCollision(m_pRootPart->pTrans->m_vInfo[INFO_POS], 1.f);
 
@@ -105,7 +112,6 @@ void CBox::BoxOpen()
 	if (fLenth - 2.f <= 0.000001f)
 	{
 		PlayAnimationOnce(&m_AnimPlay);
+		m_bOpened = true;
 	}
-
-	m_bOpened = true;
 }
