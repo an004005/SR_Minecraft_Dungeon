@@ -116,9 +116,12 @@ HRESULT CTerrainWater::Ready_Object()
 	// CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
 	// _vec3 pPos;
 	// pPlayerTransform->Get_Info(INFO_POS, &pPos);
-	// m_pTransCom->m_vInfo[INFO_POS] = _vec3(- 100.f, - 10.f, - 100.f);
+	m_pTransCom->m_vInfo[INFO_POS] = _vec3(- 30.f, - 10.f, - 30.f);
+	m_pTransCom->m_vScale *= 2.f;
+	m_pTransCom->Update_Component(0.f);
 
-	m_pTransCom->m_vScale *= 4.f;
+	m_pBufferCom->m_matWorld = m_pTransCom->m_matWorld;
+
 	return S_OK;
 }
 
@@ -143,8 +146,8 @@ _int CTerrainWater::Update_Object(const _float& fTimeDelta)
 	// ImGui::InputFloat("m_fUVSpeed input", &m_pBufferCom->m_fUVSpeed);
 	//
 	// IM_END;
-	m_pTransCom->m_vScale *= 4.f;
-	m_pTransCom->m_vInfo[INFO_POS] = _vec3(- 100.f, - 10.f, - 100.f);
+	// m_pTransCom->m_vScale *= 4.f;
+	// m_pTransCom->m_vInfo[INFO_POS] = _vec3(- 100.f, - 10.f, - 100.f);
 
 	IM_LOG("%f, %f, %f", m_pTransCom->m_vInfo[INFO_POS].x, m_pTransCom->m_vInfo[INFO_POS].z, m_pTransCom->m_vScale);
 

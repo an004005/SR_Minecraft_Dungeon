@@ -222,20 +222,20 @@ void CPlayer::AttackState()
 #pragma endregion
 
 #pragma region Heal Effect
-	// CEffectFactory::Create<CHealCircle>("Heal_Circle_L", L"Heal_Circle_L");
-	//
-	// for (int i = 0; i < 12; i++)
-	// {
-	// 	CEffectFactory::Create<CHeartParticle>("HeartParticle", L"HeartParticle");
-	// }
+	CEffectFactory::Create<CHealCircle>("Heal_Circle_L", L"Heal_Circle_L");
+	
+	for (int i = 0; i < 12; i++)
+	{
+		CEffectFactory::Create<CHeartParticle>("HeartParticle", L"HeartParticle");
+	}
 #pragma endregion
 
 #pragma region Decal
-	CEffectFactory::Create<CCrack>("Exe_Decal", L"Exe_Decal");
-	for (int i = 0; i < 5; i++)
-	{
-		CEffectFactory::Create<CCloud>("Decal_Cloud", L"Decal_Cloud");
-	}
+	// CEffectFactory::Create<CCrack>("Exe_Decal", L"Exe_Decal");
+	// for (int i = 0; i < 5; i++)
+	// {
+	// 	CEffectFactory::Create<CCloud>("Decal_Cloud", L"Decal_Cloud");
+	// }
 #pragma endregion
 
 

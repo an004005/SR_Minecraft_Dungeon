@@ -1684,6 +1684,7 @@ _int CHeartParticle::Update_Object(const _float& fTimeDelta)
 
 
 	m_fCurTime += fTimeDelta;
+
 	if(_int(fTimeDelta)% 2 == 0)
 		m_pTransCom->m_vScale *= fTimeDelta * 58.5f;
 	// else 
@@ -1705,7 +1706,7 @@ _int CHeartParticle::Update_Object(const _float& fTimeDelta)
 
 	// 	+ CGameUtilMgr::GetRandomFloat(-1.f, 1.f);
 	// +CGameUtilMgr::GetRandomFloat(-1.f, 1.f);
-	m_pTransCom->m_vInfo[INFO_POS].y += fTimeDelta * m_fSpeed;
+	m_pTransCom->m_vInfo[INFO_POS].y += pPos.y + fTimeDelta * 60.f;
 
 
 	m_pBufferCom->m_matWorld = m_pTransCom->m_matWorld;

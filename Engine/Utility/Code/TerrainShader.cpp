@@ -175,7 +175,8 @@ void CTerrainShader::Render_Buffer()
 
 
 	//Matrix
-	m_pEffect->SetMatrix("gWorldMatrix", &CGameUtilMgr::s_matIdentity);
+
+	m_pEffect->SetMatrix("gWorldMatrix", &m_matWorld);
 
 	_matrix view, proj;
 	m_pGraphicDev->GetTransform(D3DTS_VIEW, &view);
@@ -192,10 +193,10 @@ void CTerrainShader::Render_Buffer()
 	m_fTime += CGameUtilMgr::s_fTimeDelta * 1;
 	m_pEffect->SetFloat("gTime", m_fTime);
 	// CGameUtilMgr::s_fTimeDelta
-	m_pEffect->SetFloat("gSpeed", 2.16f);
-	m_pEffect->SetFloat("gWaveHeight", 1.5f);
-	m_pEffect->SetFloat("gWaveFrequency", 1.5f);
-	m_pEffect->SetFloat("gUVSpeed", 0.6f);
+	m_pEffect->SetFloat("gSpeed", 1.64f);
+	m_pEffect->SetFloat("gWaveHeight", 0.5f);
+	m_pEffect->SetFloat("gWaveFrequency", 0.5f);
+	m_pEffect->SetFloat("gUVSpeed", 0.1f);
 	// m_pEffect->SetFloat("gTime", tick / 10000.f);
 	// // CGameUtilMgr::s_fTimeDelta
 	// m_pEffect->SetFloat("gSpeed", 2.f);
