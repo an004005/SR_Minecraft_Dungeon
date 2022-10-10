@@ -62,7 +62,18 @@ _int CStage::Update_Scene(const _float & fTimeDelta)
 void CStage::LateUpdate_Scene(void)
 {
 	
+	//IM_BEGIN("cam");
+	//if (ImGui::Button("Play Anim"))
+	//{
+	//	// m_pCamAnim->GetCamWorld(pStaticCamTransform->m_matWorld);
 
+	//	_matrix matView;
+	//	Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+	//		->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/WorldTest.anim");
+	//	//m_pCam->m_bStop = true;
+	//}
+
+	//IM_END;
 	Engine::CScene::LateUpdate_Scene();
 }
 

@@ -43,8 +43,6 @@ HRESULT CCameraTool::Ready_Scene()
 
 	CEnvFactory::Create<CStaticCamera>("StaticCamera", L"StaticCamera");
 
-	m_eType = CAM_WORKING;
-
 	return S_OK;
 }
 
@@ -60,37 +58,18 @@ _int CCameraTool::Update_Scene(const _float& fTimeDelta)
 	CImGuiMgr::AnimationEditor(m_Skel);
 	IM_END;
 	// CTransform*	pDynamicCamTransform = Engine::Get_Component<CTransform>(LAYER_ENV, L"DynamicCamera", L"Proto_TransformCom", ID_DYNAMIC);
-	CTransform*	pStaticCamTransform = Engine::Get_Component<CTransform>(LAYER_ENV, L"StaticCamera", L"Proto_TransformCom", ID_DYNAMIC);
-	// //
-	// switch (m_eType)
-	// {
-	// case CAM_WORKING:
-	// 	m_pCamAnim->GetCamWorld(pDynamicCamTransform->m_matWorld);
-	// 	break;
-	// case CAM_PLAYANIM:
-	// 	m_pCamAnim->GetCamWorld(pStaticCamTransform->m_matWorld);
-	// 	if (m_pCamAnim->IsFinish())
-	// 	{
-	// 		Safe_Release(m_pCamAnim);
-	// 		m_eType = CAM_WORKING;
-	// 	}
-	// 	break;
-	// default: ;
-	// }
+
+	/*CTransform*	pStaticCamTransform = Engine::Get_Component<CTransform>(LAYER_ENV, L"StaticCamera", L"Proto_TransformCom", ID_DYNAMIC);*/
+	
 
 
 	IM_BEGIN("cam");
 	if (ImGui::Button("Play Anim"))
 	{
-		// m_pCamAnim->GetCamWorld(pStaticCamTransform->m_matWorld);
 
-		_matrix matView;
-
-		D3DXMatrixInverse(&matView, nullptr, &pStaticCamTransform->m_matWorld);
-		m_pGraphicDev->SetTransform(D3DTS_VIEW, &matView);
 
 		Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
-			->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/WorldTest.anim");
+			->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/WorldTest1.anim");
 		m_pCam->m_bStop = true;
 	}
 
