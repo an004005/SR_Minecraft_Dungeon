@@ -389,18 +389,6 @@ void CItemFactory::Ready_ItemFactory()
 	{
 		return CPosion::Create(s_pGraphicDev);
 	} });
-	s_mapItemSpawner.insert({ "ShockPowder", []()
-	{
-		return CShockPowder::Create(s_pGraphicDev);
-	} });
-	s_mapItemSpawner.insert({ "BootsOfSwiftness", []()
-	{
-		return CBootsOfSwiftness::Create(s_pGraphicDev);
-	} });
-	s_mapItemSpawner.insert({ "FireworksArrow", []()
-	{
-		return CFireworksArrow::Create(s_pGraphicDev);
-	} });
 }
 
 void CUIFactory::Ready_UIFactory()

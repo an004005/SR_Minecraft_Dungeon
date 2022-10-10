@@ -8,11 +8,6 @@
 #include "Emerald.h"
 #include "Axe.h"
 #include "Glaive.h"
-#include "Player.h"
-#include "StatComponent.h"
-#include "ShockPowder.h"
-#include "FireworksArrow.h"
-#include "BootsOfSwiftness.h"
 
 CInventory::CInventory(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CGameObject(pGraphicDev)
@@ -40,18 +35,6 @@ HRESULT CInventory::Ready_Object()
 	m_pCurMelee = CItemFactory::Create<CAxe>("Axe", L"Axe", IS_TAKE);
 	m_pCurMelee->AddRef();
 	m_vecItem.push_back(m_pCurMelee);
-
-	m_pLegacy1 = CItemFactory::Create<CShockPowder>("ShockPowder", L"ShockPowder", IS_TAKE);
-	m_pLegacy1->AddRef();
-	m_vecItem.push_back(m_pLegacy1);
-
-	m_pLegacy3 = CItemFactory::Create<CFireworksArrow>("FireworksArrow", L"FireworksArrow", IS_TAKE);
-	m_pLegacy3->AddRef();
-	m_vecItem.push_back(m_pLegacy3);
-
-	m_pLegacy2 = CItemFactory::Create<CBootsOfSwiftness>("BootsOfSwiftness", L"BootsOfSwiftness", IS_TAKE);
-	m_pLegacy2->AddRef();
-	m_vecItem.push_back(m_pLegacy2);
 
 	m_pCurMelee = m_vecItem[1];
 	return S_OK;
@@ -129,11 +112,7 @@ void CInventory::Put(CConsumeItem * pItem)
 		m_iArrow++;
 		break;
 	case IE_HEAL:
-	{
-		CPlayer* pPlayer = Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");
-		pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-			->ModifyHP(15);
-	}
+		//플레이어 체력 증가
 		break;
 	case IE_POSION:
 		//플레이어 투명
@@ -164,14 +143,8 @@ void CInventory::Equip_Item(SkeletalPart* pSkeletalPart, ITEMTYPE eIT)
 	case IT_RANGE:
 		m_pCurRange->Equipment(pSkeletalPart);
 		break;
-	case IT_LEGACY1:
-		m_pLegacy1->Equipment(pSkeletalPart);
-		break;
-	case IT_LEGACY2:
-		m_pLegacy2->Equipment(pSkeletalPart);
-		break;
-	case IT_LEGACY3:
-		m_pLegacy3->Equipment(pSkeletalPart);
+	case IT_LEGACY:
+		m_pCurLegacy->Equipment(pSkeletalPart);
 		break;
 	default:
 		_CRASH("wrong access");
@@ -188,12 +161,8 @@ CEquipItem * CInventory::CurWeapon(ITEMTYPE eIT)
 		return m_pCurMelee;
 	case IT_RANGE:
 		return m_pCurRange;
-	case IT_LEGACY1:
-		return m_pLegacy1;
-	case IT_LEGACY2:
-		return m_pLegacy2;
-	case IT_LEGACY3:
-		return m_pLegacy3;
+	case IT_LEGACY:
+		return m_pCurLegacy;
 	}
 
 	return nullptr;

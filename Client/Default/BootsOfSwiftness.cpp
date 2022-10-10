@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "BootsOfSwiftness.h"
-#include "Particle.h"
-#include "AbstFactory.h"
-#include "Player.h"
+
 
 CBootsOfSwiftness::CBootsOfSwiftness(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CEquipItem(pGraphicDev)
@@ -11,64 +9,5 @@ CBootsOfSwiftness::CBootsOfSwiftness(LPDIRECT3DDEVICE9 pGraphicDev)
 
 
 CBootsOfSwiftness::~CBootsOfSwiftness()
-{
-}
-
-HRESULT CBootsOfSwiftness::Ready_Object()
-{
-	m_arrAnim[ANIM_ROLL] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/roll.anim");
-	m_arrAnim[ANIM_LEGACY1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/shock_powder.anim");
-	m_arrAnim[ANIM_LEGACY2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/shock_powder.anim");
-
-	return S_OK;
-}
-
-_int CBootsOfSwiftness::Update_Object(const _float & fTimeDelta)
-{
-	if (!m_bUse)
-		return 0;
-
-	CPlayer* pPlayer = Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");
-	_vec3 vPos = pPlayer->GetInfo(INFO_POS);
-
-	Get_GameObject<C3DBaseTexture>(LAYER_EFFECT, L"3D_Base")->Add_Particle(vPos, 3.f, D3DXCOLOR(0.f, 0.63f, 0.82f, 0.f), 1, 1.5f);
-	Get_GameObject<CSpeedBoots>(LAYER_EFFECT, L"Speed_Boots")->Add_Particle(vPos, 3.f, D3DXCOLOR(0.2f, 0.2f, 0.5f, 1.f), 1, 1.5f);
-	Get_GameObject<CSpeedBoots_Particle>(LAYER_EFFECT, L"Speed_Boots_Particle")->Add_Particle(
-		_vec3(vPos.x, vPos.y + 15.f, vPos.z),
-		1.f, D3DXCOLOR(0.3f, 0.4f, 0.7f, 1.f), 18, 20.f);
-
-	m_bUse = false;
-	CEquipItem::Update_Object(fTimeDelta);
-	return OBJ_NOEVENT;
-}
-
-void CBootsOfSwiftness::LateUpdate_Object()
-{
-	CEquipItem::LateUpdate_Object();
-}
-
-void CBootsOfSwiftness::Render_Object()
-{
-}
-
-void CBootsOfSwiftness::Free()
-{
-	CEquipItem::Free();
-}
-
-CBootsOfSwiftness * CBootsOfSwiftness::Create(LPDIRECT3DDEVICE9 pGraphicDev)
-{
-	CBootsOfSwiftness* pInstance = new CBootsOfSwiftness(pGraphicDev);
-
-	if (FAILED(pInstance->Ready_Object()))
-	{
-		Safe_Release(pInstance);
-		return nullptr;
-	}
-
-	return pInstance;
-}
-
-void CBootsOfSwiftness::Equipment(SkeletalPart * pSkeletalPart)
 {
 }

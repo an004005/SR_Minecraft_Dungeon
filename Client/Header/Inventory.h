@@ -39,10 +39,7 @@ private:
 	vector<CEquipItem*> m_vecItem;
 	CEquipItem* m_pCurMelee = nullptr;
 	CEquipItem* m_pCurRange = nullptr;
-	CEquipItem* m_pLegacy1 = nullptr;
-	CEquipItem* m_pLegacy2 = nullptr;
-	CEquipItem* m_pLegacy3 = nullptr;
-
+	CEquipItem* m_pCurLegacy = nullptr;
 	_uint m_iEmerald = 0;
 	_uint m_iArrow = 0;
 };
