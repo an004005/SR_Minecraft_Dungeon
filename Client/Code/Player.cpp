@@ -280,7 +280,6 @@ void CPlayer::StateChange()
 		m_bLegacy1 = false;
 		m_bCanPlayAnim = false;
 		m_pInventory->CurWeapon(IT_LEGACY1)->Use();
-		//m_arrAnim = m_pInventory->CurWeapon(IT_LEGACY)->SetarrAnim();
 	}
 
 	if (m_bLegacy2 && m_bCanPlayAnim)
