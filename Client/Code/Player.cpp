@@ -176,6 +176,8 @@ void CPlayer::AnimationEvent(const string& strEvent)
 		// axe crack
 		if (m_iAttackCnt == 0 && dynamic_cast<CAxe*>(m_pInventory->CurWeapon(IT_MELEE)))
 		{
+			Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+				->PlayeShake(0.15f, 0.4f);
 			CEffectFactory::Create<CCrack>("Exe_Decal", L"Exe_Decal");
 			for (int i = 0; i < 5; i++)
 			{
@@ -211,6 +213,8 @@ void CPlayer::AttackState()
 	{
 		m_bCanPlayAnim = false;
 		m_iAttackCnt = m_pInventory->CurWeapon(IT_MELEE)->Attack();// 애니메이션 실행
+
+
 	}
 	else if (m_bRangeAttack)
 	{

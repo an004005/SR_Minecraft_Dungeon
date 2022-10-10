@@ -5,6 +5,7 @@
 #include "StatComponent.h"
 #include "CreeperController.h"
 #include "Particle.h"
+#include "StaticCamera.h"
 
 CCreeper::CCreeper(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
 {
@@ -32,7 +33,8 @@ HRESULT CCreeper::Ready_Object()
 
 	m_pStat->SetMaxHP(100);
 
-	CController* pController = Add_Component<CCreeperController>(L"Proto_CreeperController", L"Proto_CreeperController", ID_DYNAMIC);
+	CController* pController = Add_Component<CCreeperController>(L"Proto_CreeperController", L"Proto_CreeperController",
+	                                                             ID_DYNAMIC);
 	pController->SetOwner(this);
 
 	return S_OK;
@@ -95,9 +97,11 @@ void CCreeper::LateUpdate_Object()
 {
 	CMonster::LateUpdate_Object();
 
-	
+
 	if (m_bAttackFire)
 	{
+		Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+			->PlayeShake(0.15f, 0.4f);
 		set<CGameObject*> setObj;
 		_vec3 vAttackPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
 		Engine::GetOverlappedObject(setObj, vAttackPos, 3.5f);
@@ -106,18 +110,20 @@ void CCreeper::LateUpdate_Object()
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(1, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_KNOCK_BACK);
+				       ->TakeDamage(1, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_KNOCK_BACK);
 		}
 		DEBUG_SPHERE(vAttackPos, 3.5f, 1.f);
-		IM_LOG("Fire");
 
-		Get_GameObject<CFireWork>(LAYER_EFFECT, L"FireWork")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.3f, D3DXCOLOR(1.f, 1.f, 0.2f, 0), 256, 0.4f);
-		CEffectFactory::Create<CUVCircle>("Creeper_Explosion", L"Creeper_Explosion", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
-		Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.3f, RED, 30, 0.5f);
-		 for (int i = 0; i < 5; i++)
-		 {
-			 CEffectFactory::Create<CCloud>("Creeper_Cloud", L"Creeper_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
-		 }
+		Get_GameObject<CFireWork>(LAYER_EFFECT, L"FireWork")->Add_Particle(
+			m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.3f, D3DXCOLOR(1.f, 1.f, 0.2f, 0), 256, 0.4f);
+		CEffectFactory::Create<CUVCircle>("Creeper_Explosion", L"Creeper_Explosion",
+		                                  m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+		Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(
+			m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.3f, RED, 30, 0.5f);
+		for (int i = 0; i < 5; i++)
+		{
+			CEffectFactory::Create<CCloud>("Creeper_Cloud", L"Creeper_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+		}
 
 		m_bAttackFire = false;
 		m_bDelete = true;

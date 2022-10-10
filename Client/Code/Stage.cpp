@@ -23,6 +23,7 @@
 #include "RedStoneCube.h"
 #include "RedStoneMonstrosity.h"
 #include "UI.h"
+#include "CoolTimeUI.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)

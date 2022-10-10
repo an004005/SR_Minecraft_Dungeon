@@ -248,7 +248,6 @@
     <ClInclude Include="..\Header\GeomancerWall.h">
       <Filter>02. GameObject\Object</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\ArrowCubeMgr.h" />
     <ClInclude Include="..\Header\ObjectStoreMgr.h">
       <Filter>Mgr</Filter>
     </ClInclude>
@@ -326,7 +325,12 @@
     <ClInclude Include="..\Header\HPUI.h">
       <Filter>02. GameObject\05. UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\CoolTimeUI.h" />
+    <ClInclude Include="..\Header\CoolTimeUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ArrowCubeMgr.h">
+      <Filter>Mgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -484,12 +488,8 @@
     <ClCompile Include="..\Code\SphereEffect.cpp">
       <Filter>02. GameObject\05. Effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\ArrowCubeMgr.cpp" />
     <ClCompile Include="..\Code\ObjectStoreMgr.cpp">
       <Filter>Mgr</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\Sword.cpp">
-      <Filter>02. GameObject\05. Item</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Inventory.cpp">
       <Filter>02. GameObject\06. Inventory</Filter>
@@ -571,7 +571,15 @@
     <ClCompile Include="..\Code\HPUI.cpp">
       <Filter>02. GameObject\05. UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\CoolTimeUI.cpp" />
+    <ClCompile Include="..\Code\CoolTimeUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Sword.cpp">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ArrowCubeMgr.cpp">
+      <Filter>Mgr</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
