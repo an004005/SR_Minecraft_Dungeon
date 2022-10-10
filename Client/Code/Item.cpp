@@ -72,8 +72,8 @@ void CItem::Parabola(_vec3 & vPos,const _float& fHeight,const _float& fTimeDelta
 	else
 	{
 		vPos.y += m_fPower * m_fTime * fTimeDelta - (9.8f * m_fTime * m_fTime * fTimeDelta * 0.5f);
-		vPos.x += 3.f * m_vVelocity.x * fTimeDelta;
-		vPos.z += 3.f * m_vVelocity.z * fTimeDelta;
+		vPos.x += 5.f * m_vVelocity.x * fTimeDelta;
+		vPos.z += 5.f * m_vVelocity.z * fTimeDelta;
 		m_fTime += 8.f * fTimeDelta;
 	}
 }
