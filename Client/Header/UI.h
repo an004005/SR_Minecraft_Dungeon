@@ -1,6 +1,9 @@
 #pragma once
 #include "GameObject.h"
 
+/*------------------------
+ * CUI
+ ------------------------*/
 class CUI : public CGameObject
 {
 protected:
@@ -21,10 +24,32 @@ protected:
 	CTexture*			m_pTextureCom = nullptr;
 	_uint m_iTexNum = 0;
 
- /* 직교투영행렬. */
 	_matrix				m_ProjMatrix;
-
-	wstring m_wstrText;
-
 };
 
+/*------------------------
+ * CCountUI
+ ------------------------*/
+enum CountUIType
+{
+	CNT_EMERALD,
+	CNT_ARROW,
+	CNT_END
+};
+
+class CCountUI : public CUI
+{
+private:
+	explicit CCountUI(LPDIRECT3DDEVICE9 pGraphicDev);
+	virtual ~CCountUI() override;
+
+public:
+	virtual HRESULT Ready_Object() override;
+	virtual _int Update_Object(const _float& fTimeDelta) override;
+	virtual void Render_Object() override;
+	static CCountUI* Create(LPDIRECT3DDEVICE9 pGraphicDev, CountUIType eType);
+
+private:
+	 CountUIType m_eType = CNT_END;
+	_uint m_iCnt = 0;
+};

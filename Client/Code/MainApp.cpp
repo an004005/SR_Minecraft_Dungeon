@@ -113,6 +113,7 @@ HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 * ppGraphicDev)
 
 	// Font
 	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Font_Default", L"πŸ≈¡", 15, 20, FW_HEAVY), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Font_Default_Normal", L"πŸ≈¡", 10, 13, FW_HEAVY), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Font_Jinji", L"±√º≠", 15, 15, FW_NORMAL), E_FAIL);
 
     // Setup Dear ImGui context
