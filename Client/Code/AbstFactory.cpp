@@ -37,6 +37,7 @@
 #include "HPUI.h"
 #include "CoolTimeUI.h"
 #include "CameraTool.h"
+#include "BatchTool.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -465,5 +466,9 @@ void CSceneFactory::Ready_SceneFactory()
 		{
 			return CCameraTool::Create(s_pGraphicDev);
 		} });
+		s_mapSceneSpawner.insert({"Batch Tool", []()
+		{
+			return CBatchTool::Create(s_pGraphicDev);
+		}});
 	}
 }

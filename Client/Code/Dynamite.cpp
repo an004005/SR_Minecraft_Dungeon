@@ -6,6 +6,7 @@
 #include "Monster.h"
 #include "Particle.h"
 #include "AbstFactory.h"
+#include "StaticCamera.h"
 
 CDynamite::CDynamite(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CGameObject(pGraphicDev)
@@ -97,6 +98,8 @@ void CDynamite::LateUpdate_Object()
 
 	if (m_bExplosion)
 	{
+		Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+			->PlayShake(0.2f, 0.8f);
 		set<CGameObject*> objSet;
 		Engine::GetOverlappedObject(OUT objSet, m_pTransCom->m_vInfo[INFO_POS], 5.f);
 		for (auto& obj : objSet)
