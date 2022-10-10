@@ -41,7 +41,7 @@ public:
 	virtual void Collision() {}
 	//현제 플레이어 한명일때만 가정해서 구현. 서버되면 수정
 	virtual _int Attack() { return 0; }
-
+	virtual void Use() { m_bUse = true; }
 
 public:
 	const array<CubeAnimFrame, ANIM_END>& SetarrAnim(){ return m_arrAnim; }
@@ -53,7 +53,8 @@ protected:
 	Engine::CTransform*	m_pTransCom = nullptr;
 	
 	array<CubeAnimFrame, ANIM_END> m_arrAnim{};
-	_uint m_iAttackCnt = 0; // 콤보 번호
+	_uint m_iAttackCnt; // 콤보 번호
+	_bool m_bUse;
 	ITEMTYPE	m_eItemType;
 	
 };

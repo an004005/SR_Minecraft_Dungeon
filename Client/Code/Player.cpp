@@ -53,7 +53,7 @@ HRESULT CPlayer::Ready_Object()
 	m_pColl->SetRadius(0.5f);
 	m_pColl->SetCollType(COLL_PLAYER);
 
-	m_CurRollCoolTime = 3.f;
+	m_CurRollCoolTime = 3.f;	
 	m_CurPotionCoolTime = 20.f;
 
 	m_pStat = Add_Component<CStatComponent>(L"Proto_StatCom", L"Proto_StatCom", ID_DYNAMIC);
@@ -279,14 +279,8 @@ void CPlayer::StateChange()
 		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY1]);
 		m_bLegacy1 = false;
 		m_bCanPlayAnim = false;
-
-		for (int j = 0; j < 10; j++)
-		{
-			CEffectFactory::Create<CShock_Powder>("Shock_Powder", L"UV_Shock_Powder");
-			CEffectFactory::Create<CCloud>("ShockPowder_Cloud", L"ShockPowder_Cloud");
-		}
-		CEffectFactory::Create<CUVCircle>("Shock_Circle", L"Shock_Circle");
-		return;
+		m_pInventory->CurWeapon(IT_LEGACY1)->Use();
+		//m_arrAnim = m_pInventory->CurWeapon(IT_LEGACY)->SetarrAnim();
 	}
 
 	if (m_bLegacy2 && m_bCanPlayAnim)
@@ -295,13 +289,7 @@ void CPlayer::StateChange()
 		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY2]);
 		m_bLegacy2 = false;
 		m_bCanPlayAnim = false;
-
-		Get_GameObject<C3DBaseTexture>(LAYER_EFFECT, L"3D_Base")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 3.f, D3DXCOLOR(0.f,0.63f,0.82f,0.f), 1, 1.5f);
-		Get_GameObject<CSpeedBoots>(LAYER_EFFECT, L"Speed_Boots")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 3.f, D3DXCOLOR(0.2f, 0.2f, 0.5f, 1.f), 1, 1.5f);
-		Get_GameObject<CSpeedBoots_Particle>(LAYER_EFFECT, L"Speed_Boots_Particle")->Add_Particle(
-			_vec3(m_pRootPart->pTrans->m_vInfo[INFO_POS].x, m_pRootPart->pTrans->m_vInfo[INFO_POS].y + 15.f, m_pRootPart->pTrans->m_vInfo[INFO_POS].z),
-			1.f, D3DXCOLOR(0.3f, 0.4f, 0.7f, 1.f), 18, 20.f);
-
+		m_pInventory->CurWeapon(IT_LEGACY2)->Use();
 		m_fSpeed = 7.5f;
 		return;
 	}
