@@ -2,6 +2,7 @@
 #include "..\Header\Emerald.h"
 #include "TerrainCubeMap.h"
 #include "Player.h"
+#include "Inventory.h"
 
 CEmerald::CEmerald(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CConsumeItem(pGraphicDev)
@@ -37,14 +38,17 @@ _int CEmerald::Update_Object(const _float & fTimeDelta)
 
 	Parabola(vPos, fHeight, fTimeDelta);
 
-	if (m_bGotoPlayer)
+	if (m_bIdle)
 	{
 		CPlayer* pPlayer = Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");
 		_vec3 vPlayerPos = pPlayer->GetInfo(INFO_POS);
 		_vec3 vDest = vPlayerPos - m_pTransCom->m_vInfo[INFO_POS];
-
+		_float vDist = D3DXVec3Length(&vDest);
 		D3DXVec3Normalize(&vDest, &vDest);
 		m_pTransCom->m_vInfo[INFO_POS] += vDest * 13.f * fTimeDelta;
+
+		if (vDist < 1.f)
+			pPlayer->GetInventory()->Put(this);
 	}
 
 
