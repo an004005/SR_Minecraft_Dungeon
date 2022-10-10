@@ -200,13 +200,11 @@ void CPlayer::AttackState()
 	if (m_bMeleeAttack)
 	{
 		m_bCanPlayAnim = false;
-		
-		//원거리 무기는 생략.
 		m_iAttackCnt = m_pInventory->CurWeapon(IT_MELEE)->Attack();// 애니메이션 실행
 	}
 	else if (m_bRangeAttack)
 	{
-		
+		//기본이 근거리라 원거리로 바꿔줘야 텍스처가 나옴
 		WeaponChange(IT_RANGE);
 		m_bCanPlayAnim = false;
 		m_iAttackCnt = m_pInventory->CurWeapon(IT_RANGE)->Attack();
