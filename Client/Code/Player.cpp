@@ -137,24 +137,6 @@ void CPlayer::LateUpdate_Object()
 		m_bApplyMeleeAttack = false;
 		m_bApplyMeleeAttackNext = true;
 	}
-
-	//에메랄드가 땅에 떨어졌을 때, 플레이어쪽으로 오게 한다
-	for (auto& ele : Get_Layer(LAYER_ITEM)->Get_MapObject())
-	{
-		if (CEmerald* pItem = dynamic_cast<CEmerald*>(ele.second))
-		{
-			_float fDist = D3DXVec3Length(&(m_pRootPart->pTrans->m_vInfo[INFO_POS] - pItem->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS]));
-
-			if (fDist < 5.f && pItem->OnGround())
-				pItem->GoToPlayer();
-
-
-			if (fDist < 0.5f && pItem->OnGround())
-			{
-				m_pInventory->Put(pItem);
-			}
-		}
-	}
 }
 
 void CPlayer::Free()
@@ -319,6 +301,8 @@ void CPlayer::StateChange()
 		Get_GameObject<CSpeedBoots_Particle>(LAYER_EFFECT, L"Speed_Boots_Particle")->Add_Particle(
 			_vec3(m_pRootPart->pTrans->m_vInfo[INFO_POS].x, m_pRootPart->pTrans->m_vInfo[INFO_POS].y + 15.f, m_pRootPart->pTrans->m_vInfo[INFO_POS].z),
 			1.f, D3DXCOLOR(0.3f, 0.4f, 0.7f, 1.f), 18, 20.f);
+
+		m_fSpeed = 7.5f;
 		return;
 	}
 

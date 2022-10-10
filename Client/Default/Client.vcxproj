@@ -165,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\AbstFactory.h" />
+    <ClInclude Include="..\Header\FireworksArrow.h" />
     <ClInclude Include="..\Header\Posion.h" />
     <ClInclude Include="..\Header\AnimationTool.h" />
     <ClInclude Include="..\Header\Apple.h" />
@@ -208,6 +209,7 @@
     <ClInclude Include="..\Header\RedStoneCubeController.h" />
     <ClInclude Include="..\Header\RedStoneMonstrosity.h" />
     <ClInclude Include="..\Header\RedStoneMonstrosityController.h" />
+    <ClInclude Include="..\Header\ShockPowder.h" />
     <ClInclude Include="..\Header\SkeletalCube.h" />
     <ClInclude Include="..\Header\Skeleton.h" />
     <ClInclude Include="..\Header\SkeletonController.h" />
@@ -223,6 +225,7 @@
     <ClInclude Include="..\Header\ZombieController.h" />
     <ClInclude Include="..\Header\UI.h" />
     <ClInclude Include="..\Header\UITool.h" />
+    <ClInclude Include="BootsOfSwiftness.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="GraphEditor.h" />
     <ClInclude Include="imconfig.h" />
@@ -247,6 +250,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\AbstFactory.cpp" />
+    <ClCompile Include="..\Code\FireworksArrow.cpp" />
     <ClCompile Include="..\Code\Posion.cpp" />
     <ClCompile Include="..\Code\AnimationTool.cpp" />
     <ClCompile Include="..\Code\Apple.cpp" />
@@ -290,6 +294,7 @@
     <ClCompile Include="..\Code\RedStoneCubeController.cpp" />
     <ClCompile Include="..\Code\RedStoneMonstrosity.cpp" />
     <ClCompile Include="..\Code\RedStoneMonstrosityController.cpp" />
+    <ClCompile Include="..\Code\ShockPowder.cpp" />
     <ClCompile Include="..\Code\SkeletalCube.cpp" />
     <ClCompile Include="..\Code\Skeleton.cpp" />
     <ClCompile Include="..\Code\SkeletonController.cpp" />
@@ -305,6 +310,7 @@
     <ClCompile Include="..\Code\ZombieController.cpp" />
     <ClCompile Include="..\Code\UI.cpp" />
     <ClCompile Include="..\Code\UITool.cpp" />
+    <ClCompile Include="BootsOfSwiftness.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="GraphEditor.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>

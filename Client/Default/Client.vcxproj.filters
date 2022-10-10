@@ -319,6 +319,18 @@
     <ClInclude Include="..\Header\Posion.h">
       <Filter>02. GameObject\07. Item\Consume</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\ArrowCubeMgr.h">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="BootsOfSwiftness.h">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\FireworksArrow.h">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ShockPowder.h">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClInclude>
     <ClInclude Include="..\Header\UI.h">
       <Filter>02. GameObject\05. UI</Filter>
     </ClInclude>
@@ -564,6 +576,21 @@
     </ClCompile>
     <ClCompile Include="..\Code\Posion.cpp">
       <Filter>02. GameObject\07. Item\Consume</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ArrowCubeMgr.cpp">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="BootsOfSwiftness.cpp">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\FireworksArrow.cpp">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ShockPowder.cpp">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Sword.cpp">
+      <Filter>02. GameObject\07. Item\Equip</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\UI.cpp">
       <Filter>02. GameObject\05. UI</Filter>
