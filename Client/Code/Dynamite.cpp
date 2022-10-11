@@ -71,7 +71,6 @@ _int CDynamite::Update_Object(const _float & fTimeDelta)
 	case DYNAMITE_BOOM:
 	{
 		m_fTime += fTimeDelta;
-
 		if (m_fTime < 2.f)
 			break;
 
@@ -84,8 +83,6 @@ _int CDynamite::Update_Object(const _float & fTimeDelta)
 	default:
 		_CRASH("wrong access");
 	}
-
-
 
 	_int iResult = Engine::CGameObject::Update_Object(fTimeDelta);
 	Engine::Add_RenderGroup(RENDER_NONALPHA, this);

@@ -1,10 +1,9 @@
 #include "stdafx.h"
 #include "..\Header\StatComponent.h"
-
 #include "AbstFactory.h"
 #include "Particle.h"
 #include "TerrainCubeMap.h"
-
+#include "Monster.h"
 
 CStatComponent::CStatComponent()
 {
@@ -34,12 +33,26 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 			m_bStun = false;
 		else
 			m_fCurStunTime += fTimeDelta;
+	
+	
+
+	}
+
+	if (m_bKnockback)
+	{
+		if (m_fKnockbackTime < m_fCurKnockbackTime)
+			m_bKnockback = false;
+		else
+			m_fCurKnockbackTime += fTimeDelta;
 	}
 
 	if (m_bDamaged)
 	{
 		if (m_fDamagedTime < m_fCurDamagedTime)
+		{
 			m_bStun = false;
+			m_bKnockback = false;
+		}
 		else
 			m_fCurDamagedTime += fTimeDelta;
 	}
@@ -116,8 +129,8 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 		m_fCurStunTime = 0.f;
 		break;
 	case DT_KNOCK_BACK:
-		m_bStun = true;
-		m_fCurStunTime = 0.f;
+		m_bKnockback = true;
+		m_fCurKnockbackTime = 0.f;
 
 		m_vKnockBackVelocity = m_pOwnerTrans->m_vInfo[INFO_POS] - vFromPos;
 		D3DXVec3Normalize(&m_vKnockBackVelocity, &m_vKnockBackVelocity);
