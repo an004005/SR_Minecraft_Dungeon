@@ -24,6 +24,7 @@
 #include "RedStoneMonstrosity.h"
 #include "UI.h"
 #include "CoolTimeUI.h"
+#include "BatchTool.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
@@ -43,7 +44,12 @@ HRESULT CStage::Ready_Scene(void)
 	FAILED_CHECK_RETURN(Ready_Layer_Environment(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_GameLogic(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_UI(), E_FAIL);
-	
+
+	// CBatchTool::Load(L"../Bin/Resource/Batch/test2.batch");
+
+	// Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+	// 	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_11_Test.anim");
+
 	return S_OK;
 }
 
@@ -109,9 +115,9 @@ HRESULT CStage::Ready_Layer_GameLogic()
 {
 	_matrix matWorld;
 
-	CObjectFactory::Create<CBox>("Box", L"Box" , { 2.f, 7.5f, 6.f });
+	// CObjectFactory::Create<CBox>("Box", L"Box" , { 2.f, 7.5f, 6.f });
 	//CObjectFactory::Create<CBox>("Box", L"Box2", { 4.f, 9.f, 15.f });
-	CObjectFactory::Create<CDynamite>("Dynamite", L"Dynamite");
+	// CObjectFactory::Create<CDynamite>("Dynamite", L"Dynamite");
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 1.f, 0.f ,3.f });
 	CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld);
@@ -148,7 +154,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 		// CEnemyFactory::Create<CRedStoneMonstrosity>("RedStoneMonstrosity", L"RedStoneMonstrosity", matWorld);
 	}
 	
-	CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {6.f, 0.f ,6.f});
+	// CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {6.f, 0.f ,6.f});
 	// CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
 	// CEnemyFactory::Create<CMonster>("Zombie", L"TestZombie", matWorld);
 
