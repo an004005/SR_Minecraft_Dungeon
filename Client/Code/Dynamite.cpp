@@ -6,6 +6,7 @@
 #include "Monster.h"
 #include "Particle.h"
 #include "AbstFactory.h"
+#include "StaticCamera.h"
 
 CDynamite::CDynamite(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CGameObject(pGraphicDev)
@@ -70,7 +71,6 @@ _int CDynamite::Update_Object(const _float & fTimeDelta)
 	case DYNAMITE_BOOM:
 	{
 		m_fTime += fTimeDelta;
-
 		if (m_fTime < 2.f)
 			break;
 
@@ -84,8 +84,6 @@ _int CDynamite::Update_Object(const _float & fTimeDelta)
 		_CRASH("wrong access");
 	}
 
-
-
 	_int iResult = Engine::CGameObject::Update_Object(fTimeDelta);
 	Engine::Add_RenderGroup(RENDER_NONALPHA, this);
 
@@ -97,6 +95,8 @@ void CDynamite::LateUpdate_Object()
 
 	if (m_bExplosion)
 	{
+		Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+			->PlayShake(0.2f, 0.8f);
 		set<CGameObject*> objSet;
 		Engine::GetOverlappedObject(OUT objSet, m_pTransCom->m_vInfo[INFO_POS], 5.f);
 		for (auto& obj : objSet)

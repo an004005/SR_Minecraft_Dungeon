@@ -28,6 +28,7 @@ public:
 	// 아래 두 함수는 Collider 실행 중에(LateUpdate) 에 실행되기 때문에 GetOverlappedObject 사용가능
 	void DynamicCallBack(CCollisionCom* pOther);
 	void StaticCallBack(_vec3 vCenter, _float fRadius);
+
 	//
 private:
 	Engine::CTransform* m_pTransform = nullptr;

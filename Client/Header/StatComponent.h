@@ -33,7 +33,7 @@ public:
 	void ModifyHP(_int iModifyingHP);
 	void TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCauser, DamageType eType = DT_END);
 
-	_bool IsStun() const { return m_bStun; }
+	_bool IsStun() const { return m_bStun || m_bKnockback; }
 	_bool IsDead() const { return m_bDead; }
 	_bool IsDamaged() const { return m_bDamaged; }
 
@@ -49,8 +49,11 @@ private:
 	_bool m_bDead = false;
 
 	_bool m_bStun = false;
-	_float m_fStunTime = 1.f;
-	_float m_fCurStunTime = 1.f;
+	_bool m_bKnockback = false;
+	_float m_fStunTime = 2.f;
+	_float m_fKnockbackTime = 1.f;
+	_float m_fCurStunTime = 2.f;
+	_float m_fCurKnockbackTime = 1.f;
 	_vec3 m_vKnockBackVelocity = CGameUtilMgr::s_vZero;
 
 	_bool m_bDamaged = false;

@@ -36,7 +36,11 @@
 #include "ArrowBundle.h"
 #include "HPUI.h"
 #include "CoolTimeUI.h"
+#include "ShockPowder.h"
+#include "BootsOfSwiftness.h"
+#include "FireworksArrow.h"
 #include "CameraTool.h"
+#include "BatchTool.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -410,6 +414,18 @@ void CItemFactory::Ready_ItemFactory()
 	{
 		return CPosion::Create(s_pGraphicDev);
 	} });
+	s_mapItemSpawner.insert({ "ShockPowder", []()
+	{
+		return CShockPowder::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "BootsOfSwiftness", []()
+	{
+		return CBootsOfSwiftness::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "FireworksArrow", []()
+	{
+		return CFireworksArrow::Create(s_pGraphicDev);
+	} });
 }
 
 void CUIFactory::Ready_UIFactory()
@@ -483,5 +499,9 @@ void CSceneFactory::Ready_SceneFactory()
 		{
 			return CCameraTool::Create(s_pGraphicDev);
 		} });
+		s_mapSceneSpawner.insert({"Batch Tool", []()
+		{
+			return CBatchTool::Create(s_pGraphicDev);
+		}});
 	}
 }

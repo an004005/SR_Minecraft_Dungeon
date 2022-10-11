@@ -101,7 +101,7 @@ void CCreeper::LateUpdate_Object()
 	if (m_bAttackFire)
 	{
 		Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
-			->PlayeShake(0.15f, 0.4f);
+			->PlayShake(0.15f, 0.4f);
 		set<CGameObject*> setObj;
 		_vec3 vAttackPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
 		Engine::GetOverlappedObject(setObj, vAttackPos, 3.5f);
