@@ -343,6 +343,10 @@
     <ClInclude Include="..\Header\ArrowCubeMgr.h">
       <Filter>Mgr</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\CamAnimation.h" />
+    <ClInclude Include="..\Header\CameraTool.h">
+      <Filter>01. Scene\ToolScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -606,6 +610,10 @@
     </ClCompile>
     <ClCompile Include="..\Code\ArrowCubeMgr.cpp">
       <Filter>Mgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\CamAnimation.cpp" />
+    <ClCompile Include="..\Code\CameraTool.cpp">
+      <Filter>01. Scene\ToolScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

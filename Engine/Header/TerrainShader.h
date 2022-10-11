@@ -19,12 +19,12 @@ private:
 
 public:
 	virtual HRESULT Ready_Buffer(const wstring& _shaderfile, const _ulong& dwCntX, const _ulong& dwCntZ, const _ulong& dwVtxItv,
-								_vec2 _uv0, _vec2 _uv1, _vec2 _uv2, _vec2 _uv3);
+								_vec2 _uv0, _vec2 _uv1, _vec2 _uv2, _vec2 _uv3, _uint _widthcnt, _uint _heightcnt);
 	virtual void Render_Buffer() override;
 	virtual CComponent* Clone() override;
 	virtual void Free() override;
 	static CTerrainShader* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& _shaderfile, const _ulong& dwCntX, const _ulong& dwCntZ, const _ulong& dwVtxItv,
-									_vec2 _uv0, _vec2 _uv1, _vec2 _uv2, _vec2 _uv3);
+									_vec2 _uv0, _vec2 _uv1, _vec2 _uv2, _vec2 _uv3, _uint _widthcnt, _uint _heightcnt);
 
 	void Set_Texture(IDirect3DBaseTexture9* _ptexture)
 	{
@@ -38,6 +38,19 @@ public:
 		m_iTextureCnt_W = _texturecntw;
 		m_iTextureCnt_H = _texturecnth;
 	}
+
+	void Set_UVOption(_float _time, _float _speed, _float _waveheight, _float _wavefreq, _float _uvspeed)
+	{
+		 m_fTime += _time;
+		 m_fSpeed = _speed;
+		 m_fWaveHeight = _waveheight;
+		 m_fWaveFreq = _wavefreq;
+		 m_fUVSpeed = _uvspeed;
+
+	}
+
+
+
 	_matrix					 m_matWorld;
 	_matrix					 m_ViewMatrix;
 	_matrix					 m_PrjMatrix;
@@ -65,10 +78,9 @@ public:
 	_float m_fUSize = 0.f;
 	_float m_fVSize = 0.f;
 
-	_vec2 UV_0;
-	_vec2 UV_1;
-	_vec2 UV_2;
-	_vec2 UV_3;
+	_uint Mul_WidthCnt;
+	_uint Mul_HeightCnt;
+
 
 	_float m_fTime = 0;
 	_float m_fSpeed = 0;

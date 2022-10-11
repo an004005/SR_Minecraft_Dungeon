@@ -105,6 +105,7 @@ void CAttack_P::Free()
 }
 #pragma endregion
 
+#pragma region 3DBase
 C3DBaseTexture::~C3DBaseTexture()
 {
 }
@@ -143,18 +144,28 @@ void C3DBaseTexture::Reset_Particle(Attribute* _Attribute)
 {
 	_Attribute->_bIsAlive = true;
 	m_fSize = _Attribute->_fSize;
-	_Attribute->_vPosition.y += 4.f;
-	_Attribute->_vVelocity = _vec3(0.f, 3.f, 0.f);
 
-	D3DXVec3Normalize(
-		&_Attribute->_vVelocity,
-		&_Attribute->_vVelocity);
+	if(_Attribute->_iType == 1)
+	{
+		_Attribute->_vPosition.y +=  1.1f;
+		_Attribute->_vVelocity = _vec3(0.f, EPSILON, 0.f);
+		_Attribute->_vVelocity.y += EPSILON;
+		
+	}
+	else
+	{
+		_Attribute->_vPosition.y += 4.f;
+		_Attribute->_vVelocity = _vec3(0.f, 3.f, 0.f);
 
-	// 터지는 방향 조절
-	// _Attribute->_vVelocity.y = GetRandomFloat(0.0f, 1.0f) * 3.f;
+		D3DXVec3Normalize(
+			&_Attribute->_vVelocity,
+			&_Attribute->_vVelocity);
 
-	_Attribute->_vVelocity.y += 3.f;
+		// 터지는 방향 조절
+		// _Attribute->_vVelocity.y = GetRandomFloat(0.0f, 1.0f) * 3.f;
 
+		_Attribute->_vVelocity.y += 3.f;
+	}
 	_Attribute->_fAge = 0.0f;
 }
 
@@ -191,7 +202,7 @@ void C3DBaseTexture::Free()
 {
 	CParticleSystem::Free();
 }
-
+#pragma endregion
 
 #pragma region SpeedBoots
 CSpeedBoots::~CSpeedBoots()
@@ -212,7 +223,6 @@ _int CSpeedBoots::Update_Object(const _float& fTimeDelta)
 			if (i->_fAge > i->_fLifeTime)
 			{
 				i->_bIsAlive = false;
-
 			}
 		}
 	}
@@ -334,16 +344,6 @@ void CSpeedBoots_Particle::Reset_Particle(Attribute* _Attribute)
 	_Attribute->_bIsAlive = true;
 	m_fSize = _Attribute->_fSize;
 
-	// if (_Attribute->_fSize <= EPSILON)
-	// 	m_fSize = _Attribute->_fSize;
-	//
-	// CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
-	// pPlayerTransform->Get_Info(INFO_POS, &_Attribute->_vVelocity);
-	//
-	// CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
-	// pPlayerTransform->Get_Info(INFO_POS, &_Attribute->_vPosition);
-	// _Attribute->_vPosition.y += 10.f;
-
 	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
 	pPlayerTransform->Get_Info(INFO_POS, &_Attribute->_vPosition);
 
@@ -365,33 +365,11 @@ void CSpeedBoots_Particle::Reset_Particle(Attribute* _Attribute)
 	D3DXMatrixRotationY(&matRot, D3DXToRadian(45.f));
 	D3DXVec3TransformNormal(&_Attribute->_vVelocity, &_Attribute->_vVelocity, &matRot);
 
-	// GetRandomVector(
-	// 	&_Attribute->_vVelocity,
-	// 	&min,
-	// 	&max);
-	
 	D3DXVec3Normalize(
 		&_Attribute->_vVelocity,
 		&_Attribute->_vVelocity);
 
 	_Attribute->_vVelocity *= m_fSpeed;
-	// CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
-	// pPlayerTransform->Get_Info(INFO_POS, &_Attribute>_vVelocity);
-	// _Attribute->_vPosition.y += 4.f;
-	
-	
-
-	// _Attribute->_vPosition.x += _Attribute->_vPosition.x +  m_fSpeed * cosf(m_fRotAngle);
-	//_Attribute->_vPosition.y -= _Attribute->_vPosition.y - m_fSpeed * sinf(m_fRotAngle);
-
-	// _Attribute->_vVelocity *= m_fSpeed;
-	// _Attribute->_vVelocity.x *= -5.f;
-	//
-	// _Attribute->_vVelocity.z *= -5.f;
-	// _Attribute->_vVelocity.y *= -2.f;
-
-
-
 	// 터지는 방향 조절
 	// _Attribute->_vVelocity.y = GetRandomFloat(0.0f, 1.0f) * 3.f;
 
@@ -438,8 +416,7 @@ void CSpeedBoots_Particle::Free()
 
 #pragma endregion
 
-
-
+#pragma region Firework_Fuze
 CFireWork_Fuze::~CFireWork_Fuze()
 {
 }
@@ -541,7 +518,9 @@ void CFireWork_Fuze::Free()
 	CParticleSystem::Free();
 }
 
+#pragma endregion
 
+#pragma region FireWork
 CFireWork::~CFireWork()
 {
 }
@@ -629,9 +608,9 @@ void CFireWork::Free()
 {
 	CParticleSystem::Free();
 }
+#pragma endregion
 
-
-
+#pragma endregion
 
 
 #pragma region UVAnimation
@@ -666,8 +645,7 @@ HRESULT CShock_Powder::Ready_Object()
 	
 	m_pTransCom->Set_Pos(pPos.x + CGameUtilMgr::GetRandomFloat(-3.f, 3.f),
 		pPos.y + 0.5f, pPos.z + CGameUtilMgr::GetRandomFloat(-3.f, 3.f));
-	IM_LOG("%f, %f", m_pTransCom->m_vInfo[INFO_POS].x,  m_pTransCom->m_vInfo[INFO_POS].z);
-	//m_pTransCom->Set_Scale(_float(rand() % 2)  + 1, _float(rand() % 2) + 1, _float(rand() % 2 ) + 1);
+
 
 	m_pTransCom->Update_Component(0.f);
 	return S_OK;
@@ -695,7 +673,12 @@ _int CShock_Powder::Update_Object(const _float& fTimeDelta)
 void CShock_Powder::Render_Object()
 {
 	CGameObject::Render_Object();
+
+
+
+	m_pBufferCom->Check_Alpha(true);
 	m_pBufferCom->Render_Buffer();
+
 }
 
 void CShock_Powder::LateUpdate_Object()
@@ -1139,8 +1122,44 @@ HRESULT CCrack::Ready_Object(_float _size, CRACKTYPE _type)
 		m_iCrackType = EXE_DECAL;
 
 	}
+	else if (_type == LAZER)
+	{
+		m_pBufferCom = Add_Component<CRcShader>(L"Proto_Lazer_Com", L"Proto_Lazer_Com", ID_STATIC);
+		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
+		m_pTexture = Add_Component<CTexture>(L"Proto_LazerLightTex", L"Proto_LazerLightTex", ID_STATIC);
+		m_pBufferCom->Set_TextureOption(15, 2, 2);
+		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
+		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+		_vec3 pPos;
+		_vec3 pLook;
+		pPlayerTransform->Get_Info(INFO_POS, &pPos);
+		pPlayerTransform->Get_Info(INFO_LOOK, &pLook);
+		m_pTransCom->m_vInfo[INFO_POS] = pPos + pLook * 3.f;
+		m_pTransCom->Set_Pos(pPos.x, pPos.y+ 2.f, pPos.z);
+		 m_pTransCom->Rotation(ROT_Y, D3DXToRadian(45.f));
+		m_pTransCom->Set_Scale(_size, _size, _size);
+		m_fTime = 0.6f;
+		m_fCurTime = 0.f;
+		m_iCrackType = LAZER;
+	}
+	else if (_type == LOADINGBOX)
+	{
+		m_pBufferCom = Add_Component<CRcShader>(L"Proto_LoadingBoxCom", L"Proto_LoadingBoxCom", ID_STATIC);
+		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
+		m_pTexture = Add_Component<CTexture>(L"Proto_LoadingBoxTex", L"Proto_LoadingBoxTex", ID_STATIC);
+		m_pBufferCom->Set_TextureOption(10, 8, 8);
+		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
+		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+		_vec3 pPos;
+		_vec3 pLook;
+		pPlayerTransform->Get_Info(INFO_POS, &pPos);
+		m_pTransCom->Set_Pos(pPos.x, pPos.y + 4.f, pPos.z);
+		m_pTransCom->Set_Scale(_size, _size, _size);
+		m_fTime = 30.f;
+		m_fCurTime = 0.f;
+		m_iCrackType = LOADINGBOX;
+	}
 
-	// 열거체 받아서 추가 폭발 설정하기
 	m_fCurTime = 0;
 	m_fTime = 1.0f;
 	m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
@@ -1151,7 +1170,7 @@ HRESULT CCrack::Ready_Object(_float _size, CRACKTYPE _type)
 
 _int CCrack::Update_Object(const _float& fTimeDelta)
 {
-	if (m_fCurTime > m_fTime)
+	if (m_fCurTime > m_fTime && m_iCrackType != LOADINGBOX)
 	{
 		if (m_iCrackType == GOLEM_SPIT_CRACK)
 		{
@@ -1161,15 +1180,23 @@ _int CCrack::Update_Object(const _float& fTimeDelta)
 		}
 		return OBJ_DEAD;
 	}
+
+	if(m_iCrackType == LOADINGBOX)
+	{
+		auto tmp = m_pBufferCom->Get_WidthTextureCnt();
+		auto dest = m_pBufferCom->Get_HeightTextureCnt();
+
+		if (tmp == 2 && dest == 7)
+		{
+			return OBJ_DEAD;
+		}
+	}
+
 	m_fCurTime += fTimeDelta;
 
 	CGameObject::Update_Object(fTimeDelta);
 	m_pBufferCom->m_matWorld = m_pTransCom->m_matWorld;
 
-	//m_pTransCom->Set_Scale(CGameUtilMgr::GetRandomFloat(0.7f, 2.5f), CGameUtilMgr::GetRandomFloat(0.7f, 2.5f), CGameUtilMgr::GetRandomFloat(0.7f, 2.5f));
-
-	//_float fY = CGameUtilMgr::GetRandomFloat(0.f, 2.f);
-	//m_pTransCom->Rotation(ROT_Y, D3DXToRadian(fY * fTimeDelta));
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
 
@@ -1218,13 +1245,6 @@ void CCrack::Free()
 #pragma region GolemSpit
 CGolemSpit::~CGolemSpit()
 {
-	// Get_GameObject<CFireWork>(LAYER_EFFECT, L"FireWork")->Add_Particle(m_pTransCom->m_vInfo[INFO_POS], 0.3f, D3DXCOLOR(1.f, 1.f, 0.2f, 0), 256, 0.4f);
-	// CEffectFactory::Create<CUVCircle>("Creeper_Explosion", L"Creeper_Explosion", m_pTransCom->m_vInfo[INFO_POS]);
-	// Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(m_pTransCom->m_vInfo[INFO_POS], 0.3f, RED, 30, 0.5f);
-	// for (int i = 0; i < 5; i++)
-	// {
-	// 	CEffectFactory::Create<CCloud>("Creeper_Cloud", L"Creeper_Cloud", m_pTransCom->m_vInfo[INFO_POS]);
-	// }
 }
 
 HRESULT CGolemSpit::Ready_Object(_float _size)
@@ -1348,6 +1368,7 @@ void CGolemSpit::Free()
 
 #pragma endregion
 
+#pragma region Stun
 CStun::~CStun()
 {
 }
@@ -1427,9 +1448,6 @@ void CStun::Free()
 {
 	CGameObject::Free();
 }
-
-
-
 
 #pragma endregion 
 
@@ -1533,6 +1551,8 @@ void CLava_Particle::Free()
 {
 	CGameObject::Free();
 }
+
+
 
 #pragma endregion
 
@@ -1755,6 +1775,327 @@ void CHeartParticle::Free()
 }
 #pragma endregion
 
+
+#pragma region Lazer
+
+CLazer::~CLazer()
+{
+}
+
+HRESULT CLazer::Ready_Object(_float _size)
+{
+	m_pBufferCom = Add_Component<CTerrainShader>(L"Proto_LazerBeamCom", L"Proto_LazerBeamCom", ID_STATIC);
+	m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
+	m_pTexture = Add_Component<CTexture>(L"Proto_LazerBeamTex", L"Proto_LazerBeamTex", ID_STATIC);
+	m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
+	m_pBufferCom->Set_UVOption( 1, 3.f, CGameUtilMgr::GetRandomFloat(0.1f,0.5f), 3.f, 4.f);
+
+	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	_vec3 pPos;
+	_vec3 pLook;
+	pPlayerTransform->Get_Info(INFO_POS, &pPos);
+	pPlayerTransform->Get_Info(INFO_LOOK, &pLook);
+	m_pTransCom->m_vInfo[INFO_POS] = pPos +pLook *2;
+
+	m_vVelocity = pLook - pPos;
+	m_pTransCom->Set_Scale(24.f, _size, _size);
+	m_pTransCom->m_vInfo[INFO_POS].y = m_pTransCom->m_vInfo[INFO_POS].y+ 1.f;
+	m_pTransCom->m_vInfo[INFO_POS].x = m_pTransCom->m_vInfo[INFO_POS].x;
+
+	m_pTransCom->m_vAngle.y = pPlayerTransform->m_vAngle.y;
+	m_pTransCom->Rotation(ROT_Y, D3DXToRadian(270.f));
+
+	m_fTime = 10.6f;
+	m_fCurTime = 0.f;
+
+	return S_OK;
+}
+
+_int CLazer::Update_Object(const _float& fTimeDelta)
+{
+	CGameObject::Update_Object(fTimeDelta);
+
+	if (m_fCurTime >= m_fTime)
+		return OBJ_DEAD;
+
+	m_fCurTime += fTimeDelta;
+
+	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	_vec3 pPos;
+	pPlayerTransform->Get_Info(INFO_POS, &pPos);
+
+	// m_pTransCom->m_vInfo[INFO_POS].y += pPos.y + fTimeDelta * 60.f;
+
+	// m_pTransCom->m_vInfo[INFO_POS].x = pPos.x;
+	// m_pTransCom->m_vInfo[INFO_POS].z = pPos.z - 0.7f;
+
+	m_pBufferCom->m_matWorld = m_pTransCom->m_matWorld;
+
+	Add_RenderGroup(RENDER_NONALPHA, this);
+
+	return OBJ_NOEVENT;
+}
+
+void CLazer::Render_Object()
+{
+	CGameObject::Render_Object();
+	m_pBufferCom->Render_Buffer();
+}
+
+void CLazer::LateUpdate_Object()
+{
+	CGameObject::LateUpdate_Object();
+}
+
+void CLazer::PreRender_Particle()
+{
+}
+
+void CLazer::PostRender_Particle()
+{
+}
+
+CLazer* CLazer::Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size)
+{
+	CLazer* Inst = new CLazer(pGraphicDev);
+
+	if (FAILED(Inst->Ready_Object(_size)))
+	{
+		return nullptr;
+	}
+	return Inst;
+}
+
+void CLazer::Free()
+{
+	CGameObject::Free();
+}
+#pragma endregion
+
+#pragma region Gradation Beam
+CGradation_Beam::~CGradation_Beam()
+{
+}
+
+HRESULT CGradation_Beam::Ready_Object(_float _size)
+{
+	m_pBufferCom = Add_Component<CTerrainShader>(L"Proto_GradationCom", L"Proto_GradationCom", ID_STATIC);
+	m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
+	m_pTexture = Add_Component<CTexture>(L"Proto_GradationTex", L"Proto_GradationTex", ID_STATIC);
+	m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
+
+	// m_pBufferCom->Set_UVOption(0, CGameUtilMgr::GetRandomFloat(1.5f, 3.f), 0.5f, 1.5f, 0.f);
+	m_pBufferCom->Set_UVOption(0, 0.f, 0.5f, 1.5f, 0.f);
+
+	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	_vec3 pPos;
+	_vec3 pLook;
+	pPlayerTransform->Get_Info(INFO_POS, &pPos);
+	pPlayerTransform->Get_Info(INFO_LOOK, &pLook);
+	m_pTransCom->m_vInfo[INFO_POS] = pPos + pLook * 3;
+	m_pTransCom->m_vInfo[INFO_POS].y = pPos.y -1.f;
+
+	m_pTransCom->Set_Scale(_size, _size, 8.f);
+	m_pTransCom->Rotation(ROT_Y, D3DXToRadian(90.f));
+	m_pTransCom->Rotation(ROT_Z, D3DXToRadian(90.f));
+
+	m_fTime = 10.6f;
+	m_fCurTime = 0.f;
+
+	return S_OK;
+}
+
+_int CGradation_Beam::Update_Object(const _float& fTimeDelta)
+{
+	CGameObject::Update_Object(fTimeDelta);
+
+	if (m_fCurTime >= m_fTime)
+		return OBJ_DEAD;
+
+	m_fCurTime += fTimeDelta;
+
+	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	_vec3 pPos;
+	pPlayerTransform->Get_Info(INFO_POS, &pPos);
+
+	// m_pTransCom->m_vInfo[INFO_POS].y += pPos.y + fTimeDelta * 60.f;
+
+	// m_pTransCom->m_vInfo[INFO_POS].x = pPos.x;
+	// m_pTransCom->m_vInfo[INFO_POS].z = pPos.z - 0.7f;
+
+	m_pBufferCom->m_matWorld = m_pTransCom->m_matWorld;
+
+	Add_RenderGroup(RENDER_NONALPHA, this);
+
+	return OBJ_NOEVENT;
+}
+
+void CGradation_Beam::Render_Object()
+{
+	CGameObject::Render_Object();
+	m_pBufferCom->Render_Buffer();
+}
+
+void CGradation_Beam::LateUpdate_Object()
+{
+	CGameObject::LateUpdate_Object();
+}
+
+void CGradation_Beam::PreRender_Particle()
+{
+}
+
+void CGradation_Beam::PostRender_Particle()
+{
+}
+
+CGradation_Beam* CGradation_Beam::Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size)
+{
+	CGradation_Beam* Inst = new CGradation_Beam(pGraphicDev);
+
+	if (FAILED(Inst->Ready_Object(_size)))
+	{
+		return nullptr;
+	}
+	return Inst;
+}
+
+void CGradation_Beam::Free()
+{
+	CGameObject::Free();
+}
+
+
+
+#pragma endregion
+
+#pragma region Lazer Circle
+CLazer_Circle::~CLazer_Circle()
+{
+}
+
+HRESULT CLazer_Circle::Ready_Object(_float _size)
+{
+	m_pBufferCom = Add_Component<CRcShader>(L"Proto_LazerCircleCom", L"Proto_LazerCircleCom", ID_STATIC);
+	m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
+	m_pTexture = Add_Component<CTexture>(L"Proto_LazerCircleTex", L"Proto_LazerCircleTex", ID_STATIC);
+	
+	// m_pTransCom->Rotation(ROT_Z, D3DXToRadian(30.f));
+
+	m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
+	m_pBufferCom->Set_TextureOption(0, 0, 0);
+
+	// CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	// _vec3 pPos;
+	// pPlayerTransform->Get_Info(INFO_POS, &pPos);
+	// m_pTransCom->Set_Pos(pPos.x, pPos.y+1.5f, pPos.z);
+	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	_vec3 pPos;
+	_vec3 pLook;
+	pPlayerTransform->Get_Info(INFO_POS, &pPos);
+	pPlayerTransform->Get_Info(INFO_LOOK, &pLook);
+	m_pTransCom->m_vInfo[INFO_POS] = pPos + pLook * 3;
+
+	m_vVelocity = pPos-pPos + pLook * CGameUtilMgr::GetRandomFloat(1.5f,3.f);
+	m_pTransCom->Set_Scale(24.f, _size, _size);
+	m_pTransCom->m_vInfo[INFO_POS].y = m_pTransCom->m_vInfo[INFO_POS].y + 1.f;
+	m_pTransCom->m_vInfo[INFO_POS].x = pPos.x + pLook.x * 3 + CGameUtilMgr::GetRandomFloat(-0.5f,0.5f);
+	m_pTransCom->m_vInfo[INFO_POS].z = pPos.z + pLook.z * 3 + CGameUtilMgr::GetRandomFloat(-0.5f, 0.5f);
+
+	m_pTransCom->m_vAngle.y = pPlayerTransform->m_vAngle.y;
+
+	m_pTransCom->Set_Scale(_size, _size, _size);
+	m_fSpeed = 2.f;
+	m_fTime = 0.1f;
+	m_fCurTime = 0.f;
+	m_vVelocity.y = 0.f;
+
+	D3DXVec3Normalize(&m_vVelocity, &m_vVelocity);
+	m_pTransCom->Update_Component(0.f);
+
+	return S_OK;
+}
+
+_int CLazer_Circle::Update_Object(const _float& fTimeDelta)
+{
+	CGameObject::Update_Object(fTimeDelta);
+
+	if (m_fCurTime >= m_fTime)
+	{
+		return OBJ_DEAD;
+	}
+	m_pTransCom->m_vInfo[INFO_POS] += m_vVelocity * fTimeDelta * 20.f;
+
+	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	_vec3 pPos;
+	_vec3 pLook;
+	pPlayerTransform->Get_Info(INFO_POS, &pPos);
+	pPlayerTransform->Get_Info(INFO_LOOK, &pLook);
+
+	// if(m_pTransCom->m_vInfo[INFO_POS] >= pPos+pLook * 10)
+	// {
+	// 	m_pTransCom->m_vInfo[INFO_POS] = pPos + pLook * 3;
+	// }
+	// Set_Pos(pPos.x, pPos.y + 1.5f, pPos.z);
+
+	// m_pTransCom->m_vInfo[INFO_POS].y += fTimeDelta * 10.f;
+
+	// m_pTransCom->m_vScale *= 61.5f * fTimeDelta;
+
+	// if (m_pTransCom->m_vInfo[INFO_POS].y >= pPos.y + 3.f)
+	// {
+		// m_pTransCom->m_vInfo[INFO_POS].y = pPos.y;
+	// }
+	m_pTransCom->m_vScale *= 61.5f * fTimeDelta;
+
+	m_fCurTime += fTimeDelta;
+
+
+	// m_pTransCom->Rotation(ROT_X, D3DXToRadian(fTimeDelta*m_fSpeed));
+	// m_pTransCom->m_vAngle.x += D3DXToRadian(50.f) * fTimeDelta * m_fSpeed;
+
+	m_pBufferCom->m_matWorld = m_pTransCom->m_matWorld;
+
+	Add_RenderGroup(RENDER_NONALPHA, this);
+	return OBJ_NOEVENT;
+}
+
+void CLazer_Circle::Render_Object()
+{
+	CGameObject::Render_Object();
+	m_pBufferCom->Render_Buffer();
+
+}
+
+void CLazer_Circle::LateUpdate_Object()
+{
+	CGameObject::LateUpdate_Object();
+}
+
+void CLazer_Circle::PreRender_Particle()
+{
+}
+
+void CLazer_Circle::PostRender_Particle()
+{
+}
+
+CLazer_Circle* CLazer_Circle::Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size)
+{
+	CLazer_Circle* Inst = new CLazer_Circle(pGraphicDev);
+
+	if (FAILED(Inst->Ready_Object(_size)))
+	{
+		return nullptr;
+	}
+	return Inst;
+}
+
+void CLazer_Circle::Free()
+{
+	CGameObject::Free();
+}
+#pragma endregion
 
 #pragma endregion
 

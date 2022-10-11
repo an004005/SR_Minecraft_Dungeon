@@ -69,7 +69,7 @@ _int CCameraTool::Update_Scene(const _float& fTimeDelta)
 
 
 		Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
-			->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/WorldTest1.anim");
+			->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_11_Test.anim");
 		m_pCam->m_bStop = true;
 	}
 
