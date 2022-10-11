@@ -57,11 +57,16 @@ void CShockPowder::LateUpdate_Object()
 	{
 		if (CMonster* monster = dynamic_cast<CMonster*>(obj))
 		{
+			_vec3 vMonsterPos = monster->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+			vMonsterPos.y += 3.f;
 			DamageType eDT = DT_END;
 			if (m_iAttackCnt == 0) eDT = DT_STUN;
 			if (monster->CheckCC()) eDT = DT_END;
 			monster->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
 				->TakeDamage(0, vPos, this, eDT);
+
+			CEffectFactory::Create<CStun>("Monster_Stun", L"Monster_Stun", vMonsterPos);
+
 		}
 	}
 

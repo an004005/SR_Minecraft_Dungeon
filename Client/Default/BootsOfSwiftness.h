@@ -18,5 +18,9 @@ public:
 	static CBootsOfSwiftness* Create(LPDIRECT3DDEVICE9 pGraphicDev);
 	// equipitem function
 	virtual void Equipment(SkeletalPart* pSkeletalPart) override;
-};
+private:
+	_float m_fLifeTime = 10.f;
+	_float m_fAge = 0.f;
+	_bool m_bEnd = false;
 
+};

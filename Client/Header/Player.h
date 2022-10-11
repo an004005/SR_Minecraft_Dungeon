@@ -75,7 +75,7 @@ public:
 
 	//아이템 변경(임시)
 	void WeaponChange(ITEMTYPE eIT);
-
+	void SetSpeed(_float fSpeed) { m_fSpeed = fSpeed; }
 	CInventory* GetInventory() { return m_pInventory; }
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
 

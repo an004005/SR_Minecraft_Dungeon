@@ -22,19 +22,33 @@ HRESULT CBootsOfSwiftness::Ready_Object()
 
 _int CBootsOfSwiftness::Update_Object(const _float & fTimeDelta)
 {
-	if (!m_bUse)
-		return 0;
+	if (m_bUse)
+	{
+		m_fAge = 0.f;
+	
+		CPlayer* pPlayer = Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");
+		pPlayer->SetSpeed(7.5f);
+		_vec3 vPos = pPlayer->GetInfo(INFO_POS);
 
-	CPlayer* pPlayer = Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");
-	_vec3 vPos = pPlayer->GetInfo(INFO_POS);
+		Get_GameObject<C3DBaseTexture>(LAYER_EFFECT, L"3D_Base")->Add_Particle(vPos, 3.f, D3DXCOLOR(0.f, 0.63f, 0.82f, 0.f), 1, 1.5f);
+		Get_GameObject<CSpeedBoots>(LAYER_EFFECT, L"Speed_Boots")->Add_Particle(vPos, 3.f, D3DXCOLOR(0.2f, 0.2f, 0.5f, 1.f), 1, 1.5f);
+		Get_GameObject<CSpeedBoots_Particle>(LAYER_EFFECT, L"Speed_Boots_Particle")->Add_Particle(
+			_vec3(vPos.x, vPos.y + 15.f, vPos.z),
+			1.f, D3DXCOLOR(0.3f, 0.4f, 0.7f, 1.f), 18, m_fLifeTime);
+		m_bEnd = true;
+		m_bUse = false;
+		
+	}
 
-	Get_GameObject<C3DBaseTexture>(LAYER_EFFECT, L"3D_Base")->Add_Particle(vPos, 3.f, D3DXCOLOR(0.f, 0.63f, 0.82f, 0.f), 1, 1.5f);
-	Get_GameObject<CSpeedBoots>(LAYER_EFFECT, L"Speed_Boots")->Add_Particle(vPos, 3.f, D3DXCOLOR(0.2f, 0.2f, 0.5f, 1.f), 1, 1.5f);
-	Get_GameObject<CSpeedBoots_Particle>(LAYER_EFFECT, L"Speed_Boots_Particle")->Add_Particle(
-		_vec3(vPos.x, vPos.y + 15.f, vPos.z),
-		1.f, D3DXCOLOR(0.3f, 0.4f, 0.7f, 1.f), 18, 20.f);
+	m_fAge += fTimeDelta;
 
-	m_bUse = false;
+	if (m_bEnd && m_fAge >= m_fLifeTime)
+	{
+		Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player")->SetSpeed(4.5f);
+		m_bEnd = false;
+	}
+
+
 	CEquipItem::Update_Object(fTimeDelta);
 	return OBJ_NOEVENT;
 }

@@ -1375,11 +1375,6 @@ _int CStun::Update_Object(const _float& fTimeDelta)
 	if (m_fCurTime >= m_fTime)
 		return OBJ_DEAD;
 
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
-	_vec3 pPos;
-	pPlayerTransform->Get_Info(INFO_POS, &pPos);
-	m_pTransCom->Set_Pos(pPos.x, pPos.y + 3.f, pPos.z);
-
 	m_fCurTime += fTimeDelta;
 
 	CGameObject::Update_Object(fTimeDelta);

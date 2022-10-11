@@ -289,7 +289,6 @@ void CPlayer::StateChange()
 		m_bLegacy2 = false;
 		m_bCanPlayAnim = false;
 		m_pInventory->CurWeapon(IT_LEGACY2)->Use();
-		m_fSpeed = 7.5f;
 		return;
 	}
 

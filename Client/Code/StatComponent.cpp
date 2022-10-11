@@ -3,7 +3,7 @@
 #include "AbstFactory.h"
 #include "Particle.h"
 #include "TerrainCubeMap.h"
-
+#include "Monster.h"
 
 CStatComponent::CStatComponent()
 {
@@ -33,7 +33,9 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 			m_bStun = false;
 		else
 			m_fCurStunTime += fTimeDelta;
-		//기절 이펙트 넣기
+	
+	
+
 	}
 
 	if (m_bKnockback)
