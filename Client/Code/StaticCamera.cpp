@@ -105,7 +105,7 @@ void CStaticCamera::PlayeCamAnimation(const wstring& wstrAnim)
 	m_eMode = CAM_ANIMATION;
 }
 
-void CStaticCamera::PlayeShake(_float fDuration, _float fMagnitude)
+void CStaticCamera::PlayShake(_float fDuration, _float fMagnitude)
 {
 	m_fCurShakeTime = 0.f;
 	m_fShakeTime = fDuration;

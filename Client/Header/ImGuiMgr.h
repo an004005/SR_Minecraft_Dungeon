@@ -32,7 +32,7 @@ public:
 	static void MapControl(Engine::MapTool& tMaptool, _float& _far, CTerrainCubeMap* cubemap);
 
 	static void SceneSwitcher();
-
+	static void BatchControl(CCamera* pCamera, CTransform*& pTransform, CTerrainCubeMap* pMap, LPDIRECT3DDEVICE9 pGraphicDev);
 	static _bool IsShowColl() { return s_bShowColl; };
 	// static void UiEditor(Engine::UiTool& tUitool, CTerrainCubeMap* cubemap);
 

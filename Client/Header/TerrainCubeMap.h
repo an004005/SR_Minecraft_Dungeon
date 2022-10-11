@@ -25,6 +25,7 @@ struct MapCubeInfo
 
 class CTerrainCubeMap : public CGameObject
 {
+	friend class CImGuiMgr;
 public:
 	explicit CTerrainCubeMap(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual ~CTerrainCubeMap();

@@ -6,6 +6,9 @@
 #include "ImSequencerImpl.h"
 #include "TerrainCubeMap.h"
 #include "AbstFactory.h"
+#include "DynamicCamera.h"
+#include "MapTool.h"
+#include "BatchTool.h"
 
 ImGuiTextBuffer CImGuiMgr::s_log;
 SkeletalPart* CImGuiMgr::s_SelectedPart = nullptr;
@@ -755,6 +758,204 @@ void CImGuiMgr::SceneSwitcher()
 	}
 
 	ImGui::End();
+}
+
+void CImGuiMgr::BatchControl(CCamera* pCamera, CTransform*& pTransform, CTerrainCubeMap* pMap, LPDIRECT3DDEVICE9 pGraphicDev)
+{
+	static string strEnemyFactoryTag;
+	static string strobjFactoryTag;
+	static int iFactoryNum = 0;
+	static _uint iObjNumber = 0;
+
+	if (pTransform)
+		TransformEditor(pCamera, pTransform);
+	if (ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None))
+	{
+		if (ImGui::BeginTabItem("Enemy"))
+		{
+			iFactoryNum = 0;
+
+			static _uint iCurTagIdx = 0;
+			if (ImGui::BeginListBox("Enemy Factory"))
+			{
+				int iIdx = 0;
+				for (auto& enemy : CEnemyFactory::s_mapEnemySpawner)
+				{
+					const bool bSelected = iCurTagIdx == iIdx;
+					if (ImGui::Selectable(enemy.first.c_str(), bSelected))
+					{
+						iCurTagIdx = iIdx;
+						strEnemyFactoryTag = enemy.first;
+					}
+				
+					if (bSelected)
+						ImGui::SetItemDefaultFocus();
+					++iIdx;
+				}
+				ImGui::EndListBox();
+			}
+
+			if (ImGui::BeginListBox("Current Enemy"))
+			{
+				for (const auto& obj : Engine::Get_Layer(LAYER_ENEMY)->Get_MapObject())
+				{
+					string tmp;
+					tmp.assign(obj.first.begin(), obj.first.end());
+					if (ImGui::Selectable(tmp.c_str()))
+					{
+						pTransform = obj.second->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC);
+					}
+				}
+				ImGui::EndListBox();
+			}
+
+			ImGui::EndTabItem();
+		}
+
+		if (ImGui::BeginTabItem("Object"))
+		{
+			iFactoryNum = 1;
+
+			static _uint iCurTagIdx = 0;
+			if (ImGui::BeginListBox("Object Factory"))
+			{
+				int iIdx = 0;
+				for (auto& object : CObjectFactory::s_mapObjectSpawner)
+				{
+					const bool bSelected = iCurTagIdx == iIdx;
+					if (ImGui::Selectable(object.first.c_str(), bSelected))
+					{
+						iCurTagIdx = iIdx;
+						strobjFactoryTag = object.first;
+					}
+				
+					if (bSelected)
+						ImGui::SetItemDefaultFocus();
+					++iIdx;
+				}
+				ImGui::EndListBox();
+			}
+
+			if (ImGui::BeginListBox("Current Object"))
+			{
+				for (const auto& obj : Engine::Get_Layer(LAYER_GAMEOBJ)->Get_MapObject())
+				{
+					string tmp;
+					tmp.assign(obj.first.begin(), obj.first.end());
+					if (ImGui::Selectable(tmp.c_str()))
+					{
+						if (obj.second->Has_Component(L"Proto_TransformCom_root", ID_DYNAMIC))
+							pTransform = obj.second->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC);
+						else if (obj.second->Has_Component(L"Proto_TransformCom", ID_DYNAMIC))
+							pTransform = obj.second->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+					}
+				}
+				ImGui::EndListBox();
+			}
+
+			ImGui::EndTabItem();
+		}
+
+		ImGui::EndTabItem();
+	}
+
+
+	// 피킹한 위치에 선택한 팩토리로 생성
+	if (MouseKeyDown(DIM_RB))
+	{
+		// pMap->m_vecLand
+		_vec3 vOrigin, vRayDir;
+		_matrix matView, matProj;
+		D3DVIEWPORT9 ViewPort;
+
+		ZeroMemory(&ViewPort, sizeof(D3DVIEWPORT9));
+		pGraphicDev->GetViewport(&ViewPort);
+		pGraphicDev->GetTransform(D3DTS_PROJECTION, &matProj);
+		pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
+		CGameUtilMgr::GetPickingRay(vOrigin, vRayDir, g_hWnd, matView, matProj, ViewPort);
+		
+		_vec3 vCam = dynamic_cast<CDynamicCamera*>(pCamera)->GetEys();
+		_vec3 vFaceVtx[FACE_END][4];
+
+		_vec3	dwVtxIdxRU[3]{};
+		_vec3	dwVtxIdxLD[3]{};
+		_float	fU, fV, fDist;
+
+
+		_float	MinDist = 10000000;
+		_int eFace = FACE_END;
+		size_t iCurCube = 0;
+
+		for (size_t i = 0; i < pMap->m_vecLand.size(); ++i)
+		{
+			_vec3 vPos;
+			vPos.x = pMap->m_vecLand[i].matWorld._41;
+			vPos.y = pMap->m_vecLand[i].matWorld._42;
+			vPos.z = pMap->m_vecLand[i].matWorld._43;
+			_vec3 vDiff = vPos - vCam;
+			if (D3DXVec3LengthSq(&vDiff) > 900.f) continue; // 큐브 거리가 카메라부터 30 초과면 체크 안함
+
+			memcpy(&vFaceVtx, &CMapTool::s_vFaceVtx, sizeof(vFaceVtx));
+			for (int j = 0; j < FACE_END; ++j)
+			{
+				for (int k = 0; k < 4; ++k)
+					D3DXVec3TransformCoord(&vFaceVtx[j][k], &vFaceVtx[j][k], &pMap->m_vecLand[i].matWorld);
+			}
+
+			for (_ulong j = 0; j < FACE_END; ++j)
+			{
+					// 오른쪽 위
+					dwVtxIdxRU[0] = vFaceVtx[j][0];
+					dwVtxIdxRU[1] = vFaceVtx[j][1];
+					dwVtxIdxRU[2] = vFaceVtx[j][2];
+
+					// 왼쪽 아래
+					dwVtxIdxLD[0] = vFaceVtx[j][0];
+					dwVtxIdxLD[1] = vFaceVtx[j][2];
+					dwVtxIdxLD[2] = vFaceVtx[j][3];
+
+					//광선과 닿은 면이 있다면 vRayPos와의 거리가 최소값인지 확인한다.
+					BOOL RUtriCheck = D3DXIntersectTri(&dwVtxIdxRU[1], &dwVtxIdxRU[2], &dwVtxIdxRU[0], &vOrigin, &vRayDir, &fU, &fV, &fDist);
+					if (RUtriCheck && MinDist > fDist)
+					{
+						iCurCube = i;
+						eFace = j;
+						MinDist = fDist;
+						continue;
+					}
+
+					BOOL LDtriCheck = D3DXIntersectTri(&dwVtxIdxLD[0], &dwVtxIdxLD[1], &dwVtxIdxLD[2], &vOrigin, &vRayDir, &fU, &fV, &fDist);
+					if (LDtriCheck && MinDist > fDist)
+					{				
+						iCurCube = i;
+						eFace = j;
+						MinDist = fDist;		
+					}
+
+			}
+		}
+
+		if (eFace != FACE_END) // 찾음
+		{
+			_vec3 vCenter{ 0.f, 0.f, 0.f };
+			D3DXVec3TransformCoord(&vCenter, &vCenter, &pMap->m_vecLand[iCurCube].matWorld);
+			vCenter.y += 1.f;
+
+			if (iFactoryNum == 0 && strEnemyFactoryTag.empty() == false)
+			{
+				wstring tmp;
+				tmp.assign(strEnemyFactoryTag.begin(), strEnemyFactoryTag.end());
+				CEnemyFactory::Create<CGameObject>(strEnemyFactoryTag, tmp + L"$" + to_wstring(iObjNumber++), pMap->m_vecLand[iCurCube].matWorld);
+			}
+
+			if (iFactoryNum == 1 && strobjFactoryTag.empty() == false)
+			{
+				wstring tmp;
+				tmp.assign(strobjFactoryTag.begin(), strobjFactoryTag.end());
+				CObjectFactory::Create<CGameObject>(strobjFactoryTag, tmp + L"$" + to_wstring(iObjNumber++), pMap->m_vecLand[iCurCube].matWorld);
+			}
+		}
+	}
 }
 
 // void CImGuiMgr::UiEditor(Engine::UiTool& tUitool, CTerrainCubeMap* cubemap)

@@ -112,7 +112,7 @@ void CGeomancerWall::LateUpdate_Object()
 	{
 		// shake
 		Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
-			->PlayeShake(0.15f, 0.4f);
+			->PlayShake(0.15f, 0.4f);
 
 		_vec3& vPos = m_pTransform->m_vInfo[INFO_POS];
 

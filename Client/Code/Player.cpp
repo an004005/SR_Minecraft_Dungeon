@@ -159,7 +159,7 @@ void CPlayer::AnimationEvent(const string& strEvent)
 		if (m_iAttackCnt == 0 && dynamic_cast<CAxe*>(m_pInventory->CurWeapon(IT_MELEE)))
 		{
 			Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
-				->PlayeShake(0.15f, 0.4f);
+				->PlayShake(0.15f, 0.4f);
 			CEffectFactory::Create<CCrack>("Exe_Decal", L"Exe_Decal");
 			for (int i = 0; i < 5; i++)
 			{

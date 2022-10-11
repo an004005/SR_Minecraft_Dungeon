@@ -183,23 +183,28 @@ void CDynamicCamera::Key_Input(const _float& fTimeDelta)
 		m_vAt -= vLength;
 	}
 
-	if (Get_DIKeyState(DIK_T) & 0x80)
+	if (DIKeyDown(DIK_T))
 	{
-		if (m_bCheck)
-			return;
-
-		m_bCheck = true;
-
-		if (m_bFix)
-			m_bFix = false;
-		else
-			m_bFix = true;
+		m_bFix = !m_bFix;
 	}
-	else
-		m_bCheck = false;
 
-	if (false == m_bFix)
-		return;
+	// if (Get_DIKeyState(DIK_T) & 0x80)
+	// {
+	// 	if (m_bCheck)
+	// 		return;
+	//
+	// 	m_bCheck = true;
+	//
+	// 	if (m_bFix)
+	// 		m_bFix = false;
+	// 	else
+	// 		m_bFix = true;
+	// }
+	// else
+	// 	m_bCheck = false;
+	//
+	// if (false == m_bFix)
+	// 	return;
 }
 
 void CDynamicCamera::Mouse_Move(void)
