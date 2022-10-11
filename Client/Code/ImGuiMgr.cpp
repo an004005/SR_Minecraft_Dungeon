@@ -939,19 +939,20 @@ void CImGuiMgr::BatchControl(CCamera* pCamera, CTransform*& pTransform, CTerrain
 		{
 			_vec3 vCenter{ 0.f, 0.f, 0.f };
 			D3DXVec3TransformCoord(&vCenter, &vCenter, &pMap->m_vecLand[iCurCube].matWorld);
+			vCenter.y += 1.f;
 
 			if (iFactoryNum == 0 && strEnemyFactoryTag.empty() == false)
 			{
 				wstring tmp;
 				tmp.assign(strEnemyFactoryTag.begin(), strEnemyFactoryTag.end());
-				CEnemyFactory::Create<CGameObject>(strEnemyFactoryTag, tmp, pMap->m_vecLand[iCurCube].matWorld);
+				CEnemyFactory::Create<CGameObject>(strEnemyFactoryTag, tmp + L"$" + to_wstring(iObjNumber++), pMap->m_vecLand[iCurCube].matWorld);
 			}
 
 			if (iFactoryNum == 1 && strobjFactoryTag.empty() == false)
 			{
 				wstring tmp;
 				tmp.assign(strobjFactoryTag.begin(), strobjFactoryTag.end());
-				CObjectFactory::Create<CGameObject>(strobjFactoryTag, tmp, pMap->m_vecLand[iCurCube].matWorld);
+				CObjectFactory::Create<CGameObject>(strobjFactoryTag, tmp + L"$" + to_wstring(iObjNumber++), pMap->m_vecLand[iCurCube].matWorld);
 			}
 		}
 	}

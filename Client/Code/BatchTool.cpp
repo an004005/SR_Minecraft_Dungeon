@@ -95,25 +95,33 @@ _int CBatchTool::Update_Scene(const _float& fTimeDelta)
 		{
 			for (const auto& obj : Engine::Get_Layer((LAYERID)i)->Get_MapObject())
 			{
-				if (obj.second->Has_Component(L"Proto_CollisionCom", ID_DYNAMIC))
+				CTransform* pTrans = nullptr;
+				if (obj.second->Has_Component(L"Proto_TransformCom_root", ID_DYNAMIC))
 				{
-					const auto pColl = obj.second->Get_Component<CCollisionCom>(L"Proto_CollisionCom", ID_DYNAMIC);
-					const _vec3 vSubject = vOrigin - pColl->GetCollPos();
-					const _float fB = D3DXVec3Dot(&vRayDir, &vSubject);
-					const _float fC = D3DXVec3Dot(&vSubject, &vSubject) - pColl->GetRadius();
-					if (fB * fB  - fC >= 0.f)
-					{
-						if (obj.second->Has_Component(L"Proto_TransformCom_root", ID_DYNAMIC))
-							m_pTransform = obj.second->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC);
-						else if (obj.second->Has_Component(L"Proto_TransformCom", ID_DYNAMIC))
-							m_pTransform = obj.second->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
-					}
+					pTrans = obj.second->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC);
+				}
+				else if (obj.second->Has_Component(L"Proto_TransformCom", ID_DYNAMIC))
+				{
+					pTrans = obj.second->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+				}
+				if (pTrans == nullptr) continue;
+
+				const _vec3 vSubject = vOrigin - pTrans->m_vInfo[INFO_POS];
+				const _float fB = D3DXVec3Dot(&vRayDir, &vSubject);
+				const _float fC = D3DXVec3Dot(&vSubject, &vSubject) - 0.5f;
+				if (fB * fB  - fC >= 0.f)
+				{
+					m_pTransform = pTrans;
+					goto LoopEnd;
 				}
 			}
 		}
+
+		LoopEnd:
+		int a =3;
 	}
 
-	// 우클릭 선택한 팩토리 태그로 피킹한 위치에 생성
+	// 우클릭 : 선택한 팩토리 태그로 피킹한 위치에 생성
 
 	return 0;
 }
@@ -150,6 +158,8 @@ void CBatchTool::Load(const wstring& wstrPath)
 	DWORD dwByte = 0;
 	DWORD dwStrByte = 0;
 
+	_uint iObjNum = 0;
+
 	size_t mapSize;
 	ReadFile(hFile, &mapSize, sizeof(size_t), &dwByte, nullptr);
 	// enemy
@@ -166,7 +176,7 @@ void CBatchTool::Load(const wstring& wstrPath)
 
 
 		strEnemyTag.assign(tmp.begin(), tmp.end());
-		CEnemyFactory::Create<CGameObject>(strEnemyTag, tmp, matWorld);
+		CEnemyFactory::Create<CGameObject>(strEnemyTag, tmp + L"_" + to_wstring(iObjNum++), matWorld);
 	}
 
 
@@ -184,7 +194,7 @@ void CBatchTool::Load(const wstring& wstrPath)
 
 
 		strEnemyTag.assign(tmp.begin(), tmp.end());
-		CObjectFactory::Create<CGameObject>(strEnemyTag, tmp, matWorld);
+		CObjectFactory::Create<CGameObject>(strEnemyTag, tmp + L"_" + to_wstring(iObjNum++), matWorld);
 	}
 }
 
@@ -207,9 +217,12 @@ void CBatchTool::Save(const wstring& wstrPath)
 	for(auto& e : m_arrLayer[LAYER_ENEMY]->Get_MapObject())
 	{
 		// target part name
-		dwStrByte = (DWORD)e.first.size() * sizeof(_tchar);
+		wstring strFactoryTag = e.first;
+		strFactoryTag = SplitWString(strFactoryTag, '$').front();
+
+		dwStrByte = (DWORD)strFactoryTag.size() * sizeof(_tchar);
 		WriteFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
-		WriteFile(hFile, e.first.c_str(), dwStrByte, &dwByte, nullptr);
+		WriteFile(hFile, strFactoryTag.c_str(), dwStrByte, &dwByte, nullptr);
 
 		_matrix matWorld;
 		if (e.second->Has_Component(L"Proto_TransformCom_root", ID_DYNAMIC))
@@ -225,11 +238,15 @@ void CBatchTool::Save(const wstring& wstrPath)
 
 	for(auto& e : m_arrLayer[LAYER_GAMEOBJ]->Get_MapObject())
 	{
-		if (e.first == L"DynamicCamera") continue;;
+		if (e.first == L"DynamicCamera") continue;
+
+		wstring strFactoryTag = e.first;
+		strFactoryTag = SplitWString(strFactoryTag, '$').front();
+
 		// target part name
-		dwStrByte = (DWORD)e.first.size() * sizeof(_tchar);
+		dwStrByte = (DWORD)strFactoryTag.size() * sizeof(_tchar);
 		WriteFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
-		WriteFile(hFile, e.first.c_str(), dwStrByte, &dwByte, nullptr);
+		WriteFile(hFile, strFactoryTag.c_str(), dwStrByte, &dwByte, nullptr);
 
 		_matrix matWorld;
 		if (e.second->Has_Component(L"Proto_TransformCom_root", ID_DYNAMIC))
@@ -239,4 +256,26 @@ void CBatchTool::Save(const wstring& wstrPath)
 		else _CRASH("Fail to load");
 		WriteFile(hFile, &matWorld, sizeof(_matrix), &dwByte, nullptr);
 	}
+}
+
+std::vector<std::wstring> CBatchTool::SplitWString(std::wstring str, _tchar splitter)
+{
+	std::vector<std::wstring> result;
+	std::wstring current = L"";
+	for (int i = 0; i < str.size(); i++)
+	{
+		if (str[i] == splitter)
+		{
+			if (current != L"")
+			{
+				result.push_back(current);
+				current = L"";
+			}
+			continue;
+		}
+		current += str[i];
+	}
+	if (current.size() != 0)
+		result.push_back(current);
+	return result;
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene.h"
+
 class CBatchTool : public CScene
 {
 private:
@@ -16,6 +17,9 @@ public:
 	static void Load(const wstring& wstrPath);
 	void Save(const wstring& wstrPath);
 
+	static std::vector<std::wstring> SplitWString(std::wstring str, _tchar splitter);
+
+
 private:
 	class CDynamicCamera* m_pCam = nullptr;
 	CTransform* m_pTransform = nullptr;
@@ -23,4 +27,3 @@ private:
 
 	_bool m_bPick = false;
 };
-
