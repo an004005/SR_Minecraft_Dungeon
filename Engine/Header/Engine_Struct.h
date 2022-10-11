@@ -91,6 +91,7 @@ namespace Engine
 		D3DXCOLOR   _colorFade;    // 파티클의 컬러가 시간의 흐름에 따라 퇴색하는 방법
 		_bool       _bIsAlive;	   // 파티클이 생존한 경우 True, 소멸한 경우 False
 		_float		_fSize;
+		_int		_iType;
 	};
 #pragma endregion
 }

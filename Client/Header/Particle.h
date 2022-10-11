@@ -61,7 +61,11 @@ public:
 
 	void Free() override;
 };
-
+enum BaseType
+{
+	SPEEDBOOTS = 0,
+	ITEMDROP	
+};
 class C3DBaseTexture : public CParticleSystem
 {
 public:
@@ -265,7 +269,9 @@ private:
 enum CRACKTYPE
 {
 	GOLEM_SPIT_CRACK = 0,
-	EXE_DECAL
+	EXE_DECAL,
+	LAZER,
+	LOADINGBOX
 };
 
 class CCrack : public CGameObject
@@ -444,6 +450,90 @@ private:
 	_float m_fTime;
 	_float m_fCurTime;
 	_float m_fSpeed;
+};
+
+class CLazer : public CGameObject
+{
+public:
+	explicit CLazer(LPDIRECT3DDEVICE9 pGraphicDev) : CGameObject(pGraphicDev) {}
+	~CLazer() override;
+
+public:
+	virtual HRESULT Ready_Object(_float _size);
+	_int Update_Object(const _float& fTimeDelta) override;
+	void Render_Object() override;
+	void LateUpdate_Object() override;
+	void PreRender_Particle();
+	void PostRender_Particle();
+
+public:
+	static CLazer* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size);
+	CTerrainShader*		m_pBufferCom = nullptr;
+	CTransform*			m_pTransCom = nullptr;
+	CTexture*			m_pTexture = nullptr;
+	void Free() override;
+
+private:
+	_float m_fTime;
+	_float m_fCurTime;
+	_float m_fSpeed;
+	_vec3  m_vVelocity; 
+};
+
+class CGradation_Beam : public CGameObject
+{
+public:
+	explicit CGradation_Beam(LPDIRECT3DDEVICE9 pGraphicDev) : CGameObject(pGraphicDev) {}
+	~CGradation_Beam() override;
+
+public:
+	virtual HRESULT Ready_Object(_float _size);
+	_int Update_Object(const _float& fTimeDelta) override;
+	void Render_Object() override;
+	void LateUpdate_Object() override;
+	void PreRender_Particle();
+	void PostRender_Particle();
+
+public:
+	static CGradation_Beam* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size);
+	CTerrainShader*		m_pBufferCom = nullptr;
+	CTransform*			m_pTransCom = nullptr;
+	CTexture*			m_pTexture = nullptr;
+	void Free() override;
+
+private:
+	_float m_fTime;
+	_float m_fCurTime;
+	_float m_fSpeed;
+	_vec3  m_vVelocity;
+};
+
+class CLazer_Circle : public CGameObject
+{
+public:
+	explicit CLazer_Circle(LPDIRECT3DDEVICE9 pGraphicDev) : CGameObject(pGraphicDev) {}
+	~CLazer_Circle() override;
+
+public:
+	virtual HRESULT Ready_Object(_float _size);
+	_int Update_Object(const _float& fTimeDelta) override;
+	void Render_Object() override;
+	void LateUpdate_Object() override;
+	void PreRender_Particle();
+	void PostRender_Particle();
+
+public:
+	static CLazer_Circle* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size);
+	CRcShader*		m_pBufferCom = nullptr;
+	CTransform*			m_pTransCom = nullptr;
+	CTexture*			m_pTexture = nullptr;
+	void Free() override;
+
+private:
+	_float m_fTime;
+	_float m_fCurTime;
+	_float m_fSpeed;
+	_vec3  m_vVelocity;
 };
 #pragma endregion
 

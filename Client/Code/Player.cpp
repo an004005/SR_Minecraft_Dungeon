@@ -206,6 +206,23 @@ void CPlayer::AttackState()
 		m_iAttackCnt = m_pInventory->CurWeapon(IT_RANGE)->Attack();
 	}
 
+#pragma region Lazer 
+	// CEffectFactory::Create<CLazer>("Lazer_Beam", L"Lazer_Beam");
+	// for (int i = 0; i < 12; i++)
+	// {
+	// 	CEffectFactory::Create<CLazer_Circle>("Lazer_Beam_Circle", L"Lazer_Beam_Circle");
+	// }
+#pragma endregion 
+
+#pragma region Loading Box 
+ 	// CEffectFactory::Create<CCrack>("LoadingBox", L"LoadingBox");
+#pragma endregion
+
+#pragma region Item DropEffect 
+	// CEffectFactory::Create<CGradation_Beam>("Gradation_Beam", L"Gradation_Beam");
+	// Get_GameObject<C3DBaseTexture>(LAYER_EFFECT, L"3D_Base")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 3.f, D3DXCOLOR(1.f, 1.f, 0.f, 0.f), 1, 30.f,1);
+#pragma endregion
+
 #pragma region GolemSmash
 	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_Shpere_L", L"Golem_Melee_Shpere_L");
 	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_Shpere_M", L"Golem_Melee_Shpere_M");
@@ -341,6 +358,8 @@ void CPlayer::StateChange()
 		else WeaponChange(IT_MELEE);
 		return;
 	}
+
+
 }
 
 void CPlayer::UsePotion()

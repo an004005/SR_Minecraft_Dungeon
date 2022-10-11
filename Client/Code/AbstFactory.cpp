@@ -289,6 +289,24 @@ void CEffectFactory::Ready_EffectFactory()
 		return CCrack::Create(s_pGraphicDev, 2.f, EXE_DECAL);
 	} });
 
+	
+	s_mapEffectSpawner.insert({ "Gradation_Beam",[]()
+	{
+		return CGradation_Beam::Create(s_pGraphicDev, 0.5f);
+	} });
+	s_mapEffectSpawner.insert({ "LoadingBox",[]()
+	{
+		return CCrack::Create(s_pGraphicDev, 1.f, LOADINGBOX);
+	} });
+
+	s_mapEffectSpawner.insert({ "Lazer_Beam",[]()
+	{
+		return CLazer::Create(s_pGraphicDev, 1.f);
+	} });
+	s_mapEffectSpawner.insert({ "Lazer_Beam_Circle",[]()
+	{
+		return CLazer_Circle::Create(s_pGraphicDev, 1.f);
+	} });
 	s_mapEffectSpawner.insert({ "HeartParticle",[]()
 	{
 		return CHeartParticle::Create(s_pGraphicDev, 1.f);

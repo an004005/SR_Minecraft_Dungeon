@@ -9,21 +9,16 @@ CTerrainShader::CTerrainShader(LPDIRECT3DDEVICE9 pGraphicDev):CVIBuffer(pGraphic
 
 CTerrainShader::CTerrainShader(const CTerrainShader& rhs) : CVIBuffer(rhs)
 {
-	// m_pVB = rhs.m_pVB;
-	// m_pIB = rhs.m_pIB;
-	// m_pGraphicDev = rhs.m_pGraphicDev;
 	m_pEffect = rhs.m_pEffect;
 	m_pVtxDeclare = rhs.m_pVtxDeclare;
 	// m_pGraphicDev->AddRef();
 	m_pEffect->AddRef();
 	m_pVtxDeclare->AddRef();
-	// m_pVB->AddRef();
-	// m_pIB->AddRef();
 }
 CTerrainShader::~CTerrainShader() = default;
 
 HRESULT CTerrainShader::Ready_Buffer(const wstring& _shaderfile, const _ulong& dwCntX, const _ulong& dwCntZ, const _ulong& dwVtxItv,
-	_vec2 _uv0, _vec2 _uv1, _vec2 _uv2, _vec2 _uv3)
+	_vec2 _uv0, _vec2 _uv1, _vec2 _uv2, _vec2 _uv3, _uint _widthcnt, _uint _heightcnt)
 {
 	DWORD dwShaderFlags = 0;
 #ifdef _DEBUG
@@ -87,14 +82,9 @@ HRESULT CTerrainShader::Ready_Buffer(const wstring& _shaderfile, const _ulong& d
 			dwIndex = i * dwCntX + j;
 
 			pVertex[dwIndex].vPos = { _float(j) * dwVtxItv, 0.f,  _float(i) * dwVtxItv };
-			pVertex[dwIndex].vUV = { _float(j) / (dwCntX - 1) * 36.f, _float(i) / (dwCntZ - 1)* 36.f};
+			pVertex[dwIndex].vUV = { _float(j) / (dwCntX - 1) * _widthcnt, _float(i) / (dwCntZ - 1)* _heightcnt };
 		}
 	}
-
-	// pVertex[0] = { _vec3(-1.f, 1.f, 0.f), _uv0 };
-	// pVertex[1] = { _vec3(1.f, 1.f, 0.f), _uv1 };
-	// pVertex[2] = { _vec3(1.f, -1.f, 0.f), _uv2 };
-	// pVertex[3] = { _vec3(-1.f, -1.f, 0.f), _uv3 };
 
 	m_pVB->Unlock();
 
@@ -126,19 +116,7 @@ HRESULT CTerrainShader::Ready_Buffer(const wstring& _shaderfile, const _ulong& d
 	}
 
 
-	// 오른쪽 위
-	// pIndex[0]._0 = 0;
-	// pIndex[0]._1 = 1;
-	// pIndex[0]._2 = 2;
-	//
-	// // 왼쪽 아래
-	// pIndex[1]._0 = 0;
-	// pIndex[1]._1 = 2;
-	// pIndex[1]._2 = 3;
-
 	m_pIB->Unlock();
-
-	//LoadTexture(L"T_ElectricArcs.png");
 
 	return S_OK;
 }
@@ -186,23 +164,16 @@ void CTerrainShader::Render_Buffer()
 	//~Matrix
 	m_pEffect->SetTexture("DiffuseMap_Tex", m_pTexture);
 
-	// m_pEffect->SetFloat("gTime", CGameUtilMgr::s_fTimeDelta);
 
 
-	// static float timeSpeed = 1.f;
 	m_fTime += CGameUtilMgr::s_fTimeDelta * 1;
 	m_pEffect->SetFloat("gTime", m_fTime);
 	// CGameUtilMgr::s_fTimeDelta
-	m_pEffect->SetFloat("gSpeed", 1.64f);
-	m_pEffect->SetFloat("gWaveHeight", 0.5f);
-	m_pEffect->SetFloat("gWaveFrequency", 0.5f);
-	m_pEffect->SetFloat("gUVSpeed", 0.1f);
-	// m_pEffect->SetFloat("gTime", tick / 10000.f);
-	// // CGameUtilMgr::s_fTimeDelta
-	// m_pEffect->SetFloat("gSpeed", 2.f);
-	// m_pEffect->SetFloat("gWaveHeight", 0.8f);
-	// m_pEffect->SetFloat("gWaveFrequency", 3.f);
-	// m_pEffect->SetFloat("gUVSpeed", 1.f);
+	m_pEffect->SetFloat("gSpeed", m_fSpeed);
+	m_pEffect->SetFloat("gWaveHeight", m_fWaveHeight);
+	m_pEffect->SetFloat("gWaveFrequency", m_fWaveFreq);
+	m_pEffect->SetFloat("gUVSpeed", m_fUVSpeed);
+
 	
 
 	m_pGraphicDev->SetVertexDeclaration(m_pVtxDeclare);
@@ -218,7 +189,6 @@ void CTerrainShader::Render_Buffer()
 			{
 				m_pGraphicDev->SetIndices(m_pIB);
 				m_pGraphicDev->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, m_dwVtxCnt, 0, m_dwTriCnt);
-				//m_pEffect->CommitChanges();
 
 			}
 			m_pEffect->EndPass();
@@ -232,11 +202,11 @@ void CTerrainShader::Render_Buffer()
 }
 
 CTerrainShader* CTerrainShader::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& _shaderfile, const _ulong& dwCntX, const _ulong& dwCntZ, const _ulong& dwVtxItv,
-	_vec2 _uv0, _vec2 _uv1, _vec2 _uv2, _vec2 _uv3)
+	_vec2 _uv0, _vec2 _uv1, _vec2 _uv2, _vec2 _uv3, _uint _widthcnt, _uint _heightcnt)
 {
 	CTerrainShader*	pInstance = new CTerrainShader(pGraphicDev);
 
-	if (FAILED(pInstance->Ready_Buffer(_shaderfile, dwCntX, dwCntZ, dwVtxItv, _uv0, _uv1, _uv2, _uv3)))
+	if (FAILED(pInstance->Ready_Buffer(_shaderfile, dwCntX, dwCntZ, dwVtxItv, _uv0, _uv1, _uv2, _uv3, _widthcnt, _heightcnt)))
 	{
 		Safe_Release(pInstance);
 		return nullptr;
