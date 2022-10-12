@@ -41,6 +41,7 @@
 #include "FireworksArrow.h"
 #include "CameraTool.h"
 #include "BatchTool.h"
+#include "InventoryUI.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -450,7 +451,28 @@ void CUIFactory::Ready_UIFactory()
 	 {
 	 	return CCountUI::Create(s_pGraphicDev, CNT_EMERALD);
 	 } });
+
+
+
+
+
+
+
+	 
+	 /*--------------------------
+	 아래에 생성, 순서 변경 금지!!
+	 ----------------------------*/
+	 s_mapUISpawner.insert({ "InventoryUI", [](_uint iTexNum)
+	 {
+		 return CInventoryUI::Create(s_pGraphicDev, CNT_EMERALD);
+	 } });
+	 s_mapUISpawner.insert({ "ItemSpaceUI", [](_uint iTexNum)
+	 {
+		 return CItemSpaceUI::Create(s_pGraphicDev, CNT_EMERALD);
+	 } });
+	
 }
+
 
 void CSceneFactory::Ready_SceneFactory()
 {

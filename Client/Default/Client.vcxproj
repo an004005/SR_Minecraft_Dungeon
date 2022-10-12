@@ -169,6 +169,7 @@
     <ClInclude Include="..\Header\FireworksArrow.h" />
     <ClInclude Include="..\Header\CamAnimation.h" />
     <ClInclude Include="..\Header\CameraTool.h" />
+    <ClInclude Include="..\Header\InventoryUI.h" />
     <ClInclude Include="..\Header\Posion.h" />
     <ClInclude Include="..\Header\AnimationTool.h" />
     <ClInclude Include="..\Header\Apple.h" />
@@ -257,6 +258,7 @@
     <ClCompile Include="..\Code\FireworksArrow.cpp" />
     <ClCompile Include="..\Code\CamAnimation.cpp" />
     <ClCompile Include="..\Code\CameraTool.cpp" />
+    <ClCompile Include="..\Code\InventoryUI.cpp" />
     <ClCompile Include="..\Code\Posion.cpp" />
     <ClCompile Include="..\Code\AnimationTool.cpp" />
     <ClCompile Include="..\Code\Apple.cpp" />

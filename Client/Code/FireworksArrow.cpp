@@ -15,7 +15,7 @@ CFireworksArrow::~CFireworksArrow()
 HRESULT CFireworksArrow::Ready_Object()
 {
 	
-
+	m_iUItexNum = 13;
 	return S_OK;
 }
 

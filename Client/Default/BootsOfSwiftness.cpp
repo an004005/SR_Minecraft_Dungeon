@@ -16,7 +16,7 @@ CBootsOfSwiftness::~CBootsOfSwiftness()
 
 HRESULT CBootsOfSwiftness::Ready_Object()
 {
-	
+	m_iUItexNum = 11;
 	return S_OK;
 }
 

@@ -35,7 +35,7 @@ HRESULT CGlaive::Ready_Object()
 	m_arrAnim[ANIM_LEGACY1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/shock_powder.anim");
 
 	m_eItemType = IT_MELEE;
-
+	m_iUItexNum = 9;
 
 	return S_OK;
 }

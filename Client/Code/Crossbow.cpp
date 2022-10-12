@@ -31,7 +31,7 @@ HRESULT CCrossbow::Ready_Object()
 	m_arrAnim[ANIM_RANGE_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/crossbow_attack_start.anim");
 
 	m_eItemType = IT_RANGE;
-
+	m_iUItexNum = 8;
 	return S_OK;
 }
 

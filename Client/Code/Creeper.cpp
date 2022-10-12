@@ -33,8 +33,7 @@ HRESULT CCreeper::Ready_Object()
 
 	m_pStat->SetMaxHP(100);
 
-	CController* pController = Add_Component<CCreeperController>(L"Proto_CreeperController", L"Proto_CreeperController",
-	                                                             ID_DYNAMIC);
+	CController* pController = Add_Component<CCreeperController>(L"Proto_CreeperController", L"Proto_CreeperController", ID_DYNAMIC);
 	pController->SetOwner(this);
 
 	return S_OK;

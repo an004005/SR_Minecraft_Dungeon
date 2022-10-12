@@ -61,6 +61,11 @@ void CRenderer::RenderUI(LPDIRECT3DDEVICE9& pGraphicDev)
 	pGraphicDev->GetTransform(D3DTS_VIEW, &OldViewMatrix);
 	pGraphicDev->GetTransform(D3DTS_PROJECTION, &OldProjMatrix);
 
+	m_RenderGroup[RENDER_UI].sort([](CGameObject* a, CGameObject* b)
+	{
+		return a->m_iRenderPriority > b->m_iRenderPriority;
+	});
+	
 	for (auto& iter : m_RenderGroup[RENDER_UI])
 	{
 		iter->Render_Object();

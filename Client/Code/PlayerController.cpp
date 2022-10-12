@@ -6,7 +6,8 @@
 #include "EquipItem.h"
 #include "ConsumeItem.h"
 #include "Dynamite.h"
-
+#include "InventoryUI.h"
+#include "AbstFactory.h"
 CPlayerController::CPlayerController() : CController()
 {
 }
@@ -71,9 +72,12 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 		//박스 열기 , 폭탄 줍기
 		pickGameObj(pPlayer, vTargetPos);
 		//아이템 먹기
-		putItem(pPlayer, vTargetPos);
-	
-		
+		putItem(pPlayer, vTargetPos);		
+	}
+
+	if (DIKeyUp(DIK_I))
+	{
+		pPlayer->GetInventory()->OpenInventory();
 	}
 
 	if (false == CGameUtilMgr::Vec3Cmp(m_vPressDir, m_vPrevPressDir)) // 이동 입력 없으면 방향 계산 안하기

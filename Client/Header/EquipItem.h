@@ -42,20 +42,21 @@ public:
 	//현제 플레이어 한명일때만 가정해서 구현. 서버되면 수정
 	virtual _int Attack() { return 0; }
 	virtual void Use() { m_bUse = true; }
-
+	
 public:
 	const array<CubeAnimFrame, ANIM_END>& SetarrAnim(){ return m_arrAnim; }
 	ITEMTYPE GetItemType() { return m_eItemType; }
+	_int GetUITexNum() { return m_iUItexNum; }
 
 protected:
 	Engine::CTexture*	m_pTextureCom = nullptr;
 	Engine::CVoxelTex*	m_pBufferCom = nullptr;
 	Engine::CTransform*	m_pTransCom = nullptr;
-	
+
 	array<CubeAnimFrame, ANIM_END> m_arrAnim{};
 	_uint m_iAttackCnt; // 콤보 번호
 	_bool m_bUse;
 	ITEMTYPE	m_eItemType;
-	
+	_uint m_iUItexNum;
 };
 
