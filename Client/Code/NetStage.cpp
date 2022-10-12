@@ -24,7 +24,6 @@ HRESULT CNetStage::Ready_Scene()
 	if (FAILED(Engine::CScene::Ready_Scene()))
 		return E_FAIL;
 
-
 	CGameObject*		pGameObject = nullptr;
 	CEnvFactory::Create<CStaticCamera>("StaticCamera", L"StaticCamera");
 	CEnvFactory::Create<CTerrainWater>("WaterTerrain", L"WaterTerrain");
@@ -36,7 +35,7 @@ HRESULT CNetStage::Ready_Scene()
 
 
 	_matrix matWorld;
-	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 1.f, 0.f ,3.f });
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 0.f, 0.f ,0.f });
 	CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld);
 
 	CEffectFactory::Create<C3DBaseTexture>("3D_Base", L"3D_Base");
@@ -58,6 +57,9 @@ HRESULT CNetStage::Ready_Scene()
 	CUIFactory::Create<CCountUI>("ArrowUI", L"ArrowUI", -1, WINCX/2 + 190, WINCY - 30, 50, 50);
 	CUIFactory::Create<CCountUI>("EmeraldUI", L"EmeraldUI", -1, WINCX/2 + 250, WINCY - 30, 20, 30);
 
+
+
+	CClientServiceMgr::GetInstance()->ReadyClientService();
 
 	return S_OK;
 }
@@ -93,5 +95,6 @@ CNetStage* CNetStage::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 
 void CNetStage::Free()
 {
+	CClientServiceMgr::DestroyInstance();
 	CScene::Free();
 }

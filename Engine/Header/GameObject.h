@@ -51,6 +51,8 @@ public:
 		return Find_Component(pComponentTag, eID) != nullptr;
 	}
 
+	_bool IsRemove() const { return m_bRemote; }
+
 
 public:
 	virtual		HRESULT		Ready_Object(void);
@@ -66,6 +68,7 @@ protected:
 	LPDIRECT3DDEVICE9					m_pGraphicDev;
 	map<wstring, CComponent*>		m_mapComponent[ID_END];
 
+	_bool m_bRemote = false;
 
 public:
 	virtual void	Free(void);

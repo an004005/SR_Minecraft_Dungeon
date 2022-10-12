@@ -2,6 +2,8 @@
 #include "Base.h"
 #include "Session.h"
 
+extern _bool g_bOnline;
+
 class CClientServiceMgr : public CBase
 {
 	DECLARE_SINGLETON(CClientServiceMgr)

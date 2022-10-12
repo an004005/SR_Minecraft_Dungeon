@@ -150,7 +150,7 @@ _int CTerrainWater::Update_Object(const _float& fTimeDelta)
 	// m_pTransCom->m_vScale *= 4.f;
 	// m_pTransCom->m_vInfo[INFO_POS] = _vec3(- 100.f, - 10.f, - 100.f);
 
-	IM_LOG("%f, %f, %f", m_pTransCom->m_vInfo[INFO_POS].x, m_pTransCom->m_vInfo[INFO_POS].z, m_pTransCom->m_vScale);
+	// IM_LOG("%f, %f, %f", m_pTransCom->m_vInfo[INFO_POS].x, m_pTransCom->m_vInfo[INFO_POS].z, m_pTransCom->m_vScale);
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
 

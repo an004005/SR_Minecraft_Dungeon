@@ -6,6 +6,8 @@
 
 IMPLEMENT_SINGLETON(CClientServiceMgr)
 
+_bool g_bOnline = false;
+
 CClientServiceMgr::CClientServiceMgr()
 {
 }
@@ -18,6 +20,7 @@ CClientServiceMgr::~CClientServiceMgr()
 
 HRESULT CClientServiceMgr::ReadyClientService()
 {
+	g_bOnline = true;
 	ServerPacketHandler::Init();
 	this_thread::sleep_for(1s);
 
@@ -28,7 +31,7 @@ HRESULT CClientServiceMgr::ReadyClientService()
 		1);
 	ASSERT_CRASH(_service->Start());
 
-	for (int32 i = 0; i < 2; i++)
+	for (int32 i = 0; i < 1; i++)
 	{
 		GThreadManager->Launch([this]()
 			{
@@ -53,6 +56,7 @@ void CClientServiceMgr::Broadcast(const SendBufferRef& sendBuffer) const
 void CClientServiceMgr::Free()
 {
 	m_bStop = true;
+	g_bOnline = false;
 	GThreadManager->Join();
 }
 

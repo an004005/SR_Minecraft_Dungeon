@@ -20,7 +20,6 @@ void GameSession::OnDisconnected()
 	}
 
 	_currentPlayer = nullptr;
-	_players.clear();
 }
 
 void GameSession::OnRecvPacket(BYTE* buffer, int32 len)

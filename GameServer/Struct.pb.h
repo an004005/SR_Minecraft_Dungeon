@@ -46,16 +46,24 @@ struct TableStruct_Struct_2eproto {
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Struct_2eproto;
 namespace Protocol {
+class Matrix;
+struct MatrixDefaultTypeInternal;
+extern MatrixDefaultTypeInternal _Matrix_default_instance_;
 class Player;
 struct PlayerDefaultTypeInternal;
 extern PlayerDefaultTypeInternal _Player_default_instance_;
 class Vec3;
 struct Vec3DefaultTypeInternal;
 extern Vec3DefaultTypeInternal _Vec3_default_instance_;
+class Vec4;
+struct Vec4DefaultTypeInternal;
+extern Vec4DefaultTypeInternal _Vec4_default_instance_;
 }  // namespace Protocol
 PROTOBUF_NAMESPACE_OPEN
+template<> ::Protocol::Matrix* Arena::CreateMaybeMessage<::Protocol::Matrix>(Arena*);
 template<> ::Protocol::Player* Arena::CreateMaybeMessage<::Protocol::Player>(Arena*);
 template<> ::Protocol::Vec3* Arena::CreateMaybeMessage<::Protocol::Vec3>(Arena*);
+template<> ::Protocol::Vec4* Arena::CreateMaybeMessage<::Protocol::Vec4>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace Protocol {
 
@@ -184,7 +192,6 @@ class Player final :
   enum : int {
     kNameFieldNumber = 2,
     kIdFieldNumber = 1,
-    kPlayerTypeFieldNumber = 3,
   };
   // string name = 2;
   void clear_name();
@@ -209,15 +216,6 @@ class Player final :
   void _internal_set_id(uint64_t value);
   public:
 
-  // .Protocol.PlayerType playerType = 3;
-  void clear_playertype();
-  ::Protocol::PlayerType playertype() const;
-  void set_playertype(::Protocol::PlayerType value);
-  private:
-  ::Protocol::PlayerType _internal_playertype() const;
-  void _internal_set_playertype(::Protocol::PlayerType value);
-  public:
-
   // @@protoc_insertion_point(class_scope:Protocol.Player)
  private:
   class _Internal;
@@ -228,7 +226,6 @@ class Player final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
     uint64_t id_;
-    int playertype_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -404,6 +401,404 @@ class Vec3 final :
   union { Impl_ _impl_; };
   friend struct ::TableStruct_Struct_2eproto;
 };
+// -------------------------------------------------------------------
+
+class Vec4 final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.Vec4) */ {
+ public:
+  inline Vec4() : Vec4(nullptr) {}
+  ~Vec4() override;
+  explicit PROTOBUF_CONSTEXPR Vec4(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  Vec4(const Vec4& from);
+  Vec4(Vec4&& from) noexcept
+    : Vec4() {
+    *this = ::std::move(from);
+  }
+
+  inline Vec4& operator=(const Vec4& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline Vec4& operator=(Vec4&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const Vec4& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const Vec4* internal_default_instance() {
+    return reinterpret_cast<const Vec4*>(
+               &_Vec4_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    2;
+
+  friend void swap(Vec4& a, Vec4& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(Vec4* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(Vec4* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  Vec4* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<Vec4>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const Vec4& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const Vec4& from) {
+    Vec4::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Vec4* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.Vec4";
+  }
+  protected:
+  explicit Vec4(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kXFieldNumber = 1,
+    kYFieldNumber = 2,
+    kZFieldNumber = 3,
+    kWFieldNumber = 4,
+  };
+  // float x = 1;
+  void clear_x();
+  float x() const;
+  void set_x(float value);
+  private:
+  float _internal_x() const;
+  void _internal_set_x(float value);
+  public:
+
+  // float y = 2;
+  void clear_y();
+  float y() const;
+  void set_y(float value);
+  private:
+  float _internal_y() const;
+  void _internal_set_y(float value);
+  public:
+
+  // float z = 3;
+  void clear_z();
+  float z() const;
+  void set_z(float value);
+  private:
+  float _internal_z() const;
+  void _internal_set_z(float value);
+  public:
+
+  // float w = 4;
+  void clear_w();
+  float w() const;
+  void set_w(float value);
+  private:
+  float _internal_w() const;
+  void _internal_set_w(float value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.Vec4)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    float x_;
+    float y_;
+    float z_;
+    float w_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Struct_2eproto;
+};
+// -------------------------------------------------------------------
+
+class Matrix final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.Matrix) */ {
+ public:
+  inline Matrix() : Matrix(nullptr) {}
+  ~Matrix() override;
+  explicit PROTOBUF_CONSTEXPR Matrix(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  Matrix(const Matrix& from);
+  Matrix(Matrix&& from) noexcept
+    : Matrix() {
+    *this = ::std::move(from);
+  }
+
+  inline Matrix& operator=(const Matrix& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline Matrix& operator=(Matrix&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const Matrix& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const Matrix* internal_default_instance() {
+    return reinterpret_cast<const Matrix*>(
+               &_Matrix_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    3;
+
+  friend void swap(Matrix& a, Matrix& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(Matrix* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(Matrix* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  Matrix* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<Matrix>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const Matrix& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const Matrix& from) {
+    Matrix::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Matrix* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.Matrix";
+  }
+  protected:
+  explicit Matrix(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kVRightFieldNumber = 1,
+    kVUpFieldNumber = 2,
+    kVLookFieldNumber = 3,
+    kVPosFieldNumber = 4,
+  };
+  // .Protocol.Vec4 vRight = 1;
+  bool has_vright() const;
+  private:
+  bool _internal_has_vright() const;
+  public:
+  void clear_vright();
+  const ::Protocol::Vec4& vright() const;
+  PROTOBUF_NODISCARD ::Protocol::Vec4* release_vright();
+  ::Protocol::Vec4* mutable_vright();
+  void set_allocated_vright(::Protocol::Vec4* vright);
+  private:
+  const ::Protocol::Vec4& _internal_vright() const;
+  ::Protocol::Vec4* _internal_mutable_vright();
+  public:
+  void unsafe_arena_set_allocated_vright(
+      ::Protocol::Vec4* vright);
+  ::Protocol::Vec4* unsafe_arena_release_vright();
+
+  // .Protocol.Vec4 vUp = 2;
+  bool has_vup() const;
+  private:
+  bool _internal_has_vup() const;
+  public:
+  void clear_vup();
+  const ::Protocol::Vec4& vup() const;
+  PROTOBUF_NODISCARD ::Protocol::Vec4* release_vup();
+  ::Protocol::Vec4* mutable_vup();
+  void set_allocated_vup(::Protocol::Vec4* vup);
+  private:
+  const ::Protocol::Vec4& _internal_vup() const;
+  ::Protocol::Vec4* _internal_mutable_vup();
+  public:
+  void unsafe_arena_set_allocated_vup(
+      ::Protocol::Vec4* vup);
+  ::Protocol::Vec4* unsafe_arena_release_vup();
+
+  // .Protocol.Vec4 vLook = 3;
+  bool has_vlook() const;
+  private:
+  bool _internal_has_vlook() const;
+  public:
+  void clear_vlook();
+  const ::Protocol::Vec4& vlook() const;
+  PROTOBUF_NODISCARD ::Protocol::Vec4* release_vlook();
+  ::Protocol::Vec4* mutable_vlook();
+  void set_allocated_vlook(::Protocol::Vec4* vlook);
+  private:
+  const ::Protocol::Vec4& _internal_vlook() const;
+  ::Protocol::Vec4* _internal_mutable_vlook();
+  public:
+  void unsafe_arena_set_allocated_vlook(
+      ::Protocol::Vec4* vlook);
+  ::Protocol::Vec4* unsafe_arena_release_vlook();
+
+  // .Protocol.Vec4 vPos = 4;
+  bool has_vpos() const;
+  private:
+  bool _internal_has_vpos() const;
+  public:
+  void clear_vpos();
+  const ::Protocol::Vec4& vpos() const;
+  PROTOBUF_NODISCARD ::Protocol::Vec4* release_vpos();
+  ::Protocol::Vec4* mutable_vpos();
+  void set_allocated_vpos(::Protocol::Vec4* vpos);
+  private:
+  const ::Protocol::Vec4& _internal_vpos() const;
+  ::Protocol::Vec4* _internal_mutable_vpos();
+  public:
+  void unsafe_arena_set_allocated_vpos(
+      ::Protocol::Vec4* vpos);
+  ::Protocol::Vec4* unsafe_arena_release_vpos();
+
+  // @@protoc_insertion_point(class_scope:Protocol.Matrix)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::Protocol::Vec4* vright_;
+    ::Protocol::Vec4* vup_;
+    ::Protocol::Vec4* vlook_;
+    ::Protocol::Vec4* vpos_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Struct_2eproto;
+};
 // ===================================================================
 
 
@@ -485,26 +880,6 @@ inline void Player::set_allocated_name(std::string* name) {
   // @@protoc_insertion_point(field_set_allocated:Protocol.Player.name)
 }
 
-// .Protocol.PlayerType playerType = 3;
-inline void Player::clear_playertype() {
-  _impl_.playertype_ = 0;
-}
-inline ::Protocol::PlayerType Player::_internal_playertype() const {
-  return static_cast< ::Protocol::PlayerType >(_impl_.playertype_);
-}
-inline ::Protocol::PlayerType Player::playertype() const {
-  // @@protoc_insertion_point(field_get:Protocol.Player.playerType)
-  return _internal_playertype();
-}
-inline void Player::_internal_set_playertype(::Protocol::PlayerType value) {
-  
-  _impl_.playertype_ = value;
-}
-inline void Player::set_playertype(::Protocol::PlayerType value) {
-  _internal_set_playertype(value);
-  // @@protoc_insertion_point(field_set:Protocol.Player.playerType)
-}
-
 // -------------------------------------------------------------------
 
 // Vec3
@@ -569,9 +944,461 @@ inline void Vec3::set_z(float value) {
   // @@protoc_insertion_point(field_set:Protocol.Vec3.z)
 }
 
+// -------------------------------------------------------------------
+
+// Vec4
+
+// float x = 1;
+inline void Vec4::clear_x() {
+  _impl_.x_ = 0;
+}
+inline float Vec4::_internal_x() const {
+  return _impl_.x_;
+}
+inline float Vec4::x() const {
+  // @@protoc_insertion_point(field_get:Protocol.Vec4.x)
+  return _internal_x();
+}
+inline void Vec4::_internal_set_x(float value) {
+  
+  _impl_.x_ = value;
+}
+inline void Vec4::set_x(float value) {
+  _internal_set_x(value);
+  // @@protoc_insertion_point(field_set:Protocol.Vec4.x)
+}
+
+// float y = 2;
+inline void Vec4::clear_y() {
+  _impl_.y_ = 0;
+}
+inline float Vec4::_internal_y() const {
+  return _impl_.y_;
+}
+inline float Vec4::y() const {
+  // @@protoc_insertion_point(field_get:Protocol.Vec4.y)
+  return _internal_y();
+}
+inline void Vec4::_internal_set_y(float value) {
+  
+  _impl_.y_ = value;
+}
+inline void Vec4::set_y(float value) {
+  _internal_set_y(value);
+  // @@protoc_insertion_point(field_set:Protocol.Vec4.y)
+}
+
+// float z = 3;
+inline void Vec4::clear_z() {
+  _impl_.z_ = 0;
+}
+inline float Vec4::_internal_z() const {
+  return _impl_.z_;
+}
+inline float Vec4::z() const {
+  // @@protoc_insertion_point(field_get:Protocol.Vec4.z)
+  return _internal_z();
+}
+inline void Vec4::_internal_set_z(float value) {
+  
+  _impl_.z_ = value;
+}
+inline void Vec4::set_z(float value) {
+  _internal_set_z(value);
+  // @@protoc_insertion_point(field_set:Protocol.Vec4.z)
+}
+
+// float w = 4;
+inline void Vec4::clear_w() {
+  _impl_.w_ = 0;
+}
+inline float Vec4::_internal_w() const {
+  return _impl_.w_;
+}
+inline float Vec4::w() const {
+  // @@protoc_insertion_point(field_get:Protocol.Vec4.w)
+  return _internal_w();
+}
+inline void Vec4::_internal_set_w(float value) {
+  
+  _impl_.w_ = value;
+}
+inline void Vec4::set_w(float value) {
+  _internal_set_w(value);
+  // @@protoc_insertion_point(field_set:Protocol.Vec4.w)
+}
+
+// -------------------------------------------------------------------
+
+// Matrix
+
+// .Protocol.Vec4 vRight = 1;
+inline bool Matrix::_internal_has_vright() const {
+  return this != internal_default_instance() && _impl_.vright_ != nullptr;
+}
+inline bool Matrix::has_vright() const {
+  return _internal_has_vright();
+}
+inline void Matrix::clear_vright() {
+  if (GetArenaForAllocation() == nullptr && _impl_.vright_ != nullptr) {
+    delete _impl_.vright_;
+  }
+  _impl_.vright_ = nullptr;
+}
+inline const ::Protocol::Vec4& Matrix::_internal_vright() const {
+  const ::Protocol::Vec4* p = _impl_.vright_;
+  return p != nullptr ? *p : reinterpret_cast<const ::Protocol::Vec4&>(
+      ::Protocol::_Vec4_default_instance_);
+}
+inline const ::Protocol::Vec4& Matrix::vright() const {
+  // @@protoc_insertion_point(field_get:Protocol.Matrix.vRight)
+  return _internal_vright();
+}
+inline void Matrix::unsafe_arena_set_allocated_vright(
+    ::Protocol::Vec4* vright) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.vright_);
+  }
+  _impl_.vright_ = vright;
+  if (vright) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.Matrix.vRight)
+}
+inline ::Protocol::Vec4* Matrix::release_vright() {
+  
+  ::Protocol::Vec4* temp = _impl_.vright_;
+  _impl_.vright_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::Protocol::Vec4* Matrix::unsafe_arena_release_vright() {
+  // @@protoc_insertion_point(field_release:Protocol.Matrix.vRight)
+  
+  ::Protocol::Vec4* temp = _impl_.vright_;
+  _impl_.vright_ = nullptr;
+  return temp;
+}
+inline ::Protocol::Vec4* Matrix::_internal_mutable_vright() {
+  
+  if (_impl_.vright_ == nullptr) {
+    auto* p = CreateMaybeMessage<::Protocol::Vec4>(GetArenaForAllocation());
+    _impl_.vright_ = p;
+  }
+  return _impl_.vright_;
+}
+inline ::Protocol::Vec4* Matrix::mutable_vright() {
+  ::Protocol::Vec4* _msg = _internal_mutable_vright();
+  // @@protoc_insertion_point(field_mutable:Protocol.Matrix.vRight)
+  return _msg;
+}
+inline void Matrix::set_allocated_vright(::Protocol::Vec4* vright) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.vright_;
+  }
+  if (vright) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(vright);
+    if (message_arena != submessage_arena) {
+      vright = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, vright, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.vright_ = vright;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.Matrix.vRight)
+}
+
+// .Protocol.Vec4 vUp = 2;
+inline bool Matrix::_internal_has_vup() const {
+  return this != internal_default_instance() && _impl_.vup_ != nullptr;
+}
+inline bool Matrix::has_vup() const {
+  return _internal_has_vup();
+}
+inline void Matrix::clear_vup() {
+  if (GetArenaForAllocation() == nullptr && _impl_.vup_ != nullptr) {
+    delete _impl_.vup_;
+  }
+  _impl_.vup_ = nullptr;
+}
+inline const ::Protocol::Vec4& Matrix::_internal_vup() const {
+  const ::Protocol::Vec4* p = _impl_.vup_;
+  return p != nullptr ? *p : reinterpret_cast<const ::Protocol::Vec4&>(
+      ::Protocol::_Vec4_default_instance_);
+}
+inline const ::Protocol::Vec4& Matrix::vup() const {
+  // @@protoc_insertion_point(field_get:Protocol.Matrix.vUp)
+  return _internal_vup();
+}
+inline void Matrix::unsafe_arena_set_allocated_vup(
+    ::Protocol::Vec4* vup) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.vup_);
+  }
+  _impl_.vup_ = vup;
+  if (vup) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.Matrix.vUp)
+}
+inline ::Protocol::Vec4* Matrix::release_vup() {
+  
+  ::Protocol::Vec4* temp = _impl_.vup_;
+  _impl_.vup_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::Protocol::Vec4* Matrix::unsafe_arena_release_vup() {
+  // @@protoc_insertion_point(field_release:Protocol.Matrix.vUp)
+  
+  ::Protocol::Vec4* temp = _impl_.vup_;
+  _impl_.vup_ = nullptr;
+  return temp;
+}
+inline ::Protocol::Vec4* Matrix::_internal_mutable_vup() {
+  
+  if (_impl_.vup_ == nullptr) {
+    auto* p = CreateMaybeMessage<::Protocol::Vec4>(GetArenaForAllocation());
+    _impl_.vup_ = p;
+  }
+  return _impl_.vup_;
+}
+inline ::Protocol::Vec4* Matrix::mutable_vup() {
+  ::Protocol::Vec4* _msg = _internal_mutable_vup();
+  // @@protoc_insertion_point(field_mutable:Protocol.Matrix.vUp)
+  return _msg;
+}
+inline void Matrix::set_allocated_vup(::Protocol::Vec4* vup) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.vup_;
+  }
+  if (vup) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(vup);
+    if (message_arena != submessage_arena) {
+      vup = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, vup, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.vup_ = vup;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.Matrix.vUp)
+}
+
+// .Protocol.Vec4 vLook = 3;
+inline bool Matrix::_internal_has_vlook() const {
+  return this != internal_default_instance() && _impl_.vlook_ != nullptr;
+}
+inline bool Matrix::has_vlook() const {
+  return _internal_has_vlook();
+}
+inline void Matrix::clear_vlook() {
+  if (GetArenaForAllocation() == nullptr && _impl_.vlook_ != nullptr) {
+    delete _impl_.vlook_;
+  }
+  _impl_.vlook_ = nullptr;
+}
+inline const ::Protocol::Vec4& Matrix::_internal_vlook() const {
+  const ::Protocol::Vec4* p = _impl_.vlook_;
+  return p != nullptr ? *p : reinterpret_cast<const ::Protocol::Vec4&>(
+      ::Protocol::_Vec4_default_instance_);
+}
+inline const ::Protocol::Vec4& Matrix::vlook() const {
+  // @@protoc_insertion_point(field_get:Protocol.Matrix.vLook)
+  return _internal_vlook();
+}
+inline void Matrix::unsafe_arena_set_allocated_vlook(
+    ::Protocol::Vec4* vlook) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.vlook_);
+  }
+  _impl_.vlook_ = vlook;
+  if (vlook) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.Matrix.vLook)
+}
+inline ::Protocol::Vec4* Matrix::release_vlook() {
+  
+  ::Protocol::Vec4* temp = _impl_.vlook_;
+  _impl_.vlook_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::Protocol::Vec4* Matrix::unsafe_arena_release_vlook() {
+  // @@protoc_insertion_point(field_release:Protocol.Matrix.vLook)
+  
+  ::Protocol::Vec4* temp = _impl_.vlook_;
+  _impl_.vlook_ = nullptr;
+  return temp;
+}
+inline ::Protocol::Vec4* Matrix::_internal_mutable_vlook() {
+  
+  if (_impl_.vlook_ == nullptr) {
+    auto* p = CreateMaybeMessage<::Protocol::Vec4>(GetArenaForAllocation());
+    _impl_.vlook_ = p;
+  }
+  return _impl_.vlook_;
+}
+inline ::Protocol::Vec4* Matrix::mutable_vlook() {
+  ::Protocol::Vec4* _msg = _internal_mutable_vlook();
+  // @@protoc_insertion_point(field_mutable:Protocol.Matrix.vLook)
+  return _msg;
+}
+inline void Matrix::set_allocated_vlook(::Protocol::Vec4* vlook) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.vlook_;
+  }
+  if (vlook) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(vlook);
+    if (message_arena != submessage_arena) {
+      vlook = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, vlook, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.vlook_ = vlook;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.Matrix.vLook)
+}
+
+// .Protocol.Vec4 vPos = 4;
+inline bool Matrix::_internal_has_vpos() const {
+  return this != internal_default_instance() && _impl_.vpos_ != nullptr;
+}
+inline bool Matrix::has_vpos() const {
+  return _internal_has_vpos();
+}
+inline void Matrix::clear_vpos() {
+  if (GetArenaForAllocation() == nullptr && _impl_.vpos_ != nullptr) {
+    delete _impl_.vpos_;
+  }
+  _impl_.vpos_ = nullptr;
+}
+inline const ::Protocol::Vec4& Matrix::_internal_vpos() const {
+  const ::Protocol::Vec4* p = _impl_.vpos_;
+  return p != nullptr ? *p : reinterpret_cast<const ::Protocol::Vec4&>(
+      ::Protocol::_Vec4_default_instance_);
+}
+inline const ::Protocol::Vec4& Matrix::vpos() const {
+  // @@protoc_insertion_point(field_get:Protocol.Matrix.vPos)
+  return _internal_vpos();
+}
+inline void Matrix::unsafe_arena_set_allocated_vpos(
+    ::Protocol::Vec4* vpos) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.vpos_);
+  }
+  _impl_.vpos_ = vpos;
+  if (vpos) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.Matrix.vPos)
+}
+inline ::Protocol::Vec4* Matrix::release_vpos() {
+  
+  ::Protocol::Vec4* temp = _impl_.vpos_;
+  _impl_.vpos_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::Protocol::Vec4* Matrix::unsafe_arena_release_vpos() {
+  // @@protoc_insertion_point(field_release:Protocol.Matrix.vPos)
+  
+  ::Protocol::Vec4* temp = _impl_.vpos_;
+  _impl_.vpos_ = nullptr;
+  return temp;
+}
+inline ::Protocol::Vec4* Matrix::_internal_mutable_vpos() {
+  
+  if (_impl_.vpos_ == nullptr) {
+    auto* p = CreateMaybeMessage<::Protocol::Vec4>(GetArenaForAllocation());
+    _impl_.vpos_ = p;
+  }
+  return _impl_.vpos_;
+}
+inline ::Protocol::Vec4* Matrix::mutable_vpos() {
+  ::Protocol::Vec4* _msg = _internal_mutable_vpos();
+  // @@protoc_insertion_point(field_mutable:Protocol.Matrix.vPos)
+  return _msg;
+}
+inline void Matrix::set_allocated_vpos(::Protocol::Vec4* vpos) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.vpos_;
+  }
+  if (vpos) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(vpos);
+    if (message_arena != submessage_arena) {
+      vpos = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, vpos, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.vpos_ = vpos;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.Matrix.vPos)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 

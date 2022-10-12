@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Room.h"
 #include "GameSession.h"
+#include "Service.h"
 
 PacketHandlerFunc GPacketHandler[UINT16_MAX];
 
@@ -21,6 +22,8 @@ bool Handle_C_LOGIN(PacketSessionRef& session, Protocol::C_LOGIN& pkt)
 
 	// TODO : Validation 체크
 
+	Protocol::C_PLAYER_INPUT t;
+
 	Protocol::S_LOGIN loginPkt;
 	loginPkt.set_success(true);
 
@@ -31,68 +34,94 @@ bool Handle_C_LOGIN(PacketSessionRef& session, Protocol::C_LOGIN& pkt)
 	static Atomic<uint64> idGenerator = 1;
 
 	{
-		auto player = loginPkt.add_players();
-		player->set_name(u8"DB에서긁어온이름1");
-		player->set_playertype(Protocol::PLAYER_TYPE_KNIGHT);
-
 		PlayerRef playerRef = MakeShared<Player>();
 		playerRef->playerId = idGenerator++;
-		playerRef->name = player->name();
-		playerRef->type = player->playertype();
 		playerRef->ownerSession = gameSession;
 		
-		gameSession->_players.push_back(playerRef);
-	}
+		gameSession->_currentPlayer = playerRef;
 
-	{
-		auto player = loginPkt.add_players();
-		player->set_name(u8"DB에서긁어온이름2");
-		player->set_playertype(Protocol::PLAYER_TYPE_MAGE);
-
-		PlayerRef playerRef = MakeShared<Player>();
-		playerRef->playerId = idGenerator++;
-		playerRef->name = player->name();
-		playerRef->type = player->playertype();
-		playerRef->ownerSession = gameSession;
-
-		gameSession->_players.push_back(playerRef);
+		loginPkt.set_playerid(idGenerator);
+		loginPkt.set_success(true);
 	}
 
 	auto sendBuffer = ClientPacketHandler::MakeSendBuffer(loginPkt);
 	session->Send(sendBuffer);
-
+	
 	return true;
 }
 
 bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 {
 	GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
+	Protocol::Player playerPkt = pkt.player();
 
-	uint64 index = pkt.playerindex();
-	// TODO : Validation
+	// uint64 index = playerPkt.id();
+	gameSession->_currentPlayer->name = playerPkt.name();
+	gameSession->_currentPlayer->type = pkt.playerskin();
+	std::cout << "Enter Player :  " << playerPkt.id() << " " << playerPkt.name() << endl;
 
-	gameSession->_currentPlayer = gameSession->_players[index]; // READ_ONLY?
-	gameSession->_room = GRoom;
+	Protocol::S_ENTER_GAME enterPkt;
+	enterPkt.set_success(true);
+	enterPkt.mutable_player()->set_id(playerPkt.id());
+	enterPkt.mutable_player()->set_name(playerPkt.name());
+	enterPkt.set_playerskin(pkt.playerskin());
 
-	GRoom->DoAsync(&Room::Enter, gameSession->_currentPlayer);
+	{
+		if (GRoom->_players.size() > 0)
+		{
+			Protocol::S_OTHER_PLAYER otherPkt;
+			for (auto& e : GRoom->_players)
+			{
+				auto repeatedPlayer = otherPkt.add_player();
+				repeatedPlayer->set_id(e.second->playerId);
+				repeatedPlayer->set_name(e.second->name);
+				otherPkt.add_playerskin(e.second->type);
+			}
 
-	Protocol::S_ENTER_GAME enterGamePkt;
-	enterGamePkt.set_success(true);
-	auto sendBuffer = ClientPacketHandler::MakeSendBuffer(enterGamePkt);
-	gameSession->_currentPlayer->ownerSession->Send(sendBuffer);
+			auto sendBuffer = ClientPacketHandler::MakeSendBuffer(otherPkt);
+			gameSession->Send(sendBuffer);	
+		}
+
+	}
+
+	GRoom->Enter(gameSession->_currentPlayer);
+
+	{
+		auto sendBuffer = ClientPacketHandler::MakeSendBuffer(enterPkt);
+		GRoom->DoAsync(&Room::Broadcast, sendBuffer);
+	}
 
 	return true;
 }
 
-bool Handle_C_CHAT(PacketSessionRef& session, Protocol::C_CHAT& pkt)
+bool Handle_C_PLAYER_INPUT(PacketSessionRef& session, Protocol::C_PLAYER_INPUT& pkt)
 {
-	std::cout << pkt.msg() << endl;
+	Protocol::S_PLAYER_INPUT inputPkt;
+	inputPkt.set_success(true);
+	inputPkt.mutable_player()->set_id(pkt.player().id());
+	inputPkt.mutable_player()->set_name(pkt.player().name());
+	inputPkt.set_inputbit(pkt.inputbit());
+	cout << pkt.player().id() << " : " << pkt.inputbit() << endl;
 
-	Protocol::S_CHAT chatPkt;
-	chatPkt.set_msg(pkt.msg());
-	auto sendBuffer = ClientPacketHandler::MakeSendBuffer(chatPkt);
-
-	GRoom->DoAsync(&Room::Broadcast, sendBuffer);
+	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(inputPkt));
 
 	return true;
 }
+
+bool Handle_C_PLAYER_WORLD(PacketSessionRef& session, Protocol::C_PLAYER_WORLD& pkt)
+{
+	return false;
+}
+
+// bool Handle_C_CHAT(PacketSessionRef& session, Protocol::C_CHAT& pkt)
+// {
+// 	// std::cout << pkt.msg() << endl;
+// 	//
+// 	// Protocol::S_CHAT chatPkt;
+// 	// chatPkt.set_msg(pkt.msg());
+// 	// auto sendBuffer = ClientPacketHandler::MakeSendBuffer(chatPkt);
+// 	//
+// 	// GRoom->DoAsync(&Room::Broadcast, sendBuffer);
+//
+// 	return true;
+// }

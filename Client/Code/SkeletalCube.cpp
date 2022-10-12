@@ -1,8 +1,10 @@
 #include "stdafx.h"
 #include "SkeletalCube.h"
 #include "GameUtilMgr.h"
+#include <mutex>
 
 string CSkeletalCube::s_strRoot = "root";
+map<wstring, CubeAnimFrame> CubeAnimFrame::s_mapFrame;
 
 CSkeletalCube::CSkeletalCube(LPDIRECT3DDEVICE9 pGraphicDev): CGameObject(pGraphicDev)
 {
@@ -288,11 +290,14 @@ void CSkeletalCube::StopCurAnimation()
 
 void CSkeletalCube::LoadSkeletal(wstring wstrPath)
 {
-	HANDLE hFile = CreateFile(wstrPath.c_str(), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE hFile = CreateFile(wstrPath.c_str(), GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 	{
+		string tmp;
+		tmp.assign(wstrPath.begin(), wstrPath.end());
 		MSG_BOX("Fail to Load SkeletalCube");
+		IM_LOG(tmp.c_str());
 		return;
 	}
 
@@ -509,7 +514,11 @@ CubeAnimFrame CubeAnimFrame::Load(const wstring& wstrPath)
 {
 	CubeAnimFrame tmp;
 
-	HANDLE hFile = CreateFile(wstrPath.c_str(), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	if (s_mapFrame.find(wstrPath) != s_mapFrame.end())
+		return s_mapFrame.find(wstrPath)->second;
+
+
+	HANDLE hFile = CreateFile(wstrPath.c_str(), GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 	{
@@ -568,6 +577,8 @@ CubeAnimFrame CubeAnimFrame::Load(const wstring& wstrPath)
 	}
 
 	CloseHandle(hFile);
+
+	s_mapFrame.insert({wstrPath, tmp});
 
 	return tmp;
 }

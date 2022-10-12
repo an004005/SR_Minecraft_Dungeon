@@ -6,6 +6,8 @@
 #include "EquipItem.h"
 #include "ConsumeItem.h"
 #include "Dynamite.h"
+#include "Protocol.pb.h"
+#include "ServerPacketHandler.h"
 
 CPlayerController::CPlayerController() : CController()
 {
@@ -63,29 +65,52 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 			m_vPressDir.x += 1.f;
 		}
 	}
-	
+
 	//box open
 	if (DIKeyDown(DIK_F))
 	{
-		_vec3 vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+		_vec3 vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[
+			INFO_POS];
 		//박스 열기 , 폭탄 줍기
 		pickGameObj(pPlayer, vTargetPos);
 		//아이템 먹기
 		putItem(pPlayer, vTargetPos);
-	
-		
 	}
 
 	if (false == CGameUtilMgr::Vec3Cmp(m_vPressDir, m_vPrevPressDir)) // 이동 입력 없으면 방향 계산 안하기
 	{
 		D3DXVec3Normalize(&m_vMoveDir, &m_vPressDir);
-		_float fCamYaw = Engine::Get_Component<Engine::CTransform>(LAYER_ENV, L"StaticCamera", L"Proto_TransformCom", ID_DYNAMIC)->
+		_float fCamYaw = Engine::Get_Component<Engine::CTransform>(LAYER_ENV, L"StaticCamera", L"Proto_TransformCom",
+		                                                           ID_DYNAMIC)->
 		                 m_vAngle.y;
 		_matrix matYaw;
 		D3DXMatrixRotationY(&matYaw, fCamYaw);
 		D3DXVec3TransformNormal(&m_vMoveDir, &m_vMoveDir, &matYaw);
 		pPlayer->SetMoveDir(m_vMoveDir.x, m_vMoveDir.z);
+
+
+		if (g_bOnline)
+		{
+			m_iPlayerInputMask = 0;
+			if (m_vPressDir.x > 0.f)
+				m_iPlayerInputMask |= PLAYER_D;
+			else if (m_vPressDir.x < 0.f)
+				m_iPlayerInputMask |= PLAYER_A;
+
+			if (m_vPressDir.z > 0.f)
+				m_iPlayerInputMask |= PLAYER_W;
+			else if (m_vPressDir.z < 0.f)
+				m_iPlayerInputMask |= PLAYER_S;
+
+			Protocol::C_PLAYER_INPUT playerInput;
+			playerInput.set_inputbit(m_iPlayerInputMask);
+			playerInput.mutable_player()->set_id(CClientServiceMgr::GetInstance()->m_iPlayerID);
+			playerInput.mutable_player()->set_name("Player_test");
+
+			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(playerInput));
+		}
 	}
+
 
 	m_vPrevPressDir = m_vPressDir;
 
@@ -138,6 +163,7 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 		pPlayer->UsePotion();
 	}
 
+
 	return 0;
 }
 
@@ -151,7 +177,7 @@ CPlayerController* CPlayerController::Create()
 	return new CPlayerController;
 }
 
-void CPlayerController::putItem(CPlayer* pPlayer, const  _vec3& vTargetPos)
+void CPlayerController::putItem(CPlayer* pPlayer, const _vec3& vTargetPos)
 {
 	_float fEquipItemDist = 3.f;
 	_float fConsumItemDist = 3.f;
@@ -164,7 +190,8 @@ void CPlayerController::putItem(CPlayer* pPlayer, const  _vec3& vTargetPos)
 		{
 			if (pItem->GetItemState() == IS_DROP)
 			{
-				_vec3 vDiff = vTargetPos - pItem->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
+				_vec3 vDiff = vTargetPos - pItem->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->
+				                                  m_vInfo[INFO_POS];
 				_float fDist = D3DXVec3Length(&vDiff);
 
 				if (fDist < fEquipItemDist)
@@ -173,12 +200,12 @@ void CPlayerController::putItem(CPlayer* pPlayer, const  _vec3& vTargetPos)
 					fEquipItemDist = fDist;
 				}
 			}
-			
 		}
 
 		if (CConsumeItem* pItem = dynamic_cast<CConsumeItem*>(ele.second))
 		{
-			_vec3 vDiff = vTargetPos - pItem->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
+			_vec3 vDiff = vTargetPos - pItem->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->
+			                                  m_vInfo[INFO_POS];
 			_float fDist = D3DXVec3Length(&vDiff);
 
 			if (pItem->GetItemState() == IS_DROP)
@@ -195,22 +222,24 @@ void CPlayerController::putItem(CPlayer* pPlayer, const  _vec3& vTargetPos)
 	if (!pEquipItem && !pConsumItem)
 		return;
 
-	fEquipItemDist >= fConsumItemDist ? pPlayer->GetInventory()->Put(pConsumItem) : pPlayer->GetInventory()->Put(pEquipItem);
-
+	fEquipItemDist >= fConsumItemDist
+		? pPlayer->GetInventory()->Put(pConsumItem)
+		: pPlayer->GetInventory()->Put(pEquipItem);
 }
 
-void CPlayerController::pickGameObj(CPlayer* pPlayer, const  _vec3& vTargetPos)
+void CPlayerController::pickGameObj(CPlayer* pPlayer, const _vec3& vTargetPos)
 {
 	_float fDynamiteDist = 3.f;
 	_float fBoxDist = 3.f;
-	CBox*	pBox = nullptr;
+	CBox* pBox = nullptr;
 	CDynamite* pDynamite = nullptr;
 
 	for (auto& ele : Get_Layer(LAYER_GAMEOBJ)->Get_MapObject())
 	{
 		if (CDynamite* pGameObj = dynamic_cast<CDynamite*>(ele.second))
 		{
-			_vec3 vDiff = vTargetPos - pGameObj->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
+			_vec3 vDiff = vTargetPos - pGameObj->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->
+			                                     m_vInfo[INFO_POS];
 			_float fDist = D3DXVec3Length(&vDiff);
 
 			if (fDist < fDynamiteDist)
@@ -222,7 +251,8 @@ void CPlayerController::pickGameObj(CPlayer* pPlayer, const  _vec3& vTargetPos)
 
 		if (CBox* pGameObj = dynamic_cast<CBox*>(ele.second))
 		{
-			_vec3 vDiff = vTargetPos - pGameObj->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+			_vec3 vDiff = vTargetPos - pGameObj->Get_Component<Engine::CTransform>(
+				L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
 			_float fDist = D3DXVec3Length(&vDiff);
 
 			if (fDist < fBoxDist)
@@ -241,4 +271,66 @@ void CPlayerController::pickGameObj(CPlayer* pPlayer, const  _vec3& vTargetPos)
 		pDynamite->SetState(DYNAMITE_PICK);
 		m_pDynamite = pDynamite;
 	}
+}
+
+/*----------------------
+ * Remote
+ -------------------*/
+CPlayerRemoteController::CPlayerRemoteController() : CPlayerController()
+{
+}
+
+CPlayerRemoteController::CPlayerRemoteController(const CPlayerRemoteController& rhs)
+	: CPlayerController(rhs)
+{
+}
+
+CPlayerRemoteController::~CPlayerRemoteController()
+{
+}
+
+_int CPlayerRemoteController::Update_Component(const _float& fTimeDelta)
+{
+	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pOwner);
+	NULL_CHECK_RETURN(pPlayer, 0);
+
+	m_vPressDir = CGameUtilMgr::s_vZero;
+	if (m_iPlayerInputMask & PLAYER_W)
+		m_vPressDir.z += 1.f;
+
+	if (m_iPlayerInputMask & PLAYER_A)
+		m_vPressDir.x += -1.f;
+
+	if (m_iPlayerInputMask & PLAYER_S)
+		m_vPressDir.z += -1.f;
+
+	if (m_iPlayerInputMask & PLAYER_D)
+		m_vPressDir.x += 1.f;
+
+
+	if (false == CGameUtilMgr::Vec3Cmp(m_vPressDir, m_vPrevPressDir)) // 이동 입력 없으면 방향 계산 안하기
+	{
+		D3DXVec3Normalize(&m_vMoveDir, &m_vPressDir);
+		_float fCamYaw = Engine::Get_Component<Engine::CTransform>(LAYER_ENV, L"StaticCamera", L"Proto_TransformCom",
+		                                                           ID_DYNAMIC)->
+		                 m_vAngle.y;
+		_matrix matYaw;
+		D3DXMatrixRotationY(&matYaw, fCamYaw);
+		D3DXVec3TransformNormal(&m_vMoveDir, &m_vMoveDir, &matYaw);
+		pPlayer->SetMoveDir(m_vMoveDir.x, m_vMoveDir.z);
+
+		m_vPrevPressDir = m_vPressDir;
+	}
+
+	return 0;
+}
+
+CComponent* CPlayerRemoteController::Clone()
+{
+	return new CPlayerRemoteController(*this);
+}
+
+CPlayerRemoteController* CPlayerRemoteController::Create()
+{
+	return new CPlayerRemoteController;
 }

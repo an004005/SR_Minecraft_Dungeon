@@ -61,3 +61,4 @@ extern HINSTANCE g_hInst;
 
 #include "ImGuiMgr.h"
 #include "SoundMgr.h"
+#include "ClientServiceMgr.h"

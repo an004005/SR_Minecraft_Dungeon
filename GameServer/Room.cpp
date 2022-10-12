@@ -19,6 +19,9 @@ void Room::Broadcast(SendBufferRef sendBuffer)
 {
 	for (auto& p : _players)
 	{
-		p.second->ownerSession->Send(sendBuffer);
+		if (const auto locked = p.second->ownerSession.lock())
+		{
+			locked->Send(sendBuffer);
+		}
 	}
 }

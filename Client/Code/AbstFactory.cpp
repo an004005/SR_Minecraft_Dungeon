@@ -41,6 +41,7 @@
 #include "FireworksArrow.h"
 #include "CameraTool.h"
 #include "BatchTool.h"
+#include "NetStage.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -91,6 +92,11 @@ void CPlayerFactory::Ready_PlayerFactory()
 	s_mapPlayerSpawner.insert({"Copper", []()
 	{
 		return CPlayer::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Copper.cube");
+	}});
+
+	s_mapPlayerSpawner.insert({"Steve_Remote", []()
+	{
+		return CPlayer::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Steve.cube", true);
 	}});
 }
 
@@ -502,6 +508,11 @@ void CSceneFactory::Ready_SceneFactory()
 		s_mapSceneSpawner.insert({"Batch Tool", []()
 		{
 			return CBatchTool::Create(s_pGraphicDev);
+		}});
+
+		s_mapSceneSpawner.insert({"NetTest", []()
+		{
+			return CNetStage::Create(s_pGraphicDev);
 		}});
 	}
 }

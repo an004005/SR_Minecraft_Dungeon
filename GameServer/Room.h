@@ -9,7 +9,6 @@ public:
 	void Leave(PlayerRef player);
 	void Broadcast(SendBufferRef sendBuffer);
 
-private:
 	map<uint64, PlayerRef> _players;
 };
 

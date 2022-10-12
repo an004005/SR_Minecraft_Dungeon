@@ -10,17 +10,19 @@ enum : uint16
 	PKT_S_LOGIN = 1001,
 	PKT_C_ENTER_GAME = 1002,
 	PKT_S_ENTER_GAME = 1003,
-	PKT_C_MOVE = 1004,
-	PKT_C_POSITION = 1005,
-	PKT_S_POSITION = 1006,
+	PKT_S_OTHER_PLAYER = 1004,
+	PKT_C_PLAYER_INPUT = 1005,
+	PKT_S_PLAYER_INPUT = 1006,
+	PKT_C_PLAYER_WORLD = 1007,
+	PKT_S_PLAYER_WORLD = 1008,
 };
 
 // Custom Handlers
 bool Handle_INVALID(PacketSessionRef& session, BYTE* buffer, int32 len);
 bool Handle_C_LOGIN(PacketSessionRef& session, Protocol::C_LOGIN& pkt);
 bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt);
-bool Handle_C_MOVE(PacketSessionRef& session, Protocol::C_MOVE& pkt);
-bool Handle_C_POSITION(PacketSessionRef& session, Protocol::C_POSITION& pkt);
+bool Handle_C_PLAYER_INPUT(PacketSessionRef& session, Protocol::C_PLAYER_INPUT& pkt);
+bool Handle_C_PLAYER_WORLD(PacketSessionRef& session, Protocol::C_PLAYER_WORLD& pkt);
 
 class ClientPacketHandler
 {
@@ -31,8 +33,8 @@ public:
 			GPacketHandler[i] = Handle_INVALID;
 		GPacketHandler[PKT_C_LOGIN] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_LOGIN>(Handle_C_LOGIN, session, buffer, len); };
 		GPacketHandler[PKT_C_ENTER_GAME] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_ENTER_GAME>(Handle_C_ENTER_GAME, session, buffer, len); };
-		GPacketHandler[PKT_C_MOVE] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_MOVE>(Handle_C_MOVE, session, buffer, len); };
-		GPacketHandler[PKT_C_POSITION] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_POSITION>(Handle_C_POSITION, session, buffer, len); };
+		GPacketHandler[PKT_C_PLAYER_INPUT] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_PLAYER_INPUT>(Handle_C_PLAYER_INPUT, session, buffer, len); };
+		GPacketHandler[PKT_C_PLAYER_WORLD] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_PLAYER_WORLD>(Handle_C_PLAYER_WORLD, session, buffer, len); };
 	}
 
 	static bool HandlePacket(PacketSessionRef& session, BYTE* buffer, int32 len)
@@ -42,7 +44,9 @@ public:
 	}
 	static SendBufferRef MakeSendBuffer(Protocol::S_LOGIN& pkt) { return MakeSendBuffer(pkt, PKT_S_LOGIN); }
 	static SendBufferRef MakeSendBuffer(Protocol::S_ENTER_GAME& pkt) { return MakeSendBuffer(pkt, PKT_S_ENTER_GAME); }
-	static SendBufferRef MakeSendBuffer(Protocol::S_POSITION& pkt) { return MakeSendBuffer(pkt, PKT_S_POSITION); }
+	static SendBufferRef MakeSendBuffer(Protocol::S_OTHER_PLAYER& pkt) { return MakeSendBuffer(pkt, PKT_S_OTHER_PLAYER); }
+	static SendBufferRef MakeSendBuffer(Protocol::S_PLAYER_INPUT& pkt) { return MakeSendBuffer(pkt, PKT_S_PLAYER_INPUT); }
+	static SendBufferRef MakeSendBuffer(Protocol::S_PLAYER_WORLD& pkt) { return MakeSendBuffer(pkt, PKT_S_PLAYER_WORLD); }
 
 private:
 	template<typename PacketType, typename ProcessFunc>

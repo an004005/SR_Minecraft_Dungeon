@@ -78,7 +78,7 @@ public:
 	void WeaponChange(ITEMTYPE eIT);
 	void SetSpeed(_float fSpeed) { m_fSpeed = fSpeed; }
 	CInventory* GetInventory() { return m_pInventory; }
-	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
+	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath, _bool bRemote = false);
 
 private:
 	void RotateToCursor();

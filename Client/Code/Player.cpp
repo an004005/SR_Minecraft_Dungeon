@@ -43,8 +43,17 @@ HRESULT CPlayer::Ready_Object()
 	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 	m_pCurAnim = m_pIdleAnim;
 
-	CController* pController = Add_Component<CPlayerController>(L"Proto_PlayerController", L"Proto_PlayerController", ID_DYNAMIC);
-	pController->SetOwner(this);
+	if (m_bRemote)
+	{
+		CController* pController = Add_Component<CPlayerController>(L"Proto_PlayerRemoteController", L"Proto_PlayerRemoteController", ID_DYNAMIC);
+		pController->SetOwner(this);
+	}
+	else
+	{
+		CController* pController = Add_Component<CPlayerController>(L"Proto_PlayerController", L"Proto_PlayerController", ID_DYNAMIC);
+		pController->SetOwner(this);
+	}
+
 
 	m_pColl = Add_Component<CCollisionCom>(L"Proto_CollisionCom", L"Proto_CollisionCom", ID_DYNAMIC);
 	m_pColl->SetOwner(this);
@@ -61,7 +70,9 @@ HRESULT CPlayer::Ready_Object()
 	m_pStat->SetTransform(m_pRootPart->pTrans);
 
 	// 항상 카메라 먼저 만들고 플레이어 만들기!
-	Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")->SetTarget(this);
+	if (m_bRemote == false)
+		Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")->SetTarget(this);
+
 	m_dwWalkDust = GetTickCount();
 	m_dwRollDust = GetTickCount();
 
@@ -381,9 +392,10 @@ void CPlayer::UsePotion()
 	CSoundMgr::GetInstance()->PlaySound(L"P3_sfx_item_claymoreWinter1Impact-001.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 }
 
-CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
+CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath, _bool bRemote)
 {
 	CPlayer* pInstance = new CPlayer(pGraphicDev);
+	pInstance->m_bRemote = bRemote;
 
 	if (FAILED(pInstance->Ready_Object()))
 	{
