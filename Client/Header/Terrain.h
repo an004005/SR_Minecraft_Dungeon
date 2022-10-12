@@ -47,6 +47,8 @@ private:
 	CTransform*			m_pTransCom = nullptr;
 	CTexture*			m_pTextureCom = nullptr;
 
+
+
 public:
 	static CTerrainWater*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual void	Free(void);

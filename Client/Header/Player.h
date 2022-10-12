@@ -9,6 +9,7 @@ class CInventory;
 
 class CPlayer : public CSkeletalCube
 {
+	friend class CCamAnimation;
 protected:
 	explicit CPlayer(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual ~CPlayer() override;

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "..\Header\CamAnimation.h"
-
+#include "Player.h"
 
 CCamAnimation::CCamAnimation(LPDIRECT3DDEVICE9 pGraphicDev) : CSkeletalCube(pGraphicDev)
 {
@@ -37,6 +37,12 @@ void CCamAnimation::AnimationEvent(const string& strEvent)
 	{
 		// anim finish
 		m_bFinish = true;
+	}
+	else if (strEvent == "LandPlayer")
+	{
+		static CubeAnimFrame tt = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/landing.anim");
+		Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player")->PlayAnimationOnce(&tt);
+		Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player")->m_bCanPlayAnim = false;
 	}
 }
 

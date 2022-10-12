@@ -84,7 +84,6 @@ CAxe* CAxe::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 _int CAxe::Attack()
 {
 	CPlayer* pPlayer = Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");
-
 	if (pPlayer == nullptr)
 		return 0;
 
@@ -95,6 +94,7 @@ _int CAxe::Attack()
 	else if (m_iAttackCnt == 1)
 	{
 		pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK2]);
+		CSoundMgr::GetInstance()->PlaySound(L"sfx_Axe_2.ogg", pPlayer->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS]);
 	}
 	m_iAttackCnt = (m_iAttackCnt + 1) % 2;
 
