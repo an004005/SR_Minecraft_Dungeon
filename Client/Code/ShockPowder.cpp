@@ -18,6 +18,7 @@ CShockPowder::~CShockPowder()
 
 HRESULT CShockPowder::Ready_Object()
 {
+	m_iUItexNum = 14;
 	return S_OK;
 }
 
