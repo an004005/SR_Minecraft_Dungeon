@@ -362,6 +362,8 @@ void CPlayer::UsePotion()
 		}
 		// particle
 	}
+
+	CSoundMgr::GetInstance()->PlaySound(L"P3_sfx_item_claymoreWinter1Impact-001.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
