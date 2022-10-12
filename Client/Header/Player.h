@@ -9,6 +9,7 @@ class CInventory;
 
 class CPlayer : public CSkeletalCube
 {
+	friend class CCamAnimation;
 protected:
 	explicit CPlayer(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual ~CPlayer() override;
@@ -62,6 +63,7 @@ public:
 	void RollPress() { m_bRoll = true; }
 	void Legacy1Press() { m_bLegacy1 = true; }
 	void Legacy2Press() { m_bLegacy2 = true; }
+	void Legacy3Press() { m_bLegacy3 = true; }
 	void Legacy4Press();
 
 	void UsePotion();
@@ -74,7 +76,7 @@ public:
 
 	//아이템 변경(임시)
 	void WeaponChange(ITEMTYPE eIT);
-
+	void SetSpeed(_float fSpeed) { m_fSpeed = fSpeed; }
 	CInventory* GetInventory() { return m_pInventory; }
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
 
@@ -112,6 +114,7 @@ protected:
 
 	_bool m_bLegacy1 = false;
 	_bool m_bLegacy2 = false;
+	_bool m_bLegacy3 = false;
 
 	_bool m_bApplyMeleeAttack = false;
 	_bool m_bApplyMeleeAttackNext = false;

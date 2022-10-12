@@ -44,6 +44,8 @@ HRESULT CStage::Ready_Scene(void)
 	FAILED_CHECK_RETURN(Ready_Layer_Environment(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_GameLogic(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_UI(), E_FAIL);
+	Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+		->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
 
 	CBatchTool::Load(L"../Bin/Resource/Batch/test2.batch");
 
@@ -134,10 +136,11 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	
 	//monsters
 	{	
-		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 50.f, 0.f ,26.f});
-		//CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 50.f, 0.f ,26.f});
+		CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
 	
-		//
+		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 45.f, 0.f ,23.f });
+		CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
 		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 55.f, 0.f ,28.f });
 		//CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
 

@@ -125,7 +125,10 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 	{
 		pPlayer->Legacy2Press();
 	}
-	
+	if (DIKeyDown(DIK_3))
+	{
+		pPlayer->Legacy3Press();
+	}
 	if (DIKeyDown(DIK_4))
 	{
 		pPlayer->Legacy4Press();
