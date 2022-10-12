@@ -46,7 +46,7 @@ _int CCreeperController::Update_Component(const _float& fTimeDelta)
 	if (m_bWalk)
 	{
 		pCreeper->AttackCountStart();
-		if (m_fExplosionCount >= 2.5f)
+		if (m_fExplosionCount >= 3.f)
 		{
 			pCreeper->Explosion(vTargetPos);
 			return 0;

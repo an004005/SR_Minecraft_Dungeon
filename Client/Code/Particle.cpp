@@ -3,6 +3,7 @@
 #include "Export_Utility.h"
 #include "AbstFactory.h"
 #include "SphereEffect.h"
+#include "TerrainCubeMap.h"
 #define			PI			3.141592f
 
 #pragma region
@@ -1108,19 +1109,19 @@ HRESULT CCrack::Ready_Object(_float _size, CRACKTYPE _type)
 		m_pTexture = Add_Component<CTexture>(L"Proto_Crack", L"Proto_Crack", ID_STATIC);
 		m_pBufferCom->Set_TextureOption(15, 2, 2);
 		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
+		_vec3& vPos = m_pTransCom->m_vInfo[INFO_POS];
 		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
 		_vec3 pPos;
 		_vec3 pLook;
 		pPlayerTransform->Get_Info(INFO_POS, &pPos);
 		pPlayerTransform->Get_Info(INFO_LOOK, &pLook);
-		m_pTransCom->m_vInfo[INFO_POS] = pPos + pLook * 2.f;
-		// m_pTransCom->Set_Pos(pPos.x, pPos.y, pPos.z);
-	
+		vPos = pPos + pLook * 3.f;
+		vPos.y = 0.3f + Get_GameObject<CTerrainCubeMap>(LAYER_ENV, L"TerrainCubeMap")->GetHeight(vPos.x, vPos.z);
+
 		m_pTransCom->Set_Scale(_size, _size, _size);
 		m_fTime = 0.6f;
 		m_fCurTime = 0.f;
 		m_iCrackType = EXE_DECAL;
-
 	}
 	else if (_type == LAZER)
 	{
@@ -1695,8 +1696,6 @@ _int CHeartParticle::Update_Object(const _float& fTimeDelta)
 {
 	CGameObject::Update_Object(fTimeDelta);
 
-
-
 	if (m_fCurTime >= m_fTime)
 		return OBJ_DEAD;
 
@@ -1717,14 +1716,12 @@ _int CHeartParticle::Update_Object(const _float& fTimeDelta)
 	pPlayerTransform->Get_Info(INFO_POS, &pPos);
 	// m_pTransCom->Set_Pos(pPos.x + CGameUtilMgr::GetRandomFloat(-1.f, 1.f), pPos.y, pPos.z + CGameUtilMgr::GetRandomFloat(-1.f, 1.f));
 
-
-
 	m_pTransCom->m_vInfo[INFO_POS].x = pPos.x +tmp;
 	m_pTransCom->m_vInfo[INFO_POS].z = pPos.z + desk;
 
 	// 	+ CGameUtilMgr::GetRandomFloat(-1.f, 1.f);
 	// +CGameUtilMgr::GetRandomFloat(-1.f, 1.f);
-	m_pTransCom->m_vInfo[INFO_POS].y += pPos.y + fTimeDelta * 60.f;
+	m_pTransCom->m_vInfo[INFO_POS].y += fTimeDelta * m_fSpeed;
 
 
 	m_pBufferCom->m_matWorld = m_pTransCom->m_matWorld;

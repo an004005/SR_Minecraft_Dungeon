@@ -207,5 +207,6 @@ void CArrow::StaticCallBack(_vec3 vCenter, _float fRadius)
 		m_eMoveType = ARROW_MOVE_STUCK;
 		Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")
 			->Add_Particle(m_pTransform->m_vInfo[INFO_POS], 0.3f, YELLOW, 4, 0.2f);
+		CSoundMgr::GetInstance()->PlaySoundRandom({L"D6_sfx_wpn_voidBow_impact_001.ogg", L"D6_sfx_wpn_voidBow_impact_001.ogg", L"D6_sfx_wpn_voidBow_impact_001.ogg"}, m_pTransform->m_vInfo[INFO_POS]);
 	}
 }

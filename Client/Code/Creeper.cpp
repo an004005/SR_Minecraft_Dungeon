@@ -102,6 +102,8 @@ void CCreeper::LateUpdate_Object()
 	{
 		Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 			->PlayShake(0.15f, 0.4f);
+		CSoundMgr::GetInstance()->PlaySoundRandom({L"twinblast_grenade_explosion_01.ogg", L"twinblast_grenade_explosion_02.OGG"}, m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+
 		set<CGameObject*> setObj;
 		_vec3 vAttackPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
 		Engine::GetOverlappedObject(setObj, vAttackPos, 3.5f);

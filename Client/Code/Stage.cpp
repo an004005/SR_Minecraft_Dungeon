@@ -47,7 +47,7 @@ HRESULT CStage::Ready_Scene(void)
 	Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 		->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
 
-	// CBatchTool::Load(L"../Bin/Resource/Batch/test2.batch");
+	CBatchTool::Load(L"../Bin/Resource/Batch/test2.batch");
 
 	// Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 	// 	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_11_Test.anim");
@@ -65,6 +65,7 @@ _int CStage::Update_Scene(const _float & fTimeDelta)
 
 	Engine::GetFont();
 
+	CSoundMgr::GetInstance()->Update_Listener(L"Player");
 	return Engine::CScene::Update_Scene(fTimeDelta);
 }
 

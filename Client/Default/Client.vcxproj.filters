@@ -80,6 +80,9 @@
     <Filter Include="02. GameObject\05. UI">
       <UniqueIdentifier>{ccd7142e-0ace-4ebb-a0fa-ab4858a4884e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="99. Default\fmod">
+      <UniqueIdentifier>{ecdc1d57-d2d0-4795-b9a5-0995be8f09e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\MainApp.h">
@@ -349,6 +352,11 @@
     </ClInclude>
     <ClInclude Include="..\Header\BatchTool.h">
       <Filter>01. Scene\ToolScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\CamAnimation.h" />
+    <ClInclude Include="..\Header\CameraTool.h" />
+    <ClInclude Include="..\Header\SoundMgr.h">
+      <Filter>Mgr</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -620,6 +628,11 @@
     <ClCompile Include="..\Code\CamAnimation.cpp" />
     <ClCompile Include="..\Code\CameraTool.cpp">
       <Filter>01. Scene\ToolScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\CamAnimation.cpp" />
+    <ClCompile Include="..\Code\CameraTool.cpp" />
+    <ClCompile Include="..\Code\SoundMgr.cpp">
+      <Filter>Mgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
