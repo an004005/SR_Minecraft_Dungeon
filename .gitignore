@@ -250,3 +250,6 @@ Reference/Header/
 Reference/Library/
 
 Client/Default/imgui.ini
+
+Libraries/Libs/Protobuf/Debug
+Libraries/Libs/ServerCore

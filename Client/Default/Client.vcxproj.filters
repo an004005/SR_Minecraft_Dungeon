@@ -83,6 +83,9 @@
     <Filter Include="99. Default\fmod">
       <UniqueIdentifier>{ecdc1d57-d2d0-4795-b9a5-0995be8f09e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{5160ca0a-e483-4dbf-9427-4cdffa80bad0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\MainApp.h">
@@ -357,6 +360,24 @@
     <ClInclude Include="..\Header\CameraTool.h" />
     <ClInclude Include="..\Header\SoundMgr.h">
       <Filter>Mgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Protocol.pb.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Struct.pb.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ClientServiceMgr.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Enum.pb.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ServerPacketHandler.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\NetStage.h">
+      <Filter>01. Scene\01. Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -633,6 +654,24 @@
     <ClCompile Include="..\Code\CameraTool.cpp" />
     <ClCompile Include="..\Code\SoundMgr.cpp">
       <Filter>Mgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Struct.pb.cc">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ClientServiceMgr.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Enum.pb.cc">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Protocol.pb.cc">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ServerPacketHandler.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\NetStage.cpp">
+      <Filter>01. Scene\01. Stage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
