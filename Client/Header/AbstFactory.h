@@ -121,7 +121,6 @@ public:
 
 		return pCasted;
 	}
-
 	static void Ready_EnvFactory();
 
 private:

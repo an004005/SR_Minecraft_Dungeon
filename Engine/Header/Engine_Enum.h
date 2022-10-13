@@ -36,6 +36,10 @@ namespace Engine
 	enum ITEMTYPE { IT_MELEE, IT_RANGE, IT_LEGACY, IT_END };
 	
 	enum ITEMSTATE { IS_TAKE, IS_DROP, IS_END};
+
+	// Object
+
+	enum OBJTYPE { BIRD_WHITE, BIRD_BROWN, BIRD_END };
 	/////////////////////////////////////////////////////////////////
 
 	enum LAYERID

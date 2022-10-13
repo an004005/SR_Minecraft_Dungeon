@@ -2,6 +2,8 @@
 #include "AbstFactory.h"
 #include "Player.h"
 #include "Terrain.h"
+#include "Birds.h"
+#include "BirdsBrown.h"
 #include "Particle.h"
 #include "StaticCamera.h"
 #include "Monster.h"
@@ -283,17 +285,26 @@ void CEffectFactory::Ready_EffectFactory()
 
 void CEnvFactory::Ready_EnvFactory()
 {
-	s_mapEnvSpawner.insert({"DefaultTerrain", []()
+	s_mapEnvSpawner.insert({ "DefaultTerrain", []()
 	{
 		return CTerrain::Create(s_pGraphicDev);
-	}});
-	s_mapEnvSpawner.insert({"StaticCamera", []()
+	} });
+	s_mapEnvSpawner.insert({ "StaticCamera", []()
 	{
 		return CStaticCamera::Create(s_pGraphicDev);
-	}});
-	
-}
+	} });
 
+	s_mapEnvSpawner.insert({ "BirdsWhite", []()
+	{
+		return CBirds::Create(s_pGraphicDev,BIRD_WHITE);
+	} });
+
+	s_mapEnvSpawner.insert({ "BirdsBrown", []()
+	{
+		return CBirdsBrown::Create(s_pGraphicDev, BIRD_BROWN);
+	} });
+
+}
 void CBulletFactory::Ready_BulletFactory()
 {
 	s_mapBulletSpawner.insert({"PlayerNormalArrow", [](_float fDamage)

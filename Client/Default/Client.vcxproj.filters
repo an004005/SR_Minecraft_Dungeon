@@ -275,6 +275,12 @@
     <ClInclude Include="..\Header\ObjectStoreMgr.h">
       <Filter>Mgr</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\Birds.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\BirdsBrown.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -474,6 +480,12 @@
     <ClCompile Include="..\Code\UI.cpp" />
     <ClCompile Include="..\Code\UITool.cpp">
       <Filter>01. Scene\ToolScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Birds.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\BirdsBrown.cpp">
+      <Filter>02. GameObject\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -170,6 +170,7 @@
     <ClInclude Include="..\Header\ArrowCubeMgr.h" />
     <ClInclude Include="..\Header\Axe.h" />
     <ClInclude Include="..\Header\BackGround.h" />
+    <ClInclude Include="..\Header\BirdsBrown.h" />
     <ClInclude Include="..\Header\Box.h" />
     <ClInclude Include="..\Header\Controller.h" />
     <ClInclude Include="..\Header\Creeper.h" />
@@ -193,6 +194,7 @@
     <ClInclude Include="..\Header\Logo.h" />
     <ClInclude Include="..\Header\MainApp.h" />
     <ClInclude Include="..\Header\Monster.h" />
+    <ClInclude Include="..\Header\Birds.h" />
     <ClInclude Include="..\Header\ObjectStoreMgr.h" />
     <ClInclude Include="..\Header\Particle.h" />
     <ClInclude Include="..\Header\Player.h" />
@@ -246,6 +248,7 @@
     <ClCompile Include="..\Code\ArrowCubeMgr.cpp" />
     <ClCompile Include="..\Code\Axe.cpp" />
     <ClCompile Include="..\Code\BackGround.cpp" />
+    <ClCompile Include="..\Code\BirdsBrown.cpp" />
     <ClCompile Include="..\Code\Box.cpp" />
     <ClCompile Include="..\Code\Controller.cpp" />
     <ClCompile Include="..\Code\Creeper.cpp" />
@@ -269,6 +272,7 @@
     <ClCompile Include="..\Code\MainApp.cpp" />
     <ClCompile Include="..\Code\MapTool.cpp" />
     <ClCompile Include="..\Code\Monster.cpp" />
+    <ClCompile Include="..\Code\Birds.cpp" />
     <ClCompile Include="..\Code\ObjectStoreMgr.cpp" />
     <ClCompile Include="..\Code\Particle.cpp" />
     <ClCompile Include="..\Code\Player.cpp" />
