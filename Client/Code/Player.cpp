@@ -71,6 +71,7 @@ HRESULT CPlayer::Ready_Object()
 	m_pInventory->AddRef();
 	m_arrAnim = m_pInventory->CurWeapon(IT_MELEE)->SetarrAnim();
 
+	m_pRootPart->pTrans->Update_Component(0.f);
 	//test
 	// PlayerSpawn();
 
