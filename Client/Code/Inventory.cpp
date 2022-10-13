@@ -326,7 +326,7 @@ void CInventory::MouseEvent(CItemSpaceUI* pItemSpaceUI, CEquipItem* pEquipItem, 
 			vPointAt.z = 1.f;
 
 			_matrix matProj;
-			D3DXMatrixOrthoLH(&matProj, WINCX, WINCY, 0.f, 1.f);
+			D3DXMatrixOrthoLH(&matProj, WINCX, WINCY, 0.1f, 1.f);
 			D3DXMatrixInverse(&matProj, nullptr, &matProj);
 			D3DXVec3TransformCoord(&vPointAt, &vPointAt, &matProj);
 

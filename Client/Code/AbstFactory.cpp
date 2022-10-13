@@ -196,6 +196,14 @@ void CEffectFactory::Ready_EffectFactory()
 	{
 		return CCloud::Create(s_pGraphicDev,0.7f,ROLL);
 	} });
+	s_mapEffectSpawner.insert({ "Golem_Cloud", []()
+	{
+		return CCloud::Create(s_pGraphicDev, 2.f,GOLEMCLOUD);
+	} });
+	s_mapEffectSpawner.insert({ "Golem_Windmill", []()
+	{
+		return CCloud::Create(s_pGraphicDev,2.f,GOLEMWINDMILL);
+	} });
 
 	//
 
@@ -206,26 +214,26 @@ void CEffectFactory::Ready_EffectFactory()
 
 	s_mapEffectSpawner.insert({ "Golem_Melee_L",[]()
 	{
-		return CSphereEffect::Create(s_pGraphicDev, 0.03f, GOLEM_MELEE_L);
+		return CSphereEffect::Create(s_pGraphicDev, 0.04f, GOLEM_MELEE_L);
 	} });
 
 	s_mapEffectSpawner.insert({ "Golem_Melee_M",[]()
 	{
-		return CSphereEffect::Create(s_pGraphicDev, 0.025f, GOLEM_MELEE_M);
+		return CSphereEffect::Create(s_pGraphicDev, 0.03f, GOLEM_MELEE_M);
 	} });
 
 	s_mapEffectSpawner.insert({ "Golem_Melee_S",[]()
 	{
-		return CSphereEffect::Create(s_pGraphicDev, 0.015f, GOLEM_MELEE_S);
+		return CSphereEffect::Create(s_pGraphicDev, 0.02f, GOLEM_MELEE_S);
 	} });
 
 	s_mapEffectSpawner.insert({ "Golem_Melee_Shpere_L",[]()
 	{
-		return CSphereEffect::Create(s_pGraphicDev, 0.02f, SPHERE_L);
+		return CSphereEffect::Create(s_pGraphicDev, 0.03f, SPHERE_L);
 	} });
 	s_mapEffectSpawner.insert({ "Golem_Melee_Shpere_M",[]()
 	{
-		return CSphereEffect::Create(s_pGraphicDev, 0.0185f, SPHERE_M);
+		return CSphereEffect::Create(s_pGraphicDev, 0.019f, SPHERE_M);
 	} });
 
 	//
@@ -250,7 +258,7 @@ void CEffectFactory::Ready_EffectFactory()
 		return CUVCircle::Create(s_pGraphicDev, 3.7f, CREEPER);
 	} });
 
-	s_mapEffectSpawner.insert({ "Golem_Explosion", []()
+	s_mapEffectSpawner.insert({ "Golem_Circle", []()
 	{
 		return CUVCircle::Create(s_pGraphicDev, 7.f, GOLEM);
 	} });
