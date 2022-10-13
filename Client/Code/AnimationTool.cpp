@@ -4,6 +4,7 @@
 #include "TestCube.h"
 #include "ImGuiMgr.h"
 #include "SkeletalCube.h"
+#include "TerrainCubeMap.h"
 
 CAnimationTool::CAnimationTool(LPDIRECT3DDEVICE9 pGraphicDev): CScene(pGraphicDev)
 {
@@ -28,6 +29,9 @@ HRESULT CAnimationTool::Ready_Scene()
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_GAMEOBJ]->Add_GameObject(L"Skeletal", pGameObject), E_FAIL);
 	// m_pSelectedTransform = dynamic_cast<CTestCube*>(pGameObject)->m_pTransCom;
 
+	pGameObject = CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/koukusatonbase.map");
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", pGameObject), E_FAIL);
 
 	return CScene::Ready_Scene();
 }

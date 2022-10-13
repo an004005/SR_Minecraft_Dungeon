@@ -22,7 +22,7 @@ HRESULT CStaticCamera::Ready_Object()
 
 	SetMatProj();
 
-	m_pTransform->Rotation(ROT_Y, D3DXToRadian(50.f));
+	// m_pTransform->Rotation(ROT_Y, D3DXToRadian(50.f));
 	m_pTransform->Rotation(ROT_X, D3DXToRadian(55.f));
 
 	m_fShakeTime = 0.f;
