@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "..\Header\SphereEffect.h"
+#include "RedStoneMonstrosity.h"
 
 CSphereEffect::~CSphereEffect()
 {
@@ -13,10 +14,8 @@ HRESULT CSphereEffect::Ready_Object(_float _size, SPHERETYPE _type)
 
 	if (_type == GOLEM_MELEE_L)
 	{
-		m_pBufferCom = Add_Component<CSphereMesh>(L"Proto_SphereCom_Ring", L"Proto_SphereCom_Ring", ID_STATIC);
-		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
-		_vec3 pPos;
-		pPlayerTransform->Get_Info(INFO_POS, &pPos);
+		m_pBufferCom = Add_Component<CSphereMesh>(L"Proto_SphereCom_Ring", L"Proto_SphereCom_Ring", ID_STATIC);		
+		_vec3 pPos = Get_GameObject<CRedStoneMonstrosity>(LAYER_ENEMY, L"RedStoneMonstrosity")->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 		m_pTransCom->Set_Pos(pPos.x, pPos.y + 0.25f, pPos.z);
 		m_pTransCom->Set_Scale(_size, _size, _size);
 		m_fCurTime = 0.f;
@@ -26,9 +25,8 @@ HRESULT CSphereEffect::Ready_Object(_float _size, SPHERETYPE _type)
 	else if (_type == GOLEM_MELEE_M)
 	{
 		m_pBufferCom = Add_Component<CSphereMesh>(L"Proto_SphereCom_Lava", L"Proto_SphereCom_Lava", ID_STATIC);
-		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
-		_vec3 pPos;
-		pPlayerTransform->Get_Info(INFO_POS, &pPos);
+		_vec3 pPos = Get_GameObject<CRedStoneMonstrosity>(LAYER_ENEMY, L"RedStoneMonstrosity")->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
+
 		m_pTransCom->Set_Pos(pPos.x, pPos.y, pPos.z);
 		m_pTransCom->Set_Scale(_size, _size, _size);
 		m_fCurTime = 0.f;
@@ -39,9 +37,8 @@ HRESULT CSphereEffect::Ready_Object(_float _size, SPHERETYPE _type)
 	else if (_type == GOLEM_MELEE_S)
 	{
 		m_pBufferCom = Add_Component<CSphereMesh>(L"Proto_SphereCom_Ring", L"Proto_SphereCom_Ring", ID_STATIC);
-		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
-		_vec3 pPos;
-		pPlayerTransform->Get_Info(INFO_POS, &pPos);
+		_vec3 pPos = Get_GameObject<CRedStoneMonstrosity>(LAYER_ENEMY, L"RedStoneMonstrosity")->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
+
 		m_pTransCom->Set_Pos(pPos.x, pPos.y - 0.25f, pPos.z);
 		m_pTransCom->Set_Scale(_size, _size, _size);
 		
@@ -52,9 +49,8 @@ HRESULT CSphereEffect::Ready_Object(_float _size, SPHERETYPE _type)
 	else if (_type == SPHERE_L)
 	{
 		m_pBufferCom = Add_Component<CSphereMesh>(L"Proto_SphereCom_L", L"Proto_SphereCom_L", ID_STATIC);
-		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
-		_vec3 pPos;
-		pPlayerTransform->Get_Info(INFO_POS, &pPos);
+		_vec3 pPos = Get_GameObject<CRedStoneMonstrosity>(LAYER_ENEMY, L"RedStoneMonstrosity")->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
+
 		m_pTransCom->Set_Pos(pPos.x, pPos.y, pPos.z);
 		m_pTransCom->Set_Scale(_size, _size, _size);
 		m_fCurTime = 0.f;
@@ -65,9 +61,8 @@ HRESULT CSphereEffect::Ready_Object(_float _size, SPHERETYPE _type)
 	else if (_type == SPHERE_M)
 	{
 		m_pBufferCom = Add_Component<CSphereMesh>(L"Proto_SphereCom_M", L"Proto_SphereCom_M", ID_STATIC);
-		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
-		_vec3 pPos;
-		pPlayerTransform->Get_Info(INFO_POS, &pPos);
+		_vec3 pPos = Get_GameObject<CRedStoneMonstrosity>(LAYER_ENEMY, L"RedStoneMonstrosity")->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
+
 		m_pTransCom->Set_Pos(pPos.x, pPos.y, pPos.z);
 		m_pTransCom->Set_Scale(_size, _size, _size);
 		m_fCurTime = 0.f;
@@ -78,7 +73,7 @@ HRESULT CSphereEffect::Ready_Object(_float _size, SPHERETYPE _type)
 	else if (_type == GOLEM_SPIT)
 	{
 		m_pBufferCom = Add_Component<CSphereMesh>(L"Proto_SphereCom_M", L"Proto_SphereCom_M", ID_STATIC);
-		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 		_vec3 pPos;
 		pPlayerTransform->Get_Info(INFO_POS, &pPos);
 		m_pTransCom->Set_Pos(pPos.x, pPos.y, pPos.z);
