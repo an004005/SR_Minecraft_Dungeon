@@ -135,6 +135,7 @@ void CCoolTimeUI::Render_Object()
 
 void CCoolTimeUI::Free()
 {
+	Safe_Release(m_pIconTexture);
 	Safe_Release(m_pCoolTimeTex);
 	CUI::Free();
 }

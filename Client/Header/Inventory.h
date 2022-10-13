@@ -35,7 +35,7 @@ public:
 	void Put(CConsumeItem* pItem);
 	void TakeOut(CEquipItem* pItem);
 
-	void UseArrow() {--m_iArrow;}
+	void UseArrow(_uint iArrowCnt) { m_iArrow -= iArrowCnt;}
 
 
 	//아이템 장착

@@ -98,6 +98,7 @@ HRESULT CInventory::Ready_Object()
 	}
 
 	m_iArrow = 90;
+	m_iEmerald = 0;
 
 	return S_OK;
 }

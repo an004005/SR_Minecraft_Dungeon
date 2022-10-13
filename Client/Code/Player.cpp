@@ -204,7 +204,7 @@ void CPlayer::AttackState()
 		WeaponChange(IT_RANGE);
 		m_bCanPlayAnim = false;
 		m_iAttackCnt = m_pInventory->CurWeapon(IT_RANGE)->Attack();
-		m_pInventory->UseArrow();
+		m_pInventory->UseArrow(1);
 	}
 
 #pragma region Lazer 

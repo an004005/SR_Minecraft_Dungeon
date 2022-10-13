@@ -65,10 +65,11 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 		vPos += m_vKnockBackVelocity * fTimeDelta;
 		m_vKnockBackVelocity.y -= 120.f * fTimeDelta;
 
-		if (vPos.y < m_pCubeMap->GetHeight(vPos.x, vPos.z))
+		if (vPos.y < m_pCubeMap->GetHeight(vPos.x, vPos.z) || m_bKnockback == false)
 		{
 			m_vKnockBackVelocity = CGameUtilMgr::s_vZero;
 		}
+		
 	}
 
 	return 0;
