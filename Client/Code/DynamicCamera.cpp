@@ -39,6 +39,8 @@ HRESULT CDynamicCamera::Ready_Object(const _vec3* pEye,
 
 Engine::_int CDynamicCamera::Update_Object(const _float& fTimeDelta)
 {
+	if (m_bStop) return OBJ_NOEVENT;
+
 	Key_Input(fTimeDelta);
 	_int iExit = CCamera::Update_Object(fTimeDelta);
 	Make();
@@ -181,23 +183,28 @@ void CDynamicCamera::Key_Input(const _float& fTimeDelta)
 		m_vAt -= vLength;
 	}
 
-	if (Get_DIKeyState(DIK_T) & 0x80)
+	if (DIKeyDown(DIK_T))
 	{
-		if (m_bCheck)
-			return;
-
-		m_bCheck = true;
-
-		if (m_bFix)
-			m_bFix = false;
-		else
-			m_bFix = true;
+		m_bFix = !m_bFix;
 	}
-	else
-		m_bCheck = false;
 
-	if (false == m_bFix)
-		return;
+	// if (Get_DIKeyState(DIK_T) & 0x80)
+	// {
+	// 	if (m_bCheck)
+	// 		return;
+	//
+	// 	m_bCheck = true;
+	//
+	// 	if (m_bFix)
+	// 		m_bFix = false;
+	// 	else
+	// 		m_bFix = true;
+	// }
+	// else
+	// 	m_bCheck = false;
+	//
+	// if (false == m_bFix)
+	// 	return;
 }
 
 void CDynamicCamera::Mouse_Move(void)

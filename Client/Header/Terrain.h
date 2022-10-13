@@ -1,12 +1,6 @@
 #pragma once
 #include "GameObject.h"
 
-namespace Engine
-{
-	class CTransform;
-	class CTerrainTex;
-	class CTexture;
-}
 
 class CTerrain : public CGameObject
 {
@@ -25,7 +19,8 @@ private:
 
 private:
 	CTerrainTex*		m_pBufferCom = nullptr;
-	Engine::CTransform*			m_pTransCom = nullptr;
+
+	CTransform*			m_pTransCom = nullptr;
 	CTexture*			m_pTextureCom = nullptr;
 
 public:
@@ -33,3 +28,28 @@ public:
 	virtual void	Free(void);
 };
 
+class CTerrainWater : public CGameObject
+{
+private:
+	explicit CTerrainWater(LPDIRECT3DDEVICE9 pGraphicDev);
+	virtual ~CTerrainWater();
+
+public:
+	virtual HRESULT Ready_Object(void) override;
+	virtual _int	Update_Object(const _float& fTimeDelta) override;
+	virtual void	LateUpdate_Object(void) override;
+	virtual void	Render_Object(void) override;
+
+
+private:
+	// 버퍼 포인터 바꾸기
+	CTerrainShader*		m_pBufferCom = nullptr;
+	CTransform*			m_pTransCom = nullptr;
+	CTexture*			m_pTextureCom = nullptr;
+
+
+
+public:
+	static CTerrainWater*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	virtual void	Free(void);
+};

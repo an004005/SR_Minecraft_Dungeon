@@ -27,10 +27,11 @@ HRESULT CCrossbow::Ready_Object()
 	m_arrAnim[ANIM_ATTACK2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/crossbow_attack_loop.anim");
 	//Attack_end
 	m_arrAnim[ANIM_ATTACK3] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/crossbow_attack_end.anim");
+	m_arrAnim[ANIM_ROLL] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/roll.anim");
 	m_arrAnim[ANIM_RANGE_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/crossbow_attack_start.anim");
 
 	m_eItemType = IT_RANGE;
-
+	m_iUItexNum = 8;
 	return S_OK;
 }
 
@@ -100,16 +101,22 @@ _int CCrossbow::Attack()
 	// }
 
 	// todo : 임시 설정, 이후 피킹한 몬스터 방향으로 쏘게 하기
-	Engine::CTransform* pPlayerTrans = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC);
+	Engine::CTransform* pPlayerTrans = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
 	const _vec3 vPos = pPlayerTrans->m_vInfo[INFO_POS] + _vec3{0.f, 1.3f, 0.f};
 	_vec3 vLookAt;
 	if (PickTargetEnemy(OUT vLookAt) == false)
 	{
 		vLookAt = vPos + pPlayerTrans->m_vInfo[INFO_LOOK];
 	}
-
-	CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 10.f, vPos, vLookAt);
-	// m_iAttackCnt = (m_iAttackCnt + 1) % 2;
+	
+	if (m_bFireWork)
+	{
+		CBulletFactory::Create<CGameObject>("PlayerFireWorkArrow", L"PlayerFireWorkArrow", 10.f, vPos, vLookAt);
+		m_bFireWork = false;
+	}
+	else
+		CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 10.f, vPos, vLookAt);
+	
 
 	return m_iAttackCnt;
 }

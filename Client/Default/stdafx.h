@@ -15,6 +15,10 @@
 #include "imgui_impl_win32.h"
 #include "imgui_internal.h"
 
+#include "fmod.h"
+#include "fmod.hpp"
+#pragma comment(lib, "fmod_vc.lib")
+
 #include <windows.h>
 // C 런타임 헤더 파일입니다.
 #include <stdlib.h>
@@ -46,3 +50,4 @@ extern HWND g_hWnd;
 extern HINSTANCE g_hInst;
 
 #include "ImGuiMgr.h"
+#include "SoundMgr.h"

@@ -42,7 +42,7 @@ public:
 
 	// controller 조종 함수
 	void WalkToTarget(const _vec3& vTargetPos) { m_bMove = true; m_vTargetPos = vTargetPos; }
-	void AttackCountStart() { m_bAttackCount = true; }
+	void AttackCountStart() { m_bAttackCount = true; CSoundMgr::GetInstance()->PlaySound(L"sfx_multi_creeperFuse-001_soundWave.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.7f);  }
 	void Explosion(const _vec3& vTargetPos)
 	{
 		m_bAttack = true;

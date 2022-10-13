@@ -23,12 +23,8 @@
 #include "RedStoneCube.h"
 #include "RedStoneMonstrosity.h"
 #include "UI.h"
-
-//item
-#include "Crossbow.h"
-#include "Sword.h"
-#include "Glaive.h"
-#include "Axe.h"
+#include "CoolTimeUI.h"
+#include "BatchTool.h"
 
 // object
 #include "Birds.h"
@@ -51,7 +47,17 @@ HRESULT CStage::Ready_Scene(void)
 	FAILED_CHECK_RETURN(Ready_Layer_Environment(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_GameLogic(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_UI(), E_FAIL);
-	
+	// Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+	// 	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
+
+	//Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+	//	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
+
+	//CBatchTool::Load(L"../Bin/Resource/Batch/test2.batch");
+
+	// Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+	// 	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_11_Test.anim");
+
 	return S_OK;
 }
 
@@ -65,18 +71,31 @@ _int CStage::Update_Scene(const _float & fTimeDelta)
 
 	Engine::GetFont();
 
+	CSoundMgr::GetInstance()->Update_Listener(L"Player");
 	return Engine::CScene::Update_Scene(fTimeDelta);
 }
 
 void CStage::LateUpdate_Scene(void)
 {
+	
+	//IM_BEGIN("cam");
+	//if (ImGui::Button("Play Anim"))
+	//{
+	//	// m_pCamAnim->GetCamWorld(pStaticCamTransform->m_matWorld);
+
+	//	_matrix matView;
+	//	Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+	//		->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/WorldTest.anim");
+	//	//m_pCam->m_bStop = true;
+	//}
+
+	//IM_END;
 	Engine::CScene::LateUpdate_Scene();
 }
 
 void CStage::Render_Scene(void)
 {
 	CArrowCubeMgr::GetInst().Render_Buffer(); // todo : 렌더러에서 동작하게 바꾸기
-
 }
 
 HRESULT CStage::Ready_Layer_Environment()
@@ -86,7 +105,7 @@ HRESULT CStage::Ready_Layer_Environment()
 	CEnvFactory::Create<CStaticCamera>("StaticCamera", L"StaticCamera");
 
 	// Terrain
-	CEnvFactory::Create<CTerrain>("DefaultTerrain", L"Terrain");
+	CEnvFactory::Create<CTerrainWater>("WaterTerrain", L"WaterTerrain");
 
 	// TerrainCubeMap
 	pGameObject = CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/Stage1.map");
@@ -111,12 +130,11 @@ HRESULT CStage::Ready_Layer_GameLogic()
 {
 	_matrix matWorld;
 
-	CItemFactory::Create<CAxe>("Axe", L"Axe");
+	 CObjectFactory::Create<CBox>("Box", L"Box" , { 2.f, 7.5f, 6.f });
+	//CObjectFactory::Create<CBox>("Box", L"Box2", { 4.f, 9.f, 15.f });
+	// CObjectFactory::Create<CDynamite>("Dynamite", L"Dynamite");
 
-	//CObjectFactory::Create<CBox>("Box", L"Box");
-	//CObjectFactory::Create<CDynamite>("Dynamite", L"Dynamite");
-
-	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 1.f, 0.f ,3.f });
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 47.f, 0.f ,40.f });
 	CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld);
 
 	
@@ -130,10 +148,9 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	
 	//monsters
 	{	
-		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 50.f, 0.f ,26.f});
-		CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
 	
-		//
+		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 45.f, 0.f ,23.f });
+		CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
 		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 55.f, 0.f ,28.f });
 		//CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
 
@@ -141,17 +158,17 @@ HRESULT CStage::Ready_Layer_GameLogic()
 		// CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 43.f, 0.f , 21.f });
 		// CEnemyFactory::Create<CCreeper>("Creeper", L"Creeper", matWorld);
 
-		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 3.f, 0.f ,13.f });
-		CEnemyFactory::Create<CSkeleton>("Skeleton", L"Skeleton", matWorld);
+		// CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 3.f, 0.f ,13.f });
+		// CEnemyFactory::Create<CSkeleton>("Skeleton", L"Skeleton", matWorld);
 
 		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 47.f, 0.f ,17.f });
 		//CEnemyFactory::Create<CEnchanter>("Enchanter", L"Enchanter", matWorld);
 
-		// CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 3.f, 0.f ,13.f });
-		// CEnemyFactory::Create<CRedStoneMonstrosity>("RedStoneMonstrosity", L"RedStoneMonstrosity", matWorld);
+		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 3.f, 0.f ,16.f });
+		CEnemyFactory::Create<CRedStoneMonstrosity>("RedStoneMonstrosity", L"RedStoneMonstrosity", matWorld);
 	}
 	
-	CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {6.f, 0.f ,6.f});
+	// CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {6.f, 0.f ,6.f});
 	// CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
 	// CEnemyFactory::Create<CMonster>("Zombie", L"TestZombie", matWorld);
 
@@ -161,29 +178,22 @@ HRESULT CStage::Ready_Layer_GameLogic()
 
 HRESULT CStage::Ready_Layer_UI()
 {
-	// CGameObject*		pGameObject = nullptr;
-	
-	//CUIFactory::Create<CUI>("Buffe4", L"UI", 700.f, 650.f, 40.f, 40.f);
-	//CUIFactory::Create<CUI>("Buffe3", L"UI", 503.f, 650.f, 40.f, 40.f);
-	CUIFactory::Create<CUI>("UITexture", L"UI", 600.f, 650.f, 130.f, 110.f);
-	CUIFactory::Create<CUI>("UI_HP", L"UI_HP", 600.f, 650.f, 110.f, 85.f);
-	//CUIFactory::Create<CUI>("InvenTool", L"UI", 230.f, 655.f, 35.f, 35.f);
-	//CUIFactory::Create<CUI>("Inven", L"UI", 230.f, 655.f, 25.f, 25.f);
-	//CUIFactory::Create<CUI>("Buffe1", L"UI", 325.f, 650.f, 40.f, 40.f);
-	//CUIFactory::Create<CUI>("Buffe2", L"UI", 415.f, 650.f, 40.f, 40.f);
-	//CUIFactory::Create<CUI>("mapTool", L"UI", 800.f, 655.f, 35.f, 35.f);
-	//CUIFactory::Create<CUI>("map", L"UI", 800.f, 655.f, 35.f, 35.f);
-	//CUIFactory::Create<CUI>("RollTool", L"UI", 880.f, 655.f, 30.f, 30.f);
-	//CUIFactory::Create<CUI>("Roll", L"UI", 880.f, 657.f, 25.f, 20.f);
-	CUIFactory::Create<CUI>("arrowTool", L"UI", 980.f, 655.f, 40.f, 50.f);
-	CUIFactory::Create<CUI>("arrow", L"UI", 980.f, 655.f, 30.f, 30.f);
-	CUIFactory::Create<CUI>("emerald", L"UI", 1100.f, 655.f, 20.f, 25.f);
-	//CUIFactory::Create<CUI>("enchant", L"UI", 150.f, 655.f, 20.f, 20.f);
+	// 플레이어 생성하고 생성하기
+	CUIFactory::Create<CUI>("HPUI", L"HPUI", -1, WINCX/2, WINCY - 50, 100, 80);
+	CUIFactory::Create<CCoolTimeUI>("PotionCoolTime", L"PotionCoolTime", -1, WINCX/2 + 90, WINCY - 40, 50, 50);
+	CUIFactory::Create<CCoolTimeUI>("RollCoolTime", L"RollCoolTime", -1, WINCX/2 + 140, WINCY - 30, 30, 30);
+	CUIFactory::Create<CCoolTimeUI>("Legacy1CoolTime", L"Legacy1CoolTime", -1, WINCX/2 - 90, WINCY - 40, 50, 50);
+	CUIFactory::Create<CCoolTimeUI>("Legacy2CoolTime", L"Legacy2CoolTime", -1, WINCX/2 - 150, WINCY - 40, 50, 50);
+	CUIFactory::Create<CCoolTimeUI>("Legacy3CoolTime", L"Legacy3CoolTime", -1, WINCX/2 - 210, WINCY - 40, 50, 50);
 
+	CUIFactory::Create<CCountUI>("ArrowUI", L"ArrowUI", -1, WINCX/2 + 190, WINCY - 30, 50, 50);
+	CUIFactory::Create<CCountUI>("EmeraldUI", L"EmeraldUI", -1, WINCX/2 + 250, WINCY - 30, 20, 30);
 
+	// 플레이어 생성하고 생성하기
 
 	return S_OK;
 }
+
 
 
 CStage * CStage::Create(LPDIRECT3DDEVICE9 pGraphicDev)

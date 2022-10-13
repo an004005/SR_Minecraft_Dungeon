@@ -25,6 +25,8 @@ public:
 	virtual void Free() override;
 	static CRcShader* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& _shaderfile, _vec2 _uv0, _vec2 _uv1, _vec2 _uv2, _vec2 _uv3);
 
+
+public:
 	void Set_Texture(IDirect3DBaseTexture9* _ptexture)
 	{
 		m_pTexture = _ptexture;
@@ -46,7 +48,19 @@ public:
 			return false;
 	}
 
+	void Check_Alpha(_bool _TrueIsAlphaOn)
+	{
+		m_bIsAlpha = _TrueIsAlphaOn;
+	}
 
+	const _uint& Get_WidthTextureCnt(void)
+	{
+		return m_iWidthTextureCnt;
+	}
+	const _uint& Get_HeightTextureCnt(void)
+	{
+		return m_iHeightTextureCnt;
+	}
 
 	_matrix					 m_matWorld;
 	_matrix					 m_ViewMatrix;
@@ -63,7 +77,7 @@ private:
 
 
 private:
-
+	_bool m_bIsAlpha = false;
 	_uint m_iPlayOnFrameCnt = 0;
 	_uint m_iWidthTextureCnt = 0;
 	_uint m_iHeightTextureCnt= 0;

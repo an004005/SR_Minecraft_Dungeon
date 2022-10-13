@@ -161,6 +161,7 @@ void CParticleSystem::Render_Object()
 
 		m_dwVtxBf_Offset += m_dwVtxBf_BatchSize;
 
+
 		PostRender_Particle();
 	}
 }
@@ -185,13 +186,15 @@ void CParticleSystem::reset()
 }
 
 void CParticleSystem::Add_Particle(const _vec3& _pos, const _float& _size, 
-									const D3DXCOLOR& _color, const _uint& _numParticle, const _float& _lifetime)
+									const D3DXCOLOR& _color, const _uint& _numParticle, const _float& _lifetime, const _int& _type)
 {
 	Attribute attribute;
 	attribute._vPosition = _pos;
 	attribute._fSize = _size;
 	attribute._color = _color;
 	attribute._fLifeTime = _lifetime;
+	attribute._iType = _type;
+
 	for (_uint i = 0; i < _numParticle; ++i)
 	{
 		Reset_Particle(&attribute);
@@ -225,7 +228,7 @@ void CParticleSystem::PreRender_Particle()
 
 void CParticleSystem::PostRender_Particle()
 {
-	m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, true);
+	m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, false);
 	m_pGraphicDev->SetRenderState(D3DRS_POINTSPRITEENABLE, false);
 	m_pGraphicDev->SetRenderState(D3DRS_POINTSCALEENABLE, false);
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, false);

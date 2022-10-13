@@ -15,6 +15,7 @@
 #include "Axe.h"
 #include "SphereEffect.h"
 #include "Inventory.h"
+#include "Emerald.h"
 
 /*-----------------------
  *    CCharacter
@@ -49,10 +50,10 @@ HRESULT CPlayer::Ready_Object()
 	m_pColl->SetOwner(this);
 	m_pColl->SetOwnerTransform(m_pRootPart->pTrans);
 	m_pColl->SetCollOffset(_vec3{0.f, 1.5f, 0.f});
-	m_pColl->SetRadius(0.8f);
+	m_pColl->SetRadius(0.5f);
 	m_pColl->SetCollType(COLL_PLAYER);
 
-	m_CurRollCoolTime = 3.f;
+	m_CurRollCoolTime = 3.f;	
 	m_CurPotionCoolTime = 20.f;
 
 	m_pStat = Add_Component<CStatComponent>(L"Proto_StatCom", L"Proto_StatCom", ID_DYNAMIC);
@@ -68,7 +69,6 @@ HRESULT CPlayer::Ready_Object()
 	m_pInventory = CObjectFactory::Create<CInventory>("Inventory", L"Inventory");
 	m_pInventory->AddRef();
 	m_arrAnim = m_pInventory->CurWeapon(IT_MELEE)->SetarrAnim();
-	m_pAxe = Get_GameObject<CAxe>(LAYER_ITEM, L"Axe");
 	return S_OK;
 }
 
@@ -154,6 +154,19 @@ void CPlayer::AnimationEvent(const string& strEvent)
 	else if (strEvent == "MeleeAttackFire")
 	{
 		m_bApplyMeleeAttack = true;
+
+		// axe crack
+		if (m_iAttackCnt == 0 && dynamic_cast<CAxe*>(m_pInventory->CurWeapon(IT_MELEE)))
+		{
+			Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+				->PlayShake(0.15f, 0.4f);
+			CEffectFactory::Create<CCrack>("Exe_Decal", L"Exe_Decal");
+			for (int i = 0; i < 5; i++)
+			{
+				CEffectFactory::Create<CCloud>("Decal_Cloud", L"Decal_Cloud");
+			}
+		}
+		// axe crack
 	}
 	else if (strEvent == "step")
 	{
@@ -181,65 +194,38 @@ void CPlayer::AttackState()
 	if (m_bMeleeAttack)
 	{
 		m_bCanPlayAnim = false;
-		
-		//원거리 무기는 생략.
 		m_iAttackCnt = m_pInventory->CurWeapon(IT_MELEE)->Attack();// 애니메이션 실행
+
+
 	}
 	else if (m_bRangeAttack)
 	{
-		
+		//기본이 근거리라 원거리로 바꿔줘야 텍스처가 나옴
 		WeaponChange(IT_RANGE);
 		m_bCanPlayAnim = false;
 		m_iAttackCnt = m_pInventory->CurWeapon(IT_RANGE)->Attack();
 	}
 
-#pragma region GolemSmash
-	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_Shpere_L", L"Golem_Melee_Shpere_L");
-	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_Shpere_M", L"Golem_Melee_Shpere_M");
-	//
-	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_L", L"Golem_Melee_L");
-	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_M", L"Golem_Melee_M");
-	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_S", L"Golem_Melee_S");
-	// 	for (int i = 0; i < 15; i++)
-	// 	{
-	// 		CEffectFactory::Create<CCloud>("ShockPowder_Cloud", L"ShockPowder_Cloud");
-	// 	}
-	// //완전히 찍을 때
-	// 	Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.5f, D3DXCOLOR(0.88f,0.35f,0.24f,1.0f), 12, 0.8f);
-#pragma endregion
-
-#pragma region GolemSpit
-	// for (int i = 0; i < 10; i++)
+#pragma region Lazer 
+	// CEffectFactory::Create<CLazer>("Lazer_Beam", L"Lazer_Beam");
+	// for (int i = 0; i < 12; i++)
 	// {
-		// CEffectFactory::Create<CGolemSpit>("Golem_Spit", L"Golem_Spit");
-	//}
+	// 	CEffectFactory::Create<CLazer_Circle>("Lazer_Beam_Circle", L"Lazer_Beam_Circle");
+	// }
+#pragma endregion 
+
+#pragma region Loading Box 
+ 	// CEffectFactory::Create<CCrack>("LoadingBox", L"LoadingBox");
 #pragma endregion
 
-#pragma region RedCube_Spawn
-		// CEffectFactory::Create<CCrack>("Red_Cube_Crack", L"Red_Cube_Crack");
+#pragma region Item DropEffect 
+	// CEffectFactory::Create<CGradation_Beam>("Gradation_Beam", L"Gradation_Beam");
+	// Get_GameObject<C3DBaseTexture>(LAYER_EFFECT, L"3D_Base")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 3.f, D3DXCOLOR(1.f, 1.f, 0.f, 0.f), 1, 30.f,1);
 #pragma endregion
 
 #pragma region Lava_Paticle
 	// CEffectFactory::Create<CLava_Particle>("Lava_Particle", L"Lava_Particle");
 #pragma endregion
-
-#pragma region Heal Effect
-	// CEffectFactory::Create<CHealCircle>("Heal_Circle_L", L"Heal_Circle_L");
-	//
-	// for (int i = 0; i < 12; i++)
-	// {
-	// 	CEffectFactory::Create<CHeartParticle>("HeartParticle", L"HeartParticle");
-	// }
-#pragma endregion
-
-#pragma region Decal
-	CEffectFactory::Create<CCrack>("Exe_Decal", L"Exe_Decal");
-	for (int i = 0; i < 5; i++)
-	{
-		CEffectFactory::Create<CCloud>("Decal_Cloud", L"Decal_Cloud");
-	}
-#pragma endregion
-
 
 #pragma region Attack_Basic
 	// Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.3f, RED, 4, 0.2f);
@@ -280,32 +266,45 @@ void CPlayer::StateChange()
 
 	if (m_bLegacy1 && m_bCanPlayAnim)
 	{
+	
 		m_eState = LEGACY;
-		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY1]);
 		m_bLegacy1 = false;
 		m_bCanPlayAnim = false;
 
-		for (int j = 0; j < 10; j++)
-		{
-			CEffectFactory::Create<CShock_Powder>("Shock_Powder", L"UV_Shock_Powder");
-			CEffectFactory::Create<CCloud>("ShockPowder_Cloud", L"ShockPowder_Cloud");
-		}
-		CEffectFactory::Create<CUVCircle>("Shock_Circle", L"Shock_Circle");
+		if (m_pInventory->CurWeapon(IT_LEGACY1) == nullptr)
+			return;
+
+		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY1]);
+		m_pInventory->CurWeapon(IT_LEGACY1)->Use();
 		return;
 	}
 
 	if (m_bLegacy2 && m_bCanPlayAnim)
 	{
 		m_eState = LEGACY;
-		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY2]);
 		m_bLegacy2 = false;
 		m_bCanPlayAnim = false;
 
-		Get_GameObject<C3DBaseTexture>(LAYER_EFFECT, L"3D_Base")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 3.f, D3DXCOLOR(0.f,0.63f,0.82f,0.f), 1, 1.5f);
-		Get_GameObject<CSpeedBoots>(LAYER_EFFECT, L"Speed_Boots")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 3.f, D3DXCOLOR(0.2f, 0.2f, 0.5f, 1.f), 1, 1.5f);
-		Get_GameObject<CSpeedBoots_Particle>(LAYER_EFFECT, L"Speed_Boots_Particle")->Add_Particle(
-			_vec3(m_pRootPart->pTrans->m_vInfo[INFO_POS].x, m_pRootPart->pTrans->m_vInfo[INFO_POS].y + 15.f, m_pRootPart->pTrans->m_vInfo[INFO_POS].z),
-			1.f, D3DXCOLOR(0.3f, 0.4f, 0.7f, 1.f), 18, 20.f);
+		if (m_pInventory->CurWeapon(IT_LEGACY2) == nullptr)
+			return;
+
+		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY2]);
+		m_pInventory->CurWeapon(IT_LEGACY2)->Use();
+		return;
+	}
+
+	if (m_bLegacy3 && m_bCanPlayAnim)
+	{
+		
+		m_eState = LEGACY;
+		m_bLegacy3 = false;
+		m_bCanPlayAnim = false;
+
+		if (m_pInventory->CurWeapon(IT_LEGACY3) == nullptr)
+			return;
+
+		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY2]);
+		m_pInventory->CurWeapon(IT_LEGACY3)->Use();
 		return;
 	}
 
@@ -313,6 +312,7 @@ void CPlayer::StateChange()
 	{
 		m_eState = ATTACK;
 		RotateToCursor();
+		WeaponChange(IT_MELEE);
 		return;
 	}
 
@@ -321,6 +321,7 @@ void CPlayer::StateChange()
 		m_eState = ATTACK;
 		RotateToCursor();
 		m_bDelay = true;
+		WeaponChange(IT_MELEE);
 		return;
 	}
 
@@ -332,6 +333,7 @@ void CPlayer::StateChange()
 		m_pCurAnim = &m_arrAnim[ANIM_WALK];
 
 		if (m_bDelay) m_bDelay = false;
+		else WeaponChange(IT_MELEE);
 		return;
 	}
 
@@ -345,6 +347,8 @@ void CPlayer::StateChange()
 		else WeaponChange(IT_MELEE);
 		return;
 	}
+
+
 }
 
 void CPlayer::UsePotion()
@@ -352,7 +356,18 @@ void CPlayer::UsePotion()
 	if (s_PotionCollTime <= m_CurPotionCoolTime)
 	{
 		m_pStat->ModifyHP(_int(_float(m_pStat->GetMaxHP()) * 0.7f));
+		m_CurPotionCoolTime = 0.f;
+
+		// particle
+		CEffectFactory::Create<CHealCircle>("Heal_Circle_L", L"Heal_Circle_L");
+		for (int i = 0; i < 12; i++)
+		{
+			CEffectFactory::Create<CHeartParticle>("HeartParticle", L"HeartParticle");
+		}
+		// particle
 	}
+
+	CSoundMgr::GetInstance()->PlaySound(L"P3_sfx_item_claymoreWinter1Impact-001.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)

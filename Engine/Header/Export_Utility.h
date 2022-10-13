@@ -15,12 +15,12 @@
 #include "RcShader.h"
 #include "DebugLine.h"
 #include "SphereMesh.h"
-
+#include "TerrainShader.h"
 #include "Transform.h"
 #include "Calculator.h"
 #include "Camera.h"
 #include "DebugSphere.h"
-
+#include "TerrainShader.h"
 #include "ProtoMgr.h"
 #include "Management.h"
 #include "Renderer.h"
@@ -54,14 +54,21 @@ BEGIN(Engine)
 	}
 
 	template <typename T>
-	T* Get_GameObject(LAYERID eLayerID, const wstring& pObjTag)
+	T* Get_GameObjectUnCheck(LAYERID eLayerID, const wstring& pObjTag)
 	{
 		CGameObject* pGameObject = CManagement::GetInstance()->Get_GameObject(eLayerID, pObjTag);
-		T* pCasted = dynamic_cast<T*>(pGameObject);
+		return dynamic_cast<T*>(pGameObject);
+	}
+
+	template <typename T>
+	T* Get_GameObject(LAYERID eLayerID, const wstring& pObjTag)
+	{
+		T* pCasted = Get_GameObjectUnCheck<T>(eLayerID, pObjTag);
 		NULL_CHECK_RETURN(pCasted, nullptr);
 
 		return pCasted;
 	}
+
 	inline 	void Get_AllGameObject(LAYERID eLayerID, const wstring& pObjTag, list<CGameObject*>& outList);
 
 	inline CLayer* Get_Layer(LAYERID eLayerID);

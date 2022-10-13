@@ -6,6 +6,8 @@
 
 class CArrowCubeMgr;
 
+class CTerrainWater;
+
 class CStage : public Engine::CScene
 {
 private:

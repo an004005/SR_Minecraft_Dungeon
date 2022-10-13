@@ -22,9 +22,10 @@ public:
 	// equipitem function
 	virtual _int Attack() override;
 	virtual void Equipment(SkeletalPart* pSkeletalPart) override;
-	//virtual void Collision() override;
+	void LoadFireWork() { m_bFireWork = true; }
 
 private:
 	_bool PickTargetEnemy(OUT _vec3& vLookAt);
+	_bool m_bFireWork = false;
 };
 

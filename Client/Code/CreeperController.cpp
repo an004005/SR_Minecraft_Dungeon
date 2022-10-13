@@ -25,7 +25,7 @@ _int CCreeperController::Update_Component(const _float& fTimeDelta)
 	CCreeper* pCreeper = dynamic_cast<CCreeper*>(m_pOwner);
 	NULL_CHECK_RETURN(pCreeper, 0);
 
-	_vec3 vPos = pCreeper->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+	_vec3 vPos = pCreeper->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 	_vec3 vTargetPos;
 	
 
@@ -33,7 +33,7 @@ _int CCreeperController::Update_Component(const _float& fTimeDelta)
 	{
 		if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(ele.second))
 		{
-			vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+			vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 			_vec3 vDiff = vTargetPos - vPos;
 			_float fDist = D3DXVec3Length(&vDiff);
 		
@@ -46,7 +46,7 @@ _int CCreeperController::Update_Component(const _float& fTimeDelta)
 	if (m_bWalk)
 	{
 		pCreeper->AttackCountStart();
-		if (m_fExplosionCount >= 2.5f)
+		if (m_fExplosionCount >= 3.f)
 		{
 			pCreeper->Explosion(vTargetPos);
 			return 0;

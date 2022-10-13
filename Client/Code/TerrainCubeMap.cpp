@@ -20,7 +20,7 @@ HRESULT CTerrainCubeMap::Ready_Object(const wstring& wstrPath)
 	m_pTextureCom = Add_Component<CTexture>(L"Proto_PlantTexture", L"Proto_PlantTexture", ID_STATIC);
 
 	LoadMap(wstrPath);
-	
+	 
 
 	return S_OK;
 }
@@ -36,6 +36,7 @@ _int CTerrainCubeMap::Update_Object(const _float & fTimeDelta)
 void CTerrainCubeMap::LateUpdate_Object(void)
 {
 	Engine::CGameObject::LateUpdate_Object();
+	// CTerrainCubeMap* tmp = Get_GameObject<CTerrainCubeMap>(LAYER_ENV, L"TerrainCubeMap");
 }
 
 void CTerrainCubeMap::Render_Object(void)
@@ -223,7 +224,7 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 		vCenter.x = coll.matWorld._41;
 		vCenter.y = coll.matWorld._42;
 		vCenter.z = coll.matWorld._43;
-		Engine::Add_StaticCollision(vCenter, 1.f);
+		Engine::Add_StaticCollision(vCenter, 0.5f);
 	}
 
 }

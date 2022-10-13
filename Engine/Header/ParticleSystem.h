@@ -63,7 +63,7 @@ public:
 	virtual void	reset(void);												
 
 	virtual void	Reset_Particle(Attribute* _Attribute) PURE;		
-	virtual void	Add_Particle(const _vec3& _pos, const _float& _size, const D3DXCOLOR& _color, const _uint& _numParticle, const _float& _lifetime);
+	virtual void	Add_Particle(const _vec3& _pos, const _float& _size, const D3DXCOLOR& _color, const _uint& _numParticle, const _float& _lifetime,const _int& _type = 0);
 
 	virtual void	PreRender_Particle(void);	
 	virtual void	PostRender_Particle(void);	

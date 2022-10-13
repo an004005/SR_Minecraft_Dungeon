@@ -28,14 +28,15 @@ private:
 	_float m_fCurWindmillCoolTime = 0.f;
 	_float m_fCurTargetingCoolTime = 3.f;
 
-	_float m_fChopCoolTime = 8.f;
-	_float m_fSpitCoolTime = 5.f;
-	_float m_fSummonCoolTime = 15.f;
-	_float m_fWindmillCoolTime = 20.f;
+	_float m_fChopCoolTime = 10.f;
+	_float m_fSpitCoolTime = 8.f;
+	_float m_fSummonCoolTime = 17.f;
+	/*_float m_fWindmillCoolTime = 25.f;*/
+	_float m_fWindmillCoolTime = 10.f;
 	_float m_fTargetingCoolTime = 3.f;
 
-	_float m_fChopDist = 5.f;
+	_float m_fChopDist = 4.f;
 	_float m_fSpitDist = 10.f;
-	_float m_fWindmillDist = 2.f;
+	_float m_fWindmillDist = 5.f;
 };
 

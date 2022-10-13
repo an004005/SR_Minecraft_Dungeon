@@ -3,10 +3,10 @@
 #include "SkeletalCube.h"
 
 
-
 class CBox : public CSkeletalCube
 {
-public:
+private:
+
 	explicit CBox(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual ~CBox();
 
@@ -29,7 +29,9 @@ private:
 	virtual void AnimationEvent(const string& strEvent);
 
 	_bool m_bOpened = false;
-	
 
+private:
+	//template<class T>
+	void InitFunction();
+	std::function<void(const _vec3)> m_fCreateItem[8];
 };
-

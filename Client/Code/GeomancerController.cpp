@@ -30,7 +30,7 @@ _int CGeomancerController::Update_Component(const _float& fTimeDelta)
 	CGeomancer* pGeomancer = dynamic_cast<CGeomancer*>(m_pOwner);
 	NULL_CHECK_RETURN(pGeomancer, 0);
 
-	_vec3 vPos = pGeomancer->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+	_vec3 vPos = pGeomancer->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 	CPlayer* pTargetPlayer = nullptr;
 	_vec3 vTargetPos;
 	_float fTargetDist = 9999.f;
@@ -39,7 +39,7 @@ _int CGeomancerController::Update_Component(const _float& fTimeDelta)
 	{
 		if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(ele.second))
 		{
-			vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+			vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 			_vec3 vDiff = vPos - vTargetPos;
 			_float fDist = D3DXVec3Length(&vDiff);
 

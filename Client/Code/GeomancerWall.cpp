@@ -6,6 +6,7 @@
 #include "TerrainCubeMap.h"
 #include "Player.h"
 #include "StatComponent.h"
+#include "StaticCamera.h"
 
 CGeomancerWall::CGeomancerWall(LPDIRECT3DDEVICE9 pGraphicDev): CGameObject(pGraphicDev)
 {
@@ -109,6 +110,10 @@ void CGeomancerWall::LateUpdate_Object()
 {
 	if (m_bFire)
 	{
+		// shake
+		Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+			->PlayShake(0.15f, 0.4f);
+
 		_vec3& vPos = m_pTransform->m_vInfo[INFO_POS];
 
 		set<CGameObject*> setObj;

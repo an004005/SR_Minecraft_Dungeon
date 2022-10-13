@@ -6,10 +6,10 @@
 class CController;
 class CStatComponent;
 class CInventory;
-class CAxe;
 
 class CPlayer : public CSkeletalCube
 {
+	friend class CCamAnimation;
 protected:
 	explicit CPlayer(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual ~CPlayer() override;
@@ -63,23 +63,27 @@ public:
 	void RollPress() { m_bRoll = true; }
 	void Legacy1Press() { m_bLegacy1 = true; }
 	void Legacy2Press() { m_bLegacy2 = true; }
+	void Legacy3Press() { m_bLegacy3 = true; }
 	void Legacy4Press();
 
 	void UsePotion();
 	//
+
+	// UI용 함수
+	_float GetRollCoolTime() const { return m_CurRollCoolTime / s_RollCoolTime; }
+	_float GetPotionCoolTime() const { return m_CurPotionCoolTime / s_PotionCollTime; }
+	//
+
 	//아이템 변경(임시)
 	void WeaponChange(ITEMTYPE eIT);
-
+	void SetSpeed(_float fSpeed) { m_fSpeed = fSpeed; }
 	CInventory* GetInventory() { return m_pInventory; }
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
 
 private:
 	void RotateToCursor();
 	void RotateToMove();
-	
-	//근거리 ,원거리 상관없이 다 넣음, AttackState()에서 문제 생길 수 있음.
 	CInventory* m_pInventory = nullptr;
-	CAxe* m_pAxe = nullptr;
 
 protected:
 	SkeletalPart* m_pWeaponPart = nullptr;
@@ -110,6 +114,7 @@ protected:
 
 	_bool m_bLegacy1 = false;
 	_bool m_bLegacy2 = false;
+	_bool m_bLegacy3 = false;
 
 	_bool m_bApplyMeleeAttack = false;
 	_bool m_bApplyMeleeAttackNext = false;
