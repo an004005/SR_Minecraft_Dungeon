@@ -17,13 +17,24 @@ CBootsOfSwiftness::~CBootsOfSwiftness()
 HRESULT CBootsOfSwiftness::Ready_Object()
 {
 	m_iUItexNum = 11;
+	m_fCurCoolTime = 5.f;
+	m_fCoolTime = 5.f;
 	return S_OK;
 }
 
 _int CBootsOfSwiftness::Update_Object(const _float & fTimeDelta)
 {
+	if (m_fCoolTime > m_fCurCoolTime)
+	{
+		m_fCurCoolTime += fTimeDelta;
+		m_bUse = false;
+		return OBJ_NOEVENT;
+	}
+
 	if (m_bUse)
 	{
+		m_fCurCoolTime = 0.f;
+
 		m_fAge = 0.f;
 	
 		CPlayer* pPlayer = Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");

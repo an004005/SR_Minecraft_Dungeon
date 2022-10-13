@@ -72,12 +72,12 @@ public:
 	// UI용 함수
 	_float GetRollCoolTime() const { return m_CurRollCoolTime / s_RollCoolTime; }
 	_float GetPotionCoolTime() const { return m_CurPotionCoolTime / s_PotionCollTime; }
+	CInventory* GetInventory() const { return m_pInventory; }
 	//
 
 	//아이템 변경(임시)
 	void WeaponChange(ITEMTYPE eIT);
 	void SetSpeed(_float fSpeed) { m_fSpeed = fSpeed; }
-	CInventory* GetInventory() { return m_pInventory; }
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
 
 private:

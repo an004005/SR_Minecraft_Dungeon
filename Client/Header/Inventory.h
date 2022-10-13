@@ -1,4 +1,5 @@
 #pragma once
+#include "EquipItem.h"
 #include "GameObject.h"
 
 #define COL 4
@@ -42,8 +43,18 @@ public:
 
 	_uint GetEmeraldCnt() const { return m_iEmerald; }
 	_uint GetArrowCnt() const { return m_iArrow; }
-
-	
+	_float GetLegacyCoolTime(ITEMTYPE eType) const
+	{
+		if (m_arrEquip[eType] == nullptr)
+			return 1.f;
+		return m_arrEquip[eType]->GetCoolTime();
+	}
+	_uint GetItemUITexNum(ITEMTYPE eType) const
+	{
+		if (m_arrEquip[eType] == nullptr)
+			return 0;
+		return m_arrEquip[eType]->GetUITexNum();
+	}
 
 private:
 	array<CEquipItem*, (COL * ROW)> m_arrItem{}; //  아이템 스페이스

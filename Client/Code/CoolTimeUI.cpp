@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "..\Header\CoolTimeUI.h"
+
+#include "Inventory.h"
 #include "Player.h"
 
 CCoolTimeUI::CCoolTimeUI(LPDIRECT3DDEVICE9 pGraphicDev) : CUI(pGraphicDev)
@@ -27,6 +29,12 @@ HRESULT CCoolTimeUI::Ready_Object()
 		m_pIconTexture->AddRef();
 		m_iIconTexNum = 17;
 		break;
+	case CoolTimeTarget::LEGACY1:
+	case CoolTimeTarget::LEGACY2:
+	case CoolTimeTarget::LEGACY3:
+		m_pIconTexture = Add_Component<CTexture>(L"Proto_InventoryUI_Texture", L"Proto_InventoryUI_Texture", ID_STATIC);
+		m_iIconTexNum = 0;
+		break;
 	default: ;
 	}
 
@@ -45,13 +53,13 @@ _int CCoolTimeUI::Update_Object(const _float& fTimeDelta)
 		_vec3 vScale = m_pTransCom->m_vScale;
 		_vec3 vPos = m_pTransCom->m_vInfo[INFO_POS];
 		_vec3 vAngle = m_pTransCom->m_vAngle;
-		vScale.x *= 0.9f;
-		vScale.y *= 0.9f;
-		CGameUtilMgr::MatWorldComposeEuler(m_matCoolTimeWorld, vScale, vAngle, vPos);
+		CGameUtilMgr::MatWorldComposeEuler(m_matCoolTimeWorld, vScale * 0.9f, vAngle, vPos);
+		CGameUtilMgr::MatWorldComposeEuler(m_matIconWorld, vScale * 0.7f, vAngle, vPos);
 
 		m_bWorldSet = true;
 	}
 
+	ITEMTYPE eLegacyType = IT_END;
 	switch (m_eTarget)
 	{
 	case CoolTimeTarget::ROLL:
@@ -74,14 +82,26 @@ _int CCoolTimeUI::Update_Object(const _float& fTimeDelta)
 		}
 		break;
 	case CoolTimeTarget::LEGACY1:
+		eLegacyType = IT_LEGACY1;
 		break;
 	case CoolTimeTarget::LEGACY2:
+		eLegacyType = IT_LEGACY2;
 		break;
 	case CoolTimeTarget::LEGACY3:
+		eLegacyType = IT_LEGACY3;
 		break;
 	case CoolTimeTarget::COOL_END:
 		break;
 	default: ;
+	}
+
+	if (eLegacyType != IT_END)
+	{
+		const CInventory* pInventory = Get_GameObjectUnCheck<CPlayer>(LAYER_PLAYER, L"Player")->GetInventory();
+		_float fS = pInventory->GetLegacyCoolTime(eLegacyType);
+		if (fS > 1.f) fS = 1.f;
+		m_pCoolTimeTex->SetProgress(1.f - fS);
+		m_iIconTexNum = pInventory->GetItemUITexNum(eLegacyType);
 	}
 
 	return OBJ_NOEVENT;
@@ -97,10 +117,12 @@ void CCoolTimeUI::Render_Object()
 	m_pTextureCom->Set_Texture(m_iTexNum);
 	m_pBufferCom->Render_Buffer();
 
-	if (m_pIconTexture)
+	if (m_iIconTexNum != 0)
 	{
+		m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matIconWorld);
 		m_pIconTexture->Set_Texture(m_iIconTexNum);
 		m_pBufferCom->Render_Buffer();
+		m_iIconTexNum = 0;
 	}
 
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matCoolTimeWorld);

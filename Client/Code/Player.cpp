@@ -292,14 +292,15 @@ void CPlayer::StateChange()
 
 	if (m_bLegacy1 && m_bCanPlayAnim)
 	{
-	
-		m_eState = LEGACY;
 		m_bLegacy1 = false;
-		m_bCanPlayAnim = false;
 
 		if (m_pInventory->CurWeapon(IT_LEGACY1) == nullptr)
 			return;
+		if (m_pInventory->CurWeapon(IT_LEGACY1)->GetCoolTime() < 1.f)
+			return;
 
+		m_eState = LEGACY;
+		m_bCanPlayAnim = false;
 		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY1]);
 		m_pInventory->CurWeapon(IT_LEGACY1)->Use();
 		return;
@@ -307,13 +308,15 @@ void CPlayer::StateChange()
 
 	if (m_bLegacy2 && m_bCanPlayAnim)
 	{
-		m_eState = LEGACY;
 		m_bLegacy2 = false;
-		m_bCanPlayAnim = false;
 
 		if (m_pInventory->CurWeapon(IT_LEGACY2) == nullptr)
 			return;
+		if (m_pInventory->CurWeapon(IT_LEGACY2)->GetCoolTime() < 1.f)
+			return;
 
+		m_eState = LEGACY;
+		m_bCanPlayAnim = false;
 		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY2]);
 		m_pInventory->CurWeapon(IT_LEGACY2)->Use();
 		return;
@@ -321,14 +324,15 @@ void CPlayer::StateChange()
 
 	if (m_bLegacy3 && m_bCanPlayAnim)
 	{
-		
-		m_eState = LEGACY;
 		m_bLegacy3 = false;
-		m_bCanPlayAnim = false;
 
 		if (m_pInventory->CurWeapon(IT_LEGACY3) == nullptr)
 			return;
+		if (m_pInventory->CurWeapon(IT_LEGACY3)->GetCoolTime() < 1.f)
+			return;
 
+		m_eState = LEGACY;
+		m_bCanPlayAnim = false;
 		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY2]);
 		m_pInventory->CurWeapon(IT_LEGACY3)->Use();
 		return;

@@ -5,7 +5,7 @@ IMPLEMENT_SINGLETON(CDamageFontMgr)
 
 CDamageFontMgr::CDamageFontMgr()
 {
-	m_fSpeed = 2.5f;
+	m_fSpeed = 1.5f;
 }
 
 CDamageFontMgr::~CDamageFontMgr()
@@ -49,8 +49,8 @@ void CDamageFontMgr::Add_DamageFontFromWorld(_int iDamage, const _vec3& vPos, co
 
 	_vec3 vFromToScreen = vFrom;
 	D3DXVec3TransformCoord(&vFromToScreen, &vFromToScreen, &m_matViewProj);
-	vFromToScreen.x = m_ViewPort.Width * ( vFromToScreen.x + 1.0f ) / 2.0f + m_ViewPort.X;
-	vFromToScreen.y = m_ViewPort.Height * ( 2.0f - ( vFromToScreen.y + 1.0f ) ) / 2.0f + m_ViewPort.Y;
+	vFromToScreen.x = (_float)m_ViewPort.Width * ( vFromToScreen.x + 1.0f ) / 2.0f + (_float)m_ViewPort.X;
+	vFromToScreen.y = (_float)m_ViewPort.Height * ( 2.0f - ( vFromToScreen.y + 1.0f ) ) / 2.0f + (_float)m_ViewPort.Y;
 
 	_vec3 vDir = vPosToScreen - vFromToScreen;
 
@@ -72,10 +72,6 @@ void CDamageFontMgr::Render_DamageFontMgr()
 			&damageFont.vPos,
 			damageFont.Color);
 	}
-
-	// Render_Font(L"Gothic_Bold15", to_wstring(100).c_str(), 
-	// &_vec2(0,0), 
-	// D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
 }
 
 void CDamageFontMgr::Free()
