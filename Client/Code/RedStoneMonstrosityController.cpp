@@ -68,8 +68,6 @@ _int CRedStoneMonstrosityController::Update_Component(const _float& fTimeDelta)
 		vTargetPos = m_pTargetPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 		_vec3 vDiff = vTargetPos - vPos;
 		_float fDist = D3DXVec3Length(&vDiff);
-
-		
 	}
 	
 	

@@ -83,6 +83,12 @@
     <Filter Include="99. Default\fmod">
       <UniqueIdentifier>{ecdc1d57-d2d0-4795-b9a5-0995be8f09e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. Monster\00. Kuoku">
+      <UniqueIdentifier>{2a4825f2-e93f-43ea-a990-9ed99883c6ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Monster\01. Saton">
+      <UniqueIdentifier>{a617b281-bde0-4df9-9deb-bffb1f38c9b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\MainApp.h">
@@ -363,7 +369,10 @@
     <ClInclude Include="..\Header\InventoryUI.h">
       <Filter>02. GameObject\05. UI</Filter>
     </ClInclude>
-
+    <ClInclude Include="..\Header\Kouku.h">
+      <Filter>02. GameObject\01. Monster\00. Kuoku</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\KoukuController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -645,6 +654,10 @@
     <ClCompile Include="..\Code\InventoryUI.cpp">
       <Filter>02. GameObject\05. UI</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\Kouku.cpp">
+      <Filter>02. GameObject\01. Monster\00. Kuoku</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\KoukuController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
