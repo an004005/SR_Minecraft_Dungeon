@@ -29,7 +29,7 @@ public:
 	void PlayShake(_float fDuration, _float fMagnitude);
 
 	void PlayeCamAnimation(const wstring& wstrAnim);
-
+	void Set_Mode(void);
 private:
 	void Update_DefaultFollow(const _float& fTimeDelta);
 
@@ -63,3 +63,5 @@ public:
 private:
 	virtual void Free(void) override;
 };
+
+
