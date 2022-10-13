@@ -27,6 +27,9 @@
 #include "BatchTool.h"
 #include "DamageFontMgr.h"
 
+// object
+#include "Birds.h"
+#include "BirdsBrown.h"
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
 {
@@ -45,6 +48,8 @@ HRESULT CStage::Ready_Scene(void)
 	FAILED_CHECK_RETURN(Ready_Layer_Environment(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_GameLogic(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_UI(), E_FAIL);
+	// Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+	// 	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
 
 	Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 		->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
@@ -110,10 +115,17 @@ HRESULT CStage::Ready_Layer_Environment()
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", pGameObject), E_FAIL);
 
+	//  Birds
 
-	// m_arrLayer[LAYER_BULLET]->Add_GameObject(L"Arrow", pArrow);
+	for (int i = 0; i < 10; ++i)
+	{
+		CBirds* bird = CEnvFactory::Create<CBirds>("BirdsWhite", L"BirdsWhite");
+		bird->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->Set_Pos(3.f, 9.5f, 18.f + i);
 
-
+		CBirdsBrown* Brwon = CEnvFactory::Create<CBirdsBrown>("BirdsBrown", L"BirdsBrown");
+		Brwon->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->Set_Pos(6.f, 9.5f, 18.f + i);
+	}
+	
 	return S_OK;
 }
 
@@ -125,7 +137,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	//CObjectFactory::Create<CBox>("Box", L"Box2", { 4.f, 9.f, 15.f });
 	// CObjectFactory::Create<CDynamite>("Dynamite", L"Dynamite");
 
-	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 1.f, 0.f ,3.f });
+	// CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 47.f, 0.f ,40.f });
 	CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld);
 
 	
@@ -155,7 +167,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 47.f, 0.f ,17.f });
 		//CEnemyFactory::Create<CEnchanter>("Enchanter", L"Enchanter", matWorld);
 
-		// CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 3.f, 0.f ,13.f });
+		// CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 3.f, 0.f ,16.f });
 		// CEnemyFactory::Create<CRedStoneMonstrosity>("RedStoneMonstrosity", L"RedStoneMonstrosity", matWorld);
 	}
 	

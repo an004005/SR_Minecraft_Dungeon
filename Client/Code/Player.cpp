@@ -276,32 +276,6 @@ void CPlayer::AttackState()
 	// Get_GameObject<C3DBaseTexture>(LAYER_EFFECT, L"3D_Base")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 3.f, D3DXCOLOR(1.f, 1.f, 0.f, 0.f), 1, 30.f,1);
 #pragma endregion
 
-#pragma region GolemSmash
-	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_Shpere_L", L"Golem_Melee_Shpere_L");
-	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_Shpere_M", L"Golem_Melee_Shpere_M");
-	//
-	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_L", L"Golem_Melee_L");
-	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_M", L"Golem_Melee_M");
-	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_S", L"Golem_Melee_S");
-	// 	for (int i = 0; i < 15; i++)
-	// 	{
-	// 		CEffectFactory::Create<CCloud>("ShockPowder_Cloud", L"ShockPowder_Cloud");
-	// 	}
-	// //완전히 찍을 때
-	// 	Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.5f, D3DXCOLOR(0.88f,0.35f,0.24f,1.0f), 12, 0.8f);
-#pragma endregion
-
-#pragma region GolemSpit
-	// for (int i = 0; i < 10; i++)
-	// {
-		// CEffectFactory::Create<CGolemSpit>("Golem_Spit", L"Golem_Spit");
-	//}
-#pragma endregion
-
-#pragma region RedCube_Spawn
-		// CEffectFactory::Create<CCrack>("Red_Cube_Crack", L"Red_Cube_Crack");
-#pragma endregion
-
 #pragma region Lava_Paticle
 	// CEffectFactory::Create<CLava_Particle>("Lava_Particle", L"Lava_Particle");
 #pragma endregion

@@ -134,6 +134,11 @@ _int CMapTool::Update_Scene(const _float & fTimeDelta)
 
 void CMapTool::LateUpdate_Scene(void)
 {
+	IM_BEGIN("CamLoc");
+
+	ImGui::Text("x : %f, z : %f", m_pDCamera->GetEys().x, m_pDCamera->GetEys().z);
+	IM_END;
+
 	Engine::CScene::LateUpdate_Scene();
 }
 
@@ -161,13 +166,13 @@ HRESULT CMapTool::Ready_Layer_Environment()
 	m_pCubeMap = CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/Stage1.map");
 	NULL_CHECK_RETURN(m_pCubeMap, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", m_pCubeMap), E_FAIL);
-
-	/*_matrix firstCube;
-	D3DXMatrixIdentity(&firstCube);
-	firstCube._41 = 0.5f;
-	firstCube._42 = 0.5f;
-	firstCube._43 = 0.5f;
-	m_pCubeMap->AddCube({firstCube, 0, TYPE_LAND, 1.f});*/
+	 //
+	 // _matrix firstCube;
+	 // D3DXMatrixIdentity(&firstCube);
+	 // firstCube._41 = 0.5f;
+	 // firstCube._42 = 0.5f;
+	 // firstCube._43 = 0.5f;
+	 // m_pCubeMap->AddCube({firstCube, 0, TYPE_LAND, 1.f});
 
 	return S_OK;
 }
