@@ -23,7 +23,7 @@ HRESULT CKouku::Ready_Object()
 
 	// m_arrAnim[INTRO] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/RedStoneMonstrosity/intro.anim");
 	m_arrAnim[WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_walk.anim");
-	// m_arrAnim[DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/RedStoneMonstrosity/dead.anim");
+	m_arrAnim[BASIC_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_basicattack.anim");
 	m_arrAnim[IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_idle.anim");
 	m_arrAnim[HAMMER_IN] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_hammer_x.anim");
 	m_arrAnim[HAMMER_OUT] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_hammer_o.anim");
@@ -62,6 +62,10 @@ void CKouku::AnimationEvent(const string& strEvent)
 	{
 		m_bHorrorAttack = true;
 		m_bCountable = true;
+	}
+	else if (strEvent == "BasicAttack")
+	{
+		m_bBasicAttack = true;
 	}
 	else if (strEvent == "AnimStopped")
 	{
@@ -116,6 +120,8 @@ _int CKouku::Update_Object(const _float& fTimeDelta)
 		}
 		m_strState = "HORROR_ATTACK";
 		break;
+	case BASIC_ATTACK:
+		m_strState = "BASICATTACK";
 	case DEAD:
 		break;
 	default:
@@ -192,6 +198,17 @@ void CKouku::StateChange()
 			m_bCanPlayAnim = false;
 			return;
 		}
+	}
+
+	if (m_bBasicAttack && m_bCanPlayAnim)
+	{
+		m_eState = BASIC_ATTACK;
+		RotateToTargetPos(m_vTargetPos);
+		PlayAnimationOnce(&m_arrAnim[BASIC_ATTACK]);
+		m_bCanPlayAnim = false;
+		m_bMove = false;
+		SetOff();
+		return;
 	}
 
 	if (m_bDoubleHammer && m_bCanPlayAnim)

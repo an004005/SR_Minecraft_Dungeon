@@ -13,6 +13,7 @@ private:
 		HAMMER_OUT,
 		HAMMER_ATTACK,
 		HORROR_ATTACK,
+		BASIC_ATTACK,
 		WALK,
 		DEAD,
 		STATE_END
@@ -39,6 +40,11 @@ public:
 		m_bDoubleHammer = true;
 		m_vTargetPos = vTargetPos;
 	}
+	void BasicAttack(const _vec3& vTargetPos)
+	{
+		m_bBasicAttack = true;
+		m_vTargetPos = vTargetPos;
+	}
 
 	void HorrorAttack(const _vec3& vTargetPos)
 	{
@@ -60,6 +66,7 @@ private:
 		m_bDoubleHammer = false;
 		m_bHorrorAttack = false;
 		m_bCountable = false;
+		m_bBasicAttack = false;
 	}
 	// true : PlayAnimationOnce 사용 가능 상태(동작 애니메이션 실행 가능), false: 다른 애니메이션 실행중
 	_bool m_bCanPlayAnim = true; // 현재 실행중인 애니메이션 끊고 애니메이션 실행 가능 여부
@@ -68,6 +75,7 @@ private:
 
 	_bool m_bDoubleHammer = false; // controller 입력
 	_bool m_bHorrorAttack = false; // controller 입력
+	_bool m_bBasicAttack = false;
 	_bool m_bCountable = false; // contriller 입력
 	_bool m_bMove = false;
 	_float m_fTime;

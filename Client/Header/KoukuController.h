@@ -23,17 +23,18 @@ private:
 
 	_float m_fCurDoubleHammerCoolTime = 0.f;
 	_float m_fCurHorrorAttackCoolTime = 0.f;
-
+	_float m_fCurBasicAttackCoolTime = 0.f;
 	_float m_fCurTargetingCoolTime = 3.f;
 
-	_float m_fDoubleHammerCoolTime = 8.f;
-	_float m_fHorrorAttackCoolTime = 15.f;
+	_float m_fBasicAttackCoolTime = 5.f;
+	_float m_fDoubleHammerCoolTime = 15.f;
+	_float m_fHorrorAttackCoolTime = 25.f;
 	_float m_fTargetingCoolTime = 3.f; 
 
-	_float m_fDoubleHammerDist = 6.f;
-	_float m_fHorrorAttackDist = 6.f;
+	_float m_fDoubleHammerDist = 8.f;
+	_float m_fHorrorAttackDist = 8.f;
+	_float m_fBasicAttackDist = 5.f;
 
-
-	_float m_fDist = 3.f;
+	_float m_fDist = 5.f;
 };
 

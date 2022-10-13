@@ -21,6 +21,7 @@ _int CKoukuController::Update_Component(const _float& fTimeDelta)
 	{
 		m_fCurDoubleHammerCoolTime += fTimeDelta;
 		m_fCurHorrorAttackCoolTime += fTimeDelta;
+		m_fCurBasicAttackCoolTime += fTimeDelta;
 	}
 	CKouku* pKouku = dynamic_cast<CKouku*>(m_pOwner);
 	NULL_CHECK_RETURN(pKouku, 0);
@@ -65,6 +66,13 @@ _int CKoukuController::Update_Component(const _float& fTimeDelta)
 	{
 		m_fCurDoubleHammerCoolTime = 0.f;
 		pKouku->DoubleHammer(vTargetPos);
+		return 0;
+	}
+
+	if (m_fCurBasicAttackCoolTime >= m_fBasicAttackCoolTime && fTargetDist <= m_fBasicAttackDist)
+	{
+		m_fBasicAttackCoolTime = 0.f;
+		pKouku->BasicAttack(vTargetPos);
 		return 0;
 	}
 
