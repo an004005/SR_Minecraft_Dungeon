@@ -20,12 +20,12 @@ HRESULT CSkeletalCube::Ready_Object()
 	m_pRootPart = new SkeletalPart;
 	// 루트 부분 수정하지 말기
 
-	m_pRootPart->pTrans = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom_root", ID_DYNAMIC);
+	m_pRootPart->pTrans = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 
 	m_pRootPart->strName = s_strRoot;
 	m_mapParts.insert({s_strRoot, m_pRootPart});
 	m_pRootPart->strTransProto = L"Proto_TransformCom";
-	m_pRootPart->strTransCom = L"Proto_TransformCom_root";
+	m_pRootPart->strTransCom = L"Proto_TransformCom";
 
 	return S_OK;
 }

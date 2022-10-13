@@ -48,17 +48,22 @@ private:
 	_int m_iHP = 50;
 	_bool m_bDead = false;
 
+	// stun
 	_bool m_bStun = false;
-	_bool m_bKnockback = false;
 	_float m_fStunTime = 2.f;
-	_float m_fKnockbackTime = 1.f;
 	_float m_fCurStunTime = 2.f;
+
+	// knock back
+	_bool m_bKnockback = false;
+	_float m_fKnockbackTime = 1.f;
 	_float m_fCurKnockbackTime = 1.f;
+
 	_vec3 m_vKnockBackVelocity = CGameUtilMgr::s_vZero;
 
+	// damaged
 	_bool m_bDamaged = false;
-	_float m_fDamagedTime = 0.5f;
-	_float m_fCurDamagedTime = 1.f;
+	_float m_fDamagedTime = 0.5;
+	_float m_fCurDamagedTime = 0.5;
 
 
 };

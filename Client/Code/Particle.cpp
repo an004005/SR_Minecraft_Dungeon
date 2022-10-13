@@ -316,7 +316,7 @@ _int CSpeedBoots_Particle::Update_Object(const _float& fTimeDelta)
 
 			if (_int(i->_fAge) % 2 == 0)
 			{
-				CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+				CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 				pPlayerTransform->Get_Info(INFO_POS, &i->_vPosition);
 				i->_vPosition.y += 4.f;
 			}
@@ -345,7 +345,7 @@ void CSpeedBoots_Particle::Reset_Particle(Attribute* _Attribute)
 	_Attribute->_bIsAlive = true;
 	m_fSize = _Attribute->_fSize;
 
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 	pPlayerTransform->Get_Info(INFO_POS, &_Attribute->_vPosition);
 
 	_Attribute->_vPosition.y += 4.f;
@@ -475,7 +475,7 @@ void CFireWork_Fuze::Reset_Particle(Attribute* _Attribute)
 	_Attribute->_bIsAlive = true;
 	m_fSize = _Attribute->_fSize;
 
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 	pPlayerTransform->Get_Info(INFO_LOOK, &_Attribute->_vVelocity);
 
 	D3DXVec3Normalize(
@@ -640,7 +640,7 @@ HRESULT CShock_Powder::Ready_Object()
 
 	m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
 
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 	_vec3 pPos;
 	pPlayerTransform->Get_Info(INFO_POS, &pPos);
 	
@@ -737,7 +737,7 @@ HRESULT CUVCircle::Ready_Object(_float _size, CIRCLETYPE _type)
 	if (_type == SHOCK)
 	{
 		m_pBufferCom->Set_TextureOption(2, 4, 2);
-		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 		_vec3 pPos;
 		pPlayerTransform->Get_Info(INFO_POS, &pPos);
 		m_pTransCom->Set_Pos(pPos.x, pPos.y + 0.5f, pPos.z);
@@ -761,7 +761,7 @@ HRESULT CUVCircle::Ready_Object(_float _size, CIRCLETYPE _type)
 	{
 		//골렘 포인터로 바꿔야함 손 위치 받아오기 
 		m_pBufferCom->Set_TextureOption(3, 4, 2);
-		CTransform*	pGolem = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+		CTransform*	pGolem = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 		_vec3 pPos;
 		pGolem->Get_Info(INFO_POS, &pPos);
 		m_pTransCom->Set_Pos(pPos.x, pPos.y + 0.5f, pPos.z);
@@ -838,7 +838,7 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 
 	
 
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 	_vec3 pPos;
 	pPlayerTransform->Get_Info(INFO_POS, &pPos);
 
@@ -850,7 +850,7 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture(0));
 		m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
 		m_pBufferCom->Set_TextureOption(5, 4, 2);
-		CTransform*	pPlayer = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+		CTransform*	pPlayer = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 		_vec3 pPos;
 		pPlayer->Get_Info(INFO_POS, &pPos);
 		m_pTransCom->Set_Pos(pPos.x, pPos.y, pPos.z);
@@ -879,7 +879,7 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture(0));
 		m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
 		m_pBufferCom->Set_TextureOption(15, 4, 2);
-		CTransform*	pPlayer = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+		CTransform*	pPlayer = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 		_vec3 pPos;
 		pPlayer->Get_Info(INFO_POS, &pPos);
 		m_pTransCom->Set_Pos(pPos.x, pPos.y + 0.5f, pPos.z);
@@ -905,7 +905,7 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture(0));
 		m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
 		m_pBufferCom->Set_TextureOption(20, 4, 2);
-		CTransform*	pPlayer = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+		CTransform*	pPlayer = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 		_vec3 pPos;
 		pPlayer->Get_Info(INFO_POS, &pPos);
 		m_pTransCom->Set_Pos(pPos.x, pPos.y + 0.5f, pPos.z);
@@ -960,7 +960,7 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 		// m_pBufferCom->Set_TextureOption(_uint(CGameUtilMgr::GetRandomFloat(7.f, 15.f)), 4, 2);
 		m_pBufferCom->Set_TextureOption(5, 4, 2);
 
-		CTransform*	pPlayer = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+		CTransform*	pPlayer = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 		_vec3 pPos;
 		_vec3 pLook;
 		pPlayer->Get_Info(INFO_POS, &pPos);
@@ -1092,7 +1092,7 @@ HRESULT CCrack::Ready_Object(_float _size, CRACKTYPE _type)
 		m_pTexture = Add_Component<CTexture>(L"Proto_Crack", L"Proto_Crack", ID_STATIC);
 		m_pBufferCom->Set_TextureOption(15, 2, 2);
 		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
-		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 		_vec3 pPos;
 		pPlayerTransform->Get_Info(INFO_POS, &pPos);
 		
@@ -1110,7 +1110,7 @@ HRESULT CCrack::Ready_Object(_float _size, CRACKTYPE _type)
 		m_pBufferCom->Set_TextureOption(15, 2, 2);
 		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
 		_vec3& vPos = m_pTransCom->m_vInfo[INFO_POS];
-		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 		_vec3 pPos;
 		_vec3 pLook;
 		pPlayerTransform->Get_Info(INFO_POS, &pPos);
@@ -1130,7 +1130,7 @@ HRESULT CCrack::Ready_Object(_float _size, CRACKTYPE _type)
 		m_pTexture = Add_Component<CTexture>(L"Proto_LazerLightTex", L"Proto_LazerLightTex", ID_STATIC);
 		m_pBufferCom->Set_TextureOption(15, 2, 2);
 		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
-		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 		_vec3 pPos;
 		_vec3 pLook;
 		pPlayerTransform->Get_Info(INFO_POS, &pPos);
@@ -1150,7 +1150,7 @@ HRESULT CCrack::Ready_Object(_float _size, CRACKTYPE _type)
 		m_pTexture = Add_Component<CTexture>(L"Proto_LoadingBoxTex", L"Proto_LoadingBoxTex", ID_STATIC);
 		m_pBufferCom->Set_TextureOption(10, 8, 8);
 		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
-		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 		_vec3 pPos;
 		_vec3 pLook;
 		pPlayerTransform->Get_Info(INFO_POS, &pPos);
@@ -1257,7 +1257,7 @@ HRESULT CGolemSpit::Ready_Object(_float _size)
 
 	
 
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 	_vec3 pPos;
 	pPlayerTransform->Get_Info(INFO_POS, &pPos);
 	m_pTransCom->Set_Pos(pPos.x, pPos.y, pPos.z);
@@ -1464,7 +1464,7 @@ HRESULT CLava_Particle::Ready_Object(_float _size, LAVATYPE _type)
 
 	if (_type == FALLINLAVA)
 	{
-		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 		_vec3 pPos;
 		pPlayerTransform->Get_Info(INFO_POS, &pPos);
 		m_pTransCom->Set_Pos(pPos.x, pPos.y, pPos.z);
@@ -1476,7 +1476,7 @@ HRESULT CLava_Particle::Ready_Object(_float _size, LAVATYPE _type)
 	}
 	else if (_type == FUZEPARTICLE)
 	{
-		// CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+		// CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 		// _vec3 pPos;
 		// pPlayerTransform->Get_Info(INFO_POS, &pPos);
 		// m_pTransCom->Set_Pos(pPos.x, pPos.y, pPos.z);
@@ -1571,11 +1571,11 @@ HRESULT CHealCircle::Ready_Object(_float _size, _float _rad)
 	m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
 	m_pBufferCom->Set_TextureOption(0, 0, 0);
 
-	// CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	// CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 	// _vec3 pPos;
 	// pPlayerTransform->Get_Info(INFO_POS, &pPos);
 	// m_pTransCom->Set_Pos(pPos.x, pPos.y+1.5f, pPos.z);
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 	m_pTransCom->m_vInfo[INFO_POS].y = pPlayerTransform->m_vInfo[INFO_POS].y;
 
 	m_pTransCom->Set_Scale(_size, _size, _size);
@@ -1596,7 +1596,7 @@ _int CHealCircle::Update_Object(const _float& fTimeDelta)
 		return OBJ_DEAD;
 	}
 
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 	_vec3 pPos;
 	pPlayerTransform->Get_Info(INFO_POS, &pPos);
 	m_pTransCom->m_vInfo[INFO_POS].x = pPos.x;
@@ -1685,7 +1685,7 @@ HRESULT CHeartParticle::Ready_Object(_float _size)
 	m_fTime = 1.5f;
 	m_fCurTime = 0.f;
 
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 	m_pTransCom->m_vInfo[INFO_POS].y = pPlayerTransform->m_vInfo[INFO_POS].y;
 
 	m_pTransCom->Update_Component(0.f);
@@ -1711,7 +1711,7 @@ _int CHeartParticle::Update_Object(const _float& fTimeDelta)
 
 	// m_pTransCom->m_vInfo[INFO_POS].x += acosf(D3DXToRadian(20.f)) * fTimeDelta * 10.f;
 	// m_pTransCom->m_vInfo[INFO_POS].y += sinf(D3DXToRadian(20.f)) * fTimeDelta * 10.f;
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 	_vec3 pPos;
 	pPlayerTransform->Get_Info(INFO_POS, &pPos);
 	// m_pTransCom->Set_Pos(pPos.x + CGameUtilMgr::GetRandomFloat(-1.f, 1.f), pPos.y, pPos.z + CGameUtilMgr::GetRandomFloat(-1.f, 1.f));
@@ -1782,7 +1782,7 @@ HRESULT CLazer::Ready_Object(_float _size)
 	m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
 	m_pBufferCom->Set_UVOption( 1, 3.f, CGameUtilMgr::GetRandomFloat(0.1f,0.5f), 3.f, 4.f);
 
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 	_vec3 pPos;
 	_vec3 pLook;
 	pPlayerTransform->Get_Info(INFO_POS, &pPos);
@@ -1812,7 +1812,7 @@ _int CLazer::Update_Object(const _float& fTimeDelta)
 
 	m_fCurTime += fTimeDelta;
 
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 	_vec3 pPos;
 	pPlayerTransform->Get_Info(INFO_POS, &pPos);
 
@@ -1879,7 +1879,7 @@ HRESULT CGradation_Beam::Ready_Object(_float _size)
 	// m_pBufferCom->Set_UVOption(0, CGameUtilMgr::GetRandomFloat(1.5f, 3.f), 0.5f, 1.5f, 0.f);
 	m_pBufferCom->Set_UVOption(0, 0.f, 0.5f, 1.5f, 0.f);
 
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 	_vec3 pPos;
 	_vec3 pLook;
 	pPlayerTransform->Get_Info(INFO_POS, &pPos);
@@ -1906,7 +1906,7 @@ _int CGradation_Beam::Update_Object(const _float& fTimeDelta)
 
 	m_fCurTime += fTimeDelta;
 
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 	_vec3 pPos;
 	pPlayerTransform->Get_Info(INFO_POS, &pPos);
 
@@ -1977,11 +1977,11 @@ HRESULT CLazer_Circle::Ready_Object(_float _size)
 	m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
 	m_pBufferCom->Set_TextureOption(0, 0, 0);
 
-	// CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	// CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 	// _vec3 pPos;
 	// pPlayerTransform->Get_Info(INFO_POS, &pPos);
 	// m_pTransCom->Set_Pos(pPos.x, pPos.y+1.5f, pPos.z);
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 	_vec3 pPos;
 	_vec3 pLook;
 	pPlayerTransform->Get_Info(INFO_POS, &pPos);
@@ -2018,7 +2018,7 @@ _int CLazer_Circle::Update_Object(const _float& fTimeDelta)
 	}
 	m_pTransCom->m_vInfo[INFO_POS] += m_vVelocity * fTimeDelta * 20.f;
 
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 	_vec3 pPos;
 	_vec3 pLook;
 	pPlayerTransform->Get_Info(INFO_POS, &pPos);

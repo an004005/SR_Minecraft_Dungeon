@@ -68,7 +68,7 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 	//box open
 	if (DIKeyDown(DIK_F))
 	{
-		_vec3 vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+		_vec3 vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 		//¹Ú½º ¿­±â , ÆøÅº ÁÝ±â
 		pickGameObj(pPlayer, vTargetPos);
 		//¾ÆÀÌÅÛ ¸Ô±â
@@ -226,7 +226,7 @@ void CPlayerController::pickGameObj(CPlayer* pPlayer, const  _vec3& vTargetPos)
 
 		if (CBox* pGameObj = dynamic_cast<CBox*>(ele.second))
 		{
-			_vec3 vDiff = vTargetPos - pGameObj->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+			_vec3 vDiff = vTargetPos - pGameObj->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 			_float fDist = D3DXVec3Length(&vDiff);
 
 			if (fDist < fBoxDist)

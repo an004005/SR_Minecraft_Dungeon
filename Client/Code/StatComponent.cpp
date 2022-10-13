@@ -33,9 +33,6 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 			m_bStun = false;
 		else
 			m_fCurStunTime += fTimeDelta;
-	
-	
-
 	}
 
 	if (m_bKnockback)
@@ -49,10 +46,7 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 	if (m_bDamaged)
 	{
 		if (m_fDamagedTime < m_fCurDamagedTime)
-		{
-			m_bStun = false;
-			m_bKnockback = false;
-		}
+			m_bDamaged = false;
 		else
 			m_fCurDamagedTime += fTimeDelta;
 	}
