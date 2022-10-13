@@ -97,6 +97,8 @@ HRESULT CInventory::Ready_Object()
 	
 	}
 
+	m_iArrow = 90;
+
 	return S_OK;
 }
 
@@ -229,7 +231,7 @@ void CInventory::Put(CConsumeItem * pItem)
 		m_iEmerald++;
 		break;
 	case IE_ARROW:
-		m_iArrow++;
+		m_iArrow += 40;
 		break;
 	case IE_HEAL:
 	{

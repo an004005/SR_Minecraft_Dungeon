@@ -35,6 +35,8 @@ public:
 	void Put(CConsumeItem* pItem);
 	void TakeOut(CEquipItem* pItem);
 
+	void UseArrow() {--m_iArrow;}
+
 
 	//아이템 장착
 	void Equip_Item(SkeletalPart* pSkeletalPart, ITEMTYPE eIT);

@@ -69,6 +69,7 @@ _int CCoolTimeUI::Update_Object(const _float& fTimeDelta)
 			_float fS = pPlayer->GetRollCoolTime();
 			if (fS > 1.f) fS = 1.f;
 			m_pCoolTimeTex->SetProgress(1.f - fS);
+			m_iIconTexNum = 5;
 		}
 
 		break;
@@ -79,6 +80,7 @@ _int CCoolTimeUI::Update_Object(const _float& fTimeDelta)
 			_float fS = pPlayer->GetPotionCoolTime();
 			if (fS > 1.f) fS = 1.f;
 			m_pCoolTimeTex->SetProgress(1.f - fS);
+			m_iIconTexNum = 17;
 		}
 		break;
 	case CoolTimeTarget::LEGACY1:
@@ -133,7 +135,6 @@ void CCoolTimeUI::Render_Object()
 
 void CCoolTimeUI::Free()
 {
-	Safe_Release(m_pIconTexture);
 	Safe_Release(m_pCoolTimeTex);
 	CUI::Free();
 }

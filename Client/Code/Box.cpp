@@ -40,7 +40,8 @@ void CBox::AnimationEvent(const string& strEvent)
 			iRandNum = rand() % 8;
 			m_fCreateItem[iRandNum](m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 		}
-	
+
+		m_fCreateItem[7](m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 	}
 	
 }
