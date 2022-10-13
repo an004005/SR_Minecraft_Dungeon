@@ -18,6 +18,7 @@ CShockPowder::~CShockPowder()
 
 HRESULT CShockPowder::Ready_Object()
 {
+	m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 	m_iUItexNum = 14;
 	m_fCurCoolTime = 10.f;
 	m_fCoolTime = 10.f;

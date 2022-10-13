@@ -175,22 +175,22 @@ HRESULT CMainApp::Ready_Proto()
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Terrain_WaterCom", CTerrainShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/Terrain_Water_Test1.fx", VTXCNTX, VTXCNTZ, VTXITV
 		, _vec2(0.f, 0.f), _vec2(1.f, 0.f), _vec2(1.f, 1.f), _vec2(0.f, 1.f), 36,36)), E_FAIL);
 
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_LazerBeamCom", CTerrainShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/Terrain_Water_Test1.fx", 2, 2, 1
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_LazerBeamCom", CTerrainShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/Terrain_Water_Twssaest1.fx", 2, 2, 1
 		, _vec2(0.f, 0.f), _vec2(1.f, 0.f), _vec2(1.f, 1.f), _vec2(0.f, 1.f), 1, 1)), E_FAIL);
 
 
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_GradationCom", CTerrainShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/UVAnimation_Lazer.fx", 2, 2, 1
 		, _vec2(0.f, 0.f), _vec2(1.f, 0.f), _vec2(1.f, 1.f), _vec2(0.f, 1.f), 1, 1)), E_FAIL);
 
+	s
 
-
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Terrain_Water_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Terrain/Water4.png", TEX_NORMAL)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Terrain_Water_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Terrain/Water4.psng", TEX_NORMAL)), E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CubeTexCom", Engine::CCubeTex::Create(m_pGraphicDev)), E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CubeTexture", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/SkyBox/burger%d.dds", TEX_CUBE, 4)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_MinecraftCubeTexture", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/MinscraftCubeTile/CubeTile_%d.dds", TEX_CUBE, 164)), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_TransformCom", Engine::CTransform::Create()), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"wwa", Engine::CTransform::Create()), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_BossCubeTile", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/BossCubeTile/boss_%d.dds", TEX_CUBE, 12)), E_FAIL);
 
 

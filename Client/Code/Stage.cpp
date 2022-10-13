@@ -49,8 +49,8 @@ HRESULT CStage::Ready_Scene(void)
 	FAILED_CHECK_RETURN(Ready_Layer_GameLogic(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_UI(), E_FAIL);
 
-	Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
-		->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
+	// Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+	// 	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
 
 	CBatchTool::Load(L"../Bin/Resource/Batch/stage1_test.batch");
 
@@ -131,7 +131,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	// CObjectFactory::Create<CDynamite>("Dynamite", L"Dynamite");
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 0.f, 0.f ,0.f });
-	CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld);
+	CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld)->PlayerSpawn();
 
 	
 	CEffectFactory::Create<C3DBaseTexture>("3D_Base", L"3D_Base");

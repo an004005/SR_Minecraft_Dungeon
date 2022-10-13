@@ -14,8 +14,17 @@ HRESULT CSphereEffect::Ready_Object(_float _size, SPHERETYPE _type)
 
 	if (_type == GOLEM_MELEE_L)
 	{
-		m_pBufferCom = Add_Component<CSphereMesh>(L"Proto_SphereCom_Ring", L"Proto_SphereCom_Ring", ID_STATIC);		
-		CTransform* pTrans = Get_GameObject<CRedStoneMonstrosity>(LAYER_ENEMY, L"RedStoneMonstrosity")->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+		m_pBufferCom = Add_Component<CSphereMesh>(L"Proto_SphereCom_Ring", L"Proto_SphereCom_Ring", ID_STATIC);
+
+		CTransform* pTrans= nullptr;
+		for (auto& e : Get_Layer(LAYER_ENEMY)->Get_MapObject())
+		{
+			if (CRedStoneMonstrosity* red = dynamic_cast<CRedStoneMonstrosity*>(e.second))
+			{
+				pTrans = red->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+			}
+		}
+
 		_vec3 pPos = pTrans->m_vInfo[INFO_POS];
 		_vec3 vLook = pTrans->m_vInfo[INFO_LOOK];
 		D3DXVec3Normalize(&vLook, &vLook);
@@ -29,7 +38,15 @@ HRESULT CSphereEffect::Ready_Object(_float _size, SPHERETYPE _type)
 	else if (_type == GOLEM_MELEE_M)
 	{
 		m_pBufferCom = Add_Component<CSphereMesh>(L"Proto_SphereCom_Lava", L"Proto_SphereCom_Lava", ID_STATIC);
-		CTransform* pTrans = Get_GameObject<CRedStoneMonstrosity>(LAYER_ENEMY, L"RedStoneMonstrosity")->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+		CTransform* pTrans = nullptr;
+		for (auto& e : Get_Layer(LAYER_ENEMY)->Get_MapObject())
+		{
+			if (CRedStoneMonstrosity* red = dynamic_cast<CRedStoneMonstrosity*>(e.second))
+			{
+				pTrans = red->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+				break;
+			}
+		}
 		_vec3 pPos = pTrans->m_vInfo[INFO_POS];
 		_vec3 vLook = pTrans->m_vInfo[INFO_LOOK];
 		D3DXVec3Normalize(&vLook, &vLook);
@@ -44,7 +61,14 @@ HRESULT CSphereEffect::Ready_Object(_float _size, SPHERETYPE _type)
 	else if (_type == GOLEM_MELEE_S)
 	{
 		m_pBufferCom = Add_Component<CSphereMesh>(L"Proto_SphereCom_Ring", L"Proto_SphereCom_Ring", ID_STATIC);
-		CTransform* pTrans = Get_GameObject<CRedStoneMonstrosity>(LAYER_ENEMY, L"RedStoneMonstrosity")->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+		CTransform* pTrans= nullptr;
+		for (auto& e : Get_Layer(LAYER_ENEMY)->Get_MapObject())
+		{
+			if (CRedStoneMonstrosity* red = dynamic_cast<CRedStoneMonstrosity*>(e.second))
+			{
+				pTrans = red->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+			}
+		}
 		_vec3 pPos = pTrans->m_vInfo[INFO_POS];
 		_vec3 vLook = pTrans->m_vInfo[INFO_LOOK];
 		D3DXVec3Normalize(&vLook, &vLook);
@@ -59,7 +83,14 @@ HRESULT CSphereEffect::Ready_Object(_float _size, SPHERETYPE _type)
 	else if (_type == SPHERE_L)
 	{
 		m_pBufferCom = Add_Component<CSphereMesh>(L"Proto_SphereCom_L", L"Proto_SphereCom_L", ID_STATIC);
-		CTransform* pTrans = Get_GameObject<CRedStoneMonstrosity>(LAYER_ENEMY, L"RedStoneMonstrosity")->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+		CTransform* pTrans= nullptr;
+		for (auto& e : Get_Layer(LAYER_ENEMY)->Get_MapObject())
+		{
+			if (CRedStoneMonstrosity* red = dynamic_cast<CRedStoneMonstrosity*>(e.second))
+			{
+				pTrans = red->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+			}
+		}
 		_vec3 pPos = pTrans->m_vInfo[INFO_POS];
 		_vec3 vLook = pTrans->m_vInfo[INFO_LOOK];
 		D3DXVec3Normalize(&vLook, &vLook);
@@ -74,7 +105,14 @@ HRESULT CSphereEffect::Ready_Object(_float _size, SPHERETYPE _type)
 	else if (_type == SPHERE_M)
 	{
 		m_pBufferCom = Add_Component<CSphereMesh>(L"Proto_SphereCom_M", L"Proto_SphereCom_M", ID_STATIC);
-		CTransform* pTrans = Get_GameObject<CRedStoneMonstrosity>(LAYER_ENEMY, L"RedStoneMonstrosity")->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+		CTransform* pTrans= nullptr;
+		for (auto& e : Get_Layer(LAYER_ENEMY)->Get_MapObject())
+		{
+			if (CRedStoneMonstrosity* red = dynamic_cast<CRedStoneMonstrosity*>(e.second))
+			{
+				pTrans = red->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+			}
+		}
 		_vec3 pPos = pTrans->m_vInfo[INFO_POS];
 		_vec3 vLook = pTrans->m_vInfo[INFO_LOOK];
 		D3DXVec3Normalize(&vLook, &vLook);
