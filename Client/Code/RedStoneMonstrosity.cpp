@@ -103,7 +103,7 @@ void CRedStoneMonstrosity::AnimationEvent(const string& strEvent)
 			pMonsterBullet->SetBulletInform(vLook, _float(rand() % 3 + 9));
 		}		
 	}
-	//땅 내려치는 모션
+	//소환 모션
 	else if (strEvent == "Sommon_End")
 	{
 		for (_int i = 0; i < 6; ++i)
