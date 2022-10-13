@@ -134,7 +134,7 @@ void CSoundMgr::SetChannelPause(CHANNELID eID, bool bPause)
 
 void CSoundMgr::Update_Listener(const wstring& wstrListernTag)
 {
-	m_vListenerPos = Engine::Get_Component<CTransform>(LAYER_PLAYER, wstrListernTag, L"Proto_TransformCom_root", ID_DYNAMIC)
+	m_vListenerPos = Engine::Get_Component<CTransform>(LAYER_PLAYER, wstrListernTag, L"Proto_TransformCom", ID_DYNAMIC)
 		->m_vInfo[INFO_POS];
 }
 

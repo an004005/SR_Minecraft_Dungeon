@@ -137,8 +137,6 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	
 	//monsters
 	{	
-		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 50.f, 0.f ,26.f});
-		CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
 	
 		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 45.f, 0.f ,23.f });
 		CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);

@@ -96,9 +96,9 @@ _int CBatchTool::Update_Scene(const _float& fTimeDelta)
 			for (const auto& obj : Engine::Get_Layer((LAYERID)i)->Get_MapObject())
 			{
 				CTransform* pTrans = nullptr;
-				if (obj.second->Has_Component(L"Proto_TransformCom_root", ID_DYNAMIC))
+				if (obj.second->Has_Component(L"Proto_TransformCom", ID_DYNAMIC))
 				{
-					pTrans = obj.second->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC);
+					pTrans = obj.second->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
 				}
 				else if (obj.second->Has_Component(L"Proto_TransformCom", ID_DYNAMIC))
 				{
@@ -225,8 +225,8 @@ void CBatchTool::Save(const wstring& wstrPath)
 		WriteFile(hFile, strFactoryTag.c_str(), dwStrByte, &dwByte, nullptr);
 
 		_matrix matWorld;
-		if (e.second->Has_Component(L"Proto_TransformCom_root", ID_DYNAMIC))
-			matWorld = e.second->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_matWorld;
+		if (e.second->Has_Component(L"Proto_TransformCom", ID_DYNAMIC))
+			matWorld = e.second->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_matWorld;
 		else if (e.second->Has_Component(L"Proto_TransformCom", ID_DYNAMIC))
 			matWorld = e.second->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_matWorld;
 		else _CRASH("Fail to load");
@@ -249,8 +249,8 @@ void CBatchTool::Save(const wstring& wstrPath)
 		WriteFile(hFile, strFactoryTag.c_str(), dwStrByte, &dwByte, nullptr);
 
 		_matrix matWorld;
-		if (e.second->Has_Component(L"Proto_TransformCom_root", ID_DYNAMIC))
-			matWorld = e.second->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_matWorld;
+		if (e.second->Has_Component(L"Proto_TransformCom", ID_DYNAMIC))
+			matWorld = e.second->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_matWorld;
 		else if (e.second->Has_Component(L"Proto_TransformCom", ID_DYNAMIC))
 			matWorld = e.second->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_matWorld;
 		else _CRASH("Fail to load");

@@ -196,7 +196,7 @@ void CImGuiMgr::LoggerWindow()
 	ImGui::Begin("Logger");
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
-	// _vec3 vpos = Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+	// _vec3 vpos = Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 	// ImGui::Text("x : %f, z : %f", vpos.x, vpos.z);
 	if (ImGui::Checkbox("Show Collision", &s_bShowColl))
 
@@ -803,7 +803,7 @@ void CImGuiMgr::BatchControl(CCamera* pCamera, CTransform*& pTransform, CTerrain
 					tmp.assign(obj.first.begin(), obj.first.end());
 					if (ImGui::Selectable(tmp.c_str()))
 					{
-						pTransform = obj.second->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC);
+						pTransform = obj.second->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
 					}
 				}
 				ImGui::EndListBox();
@@ -844,8 +844,8 @@ void CImGuiMgr::BatchControl(CCamera* pCamera, CTransform*& pTransform, CTerrain
 					tmp.assign(obj.first.begin(), obj.first.end());
 					if (ImGui::Selectable(tmp.c_str()))
 					{
-						if (obj.second->Has_Component(L"Proto_TransformCom_root", ID_DYNAMIC))
-							pTransform = obj.second->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC);
+						if (obj.second->Has_Component(L"Proto_TransformCom", ID_DYNAMIC))
+							pTransform = obj.second->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
 						else if (obj.second->Has_Component(L"Proto_TransformCom", ID_DYNAMIC))
 							pTransform = obj.second->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
 					}

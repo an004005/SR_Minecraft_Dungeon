@@ -94,7 +94,7 @@ _int CAxe::Attack()
 	else if (m_iAttackCnt == 1)
 	{
 		pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK2]);
-		CSoundMgr::GetInstance()->PlaySound(L"sfx_Axe_2.ogg", pPlayer->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS]);
+		CSoundMgr::GetInstance()->PlaySound(L"sfx_Axe_2.ogg", pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS]);
 	}
 	m_iAttackCnt = (m_iAttackCnt + 1) % 2;
 
