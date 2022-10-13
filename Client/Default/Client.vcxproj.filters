@@ -364,6 +364,12 @@
       <Filter>02. GameObject\05. UI</Filter>
     </ClInclude>
 
+    <ClInclude Include="..\Header\Birds.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\BirdsBrown.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -644,6 +650,12 @@
     <ClCompile Include="..\Code\CameraTool.cpp" />
     <ClCompile Include="..\Code\InventoryUI.cpp">
       <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Birds.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\BirdsBrown.cpp">
+      <Filter>02. GameObject\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

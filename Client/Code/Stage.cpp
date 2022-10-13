@@ -26,6 +26,9 @@
 #include "CoolTimeUI.h"
 #include "BatchTool.h"
 
+// object
+#include "Birds.h"
+#include "BirdsBrown.h"
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
 {
@@ -109,10 +112,17 @@ HRESULT CStage::Ready_Layer_Environment()
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", pGameObject), E_FAIL);
 
+	//  Birds
 
-	// m_arrLayer[LAYER_BULLET]->Add_GameObject(L"Arrow", pArrow);
+	for (int i = 0; i < 10; ++i)
+	{
+		CBirds* bird = CEnvFactory::Create<CBirds>("BirdsWhite", L"BirdsWhite");
+		bird->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->Set_Pos(3.f, 9.5f, 18.f + i);
 
-
+		CBirdsBrown* Brwon = CEnvFactory::Create<CBirdsBrown>("BirdsBrown", L"BirdsBrown");
+		Brwon->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->Set_Pos(6.f, 9.5f, 18.f + i);
+	}
+	
 	return S_OK;
 }
 
