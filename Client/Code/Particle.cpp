@@ -1159,7 +1159,7 @@ HRESULT CCrack::Ready_Object(_float _size, CRACKTYPE _type)
 		pPlayerTransform->Get_Info(INFO_POS, &pPos);
 		
 		m_pTransCom->Set_Pos(pPos.x, pPos.y + 4.f, pPos.z);
-		IM_LOG("%f, %f", m_pTransCom->m_vInfo[INFO_POS].x, m_pTransCom->m_vInfo[INFO_POS].z);
+		//IM_LOG("%f, %f", m_pTransCom->m_vInfo[INFO_POS].x, m_pTransCom->m_vInfo[INFO_POS].z);
 		m_pTransCom->Set_Scale(_size, _size, _size);
 		m_iCrackType = GOLEM_SPIT_CRACK;
 	}

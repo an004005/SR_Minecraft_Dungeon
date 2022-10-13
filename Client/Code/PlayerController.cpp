@@ -26,6 +26,15 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pOwner);
 	NULL_CHECK_RETURN(pPlayer, 0);
 
+	//이거 내리면 인벤 안꺼짐
+	if (DIKeyUp(DIK_I))
+	{
+		pPlayer->GetInventory()->OpenInventory();
+	}
+
+	if (pPlayer->GetInventory()->InputLock())
+		return 0;
+
 	// 움직임 입력
 	{
 		if (DIKeyDown(DIK_W))
@@ -75,10 +84,7 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 		putItem(pPlayer, vTargetPos);		
 	}
 
-	if (DIKeyUp(DIK_I))
-	{
-		pPlayer->GetInventory()->OpenInventory();
-	}
+	
 
 	if (false == CGameUtilMgr::Vec3Cmp(m_vPressDir, m_vPrevPressDir)) // 이동 입력 없으면 방향 계산 안하기
 	{
@@ -201,6 +207,15 @@ void CPlayerController::putItem(CPlayer* pPlayer, const  _vec3& vTargetPos)
 
 	fEquipItemDist >= fConsumItemDist ? pPlayer->GetInventory()->Put(pConsumItem) : pPlayer->GetInventory()->Put(pEquipItem);
 
+	CSoundMgr::GetInstance()->PlaySoundRandom({
+		L"sfx_item_eatGeneric-001.ogg",
+		L"sfx_item_eatGeneric-002.ogg",
+		L"sfx_item_eatGeneric-003.ogg",
+		L"sfx_item_eatGeneric-004.ogg",
+		L"sfx_item_eatGeneric-005.ogg",
+		L"sfx_item_eatGeneric-006.ogg" },
+		vTargetPos);
+
 }
 
 void CPlayerController::pickGameObj(CPlayer* pPlayer, const  _vec3& vTargetPos)
@@ -238,11 +253,23 @@ void CPlayerController::pickGameObj(CPlayer* pPlayer, const  _vec3& vTargetPos)
 	}
 
 	if (pBox)
+	{
 		pBox->BoxOpen();
+		return;
+	}
 
 	if (pDynamite)
 	{
 		pDynamite->SetState(DYNAMITE_PICK);
 		m_pDynamite = pDynamite;
+		return;
 	}
+	CSoundMgr::GetInstance()->PlaySoundRandom({
+		L"sfx_item_eatGeneric-001.ogg",
+		L"sfx_item_eatGeneric-002.ogg",
+		L"sfx_item_eatGeneric-003.ogg",
+		L"sfx_item_eatGeneric-004.ogg",
+		L"sfx_item_eatGeneric-005.ogg",
+		L"sfx_item_eatGeneric-006.ogg"},
+		vTargetPos);
 }

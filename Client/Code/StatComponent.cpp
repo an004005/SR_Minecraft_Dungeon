@@ -101,6 +101,10 @@ void CStatComponent::ModifyHP(_int iModifyingHP)
 		// 피타격 이펙트
 		Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")
 			->Add_Particle(m_pOwnerTrans->m_vInfo[INFO_POS] +_vec3{0.f, 1.2f, 0.f}, CGameUtilMgr::GetRandomFloat(0.15f,0.3f), RED, 20, 0.2f);
+		IM_LOG("Hurt");
+
+		if(m_vHurtSound.size() > 0)
+			CSoundMgr::GetInstance()->PlaySoundRandom(m_vHurtSound, m_pOwnerTrans->m_vInfo[INFO_POS], 0.2f);
 	}
 
 	if (m_iHP <= 0)

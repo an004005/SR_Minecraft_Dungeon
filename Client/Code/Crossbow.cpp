@@ -111,11 +111,15 @@ _int CCrossbow::Attack()
 	
 	if (m_bFireWork)
 	{
+		CSoundMgr::GetInstance()->PlaySound(L"_sfx__fireworks_fire_1.ogg", vPos);
 		CBulletFactory::Create<CGameObject>("PlayerFireWorkArrow", L"PlayerFireWorkArrow", 10.f, vPos, vLookAt);
 		m_bFireWork = false;
 	}
 	else
+	{
+		CSoundMgr::GetInstance()->PlaySound(L"sfx_item_arrow_fire.ogg", vPos);
 		CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 10.f, vPos, vLookAt);
+	}
 	
 
 	return m_iAttackCnt;

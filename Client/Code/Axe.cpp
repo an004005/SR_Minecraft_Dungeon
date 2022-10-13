@@ -90,6 +90,7 @@ _int CAxe::Attack()
 	if (m_iAttackCnt == 0)
 	{
 		pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK1]);
+		CSoundMgr::GetInstance()->PlaySound(L"sfx_item_axeSwingSwong-001.ogg", pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS]);
 	}
 	else if (m_iAttackCnt == 1)
 	{

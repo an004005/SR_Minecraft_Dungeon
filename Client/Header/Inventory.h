@@ -43,7 +43,7 @@ public:
 	_uint GetEmeraldCnt() const { return m_iEmerald; }
 	_uint GetArrowCnt() const { return m_iArrow; }
 
-	
+	_bool InputLock() { return m_bLock; }
 
 private:
 	array<CEquipItem*, (COL * ROW)> m_arrItem{}; //  아이템 스페이스
@@ -58,6 +58,7 @@ private:
 	void MouseEvent(CItemSpaceUI* pItemSpaceUI, CEquipItem* pEquipItem, _int index, _bool bEquipState);
 	_uint m_iEmerald = 0;
 	_uint m_iArrow = 0;
+	_bool m_bLock = false;
 
 };
 

@@ -59,6 +59,13 @@ HRESULT CPlayer::Ready_Object()
 	m_pStat = Add_Component<CStatComponent>(L"Proto_StatCom", L"Proto_StatCom", ID_DYNAMIC);
 	m_pStat->SetMaxHP(100);
 	m_pStat->SetTransform(m_pRootPart->pTrans);
+	m_pStat->SetHurtSound({
+		L"DLC_sfx_mob_whisperer_hit_1.ogg",
+		L"DLC_sfx_mob_whisperer_hit_2.ogg",
+		L"DLC_sfx_mob_whisperer_hit_3.ogg",
+		L"DLC_sfx_mob_whisperer_hit_4.ogg",
+		L"DLC_sfx_mob_whisperer_hit_5.ogg",
+		L"DLC_sfx_mob_whisperer_hit_6.ogg" });
 
 	// 항상 카메라 먼저 만들고 플레이어 만들기!
 	Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")->SetTarget(this);
@@ -170,6 +177,8 @@ void CPlayer::AnimationEvent(const string& strEvent)
 	}
 	else if (strEvent == "step")
 	{
+		CSoundMgr::GetInstance()->PlaySoundRandom({ L"sfx_player_stepStone-001.ogg", L"sfx_player_stepStone-002.ogg" ,L"sfx_player_stepStone-003.ogg" }, m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+
 		if (m_dwWalkDust + 500 < GetTickCount())
 		{
 			CEffectFactory::Create<CCloud>("Walk_Cloud", L"Walk_Cloud");
@@ -207,15 +216,15 @@ void CPlayer::AttackState()
 	}
 
 #pragma region Lazer 
-	// CEffectFactory::Create<CLazer>("Lazer_Beam", L"Lazer_Beam");
-	// for (int i = 0; i < 12; i++)
-	// {
-	// 	CEffectFactory::Create<CLazer_Circle>("Lazer_Beam_Circle", L"Lazer_Beam_Circle");
-	// }
+	 //CEffectFactory::Create<CLazer>("Lazer_Beam", L"Lazer_Beam");
+	 //for (int i = 0; i < 12; i++)
+	 //{
+	 //	CEffectFactory::Create<CLazer_Circle>("Lazer_Beam_Circle", L"Lazer_Beam_Circle");
+	 //}
 #pragma endregion 
 
 #pragma region Loading Box 
- 	// CEffectFactory::Create<CCrack>("LoadingBox", L"LoadingBox");
+ 	 //CEffectFactory::Create<CCrack>("LoadingBox", L"LoadingBox");
 #pragma endregion
 
 #pragma region Item DropEffect 
@@ -255,6 +264,7 @@ void CPlayer::StateChange()
 
 	if (m_bRoll && s_RollCoolTime <= m_CurRollCoolTime)
 	{
+		CSoundMgr::GetInstance()->PlaySound(L"sfx_player_stepCloth-003.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 		m_eState = ROLL;
 		RotateToCursor();
 		m_bCanPlayAnim = false;
@@ -367,7 +377,12 @@ void CPlayer::UsePotion()
 		// particle
 	}
 
-	CSoundMgr::GetInstance()->PlaySound(L"P3_sfx_item_claymoreWinter1Impact-001.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+	CSoundMgr::GetInstance()->PlaySoundRandom({
+		L"sfx_ui_healthsynergy-001.ogg",
+		L"sfx_ui_healthsynergy-002.ogg",
+		L"sfx_ui_healthsynergy-003.ogg",
+		L"sfx_ui_healthsynergy-004.ogg"},
+		m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)

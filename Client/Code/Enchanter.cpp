@@ -30,6 +30,11 @@ HRESULT CEnchanter::Ready_Object()
 
 	m_pStat->SetMaxHP(100);
 
+	m_pStat->SetHurtSound({
+		L"sfx_mob_enchanterHurt-001.ogg",
+		L"sfx_mob_enchanterHurt-002.ogg" ,
+		L"sfx_mob_enchanterHurt-003.ogg" });
+
 	CController* pController = Add_Component<CEnchanterController>(L"Proto_EnchanterController", L"Proto_EnchanterController", ID_DYNAMIC);
 	pController->SetOwner(this);
 
@@ -49,6 +54,9 @@ void CEnchanter::AnimationEvent(const string& strEvent)
 	else if (strEvent == "AnimStopped")
 	{
 		m_bDelete = true;
+	}
+	else if (strEvent == "Step")
+	{
 	}
 }
 
@@ -105,6 +113,10 @@ void CEnchanter::LateUpdate_Object()
 		DEBUG_SPHERE(vAttackPos, 1.f, 1.f);
 		IM_LOG("Fire");
 
+		CSoundMgr::GetInstance()->PlaySoundRandom({
+			L"sfx_mob_enchanterAttack-001.ogg",
+			L"sfx_mob_enchanterAttack-002.ogg",
+			L"sfx_mob_enchanterAttack-003.ogg"}, vAttackPos, 0.3f);
 		m_bAttackFire = false;
 	}
 }
@@ -136,6 +148,12 @@ void CEnchanter::StateChange()
 	{
 		if (m_bReserveStop == false)
 		{
+			CSoundMgr::GetInstance()->PlaySoundRandom({
+				L"sfx_mob_enchanterDeath-001.ogg",
+				L"sfx_mob_enchanterDeath-002.ogg",
+				L"sfx_mob_enchanterDeath-003.ogg" },
+				m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.5f);
+
 			m_eState = DEAD;
 			PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
 			m_bAttack = false;
@@ -149,6 +167,8 @@ void CEnchanter::StateChange()
 	if (m_pStat->IsStun())
 	{
 		m_eState = STUN;
+		m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
+		m_pCurAnim = &m_arrAnim[ANIM_IDLE];
 		m_bAttack = false;
 		m_bMove = false;
 		StopCurAnimation();

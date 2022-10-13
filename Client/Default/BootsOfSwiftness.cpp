@@ -35,6 +35,8 @@ _int CBootsOfSwiftness::Update_Object(const _float & fTimeDelta)
 		Get_GameObject<CSpeedBoots_Particle>(LAYER_EFFECT, L"Speed_Boots_Particle")->Add_Particle(
 			_vec3(vPos.x, vPos.y + 15.f, vPos.z),
 			1.f, D3DXCOLOR(0.3f, 0.4f, 0.7f, 1.f), 18, m_fLifeTime);
+
+		CSoundMgr::GetInstance()->PlaySound(L"sfx_item_glaiveSwing-004.ogg", vPos);
 		m_bEnd = true;
 		m_bUse = false;
 		

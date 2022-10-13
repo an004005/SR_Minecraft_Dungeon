@@ -20,7 +20,6 @@ public:
 	void	ItemDelete() { m_bDead = true; }
 protected:
 	CTexture*	m_pTextureCom = nullptr;
-	CTransform*	m_pTransCom = nullptr;
 	CRcTex*		m_pBufferCom = nullptr;
 	ITEMEFFECT	m_eItemEffect;
 	_bool		m_bDead;

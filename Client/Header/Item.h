@@ -35,6 +35,7 @@ protected:
 	_float m_fTime;
 	_bool m_bIdle;
 	CCollisionCom* m_pColl = nullptr;
+	Engine::CTransform*	m_pTransCom = nullptr;
 
 	virtual void Parabola(_vec3 & vPos,const _float& fHeight,const _float& fTimeDelta);
 };
