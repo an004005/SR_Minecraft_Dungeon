@@ -216,15 +216,15 @@ void CPlayer::AttackState()
 	}
 
 #pragma region Lazer 
-	// CEffectFactory::Create<CLazer>("Lazer_Beam", L"Lazer_Beam");
-	// for (int i = 0; i < 12; i++)
-	// {
-	// 	CEffectFactory::Create<CLazer_Circle>("Lazer_Beam_Circle", L"Lazer_Beam_Circle");
-	// }
+	 //CEffectFactory::Create<CLazer>("Lazer_Beam", L"Lazer_Beam");
+	 //for (int i = 0; i < 12; i++)
+	 //{
+	 //	CEffectFactory::Create<CLazer_Circle>("Lazer_Beam_Circle", L"Lazer_Beam_Circle");
+	 //}
 #pragma endregion 
 
 #pragma region Loading Box 
- 	// CEffectFactory::Create<CCrack>("LoadingBox", L"LoadingBox");
+ 	 //CEffectFactory::Create<CCrack>("LoadingBox", L"LoadingBox");
 #pragma endregion
 
 #pragma region Item DropEffect 
@@ -377,7 +377,12 @@ void CPlayer::UsePotion()
 		// particle
 	}
 
-	CSoundMgr::GetInstance()->PlaySound(L"P3_sfx_item_claymoreWinter1Impact-001.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+	CSoundMgr::GetInstance()->PlaySoundRandom({
+		L"sfx_ui_healthsynergy-001.ogg",
+		L"sfx_ui_healthsynergy-002.ogg",
+		L"sfx_ui_healthsynergy-003.ogg",
+		L"sfx_ui_healthsynergy-004.ogg"},
+		m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)

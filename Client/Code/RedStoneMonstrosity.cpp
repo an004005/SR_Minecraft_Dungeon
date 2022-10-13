@@ -260,9 +260,7 @@ void CRedStoneMonstrosity::LateUpdate_Object()
 			}
 			DEBUG_SPHERE(vAttackPos, 7.f, 1.f);
 
-			CSoundMgr::GetInstance()->PlaySoundRandom({
-				L"sfx_mob_redstonegolemSwipe-001.ogg",
-				L"sfx_mob_redstonegolemSwipe-002.ogg",},
+			CSoundMgr::GetInstance()->PlaySound(L"sfx_mob_redstonegolemWindmill-001.ogg",
 				m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.5f);
 
 			m_dwWindTime = GetTickCount64();

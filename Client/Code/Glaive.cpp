@@ -81,14 +81,18 @@ _int CGlaive::Attack()
 	if (m_iAttackCnt == 2)
 	{
 		pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK3]);
+		CSoundMgr::GetInstance()->PlaySound(L"sfx_item_glaiveSwing-001.ogg", pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS]);
 	}
 	else if(m_iAttackCnt == 1)
 	{
 		pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK2]);
+		CSoundMgr::GetInstance()->PlaySound(L"sfx_item_glaiveSwing-002.ogg", pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS]);
+		CSoundMgr::GetInstance()->PlaySound(L"sfx_item_glaiveSwing-003.ogg", pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS]);
 	}
 	else
 	{
 		pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK1]);
+		CSoundMgr::GetInstance()->PlaySound(L"sfx_item_glaiveSwing-004.ogg", pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS]);
 	}
 
 	m_iAttackCnt = (m_iAttackCnt + 1) % 3;

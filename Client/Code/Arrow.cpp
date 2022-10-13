@@ -124,6 +124,7 @@ void CArrow::Free()
 void CArrow::FireWork()
 {
 	m_fLife = 0.f;
+	CSoundMgr::GetInstance()->PlaySound(L"sfx_item_fireworksTwinkle-002_soundWave.ogg", m_pTransform->m_vInfo[INFO_POS]);
 
 	// firework particle
 	_float fColor = CGameUtilMgr::GetRandomFloat(0.0f, 1.0f);
@@ -202,7 +203,7 @@ void CArrow::StaticCallBack(_vec3 vCenter, _float fRadius)
 	{
 		FireWork();
 	}
-	else
+	else if (m_fLife > 0.f)
 	{
 		m_eMoveType = ARROW_MOVE_STUCK;
 		Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")
