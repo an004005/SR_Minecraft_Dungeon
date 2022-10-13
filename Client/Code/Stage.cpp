@@ -44,6 +44,8 @@ HRESULT CStage::Ready_Scene(void)
 	FAILED_CHECK_RETURN(Ready_Layer_Environment(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_GameLogic(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_UI(), E_FAIL);
+	// Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+	// 	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
 
 	//Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 	//	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
@@ -91,7 +93,6 @@ void CStage::LateUpdate_Scene(void)
 void CStage::Render_Scene(void)
 {
 	CArrowCubeMgr::GetInst().Render_Buffer(); // todo : 렌더러에서 동작하게 바꾸기
-
 }
 
 HRESULT CStage::Ready_Layer_Environment()
@@ -123,7 +124,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	//CObjectFactory::Create<CBox>("Box", L"Box2", { 4.f, 9.f, 15.f });
 	// CObjectFactory::Create<CDynamite>("Dynamite", L"Dynamite");
 
-	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 1.f, 0.f ,3.f });
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 47.f, 0.f ,40.f });
 	CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld);
 
 	
@@ -137,8 +138,6 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	
 	//monsters
 	{	
-		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 50.f, 0.f ,26.f});
-		CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
 	
 		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 45.f, 0.f ,23.f });
 		CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);

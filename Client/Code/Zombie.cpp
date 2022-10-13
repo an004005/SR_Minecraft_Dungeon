@@ -82,7 +82,6 @@ _int CZombie::Update_Object(const _float& fTimeDelta)
 		break;
 	}
 
-
 	return OBJ_NOEVENT;
 }
 
