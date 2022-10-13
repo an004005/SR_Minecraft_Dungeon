@@ -42,6 +42,7 @@
 #include "CameraTool.h"
 #include "BatchTool.h"
 #include "InventoryUI.h"
+#include "PlayerStartPos.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -374,7 +375,10 @@ void CObjectFactory::Ready_ObjectFactory()
 	{
 		return CDynamite::Create(s_pGraphicDev);
 	} });
-
+	s_mapObjectSpawner.insert({ "PlayerPos", []()
+	{
+		return CPlayerStartPos::Create(s_pGraphicDev);
+	} });
 }
 
 void CItemFactory::Ready_ItemFactory()

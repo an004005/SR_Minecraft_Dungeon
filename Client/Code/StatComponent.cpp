@@ -3,9 +3,7 @@
 #include "AbstFactory.h"
 #include "Particle.h"
 #include "TerrainCubeMap.h"
-#include "Monster.h"
 #include "DamageFontMgr.h"
-#include "EquipItem.h"
 
 CStatComponent::CStatComponent()
 {
@@ -153,4 +151,13 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 			vFromPos,
 			D3DCOLOR_ARGB(255, 255, 255, 255));
 	}
+}
+
+void CStatComponent::Revive()
+{
+	m_iHP = m_iMaxHP;
+	m_bDead = false;
+	m_bStun = false;
+	m_bDamaged = false;
+	m_bKnockback = false;
 }

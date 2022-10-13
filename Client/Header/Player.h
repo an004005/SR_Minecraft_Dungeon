@@ -49,12 +49,16 @@ public:
 	virtual HRESULT Ready_Object() override;
 	virtual _int Update_Object(const _float& fTimeDelta) override;
 	virtual void LateUpdate_Object() override;
+	virtual void Render_Object() override;
 	virtual void Free() override;
 	virtual void AnimationEvent(const string& strEvent) override;
 
 	virtual void AttackState();
 	void StateChange();
 	_vec3 GetInfo(INFOID eID) { return m_pRootPart->pTrans->m_vInfo[eID]; }
+	void SetVisible(bool bVisible){ m_bVisible = bVisible; }
+	_bool IsVisible() const { return m_bVisible; }
+	void PlayerSpawn();
 
 	// controller 입력함수
 	void SetMoveDir(_float fX, _float fZ);
@@ -125,7 +129,8 @@ protected:
 	// 원거리에서 근거리 무기로 다시 돌아올 때 1프레임동안 근거리 무기 위치가 이상한 현상을 막기 위함.
 	_bool m_bDelay = false;
 
-	
+	_bool m_bVisible = false;
+	_float m_bDeadTime = 0.f;
 };
 
 

@@ -37,6 +37,8 @@ public:
 	_bool IsDead() const { return m_bDead; }
 	_bool IsDamaged() const { return m_bDamaged; }
 
+	void Revive();
+
 	// cur hp, max hp, damage
 	BaseDelegater<_int, _uint, _int> m_DamageDelegater;
 

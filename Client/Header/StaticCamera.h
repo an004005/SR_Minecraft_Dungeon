@@ -29,6 +29,7 @@ public:
 	void PlayShake(_float fDuration, _float fMagnitude);
 
 	void PlayeCamAnimation(const wstring& wstrAnim);
+	void ResetPosition();
 
 private:
 	void Update_DefaultFollow(const _float& fTimeDelta);

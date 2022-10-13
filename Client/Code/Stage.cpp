@@ -46,10 +46,10 @@ HRESULT CStage::Ready_Scene(void)
 	FAILED_CHECK_RETURN(Ready_Layer_GameLogic(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_UI(), E_FAIL);
 
-	//Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
-	//	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
+	Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+		->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
 
-	//CBatchTool::Load(L"../Bin/Resource/Batch/test2.batch");
+	CBatchTool::Load(L"../Bin/Resource/Batch/test2.batch");
 
 	// Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 	// 	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_11_Test.anim");
@@ -67,7 +67,7 @@ _int CStage::Update_Scene(const _float & fTimeDelta)
 
 	Engine::GetFont();
 
-	CSoundMgr::GetInstance()->Update_Listener(L"Player");
+	CSoundMgr::GetInstance()->Update_Listener(LAYER_ENV, L"StaticCamera");
 	CDamageFontMgr::GetInstance()->Update_DamageFontMgr(fTimeDelta);
 	return Engine::CScene::Update_Scene(fTimeDelta);
 }
@@ -121,7 +121,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 {
 	_matrix matWorld;
 
-	 CObjectFactory::Create<CBox>("Box", L"Box" , { 2.f, 7.5f, 6.f });
+	 // CObjectFactory::Create<CBox>("Box", L"Box" , { 2.f, 7.5f, 6.f });
 	//CObjectFactory::Create<CBox>("Box", L"Box2", { 4.f, 9.f, 15.f });
 	// CObjectFactory::Create<CDynamite>("Dynamite", L"Dynamite");
 
@@ -140,8 +140,8 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	//monsters
 	{	
 	
-		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 1.f, 0.f ,3.f });
-		CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+		// CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 1.f, 0.f ,3.f });
+		// CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
 		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 55.f, 0.f ,28.f });
 		//CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
 

@@ -25,7 +25,7 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 {
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pOwner);
 	NULL_CHECK_RETURN(pPlayer, 0);
-
+	if (pPlayer->IsVisible() == false) return 0;
 	// 움직임 입력
 	{
 		if (DIKeyDown(DIK_W))

@@ -366,6 +366,7 @@
     <ClInclude Include="..\Header\DamageFontMgr.h">
       <Filter>Mgr</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\PlayerStartPos.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -650,6 +651,7 @@
     <ClCompile Include="..\Code\DamageFontMgr.cpp">
       <Filter>Mgr</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\PlayerStartPos.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
