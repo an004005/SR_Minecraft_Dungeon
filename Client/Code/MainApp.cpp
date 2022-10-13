@@ -182,7 +182,7 @@ HRESULT CMainApp::Ready_Proto()
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_GradationCom", CTerrainShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/UVAnimation_Lazer.fx", 2, 2, 1
 		, _vec2(0.f, 0.f), _vec2(1.f, 0.f), _vec2(1.f, 1.f), _vec2(0.f, 1.f), 1, 1)), E_FAIL);
 
-	s
+	
 
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Terrain_Water_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Terrain/Water4.psng", TEX_NORMAL)), E_FAIL);
 
