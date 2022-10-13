@@ -47,7 +47,10 @@ HRESULT CStage::Ready_Scene(void)
 	// Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 	// 	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
 
-	// CBatchTool::Load(L"../Bin/Resource/Batch/test2.batch");
+	//Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+	//	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
+
+	//CBatchTool::Load(L"../Bin/Resource/Batch/test2.batch");
 
 	// Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 	// 	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_11_Test.anim");
@@ -65,6 +68,7 @@ _int CStage::Update_Scene(const _float & fTimeDelta)
 
 	Engine::GetFont();
 
+	CSoundMgr::GetInstance()->Update_Listener(L"Player");
 	return Engine::CScene::Update_Scene(fTimeDelta);
 }
 
@@ -101,7 +105,7 @@ HRESULT CStage::Ready_Layer_Environment()
 	CEnvFactory::Create<CTerrainWater>("WaterTerrain", L"WaterTerrain");
 
 	// TerrainCubeMap
-	pGameObject = CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/koukusatonbase.map");
+	pGameObject = CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/Stage1.map");
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", pGameObject), E_FAIL);
 
@@ -116,7 +120,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 {
 	_matrix matWorld;
 
-	// CObjectFactory::Create<CBox>("Box", L"Box" , { 2.f, 7.5f, 6.f });
+	 CObjectFactory::Create<CBox>("Box", L"Box" , { 2.f, 7.5f, 6.f });
 	//CObjectFactory::Create<CBox>("Box", L"Box2", { 4.f, 9.f, 15.f });
 	// CObjectFactory::Create<CDynamite>("Dynamite", L"Dynamite");
 
@@ -134,8 +138,6 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	
 	//monsters
 	{	
-		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 50.f, 0.f ,26.f});
-		CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
 	
 		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 45.f, 0.f ,23.f });
 		CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);

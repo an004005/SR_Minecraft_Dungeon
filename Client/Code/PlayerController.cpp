@@ -6,7 +6,8 @@
 #include "EquipItem.h"
 #include "ConsumeItem.h"
 #include "Dynamite.h"
-
+#include "InventoryUI.h"
+#include "AbstFactory.h"
 CPlayerController::CPlayerController() : CController()
 {
 }
@@ -67,13 +68,16 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 	//box open
 	if (DIKeyDown(DIK_F))
 	{
-		_vec3 vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+		_vec3 vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 		//박스 열기 , 폭탄 줍기
 		pickGameObj(pPlayer, vTargetPos);
 		//아이템 먹기
-		putItem(pPlayer, vTargetPos);
-	
-		
+		putItem(pPlayer, vTargetPos);		
+	}
+
+	if (DIKeyUp(DIK_I))
+	{
+		pPlayer->GetInventory()->OpenInventory();
 	}
 
 	if (false == CGameUtilMgr::Vec3Cmp(m_vPressDir, m_vPrevPressDir)) // 이동 입력 없으면 방향 계산 안하기
@@ -222,7 +226,7 @@ void CPlayerController::pickGameObj(CPlayer* pPlayer, const  _vec3& vTargetPos)
 
 		if (CBox* pGameObj = dynamic_cast<CBox*>(ele.second))
 		{
-			_vec3 vDiff = vTargetPos - pGameObj->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+			_vec3 vDiff = vTargetPos - pGameObj->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 			_float fDist = D3DXVec3Length(&vDiff);
 
 			if (fDist < fBoxDist)

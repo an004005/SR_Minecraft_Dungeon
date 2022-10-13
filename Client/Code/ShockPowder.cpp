@@ -18,6 +18,7 @@ CShockPowder::~CShockPowder()
 
 HRESULT CShockPowder::Ready_Object()
 {
+	m_iUItexNum = 14;
 	return S_OK;
 }
 
@@ -57,7 +58,7 @@ void CShockPowder::LateUpdate_Object()
 	{
 		if (CMonster* monster = dynamic_cast<CMonster*>(obj))
 		{
-			_vec3 vMonsterPos = monster->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+			_vec3 vMonsterPos = monster->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 			vMonsterPos.y += 3.f;
 			DamageType eDT = DT_END;
 			if (m_iAttackCnt == 0) eDT = DT_STUN;

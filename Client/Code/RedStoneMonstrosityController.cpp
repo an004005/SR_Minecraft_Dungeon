@@ -32,7 +32,7 @@ _int CRedStoneMonstrosityController::Update_Component(const _float& fTimeDelta)
 	CRedStoneMonstrosity* pRedStoneMonstrosity = dynamic_cast<CRedStoneMonstrosity*>(m_pOwner);
 	NULL_CHECK_RETURN(pRedStoneMonstrosity, 0);
 
-	_vec3 vPos = pRedStoneMonstrosity->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+	_vec3 vPos = pRedStoneMonstrosity->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 	_vec3 vTargetPos;
 	_float fTargetDist = 9999.f;
 
@@ -43,7 +43,7 @@ _int CRedStoneMonstrosityController::Update_Component(const _float& fTimeDelta)
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(ele.second))
 			{
-				vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+				vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 				_vec3 vDiff = vTargetPos - vPos;
 				_float fDist = D3DXVec3Length(&vDiff);
 
@@ -65,7 +65,7 @@ _int CRedStoneMonstrosityController::Update_Component(const _float& fTimeDelta)
 		m_fCurTargetingCoolTime += fTimeDelta;
 		if (m_pTargetPlayer == nullptr) return 0;
 
-		vTargetPos = m_pTargetPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+		vTargetPos = m_pTargetPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 		_vec3 vDiff = vTargetPos - vPos;
 		_float fDist = D3DXVec3Length(&vDiff);
 

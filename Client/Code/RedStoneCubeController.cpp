@@ -23,7 +23,7 @@ _int CRedStoneCubeController::Update_Component(const _float& fTimeDelta)
 	CRedStoneCube* pRedStoneCube = dynamic_cast<CRedStoneCube*>(m_pOwner);
 	NULL_CHECK_RETURN(pRedStoneCube, 0);
 
-	_vec3 vPos = pRedStoneCube->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+	_vec3 vPos = pRedStoneCube->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 	CPlayer* pTargetPlayer = nullptr;
 	_vec3 vTargetPos;
 	_float fTargetDist = 9999.f;
@@ -32,7 +32,7 @@ _int CRedStoneCubeController::Update_Component(const _float& fTimeDelta)
 	{
 		if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(ele.second))
 		{
-			vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+			vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 			_vec3 vDiff = vTargetPos - vPos;
 			_float fDist = D3DXVec3Length(&vDiff);
 

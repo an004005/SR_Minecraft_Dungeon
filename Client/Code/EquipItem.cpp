@@ -10,6 +10,7 @@ CEquipItem::CEquipItem(LPDIRECT3DDEVICE9 pGraphicDev)
 	m_eItemType = IT_END;
 	m_iAttackCnt = 0;
 	m_bUse = false;
+	m_iUItexNum = 0;
 }
 
 

@@ -33,8 +33,7 @@ HRESULT CCreeper::Ready_Object()
 
 	m_pStat->SetMaxHP(100);
 
-	CController* pController = Add_Component<CCreeperController>(L"Proto_CreeperController", L"Proto_CreeperController",
-	                                                             ID_DYNAMIC);
+	CController* pController = Add_Component<CCreeperController>(L"Proto_CreeperController", L"Proto_CreeperController", ID_DYNAMIC);
 	pController->SetOwner(this);
 
 	return S_OK;
@@ -102,6 +101,8 @@ void CCreeper::LateUpdate_Object()
 	{
 		Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 			->PlayShake(0.15f, 0.4f);
+		CSoundMgr::GetInstance()->PlaySoundRandom({L"twinblast_grenade_explosion_01.ogg", L"twinblast_grenade_explosion_02.OGG"}, m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+
 		set<CGameObject*> setObj;
 		_vec3 vAttackPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
 		Engine::GetOverlappedObject(setObj, vAttackPos, 3.5f);

@@ -221,7 +221,8 @@ void CArrowCubeMgr::Render_Buffer()
 		pIPos[i] = m_vecArrowTrans[i]->m_matWorld;
 	m_pVBMatrix->Unlock();
 
-
+	m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 	_matrix view, proj;
 	m_pGraphicDev->GetTransform(D3DTS_VIEW, &view);
 	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &proj);

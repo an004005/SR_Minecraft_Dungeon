@@ -159,10 +159,32 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, 
-	   rc.right - rc.left, 
-	   rc.bottom - rc.top, nullptr, nullptr, hInstance, nullptr);
+   // HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+   //    0, 0, 
+	  //  rc.right - rc.left, 
+	  //  rc.bottom - rc.top, nullptr, nullptr, hInstance, nullptr);
+   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_EX_TOPMOST | WS_POPUP,
+      0, 0,
+	   WINCX, 
+	   WINCY, GetDesktopWindow(), nullptr, hInstance, nullptr);
+
+
+	int maxWid = 0;
+	int maxHeight= 0;
+	// for(int i=0; ; i++)
+	// {
+	//    DEVMODE dm;
+	//    if(!EnumDisplaySettings(NULL, i, &dm))
+	//       break;
+	//
+	//    int iMonitorWidth = dm.dmPelsWidth;           // 해상도 가로 사이즈
+	//    int iMonitorHeight = dm.dmPelsHeight;        // 해상도 세로 사이즈
+	//    if (maxWid < iMonitorWidth) maxWid = iMonitorWidth;
+	//    if (maxHeight < iMonitorHeight) maxHeight = iMonitorHeight;
+	//
+	//    int iColorBit = dm.dmBitsPerPel;                // 색상 비트 수
+	//    int iFrequency = dm.dmDisplayFrequency;   // 모니터 주사율
+	// }
 
    if (!hWnd)
    {

@@ -86,7 +86,7 @@ void CStaticCamera::SetTarget(CGameObject* pTarget)
 
 	m_pTarget = pTarget;
 	m_pTarget->AddRef();
-	m_pTargetTrans = m_pTarget->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC);
+	m_pTargetTrans = m_pTarget->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
 	m_pTargetTrans->AddRef();
 
 	m_pTransform->m_vInfo[INFO_POS] = m_pTargetTrans->m_vInfo[INFO_POS] + (m_pTransform->m_vInfo[INFO_LOOK] * -

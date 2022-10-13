@@ -292,29 +292,44 @@ void CPlayer::StateChange()
 
 	if (m_bLegacy1 && m_bCanPlayAnim)
 	{
+	
 		m_eState = LEGACY;
-		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY1]);
 		m_bLegacy1 = false;
 		m_bCanPlayAnim = false;
+
+		if (m_pInventory->CurWeapon(IT_LEGACY1) == nullptr)
+			return;
+
+		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY1]);
 		m_pInventory->CurWeapon(IT_LEGACY1)->Use();
+		return;
 	}
 
 	if (m_bLegacy2 && m_bCanPlayAnim)
 	{
 		m_eState = LEGACY;
-		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY2]);
 		m_bLegacy2 = false;
 		m_bCanPlayAnim = false;
+
+		if (m_pInventory->CurWeapon(IT_LEGACY2) == nullptr)
+			return;
+
+		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY2]);
 		m_pInventory->CurWeapon(IT_LEGACY2)->Use();
 		return;
 	}
 
 	if (m_bLegacy3 && m_bCanPlayAnim)
 	{
+		
 		m_eState = LEGACY;
-		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY2]);
 		m_bLegacy3 = false;
 		m_bCanPlayAnim = false;
+
+		if (m_pInventory->CurWeapon(IT_LEGACY3) == nullptr)
+			return;
+
+		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY2]);
 		m_pInventory->CurWeapon(IT_LEGACY3)->Use();
 		return;
 	}
@@ -377,6 +392,8 @@ void CPlayer::UsePotion()
 		}
 		// particle
 	}
+
+	CSoundMgr::GetInstance()->PlaySound(L"P3_sfx_item_claymoreWinter1Impact-001.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
