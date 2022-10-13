@@ -31,6 +31,12 @@ HRESULT CGeomancer::Ready_Object()
 	m_eState = IDLE;
 	m_fSpeed = 3.f;
 
+	m_pStat->SetHurtSound({
+		L"sfx_mob_geomancerHurt-001.ogg",
+		L"sfx_mob_geomancerHurt-002.ogg" ,
+		L"sfx_mob_geomancerHurt-003.ogg",
+		L"sfx_mob_geomancerHurt-004.ogg" });
+
 	m_pStat->SetMaxHP(100);
 
 	CController* pController = Add_Component<CGeomancerController>(L"Proto_GeomancerController", L"Proto_GeomancerController", ID_DYNAMIC);
@@ -52,6 +58,16 @@ void CGeomancer::AnimationEvent(const string& strEvent)
 	else if (strEvent == "AnimStopped")
 	{
 		m_bDelete = true;
+	}
+	else if (strEvent == "Step")
+	{
+		CSoundMgr::GetInstance()->PlaySoundRandom({
+			L"sfx_mob_zombieStepGeneric-001.ogg",
+			L"sfx_mob_zombieStepGeneric-002.ogg",
+			L"sfx_mob_zombieStepGeneric-003.ogg",
+			L"sfx_mob_zombieStepGeneric-004.ogg",
+			L"sfx_mob_zombieStepGeneric-005.ogg", },
+			m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.5f);
 	}
 }
 
@@ -101,6 +117,11 @@ _int CGeomancer::Update_Object(const _float& fTimeDelta)
 				CObjectFactory::Create<CGeomancerWall>("GeoWall_Normal", L"GeoWall_Normal", wallPos);
 		}
 	
+		CSoundMgr::GetInstance()->PlaySoundRandom({
+			L"sfx_mob_geomancerAttack-001.ogg",
+			L"sfx_mob_geomancerAttack-002.ogg" }, 
+			m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.3f);
+
 		m_bAttackFire = false;
 	}
 
@@ -136,6 +157,11 @@ void CGeomancer::StateChange()
 	{
 		if (m_bReserveStop == false)
 		{
+			CSoundMgr::GetInstance()->PlaySoundRandom({
+				L"sfx_mob_geomancerDeath-001.ogg",
+				L"sfx_mob_geomancerDeath-002.ogg",
+				L"sfx_mob_geomancerDeath-003.ogg" },
+				m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.5f);
 			m_eState = DEAD;
 			PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
 			m_bAttack = false;
@@ -151,6 +177,8 @@ void CGeomancer::StateChange()
 		if (m_pCurAnim != m_pIdleAnim)
 			StopCurAnimation();
 		m_eState = STUN;
+		m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
+		m_pCurAnim = &m_arrAnim[ANIM_IDLE];
 		m_bAttack = false;
 		m_bMove = false;
 		StopCurAnimation();

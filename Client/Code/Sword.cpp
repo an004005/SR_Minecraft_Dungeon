@@ -109,7 +109,7 @@ _int CSword::Attack()
 		pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK3]);
 	}
 	CSoundMgr::GetInstance()->PlaySoundRandom({L"sfx_item_swordSwingSteel-001_soundWave.ogg", L"sfx_item_swordSwingSteel-002_soundWave.ogg", L"sfx_item_swordSwingSteel-003_soundWave.ogg"}, 
-		pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS]);
+		pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS], 0.4f);
 	m_iAttackCnt = (m_iAttackCnt + 1) % 3;
 
 	return m_iAttackCnt;

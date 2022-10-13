@@ -7,6 +7,8 @@ IMPLEMENT_SINGLETON(CSoundMgr)
 CSoundMgr::CSoundMgr()
 {
 	Ready_SoundMgr();
+	m_fMasterVolume = 0.8f;
+
 }
 
 CSoundMgr::~CSoundMgr()
@@ -16,6 +18,8 @@ CSoundMgr::~CSoundMgr()
 
 void CSoundMgr::PlaySound(const wstring& pSoundKey, const _vec3& vSoundPos, float fVolume)
 {
+	fVolume *= m_fMasterVolume;
+
 	const _vec3 vDiff = vSoundPos - m_vListenerPos;
 	const _float fDistance = D3DXVec3Length(&vDiff);
 	if (fDistance > m_fMaxListenDist) // 너무 멀다.

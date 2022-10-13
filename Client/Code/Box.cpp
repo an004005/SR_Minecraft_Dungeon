@@ -26,6 +26,7 @@ void CBox::AnimationEvent(const string& strEvent)
 {
 	if (strEvent == "ActionEnd")
 	{		
+		CSoundMgr::GetInstance()->PlaySound(L"sfx_box_open.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 		_int iRandNum = rand() % 6 + 5;
 		for (_int i = 0; i < iRandNum; ++i)
 		{

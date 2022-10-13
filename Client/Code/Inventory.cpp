@@ -175,6 +175,7 @@ void CInventory::OpenInventory()
 	if (Select & 1)
 	{
 		m_pInventoryUI->Open();
+		m_bLock = true;
 		for (int i = 0; i < COL; ++i)
 		{
 			for (int j = 0; j < ROW; ++j)
@@ -190,6 +191,7 @@ void CInventory::OpenInventory()
 	else
 	{
 		m_pInventoryUI->Close();
+		m_bLock = false;
 		for (int i = 0; i < COL; ++i)
 		{
 			for (int j = 0; j < ROW; ++j)

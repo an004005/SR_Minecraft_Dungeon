@@ -46,6 +46,10 @@ _int CShockPowder::Update_Object(const _float & fTimeDelta)
 
 	CEffectFactory::Create<CUVCircle>("Shock_Circle", L"Shock_Circle");
 
+	CPlayer* pPlayer = Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");
+	_vec3 vPos = pPlayer->GetInfo(INFO_POS);
+
+	CSoundMgr::GetInstance()->PlaySound(L"sfx_item_shockpowder-001.ogg", vPos);
 	m_bUse = false;
 	m_bColl = true;
 	CEquipItem::Update_Object(fTimeDelta);

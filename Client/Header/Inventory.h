@@ -45,6 +45,8 @@ public:
 
 	_uint GetEmeraldCnt() const { return m_iEmerald; }
 	_uint GetArrowCnt() const { return m_iArrow; }
+
+	_bool InputLock() { return m_bLock; }
 	_float GetLegacyCoolTime(ITEMTYPE eType) const
 	{
 		if (m_arrEquip[eType] == nullptr)
@@ -71,6 +73,7 @@ private:
 	void MouseEvent(CItemSpaceUI* pItemSpaceUI, CEquipItem* pEquipItem, _int index, _bool bEquipState);
 	_uint m_iEmerald = 0;
 	_uint m_iArrow = 0;
+	_bool m_bLock = false;
 
 };
 
