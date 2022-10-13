@@ -24,6 +24,8 @@ private:
 	HRESULT			Ready_Layer_GameLogic();
 	HRESULT			Ready_Layer_UI();
 
+	_vec3			m_vDir;
+
 public:
 	static CStage*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
