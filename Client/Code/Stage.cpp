@@ -25,6 +25,7 @@
 #include "UI.h"
 #include "CoolTimeUI.h"
 #include "BatchTool.h"
+#include "DamageFontMgr.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
@@ -67,6 +68,7 @@ _int CStage::Update_Scene(const _float & fTimeDelta)
 	Engine::GetFont();
 
 	CSoundMgr::GetInstance()->Update_Listener(L"Player");
+	CDamageFontMgr::GetInstance()->Update_DamageFontMgr(fTimeDelta);
 	return Engine::CScene::Update_Scene(fTimeDelta);
 }
 
@@ -91,7 +93,7 @@ void CStage::LateUpdate_Scene(void)
 void CStage::Render_Scene(void)
 {
 	CArrowCubeMgr::GetInst().Render_Buffer(); // todo : 렌더러에서 동작하게 바꾸기
-
+	CDamageFontMgr::GetInstance()->Render_DamageFontMgr();
 }
 
 HRESULT CStage::Ready_Layer_Environment()
@@ -138,7 +140,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	//monsters
 	{	
 	
-		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 45.f, 0.f ,23.f });
+		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 1.f, 0.f ,3.f });
 		CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
 		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 55.f, 0.f ,28.f });
 		//CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);

@@ -363,7 +363,9 @@
     <ClInclude Include="..\Header\InventoryUI.h">
       <Filter>02. GameObject\05. UI</Filter>
     </ClInclude>
-
+    <ClInclude Include="..\Header\DamageFontMgr.h">
+      <Filter>Mgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -644,6 +646,9 @@
     <ClCompile Include="..\Code\CameraTool.cpp" />
     <ClCompile Include="..\Code\InventoryUI.cpp">
       <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\DamageFontMgr.cpp">
+      <Filter>Mgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

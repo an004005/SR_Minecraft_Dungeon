@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Header\HPUI.h"
 #include "StatComponent.h"
+#include "DamageFontMgr.h"
 
 CHPUI::CHPUI(LPDIRECT3DDEVICE9 pGraphicDev): CUI(pGraphicDev)
 {
@@ -103,6 +104,11 @@ CHPUI* CHPUI::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _uint iTexNum)
 
 void CHPUI::SetProgress(_int iCurHP, _uint iMaxHP, _int iDamage)
 {
+	_vec2 vScreen;
+	vScreen.x = m_pTransCom->m_vInfo[INFO_POS].x + WINCX / 2 - 10;
+	vScreen.y = -m_pTransCom->m_vInfo[INFO_POS].y + WINCY / 2 - 60.f;
+
+	CDamageFontMgr::GetInstance()->Add_DamageFontFromScreen(iDamage, vScreen, D3DCOLOR_ARGB(255, 255, 0, 0));
 	_float fProgress = (_float)iCurHP / (_float) iMaxHP;
 	m_fProgress = fProgress;
 	m_pHeartRed->SetProgress(fProgress);

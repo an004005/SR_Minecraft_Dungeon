@@ -19,7 +19,7 @@
 #include "EnchanterController.h"
 #include "RedStoneCubeController.h"
 #include "RedStoneMonstrosityController.h"
-
+#include "DamageFontMgr.h"
 
 USING(Engine)
 
@@ -114,9 +114,11 @@ HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 * ppGraphicDev)
 	FAILED_CHECK_RETURN(Engine::Ready_InputDev(g_hInst, g_hWnd), E_FAIL);
 
 	// Font
-	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Font_Default", L"¹ÙÅÁ", 15, 20, FW_HEAVY), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Font_Default_Normal", L"¹ÙÅÁ", 10, 13, FW_HEAVY), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Font_Jinji", L"±Ã¼­", 15, 15, FW_NORMAL), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Minecraft15", L"Minecraft", 15, 20, FW_NORMAL), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Gothic_Bold15", L"Kim jung chul Gothic Bold", 15, 20, FW_NORMAL), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Gothic_Regular15", L"Kim jung chul Gothic Regular", 15, 20, FW_NORMAL), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Gothic_Bold20", L"Kim jung chul Gothic Bold", 20, 25, FW_NORMAL), E_FAIL);
+
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -147,7 +149,7 @@ HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 * ppGraphicDev)
 
 	// ¸Å´ÏÀú ÃÊ±âÈ­
 	CArrowCubeMgr::Create(m_pGraphicDev);
-
+	CDamageFontMgr::GetInstance()->SetGraphicDev(m_pGraphicDev);
 	
 
 	return S_OK;
@@ -307,6 +309,7 @@ void CMainApp::Free(void)
     ImGui::DestroyContext();
 
 	CArrowCubeMgr::DeleteInst();
+	CDamageFontMgr::DestroyInstance();
 	CAbstFactory::ReleaseGraphicDev();
 	Safe_Release(m_pGraphicDev);
 	Safe_Release(m_pDeviceClass);
