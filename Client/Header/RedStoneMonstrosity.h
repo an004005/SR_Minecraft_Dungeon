@@ -113,7 +113,7 @@ private:
 	_bool m_bWindmillFire = false; // anim event ют╥б
 	_matrix m_matSommonWorld[6];
 
-	ULONG m_dwWindTime = 0;
+	ULONGLONG m_dwWindTime = 0;
 
 	_bool m_bStartPlay = false;
 	_bool m_bIntroPlay = false;

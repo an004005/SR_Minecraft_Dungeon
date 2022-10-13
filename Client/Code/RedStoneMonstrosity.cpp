@@ -40,6 +40,12 @@ HRESULT CRedStoneMonstrosity::Ready_Object()
 
 	m_pStat->SetMaxHP(1000);
 
+	m_pStat->SetHurtSound({
+		L"sfx_mob_redstoneGolemHurt-001.ogg",
+		L"sfx_mob_redstoneGolemHurt-002.ogg",
+		L"sfx_mob_redstoneGolemHurt-003.ogg",
+		L"sfx_mob_redstoneGolemHurt-004.ogg"});
+
 	CController* pController = Add_Component<CRedStoneMonstrosityController>(L"Proto_RedStoneMonstrosityController", L"Proto_RedStoneMonstrosityController", ID_DYNAMIC);
 	pController->SetOwner(this);
 
@@ -72,6 +78,13 @@ void CRedStoneMonstrosity::AnimationEvent(const string& strEvent)
 		Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 			->PlayShake(0.2f, 0.8f);
 
+
+		CSoundMgr::GetInstance()->PlaySoundRandom({
+			L"sfx_mob_redstoneGolemChop-001.ogg",
+			L"sfx_mob_redstoneGolemChop-002.ogg", 
+			L"sfx_mob_redstoneGolemChop-003.ogg"},
+			m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.7f);
+
 		m_bChopFire = true;
 	}
 	else if (strEvent == "ActionEnd")
@@ -84,6 +97,13 @@ void CRedStoneMonstrosity::AnimationEvent(const string& strEvent)
 	}
 	else if (strEvent == "SpitFire")
 	{
+
+		CSoundMgr::GetInstance()->PlaySoundRandom({
+			L"sfx_mob_redstoneGolemSpit-001.ogg",
+			L"sfx_mob_redstoneGolemSpit-002.ogg",
+			L"sfx_mob_redstoneGolemSpit-003.ogg" },
+			m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.6f);
+
 		_matrix matWorld;
 		
 		auto& itr = m_mapParts.find("head");
@@ -115,6 +135,7 @@ void CRedStoneMonstrosity::AnimationEvent(const string& strEvent)
 			CGameUtilMgr::MatWorldComposeEuler(m_matSommonWorld[i], { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { vPos.x + (_float)randomx, vPos.y , vPos.z + (_float)randomz });
 			CEffectFactory::Create<CCrack>("Red_Cube_Crack", L"Red_Cube_Crack", m_matSommonWorld[i]);
 
+			CSoundMgr::GetInstance()->PlaySound(L"sfx_prop_redstoneSommon-01.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.2f);
 		}
 	}
 	//몬스터 소환할때 모션
@@ -140,6 +161,15 @@ void CRedStoneMonstrosity::AnimationEvent(const string& strEvent)
 	else if (strEvent == "Windmill_Fire")
 	{
 		m_bWindmillFire = false;
+	}
+	else if (strEvent == "Step")
+	{
+		CSoundMgr::GetInstance()->PlaySoundRandom({
+			L"sfx_mob_redstoneGolemStepHeavy-001.ogg",
+			L"sfx_mob_redstoneGolemStepHeavy-002.ogg",
+			L"sfx_mob_redstoneGolemStepHeavy-003.ogg",
+			L"sfx_mob_redstoneGolemStepHeavy-004.ogg" },
+			m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.5f);
 	}
 }
 
@@ -230,6 +260,11 @@ void CRedStoneMonstrosity::LateUpdate_Object()
 			}
 			DEBUG_SPHERE(vAttackPos, 7.f, 1.f);
 
+			CSoundMgr::GetInstance()->PlaySoundRandom({
+				L"sfx_mob_redstonegolemSwipe-001.ogg",
+				L"sfx_mob_redstonegolemSwipe-002.ogg",},
+				m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.5f);
+
 			m_dwWindTime = GetTickCount64();
 		}
 	
@@ -261,9 +296,14 @@ void CRedStoneMonstrosity::StateChange()
 {
 	if (m_pStat->IsDead() && m_bReserveStop == false)
 	{
+		CSoundMgr::GetInstance()->PlaySoundRandom({
+			L"sfx_mob_redstoneGolemDeathHeavy-001.ogg",
+			L"sfx_mob_redstoneGolemDeathHeavy-002.ogg",
+			L"sfx_mob_redstoneGolemDeathHeavy-003.ogg" },
+			m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.6f);
+
 		m_eState = DEAD;
 		PlayAnimationOnce(&m_arrAnim[DEAD], true);
-	
 		m_bCanPlayAnim = false;
 		return;
 	}

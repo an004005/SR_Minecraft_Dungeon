@@ -48,6 +48,7 @@ private:
 
 	_vec3 m_vListenerPos = CGameUtilMgr::s_vZero;
 	_float m_fMaxListenDist = 20.f;
+	_float m_fMasterVolume;
 
 };
 

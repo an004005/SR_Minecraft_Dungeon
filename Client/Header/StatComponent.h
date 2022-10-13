@@ -39,10 +39,13 @@ public:
 
 	// cur hp, max hp, damage
 	BaseDelegater<_int, _uint, _int> m_DamageDelegater;
+	void SetHurtSound(const vector<wstring>& vHurtSound)	{ m_vHurtSound = vHurtSound;}
 
 private:
 	Engine::CTransform* m_pOwnerTrans = nullptr;
 	CTerrainCubeMap* m_pCubeMap = nullptr;
+
+	vector<wstring> m_vHurtSound;
 
 	_uint m_iMaxHP = 50;
 	_int m_iHP = 50;
