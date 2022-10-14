@@ -51,6 +51,14 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 			m_fCurDamagedTime += fTimeDelta;
 	}
 
+	// 세이튼 장판 기믹 때만 해당되게 구현하기 
+	// if (!m_bSatonSymbol)
+	// {
+	// 	if (m_fDamagedTime < m_fCurDamagedTime)
+	// 		m_bDamaged = false;
+	// 	else
+	// 		m_fCurDamagedTime += fTimeDelta;
+	// }
 
 	_vec3& vPos = m_pOwnerTrans->m_vInfo[INFO_POS];
 	if (CGameUtilMgr::Vec3Cmp(m_vKnockBackVelocity, CGameUtilMgr::s_vZero))
@@ -134,6 +142,19 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 		D3DXVec3Normalize(&m_vKnockBackVelocity, &m_vKnockBackVelocity);
 		m_vKnockBackVelocity *= 15.f;
 		m_vKnockBackVelocity.y = 10.f;
+		break;
+	case DT_HUGE_KNOCK_BACK:
+		m_bKnockback = true;
+		m_fCurKnockbackTime = 0.f;
+
+		m_vKnockBackVelocity = m_pOwnerTrans->m_vInfo[INFO_POS] - vFromPos;
+		D3DXVec3Normalize(&m_vKnockBackVelocity, &m_vKnockBackVelocity);
+		m_vKnockBackVelocity *= 40.f;
+		m_vKnockBackVelocity.y = 18.f;
+		break;
+	case DT_SATON_SYMBOL:
+		m_bSatonSymbol = true;
+		m_fCurSatonSymbolTime = 0.f;
 		break;
 	case DT_END:
 		break;

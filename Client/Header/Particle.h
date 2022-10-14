@@ -157,7 +157,26 @@ private:
 	_uint tmp = 1;
 };
 
+class CMoonParticle : public CParticleSystem
+{
+public:
+	explicit CMoonParticle(LPDIRECT3DDEVICE9 pGraphicDev) : CParticleSystem(pGraphicDev) {}
+	virtual ~CMoonParticle() override;
 
+public:
+	_int Update_Object(const _float& fTimeDelta) override;
+	void Render_Object() override;
+	void Reset_Particle(Attribute* _Attribute) override;
+	void PreRender_Particle() override;
+	void PostRender_Particle() override;
+	// void Reset_tmp(void) { tmp = 1; }
+public:
+	static CMoonParticle* Create(LPDIRECT3DDEVICE9 pGraphicDev, LPCWSTR _TexFileName);
+
+	void Free() override;
+
+private:
+};
 
 #pragma endregion
 
@@ -361,6 +380,12 @@ private:
 	_float m_fSpeed;
 };
 
+enum HealCircleType
+{
+	HEAL,
+	BLUE_CIRCLE
+};
+
 class CHealCircle : public CGameObject
 {
 public:
@@ -368,7 +393,7 @@ public:
 	~CHealCircle() override;
 
 public:
-	virtual HRESULT Ready_Object(_float _size,_float _rad);
+	virtual HRESULT Ready_Object(_float _size,_float _rad, HealCircleType _type);
 	_int Update_Object(const _float& fTimeDelta) override;
 	void Render_Object() override;
 	void LateUpdate_Object() override;
@@ -376,7 +401,7 @@ public:
 	void PostRender_Particle();
 
 public:
-	static CHealCircle* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size, _float _rad);
+	static CHealCircle* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size, _float _rad, HealCircleType _type);
 	CRcShader*			m_pBufferCom = nullptr;
 	CTransform*			m_pTransCom = nullptr;
 	CTexture*			m_pTexture = nullptr;
@@ -387,6 +412,8 @@ private:
 	_float m_fCurTime;
 	_float m_fSpeed;
 	_float m_fRad;
+
+	HealCircleType m_eType;
 };
 
 class CHeartParticle : public CGameObject

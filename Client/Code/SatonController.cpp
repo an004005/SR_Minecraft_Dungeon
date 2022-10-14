@@ -17,6 +17,7 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 		m_fCurSatonBirdCoolTime += fTimeDelta;
 		m_fCurSatonGrapCoolTime += fTimeDelta;
 	}
+
 	CSaton* saton = dynamic_cast<CSaton*>(m_pOwner);
 	NULL_CHECK_RETURN(saton, 0);
 

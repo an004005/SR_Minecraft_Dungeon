@@ -142,6 +142,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	CEffectFactory::Create<CFireWork>("FireWork", L"FireWork");
 	CEffectFactory::Create<CSpeedBoots>("Speed_Boots", L"Speed_Boots");
 	CEffectFactory::Create<CSpeedBoots_Particle>("Speed_Boots_Particle", L"Speed_Boots_Particle");
+	CEffectFactory::Create<CMoonParticle>("MoonParticle", L"MoonParticle");
 
 	
 	//monsters

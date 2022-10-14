@@ -89,6 +89,9 @@
     <Filter Include="02. GameObject\01. Monster\01. Saton">
       <UniqueIdentifier>{a617b281-bde0-4df9-9deb-bffb1f38c9b9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\Particle">
+      <UniqueIdentifier>{a097aa65-4bb2-4da6-803b-331fe7896605}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\MainApp.h">
@@ -205,7 +208,6 @@
     <ClInclude Include="..\Header\StatComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\Particle.h" />
     <ClInclude Include="..\Header\PlayerController.h">
       <Filter>Controller</Filter>
     </ClInclude>
@@ -369,7 +371,6 @@
     <ClInclude Include="..\Header\InventoryUI.h">
       <Filter>02. GameObject\05. UI</Filter>
     </ClInclude>
-
     <ClInclude Include="..\Header\Birds.h">
       <Filter>02. GameObject\Object</Filter>
     </ClInclude>
@@ -392,6 +393,10 @@
     <ClInclude Include="..\Header\Saton.h">
       <Filter>02. GameObject\01. Monster\01. Saton</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\Particle.h">
+      <Filter>02. GameObject\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\SatonCircle.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -496,7 +501,6 @@
     <ClCompile Include="..\Code\GeomancerController.cpp">
       <Filter>Controller</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Particle.cpp" />
     <ClCompile Include="..\Code\ZombieController.cpp">
       <Filter>Controller</Filter>
     </ClCompile>
@@ -695,6 +699,10 @@
     <ClCompile Include="..\Code\Saton.cpp">
       <Filter>02. GameObject\01. Monster\01. Saton</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\Particle.cpp">
+      <Filter>02. GameObject\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SatonCircle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">

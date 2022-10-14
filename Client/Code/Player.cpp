@@ -269,6 +269,8 @@ void CPlayer::AttackState()
 		m_pInventory->UseArrow(1);
 	}
 
+
+
 #pragma region Lazer 
 	 //CEffectFactory::Create<CLazer>("Lazer_Beam", L"Lazer_Beam");
 	 //for (int i = 0; i < 12; i++)

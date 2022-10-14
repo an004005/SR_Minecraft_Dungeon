@@ -610,6 +610,100 @@ void CFireWork::Free()
 {
 	CParticleSystem::Free();
 }
+
+#pragma endregion
+
+#pragma region MoonParticle
+CMoonParticle::~CMoonParticle()
+{
+}
+
+_int CMoonParticle::Update_Object(const _float& fTimeDelta)
+{
+	std::list<Attribute>::iterator i;
+
+	for (i = m_ParticlesList.begin(); i != m_ParticlesList.end(); i++)
+	{
+		if (i->_bIsAlive)
+		{
+			i->_vPosition += i->_vVelocity * fTimeDelta;
+			i->_fAge += fTimeDelta;
+
+			if (i->_fAge > i->_fLifeTime)
+			{
+				i->_bIsAlive = false;
+			}
+		}
+	}
+
+	RemoveDeadParticles();
+	CParticleSystem::Update_Object(fTimeDelta);
+
+	return OBJ_NOEVENT;
+}
+
+void CMoonParticle::Render_Object()
+{
+	CParticleSystem::Render_Object();
+
+
+}
+
+void CMoonParticle::Reset_Particle(Attribute* _Attribute)
+{
+	_Attribute->_bIsAlive = true;
+	m_fSize = _Attribute->_fSize;
+
+	_vec3 min = _vec3(0.f, -1.0f, 0.f);
+	_vec3 max = _vec3(0.5f, 1.0f, 0.5f);
+
+	GetRandomVector(
+		&_Attribute->_vVelocity,
+		&min,
+		&max);
+
+	D3DXVec3Normalize(
+		&_Attribute->_vVelocity,
+		&_Attribute->_vVelocity);
+
+	_Attribute->_vVelocity *= -10.f;
+
+	_Attribute->_fAge = 0.0f;
+}
+
+void CMoonParticle::PreRender_Particle()
+{
+	CParticleSystem::PreRender_Particle();
+	m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
+	m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, false);
+}
+
+void CMoonParticle::PostRender_Particle()
+{
+	CParticleSystem::PostRender_Particle();
+	m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, true);
+}
+
+CMoonParticle* CMoonParticle::Create(LPDIRECT3DDEVICE9 pGraphicDev, LPCWSTR _TexFileName)
+{
+	CMoonParticle* Inst = new CMoonParticle(pGraphicDev);
+	Inst->m_dwVtxBf_Size = 4096 * 2;
+	Inst->m_dwVtxBf_Offset = 0;
+	Inst->m_dwVtxBf_BatchSize = 1024 * 2;
+	if (FAILED(Inst->Ready_Object(_TexFileName)))
+	{
+		return nullptr;
+	}
+	return Inst;
+}
+
+void CMoonParticle::Free()
+{
+	CParticleSystem::Free();
+}
+
+
 #pragma endregion
 
 #pragma endregion
@@ -1645,28 +1739,58 @@ CHealCircle::~CHealCircle()
 {
 }
 
-HRESULT CHealCircle::Ready_Object(_float _size, _float _rad)
+HRESULT CHealCircle::Ready_Object(_float _size, _float _rad, HealCircleType _type)
 {
-	m_pBufferCom = Add_Component<CRcShader>(L"Proto_HealCom", L"Proto_HealCom", ID_STATIC);
-	m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
-	m_pTexture = Add_Component<CTexture>(L"Proto_Heal", L"Proto_Heal", ID_STATIC);
-	m_pTransCom->Rotation(ROT_X, D3DXToRadian(_rad));
-	// m_pTransCom->Rotation(ROT_Z, D3DXToRadian(30.f));
+	m_eType = _type;
 
-	m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
-	m_pBufferCom->Set_TextureOption(0, 0, 0);
+	if (m_eType == HEAL)
+	{
+		m_pBufferCom = Add_Component<CRcShader>(L"Proto_HealCom", L"Proto_HealCom", ID_STATIC);
+		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
+		m_pTexture = Add_Component<CTexture>(L"Proto_Heal", L"Proto_Heal", ID_STATIC);
+		m_pTransCom->Rotation(ROT_X, D3DXToRadian(_rad));
+		// m_pTransCom->Rotation(ROT_Z, D3DXToRadian(30.f));
 
-	// CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
-	// _vec3 pPos;
-	// pPlayerTransform->Get_Info(INFO_POS, &pPos);
-	// m_pTransCom->Set_Pos(pPos.x, pPos.y+1.5f, pPos.z);
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
-	m_pTransCom->m_vInfo[INFO_POS].y = pPlayerTransform->m_vInfo[INFO_POS].y;
+		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
+		m_pBufferCom->Set_TextureOption(0, 0, 0);
 
-	m_pTransCom->Set_Scale(_size, _size, _size);
-	m_fSpeed = 4.f;
-	m_fTime = 1.2f;
-	m_fCurTime = 0.f;
+		// CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
+		// _vec3 pPos;
+		// pPlayerTransform->Get_Info(INFO_POS, &pPos);
+		// m_pTransCom->Set_Pos(pPos.x, pPos.y+1.5f, pPos.z);
+		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
+		m_pTransCom->m_vInfo[INFO_POS].y = pPlayerTransform->m_vInfo[INFO_POS].y;
+
+		m_pTransCom->Set_Scale(_size, _size, _size);
+		m_fSpeed = 4.f;
+		m_fTime = 1.2f;
+		m_fCurTime = 0.f;
+	}
+	else if (m_eType == BLUE_CIRCLE)
+	{
+		m_pBufferCom = Add_Component<CRcShader>(L"Proto_BlueCom", L"Proto_BlueCom", ID_STATIC);
+		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
+		m_pTexture = Add_Component<CTexture>(L"Proto_Heal", L"Proto_Heal", ID_STATIC);
+		m_pTransCom->Rotation(ROT_X, D3DXToRadian(_rad));
+		// m_pTransCom->Rotation(ROT_Z, D3DXToRadian(30.f));
+
+		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
+		m_pBufferCom->Set_TextureOption(0, 0, 0);
+
+		// CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
+		// _vec3 pPos;
+		// pPlayerTransform->Get_Info(INFO_POS, &pPos);
+		// m_pTransCom->Set_Pos(pPos.x, pPos.y+1.5f, pPos.z);
+		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
+		m_pTransCom->m_vInfo[INFO_POS].y = pPlayerTransform->m_vInfo[INFO_POS].y;
+
+		m_pTransCom->Set_Scale(_size, _size, _size);
+		m_fSpeed = 4.f;
+		m_fTime = 1.2f;
+		m_fCurTime = 0.f;
+	}
+
+
 	m_pTransCom->Update_Component(0.f);
 
 	return S_OK;
@@ -1680,27 +1804,48 @@ _int CHealCircle::Update_Object(const _float& fTimeDelta)
 	{
 		return OBJ_DEAD;
 	}
-
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
-	_vec3 pPos;
-	pPlayerTransform->Get_Info(INFO_POS, &pPos);
-	m_pTransCom->m_vInfo[INFO_POS].x = pPos.x;
-	m_pTransCom->m_vInfo[INFO_POS].z = pPos.z;
-
-
-	// Set_Pos(pPos.x, pPos.y + 1.5f, pPos.z);
-
-	m_pTransCom->m_vInfo[INFO_POS].y += fTimeDelta * 10.f;
-
-	// m_pTransCom->m_vScale *= 61.5f * fTimeDelta;
-
-	if(m_pTransCom->m_vInfo[INFO_POS].y >= pPos.y + 3.f)
-	{
-		m_pTransCom->m_vInfo[INFO_POS].y = pPos.y;
-	}
-
 	m_fCurTime += fTimeDelta;
-	
+
+	if (m_eType == HEAL)
+	{
+		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
+		_vec3 pPos;
+		pPlayerTransform->Get_Info(INFO_POS, &pPos);
+		m_pTransCom->m_vInfo[INFO_POS].x = pPos.x;
+		m_pTransCom->m_vInfo[INFO_POS].z = pPos.z;
+
+
+		// Set_Pos(pPos.x, pPos.y + 1.5f, pPos.z);
+
+		m_pTransCom->m_vInfo[INFO_POS].y += fTimeDelta * 10.f;
+
+		// m_pTransCom->m_vScale *= 61.5f * fTimeDelta;
+
+		if (m_pTransCom->m_vInfo[INFO_POS].y >= pPos.y + 3.f)
+		{
+			m_pTransCom->m_vInfo[INFO_POS].y = pPos.y;
+		}
+	}
+	else if (m_eType == BLUE_CIRCLE)
+	{
+		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
+		_vec3 pPos;
+		pPlayerTransform->Get_Info(INFO_POS, &pPos);
+		m_pTransCom->m_vInfo[INFO_POS].x = pPos.x;
+		m_pTransCom->m_vInfo[INFO_POS].z = pPos.z;
+
+
+		// Set_Pos(pPos.x, pPos.y + 1.5f, pPos.z);
+
+		m_pTransCom->m_vInfo[INFO_POS].y += fTimeDelta * 10.f;
+
+		// m_pTransCom->m_vScale *= 61.5f * fTimeDelta;
+
+		if (m_pTransCom->m_vInfo[INFO_POS].y >= pPos.y + 3.f)
+		{
+			m_pTransCom->m_vInfo[INFO_POS].y = pPos.y;
+		}
+	}
 
 	// m_pTransCom->m_vAngle.y += D3DXToRadian(50.f) * fTimeDelta * m_fSpeed;
 
@@ -1729,11 +1874,11 @@ void CHealCircle::PostRender_Particle()
 {
 }
 
-CHealCircle* CHealCircle::Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size, _float _rad)
+CHealCircle* CHealCircle::Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size, _float _rad, HealCircleType _type)
 {
 	CHealCircle* Inst = new CHealCircle(pGraphicDev);
 
-	if (FAILED(Inst->Ready_Object(_size, _rad)))
+	if (FAILED(Inst->Ready_Object(_size, _rad,_type)))
 	{
 		return nullptr;
 	}

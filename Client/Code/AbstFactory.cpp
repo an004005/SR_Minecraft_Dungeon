@@ -179,6 +179,11 @@ void CEffectFactory::Ready_EffectFactory()
 		return CFireWork::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/bump.png");
 	} });
 
+	s_mapEffectSpawner.insert({ "MoonParticle", []()
+	{
+		return CMoonParticle::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/torbellino_texture.png");
+	} });
+
 	/**********************
 	*		-Shader
 	**********************/
@@ -290,14 +295,17 @@ void CEffectFactory::Ready_EffectFactory()
 
 	s_mapEffectSpawner.insert({ "Heal_Circle_R",[]()
 	{
-		return CHealCircle::Create(s_pGraphicDev, 1.4f, 90.f);
+		return CHealCircle::Create(s_pGraphicDev, 1.4f, 90.f, HEAL);
 	} });
 
 	s_mapEffectSpawner.insert({ "Heal_Circle_L",[]()
 	{
-		return CHealCircle::Create(s_pGraphicDev, 1.4f, 90.f);
+		return CHealCircle::Create(s_pGraphicDev, 1.4f, 90.f,HEAL);
 	} });
-
+	s_mapEffectSpawner.insert({ "Blue_Circle",[]()
+	{
+		return CHealCircle::Create(s_pGraphicDev, 1.4f, 90.f,BLUE_CIRCLE);
+	} });
 	s_mapEffectSpawner.insert({ "Lava_Particle",[]()
 	{
 		return CLava_Particle::Create(s_pGraphicDev, 1.f, FALLINLAVA);
