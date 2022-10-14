@@ -30,6 +30,8 @@ private:
 	_uint m_iCoolTimeTexNum = 0;
 	_matrix m_matCoolTimeWorld;
 
+
+	_matrix m_matIconWorld;
 	CTexture* m_pIconTexture = nullptr;
 	_uint m_iIconTexNum = 0;
 

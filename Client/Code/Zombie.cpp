@@ -21,7 +21,7 @@ HRESULT CZombie::Ready_Object()
 
 	m_arrAnim[ANIM_IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Zombie/idle.anim");
 	m_arrAnim[ANIM_WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Zombie/walk.anim");
-	m_arrAnim[ANIM_DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Zombie/dead.anim");
+	m_arrAnim[ANIM_DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Zombie/dead_a.anim");
 	m_arrAnim[ANIM_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Zombie/attack.anim");
 	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 	m_pCurAnim = m_pIdleAnim;
@@ -29,6 +29,11 @@ HRESULT CZombie::Ready_Object()
 	m_fSpeed = 2.f;
 
 	m_pStat->SetMaxHP(100);
+
+	m_pStat->SetHurtSound({
+		L"DLC_sfx_mob_monster_Hurt-001.ogg",
+		L"DLC_sfx_mob_monster_Hurt-002.ogg" ,
+		L"DLC_sfx_mob_monster_Hurt-003.ogg" });
 
 	CController* pController = Add_Component<CZombieController>(L"Proto_ZombieController", L"Proto_ZombieController", ID_DYNAMIC);
 	pController->SetOwner(this);
@@ -49,6 +54,16 @@ void CZombie::AnimationEvent(const string& strEvent)
 	else if (strEvent == "AnimStopped")
 	{
 		m_bDelete = true;
+	}
+	else if (strEvent == "Step")
+	{
+		CSoundMgr::GetInstance()->PlaySoundRandom({
+			L"sfx_mob_zombieStepGeneric-001.ogg",
+			L"sfx_mob_zombieStepGeneric-002.ogg",
+			L"sfx_mob_zombieStepGeneric-003.ogg",
+			L"sfx_mob_zombieStepGeneric-004.ogg",
+			L"sfx_mob_zombieStepGeneric-005.ogg", },
+			m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.3f);
 	}
 }
 
@@ -104,6 +119,11 @@ void CZombie::LateUpdate_Object()
 		DEBUG_SPHERE(vAttackPos, 1.f, 1.f);
 		IM_LOG("Fire");
 	
+		CSoundMgr::GetInstance()->PlaySoundRandom({ 
+			L"sfx_mob_zombieAttack-001.ogg", 
+			L"sfx_mob_zombieAttack-002.ogg",
+			L"sfx_mob_zombieAttack-003.ogg",
+			L"sfx_mob_zombieAttack-004.ogg"}, vAttackPos, 0.2f);
 		m_bAttackFire = false;
 	}
 }
@@ -135,6 +155,12 @@ void CZombie::StateChange()
 	{
 		if (m_bReserveStop == false)
 		{
+			CSoundMgr::GetInstance()->PlaySoundRandom({
+				L"sfx_mob_zombieDeath-001.ogg",
+				L"sfx_mob_zombieDeath-002.ogg",
+				L"sfx_mob_zombieDeath-003.ogg" },
+				m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.5f);
+
 			m_eState = DEAD;
 			PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
 			m_bAttack = false;
@@ -148,9 +174,12 @@ void CZombie::StateChange()
 	if (m_pStat->IsStun())
 	{
 		m_eState = STUN;
+		m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
+		m_pCurAnim = &m_arrAnim[ANIM_IDLE];
 		m_bAttack = false;
 		m_bMove = false;
 		StopCurAnimation();
+		
 		return;
 	}
 

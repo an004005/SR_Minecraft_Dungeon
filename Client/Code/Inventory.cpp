@@ -97,6 +97,9 @@ HRESULT CInventory::Ready_Object()
 	
 	}
 
+	m_iArrow = 90;
+	m_iEmerald = 0;
+
 	return S_OK;
 }
 
@@ -172,6 +175,7 @@ void CInventory::OpenInventory()
 	if (Select & 1)
 	{
 		m_pInventoryUI->Open();
+		m_bLock = true;
 		for (int i = 0; i < COL; ++i)
 		{
 			for (int j = 0; j < ROW; ++j)
@@ -187,6 +191,7 @@ void CInventory::OpenInventory()
 	else
 	{
 		m_pInventoryUI->Close();
+		m_bLock = false;
 		for (int i = 0; i < COL; ++i)
 		{
 			for (int j = 0; j < ROW; ++j)
@@ -229,7 +234,7 @@ void CInventory::Put(CConsumeItem * pItem)
 		m_iEmerald++;
 		break;
 	case IE_ARROW:
-		m_iArrow++;
+		m_iArrow += 40;
 		break;
 	case IE_HEAL:
 	{
@@ -326,7 +331,7 @@ void CInventory::MouseEvent(CItemSpaceUI* pItemSpaceUI, CEquipItem* pEquipItem, 
 			vPointAt.z = 1.f;
 
 			_matrix matProj;
-			D3DXMatrixOrthoLH(&matProj, WINCX, WINCY, 0.f, 1.f);
+			D3DXMatrixOrthoLH(&matProj, WINCX, WINCY, 0.1f, 1.f);
 			D3DXMatrixInverse(&matProj, nullptr, &matProj);
 			D3DXVec3TransformCoord(&vPointAt, &vPointAt, &matProj);
 

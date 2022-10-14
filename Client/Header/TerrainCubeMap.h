@@ -26,7 +26,7 @@ struct MapCubeInfo
 class CTerrainCubeMap : public CGameObject
 {
 	friend class CImGuiMgr;
-public:
+private:
 	explicit CTerrainCubeMap(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual ~CTerrainCubeMap();
 
@@ -52,7 +52,6 @@ public:
 	
 
 private:
-
 	vector<MapCubeInfo> m_vecTotalCube;
 	vector<MapCubeInfo> m_vecLand;
 	vector<MapCubeInfo> m_vecCollision;
@@ -65,9 +64,10 @@ private:
 	CTexture* m_pCubeTextureCom = nullptr;
 	CTexture* m_pTextureCom = nullptr;
 
-public:
+private:
 	_float			m_fHeight[VTXCNTX][VTXCNTZ];
 	_bool			m_bRendState = false;
+	_float			m_fBlock[VTXCNTX][VTXCNTZ];
 
 public:
 	static CTerrainCubeMap*		Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath = L"");

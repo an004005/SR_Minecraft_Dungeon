@@ -166,10 +166,12 @@
   <ItemGroup>
     <ClInclude Include="..\Header\AbstFactory.h" />
     <ClInclude Include="..\Header\BatchTool.h" />
+    <ClInclude Include="..\Header\DamageFontMgr.h" />
     <ClInclude Include="..\Header\FireworksArrow.h" />
     <ClInclude Include="..\Header\CamAnimation.h" />
     <ClInclude Include="..\Header\CameraTool.h" />
     <ClInclude Include="..\Header\InventoryUI.h" />
+    <ClInclude Include="..\Header\PlayerStartPos.h" />
     <ClInclude Include="..\Header\Kouku.h" />
     <ClInclude Include="..\Header\KoukuController.h" />
     <ClInclude Include="..\Header\Posion.h" />
@@ -179,6 +181,8 @@
     <ClInclude Include="..\Header\ArrowBundle.h" />
     <ClInclude Include="..\Header\ArrowCubeMgr.h" />
     <ClInclude Include="..\Header\Axe.h" />
+
+    <ClInclude Include="..\Header\BirdsBrown.h" />
     <ClInclude Include="..\Header\Box.h" />
     <ClInclude Include="..\Header\Bread.h" />
     <ClInclude Include="..\Header\ConsumeItem.h" />
@@ -206,6 +210,7 @@
     <ClInclude Include="..\Header\MapTool.h" />
     <ClInclude Include="..\Header\MainApp.h" />
     <ClInclude Include="..\Header\Monster.h" />
+    <ClInclude Include="..\Header\Birds.h" />
     <ClInclude Include="..\Header\ObjectStoreMgr.h" />
     <ClInclude Include="..\Header\Particle.h" />
     <ClInclude Include="..\Header\Player.h" />
@@ -260,10 +265,12 @@
   <ItemGroup>
     <ClCompile Include="..\Code\AbstFactory.cpp" />
     <ClCompile Include="..\Code\BatchTool.cpp" />
+    <ClCompile Include="..\Code\DamageFontMgr.cpp" />
     <ClCompile Include="..\Code\FireworksArrow.cpp" />
     <ClCompile Include="..\Code\CamAnimation.cpp" />
     <ClCompile Include="..\Code\CameraTool.cpp" />
     <ClCompile Include="..\Code\InventoryUI.cpp" />
+    <ClCompile Include="..\Code\PlayerStartPos.cpp" />
     <ClCompile Include="..\Code\Kouku.cpp" />
     <ClCompile Include="..\Code\KoukuController.cpp" />
     <ClCompile Include="..\Code\Posion.cpp" />
@@ -273,6 +280,7 @@
     <ClCompile Include="..\Code\ArrowBundle.cpp" />
     <ClCompile Include="..\Code\ArrowCubeMgr.cpp" />
     <ClCompile Include="..\Code\Axe.cpp" />
+    <ClCompile Include="..\Code\BirdsBrown.cpp" />
     <ClCompile Include="..\Code\Box.cpp" />
     <ClCompile Include="..\Code\Bread.cpp" />
     <ClCompile Include="..\Code\ConsumeItem.cpp" />
@@ -300,6 +308,7 @@
     <ClCompile Include="..\Code\MainApp.cpp" />
     <ClCompile Include="..\Code\MapTool.cpp" />
     <ClCompile Include="..\Code\Monster.cpp" />
+    <ClCompile Include="..\Code\Birds.cpp" />
     <ClCompile Include="..\Code\ObjectStoreMgr.cpp" />
     <ClCompile Include="..\Code\Particle.cpp" />
     <ClCompile Include="..\Code\Player.cpp" />

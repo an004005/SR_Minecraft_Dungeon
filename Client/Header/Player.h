@@ -49,12 +49,16 @@ public:
 	virtual HRESULT Ready_Object() override;
 	virtual _int Update_Object(const _float& fTimeDelta) override;
 	virtual void LateUpdate_Object() override;
+	virtual void Render_Object() override;
 	virtual void Free() override;
 	virtual void AnimationEvent(const string& strEvent) override;
 
 	virtual void AttackState();
 	void StateChange();
 	_vec3 GetInfo(INFOID eID) { return m_pRootPart->pTrans->m_vInfo[eID]; }
+	void SetVisible(bool bVisible){ m_bVisible = bVisible; }
+	_bool IsVisible() const { return m_bVisible; }
+	void PlayerSpawn();
 
 	// controller 입력함수
 	void SetMoveDir(_float fX, _float fZ);
@@ -72,12 +76,12 @@ public:
 	// UI용 함수
 	_float GetRollCoolTime() const { return m_CurRollCoolTime / s_RollCoolTime; }
 	_float GetPotionCoolTime() const { return m_CurPotionCoolTime / s_PotionCollTime; }
+	CInventory* GetInventory() const { return m_pInventory; }
 	//
 
 	//아이템 변경(임시)
 	void WeaponChange(ITEMTYPE eIT);
 	void SetSpeed(_float fSpeed) { m_fSpeed = fSpeed; }
-	CInventory* GetInventory() { return m_pInventory; }
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
 
 private:
@@ -124,8 +128,10 @@ protected:
 
 	// 원거리에서 근거리 무기로 다시 돌아올 때 1프레임동안 근거리 무기 위치가 이상한 현상을 막기 위함.
 	_bool m_bDelay = false;
+	_float m_bBlockIndex[VTXCNTX][VTXCNTZ];
 
-	
+	_bool m_bVisible = false;
+	_float m_bDeadTime = 0.f;
 };
 
 

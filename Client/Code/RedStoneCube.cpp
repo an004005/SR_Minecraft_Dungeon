@@ -49,6 +49,15 @@ void CRedStoneCube::AnimationEvent(const string& strEvent)
 	{
 		m_bDelete = true;
 	}
+	else if (strEvent == "Step")
+	{
+		CSoundMgr::GetInstance()->PlaySoundRandom({
+			L"sfx_mob_redstoneCubeWalk-001.ogg",
+			L"sfx_mob_redstoneCubeWalk-002.ogg",
+			L"sfx_mob_redstoneCubeWalk-003.ogg",
+			L"sfx_mob_redstoneCubeWalk-004.ogg"},
+			m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.3f);
+	}
 }
 
 _int CRedStoneCube::Update_Object(const _float& fTimeDelta)

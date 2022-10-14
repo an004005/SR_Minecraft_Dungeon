@@ -2,6 +2,7 @@
 #include "..\Header\Particle.h"
 #include "Export_Utility.h"
 #include "AbstFactory.h"
+#include "RedStoneMonstrosity.h"
 #include "SphereEffect.h"
 #include "TerrainCubeMap.h"
 #define			PI			3.141592f
@@ -761,7 +762,15 @@ HRESULT CUVCircle::Ready_Object(_float _size, CIRCLETYPE _type)
 	{
 		//골렘 포인터로 바꿔야함 손 위치 받아오기 
 		m_pBufferCom->Set_TextureOption(3, 4, 2);
-		CTransform*	pGolem = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
+
+		CTransform* pGolem= nullptr;
+		for (auto& e : Get_Layer(LAYER_ENEMY)->Get_MapObject())
+		{
+			if (CRedStoneMonstrosity* red = dynamic_cast<CRedStoneMonstrosity*>(e.second))
+			{
+				pGolem = red->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+			}
+		}
 		_vec3 pPos;
 		pGolem->Get_Info(INFO_POS, &pPos);
 		m_pTransCom->Set_Pos(pPos.x, pPos.y + 0.5f, pPos.z);
@@ -989,6 +998,82 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 		// m_vVelocity.z = 0.f;
 
 	}
+	else if (_type == GOLEMCLOUD)
+	{
+		m_pBufferCom = Add_Component<CRcShader>(L"Proto_WalkCloudCom", L"Proto_WalkCloudCom", ID_STATIC);
+		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
+		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture(0));
+		m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
+		// m_pBufferCom->Set_TextureOption(_uint(CGameUtilMgr::GetRandomFloat(7.f, 15.f)), 4, 2);
+		m_pBufferCom->Set_TextureOption(5, 4, 2);
+
+		CTransform* pGolem= nullptr;
+		for (auto& e : Get_Layer(LAYER_ENEMY)->Get_MapObject())
+		{
+			if (CRedStoneMonstrosity* red = dynamic_cast<CRedStoneMonstrosity*>(e.second))
+			{
+				pGolem = red->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+			}
+		}
+		_vec3 pPos;
+		_vec3 pLook;
+		pGolem->Get_Info(INFO_POS, &pPos);
+		pGolem->Get_Info(INFO_LOOK, &pLook);
+
+		m_pTransCom->m_vInfo[INFO_POS] = pPos + pLook * 2.f;
+		// m_pTransCom->Set_Pos(pPos.x, pPos.y, pPos.z);
+		m_pTransCom->Set_Scale(_size, _size, _size);
+		m_fTime = 0.7f;
+		m_fCurTime = 0.f;
+		m_fSpeed = 3.5f;
+
+		_vec3 min = _vec3(-1.0f, 1.0f, -1.0f);
+		_vec3 max = _vec3(1.0f, 1.0f, 1.0f);
+
+		CGameUtilMgr::GetRandomVector(
+			&m_vVelocity,
+			&min,
+			&max);
+
+		m_vVelocity.x += pLook.x;
+		m_vVelocity.y += pLook.y;
+
+		D3DXVec3Normalize(&m_vVelocity, &m_vVelocity);
+	}
+	else if (_type == GOLEMWINDMILL)
+	{
+		m_pBufferCom = Add_Component<CRcShader>(L"Proto_ShockPowderCloudCom", L"Proto_ShockPowderCloudCom", ID_STATIC);
+		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransFormCom_CloudEffect", ID_DYNAMIC);
+		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture(0));
+		m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
+		m_pBufferCom->Set_TextureOption(20, 4, 2);
+		CTransform* pGolem= nullptr;
+		for (auto& e : Get_Layer(LAYER_ENEMY)->Get_MapObject())
+		{
+			if (CRedStoneMonstrosity* red = dynamic_cast<CRedStoneMonstrosity*>(e.second))
+			{
+				pGolem = red->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+			}
+		}
+		_vec3 pPos;
+		pGolem->Get_Info(INFO_POS, &pPos);
+		m_pTransCom->Set_Pos(pPos.x, pPos.y + 2.f, pPos.z);
+		m_pTransCom->Set_Scale(_size, _size, _size);
+		m_fTime = 3.f;
+		m_fCurTime = 0.f;
+		m_fSpeed = 3.5f;
+
+		_vec3 min = _vec3(-1.0f, 1.0f, -1.0f);
+		_vec3 max = _vec3(1.0f, 1.0f, 1.0f);
+
+		CGameUtilMgr::GetRandomVector(
+			&m_vVelocity,
+			&min,
+			&max);
+
+		D3DXVec3Normalize(&m_vVelocity, &m_vVelocity);
+		m_vVelocity.y = 0.f;
+	}
 	// m_pTransCom->Set_Pos(pPos.x,
 	// 	pPos.y, pPos.z);
 	// IM_LOG("%f, %f", m_pTransCom->m_vInfo[INFO_POS].x, m_pTransCom->m_vInfo[INFO_POS].z);
@@ -1097,7 +1182,7 @@ HRESULT CCrack::Ready_Object(_float _size, CRACKTYPE _type)
 		pPlayerTransform->Get_Info(INFO_POS, &pPos);
 		
 		m_pTransCom->Set_Pos(pPos.x, pPos.y + 4.f, pPos.z);
-		IM_LOG("%f, %f", m_pTransCom->m_vInfo[INFO_POS].x, m_pTransCom->m_vInfo[INFO_POS].z);
+		//IM_LOG("%f, %f", m_pTransCom->m_vInfo[INFO_POS].x, m_pTransCom->m_vInfo[INFO_POS].z);
 		m_pTransCom->Set_Scale(_size, _size, _size);
 		m_iCrackType = GOLEM_SPIT_CRACK;
 	}
@@ -1310,7 +1395,7 @@ _int CGolemSpit::Update_Object(const _float& fTimeDelta)
 	CGameObject::Update_Object(fTimeDelta);
 
 	m_pBufferCom->m_matWorld = m_pTransCom->m_matWorld;
-
+	
 	_vec3& vPos = m_pTransCom->m_vInfo[INFO_POS];
 	// 삼각함수 적용해보기
 	m_vVelocity *= CGameUtilMgr::GetRandomFloat(0.5f, 1.0f) * 1.f;

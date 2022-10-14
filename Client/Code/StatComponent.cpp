@@ -1,9 +1,9 @@
 #include "stdafx.h"
-#include "..\Header\StatComponent.h"
+#include "../Header/StatComponent.h"
 #include "AbstFactory.h"
 #include "Particle.h"
 #include "TerrainCubeMap.h"
-#include "Monster.h"
+#include "DamageFontMgr.h"
 
 CStatComponent::CStatComponent()
 {
@@ -57,16 +57,17 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 	{
 		vPos.y = m_pCubeMap->GetHeight(vPos.x, vPos.z);
 	}
-	else 
+	else
 	{
 		// ≥ÀπÈ ªÛ≈¬
 		vPos += m_vKnockBackVelocity * fTimeDelta;
 		m_vKnockBackVelocity.y -= 120.f * fTimeDelta;
 
-		if (vPos.y < m_pCubeMap->GetHeight(vPos.x, vPos.z))
+		if (vPos.y < m_pCubeMap->GetHeight(vPos.x, vPos.z) || m_bKnockback == false)
 		{
 			m_vKnockBackVelocity = CGameUtilMgr::s_vZero;
 		}
+		
 	}
 
 	return 0;
@@ -101,6 +102,9 @@ void CStatComponent::ModifyHP(_int iModifyingHP)
 		// ««≈∏∞› ¿Ã∆Â∆Æ
 		Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")
 			->Add_Particle(m_pOwnerTrans->m_vInfo[INFO_POS] +_vec3{0.f, 1.2f, 0.f}, CGameUtilMgr::GetRandomFloat(0.15f,0.3f), RED, 20, 0.2f);
+
+		if(m_vHurtSound.size() > 0)
+			CSoundMgr::GetInstance()->PlaySoundRandom(m_vHurtSound, m_pOwnerTrans->m_vInfo[INFO_POS], 0.2f);
 	}
 
 	if (m_iHP <= 0)
@@ -114,7 +118,7 @@ void CStatComponent::ModifyHP(_int iModifyingHP)
 
 void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCauser, DamageType eType)
 {
-	if (m_bDead) return ;
+	if (m_bDead) return;
 
 	switch (eType)
 	{
@@ -140,5 +144,22 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 
 
 	ModifyHP(-iDamage);
+	if (iDamage != 0)
+	{
+		// if (dynamic_cast<CPlayer*>())
+		CDamageFontMgr::GetInstance()->Add_DamageFontFromWorld(
+			iDamage,
+			m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{0.f, 1.5f, 0.f},
+			vFromPos,
+			D3DCOLOR_ARGB(255, 255, 255, 255));
+	}
 }
 
+void CStatComponent::Revive()
+{
+	m_iHP = m_iMaxHP;
+	m_bDead = false;
+	m_bStun = false;
+	m_bDamaged = false;
+	m_bKnockback = false;
+}

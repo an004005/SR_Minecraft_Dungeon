@@ -37,12 +37,17 @@ public:
 	_bool IsDead() const { return m_bDead; }
 	_bool IsDamaged() const { return m_bDamaged; }
 
+	void Revive();
+
 	// cur hp, max hp, damage
 	BaseDelegater<_int, _uint, _int> m_DamageDelegater;
+	void SetHurtSound(const vector<wstring>& vHurtSound)	{ m_vHurtSound = vHurtSound;}
 
 private:
 	Engine::CTransform* m_pOwnerTrans = nullptr;
 	CTerrainCubeMap* m_pCubeMap = nullptr;
+
+	vector<wstring> m_vHurtSound;
 
 	_uint m_iMaxHP = 50;
 	_int m_iHP = 50;
@@ -55,8 +60,8 @@ private:
 
 	// knock back
 	_bool m_bKnockback = false;
-	_float m_fKnockbackTime = 1.f;
-	_float m_fCurKnockbackTime = 1.f;
+	_float m_fKnockbackTime = 0.3f;
+	_float m_fCurKnockbackTime = 0.3f;
 
 	_vec3 m_vKnockBackVelocity = CGameUtilMgr::s_vZero;
 

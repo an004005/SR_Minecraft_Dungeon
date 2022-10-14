@@ -38,6 +38,10 @@ namespace Engine
 	enum ITEMSTATE { IS_TAKE, IS_DROP, IS_END};
 
 	enum ITEMEFFECT { IE_MONEY, IE_HEAL, IE_ARROW, IE_POSION, IE_END};
+
+	// Object
+
+	enum OBJTYPE { BIRD_WHITE, BIRD_BROWN, BIRD_END };
 	/////////////////////////////////////////////////////////////////
 
 	enum LAYERID

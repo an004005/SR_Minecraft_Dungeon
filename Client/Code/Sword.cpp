@@ -32,6 +32,7 @@ HRESULT CSword::Ready_Object()
 	m_arrAnim[ANIM_RANGE_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/crossbow_attack_start.anim");
 	m_arrAnim[ANIM_LEGACY1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/shock_powder.anim");
 	m_arrAnim[ANIM_LEGACY2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/shock_powder.anim");
+	m_arrAnim[ANIM_DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/dead.anim");
 
 	m_eItemType = IT_MELEE;
 	m_iUItexNum = 10;
@@ -108,7 +109,7 @@ _int CSword::Attack()
 		pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK3]);
 	}
 	CSoundMgr::GetInstance()->PlaySoundRandom({L"sfx_item_swordSwingSteel-001_soundWave.ogg", L"sfx_item_swordSwingSteel-002_soundWave.ogg", L"sfx_item_swordSwingSteel-003_soundWave.ogg"}, 
-		pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS]);
+		pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS], 0.4f);
 	m_iAttackCnt = (m_iAttackCnt + 1) % 3;
 
 	return m_iAttackCnt;

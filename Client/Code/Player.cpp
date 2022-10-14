@@ -16,6 +16,7 @@
 #include "SphereEffect.h"
 #include "Inventory.h"
 #include "Emerald.h"
+#include "PlayerStartPos.h"
 
 /*-----------------------
  *    CCharacter
@@ -59,6 +60,13 @@ HRESULT CPlayer::Ready_Object()
 	m_pStat = Add_Component<CStatComponent>(L"Proto_StatCom", L"Proto_StatCom", ID_DYNAMIC);
 	m_pStat->SetMaxHP(100);
 	m_pStat->SetTransform(m_pRootPart->pTrans);
+	m_pStat->SetHurtSound({
+		L"DLC_sfx_mob_whisperer_hit_1.ogg",
+		L"DLC_sfx_mob_whisperer_hit_2.ogg",
+		L"DLC_sfx_mob_whisperer_hit_3.ogg",
+		L"DLC_sfx_mob_whisperer_hit_4.ogg",
+		L"DLC_sfx_mob_whisperer_hit_5.ogg",
+		L"DLC_sfx_mob_whisperer_hit_6.ogg" });
 
 	// 항상 카메라 먼저 만들고 플레이어 만들기!
 	Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")->SetTarget(this);
@@ -69,6 +77,11 @@ HRESULT CPlayer::Ready_Object()
 	m_pInventory = CObjectFactory::Create<CInventory>("Inventory", L"Inventory");
 	m_pInventory->AddRef();
 	m_arrAnim = m_pInventory->CurWeapon(IT_MELEE)->SetarrAnim();
+
+	m_pRootPart->pTrans->Update_Component(0.f);
+	//test
+	// PlayerSpawn();
+
 	return S_OK;
 }
 
@@ -113,9 +126,12 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 	case LEGACY:
 		break;
 	case DEAD:
+		if (m_bDeadTime > 3.f) 
+			PlayerSpawn();
+		m_bDeadTime += fTimeDelta;
 		break;
 	default:
-		break;;
+		break;
 	}
 
 	return OBJ_NOEVENT;
@@ -137,6 +153,12 @@ void CPlayer::LateUpdate_Object()
 		m_bApplyMeleeAttack = false;
 		m_bApplyMeleeAttackNext = true;
 	}
+}
+
+void CPlayer::Render_Object()
+{
+	if (m_bVisible)
+		CSkeletalCube::Render_Object();
 }
 
 void CPlayer::Free()
@@ -170,12 +192,52 @@ void CPlayer::AnimationEvent(const string& strEvent)
 	}
 	else if (strEvent == "step")
 	{
+		CSoundMgr::GetInstance()->PlaySoundRandom({ L"sfx_player_stepStone-001.ogg", L"sfx_player_stepStone-002.ogg" ,L"sfx_player_stepStone-003.ogg" }, m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+
 		if (m_dwWalkDust + 500 < GetTickCount())
 		{
 			CEffectFactory::Create<CCloud>("Walk_Cloud", L"Walk_Cloud");
 			m_dwWalkDust = GetTickCount();
 		}
 	}
+	else if (strEvent == "AnimStopped")
+	{
+		SetVisible(false);
+	}
+	else if (strEvent == "landing")
+	{
+		CSoundMgr::GetInstance()->PlaySound(L"sfx_player_landing.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+		for (int j = 0; j < 15; j++)
+			CEffectFactory::Create<CCloud>("ShockPowder_Cloud", L"ShockPowder_Cloud");
+	}
+	else if (strEvent == "visible")
+	{
+		SetVisible(true);
+	}
+}
+
+void CPlayer::PlayerSpawn()
+{
+	static CubeAnimFrame landing = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/landing.anim");
+
+	for (auto& obj :Get_Layer(LAYER_GAMEOBJ)->Get_MapObject())
+	{
+		if (CPlayerStartPos* pStartPos = dynamic_cast<CPlayerStartPos*>(obj.second))
+		{
+			m_pRootPart->pTrans->Set_WorldDecompose(pStartPos->GetWorld());
+			break;
+		}
+	}
+
+	Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")->ResetPosition();
+	m_pColl->SetStart();
+	m_pStat->Revive();
+	m_bReserveStop = false;
+	m_bStopAnim = false;
+	m_bCanPlayAnim = false;
+	PlayAnimationOnce(&landing);
+	m_bDeadTime = 0.f;
+	SetVisible(true);
 }
 
 void CPlayer::SetMoveDir(_float fX, _float fZ)
@@ -204,49 +266,24 @@ void CPlayer::AttackState()
 		WeaponChange(IT_RANGE);
 		m_bCanPlayAnim = false;
 		m_iAttackCnt = m_pInventory->CurWeapon(IT_RANGE)->Attack();
+		m_pInventory->UseArrow(1);
 	}
 
 #pragma region Lazer 
-	// CEffectFactory::Create<CLazer>("Lazer_Beam", L"Lazer_Beam");
-	// for (int i = 0; i < 12; i++)
-	// {
-	// 	CEffectFactory::Create<CLazer_Circle>("Lazer_Beam_Circle", L"Lazer_Beam_Circle");
-	// }
+	 //CEffectFactory::Create<CLazer>("Lazer_Beam", L"Lazer_Beam");
+	 //for (int i = 0; i < 12; i++)
+	 //{
+	 //	CEffectFactory::Create<CLazer_Circle>("Lazer_Beam_Circle", L"Lazer_Beam_Circle");
+	 //}
 #pragma endregion 
 
 #pragma region Loading Box 
- 	// CEffectFactory::Create<CCrack>("LoadingBox", L"LoadingBox");
+ 	 //CEffectFactory::Create<CCrack>("LoadingBox", L"LoadingBox");
 #pragma endregion
 
 #pragma region Item DropEffect 
 	// CEffectFactory::Create<CGradation_Beam>("Gradation_Beam", L"Gradation_Beam");
 	// Get_GameObject<C3DBaseTexture>(LAYER_EFFECT, L"3D_Base")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 3.f, D3DXCOLOR(1.f, 1.f, 0.f, 0.f), 1, 30.f,1);
-#pragma endregion
-
-#pragma region GolemSmash
-	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_Shpere_L", L"Golem_Melee_Shpere_L");
-	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_Shpere_M", L"Golem_Melee_Shpere_M");
-	//
-	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_L", L"Golem_Melee_L");
-	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_M", L"Golem_Melee_M");
-	// 	CEffectFactory::Create<CSphereEffect>("Golem_Melee_S", L"Golem_Melee_S");
-	// 	for (int i = 0; i < 15; i++)
-	// 	{
-	// 		CEffectFactory::Create<CCloud>("ShockPowder_Cloud", L"ShockPowder_Cloud");
-	// 	}
-	// //완전히 찍을 때
-	// 	Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.5f, D3DXCOLOR(0.88f,0.35f,0.24f,1.0f), 12, 0.8f);
-#pragma endregion
-
-#pragma region GolemSpit
-	// for (int i = 0; i < 10; i++)
-	// {
-		// CEffectFactory::Create<CGolemSpit>("Golem_Spit", L"Golem_Spit");
-	//}
-#pragma endregion
-
-#pragma region RedCube_Spawn
-		// CEffectFactory::Create<CCrack>("Red_Cube_Crack", L"Red_Cube_Crack");
 #pragma endregion
 
 #pragma region Lava_Paticle
@@ -265,10 +302,16 @@ void CPlayer::StateChange()
 {
 	if (m_pStat->IsDead())
 	{
-		m_eState = DEAD;
-		PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
-		m_bRoll = false;
-		m_bCanPlayAnim = false;
+		if (m_bReserveStop == false)
+		{
+			m_eState = DEAD;
+			PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
+			m_bRoll = false;
+			m_bCanPlayAnim = false;
+			m_bMove = false;
+			m_bCanPlayAnim = false;
+			m_pColl->SetStop();
+		}
 		return;
 	}
 
@@ -281,6 +324,7 @@ void CPlayer::StateChange()
 
 	if (m_bRoll && s_RollCoolTime <= m_CurRollCoolTime)
 	{
+		CSoundMgr::GetInstance()->PlaySound(L"sfx_player_stepCloth-003.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 		m_eState = ROLL;
 		RotateToCursor();
 		m_bCanPlayAnim = false;
@@ -292,14 +336,15 @@ void CPlayer::StateChange()
 
 	if (m_bLegacy1 && m_bCanPlayAnim)
 	{
-	
-		m_eState = LEGACY;
 		m_bLegacy1 = false;
-		m_bCanPlayAnim = false;
 
 		if (m_pInventory->CurWeapon(IT_LEGACY1) == nullptr)
 			return;
+		if (m_pInventory->CurWeapon(IT_LEGACY1)->GetCoolTime() < 1.f)
+			return;
 
+		m_eState = LEGACY;
+		m_bCanPlayAnim = false;
 		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY1]);
 		m_pInventory->CurWeapon(IT_LEGACY1)->Use();
 		return;
@@ -307,13 +352,15 @@ void CPlayer::StateChange()
 
 	if (m_bLegacy2 && m_bCanPlayAnim)
 	{
-		m_eState = LEGACY;
 		m_bLegacy2 = false;
-		m_bCanPlayAnim = false;
 
 		if (m_pInventory->CurWeapon(IT_LEGACY2) == nullptr)
 			return;
+		if (m_pInventory->CurWeapon(IT_LEGACY2)->GetCoolTime() < 1.f)
+			return;
 
+		m_eState = LEGACY;
+		m_bCanPlayAnim = false;
 		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY2]);
 		m_pInventory->CurWeapon(IT_LEGACY2)->Use();
 		return;
@@ -321,14 +368,15 @@ void CPlayer::StateChange()
 
 	if (m_bLegacy3 && m_bCanPlayAnim)
 	{
-		
-		m_eState = LEGACY;
 		m_bLegacy3 = false;
-		m_bCanPlayAnim = false;
 
 		if (m_pInventory->CurWeapon(IT_LEGACY3) == nullptr)
 			return;
+		if (m_pInventory->CurWeapon(IT_LEGACY3)->GetCoolTime() < 1.f)
+			return;
 
+		m_eState = LEGACY;
+		m_bCanPlayAnim = false;
 		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY2]);
 		m_pInventory->CurWeapon(IT_LEGACY3)->Use();
 		return;
@@ -342,7 +390,7 @@ void CPlayer::StateChange()
 		return;
 	}
 
-	if (m_bRangeAttack && m_bCanPlayAnim)
+	if (m_bRangeAttack && m_bCanPlayAnim && m_pInventory->GetArrowCnt() > 0)
 	{
 		m_eState = ATTACK;
 		RotateToCursor();
@@ -393,7 +441,12 @@ void CPlayer::UsePotion()
 		// particle
 	}
 
-	CSoundMgr::GetInstance()->PlaySound(L"P3_sfx_item_claymoreWinter1Impact-001.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+	CSoundMgr::GetInstance()->PlaySoundRandom({
+		L"sfx_ui_healthsynergy-001.ogg",
+		L"sfx_ui_healthsynergy-002.ogg",
+		L"sfx_ui_healthsynergy-003.ogg",
+		L"sfx_ui_healthsynergy-004.ogg"},
+		m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)

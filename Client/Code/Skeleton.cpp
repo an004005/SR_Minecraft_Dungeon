@@ -34,6 +34,12 @@ HRESULT CSkeleton::Ready_Object(const wstring& wstrPath)
 
 	m_pStat->SetMaxHP(100);
 
+	m_pStat->SetHurtSound({
+		L"sfx_mob_skeletonHurt-001.ogg",
+		L"sfx_mob_skeletonHurt-002.ogg" ,
+		L"sfx_mob_skeletonHurt-003.ogg",
+		L"sfx_mob_skeletonHurt-004.ogg" });
+
 	CController* pController = Add_Component<CSkeletonController>(L"Proto_SkeletonController", L"Proto_SkeletonController", ID_DYNAMIC);
 	pController->SetOwner(this);
 
@@ -59,6 +65,15 @@ void CSkeleton::AnimationEvent(const string& strEvent)
 	else if (strEvent == "AnimStopped")
 	{
 		m_bDelete = true;
+	}
+	else if (strEvent == "Step")
+	{
+		CSoundMgr::GetInstance()->PlaySoundRandom({
+			L"sfx_mob_skeletonStep-001.ogg",
+			L"sfx_mob_skeletonStep-002.ogg",
+			L"sfx_mob_skeletonStep-003.ogg",
+			L"sfx_mob_skeletonStep-004.ogg"},
+			m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.3f);
 	}
 }
 
@@ -125,6 +140,13 @@ void CSkeleton::StateChange()
 	{
 		if (m_bReserveStop == false)
 		{
+			CSoundMgr::GetInstance()->PlaySoundRandom({
+				L"sfx_mob_skeletonDeath-001.ogg",
+				L"sfx_mob_skeletonDeath-002.ogg",
+				L"sfx_mob_skeletonDeath-003.ogg",
+				L"sfx_mob_skeletonDeath-004.ogg" },
+				m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.5f);
+
 			m_eState = DEAD;
 			PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
 			m_bAttack = false;
@@ -138,6 +160,8 @@ void CSkeleton::StateChange()
 	if (m_pStat->IsStun())
 	{
 		m_eState = STUN;
+		m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
+		m_pCurAnim = &m_arrAnim[ANIM_IDLE];
 		m_bAttack = false;
 		m_bMove = false;
 		StopCurAnimation();
