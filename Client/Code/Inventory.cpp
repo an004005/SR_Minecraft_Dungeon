@@ -94,6 +94,7 @@ HRESULT CInventory::Ready_Object()
 		pLegacySlot = CUIFactory::Create<CItemSpaceUI>("ItemSpaceUI", L"LegacySlot3", 0, WINCX * 0.1f + fEquipSlotSize * 0.55f * 4.f, WINCY*0.85f, fEquipSlotSize, fEquipSlotSize);
 		pLegacySlot->SetRenderType(SLOT_LEGACY);
 		m_arrEquipSpace[IT_LEGACY3] = pLegacySlot;
+
 	
 	}
 
@@ -284,7 +285,10 @@ CEquipItem * CInventory::CurWeapon(ITEMTYPE eIT)
 
 void CInventory::MouseEvent(CItemSpaceUI* pItemSpaceUI, CEquipItem* pEquipItem, _int index , _bool bEquipState)
 {
-	
+	//for sound
+	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
+	_vec3 vSoundPos = pPlayerTransform->m_vInfo[INFO_POS];
+
 	_matrix& matIconWorld = pItemSpaceUI->GetIconWorld();
 	_float fX = matIconWorld._41 + WINCX / 2;
 	_float fY = -matIconWorld._42 + WINCY / 2;
@@ -298,10 +302,20 @@ void CInventory::MouseEvent(CItemSpaceUI* pItemSpaceUI, CEquipItem* pEquipItem, 
 
 	// check mouse collison
 	if (PtInRect(&rcUI, ptMouse))
-	{
+	{	
+		//sound play	
+		if (pCurCollsionIconUI == nullptr || (pCurCollsionIconUI != pItemSpaceUI && !pCurCollsionIconUI->GetPick()))
+		{		
+			pCurCollsionIconUI = pItemSpaceUI;
+			CSoundMgr::GetInstance()->PlaySound(L"sfx_multi_clickLong-001.ogg", vSoundPos);
+		}
+
+
 		// check mouse click event
 		if (MouseKeyDown(DIM_LB))
 		{
+			//sound play
+			CSoundMgr::GetInstance()->PlaySound(L"inven_click_001.ogg", vSoundPos);
 			// occur clickFrame Event
 			for (int i = 0; i < COL * ROW; ++i)
 			{
@@ -310,7 +324,8 @@ void CInventory::MouseEvent(CItemSpaceUI* pItemSpaceUI, CEquipItem* pEquipItem, 
 			}
 			pItemSpaceUI->SetCurClickFrame(true);
 			//아이템 특성과 설명 UI 추가
-		
+			m_pInventoryUI->SetUITexture(pEquipItem->GetUITexNum());
+
 		}
 		else if (MouseKeyPress(DIM_LB))
 		{
@@ -338,6 +353,11 @@ void CInventory::MouseEvent(CItemSpaceUI* pItemSpaceUI, CEquipItem* pEquipItem, 
 			matIconWorld._41 = vPointAt.x;
 			matIconWorld._42 = vPointAt.y;
 
+			if (matIconWorld._11 < WINCX * 0.1f && matIconWorld._22 < WINCX * 0.1f)
+			{
+				matIconWorld._11 *= 1.1f;
+				matIconWorld._22 *= 1.1f;
+			}
 			//cant collision other Icon		
 			for (int i = 0; i < COL * ROW; ++i)
 			{
@@ -357,8 +377,9 @@ void CInventory::MouseEvent(CItemSpaceUI* pItemSpaceUI, CEquipItem* pEquipItem, 
 			// set worldmatrix at immediate black space by check collision
 			// clickFrame on
 
-			//pItemSpaceUI->SetCurClickFrame(false);
-			
+			//sound play
+			CSoundMgr::GetInstance()->PlaySound(L"inven_click_end-001.ogg", vSoundPos);
+
 			ITEMTYPE eType = pEquipItem->GetItemType();
 			
 			for (int i = 0; i < COL * ROW; ++i)
@@ -422,6 +443,7 @@ void CInventory::MouseEvent(CItemSpaceUI* pItemSpaceUI, CEquipItem* pEquipItem, 
 								m_arrEquipSpace[index]->InitIconWorldSet();
 								m_arrItemSpace[i]->SetUITexture(m_arrItem[i]->GetUITexNum());
 								m_arrItemSpace[i]->SetCurClickFrame(true);
+								m_arrItemSpace[i]->InitIconWorldSet();
 								break;
 							}				
 						}
@@ -519,6 +541,12 @@ void CInventory::MouseEvent(CItemSpaceUI* pItemSpaceUI, CEquipItem* pEquipItem, 
 		}
 		else if (MouseKeyDown(DIM_RB))
 		{
+			//sound play
+			CSoundMgr::GetInstance()->PlaySoundRandom({
+				L"inven_equip-001.ogg",
+				L"inven_equip-002.ogg",
+				L"inven_equip-003.ogg",
+				L"inven_equip-004.ogg" }, vSoundPos);
 			// Change Equip item
 			ITEMTYPE eType = pEquipItem->GetItemType();
 			
@@ -581,12 +609,16 @@ void CInventory::MouseEvent(CItemSpaceUI* pItemSpaceUI, CEquipItem* pEquipItem, 
 					}
 				}
 			}
-
 		}
 		else
-		{
+		{	
 			pItemSpaceUI->SetMouseCollFrame();
 		}
 	}
+	else if (pCurCollsionIconUI == pItemSpaceUI)
+	{
+		pCurCollsionIconUI = nullptr;
+	}
 }
+
 
