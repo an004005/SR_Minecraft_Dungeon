@@ -10,7 +10,7 @@ enum DamageType
 };
 
 class CTerrainCubeMap;
-
+class CStun;
 class CStatComponent : public CComponent
 {
 protected:
@@ -57,6 +57,7 @@ private:
 	_bool m_bStun = false;
 	_float m_fStunTime = 2.f;
 	_float m_fCurStunTime = 2.f;
+	CStun* m_pStun = nullptr;
 
 	// knock back
 	_bool m_bKnockback = false;

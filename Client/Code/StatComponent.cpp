@@ -30,9 +30,17 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 	if (m_bStun)
 	{
 		if (m_fStunTime < m_fCurStunTime)
+		{
 			m_bStun = false;
+			if (m_pStun)
+				m_pStun->SetDead();
+		}
 		else
+		{
 			m_fCurStunTime += fTimeDelta;
+			if (m_pStun)
+				m_pStun->SetPos(m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{0.f, 3.f, 0.f});
+		}
 	}
 
 	if (m_bKnockback)
@@ -133,6 +141,7 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 	case DT_STUN:
 		m_bStun = true;
 		m_fCurStunTime = 0.f;
+		m_pStun = CEffectFactory::Create<CStun>("Monster_Stun", L"Monster_Stun", m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{0.f, 3.f, 0.f});
 		break;
 	case DT_KNOCK_BACK:
 		m_bKnockback = true;

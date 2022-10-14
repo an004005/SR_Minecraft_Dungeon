@@ -2,6 +2,7 @@
 #include "Item.h"
 #include "SkeletalCube.h"
 
+class CPlayer;
 class CEquipItem :
 	public CItem
 {
@@ -43,7 +44,7 @@ public:
 	virtual _int Attack() { return 0; }
 	virtual void Use() { m_bUse = true; }
 	_float GetCoolTime() const { return m_fCurCoolTime / m_fCoolTime; }
-
+	void SetOwner(CPlayer* pOwner) { m_pOwner = pOwner; NULL_CHECK(m_pOwner); }
 	
 public:
 	const array<CubeAnimFrame, ANIM_END>& SetarrAnim(){ return m_arrAnim; }
@@ -51,6 +52,7 @@ public:
 	_int GetUITexNum() const { return m_iUItexNum; }
 
 protected:
+	CPlayer* m_pOwner = nullptr;
 	Engine::CTexture*	m_pTextureCom = nullptr;
 	Engine::CVoxelTex*	m_pBufferCom = nullptr;
 	

@@ -1,9 +1,8 @@
 #pragma once
-#include "EquipItem.h"
-
+#include "Weapon.h"
 
 class CCrossbow :
-	public CEquipItem
+	public CWeapon
 {
 private:
 	explicit CCrossbow(LPDIRECT3DDEVICE9 pGraphicDev);
@@ -25,7 +24,6 @@ public:
 	void LoadFireWork() { m_bFireWork = true; }
 
 private:
-	_bool PickTargetEnemy(OUT _vec3& vLookAt);
 	_bool m_bFireWork = false;
 };
 

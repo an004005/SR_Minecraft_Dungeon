@@ -1,7 +1,13 @@
 #pragma once
 #include "SkeletalCube.h"
 
-
+enum class PlayerArrowType
+{
+	NORMAL,
+	FIREWORK,
+	MULTISHOT,
+	LASER
+};
 
 class CController;
 class CStatComponent;
@@ -62,6 +68,9 @@ public:
 	void SetVisible(bool bVisible){ m_bVisible = bVisible; }
 	_bool IsVisible() const { return m_bVisible; }
 	void PlayerSpawn();
+
+	void SpawnArrow(_uint iDamage, PlayerArrowType eType);
+	_bool PickTargetEnemy(OUT _vec3& vLookAt);
 
 	// controller 입력함수
 	void SetMoveDir(_float fX, _float fZ);

@@ -347,6 +347,8 @@ public:
 	void LateUpdate_Object() override;
 	void PreRender_Particle();
 	void PostRender_Particle();
+	void SetPos(const _vec3& vPos);
+	void SetDead() {m_fCurTime = m_fTime; };
 
 public:
 	static CStun* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size);

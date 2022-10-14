@@ -1,16 +1,17 @@
 #include "stdafx.h"
 #include "..\Header\Axe.h"
 
-#include "AbstFactory.h"
 #include "SkeletalCube.h"
 #include "Player.h"
 #include "Monster.h"
-#include "Particle.h"
 #include "StatComponent.h"
 #include "TerrainCubeMap.h"
+#include "Rune.h"
 
-CAxe::CAxe(LPDIRECT3DDEVICE9 pGraphicDev): CEquipItem(pGraphicDev)
+CAxe::CAxe(LPDIRECT3DDEVICE9 pGraphicDev): CWeapon(pGraphicDev)
 {
+	m_eType = WEAPON_AXE;
+	m_iDamage = 50;
 }
 
 CAxe::~CAxe()
@@ -84,7 +85,7 @@ CAxe* CAxe::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 
 _int CAxe::Attack()
 {
-	CPlayer* pPlayer = Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");
+	CPlayer* pPlayer = m_pOwner;
 	if (pPlayer == nullptr)
 		return 0;
 
@@ -114,7 +115,7 @@ void CAxe::Collision()
 {
 	set<CGameObject*> objSet;
 
-	CPlayer* pPlayer =Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");
+	CPlayer* pPlayer = m_pOwner;
 	_vec3 vPos = pPlayer->GetInfo(INFO_POS);
 	_vec3 vLook = pPlayer->GetInfo(INFO_LOOK);
 
@@ -131,9 +132,12 @@ void CAxe::Collision()
 			if (m_iAttackCnt == 0) eDT = DT_KNOCK_BACK;
 			if (monster->CheckCC()) eDT = DT_END;
 			monster->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(30, vPos, this, eDT);
+				->TakeDamage(m_iDamage, vPos, this, eDT);
 		}
 	}
+
+	if (m_pRune)
+		m_pRune->Collision();
 
 	DEBUG_SPHERE(vAttackPos, 3.f, 1.f);
 }

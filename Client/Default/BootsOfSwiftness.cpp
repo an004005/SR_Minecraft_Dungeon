@@ -38,7 +38,7 @@ _int CBootsOfSwiftness::Update_Object(const _float & fTimeDelta)
 
 		m_fAge = 0.f;
 	
-		CPlayer* pPlayer = Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");
+		CPlayer* pPlayer = m_pOwner;
 		pPlayer->SetSpeed(7.5f);
 		_vec3 vPos = pPlayer->GetInfo(INFO_POS);
 
@@ -58,7 +58,7 @@ _int CBootsOfSwiftness::Update_Object(const _float & fTimeDelta)
 
 	if (m_bEnd && m_fAge >= m_fLifeTime)
 	{
-		Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player")->SetSpeed(4.5f);
+		m_pOwner->SetSpeed(4.5f);
 		m_bEnd = false;
 	}
 

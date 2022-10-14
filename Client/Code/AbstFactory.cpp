@@ -47,6 +47,12 @@
 #include "PlayerStartPos.h"
 #include "Kouku.h"
 #include "Saton.h"
+#include "PowerRune.h"
+#include "StunRune.h"
+#include "StormRune.h"
+#include "MultiShotRune.h"
+#include "LightningRune.h"
+#include "LaserShotRune.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -464,6 +470,32 @@ void CItemFactory::Ready_ItemFactory()
 	s_mapItemSpawner.insert({ "FireworksArrow", []()
 	{
 		return CFireworksArrow::Create(s_pGraphicDev);
+	} });
+
+	// rune factories
+	s_mapItemSpawner.insert({ "PowerRune", []()
+	{
+		return CPowerRune::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "StormRune", []()
+	{
+		return CStormRune::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "StunRune", []()
+	{
+		return CStunRune::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "MultishotRune", []()
+	{
+		return CMultiShotRune::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "LightningRune", []()
+	{
+		return CLightningRune::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "LasershotRune", []()
+	{
+		return CLaserShotRune::Create(s_pGraphicDev);
 	} });
 }
 

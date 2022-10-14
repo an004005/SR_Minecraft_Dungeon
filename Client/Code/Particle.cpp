@@ -1514,6 +1514,11 @@ void CStun::PostRender_Particle()
 {
 }
 
+void CStun::SetPos(const _vec3& vPos)
+{
+	m_pTransCom->m_vInfo[INFO_POS] = vPos;
+}
+
 CStun* CStun::Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size)
 {
 	CStun* Inst = new CStun(pGraphicDev);
