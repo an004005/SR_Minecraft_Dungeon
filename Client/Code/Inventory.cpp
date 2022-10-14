@@ -94,6 +94,7 @@ HRESULT CInventory::Ready_Object()
 		pLegacySlot = CUIFactory::Create<CItemSpaceUI>("ItemSpaceUI", L"LegacySlot3", 0, WINCX * 0.1f + fEquipSlotSize * 0.55f * 4.f, WINCY*0.85f, fEquipSlotSize, fEquipSlotSize);
 		pLegacySlot->SetRenderType(SLOT_LEGACY);
 		m_arrEquipSpace[IT_LEGACY3] = pLegacySlot;
+
 	
 	}
 
@@ -323,7 +324,8 @@ void CInventory::MouseEvent(CItemSpaceUI* pItemSpaceUI, CEquipItem* pEquipItem, 
 			}
 			pItemSpaceUI->SetCurClickFrame(true);
 			//아이템 특성과 설명 UI 추가
-		
+			m_pInventoryUI->SetUITexture(pEquipItem->GetUITexNum());
+
 		}
 		else if (MouseKeyPress(DIM_LB))
 		{

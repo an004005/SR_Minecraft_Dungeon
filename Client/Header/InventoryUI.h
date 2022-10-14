@@ -1,7 +1,6 @@
 #pragma once
 #include "UI.h"
 
-
 /*------------------------
 * BackGround
 ------------------------*/
@@ -22,9 +21,18 @@ public:
 	void Close() { m_bClose = true; }
 	void Open() { m_bClose = false; }
 	_bool IsClosen() { return m_bClose; }
+	void SetUITexture(_int TexIndex) { m_iTexNum = TexIndex; }
 
 protected:
 	_bool m_bClose = true;
+
+private:
+	_int m_iTexNum = 0;
+	_matrix m_matIonUIWorld;
+	_bool m_bWorldSet = false;
+	wstring wstrItemName[3]{};
+
+	void SetTexture(_int iTexNum);
 };
 
 /*------------------------
@@ -53,7 +61,6 @@ public:
 
 	void SetMouseCollFrame() { m_bMouseCollFrame = true; }
 	void SetCurClickFrame(_bool bCurClickFrame) { m_bCurClickFrame = bCurClickFrame; }
-
 	_matrix& GetIconWorld() { return m_matIconWorld; }
 
 	void Do_OtherIcon_Picking(_bool bPick) { m_bPick = bPick; }
@@ -61,6 +68,8 @@ public:
 	void InitIconWorldSet() { m_bWorldSet = false; }
 
 private:
+	
+
 	_uint m_iBaseSlot = 1;
 	_uint m_iWeaponSlot = 2;
 	_uint m_iLegacySlot = 6;
@@ -71,6 +80,7 @@ private:
 
 	_matrix m_matMouseCollFrameWorld;
 	_matrix m_matCurClickFrameWorld;
+	
 
 	_bool m_bWorldSet = false;
 	_bool m_MouseCollFrameWorldSet = false;
@@ -81,5 +91,6 @@ private:
 
 	// 아이템을 선택했을 때 다른 아이템이 마우스를 따라가지 않도록 한다.
 	_bool m_bPick = false;
+	
 };
 
