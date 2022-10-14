@@ -18,6 +18,7 @@ CShockPowder::~CShockPowder()
 
 HRESULT CShockPowder::Ready_Object()
 {
+	m_pTransCom = Add_Component<Engine::CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 	m_iUItexNum = 14;
 	return S_OK;
 }

@@ -16,6 +16,7 @@ CBootsOfSwiftness::~CBootsOfSwiftness()
 
 HRESULT CBootsOfSwiftness::Ready_Object()
 {
+	m_pTransCom = Add_Component<Engine::CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 	m_iUItexNum = 11;
 	return S_OK;
 }

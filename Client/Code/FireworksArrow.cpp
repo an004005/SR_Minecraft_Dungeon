@@ -14,7 +14,7 @@ CFireworksArrow::~CFireworksArrow()
 
 HRESULT CFireworksArrow::Ready_Object()
 {
-	
+	m_pTransCom = Add_Component<Engine::CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);	
 	m_iUItexNum = 13;
 	return S_OK;
 }
