@@ -120,6 +120,12 @@ void CDynamite::LateUpdate_Object()
 			CEffectFactory::Create<CCloud>("Creeper_Cloud", L"Creeper_Cloud", m_pTransCom->m_vInfo[INFO_POS]);
 		}
 
+		CSoundMgr::GetInstance()->PlaySoundRandom({
+			L"twinblast_grenade_explosion_01.ogg",
+			L"twinblast_grenade_explosion_02.ogg" ,
+			L"twinblast_grenade_explosion_03.ogg" },
+			m_pTransCom->m_vInfo[INFO_POS], 1.f);
+
 		m_bDead = true;
 	}
 	

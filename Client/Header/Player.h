@@ -45,6 +45,8 @@ private:
 		ANIM_END
 	};
 
+	template<_int VX, _int VZ>
+	using iBlockIndex = array<array<_int, VZ>, VX>;
 public:
 	virtual HRESULT Ready_Object() override;
 	virtual _int Update_Object(const _float& fTimeDelta) override;
@@ -128,7 +130,7 @@ protected:
 
 	// 원거리에서 근거리 무기로 다시 돌아올 때 1프레임동안 근거리 무기 위치가 이상한 현상을 막기 위함.
 	_bool m_bDelay = false;
-	_float m_bBlockIndex[VTXCNTX][VTXCNTZ];
+	iBlockIndex<VTXCNTX, VTXCNTZ> arrBlock{};
 
 	_bool m_bVisible = false;
 	_float m_bDeadTime = 0.f;
