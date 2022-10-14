@@ -34,6 +34,10 @@ private:
 	_bool			m_bStart = false;
 	_vec3			m_vDir;
 	_bool			m_bReverse = false;
+	
+	_vec3 m_vPlayerPos;
+	_float m_fTriggerFreq = 0.3f;
+	_float m_fCurTriggerFreq = 0.3f;
 
 private:
 

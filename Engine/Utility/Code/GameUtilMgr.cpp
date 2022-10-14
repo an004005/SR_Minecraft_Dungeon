@@ -232,8 +232,6 @@ void CGameUtilMgr::GetPickingRay(_vec3& vOrigin, _vec3& vRayDir, HWND hWnd, cons
 	D3DXVec3Normalize(&vRayDir, &vRayDir);
 }
 
-
-
 DWORD CGameUtilMgr::FtoDw(_float f)
 {
 	return *((DWORD*)&f);

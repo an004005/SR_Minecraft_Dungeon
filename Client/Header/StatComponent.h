@@ -62,6 +62,7 @@ private:
 	_bool m_bKnockback = false;
 	_float m_fKnockbackTime = 0.3f;
 	_float m_fCurKnockbackTime = 0.3f;
+	_float m_fPreYPos = 0.f;
 
 	_vec3 m_vKnockBackVelocity = CGameUtilMgr::s_vZero;
 

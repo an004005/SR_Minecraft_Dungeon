@@ -27,7 +27,7 @@ HRESULT CArrow::Ready_Object()
 	m_pCollCom = Add_Component<CCollisionCom>(L"Proto_CollisionCom", L"Proto_CollisionCom", ID_DYNAMIC);
 	m_pCollCom->SetOwner(this);
 	m_pCollCom->SetOwnerTransform(m_pTransform);
-	m_pCollCom->SetRadius(0.5f);
+	m_pCollCom->SetRadius(0.7f);
 	m_pCollCom->SetCollType(m_eCollType);
 	m_pCollCom->SetCallBack(
 		[this](CCollisionCom* pOther)

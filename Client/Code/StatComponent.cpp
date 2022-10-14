@@ -52,6 +52,8 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 	}
 
 
+
+
 	_vec3& vPos = m_pOwnerTrans->m_vInfo[INFO_POS];
 	if (CGameUtilMgr::Vec3Cmp(m_vKnockBackVelocity, CGameUtilMgr::s_vZero))
 	{
@@ -60,8 +62,14 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 	else
 	{
 		// ณหน้ ป๓ลย
+		if (m_fPreYPos + 4.f < vPos.y)
+		{
+			m_bKnockback = false;
+		}
+
 		vPos += m_vKnockBackVelocity * fTimeDelta;
-		m_vKnockBackVelocity.y -= 120.f * fTimeDelta;
+
+		m_vKnockBackVelocity.y -= 80.f * fTimeDelta;
 
 		if (vPos.y < m_pCubeMap->GetHeight(vPos.x, vPos.z) || m_bKnockback == false)
 		{
@@ -129,10 +137,11 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 	case DT_KNOCK_BACK:
 		m_bKnockback = true;
 		m_fCurKnockbackTime = 0.f;
+		m_fPreYPos = m_pOwnerTrans->m_vInfo[INFO_POS].y;
 
 		m_vKnockBackVelocity = m_pOwnerTrans->m_vInfo[INFO_POS] - vFromPos;
 		D3DXVec3Normalize(&m_vKnockBackVelocity, &m_vKnockBackVelocity);
-		m_vKnockBackVelocity *= 15.f;
+		m_vKnockBackVelocity *= 10.f;
 		m_vKnockBackVelocity.y = 10.f;
 		break;
 	case DT_END:
