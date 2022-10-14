@@ -80,5 +80,7 @@ private:
 	_uint m_iArrow = 0;
 	_bool m_bLock = false;
 
+	CItemSpaceUI* pCurCollsionIconUI = nullptr;
+
 };
 
