@@ -40,9 +40,7 @@ void CCamAnimation::AnimationEvent(const string& strEvent)
 	}
 	else if (strEvent == "LandPlayer")
 	{
-		static CubeAnimFrame tt = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/landing.anim");
-		Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player")->PlayAnimationOnce(&tt);
-		Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player")->m_bCanPlayAnim = false;
+		Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player")->PlayerSpawn();
 	}
 }
 

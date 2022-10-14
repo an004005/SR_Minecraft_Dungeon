@@ -2,6 +2,7 @@
 #include "..\Header\Particle.h"
 #include "Export_Utility.h"
 #include "AbstFactory.h"
+#include "RedStoneMonstrosity.h"
 #include "SphereEffect.h"
 #include "TerrainCubeMap.h"
 #define			PI			3.141592f
@@ -761,7 +762,15 @@ HRESULT CUVCircle::Ready_Object(_float _size, CIRCLETYPE _type)
 	{
 		//골렘 포인터로 바꿔야함 손 위치 받아오기 
 		m_pBufferCom->Set_TextureOption(3, 4, 2);
-		CTransform*	pGolem = Engine::Get_Component<CTransform>(LAYER_ENEMY, L"RedStoneMonstrosity", L"Proto_TransformCom", ID_DYNAMIC);
+
+		CTransform* pGolem= nullptr;
+		for (auto& e : Get_Layer(LAYER_ENEMY)->Get_MapObject())
+		{
+			if (CRedStoneMonstrosity* red = dynamic_cast<CRedStoneMonstrosity*>(e.second))
+			{
+				pGolem = red->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+			}
+		}
 		_vec3 pPos;
 		pGolem->Get_Info(INFO_POS, &pPos);
 		m_pTransCom->Set_Pos(pPos.x, pPos.y + 0.5f, pPos.z);
@@ -998,7 +1007,14 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 		// m_pBufferCom->Set_TextureOption(_uint(CGameUtilMgr::GetRandomFloat(7.f, 15.f)), 4, 2);
 		m_pBufferCom->Set_TextureOption(5, 4, 2);
 
-		CTransform*	pGolem = Engine::Get_Component<CTransform>(LAYER_ENEMY, L"RedStoneMonstrosity", L"Proto_TransformCom", ID_DYNAMIC);
+		CTransform* pGolem= nullptr;
+		for (auto& e : Get_Layer(LAYER_ENEMY)->Get_MapObject())
+		{
+			if (CRedStoneMonstrosity* red = dynamic_cast<CRedStoneMonstrosity*>(e.second))
+			{
+				pGolem = red->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+			}
+		}
 		_vec3 pPos;
 		_vec3 pLook;
 		pGolem->Get_Info(INFO_POS, &pPos);
@@ -1031,7 +1047,14 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture(0));
 		m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
 		m_pBufferCom->Set_TextureOption(20, 4, 2);
-		CTransform*	pGolem = Engine::Get_Component<CTransform>(LAYER_ENEMY, L"RedStoneMonstrosity", L"Proto_TransformCom", ID_DYNAMIC);
+		CTransform* pGolem= nullptr;
+		for (auto& e : Get_Layer(LAYER_ENEMY)->Get_MapObject())
+		{
+			if (CRedStoneMonstrosity* red = dynamic_cast<CRedStoneMonstrosity*>(e.second))
+			{
+				pGolem = red->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+			}
+		}
 		_vec3 pPos;
 		pGolem->Get_Info(INFO_POS, &pPos);
 		m_pTransCom->Set_Pos(pPos.x, pPos.y + 2.f, pPos.z);
