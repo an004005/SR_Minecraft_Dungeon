@@ -39,6 +39,8 @@ _int CItem::Update_Object(const _float & fTimeDelta)
 	// 현재 지금 이 코드는 문제가 없지만 나중에 문제가 될 수 있음
 	m_pTransCom->Set_WorldMatrix(&(matBill * matWorld));
 
+	
+
 	return 0;
 }
 

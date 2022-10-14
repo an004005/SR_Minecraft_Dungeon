@@ -1,5 +1,7 @@
 #pragma once
 #include "GameObject.h"
+#include "AbstFactory.h"
+#include "Particle.h"
 
 class CItem : public CGameObject
 {
@@ -24,7 +26,6 @@ public:
 		
 		m_vVelocity = vLook;	
 		m_fPower = fPower;
-	
 	}
 	ITEMSTATE GetItemState() { return m_eItemState; }
 

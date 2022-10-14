@@ -495,6 +495,8 @@ public:
 	void LateUpdate_Object() override;
 	void PreRender_Particle();
 	void PostRender_Particle();
+	void SetTransform(_vec3 vPos) { m_pTransCom->m_vInfo[INFO_POS] = vPos; }
+	void IsDead() { m_bDead = true; }
 
 public:
 	static CGradation_Beam* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size);
@@ -508,6 +510,7 @@ private:
 	_float m_fCurTime;
 	_float m_fSpeed;
 	_vec3  m_vVelocity;
+	_bool  m_bDead = false;
 };
 
 class CLazer_Circle : public CGameObject

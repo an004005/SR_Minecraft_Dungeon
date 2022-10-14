@@ -45,6 +45,8 @@
 #include "BatchTool.h"
 #include "InventoryUI.h"
 #include "PlayerStartPos.h"
+#include "Kouku.h"
+#include "Saton.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -127,6 +129,16 @@ void CEnemyFactory::Ready_EnemyFactory()
 	s_mapEnemySpawner.insert({ "RedStoneMonstrosity", []()
 	{
 		return CRedStoneMonstrosity::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/RedStoneMonstrosity.cube");
+	} });
+
+	s_mapEnemySpawner.insert({ "Kouku", []()
+	{
+		return CKouku::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/kouku.cube");
+	} });
+
+	s_mapEnemySpawner.insert({ "Saton", []()
+	{
+		return CSaton::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/saton.cube");
 	} });
 }
 

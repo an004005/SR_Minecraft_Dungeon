@@ -26,6 +26,8 @@
 #include "CoolTimeUI.h"
 #include "BatchTool.h"
 #include "DamageFontMgr.h"
+#include "Kouku.h"
+#include "Saton.h"
 
 // object
 #include "Birds.h"

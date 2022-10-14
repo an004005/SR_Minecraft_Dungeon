@@ -83,6 +83,12 @@
     <Filter Include="99. Default\fmod">
       <UniqueIdentifier>{ecdc1d57-d2d0-4795-b9a5-0995be8f09e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObject\01. Monster\00. Kuoku">
+      <UniqueIdentifier>{2a4825f2-e93f-43ea-a990-9ed99883c6ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObject\01. Monster\01. Saton">
+      <UniqueIdentifier>{a617b281-bde0-4df9-9deb-bffb1f38c9b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\MainApp.h">
@@ -371,6 +377,19 @@
     </ClInclude>
     <ClInclude Include="..\Header\DamageFontMgr.h">
       <Filter>Mgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\PlayerStartPos.h" />
+    <ClInclude Include="..\Header\Kouku.h">
+      <Filter>02. GameObject\01. Monster\00. Kuoku</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\KoukuController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\SatonController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Saton.h">
+      <Filter>02. GameObject\01. Monster\01. Saton</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Trigger.h">
       <Filter>02. GameObject\Object</Filter>
@@ -667,6 +686,19 @@
     </ClCompile>
     <ClCompile Include="..\Code\DamageFontMgr.cpp">
       <Filter>Mgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\PlayerStartPos.cpp" />
+    <ClCompile Include="..\Code\Kouku.cpp">
+      <Filter>02. GameObject\01. Monster\00. Kuoku</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\KoukuController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SatonController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Saton.cpp">
+      <Filter>02. GameObject\01. Monster\01. Saton</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Trigger.cpp">
       <Filter>02. GameObject\Object</Filter>

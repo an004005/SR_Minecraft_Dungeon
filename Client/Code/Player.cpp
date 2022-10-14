@@ -17,6 +17,7 @@
 #include "Inventory.h"
 #include "Emerald.h"
 #include "PlayerStartPos.h"
+#include "TerrainCubeMap.h"
 
 /*-----------------------
  *    CCharacter
@@ -82,6 +83,9 @@ HRESULT CPlayer::Ready_Object()
 	//test
 	// PlayerSpawn();
 
+	//≈•∫Í¿« ¿Œµ¶Ω∫∏¶ πﬁæ∆ø»
+	CTerrainCubeMap* pTerrainCube = Get_GameObject<CTerrainCubeMap>(LAYER_ENV, L"TerrainCubeMap");
+	arrBlock = pTerrainCube->GetBlockIndex();
 	return S_OK;
 }
 
@@ -192,7 +196,21 @@ void CPlayer::AnimationEvent(const string& strEvent)
 	}
 	else if (strEvent == "step")
 	{
-		CSoundMgr::GetInstance()->PlaySoundRandom({ L"sfx_player_stepStone-001.ogg", L"sfx_player_stepStone-002.ogg" ,L"sfx_player_stepStone-003.ogg" }, m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+		if ((_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].x <= 0 || (_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].z <= 0 ||
+			(_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].x > 129 || (_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].z > 129)
+			return;
+
+		if (arrBlock[(_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].x][(_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].z] == 13)
+		{
+			CSoundMgr::GetInstance()->PlaySoundRandom({ L"sfx_player_stepGrass-001.ogg", L"sfx_player_stepGrass-002.ogg" ,L"sfx_player_stepGrass-003.ogg" }, m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+		}
+		else if (arrBlock[(_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].x][(_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].z] == 15)
+		{
+			CSoundMgr::GetInstance()->PlaySound(L"DLC_Ice_SluiceGate_Water_LOOP.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+
+		}
+		else
+			CSoundMgr::GetInstance()->PlaySoundRandom({ L"sfx_player_stepStone-001.ogg", L"sfx_player_stepStone-002.ogg" ,L"sfx_player_stepStone-003.ogg" }, m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 
 		if (m_dwWalkDust + 500 < GetTickCount())
 		{
@@ -282,8 +300,7 @@ void CPlayer::AttackState()
 #pragma endregion
 
 #pragma region Item DropEffect 
-	// CEffectFactory::Create<CGradation_Beam>("Gradation_Beam", L"Gradation_Beam");
-	// Get_GameObject<C3DBaseTexture>(LAYER_EFFECT, L"3D_Base")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 3.f, D3DXCOLOR(1.f, 1.f, 0.f, 0.f), 1, 30.f,1);
+	
 #pragma endregion
 
 #pragma region Lava_Paticle
@@ -304,6 +321,7 @@ void CPlayer::StateChange()
 	{
 		if (m_bReserveStop == false)
 		{
+			CSoundMgr::GetInstance()->PlaySound(L"sfx_playerDead-001_soundWave.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 			m_eState = DEAD;
 			PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
 			m_bRoll = false;
@@ -438,15 +456,16 @@ void CPlayer::UsePotion()
 		{
 			CEffectFactory::Create<CHeartParticle>("HeartParticle", L"HeartParticle");
 		}
-		// particle
+		
+		CSoundMgr::GetInstance()->PlaySoundRandom({
+			L"sfx_ui_healthsynergy-001.ogg",
+			L"sfx_ui_healthsynergy-002.ogg",
+			L"sfx_ui_healthsynergy-003.ogg",
+			L"sfx_ui_healthsynergy-004.ogg" },
+			m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 	}
 
-	CSoundMgr::GetInstance()->PlaySoundRandom({
-		L"sfx_ui_healthsynergy-001.ogg",
-		L"sfx_ui_healthsynergy-002.ogg",
-		L"sfx_ui_healthsynergy-003.ogg",
-		L"sfx_ui_healthsynergy-004.ogg"},
-		m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)

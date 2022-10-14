@@ -1964,19 +1964,19 @@ HRESULT CGradation_Beam::Ready_Object(_float _size)
 	// m_pBufferCom->Set_UVOption(0, CGameUtilMgr::GetRandomFloat(1.5f, 3.f), 0.5f, 1.5f, 0.f);
 	m_pBufferCom->Set_UVOption(0, 0.f, 0.5f, 1.5f, 0.f);
 
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
-	_vec3 pPos;
-	_vec3 pLook;
-	pPlayerTransform->Get_Info(INFO_POS, &pPos);
-	pPlayerTransform->Get_Info(INFO_LOOK, &pLook);
-	m_pTransCom->m_vInfo[INFO_POS] = pPos + pLook * 3;
-	m_pTransCom->m_vInfo[INFO_POS].y = pPos.y -1.f;
+	//CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
+	//_vec3 pPos;
+	//_vec3 pLook;
+	//pPlayerTransform->Get_Info(INFO_POS, &pPos);
+	//pPlayerTransform->Get_Info(INFO_LOOK, &pLook);
+	//m_pTransCom->m_vInfo[INFO_POS] = pPos + pLook * 3;
+	//m_pTransCom->m_vInfo[INFO_POS].y = pPos.y -1.f;
 
 	m_pTransCom->Set_Scale(_size, _size, 8.f);
 	m_pTransCom->Rotation(ROT_Y, D3DXToRadian(90.f));
 	m_pTransCom->Rotation(ROT_Z, D3DXToRadian(90.f));
 
-	m_fTime = 10.6f;
+	m_fTime = 5.f;
 	m_fCurTime = 0.f;
 
 	return S_OK;
@@ -1990,15 +1990,6 @@ _int CGradation_Beam::Update_Object(const _float& fTimeDelta)
 		return OBJ_DEAD;
 
 	m_fCurTime += fTimeDelta;
-
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
-	_vec3 pPos;
-	pPlayerTransform->Get_Info(INFO_POS, &pPos);
-
-	// m_pTransCom->m_vInfo[INFO_POS].y += pPos.y + fTimeDelta * 60.f;
-
-	// m_pTransCom->m_vInfo[INFO_POS].x = pPos.x;
-	// m_pTransCom->m_vInfo[INFO_POS].z = pPos.z - 0.7f;
 
 	m_pBufferCom->m_matWorld = m_pTransCom->m_matWorld;
 
