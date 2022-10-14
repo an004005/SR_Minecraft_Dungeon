@@ -17,6 +17,7 @@ CSword::~CSword()
 HRESULT CSword::Ready_Object()
 {
 	FAILED_CHECK_RETURN(CEquipItem::Ready_Object(), E_FAIL);
+
 	m_pTransCom = Add_Component<Engine::CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 	m_pBufferCom = Add_Component<CVoxelTex>(L"Proto_VoxelTex_Sword", L"Proto_VoxelTex_Sword", ID_STATIC);
 	m_pTextureCom = Add_Component<CTexture>(L"Proto_WeaponTexture", L"Proto_WeaponTexture", ID_STATIC);
@@ -35,6 +36,7 @@ HRESULT CSword::Ready_Object()
 
 	m_eItemType = IT_MELEE;
 	m_iUItexNum = 10;
+
 	return S_OK;
 }
 
@@ -42,6 +44,17 @@ _int CSword::Update_Object(const _float & fTimeDelta)
 {
 	if (m_eItemState == IS_TAKE)
 		return 0;
+
+	if (m_bIdle == true && !m_bCreateOnce)
+	{
+		CGradation_Beam* pBeam = nullptr;
+
+		pBeam = CEffectFactory::Create<CGradation_Beam>("Gradation_Beam", L"Gradation_Beam");
+		Get_GameObject<C3DBaseTexture>(LAYER_EFFECT, L"3D_Base")->Add_Particle(m_pTransCom->m_vInfo[INFO_POS], 3.f, D3DXCOLOR(1.f, 1.f, 0.f, 0.f), 1, 30.f, 1);
+		pBeam->SetTransform(m_pTransCom->m_vInfo[INFO_POS]);
+		m_bCreateOnce = true;
+	}
+	
 
 	_vec3& vPos = m_pTransCom->m_vInfo[INFO_POS];
 	CTerrainCubeMap* pCubeMap = Get_GameObject<CTerrainCubeMap>(LAYER_ENV, L"TerrainCubeMap");

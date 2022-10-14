@@ -23,6 +23,6 @@ public:
 	virtual void Equipment(SkeletalPart* pSkeletalPart) override;
 	virtual void Collision() override;
 
-	
+	_bool m_bCreateOnce = false;
 };
 

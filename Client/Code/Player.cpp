@@ -228,8 +228,7 @@ void CPlayer::AttackState()
 #pragma endregion
 
 #pragma region Item DropEffect 
-	// CEffectFactory::Create<CGradation_Beam>("Gradation_Beam", L"Gradation_Beam");
-	// Get_GameObject<C3DBaseTexture>(LAYER_EFFECT, L"3D_Base")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 3.f, D3DXCOLOR(1.f, 1.f, 0.f, 0.f), 1, 30.f,1);
+	
 #pragma endregion
 
 #pragma region Lava_Paticle

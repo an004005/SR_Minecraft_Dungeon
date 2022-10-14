@@ -17,6 +17,7 @@ CCrossbow::~CCrossbow()
 
 HRESULT CCrossbow::Ready_Object()
 {
+	FAILED_CHECK_RETURN(CEquipItem::Ready_Object(), E_FAIL);
 	m_pTransCom = Add_Component<Engine::CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 	m_pBufferCom = Add_Component<CVoxelTex>(L"Proto_VoxelTex_Crossbow", L"Proto_VoxelTex_Crossbow", ID_STATIC);
 	m_pTextureCom = Add_Component<CTexture>(L"Proto_WeaponTexture", L"Proto_WeaponTexture", ID_STATIC);
