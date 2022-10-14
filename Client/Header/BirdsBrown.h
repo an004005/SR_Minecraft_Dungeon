@@ -27,12 +27,16 @@ private:
 	CTransform*		m_pTransCom = nullptr;
 	CTexture*		m_pTextureCom = nullptr;
 
-	_float			m_fFrame2 = 0.f;
+	_float			m_fFrame = 0.f;
 	_float			m_fSpeed = 10.f;
-	
-	_bool			m_bBrown = false;
+
+	_bool			m_bStart = false;
 	_vec3			m_vDir;
-	_bool			m_bReverese = false;
+	_bool			m_bReverse = false;
+	
+	_vec3 m_vPlayerPos;
+	_float m_fTriggerFreq = 0.3f;
+	_float m_fCurTriggerFreq = 0.3f;
 
 
 public:
