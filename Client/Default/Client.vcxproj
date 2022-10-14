@@ -215,6 +215,8 @@
     <ClInclude Include="..\Header\RedStoneCubeController.h" />
     <ClInclude Include="..\Header\RedStoneMonstrosity.h" />
     <ClInclude Include="..\Header\RedStoneMonstrosityController.h" />
+    <ClInclude Include="..\Header\Saton.h" />
+    <ClInclude Include="..\Header\SatonController.h" />
     <ClInclude Include="..\Header\ShockPowder.h" />
     <ClInclude Include="..\Header\SkeletalCube.h" />
     <ClInclude Include="..\Header\Skeleton.h" />
@@ -307,6 +309,8 @@
     <ClCompile Include="..\Code\RedStoneCubeController.cpp" />
     <ClCompile Include="..\Code\RedStoneMonstrosity.cpp" />
     <ClCompile Include="..\Code\RedStoneMonstrosityController.cpp" />
+    <ClCompile Include="..\Code\Saton.cpp" />
+    <ClCompile Include="..\Code\SatonController.cpp" />
     <ClCompile Include="..\Code\ShockPowder.cpp" />
     <ClCompile Include="..\Code\SkeletalCube.cpp" />
     <ClCompile Include="..\Code\Skeleton.cpp" />

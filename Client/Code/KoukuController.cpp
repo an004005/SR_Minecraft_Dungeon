@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "..\Header\KoukuController.h"
+#include "KoukuController.h"
 
 #include "Kouku.h"
 

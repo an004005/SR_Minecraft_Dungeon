@@ -372,7 +372,15 @@
     <ClInclude Include="..\Header\Kouku.h">
       <Filter>02. GameObject\01. Monster\00. Kuoku</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\KoukuController.h" />
+    <ClInclude Include="..\Header\KoukuController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\SatonController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Saton.h">
+      <Filter>02. GameObject\01. Monster\01. Saton</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -657,7 +665,15 @@
     <ClCompile Include="..\Code\Kouku.cpp">
       <Filter>02. GameObject\01. Monster\00. Kuoku</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\KoukuController.cpp" />
+    <ClCompile Include="..\Code\KoukuController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SatonController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Saton.cpp">
+      <Filter>02. GameObject\01. Monster\01. Saton</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">

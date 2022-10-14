@@ -26,6 +26,7 @@
 #include "CoolTimeUI.h"
 #include "BatchTool.h"
 #include "Kouku.h"
+#include "Saton.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
@@ -141,8 +142,11 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	{	
 	
 		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 45.f, 0.f ,23.f });
+		// // CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+		// CEnemyFactory::Create<CKouku>("Kouku", L"Kouku", matWorld);
+
 		// CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
-		CEnemyFactory::Create<CKouku>("Kouku", L"Kouku", matWorld);
+		CEnemyFactory::Create<CSaton>("Saton", L"Saton", matWorld);
 
 		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 55.f, 0.f ,28.f });
 		//CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
