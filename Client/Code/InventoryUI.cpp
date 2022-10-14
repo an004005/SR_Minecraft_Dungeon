@@ -22,6 +22,15 @@ HRESULT CInventoryUI::Ready_Object()
 	m_pTextureCom = Add_Component<CTexture>(L"Proto_InventoryUI_Texture", L"Proto_InventoryUI_Texture", ID_STATIC);
 	m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 	m_pTransCom->Set_Scale(WINCX, WINCY, 0.f);
+
+	_vec3 vScale = m_pTransCom->m_vScale;
+	_vec3 vPos = _vec3(WINCX * 0.3f, -WINCY * 0.33f, 0.f);
+	_vec3 vAngle = m_pTransCom->m_vAngle;
+	vScale.x *= 0.1f;
+	vScale.y *= 0.16f;
+
+	CGameUtilMgr::MatWorldComposeEuler(m_matcarveWorld, vScale, vAngle, vPos);
+
 	m_iRenderPriority = 9;
 	return S_OK;
 }
@@ -60,6 +69,8 @@ void CInventoryUI::Render_Object()
 	m_pTextureCom->Set_Texture(0);
 	m_pBufferCom->Render_Buffer();
 
+	_vec2 vPos = _vec2(m_matIonUIWorld._41, m_matIonUIWorld._22);
+
 	if (m_iTexNum != 0)
 	{
 		m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matIonUIWorld);
@@ -68,7 +79,7 @@ void CInventoryUI::Render_Object()
 
 		SetTexture(m_iTexNum);
 		
-		_vec2 vPos = _vec2(m_matIonUIWorld._41, m_matIonUIWorld._22);
+		
 		Render_Font(L"Gothic_Regular30", wstrItemName[0].c_str(),
 			&_vec2(vPos.x + WINCX * 0.28f, -vPos.y + WINCY *0.38f),
 			D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
@@ -81,6 +92,14 @@ void CInventoryUI::Render_Object()
 			&_vec2(vPos.x + WINCX * 0.28f, -vPos.y + WINCY *0.55f),
 			D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
 	}
+
+
+	Render_Font(L"Gothic_Bold20", L"효과 부여",
+		&_vec2(vPos.x + WINCX * 0.4f, -vPos.y + WINCY *0.85f),
+		D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
+	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matcarveWorld);
+	m_pTextureCom->Set_Texture(3);
+	m_pBufferCom->Render_Buffer();
 }
 
 void CInventoryUI::Free()

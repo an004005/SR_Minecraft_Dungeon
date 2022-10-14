@@ -33,6 +33,9 @@ private:
 	wstring wstrItemName[3]{};
 
 	void SetTexture(_int iTexNum);
+
+
+	_matrix m_matcarveWorld;
 };
 
 /*------------------------
