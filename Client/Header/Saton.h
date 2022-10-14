@@ -10,7 +10,6 @@ private:
 		INTRO,
 		IDLE,
 		FIRSTATTACK,
-		SECONDATTACK,
 		SATON_BIRD,
 		SATON_GRAP,
 		DEAD,
@@ -38,11 +37,7 @@ public:
 		m_bFirstHammerAttack = true;
 		m_vTargetPos = vTargetPos;
 	}
-	void SecondAttack(const _vec3& vTargetPos)
-	{
-		m_bSecondHammerAttack = true;
-		m_vTargetPos = vTargetPos;
-	}
+	
 	void SatonGrap(const _vec3& vTargetPos)
 	{
 		m_bSatonGrap = true;
@@ -66,7 +61,6 @@ private:
 	void	SetOff()
 	{
 		m_bFirstHammerAttack = false;
-		m_bSecondHammerAttack = false;
 		m_bSatonGrap = false;
 		m_bSatonBird = false;
 	}
@@ -77,7 +71,6 @@ private:
 	_vec3 m_vTargetPos = CGameUtilMgr::s_vZero; // controller 입력
 
 	_bool m_bFirstHammerAttack = false; // controller 입력
-	_bool m_bSecondHammerAttack = false; // controller 입력
 	_bool m_bSatonGrap = false;
 	_bool m_bSatonBird = false;
 

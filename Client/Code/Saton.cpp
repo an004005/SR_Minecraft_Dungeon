@@ -20,8 +20,8 @@ HRESULT CSaton::Ready_Object()
 	CMonster::Ready_Object();
 
 	// m_arrAnim[INTRO] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/RedStoneMonstrosity/intro.anim");
-	m_arrAnim[FIRSTATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_attack1.anim");
-	m_arrAnim[SECONDATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_attack2.anim");
+	m_arrAnim[FIRSTATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_doubleattack.anim");
+	// m_arrAnim[SECONDATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_attack2.anim");
 	m_arrAnim[IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_idle.anim");
 	m_arrAnim[SATON_BIRD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_bird.anim");
 	m_arrAnim[SATON_GRAP] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_grap.anim");
@@ -54,10 +54,6 @@ void CSaton::AnimationEvent(const string& strEvent)
 	{
 		m_bFirstHammerAttack = true;
 	}
-	else if (strEvent == "SecondAttack")
-	{
-		m_bSecondHammerAttack = true;
-	}
 	else if (strEvent == "SatonGrap")
 	{
 		m_bSatonGrap = true;
@@ -65,10 +61,6 @@ void CSaton::AnimationEvent(const string& strEvent)
 	else if (strEvent == "SatonBird")
 	{
 		m_bSatonBird = true;
-	}
-	else if (strEvent == "firstattack_end")
-	{
-		m_bSecondHammerAttack = true;
 	}
 	else if (strEvent == "AnimStopped")
 	{
@@ -101,9 +93,6 @@ _int CSaton::Update_Object(const _float& fTimeDelta)
 		break;
 	case FIRSTATTACK:
 		m_strState = "FIRSTATTACK";
-		break;
-	case SECONDATTACK:
-		m_strState = "SECONDATTACK";
 		break;
 	case SATON_BIRD:
 		m_strState = "SATON_BIRD";
@@ -184,16 +173,6 @@ void CSaton::StateChange()
 		PlayAnimationOnce(&m_arrAnim[FIRSTATTACK]);
 		m_bCanPlayAnim = false;
 		
-		SetOff();
-		return;
-	}
-	if (m_bSecondHammerAttack && m_bCanPlayAnim)
-	{
-		m_eState = SECONDATTACK;
-		RotateToTargetPos(m_vTargetPos);
-		PlayAnimationOnce(&m_arrAnim[SECONDATTACK]);
-		m_bCanPlayAnim = false;
-
 		SetOff();
 		return;
 	}
