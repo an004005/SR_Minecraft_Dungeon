@@ -342,15 +342,7 @@ void CEnvFactory::Ready_EnvFactory()
 		return CStaticCamera::Create(s_pGraphicDev);
 	} });
 
-	s_mapEnvSpawner.insert({ "BirdsWhite", []()
-	{
-		return CBirds::Create(s_pGraphicDev,BIRD_WHITE);
-	} });
 
-	s_mapEnvSpawner.insert({ "BirdsBrown", []()
-	{
-		return CBirdsBrown::Create(s_pGraphicDev, BIRD_BROWN);
-	} });
 
 }
 void CBulletFactory::Ready_BulletFactory()
@@ -398,6 +390,16 @@ void CObjectFactory::Ready_ObjectFactory()
 	s_mapObjectSpawner.insert({ "PlayerPos", []()
 	{
 		return CPlayerStartPos::Create(s_pGraphicDev);
+	} });
+
+	s_mapObjectSpawner.insert({ "BirdsWhite", []()
+	{
+		return CBirds::Create(s_pGraphicDev,BIRD_WHITE);
+	} });
+
+	s_mapObjectSpawner.insert({ "BirdsBrown", []()
+	{
+		return CBirdsBrown::Create(s_pGraphicDev, BIRD_BROWN);
 	} });
 }
 

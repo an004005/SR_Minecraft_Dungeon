@@ -2,6 +2,7 @@
 #include "..\Header\Birds.h"
 
 #include "Player.h"
+#include "StaticCamera.h"
 
 CBirds::CBirds(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CGameObject(pGraphicDev)
@@ -50,32 +51,15 @@ _int CBirds::Update_Object(const _float & fTimeDelta)
 			return OBJ_DEAD;
 	}
 
-	_matrix		matWorld, matView, matBill;
-	D3DXMatrixIdentity(&matBill);
-
-	m_pTransCom->Get_WorldMatrix(&matWorld);
-	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);  
-
-	// todo : reverse에 문제가 있는듯, 해결요함
-	//if (m_bReverse)
-	//{
-	//	matBill._11 = -matView._11;
-	//	matBill._13 = -matView._13;
-	//	matBill._31 = -matView._31;
-	//	matBill._33 = -matView._33;
-	//}
-	//else
-	//{
-		matBill._11 = matView._11;
-		matBill._13 = matView._13;
-		matBill._31 = matView._31;
-		matBill._33 = matView._33;
-	//}
-
-
-	D3DXMatrixInverse(&matBill, 0, &matBill);
-
-	m_pTransCom->Set_WorldMatrix(&(matBill * matWorld));
+	for (auto e : Get_Layer(LAYER_ENV)->Get_MapObject())
+	{
+		if (CStaticCamera* pStatic = dynamic_cast<CStaticCamera*>(e.second))
+		{
+			m_pTransCom->m_vAngle.y = pStatic->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)
+				->m_vAngle.y;
+			if (m_bReverse) m_pTransCom->m_vAngle.y += D3DXToRadian(180.f);
+		}
+	}
 
 	Add_RenderGroup(RENDER_ALPHA, this);
 
@@ -99,18 +83,18 @@ void CBirds::LateUpdate_Object(void)
 				m_vDir = { CGameUtilMgr::GetRandomFloat(-1.f, 1.f), 0.5f, CGameUtilMgr::GetRandomFloat(-1.f, 1.f) };
 				D3DXVec3Normalize(&m_vDir, &m_vDir);
 
-				// _matrix matCamWorld;
-				// m_pGraphicDev->GetTransform(D3DTS_VIEW, &matCamWorld);
-				// D3DXMatrixInverse(&matCamWorld, nullptr, &matCamWorld);
-				//
-				// _vec3 vCamLook{ matCamWorld._31, matCamWorld._32, matCamWorld._33};
-				// D3DXVec3Normalize(&vCamLook, &vCamLook);
-				//
-				// _vec3 vCross;
-				// D3DXVec3Cross(&vCross, &vCamLook, &m_vDir);
-				//
-				// if (vCross.y < 0.f)
-				// 	m_bReverse = true;
+				_matrix matCamWorld;
+				m_pGraphicDev->GetTransform(D3DTS_VIEW, &matCamWorld);
+				D3DXMatrixInverse(&matCamWorld, nullptr, &matCamWorld);
+				
+				_vec3 vCamLook{ matCamWorld._31, matCamWorld._32, matCamWorld._33};
+				D3DXVec3Normalize(&vCamLook, &vCamLook);
+				
+				_vec3 vCross;
+				D3DXVec3Cross(&vCross, &vCamLook, &m_vDir);
+				
+				if (vCross.y < 0.f)
+					m_bReverse = true;
 			}
 		}
 
@@ -127,12 +111,15 @@ void CBirds::Render_Object(void)
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0xcc);
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+	
 
 	m_pTextureCom->Set_Texture((_ulong)m_fFrame);
 
 	m_pBufferCom->Render_Buffer();
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 }
 
 

@@ -52,7 +52,7 @@ HRESULT CStage::Ready_Scene(void)
 	// Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 	// 	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
 
-	CBatchTool::Load(L"../Bin/Resource/Batch/stage1_test.batch");
+	// CBatchTool::Load(L"../Bin/Resource/Batch/stage1_test.batch");
 
 	return S_OK;
 }
@@ -114,7 +114,7 @@ HRESULT CStage::Ready_Layer_Environment()
 
 	for (int i = 0; i < 10; ++i)
 	{
-		CBirds* bird = CEnvFactory::Create<CBirds>("BirdsWhite", L"BirdsWhite");
+		CBirdsBrown* bird = CObjectFactory::Create<CBirdsBrown>("BirdsBrown", L"BirdsWhite");
 		bird->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->Set_Pos(3.f, 9.5f, 18.f + i);
 
 	}
