@@ -103,7 +103,7 @@ void CMainApp::Render_MainApp(void)
 
 HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 * ppGraphicDev)
 {
-	// µð¹ÙÀÌ½º ÃÊ±âÈ­
+	// ë””ë°”ì´ìŠ¤ ì´ˆê¸°í™”
 	FAILED_CHECK_RETURN(Engine::Ready_GraphicDev(g_hWnd, MODE_WIN, WINCX, WINCY, &m_pDeviceClass), E_FAIL);
 	m_pDeviceClass->AddRef();
 
@@ -147,7 +147,7 @@ HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 * ppGraphicDev)
     ImGui_ImplWin32_Init(g_hWnd);
     ImGui_ImplDX9_Init(m_pGraphicDev);
 
-	// ¸Å´ÏÀú ÃÊ±âÈ­
+	// ë§¤ë‹ˆì € ì´ˆê¸°í™”
 	CArrowCubeMgr::Create(m_pGraphicDev);
 	CDamageFontMgr::GetInstance()->SetGraphicDev(m_pGraphicDev);
 	
@@ -158,8 +158,8 @@ HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 * ppGraphicDev)
 HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement** ppManagement)
 {
 
-	// scene »ý¼º½Ã Management¿¡ ÀÚµ¿ setµË´Ï´Ù. sceneÀ» º¸Á¸ÇÏ°í ½ÍÀ¸¸é ref 1¿Ã·Á¼­ ÀúÀåÇÏ±â
-	// Scene::Ready_Scene ¿¡¼­ Management¿¡ set
+	// scene ìƒì„±ì‹œ Managementì— ìžë™ setë©ë‹ˆë‹¤. sceneì„ ë³´ì¡´í•˜ê³  ì‹¶ìœ¼ë©´ ref 1ì˜¬ë ¤ì„œ ì €ìž¥í•˜ê¸°
+	// Scene::Ready_Scene ì—ì„œ Managementì— set
 	FAILED_CHECK_RETURN(Engine::Create_Management(pGraphicDev, ppManagement), E_FAIL);
 	(*ppManagement)->AddRef();
 
@@ -184,13 +184,13 @@ HRESULT CMainApp::Ready_Proto()
 
 	
 
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Terrain_Water_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Terrain/Water4.psng", TEX_NORMAL)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Terrain_Water_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Terrain/Water4.png", TEX_NORMAL)), E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CubeTexCom", Engine::CCubeTex::Create(m_pGraphicDev)), E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CubeTexture", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/SkyBox/burger%d.dds", TEX_CUBE, 4)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_MinecraftCubeTexture", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/MinscraftCubeTile/CubeTile_%d.dds", TEX_CUBE, 164)), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"wwa", Engine::CTransform::Create()), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_TransformCom", Engine::CTransform::Create()), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_BossCubeTile", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/BossCubeTile/boss_%d.dds", TEX_CUBE, 12)), E_FAIL);
 
 
