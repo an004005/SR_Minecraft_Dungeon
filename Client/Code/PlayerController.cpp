@@ -25,6 +25,7 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 {
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pOwner);
 	NULL_CHECK_RETURN(pPlayer, 0);
+	if (pPlayer->IsVisible() == false) return 0;
 
 	//이거 내리면 인벤 안꺼짐
 	if (DIKeyUp(DIK_I))

@@ -119,7 +119,7 @@ void CCountUI::Render_Object()
 	CUI::Render_Object();
 
 	const _vec3& vPos = m_pTransCom->m_vInfo[INFO_POS];
-	Render_Font(L"Font_Default_Normal", to_wstring(m_iCnt).c_str(), 
+	Render_Font(L"Gothic_Bold15", to_wstring(m_iCnt).c_str(), 
 		&_vec2(vPos.x + WINCX/2 + 10, -vPos.y + WINCY/2 - 20), 
 		D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
 }

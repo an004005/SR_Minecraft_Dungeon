@@ -16,6 +16,7 @@
 #include "SphereEffect.h"
 #include "Inventory.h"
 #include "Emerald.h"
+#include "PlayerStartPos.h"
 
 /*-----------------------
  *    CCharacter
@@ -76,6 +77,11 @@ HRESULT CPlayer::Ready_Object()
 	m_pInventory = CObjectFactory::Create<CInventory>("Inventory", L"Inventory");
 	m_pInventory->AddRef();
 	m_arrAnim = m_pInventory->CurWeapon(IT_MELEE)->SetarrAnim();
+
+	m_pRootPart->pTrans->Update_Component(0.f);
+	//test
+	// PlayerSpawn();
+
 	return S_OK;
 }
 
@@ -120,9 +126,12 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 	case LEGACY:
 		break;
 	case DEAD:
+		if (m_bDeadTime > 3.f) 
+			PlayerSpawn();
+		m_bDeadTime += fTimeDelta;
 		break;
 	default:
-		break;;
+		break;
 	}
 
 	return OBJ_NOEVENT;
@@ -144,6 +153,12 @@ void CPlayer::LateUpdate_Object()
 		m_bApplyMeleeAttack = false;
 		m_bApplyMeleeAttackNext = true;
 	}
+}
+
+void CPlayer::Render_Object()
+{
+	if (m_bVisible)
+		CSkeletalCube::Render_Object();
 }
 
 void CPlayer::Free()
@@ -185,6 +200,44 @@ void CPlayer::AnimationEvent(const string& strEvent)
 			m_dwWalkDust = GetTickCount();
 		}
 	}
+	else if (strEvent == "AnimStopped")
+	{
+		SetVisible(false);
+	}
+	else if (strEvent == "landing")
+	{
+		CSoundMgr::GetInstance()->PlaySound(L"sfx_player_landing.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+		for (int j = 0; j < 15; j++)
+			CEffectFactory::Create<CCloud>("ShockPowder_Cloud", L"ShockPowder_Cloud");
+	}
+	else if (strEvent == "visible")
+	{
+		SetVisible(true);
+	}
+}
+
+void CPlayer::PlayerSpawn()
+{
+	static CubeAnimFrame landing = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/landing.anim");
+
+	for (auto& obj :Get_Layer(LAYER_GAMEOBJ)->Get_MapObject())
+	{
+		if (CPlayerStartPos* pStartPos = dynamic_cast<CPlayerStartPos*>(obj.second))
+		{
+			m_pRootPart->pTrans->Set_WorldDecompose(pStartPos->GetWorld());
+			break;
+		}
+	}
+
+	Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")->ResetPosition();
+	m_pColl->SetStart();
+	m_pStat->Revive();
+	m_bReserveStop = false;
+	m_bStopAnim = false;
+	m_bCanPlayAnim = false;
+	PlayAnimationOnce(&landing);
+	m_bDeadTime = 0.f;
+	SetVisible(true);
 }
 
 void CPlayer::SetMoveDir(_float fX, _float fZ)
@@ -213,6 +266,7 @@ void CPlayer::AttackState()
 		WeaponChange(IT_RANGE);
 		m_bCanPlayAnim = false;
 		m_iAttackCnt = m_pInventory->CurWeapon(IT_RANGE)->Attack();
+		m_pInventory->UseArrow(1);
 	}
 
 #pragma region Lazer 
@@ -248,10 +302,16 @@ void CPlayer::StateChange()
 {
 	if (m_pStat->IsDead())
 	{
-		m_eState = DEAD;
-		PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
-		m_bRoll = false;
-		m_bCanPlayAnim = false;
+		if (m_bReserveStop == false)
+		{
+			m_eState = DEAD;
+			PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
+			m_bRoll = false;
+			m_bCanPlayAnim = false;
+			m_bMove = false;
+			m_bCanPlayAnim = false;
+			m_pColl->SetStop();
+		}
 		return;
 	}
 
@@ -276,14 +336,15 @@ void CPlayer::StateChange()
 
 	if (m_bLegacy1 && m_bCanPlayAnim)
 	{
-	
-		m_eState = LEGACY;
 		m_bLegacy1 = false;
-		m_bCanPlayAnim = false;
 
 		if (m_pInventory->CurWeapon(IT_LEGACY1) == nullptr)
 			return;
+		if (m_pInventory->CurWeapon(IT_LEGACY1)->GetCoolTime() < 1.f)
+			return;
 
+		m_eState = LEGACY;
+		m_bCanPlayAnim = false;
 		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY1]);
 		m_pInventory->CurWeapon(IT_LEGACY1)->Use();
 		return;
@@ -291,13 +352,15 @@ void CPlayer::StateChange()
 
 	if (m_bLegacy2 && m_bCanPlayAnim)
 	{
-		m_eState = LEGACY;
 		m_bLegacy2 = false;
-		m_bCanPlayAnim = false;
 
 		if (m_pInventory->CurWeapon(IT_LEGACY2) == nullptr)
 			return;
+		if (m_pInventory->CurWeapon(IT_LEGACY2)->GetCoolTime() < 1.f)
+			return;
 
+		m_eState = LEGACY;
+		m_bCanPlayAnim = false;
 		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY2]);
 		m_pInventory->CurWeapon(IT_LEGACY2)->Use();
 		return;
@@ -305,14 +368,15 @@ void CPlayer::StateChange()
 
 	if (m_bLegacy3 && m_bCanPlayAnim)
 	{
-		
-		m_eState = LEGACY;
 		m_bLegacy3 = false;
-		m_bCanPlayAnim = false;
 
 		if (m_pInventory->CurWeapon(IT_LEGACY3) == nullptr)
 			return;
+		if (m_pInventory->CurWeapon(IT_LEGACY3)->GetCoolTime() < 1.f)
+			return;
 
+		m_eState = LEGACY;
+		m_bCanPlayAnim = false;
 		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY2]);
 		m_pInventory->CurWeapon(IT_LEGACY3)->Use();
 		return;
@@ -326,7 +390,7 @@ void CPlayer::StateChange()
 		return;
 	}
 
-	if (m_bRangeAttack && m_bCanPlayAnim)
+	if (m_bRangeAttack && m_bCanPlayAnim && m_pInventory->GetArrowCnt() > 0)
 	{
 		m_eState = ATTACK;
 		RotateToCursor();

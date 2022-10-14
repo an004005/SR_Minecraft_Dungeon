@@ -5,12 +5,20 @@ IMPLEMENT_SINGLETON(CFontMgr)
 
 CFontMgr::CFontMgr()
 {
+	AddFontResourceEx(L"../Bin/Resource/Font/Minecraft.ttf", FR_PRIVATE, NULL);
+	AddFontResourceEx(L"../Bin/Resource/Font/KimjungchulGothic-Bold.ttf", FR_PRIVATE, NULL);
+	AddFontResourceEx(L"../Bin/Resource/Font/KimjungchulGothic-Light.ttf", FR_PRIVATE, NULL);
+	AddFontResourceEx(L"../Bin/Resource/Font/KimjungchulGothic-Regular.ttf", FR_PRIVATE, NULL);
 }
 
 
 CFontMgr::~CFontMgr()
 {
 	Free();
+	RemoveFontResourceEx(L"../Bin/Resource/Font/Minecraft.ttf", FR_PRIVATE, NULL);
+	RemoveFontResourceEx(L"../Bin/Resource/Font/KimjungchulGothic-Bold.ttf", FR_PRIVATE, NULL);
+	RemoveFontResourceEx(L"../Bin/Resource/Font/KimjungchulGothic-Light.ttf", FR_PRIVATE, NULL);
+	RemoveFontResourceEx(L"../Bin/Resource/Font/KimjungchulGothic-Regular.ttf", FR_PRIVATE, NULL);
 }
 
 HRESULT CFontMgr::Ready_Font(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& pFontTag, const _tchar * pFontType, const _uint & iWidth, const _uint & iHeight, const _uint & iWeight)

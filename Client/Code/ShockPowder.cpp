@@ -18,14 +18,26 @@ CShockPowder::~CShockPowder()
 
 HRESULT CShockPowder::Ready_Object()
 {
+	m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 	m_iUItexNum = 14;
+	m_fCurCoolTime = 10.f;
+	m_fCoolTime = 10.f;
 	return S_OK;
 }
 
 _int CShockPowder::Update_Object(const _float & fTimeDelta)
 {
+	if (m_fCoolTime > m_fCurCoolTime)
+	{
+		m_fCurCoolTime += fTimeDelta;
+		m_bUse = false;
+		return OBJ_NOEVENT;
+	}
+
 	if (!m_bUse)
 		return 0;
+
+	m_fCurCoolTime = 0.f;
 
 	for (int j = 0; j < 10; j++)
 	{

@@ -3,6 +3,7 @@
 #include "DynamicCamera.h"
 #include "AbstFactory.h"
 #include "ImGuiFileDialog.h"
+#include "Player.h"
 #include "TerrainCubeMap.h"
 
 CBatchTool::CBatchTool(LPDIRECT3DDEVICE9 pGraphicDev) : CScene(pGraphicDev)
@@ -26,7 +27,6 @@ HRESULT CBatchTool::Ready_Scene()
 	pGameObject = m_pMap = CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/Stage1.map");
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", pGameObject), E_FAIL);
-
 
 	return S_OK;
 }
