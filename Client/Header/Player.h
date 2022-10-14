@@ -47,6 +47,7 @@ private:
 
 	template<_int VX, _int VZ>
 	using iBlockIndex = array<array<_int, VZ>, VX>;
+
 public:
 	virtual HRESULT Ready_Object() override;
 	virtual _int Update_Object(const _float& fTimeDelta) override;

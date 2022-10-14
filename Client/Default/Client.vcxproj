@@ -172,6 +172,8 @@
     <ClInclude Include="..\Header\CameraTool.h" />
     <ClInclude Include="..\Header\InventoryUI.h" />
     <ClInclude Include="..\Header\PlayerStartPos.h" />
+    <ClInclude Include="..\Header\Kouku.h" />
+    <ClInclude Include="..\Header\KoukuController.h" />
     <ClInclude Include="..\Header\Posion.h" />
     <ClInclude Include="..\Header\AnimationTool.h" />
     <ClInclude Include="..\Header\Apple.h" />
@@ -218,6 +220,8 @@
     <ClInclude Include="..\Header\RedStoneCubeController.h" />
     <ClInclude Include="..\Header\RedStoneMonstrosity.h" />
     <ClInclude Include="..\Header\RedStoneMonstrosityController.h" />
+    <ClInclude Include="..\Header\Saton.h" />
+    <ClInclude Include="..\Header\SatonController.h" />
     <ClInclude Include="..\Header\ShockPowder.h" />
     <ClInclude Include="..\Header\SkeletalCube.h" />
     <ClInclude Include="..\Header\Skeleton.h" />
@@ -267,6 +271,8 @@
     <ClCompile Include="..\Code\CameraTool.cpp" />
     <ClCompile Include="..\Code\InventoryUI.cpp" />
     <ClCompile Include="..\Code\PlayerStartPos.cpp" />
+    <ClCompile Include="..\Code\Kouku.cpp" />
+    <ClCompile Include="..\Code\KoukuController.cpp" />
     <ClCompile Include="..\Code\Posion.cpp" />
     <ClCompile Include="..\Code\AnimationTool.cpp" />
     <ClCompile Include="..\Code\Apple.cpp" />
@@ -312,6 +318,8 @@
     <ClCompile Include="..\Code\RedStoneCubeController.cpp" />
     <ClCompile Include="..\Code\RedStoneMonstrosity.cpp" />
     <ClCompile Include="..\Code\RedStoneMonstrosityController.cpp" />
+    <ClCompile Include="..\Code\Saton.cpp" />
+    <ClCompile Include="..\Code\SatonController.cpp" />
     <ClCompile Include="..\Code\ShockPowder.cpp" />
     <ClCompile Include="..\Code\SkeletalCube.cpp" />
     <ClCompile Include="..\Code\Skeleton.cpp" />
