@@ -179,7 +179,6 @@
     <ClInclude Include="..\Header\ArrowBundle.h" />
     <ClInclude Include="..\Header\ArrowCubeMgr.h" />
     <ClInclude Include="..\Header\Axe.h" />
-
     <ClInclude Include="..\Header\BirdsBrown.h" />
     <ClInclude Include="..\Header\Box.h" />
     <ClInclude Include="..\Header\Bread.h" />
@@ -231,6 +230,7 @@
     <ClInclude Include="..\Header\Terrain.h" />
     <ClInclude Include="..\Header\TerrainCubeMap.h" />
     <ClInclude Include="..\Header\TestCube.h" />
+    <ClInclude Include="..\Header\Trigger.h" />
     <ClInclude Include="..\Header\Zombie.h" />
     <ClInclude Include="..\Header\ZombieController.h" />
     <ClInclude Include="..\Header\UI.h" />
@@ -325,6 +325,7 @@
     <ClCompile Include="..\Code\Terrain.cpp" />
     <ClCompile Include="..\Code\TerrainCubeMap.cpp" />
     <ClCompile Include="..\Code\TestCube.cpp" />
+    <ClCompile Include="..\Code\Trigger.cpp" />
     <ClCompile Include="..\Code\Zombie.cpp" />
     <ClCompile Include="..\Code\ZombieController.cpp" />
     <ClCompile Include="..\Code\UI.cpp" />

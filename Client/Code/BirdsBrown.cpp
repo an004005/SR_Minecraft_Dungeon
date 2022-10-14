@@ -2,6 +2,7 @@
 #include "..\Header\BirdsBrown.h"
 
 #include "Export_Function.h"
+#include "Player.h"
 
 CBirdsBrown::CBirdsBrown(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CGameObject(pGraphicDev)
@@ -27,40 +28,14 @@ _int CBirdsBrown::Update_Object(const _float & fTimeDelta)
 {
 	Engine::CGameObject::Update_Object(fTimeDelta);
 
-	const _vec3& vPlayerPos = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC)
-		->m_vInfo[INFO_POS];
+	if (m_bBrown == false && m_fCurTriggerFreq < m_fTriggerFreq)
+		m_fCurTriggerFreq += fTimeDelta;
 
 	m_fFrame2 += 8.f * fTimeDelta;
 
 	if (m_bBrown == false)
 	{
 		m_fFrame2 = 0.f;
-	}
-
-	_float fDist = D3DXVec3Length(&(m_pTransCom->m_vInfo[INFO_POS] - vPlayerPos));
-	
-	if (fDist < 5.f)
-	{
-		if (m_bBrown == false)
-		{
-			m_vDir = { CGameUtilMgr::GetRandomFloat(-1.f, 1.f), 0.5f, CGameUtilMgr::GetRandomFloat(-1.f, 1.f) };
-			D3DXVec3Normalize(&m_vDir, &m_vDir);
-
-			_matrix		matCamWorld;
-			m_pGraphicDev->GetTransform(D3DTS_VIEW, &matCamWorld);
-			D3DXMatrixInverse(&matCamWorld, nullptr, &matCamWorld);
-
-			_vec3	vCamLook{ matCamWorld._31,matCamWorld._32,matCamWorld._33 };
-			D3DXVec3Normalize(&vCamLook, &vCamLook);
-
-			_vec3	vCross;
-			D3DXVec3Cross(&vCross, &vCamLook, &m_vDir);
-
-			if (vCross.y > 0.f)
-				m_bReverese = true;
-		}
-
-		m_bBrown = true;
 	}
 
 	if (m_bBrown)
@@ -70,6 +45,7 @@ _int CBirdsBrown::Update_Object(const _float & fTimeDelta)
 
 		m_pTransCom->m_vInfo[INFO_POS] += fTimeDelta * m_vDir * m_fSpeed;
 
+		const _float fDist = D3DXVec3Length(&(m_pTransCom->m_vInfo[INFO_POS] - m_vPlayerPos));
 		if (fDist > 30.f)
 			return OBJ_DEAD;
 	}
@@ -78,23 +54,24 @@ _int CBirdsBrown::Update_Object(const _float & fTimeDelta)
 	D3DXMatrixIdentity(&matBill);
 
 	m_pTransCom->Get_WorldMatrix(&matWorld);
-	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
+	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);  
 
-	if (m_bReverese)
-	{
+	// todo : reverse에 문제가 있는듯, 해결요함
+	//if (m_bReverse)
+	//{
+	//	matBill._11 = -matView._11;
+	//	matBill._13 = -matView._13;
+	//	matBill._31 = -matView._31;
+	//	matBill._33 = -matView._33;
+	//}
+	//else
+	//{
 		matBill._11 = matView._11;
 		matBill._13 = matView._13;
 		matBill._31 = matView._31;
 		matBill._33 = matView._33;
-	}
-	else
-	{
-		matBill._11 = -matView._11;
-		matBill._13 = -matView._13;
-		matBill._31 = -matView._31;
-		matBill._33 = -matView._33;
-	}
-	
+	//}
+
 
 	D3DXMatrixInverse(&matBill, 0, &matBill);
 
@@ -107,7 +84,38 @@ _int CBirdsBrown::Update_Object(const _float & fTimeDelta)
 
 void CBirdsBrown::LateUpdate_Object(void)
 {
-	Engine::CGameObject::LateUpdate_Object();
+	if (m_fCurTriggerFreq >= m_fTriggerFreq)
+	{
+		set<CGameObject*> setObj;
+		Engine::GetOverlappedObject(setObj, m_pTransCom->m_vInfo[INFO_POS], 5.f);
+
+		for (auto obj : setObj)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+			{
+				m_vPlayerPos = pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
+				m_bBrown = true;
+
+				m_vDir = { CGameUtilMgr::GetRandomFloat(-1.f, 1.f), 0.5f, CGameUtilMgr::GetRandomFloat(-1.f, 1.f) };
+				D3DXVec3Normalize(&m_vDir, &m_vDir);
+
+				// _matrix matCamWorld;
+				// m_pGraphicDev->GetTransform(D3DTS_VIEW, &matCamWorld);
+				// D3DXMatrixInverse(&matCamWorld, nullptr, &matCamWorld);
+				//
+				// _vec3 vCamLook{ matCamWorld._31, matCamWorld._32, matCamWorld._33};
+				// D3DXVec3Normalize(&vCamLook, &vCamLook);
+				//
+				// _vec3 vCross;
+				// D3DXVec3Cross(&vCross, &vCamLook, &m_vDir);
+				//
+				// if (vCross.y < 0.f)
+				// 	m_bReverese = true;
+			}
+		}
+
+		m_fCurTriggerFreq = 0.f;
+	}
 }
 
 void CBirdsBrown::Render_Object(void)

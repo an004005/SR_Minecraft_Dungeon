@@ -34,6 +34,10 @@ private:
 	_vec3			m_vDir;
 	_bool			m_bReverese = false;
 
+	_vec3 m_vPlayerPos;
+	_float m_fTriggerFreq = 0.3f;
+	_float m_fCurTriggerFreq = 0.3f;
+
 
 public:
 	static CBirdsBrown*		Create(LPDIRECT3DDEVICE9 pGraphicDev, OBJTYPE eType);

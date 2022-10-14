@@ -363,7 +363,6 @@
     <ClInclude Include="..\Header\InventoryUI.h">
       <Filter>02. GameObject\05. UI</Filter>
     </ClInclude>
-
     <ClInclude Include="..\Header\Birds.h">
       <Filter>02. GameObject\Object</Filter>
     </ClInclude>
@@ -373,7 +372,12 @@
     <ClInclude Include="..\Header\DamageFontMgr.h">
       <Filter>Mgr</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\PlayerStartPos.h" />
+    <ClInclude Include="..\Header\Trigger.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\PlayerStartPos.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -664,7 +668,12 @@
     <ClCompile Include="..\Code\DamageFontMgr.cpp">
       <Filter>Mgr</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\PlayerStartPos.cpp" />
+    <ClCompile Include="..\Code\Trigger.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\PlayerStartPos.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
