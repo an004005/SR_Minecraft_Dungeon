@@ -16,7 +16,7 @@ public:
 	static CCreeperController* Create();
 
 private:
-	_float m_fCountStartDist = 7.f; // 폭발 카운트 시작 거리
+	_float m_fCountStartDist = 12.f; // 폭발 카운트 시작 거리
 	_float m_fExplosionCount = 0.f;
 
 	_bool m_bWalk = false;
