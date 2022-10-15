@@ -4,7 +4,6 @@
 enum class PlayerArrowType
 {
 	NORMAL,
-	FIREWORK,
 	MULTISHOT,
 	LASER
 };
@@ -69,7 +68,7 @@ public:
 	_bool IsVisible() const { return m_bVisible; }
 	void PlayerSpawn();
 
-	void SpawnArrow(_uint iDamage, PlayerArrowType eType, _bool bCritical = false);
+	void SpawnArrow(_uint iDamage, PlayerArrowType eType, _bool bCritical = false, ArrowType eArrowType = ARROW_NORMAL);
 	_bool PickTargetEnemy(OUT _vec3& vLookAt);
 
 	// controller 입력함수

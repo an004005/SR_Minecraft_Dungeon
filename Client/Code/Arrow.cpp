@@ -40,7 +40,7 @@ HRESULT CArrow::Ready_Object()
 		});
 
 	m_fpSpeed = 20.f;
-	m_fLife = 6.f;
+	m_fLife = 3.f;
 	return S_OK;
 }
 
@@ -125,7 +125,7 @@ void CArrow::Free()
 void CArrow::FireWork()
 {
 	m_fLife = 0.f;
-	CSoundMgr::GetInstance()->PlaySound(L"sfx_item_fireworksTwinkle-002_soundWave.ogg", m_pTransform->m_vInfo[INFO_POS]);
+	CSoundMgr::GetInstance()->PlaySoundChannel(L"sfx_item_fireworksTwinkle-002_soundWave.ogg", m_pTransform->m_vInfo[INFO_POS], SOUND_UI);
 
 	// firework particle
 	_float fColor = CGameUtilMgr::GetRandomFloat(0.0f, 1.0f);
@@ -187,7 +187,7 @@ void CArrow::DynamicCallBack(CCollisionCom* pOther)
 
 			CGameUtilMgr::MatWorldComposeEuler(m_matDanglingLocal, m_pTransform->m_vScale, vLocalAngle, {0.f, 1.5f, 0.f});
 			Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(m_pTransform->m_vInfo[INFO_POS], 0.3f, YELLOW, 4, 0.2f);
-
+			CSoundMgr::GetInstance()->PlaySoundRandom({L"sfx_item_arrowChargedImpact-001_soundWave.ogg", L"sfx_item_arrowChargedImpact-002_soundWave.ogg", L"sfx_item_arrowChargedImpact-003_soundWave.ogg"}, m_pTransform->m_vInfo[INFO_POS], 0.35f);
 		}
 		else
 		{
@@ -209,6 +209,6 @@ void CArrow::StaticCallBack(_vec3 vCenter, _float fRadius)
 		m_eMoveType = ARROW_MOVE_STUCK;
 		Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")
 			->Add_Particle(m_pTransform->m_vInfo[INFO_POS], 0.3f, YELLOW, 4, 0.2f);
-		CSoundMgr::GetInstance()->PlaySoundRandom({L"D6_sfx_wpn_voidBow_impact_001.ogg", L"D6_sfx_wpn_voidBow_impact_001.ogg", L"D6_sfx_wpn_voidBow_impact_001.ogg"}, m_pTransform->m_vInfo[INFO_POS], 0.25f);
+		CSoundMgr::GetInstance()->PlaySoundRandom({L"sfx_item_arrowChargedImpact-001_soundWave.ogg", L"sfx_item_arrowChargedImpact-002_soundWave.ogg", L"sfx_item_arrowChargedImpact-003_soundWave.ogg"}, m_pTransform->m_vInfo[INFO_POS], 0.35f);
 	}
 }

@@ -16,6 +16,7 @@
 #include "InventoryUI.h"
 #include "PowerRune.h"
 #include "StunRune.h"
+#include "MultiShotRune.h"
 
 CInventory::CInventory(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CGameObject(pGraphicDev)
@@ -265,7 +266,11 @@ void CInventory::AddDefaultItems()
 	// dynamic_cast<CWeapon*>(m_arrItem[3])->SetRune(rune);
 	// rune->SetOwner(m_pOwner);
 
-	CPowerRune* rune = CItemFactory::Create<CPowerRune>("PowerRune", L"PowerRune", IS_TAKE);
+	// CPowerRune* rune = CItemFactory::Create<CPowerRune>("PowerRune", L"PowerRune", IS_TAKE);
+	// dynamic_cast<CWeapon*>(m_arrEquip[IT_RANGE])->SetRune(rune);
+	// rune->SetOwner(m_pOwner);
+
+	CMultiShotRune* rune = CItemFactory::Create<CMultiShotRune>("MultishotRune", L"MultishotRune", IS_TAKE);
 	dynamic_cast<CWeapon*>(m_arrEquip[IT_RANGE])->SetRune(rune);
 	rune->SetOwner(m_pOwner);
 

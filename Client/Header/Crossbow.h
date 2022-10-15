@@ -22,6 +22,7 @@ public:
 	virtual _int Attack() override;
 	virtual void Equipment(SkeletalPart* pSkeletalPart) override;
 	void LoadFireWork() { m_bFireWork = true; }
+	_bool IsFireWork() const { return m_bFireWork; }
 
 private:
 	_bool m_bFireWork = false;

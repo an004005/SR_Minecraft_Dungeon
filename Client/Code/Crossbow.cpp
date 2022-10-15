@@ -96,29 +96,25 @@ _int CCrossbow::Attack()
 
 	pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK1]);
 
-	if (m_bFireWork) // legacy
-	{
-		m_pOwner->SpawnArrow(m_iDamage, PlayerArrowType::FIREWORK, m_bCritical);
-		m_bFireWork = false;
-		return m_iAttackCnt;
-	}
 
-	if (m_pRune) // rune
+	if (m_pRune == nullptr || dynamic_cast<CPowerRune*>(m_pRune))
 	{
-		if (dynamic_cast<CPowerRune*>(m_pRune))
+		if (m_bFireWork)
 		{
-			m_pOwner->SpawnArrow(m_iDamage, PlayerArrowType::NORMAL, m_bCritical);
+			m_pOwner->SpawnArrow(50, PlayerArrowType::NORMAL, m_bCritical, ARROW_FIREWORK);
+			m_bFireWork = false;
 		}
 		else
 		{
-			m_pRune->Use();
+			m_pOwner->SpawnArrow(m_iDamage, PlayerArrowType::NORMAL, m_bCritical);
 		}
 	}
-	else // normal attack
+	else
 	{
-		m_pOwner->SpawnArrow(m_iDamage, PlayerArrowType::NORMAL, m_bCritical);
+		m_pRune->Use();
 	}
 
+	m_bFireWork = false;
 	return m_iAttackCnt;
 }
 
