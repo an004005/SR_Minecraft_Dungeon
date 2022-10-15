@@ -17,6 +17,7 @@
 #include "PowerRune.h"
 #include "StunRune.h"
 #include "MultiShotRune.h"
+#include "LightningRune.h"
 
 CInventory::CInventory(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CGameObject(pGraphicDev)
@@ -270,9 +271,13 @@ void CInventory::AddDefaultItems()
 	// dynamic_cast<CWeapon*>(m_arrEquip[IT_RANGE])->SetRune(rune);
 	// rune->SetOwner(m_pOwner);
 
-	CMultiShotRune* rune = CItemFactory::Create<CMultiShotRune>("MultishotRune", L"MultishotRune", IS_TAKE);
-	dynamic_cast<CWeapon*>(m_arrEquip[IT_RANGE])->SetRune(rune);
+	// CMultiShotRune* rune = CItemFactory::Create<CMultiShotRune>("MultishotRune", L"MultishotRune", IS_TAKE);
+	// dynamic_cast<CWeapon*>(m_arrEquip[IT_RANGE])->SetRune(rune);
+	// rune->SetOwner(m_pOwner);
+
+	CLightningRune* rune = CItemFactory::Create<CLightningRune>("LightningRune", L"LightningRune");
 	rune->SetOwner(m_pOwner);
+	dynamic_cast<CWeapon*>(m_arrEquip[IT_MELEE])->SetRune(rune);
 
 	m_arrEquip[IT_LEGACY1] = CItemFactory::Create<CShockPowder>("ShockPowder", L"ShockPowder", IS_TAKE);
 	m_arrEquip[IT_LEGACY1]->AddRef();

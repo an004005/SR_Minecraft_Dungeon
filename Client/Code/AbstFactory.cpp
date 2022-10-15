@@ -341,6 +341,11 @@ void CEffectFactory::Ready_EffectFactory()
 	{
 		return CHeartParticle::Create(s_pGraphicDev, 1.f);
 	} });
+
+	s_mapEffectSpawner.insert({ "ChainLightning", []()
+	{
+		return CChainLightning::Create(s_pGraphicDev);
+	} });
 }
 
 void CEnvFactory::Ready_EnvFactory()

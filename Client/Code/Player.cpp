@@ -37,10 +37,11 @@ CPlayer::~CPlayer()
 {
 }
 
-HRESULT CPlayer::Ready_Object()
+HRESULT CPlayer::Ready_Object(const wstring& wstrPath)
 {
 	CSkeletalCube::Ready_Object();
-
+	if (wstrPath.empty() == false)
+		LoadSkeletal(wstrPath);
 
 	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 	m_pCurAnim = m_pIdleAnim;
@@ -545,14 +546,14 @@ CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
 {
 	CPlayer* pInstance = new CPlayer(pGraphicDev);
 
-	if (FAILED(pInstance->Ready_Object()))
+	if (FAILED(pInstance->Ready_Object(wstrPath)))
 	{
 		Safe_Release(pInstance);
 		return nullptr;
 	}
 
-	if (!wstrPath.empty())
-		pInstance->LoadSkeletal(wstrPath);
+	// if (!wstrPath.empty())
+	// 	pInstance->LoadSkeletal(wstrPath);
 
 	return pInstance;
 }
@@ -638,7 +639,7 @@ void CPlayer::WeaponChange(ITEMTYPE eIT)
 {
 	if (m_pWeaponPart == nullptr)
 	{
-		auto& itr = m_mapParts.find("weapon_r");
+		const auto itr = m_mapParts.find("weapon_r");
 		if (itr == m_mapParts.end())
 			return;
 		m_pWeaponPart = itr->second;

@@ -54,7 +54,7 @@ private:
 	using iBlockIndex = array<array<_int, VZ>, VX>;
 
 public:
-	virtual HRESULT Ready_Object() override;
+	virtual HRESULT Ready_Object(const wstring& wstrPath);
 	virtual _int Update_Object(const _float& fTimeDelta) override;
 	virtual void LateUpdate_Object() override;
 	virtual void Render_Object() override;

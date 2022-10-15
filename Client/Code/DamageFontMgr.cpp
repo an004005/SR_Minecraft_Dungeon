@@ -54,7 +54,15 @@ void CDamageFontMgr::Add_DamageFontFromWorld(_int iDamage, const _vec3& vPos, co
 
 	_vec3 vDir = vPosToScreen - vFromToScreen;
 
-	m_vecDamageFont.push_back({iDamage, {vDir.x, vDir.y}, {vPosToScreen.x, vPosToScreen.y}, Color, bCritical});
+	const _vec2 vScreenPos = {vPosToScreen.x, vPosToScreen.y};
+	for (auto& damageFont : m_vecDamageFont)
+	{
+		const _vec2 vDiff = vScreenPos - damageFont.vPos;
+		if (D3DXVec2LengthSq(&vDiff) < 100.f)
+			damageFont.vPos += damageFont.vDir * 0.15f * m_fSpeed;
+	}
+
+	m_vecDamageFont.push_back({iDamage, {vDir.x, vDir.y}, vScreenPos, Color, bCritical});
 }
 
 void CDamageFontMgr::Add_DamageFontFromScreen(_int iDamage, const _vec2& vScreen, D3DXCOLOR Color)

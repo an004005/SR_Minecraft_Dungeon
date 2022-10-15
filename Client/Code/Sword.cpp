@@ -103,7 +103,7 @@ CSword * CSword::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 
 void CSword::Free()
 {
-	CEquipItem::Free();
+	CWeapon::Free();
 }
 
 _int CSword::Attack()
@@ -163,7 +163,7 @@ void CSword::Collision()
 	}
 
 	if (m_pRune)
-		m_pRune->Use();
+		m_pRune->Collision();
 
 	DEBUG_SPHERE(vAttackPos, 2.f, 1.f);
 }
