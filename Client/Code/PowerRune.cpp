@@ -14,11 +14,13 @@ void CPowerRune::EquipRune(CWeapon* pWeapon)
 {
 	m_iPrevDamage = pWeapon->GetDamage();
 	pWeapon->SetDamage(static_cast<_uint>((_float)m_iPrevDamage * 1.5f));
+	pWeapon->SetCritical(true);
 }
 
 void CPowerRune::UnEquipRune(CWeapon* pWeapon)
 {
 	pWeapon->SetDamage(m_iPrevDamage);
+	pWeapon->SetCritical(false);
 	m_iPrevDamage = 0;
 }
 

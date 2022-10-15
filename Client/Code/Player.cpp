@@ -261,7 +261,7 @@ void CPlayer::PlayerSpawn()
 }
 
 
-void CPlayer::SpawnArrow(_uint iDamage, PlayerArrowType eType)
+void CPlayer::SpawnArrow(_uint iDamage, PlayerArrowType eType, _bool bCritical)
 {
 	const _vec3 vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + _vec3{0.f, 1.3f, 0.f};
 	_vec3 vLookAt;
@@ -272,11 +272,15 @@ void CPlayer::SpawnArrow(_uint iDamage, PlayerArrowType eType)
 	{
 	case PlayerArrowType::NORMAL:
 		CSoundMgr::GetInstance()->PlaySound(L"sfx_item_arrow_fire.ogg", vPos);
-		CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", (_float)iDamage, vPos, vLookAt);
+		CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 
+		{_float(iDamage), bCritical, COLL_PLAYER_BULLET, ARROW_NORMAL},
+			vPos, vLookAt);
 		break;
 	case PlayerArrowType::FIREWORK:
 		CSoundMgr::GetInstance()->PlaySound(L"_sfx__fireworks_fire_1.ogg", vPos);
-		CBulletFactory::Create<CGameObject>("PlayerFireWorkArrow", L"PlayerFireWorkArrow", 50.f, vPos, vLookAt);
+		CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 
+		{50.f, false, COLL_PLAYER_BULLET, ARROW_FIREWORK},
+			vPos, vLookAt);
 		break;
 	case PlayerArrowType::MULTISHOT:
 		break;

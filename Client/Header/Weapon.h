@@ -23,6 +23,7 @@ public:
 
 	void SetDamage(_uint iDamage) { m_iDamage = iDamage;}
 	_uint GetDamage() const { return m_iDamage; }
+	void SetCritical(_bool bCritical) {m_bCritical = bCritical;}
 
 	virtual void Free() override;
 
@@ -30,5 +31,6 @@ protected:
 	CRune* m_pRune = nullptr;
 	WeaponType m_eType = WEAPON_END;
 	_uint m_iDamage = 0;
+	_bool m_bCritical = false;
 };
 

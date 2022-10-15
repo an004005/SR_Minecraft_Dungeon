@@ -60,7 +60,7 @@ map<string, std::function<CGameObject*()>> CPlayerFactory::s_mapPlayerSpawner;
 map<string, std::function<CGameObject*()>> CEnemyFactory::s_mapEnemySpawner;
 map<string, std::function<CGameObject*()>> CEffectFactory::s_mapEffectSpawner;
 map<string, std::function<CGameObject*()>> CEnvFactory::s_mapEnvSpawner;
-map<string, std::function<CGameObject*(_float)>> CBulletFactory::s_mapBulletSpawner;
+map<string, std::function<CGameObject*(ArrowParams)>> CBulletFactory::s_mapBulletSpawner;
 map<string, std::function<CGameObject*()>> CObjectFactory::s_mapObjectSpawner;
 map<string, std::function<CGameObject*()>> CItemFactory::s_mapItemSpawner;
 map<string, std::function<CGameObject*(_uint)>> CUIFactory::s_mapUISpawner;
@@ -365,17 +365,13 @@ void CEnvFactory::Ready_EnvFactory()
 }
 void CBulletFactory::Ready_BulletFactory()
 {
-	s_mapBulletSpawner.insert({"PlayerNormalArrow", [](_float fDamage)
+	s_mapBulletSpawner.insert({"PlayerNormalArrow", [](ArrowParams tArrowParams)
 	{
-		return CArrow::Create(s_pGraphicDev, fDamage, COLL_PLAYER_BULLET);
+		return CArrow::Create(s_pGraphicDev, tArrowParams);
 	}});
-	s_mapBulletSpawner.insert({"EnemyNormalArrow", [](_float fDamage)
+	s_mapBulletSpawner.insert({"EnemyNormalArrow", [](ArrowParams tArrowParams)
 	{
-		return CArrow::Create(s_pGraphicDev, fDamage, COLL_ENEMY_BULLET);
-	}});
-	s_mapBulletSpawner.insert({"PlayerFireWorkArrow", [](_float fDamage)
-	{
-		return CArrow::Create(s_pGraphicDev, fDamage, COLL_PLAYER_BULLET, ARROW_FIREWORK);
+		return CArrow::Create(s_pGraphicDev, tArrowParams);
 	}});
 }
 

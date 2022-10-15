@@ -69,7 +69,7 @@ public:
 	_bool IsVisible() const { return m_bVisible; }
 	void PlayerSpawn();
 
-	void SpawnArrow(_uint iDamage, PlayerArrowType eType);
+	void SpawnArrow(_uint iDamage, PlayerArrowType eType, _bool bCritical = false);
 	_bool PickTargetEnemy(OUT _vec3& vLookAt);
 
 	// controller 입력함수

@@ -265,9 +265,9 @@ void CInventory::AddDefaultItems()
 	// dynamic_cast<CWeapon*>(m_arrItem[3])->SetRune(rune);
 	// rune->SetOwner(m_pOwner);
 
-	// CPowerRune* rune = CItemFactory::Create<CPowerRune>("PowerRune", L"PowerRune", IS_TAKE);
-	// dynamic_cast<CWeapon*>(m_arrItem[3])->SetRune(rune);
-	// rune->SetOwner(m_pOwner);
+	CPowerRune* rune = CItemFactory::Create<CPowerRune>("PowerRune", L"PowerRune", IS_TAKE);
+	dynamic_cast<CWeapon*>(m_arrEquip[IT_RANGE])->SetRune(rune);
+	rune->SetOwner(m_pOwner);
 
 	m_arrEquip[IT_LEGACY1] = CItemFactory::Create<CShockPowder>("ShockPowder", L"ShockPowder", IS_TAKE);
 	m_arrEquip[IT_LEGACY1]->AddRef();

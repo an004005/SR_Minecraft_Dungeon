@@ -132,7 +132,7 @@ void CStatComponent::ModifyHP(_int iModifyingHP)
 	m_DamageDelegater.broadcast(m_iHP, m_iMaxHP, iModifyingHP);
 }
 
-void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCauser, DamageType eType)
+void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCauser, DamageType eType, _bool bCritical)
 {
 	if (m_bDead) return;
 
@@ -164,12 +164,12 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 	ModifyHP(-iDamage);
 	if (iDamage != 0)
 	{
-		// if (dynamic_cast<CPlayer*>())
 		CDamageFontMgr::GetInstance()->Add_DamageFontFromWorld(
 			iDamage,
 			m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{0.f, 1.5f, 0.f},
 			vFromPos,
-			D3DCOLOR_ARGB(255, 255, 255, 255));
+			D3DCOLOR_ARGB(255, 255, 255, 255),
+			bCritical);
 	}
 }
 
