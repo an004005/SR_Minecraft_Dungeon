@@ -67,7 +67,7 @@ void CSaton::AnimationEvent(const string& strEvent)
 	}
 	else if (strEvent == "SymbolAttack")
 	{
-		// m_bSatonSymbol = true;
+		// m_bSatonSymbol_Blue = true;
 	}
 	else if (strEvent == "AnimStopped")
 	{

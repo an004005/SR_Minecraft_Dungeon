@@ -95,6 +95,7 @@ private:
 	_bool m_bIsSymbolGimmick = false;
 	_bool m_bIsSymbolAttackCycle = false;
 
+	_uint m_iRedSymbolCnt;
 
 	_bool m_bMove = false;
 	_float m_fTime;

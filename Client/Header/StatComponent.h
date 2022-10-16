@@ -6,7 +6,8 @@ enum DamageType
 	DT_STUN,
 	DT_KNOCK_BACK,
 	DT_HUGE_KNOCK_BACK,
-	DT_SATON_SYMBOL,
+	DT_KOUKU_SYMBOL_BLUE,
+	DT_KOUKU_SYMBOL_RED,
 	// posion .. etc
 	DT_END
 };
@@ -38,7 +39,8 @@ public:
 	_bool IsStun() const { return m_bStun || m_bKnockback; }
 	_bool IsDead() const { return m_bDead; }
 	_bool IsDamaged() const { return m_bDamaged; }
-	_bool IsSatonSybol() const { return m_bSatonSymbol; }
+	_bool IsSatonSymbol_Blue() const { return m_bSatonSymbol_Blue; }
+	_bool IsSatonSymbol_Red() const { return m_bSatonSymbol_Red; }
 
 	void IsSaton() { m_bIsSaton = !m_bIsSaton; }
 
@@ -76,7 +78,9 @@ private:
 	_float m_fCurDamagedTime = 0.5;
 
 	// Saton Symbol
-	_bool m_bSatonSymbol = false;
+	_bool m_bSatonSymbol_Blue = false;
+	_bool m_bSatonSymbol_Red = false;
+
 	_float m_fSatonSymbolTime = 0.3f;
 	_float m_fCurSatonSymbolTime = 0.3f;
 

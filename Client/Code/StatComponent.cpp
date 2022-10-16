@@ -54,10 +54,10 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 
 
 	// 세이튼 장판 기믹 때만 해당되게 구현하기 
-	if (m_bSatonSymbol)
+	if (m_bSatonSymbol_Blue)
 	{
 		if (m_fSatonSymbolTime < m_fCurSatonSymbolTime)
-			m_bSatonSymbol = false;
+			m_bSatonSymbol_Blue = false;
 		else
 			m_fCurSatonSymbolTime += fTimeDelta;
 	}
@@ -156,8 +156,12 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 		m_vKnockBackVelocity *= 40.f;
 		m_vKnockBackVelocity.y = 18.f;
 		break;
-	case DT_SATON_SYMBOL:
-		m_bSatonSymbol = true;
+	case DT_KOUKU_SYMBOL_BLUE:
+		m_bSatonSymbol_Blue = true;
+		m_fCurSatonSymbolTime = 0.f;
+		break;
+	case DT_KOUKU_SYMBOL_RED:
+		m_bSatonSymbol_Red = true;
 		m_fCurSatonSymbolTime = 0.f;
 		break;
 	case DT_END:

@@ -39,6 +39,7 @@ HRESULT CKouku::Ready_Object()
 	m_eState = IDLE;
 	m_fSpeed = 2.f;
 
+	m_iRedSymbolCnt = 0;
 
 
 	m_pStat->SetMaxHP(120);
@@ -182,7 +183,7 @@ void CKouku::LateUpdate_Object()
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(0, _vec3(51.5f, 25.f, 42.5f), this, DT_SATON_SYMBOL);
+				->TakeDamage(0, _vec3(51.5f, 25.f, 42.5f), this, DT_KOUKU_SYMBOL_BLUE);
 		}
 
 		DEBUG_SPHERE(Left_BludCircle_1, 10.f, 6.2f);
@@ -197,7 +198,7 @@ void CKouku::LateUpdate_Object()
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(0, _vec3(57.5f, 25.f, 38.5f), this, DT_SATON_SYMBOL);
+				->TakeDamage(0, _vec3(57.5f, 25.f, 38.5f), this, DT_KOUKU_SYMBOL_BLUE);
 		}
 
 		DEBUG_SPHERE(Left_BludCircle_2, 10.f, 6.2f);
@@ -208,11 +209,15 @@ void CKouku::LateUpdate_Object()
 		_vec3 Right_RedCircle_3 = _vec3(67.5f, 25.f, 38.5f);
 		Engine::GetOverlappedObject(setPlayer_3, Right_RedCircle_3, 2.f);
 
+
+		m_iRedSymbolCnt = 0;
 		for (auto& obj : setPlayer_3)
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(0, _vec3(67.5f, 25.f, 38.5f), this, DT_SATON_SYMBOL);
+				->TakeDamage(0, _vec3(67.5f, 25.f, 38.5f), this, DT_KOUKU_SYMBOL_RED);
+
+			m_iRedSymbolCnt++;
 		}
 
 		DEBUG_SPHERE(Right_RedCircle_3, 10.f, 6.2f);
@@ -226,7 +231,7 @@ void CKouku::LateUpdate_Object()
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(0, _vec3(73.5f, 25.f, 42.5f), this, DT_SATON_SYMBOL);
+				->TakeDamage(0, _vec3(73.5f, 25.f, 42.5f), this, DT_KOUKU_SYMBOL_BLUE);
 		}
 
 		DEBUG_SPHERE(Left_BlueCircle_4, 10.f, 6.2f);
@@ -246,9 +251,9 @@ void CKouku::LateUpdate_Object()
 				{
 					CStatComponent* PlayerStatCom = pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC);
 
-					if (!PlayerStatCom->IsSatonSybol())
+					if (PlayerStatCom->IsSatonSymbol_Blue() == false && m_iRedSymbolCnt != 2)
 					{
-						PlayerStatCom->TakeDamage(40, pPlayer->GetInfo(INFO_POS), this, DT_END);
+						PlayerStatCom->TakeDamage(20, pPlayer->GetInfo(INFO_POS), this, DT_END);
 					}
 				}
 			}
@@ -379,9 +384,9 @@ void CKouku::Symbol_Attack()
 		{
 			CStatComponent* PlayerStatCom = pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC);
 
-			if (!PlayerStatCom->IsSatonSybol())
+			if (!PlayerStatCom->IsSatonSymbol_Blue())
 			{
-				PlayerStatCom->TakeDamage(20, pPlayer->GetInfo(INFO_POS), this, DT_SATON_SYMBOL);
+				PlayerStatCom->TakeDamage(20, pPlayer->GetInfo(INFO_POS), this, DT_KOUKU_SYMBOL_BLUE);
 			}
 		}
 	}

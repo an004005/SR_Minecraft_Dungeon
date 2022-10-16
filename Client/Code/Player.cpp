@@ -90,7 +90,7 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 	CSkeletalCube::Update_Object(fTimeDelta);
 	DEBUG_SPHERE(m_pColl->GetCollPos(), m_pColl->GetRadius(), 0.1f);
 
-	if (m_pStat->IsSatonSybol())
+	if (m_pStat->IsSatonSymbol_Blue())
 		m_strStatus = "Saton_Symboled";
 	else
 		m_strStatus = "nothing";

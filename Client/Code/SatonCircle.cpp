@@ -87,7 +87,7 @@ void CSatonCircle::LateUpdate_Object()
 		if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 		{
 			pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(0, vPos, this, DT_SATON_SYMBOL);
+				->TakeDamage(0, vPos, this, DT_KOUKU_SYMBOL_BLUE);
 			IM_LOG("SatonSymbol");
 			break;
 		}
