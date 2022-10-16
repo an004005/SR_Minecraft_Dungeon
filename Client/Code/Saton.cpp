@@ -128,6 +128,7 @@ _int CSaton::Update_Object(const _float& fTimeDelta)
 		break;
 	case SATON_SYMBOL:
 		m_strState = "SATON_SYMBOL";
+		break;
 	case SATON_FASCINATE:
 		m_strState = "SATON_FASCINATE";
 		break;
@@ -230,7 +231,7 @@ void CSaton::StateChange()
 		SetOff();
 		return;
 	}
-	if (m_bSatonFascinate && m_bCanPlayAnim && m_eState == IDLE)
+	if (m_bSatonFascinate && m_bCanPlayAnim)
 	{
 		m_eState = SATON_FASCINATE;
 		RotateToTargetPos(m_vTargetPos);
