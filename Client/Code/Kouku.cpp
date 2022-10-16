@@ -4,6 +4,7 @@
 #include "Skeleton.h"
 #include "StatComponent.h"
 #include "KoukuController.h"
+#include "Particle.h"
 
 CKouku::CKouku(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
 {
@@ -29,6 +30,7 @@ HRESULT CKouku::Ready_Object()
 	m_arrAnim[HAMMER_OUT] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_hammer_o.anim");
 	m_arrAnim[HAMMER_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_hamer.anim");
 	m_arrAnim[HORROR_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_runattack.anim");
+	m_arrAnim[SYMBOL_HIDE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_hide.anim");
 
 	m_pIdleAnim = &m_arrAnim[IDLE];
 	// m_pCurAnim = &m_arrAnim[INTRO];
@@ -37,7 +39,9 @@ HRESULT CKouku::Ready_Object()
 	m_eState = IDLE;
 	m_fSpeed = 2.f;
 
-	m_pStat->SetMaxHP(1000);
+
+
+	m_pStat->SetMaxHP(120);
 
 	CController* pController = Add_Component<CKoukuController>(L"Proto_KoukuController", L"Proto_KoukuController", ID_DYNAMIC);
 	pController->SetOwner(this);
@@ -54,14 +58,37 @@ HRESULT CKouku::Ready_Object()
 
 void CKouku::AnimationEvent(const string& strEvent)
 {
-	if (strEvent == "DoubleHammer")
+	if (strEvent == "SymbolCloud")
 	{
-		m_bDoubleHammer = true;
+		for (int i = 0; i < 5; i++)
+		{
+			CEffectFactory::Create<CCloud>("Creeper_Cloud", L"Creeper_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+		}
 	}
 	else if (strEvent == "HorrorAttack")
 	{
 		m_bHorrorAttack = true;
 		m_bCountable = true;
+	}
+	else if (strEvent == "SymbolStart")
+	{
+		for (int i = 0; i < 60; i++)
+		{
+			CEffectFactory::Create<CHealCircle>("Blue_Circle", L"Blue_Circle", _vec3(51.5f, 25.f, 42.5f));
+			CEffectFactory::Create<CHealCircle>("Blue_Circle", L"Blue_Circle", _vec3(57.5f, 25.f, 38.5f));
+			CEffectFactory::Create<CHealCircle>("Red_Circle", L"Red_Circle", _vec3(67.5f, 25.f, 38.5f));
+			CEffectFactory::Create<CHealCircle>("Blue_Circle", L"Blue_Circle", _vec3(73.5f, 25.f, 42.5f));
+		}
+		Get_GameObject<CMoonParticle>(LAYER_EFFECT, L"MoonParticle")->Add_Particle(_vec3(51.5f, 25.f, 42.5f), 1.f, BLUE, 12, 6.2f);
+		Get_GameObject<CMoonParticle>(LAYER_EFFECT, L"MoonParticle")->Add_Particle(_vec3(57.5f, 25.f, 38.5f), 1.f, BLUE, 12, 6.2f);
+		Get_GameObject<CMoonParticle>(LAYER_EFFECT, L"MoonParticle")->Add_Particle(_vec3(67.5f, 25.f, 38.5f), 1.f, RED, 30, 6.2f);
+		Get_GameObject<CMoonParticle>(LAYER_EFFECT, L"MoonParticle")->Add_Particle(_vec3(73.5f, 25.f, 42.5f), 1.f, BLUE, 12, 6.2f);
+
+		m_pRootPart->pTrans->m_vInfo[INFO_POS] = _vec3(62.5f, 0.f, 40.5f);
+	}
+	else if (strEvent == "BasicAttack")
+	{
+		m_bBasicAttack = true;
 	}
 	else if (strEvent == "BasicAttack")
 	{
@@ -72,13 +99,6 @@ void CKouku::AnimationEvent(const string& strEvent)
 		m_bDelete = true;
 		m_bCountable = false;
 	}
-	// else if (strEvent == "SpitFire")
-	// {
-	// 	_matrix matWorld;
-	// 	_vec3 vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
-	// 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { vPos.x, vPos.y + 5.f , vPos.z });
-	// 	CObjectFactory::Create<CRedStoneMonstrosityBullet>("RedStoneMonstrosityBullet", L"RedStoneMonstrosityBullet", matWorld);
-	// }
 }
 
 _int CKouku::Update_Object(const _float& fTimeDelta)
@@ -92,7 +112,7 @@ _int CKouku::Update_Object(const _float& fTimeDelta)
 		m_bCanPlayAnim = true;
 
 	// 상태 변경 조건 설정
-	StateChange();
+		StateChange();
 
 	// 각 상태에 따른 프레임 마다 실행할 함수 지정
 	switch (m_eState)
@@ -122,6 +142,12 @@ _int CKouku::Update_Object(const _float& fTimeDelta)
 		break;
 	case BASIC_ATTACK:
 		m_strState = "BASICATTACK";
+		break;
+
+	case SYMBOL_HIDE:
+		m_strState = "SYMBOL_HIDE";
+		break;
+
 	case DEAD:
 		break;
 	default:
@@ -134,11 +160,25 @@ _int CKouku::Update_Object(const _float& fTimeDelta)
 			m_fCurTime = 0.f;
 	}
 
-	IM_BEGIN("State");
+	// if (m_pStat->GetHP() <= m_pStat->GetMaxHP() / 2 && !m_bIsSymbolGimmick)
+	// {
+	// 	m_bIsSymbolGimmick = !m_bIsSymbolGimmick;
+	// }
 
-	ImGui::Text(m_strState.c_str());
-
-	IM_END;
+	// IM_BEGIN("Kouku_ObjectData");
+	//
+	// ImGui::Text("%d", m_pStat->GetHP());
+	// ImGui::Text(m_strState.c_str());
+	// // ImGui::Text("%s, ", m_strState.c_str());
+	// // ImGui::Text("%d", m_pStat->GetHP());
+	// // ImGui::Text("%d", m_pStat->GetHP());
+	// // ImGui::Text("%d", m_pStat->GetHP());
+	// // ImGui::Text("%d", m_pStat->GetHP());
+	// // ImGui::Text("%d", m_pStat->GetHP());
+	//
+	// ImGui::Separator();
+	//
+	// IM_END;
 
 	return OBJ_NOEVENT;
 }
@@ -227,6 +267,17 @@ void CKouku::StateChange()
 		m_eState = HORROR_ATTACK;
 		RotateToTargetPos(m_vTargetPos);
 		PlayAnimationOnce(&m_arrAnim[HORROR_ATTACK]);
+		m_bMove = false;
+		m_bCanPlayAnim = false;
+		SetOff();
+		return;
+	}
+
+	if (m_bKoukuSymbol && m_bCanPlayAnim)
+	{
+		m_eState = SYMBOL_HIDE;
+		RotateToTargetPos(m_vTargetPos);
+		PlayAnimationOnce(&m_arrAnim[SYMBOL_HIDE]);
 		m_bMove = false;
 		m_bCanPlayAnim = false;
 		SetOff();

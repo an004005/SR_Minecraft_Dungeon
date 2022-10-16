@@ -25,6 +25,7 @@ HRESULT CSaton::Ready_Object()
 	m_arrAnim[IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_idle.anim");
 	m_arrAnim[SATON_BIRD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_bird.anim");
 	m_arrAnim[SATON_GRAP] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_grap.anim");
+	m_arrAnim[SATON_SYMBOL] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_symbol.anim");
 
 	m_pIdleAnim = &m_arrAnim[IDLE];
 	// m_pCurAnim = &m_arrAnim[INTRO];
@@ -32,8 +33,10 @@ HRESULT CSaton::Ready_Object()
 
 	m_eState = IDLE;
 	m_fSpeed = 2.f;
-
-	m_pStat->SetMaxHP(1000);
+	// m_pStat->IsSaton();
+	m_pStat->SetMaxHP(100);
+	// m_pRootPart->pTrans->Set_Pos(62.5f, 20.5f, 49.4f);
+	m_pRootPart->pTrans->m_vInfo[INFO_POS].y = 20.5f;
 
 	CController* pController = Add_Component<CSatonController>(L"Proto_SatonController", L"Proto_SatonController", ID_DYNAMIC);
 	pController->SetOwner(this);
@@ -62,6 +65,10 @@ void CSaton::AnimationEvent(const string& strEvent)
 	{
 		m_bSatonBird = true;
 	}
+	else if (strEvent == "SymbolAttack")
+	{
+		// m_bSatonSymbol = true;
+	}
 	else if (strEvent == "AnimStopped")
 	{
 		m_bDelete = true;
@@ -77,6 +84,15 @@ _int CSaton::Update_Object(const _float& fTimeDelta)
 
 	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
 		m_bCanPlayAnim = true;
+
+
+
+
+	//
+	// NULL_CHECK_RETURN(pkouku, 0);
+	//
+	// _vec3 vPos = saton->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
+
 
 	// 상태 변경 조건 설정
 	StateChange();
@@ -98,13 +114,10 @@ _int CSaton::Update_Object(const _float& fTimeDelta)
 		m_strState = "SATON_BIRD";
 		break;
 	case SATON_GRAP:
-		// m_fCurTime += fTimeDelta;
-		//
-		// if (m_fCurTime <= m_fTime)
-		// {
-		// 	m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * m_fSpeed * fTimeDelta;
-		// }
 		m_strState = "SATON_GRAP";
+		break;
+	case SATON_SYMBOL:
+		m_strState = "SATON_SYMBOL";
 		break;
 	case DEAD:
 		m_strState = "DEAD";
@@ -118,9 +131,9 @@ _int CSaton::Update_Object(const _float& fTimeDelta)
 	// 		m_fCurTime = 0.f;
 	// }
 
-	IM_BEGIN("State");
+	IM_BEGIN("StatePos");
 
-	ImGui::Text(m_strState.c_str());
+	ImGui::Text("%f,%f,%f",m_pRootPart->pTrans->m_vInfo[INFO_POS].x, m_pRootPart->pTrans->m_vInfo[INFO_POS].y, m_pRootPart->pTrans->m_vInfo[INFO_POS].z);
 
 	IM_END;
 
@@ -180,7 +193,7 @@ void CSaton::StateChange()
 	if (m_bSatonBird && m_bCanPlayAnim)
 	{
 		m_eState = SATON_BIRD;
-		// RotateToTargetPos(m_vTargetPos);
+		RotateToTargetPos(m_vTargetPos);
 		PlayAnimationOnce(&m_arrAnim[SATON_BIRD]);
 		m_bCanPlayAnim = false;
 		SetOff();
@@ -192,6 +205,15 @@ void CSaton::StateChange()
 		m_eState = SATON_GRAP;
 		RotateToTargetPos(m_vTargetPos);
 		PlayAnimationOnce(&m_arrAnim[SATON_GRAP]);
+		m_bCanPlayAnim = false;
+		SetOff();
+		return;
+	}
+	if (m_bSatonSymbolAnim && m_bCanPlayAnim && m_eState == IDLE)
+	{
+		m_eState = SATON_SYMBOL;
+		RotateToTargetPos(m_vTargetPos);
+		PlayAnimationOnce(&m_arrAnim[SATON_SYMBOL]);
 		m_bCanPlayAnim = false;
 		SetOff();
 		return;

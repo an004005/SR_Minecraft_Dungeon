@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "SatonController.h"
+
+#include "Kouku.h"
 #include "Saton.h"
+#include "StatComponent.h"
 
 CSatonController::CSatonController()
 {
@@ -57,6 +60,15 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 		_float fDist = D3DXVec3Length(&vDiff);
 	}
 
+	CKouku* pKouku = Engine::Get_GameObject<CKouku>(LAYER_ENEMY, L"Kouku");
+
+	if(pKouku->Check_SymbolGimmick() && !m_bIsKoukuSymbol)
+	{
+		_vec3  vPos = saton->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS] - _vec3(62.5f,21.5f,47.f);
+		saton->SatonSymbolAnim(_vec3(vPos));
+		m_bIsKoukuSymbol = !m_bIsKoukuSymbol;
+	}
+
 	if (m_fCurFirstHammerCoolTime >= m_fFirstHammerCoolTime && fTargetDist <= m_fFirstHammerDist)
 	{
 		m_fCurFirstHammerCoolTime = 0.f;
@@ -77,7 +89,9 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 		saton->SatonGrap(vTargetPos);
 		return 0;
 	}
+	_vec3  Pos = saton->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS] - _vec3(62.5f, 21.5f, 47.f);
 
+	saton->WalkToTarget(vTargetPos);
 
 	return 0;
 }

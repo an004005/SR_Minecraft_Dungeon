@@ -297,14 +297,19 @@ void CEffectFactory::Ready_EffectFactory()
 	{
 		return CHealCircle::Create(s_pGraphicDev, 1.4f, 90.f, HEAL);
 	} });
-
+	
 	s_mapEffectSpawner.insert({ "Heal_Circle_L",[]()
 	{
 		return CHealCircle::Create(s_pGraphicDev, 1.4f, 90.f,HEAL);
 	} });
+
+	s_mapEffectSpawner.insert({ "Red_Circle",[]()
+	{
+		return CHealCircle::Create(s_pGraphicDev, 2.f, 90.f, RED_CIRCLE);
+	} });
 	s_mapEffectSpawner.insert({ "Blue_Circle",[]()
 	{
-		return CHealCircle::Create(s_pGraphicDev, 1.4f, 90.f,BLUE_CIRCLE);
+		return CHealCircle::Create(s_pGraphicDev, 2.f, 90.f,BLUE_CIRCLE);
 	} });
 	s_mapEffectSpawner.insert({ "Lava_Particle",[]()
 	{

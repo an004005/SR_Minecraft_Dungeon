@@ -54,7 +54,7 @@ HRESULT CStage::Ready_Scene(void)
 	// Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 	// 	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
 
-	CBatchTool::Load(L"../Bin/Resource/Batch/stage1_test.batch");
+	// CBatchTool::Load(L"../Bin/Resource/Batch/stage1_test.batch");
 
 	return S_OK;
 }
@@ -66,6 +66,13 @@ _int CStage::Update_Scene(const _float & fTimeDelta)
 	//CUIFactory::Create<CUI>("UI_HP", L"UI", 600.f, 650.f - fY, 55.f, 40.f);
 	//Engine::Get_Component<CTransform>(LAYER_UI, L"UI_HP", L"Proto_TransformCom", ID_DYNAMIC)
 	//	->m_vAngle.y += D3DXToRadian(40.f) * fTimeDelta;
+
+	// IM_BEGIN("PlayerPos");
+	// CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
+	// _vec3 pPos = pPlayerTransform->m_vInfo[INFO_POS];
+	// ImGui::Text("%f,%f", pPos.x, pPos.z);
+	// IM_END;
+
 
 	Engine::GetFont();
 
@@ -102,13 +109,14 @@ HRESULT CStage::Ready_Layer_Environment()
 {
 	CGameObject*		pGameObject = nullptr;
 
-	CEnvFactory::Create<CStaticCamera>("StaticCamera", L"StaticCamera");
-
+	CStaticCamera* pCAm = CEnvFactory::Create<CStaticCamera>("StaticCamera", L"StaticCamera");
+	pCAm->Set_Mode();
+	
 	// Terrain
 	CEnvFactory::Create<CTerrainWater>("WaterTerrain", L"WaterTerrain");
 
 	// TerrainCubeMap
-	pGameObject = CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/Stage1.map");
+	pGameObject = CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/koukusaton_size_s.map");
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", pGameObject), E_FAIL);
 
@@ -132,7 +140,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	//CObjectFactory::Create<CBox>("Box", L"Box2", { 4.f, 9.f, 15.f });
 	// CObjectFactory::Create<CDynamite>("Dynamite", L"Dynamite");
 
-	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 0.f, 0.f ,0.f });
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 0.f ,42.7f });
 	CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld)->PlayerSpawn();
 
 	
@@ -152,6 +160,11 @@ HRESULT CStage::Ready_Layer_GameLogic()
 		// CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
 		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 55.f, 0.f ,28.f });
 		//CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
+		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 3.f, 3.f, 3.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 21.5f ,47.8f });
+		CEnemyFactory::Create<CSaton>("Saton", L"Saton", matWorld);
+
+		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 0.7f, 0.7f, 0.7f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 25.f ,42.4f });
+		CEnemyFactory::Create<CKouku>("Kouku", L"Kouku", matWorld);
 
 
 	/*	 CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 43.f, 0.f , 21.f });

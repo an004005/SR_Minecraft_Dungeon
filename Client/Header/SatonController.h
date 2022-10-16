@@ -24,15 +24,20 @@ private:
 	_float m_fCurFirstHammerCoolTime = 0.f;
 	_float m_fCurSatonBirdCoolTime = 0.f;
 	_float m_fCurSatonGrapCoolTime = 0.f;
+	// _float m_fCurSatonSymbolCoolTime = 0.f;
 	_float m_fCurTargetingCoolTime = 3.f;
 
 	_float m_fFirstHammerCoolTime = 15.f;
 	_float m_fSatonBirdCoolTime = 25.f;
 	_float m_fSatonGrapCoolTime = 30.f;
+	// _float m_fCurSatonSymbolCoolTime = 0.f;
 	_float m_fTargetingCoolTime = 3.f;
-	_float m_fFirstHammerDist = 8.f;
-	_float m_fSatonBirdkDist = 8.f;
-	_float m_fSatonGrapkDist = 5.f;
+
+	_float m_fFirstHammerDist = 20.f;
+	_float m_fSatonBirdkDist = 20.f;
+	_float m_fSatonGrapkDist = 20.f;
+
+	_bool m_bIsKoukuSymbol = false;
 
 	_float m_fDist = 5.f;
 };

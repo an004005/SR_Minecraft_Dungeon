@@ -35,6 +35,9 @@ private:
 	_float m_fHorrorAttackDist = 8.f;
 	_float m_fBasicAttackDist = 5.f;
 
+	_bool m_bIsSymbolGimmick = false;
+
+	string m_strState;
 	_float m_fDist = 5.f;
 };
 

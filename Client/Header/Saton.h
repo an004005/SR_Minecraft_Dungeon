@@ -12,6 +12,7 @@ private:
 		FIRSTATTACK,
 		SATON_BIRD,
 		SATON_GRAP,
+		SATON_SYMBOL,
 		DEAD,
 		STATE_END
 	};
@@ -50,9 +51,17 @@ public:
 		m_vTargetPos = vTargetPos;
 	}
 
+	void SatonSymbolAnim(const _vec3& vTargetPos)
+	{
+		m_bSatonSymbolAnim = true;
+		m_vTargetPos = vTargetPos;
+	}
+
 	// controller 조종 함수
 	_vec3 Get_TargetPos() { return m_vTargetPos; }
 	void WalkToTarget(const _vec3& vTargetPos) { m_vTargetPos = vTargetPos; }
+
+
 	//m_bMove = true;
 private:
 	CStatonState m_eState = STATE_END;
@@ -63,6 +72,7 @@ private:
 		m_bFirstHammerAttack = false;
 		m_bSatonGrap = false;
 		m_bSatonBird = false;
+		m_bSatonSymbolAnim = false;
 	}
 
 	// true : PlayAnimationOnce 사용 가능 상태(동작 애니메이션 실행 가능), false: 다른 애니메이션 실행중
@@ -73,7 +83,7 @@ private:
 	_bool m_bFirstHammerAttack = false; // controller 입력
 	_bool m_bSatonGrap = false;
 	_bool m_bSatonBird = false;
-
+	_bool m_bSatonSymbolAnim = false;
 	_float m_fTime;
 	_float m_fCurTime;
 	// _bool m_bHammerReady = false;

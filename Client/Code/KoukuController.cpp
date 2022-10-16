@@ -2,6 +2,7 @@
 #include "KoukuController.h"
 
 #include "Kouku.h"
+#include "StatComponent.h"
 
 
 CKoukuController::CKoukuController()
@@ -62,10 +63,28 @@ _int CKoukuController::Update_Component(const _float& fTimeDelta)
 		_float fDist = D3DXVec3Length(&vDiff);
 	}
 
+	CStatComponent* pkouku = Engine::Get_Component<CStatComponent>(LAYER_ENEMY, L"Kouku", L"Proto_StatCom", ID_DYNAMIC);
+	
+	const _int koukuMaxHP = pkouku->GetMaxHP();
+	const _int koukuHP = pkouku->GetHP();
+
+	if(koukuHP <= koukuMaxHP / 2 && !m_bIsSymbolGimmick)
+	{
+		pKouku->KoukuSymbol(vTargetPos);
+		m_strState = "KoukuSymbol_On";
+		m_bIsSymbolGimmick = true;
+	}
+	//
+	// if (pKouku->Check_SymbolGimmick())
+	// {
+	// 	pKouku->KoukuSymbol(vTargetPos);
+	// }
+
 	if (m_fCurDoubleHammerCoolTime >= m_fDoubleHammerCoolTime && fTargetDist <= m_fDoubleHammerDist)
 	{
 		m_fCurDoubleHammerCoolTime = 0.f;
 		pKouku->DoubleHammer(vTargetPos);
+		m_strState = "DoubleHammer_On";
 		return 0;
 	}
 
@@ -73,6 +92,7 @@ _int CKoukuController::Update_Component(const _float& fTimeDelta)
 	{
 		m_fBasicAttackCoolTime = 0.f;
 		pKouku->BasicAttack(vTargetPos);
+		m_strState = "BasicAttack_On";
 		return 0;
 	}
 
@@ -80,10 +100,27 @@ _int CKoukuController::Update_Component(const _float& fTimeDelta)
 	{
 		m_fCurHorrorAttackCoolTime = 0.f;
 		pKouku->HorrorAttack(vTargetPos);
+		m_strState = "HorrorAttack_On";
 		return 0;
 	}
 
 	pKouku->WalkToTarget(vTargetPos);
+
+	// IM_BEGIN("Kouku_ControlloerData");
+	//
+	// ImGui::Text("CurDoubleHammerCoolTime : %f,DoubleHammerCoolTime : %f", m_fCurDoubleHammerCoolTime, m_fDoubleHammerCoolTime);
+	// // ImGui::Text("m_bIsSymbolGimmick", m_bIsSymbolGimmick);
+	// // ImGui::Text("%s, ", m_strState.c_str());
+	// // ImGui::Text("%d", m_pStat->GetHP());
+	// // ImGui::Text("%d", m_pStat->GetHP());
+	// // ImGui::Text("%d", m_pStat->GetHP());
+	// // ImGui::Text("%d", m_pStat->GetHP());
+	// // ImGui::Text("%d", m_pStat->GetHP());
+	//
+	// ImGui::Separator();
+	//
+	// IM_END;
+
 
 	return 0;
 }

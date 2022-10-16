@@ -60,24 +60,26 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 	// 		m_fCurDamagedTime += fTimeDelta;
 	// }
 
-	_vec3& vPos = m_pOwnerTrans->m_vInfo[INFO_POS];
-	if (CGameUtilMgr::Vec3Cmp(m_vKnockBackVelocity, CGameUtilMgr::s_vZero))
+	if (!m_bIsSaton)
 	{
-		vPos.y = m_pCubeMap->GetHeight(vPos.x, vPos.z);
-	}
-	else
-	{
-		// ณหน้ ป๓ลย
-		vPos += m_vKnockBackVelocity * fTimeDelta;
-		m_vKnockBackVelocity.y -= 120.f * fTimeDelta;
-
-		if (vPos.y < m_pCubeMap->GetHeight(vPos.x, vPos.z) || m_bKnockback == false)
+		_vec3& vPos = m_pOwnerTrans->m_vInfo[INFO_POS];
+		if (CGameUtilMgr::Vec3Cmp(m_vKnockBackVelocity, CGameUtilMgr::s_vZero))
 		{
-			m_vKnockBackVelocity = CGameUtilMgr::s_vZero;
+			vPos.y = m_pCubeMap->GetHeight(vPos.x, vPos.z);
 		}
-		
-	}
+		else
+		{
+			// ณหน้ ป๓ลย
+			vPos += m_vKnockBackVelocity * fTimeDelta;
+			m_vKnockBackVelocity.y -= 120.f * fTimeDelta;
 
+			if (vPos.y < m_pCubeMap->GetHeight(vPos.x, vPos.z) || m_bKnockback == false)
+			{
+				m_vKnockBackVelocity = CGameUtilMgr::s_vZero;
+			}
+
+		}
+	}
 	return 0;
 }
 

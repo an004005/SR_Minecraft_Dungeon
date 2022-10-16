@@ -383,7 +383,8 @@ private:
 enum HealCircleType
 {
 	HEAL,
-	BLUE_CIRCLE
+	BLUE_CIRCLE,
+	RED_CIRCLE
 };
 
 class CHealCircle : public CGameObject

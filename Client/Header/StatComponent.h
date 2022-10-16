@@ -40,6 +40,8 @@ public:
 	_bool IsDamaged() const { return m_bDamaged; }
 	_bool IsSatonSybol() const { return m_bSatonSymbol; }
 
+	void IsSaton() { m_bIsSaton = !m_bIsSaton; }
+
 	void Revive();
 
 	// cur hp, max hp, damage
@@ -77,6 +79,8 @@ private:
 	_bool m_bSatonSymbol;
 	_float m_fSatonSymbolTime = 6.0f;
 	_float m_fCurSatonSymbolTime = 6.f;
+
+	_bool m_bIsSaton = false;
 
 };
 
