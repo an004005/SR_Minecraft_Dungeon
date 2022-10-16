@@ -199,12 +199,12 @@ void CSword::Collision()
 			if (m_iAttackCnt == 0) eDT = DT_KNOCK_BACK;
 			if (monster->CheckCC()) eDT = DT_END;
 			monster->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(m_iDamage, vPos, this, eDT);
+				->TakeDamage(m_iDamage, vPos, this, eDT, m_bCritical);
 		}
 	}
 
 	if (m_pRune)
-		m_pRune->Use();
+		m_pRune->Collision();
 
 	DEBUG_SPHERE(vAttackPos, 2.f, 1.f);
 }

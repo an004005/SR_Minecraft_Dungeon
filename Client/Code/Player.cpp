@@ -38,10 +38,11 @@ CPlayer::~CPlayer()
 {
 }
 
-HRESULT CPlayer::Ready_Object()
+HRESULT CPlayer::Ready_Object(const wstring& wstrPath)
 {
 	CSkeletalCube::Ready_Object();
-
+	if (wstrPath.empty() == false)
+		LoadSkeletal(wstrPath);
 
 	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 	m_pCurAnim = m_pIdleAnim;
@@ -266,7 +267,7 @@ void CPlayer::PlayerSpawn()
 }
 
 
-void CPlayer::SpawnArrow(_uint iDamage, PlayerArrowType eType)
+void CPlayer::SpawnArrow(_uint iDamage, PlayerArrowType eType, _bool bCritical, ArrowType eArrowType)
 {
 	const _vec3 vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + _vec3{0.f, 1.3f, 0.f};
 	_vec3 vLookAt;
@@ -277,13 +278,29 @@ void CPlayer::SpawnArrow(_uint iDamage, PlayerArrowType eType)
 	{
 	case PlayerArrowType::NORMAL:
 		CSoundMgr::GetInstance()->PlaySound(L"sfx_item_arrow_fire.ogg", vPos);
-		CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", (_float)iDamage, vPos, vLookAt);
-		break;
-	case PlayerArrowType::FIREWORK:
-		CSoundMgr::GetInstance()->PlaySound(L"_sfx__fireworks_fire_1.ogg", vPos);
-		CBulletFactory::Create<CGameObject>("PlayerFireWorkArrow", L"PlayerFireWorkArrow", 50.f, vPos, vLookAt);
+		CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 
+		{_float(iDamage), bCritical, COLL_PLAYER_BULLET, eArrowType},
+			vPos, vLookAt);
 		break;
 	case PlayerArrowType::MULTISHOT:
+		{
+			CSoundMgr::GetInstance()->PlaySound(L"sfx_item_arrow_fire.ogg", vPos);
+
+			_matrix matRot, matRotReverse;
+			D3DXMatrixRotationY(&matRotReverse, D3DXToRadian(-15.f));
+			D3DXMatrixRotationY(&matRot, D3DXToRadian(5.f));
+
+			_vec3 vLook = vLookAt - vPos;
+			D3DXVec3TransformNormal(&vLook, &vLook, &matRotReverse);
+
+			for (int i = 0; i < 5; ++i)
+			{
+				D3DXVec3TransformNormal(&vLook, &vLook, &matRot);
+				CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 
+				{_float(iDamage), bCritical, COLL_PLAYER_BULLET, eArrowType},
+					vPos, vLook + vPos);
+			}
+		}
 		break;
 	case PlayerArrowType::LASER:
 		m_bLaser = true;
@@ -543,14 +560,14 @@ CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
 {
 	CPlayer* pInstance = new CPlayer(pGraphicDev);
 
-	if (FAILED(pInstance->Ready_Object()))
+	if (FAILED(pInstance->Ready_Object(wstrPath)))
 	{
 		Safe_Release(pInstance);
 		return nullptr;
 	}
 
-	if (!wstrPath.empty())
-		pInstance->LoadSkeletal(wstrPath);
+	// if (!wstrPath.empty())
+	// 	pInstance->LoadSkeletal(wstrPath);
 
 	return pInstance;
 }
@@ -636,7 +653,7 @@ void CPlayer::WeaponChange(ITEMTYPE eIT)
 {
 	if (m_pWeaponPart == nullptr)
 	{
-		auto& itr = m_mapParts.find("weapon_r");
+		const auto itr = m_mapParts.find("weapon_r");
 		if (itr == m_mapParts.end())
 			return;
 		m_pWeaponPart = itr->second;

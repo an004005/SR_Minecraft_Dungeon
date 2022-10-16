@@ -55,8 +55,8 @@ _int CBirdsBrown::Update_Object(const _float & fTimeDelta)
 	{
 		if (CStaticCamera* pStatic = dynamic_cast<CStaticCamera*>(e.second))
 		{
-			m_pTransCom->m_vAngle.y = pStatic->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)
-				->m_vAngle.y;
+			const _vec3& vAngle = pStatic->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vAngle;
+			m_pTransCom->m_vAngle.y = vAngle.y;
 			if (m_bReverse) m_pTransCom->m_vAngle.y += D3DXToRadian(180.f);
 		}
 	}

@@ -5,6 +5,7 @@
 #include "TerrainCubeMap.h"
 #include "Rune.h"
 #include "Inventory.h"
+#include "PowerRune.h"
 
 CCrossbow::CCrossbow(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CWeapon(pGraphicDev)
@@ -116,23 +117,26 @@ _int CCrossbow::Attack()
 
 	pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK1]);
 
-	if (m_bFireWork) // legacy
-	{
-		m_pOwner->SpawnArrow(m_iDamage, PlayerArrowType::FIREWORK);
-		m_bFireWork = false;
-		return m_iAttackCnt;
-	}
 
-	if (m_pRune) // rune
+	if (m_pRune == nullptr || dynamic_cast<CPowerRune*>(m_pRune))
+	{
+		if (m_bFireWork)
+		{
+			m_pOwner->SpawnArrow(50, PlayerArrowType::NORMAL, m_bCritical, ARROW_FIREWORK);
+			m_bFireWork = false;
+		}
+		else
+		{
+			m_pOwner->SpawnArrow(m_iDamage, PlayerArrowType::NORMAL, m_bCritical);
+		}
+	}
+	else
 	{
 		m_pOwner->SpawnArrow(m_iDamage, PlayerArrowType::LASER);
 		m_pRune->Use();
 	}
-	else // normal attack
-	{
-		m_pOwner->SpawnArrow(m_iDamage, PlayerArrowType::NORMAL);
-	}
 
+	m_bFireWork = false;
 	return m_iAttackCnt;
 }
 

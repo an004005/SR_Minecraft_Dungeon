@@ -151,7 +151,7 @@ void CAxe::Collision()
 			if (m_iAttackCnt == 0) eDT = DT_KNOCK_BACK;
 			if (monster->CheckCC()) eDT = DT_END;
 			monster->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(m_iDamage, vPos, this, eDT);
+				->TakeDamage(m_iDamage, vPos, this, eDT, m_bCritical);
 		}
 	}
 

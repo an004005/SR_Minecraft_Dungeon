@@ -16,6 +16,9 @@
 #include "InventoryUI.h"
 #include "PowerRune.h"
 #include "StunRune.h"
+#include "MultiShotRune.h"
+#include "LightningRune.h"
+
 #include "LaserShotRune.h"
 CInventory::CInventory(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CGameObject(pGraphicDev)

@@ -4,7 +4,6 @@
 enum class PlayerArrowType
 {
 	NORMAL,
-	FIREWORK,
 	MULTISHOT,
 	LASER
 };
@@ -55,7 +54,7 @@ private:
 	using iBlockIndex = array<array<_int, VZ>, VX>;
 
 public:
-	virtual HRESULT Ready_Object() override;
+	virtual HRESULT Ready_Object(const wstring& wstrPath);
 	virtual _int Update_Object(const _float& fTimeDelta) override;
 	virtual void LateUpdate_Object() override;
 	virtual void Render_Object() override;
@@ -69,7 +68,7 @@ public:
 	_bool IsVisible() const { return m_bVisible; }
 	void PlayerSpawn();
 
-	void SpawnArrow(_uint iDamage, PlayerArrowType eType);
+	void SpawnArrow(_uint iDamage, PlayerArrowType eType, _bool bCritical = false, ArrowType eArrowType = ARROW_NORMAL);
 	_bool PickTargetEnemy(OUT _vec3& vLookAt);
 
 	// controller 입력함수

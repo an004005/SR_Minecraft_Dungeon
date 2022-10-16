@@ -28,12 +28,15 @@ public:
 	_int GetWeaponType() { return m_eType; }
 	void SetDamage(_uint iDamage) { m_iDamage = iDamage;}
 	_uint GetDamage() const { return m_iDamage; }
+	void SetCritical(_bool bCritical) {m_bCritical = bCritical;}
+
 	virtual void Free() override;
 
 protected:
 	CRune* m_pRune;
 	_int m_eType = WEAPON_END;
 	_uint m_iDamage = 0;
+	_bool m_bCritical = false;
 
 	CInventory* m_pInventory;
 };
