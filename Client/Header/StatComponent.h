@@ -76,9 +76,9 @@ private:
 	_float m_fCurDamagedTime = 0.5;
 
 	// Saton Symbol
-	_bool m_bSatonSymbol;
-	_float m_fSatonSymbolTime = 6.0f;
-	_float m_fCurSatonSymbolTime = 6.f;
+	_bool m_bSatonSymbol = false;
+	_float m_fSatonSymbolTime = 0.3f;
+	_float m_fCurSatonSymbolTime = 0.3f;
 
 	_bool m_bIsSaton = false;
 

@@ -130,6 +130,9 @@ protected:
 	_bool m_bDelay = false;
 	_float m_bBlockIndex[VTXCNTX][VTXCNTZ];
 
+
+	string m_strStatus;
+
 	_bool m_bVisible = false;
 	_float m_bDeadTime = 0.f;
 };

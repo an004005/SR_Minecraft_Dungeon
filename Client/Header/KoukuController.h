@@ -24,11 +24,13 @@ private:
 	_float m_fCurDoubleHammerCoolTime = 0.f;
 	_float m_fCurHorrorAttackCoolTime = 0.f;
 	_float m_fCurBasicAttackCoolTime = 0.f;
+	_float m_fCurSymbolGimmickCoolTime = 0.f;
 	_float m_fCurTargetingCoolTime = 3.f;
 
 	_float m_fBasicAttackCoolTime = 5.f;
 	_float m_fDoubleHammerCoolTime = 15.f;
 	_float m_fHorrorAttackCoolTime = 25.f;
+	_float m_fSymbolGimmickCoolTime = 6.2f;
 	_float m_fTargetingCoolTime = 3.f; 
 
 	_float m_fDoubleHammerDist = 8.f;
@@ -36,7 +38,7 @@ private:
 	_float m_fBasicAttackDist = 5.f;
 
 	_bool m_bIsSymbolGimmick = false;
-
+	_bool m_bIsFirstSymbolGimmick = false;
 	string m_strState;
 	_float m_fDist = 5.f;
 };

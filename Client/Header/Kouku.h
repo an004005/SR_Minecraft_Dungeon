@@ -57,11 +57,12 @@ public:
 	void KoukuSymbol(const _vec3& vTargetPos)
 	{
 		m_bKoukuSymbol = true;
-		m_bIsSymbolGimmick = true;
 		m_vTargetPos = vTargetPos;
 	}
 
-	void KoukuSymbol(_bool _trueison) { m_bIsSymbolGimmick = _trueison; }
+	void Symbol_Attack(void);
+
+	void KoukuSymbol_OnOff(_bool _trueison) { m_bIsSymbolGimmick = _trueison; }
 
 	_bool Check_SymbolGimmick(void) { return m_bIsSymbolGimmick; }
 
@@ -92,10 +93,14 @@ private:
 	_bool m_bCountable = false; // contriller ют╥б
 	_bool m_bKoukuSymbol = false;
 	_bool m_bIsSymbolGimmick = false;
+	_bool m_bIsSymbolAttackCycle = false;
+
 
 	_bool m_bMove = false;
 	_float m_fTime;
 	_float m_fCurTime;
+
+	
 	_bool m_bHammerReady = false;
 
 };

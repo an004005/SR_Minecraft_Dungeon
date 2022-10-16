@@ -90,6 +90,17 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 	CSkeletalCube::Update_Object(fTimeDelta);
 	DEBUG_SPHERE(m_pColl->GetCollPos(), m_pColl->GetRadius(), 0.1f);
 
+	if (m_pStat->IsSatonSybol())
+		m_strStatus = "Saton_Symboled";
+	else
+		m_strStatus = "nothing";
+
+
+	IM_BEGIN("player");
+	ImGui::Text("%s", m_strStatus.c_str());
+	// ImGui::Text("%f, %f, %f", m_pColl->GetCollPos().x, m_pColl->GetCollPos(). m_pColl->GetCollPos().z);
+	IM_END;
+
 	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
 		m_bCanPlayAnim = true;
 

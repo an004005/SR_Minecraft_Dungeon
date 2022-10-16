@@ -1868,8 +1868,8 @@ _int CHealCircle::Update_Object(const _float& fTimeDelta)
 		pPlayerTransform->Get_Info(INFO_POS, &pPos);
 
 		// m_pTransCom->m_vAngle.y += D3DXToRadian(CGameUtilMgr::GetRandomFloat(10.f,60.f)) * fTimeDelta * CGameUtilMgr::GetRandomFloat(3.f, 10.f);
-		m_pTransCom->m_vAngle.z += D3DXToRadian(CGameUtilMgr::GetRandomFloat(10.f, 90.f)) * fTimeDelta * CGameUtilMgr::GetRandomFloat(3.f, 20.f);
-		m_pTransCom->m_vAngle.x += D3DXToRadian(CGameUtilMgr::GetRandomFloat(30.f, 60.f)) * fTimeDelta * CGameUtilMgr::GetRandomFloat(3.f, 10.f);
+		m_pTransCom->m_vAngle.z += D3DXToRadian(CGameUtilMgr::GetRandomFloat(-10.f, 90.f)) * fTimeDelta * CGameUtilMgr::GetRandomFloat(3.f, 20.f);
+		m_pTransCom->m_vAngle.x += D3DXToRadian(CGameUtilMgr::GetRandomFloat(-30.f, 60.f)) * fTimeDelta * CGameUtilMgr::GetRandomFloat(3.f, 10.f);
 
 		// m_pTransCom->m_vInfo[INFO_POS].y += fTimeDelta * 10.f;
 		//
@@ -1886,8 +1886,8 @@ _int CHealCircle::Update_Object(const _float& fTimeDelta)
 		pPlayerTransform->Get_Info(INFO_POS, &pPos);
 
 		// m_pTransCom->m_vAngle.y += D3DXToRadian(CGameUtilMgr::GetRandomFloat(10.f, 60.f)) * fTimeDelta * CGameUtilMgr::GetRandomFloat(3.f, 10.f);
-		m_pTransCom->m_vAngle.z += D3DXToRadian(CGameUtilMgr::GetRandomFloat(10.f, 90.f)) * fTimeDelta * CGameUtilMgr::GetRandomFloat(1.f, 20.f);
-		m_pTransCom->m_vAngle.x += D3DXToRadian(CGameUtilMgr::GetRandomFloat(30.f, 60.f)) * fTimeDelta * CGameUtilMgr::GetRandomFloat(3.f, 10.f);
+		m_pTransCom->m_vAngle.z += D3DXToRadian(CGameUtilMgr::GetRandomFloat(-10.f, 90.f)) * fTimeDelta * CGameUtilMgr::GetRandomFloat(1.f, 20.f);
+		m_pTransCom->m_vAngle.x += D3DXToRadian(CGameUtilMgr::GetRandomFloat(-30.f, 60.f)) * fTimeDelta * CGameUtilMgr::GetRandomFloat(3.f, 10.f);
 
 
 		// m_pTransCom->m_vInfo[INFO_POS].y += fTimeDelta * 10.f;

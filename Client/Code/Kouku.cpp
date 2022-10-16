@@ -72,7 +72,7 @@ void CKouku::AnimationEvent(const string& strEvent)
 	}
 	else if (strEvent == "SymbolStart")
 	{
-		for (int i = 0; i < 60; i++)
+		for (int i = 0; i < 40; i++)
 		{
 			CEffectFactory::Create<CHealCircle>("Blue_Circle", L"Blue_Circle", _vec3(51.5f, 25.f, 42.5f));
 			CEffectFactory::Create<CHealCircle>("Blue_Circle", L"Blue_Circle", _vec3(57.5f, 25.f, 38.5f));
@@ -81,19 +81,16 @@ void CKouku::AnimationEvent(const string& strEvent)
 		}
 		Get_GameObject<CMoonParticle>(LAYER_EFFECT, L"MoonParticle")->Add_Particle(_vec3(51.5f, 25.f, 42.5f), 1.f, BLUE, 12, 6.2f);
 		Get_GameObject<CMoonParticle>(LAYER_EFFECT, L"MoonParticle")->Add_Particle(_vec3(57.5f, 25.f, 38.5f), 1.f, BLUE, 12, 6.2f);
-		Get_GameObject<CMoonParticle>(LAYER_EFFECT, L"MoonParticle")->Add_Particle(_vec3(67.5f, 25.f, 38.5f), 1.f, RED, 30, 6.2f);
+		Get_GameObject<CMoonParticle>(LAYER_EFFECT, L"MoonParticle")->Add_Particle(_vec3(67.5f, 25.f, 38.5f), 1.f, RED, 12, 6.2f);
 		Get_GameObject<CMoonParticle>(LAYER_EFFECT, L"MoonParticle")->Add_Particle(_vec3(73.5f, 25.f, 42.5f), 1.f, BLUE, 12, 6.2f);
 
 		m_pRootPart->pTrans->m_vInfo[INFO_POS] = _vec3(62.5f, 0.f, 40.5f);
 	}
-	else if (strEvent == "BasicAttack")
+	else if (strEvent == "SymbolAttack")
 	{
-		m_bBasicAttack = true;
+		m_bIsSymbolAttackCycle = true;
 	}
-	else if (strEvent == "BasicAttack")
-	{
-		m_bBasicAttack = true;
-	}
+
 	else if (strEvent == "AnimStopped")
 	{
 		m_bDelete = true;
@@ -160,25 +157,7 @@ _int CKouku::Update_Object(const _float& fTimeDelta)
 			m_fCurTime = 0.f;
 	}
 
-	// if (m_pStat->GetHP() <= m_pStat->GetMaxHP() / 2 && !m_bIsSymbolGimmick)
-	// {
-	// 	m_bIsSymbolGimmick = !m_bIsSymbolGimmick;
-	// }
-
-	// IM_BEGIN("Kouku_ObjectData");
-	//
-	// ImGui::Text("%d", m_pStat->GetHP());
-	// ImGui::Text(m_strState.c_str());
-	// // ImGui::Text("%s, ", m_strState.c_str());
-	// // ImGui::Text("%d", m_pStat->GetHP());
-	// // ImGui::Text("%d", m_pStat->GetHP());
-	// // ImGui::Text("%d", m_pStat->GetHP());
-	// // ImGui::Text("%d", m_pStat->GetHP());
-	// // ImGui::Text("%d", m_pStat->GetHP());
-	//
-	// ImGui::Separator();
-	//
-	// IM_END;
+	
 
 	return OBJ_NOEVENT;
 }
@@ -187,23 +166,97 @@ void CKouku::LateUpdate_Object()
 {
 	CMonster::LateUpdate_Object();
 
-	// if (m_bChopFire)
-	// {
-	// 	set<CGameObject*> setObj;
-	// 	_vec3 vAttackPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + (m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 2.f);
-	// 	Engine::GetOverlappedObject(setObj, vAttackPos, 6.f);
-	//
-	// 	for (auto& obj : setObj)
-	// 	{
-	// 		if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
-	// 			pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-	// 			->TakeDamage(1, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_KNOCK_BACK);
-	// 	}
-	// 	DEBUG_SPHERE(vAttackPos, 6.f, 1.f);
-	// 	IM_LOG("Fire");
-	//
-	// 	m_bChopFire = false;
-	// }
+	// CEffectFactory::Create<CHealCircle>("Blue_Circle", L"Blue_Circle", _vec3(51.5f, 25.f, 42.5f));
+	// CEffectFactory::Create<CHealCircle>("Blue_Circle", L"Blue_Circle", _vec3(57.5f, 25.f, 38.5f));
+	// CEffectFactory::Create<CHealCircle>("Red_Circle", L"Red_Circle", _vec3(67.5f, 25.f, 38.5f));
+	// CEffectFactory::Create<CHealCircle>("Blue_Circle", L"Blue_Circle", _vec3(73.5f, 25.f, 42.5f));
+
+
+	if (m_bIsSymbolGimmick)
+	{
+		set<CGameObject*> setPlayer_1;
+		_vec3 Left_BludCircle_1 = _vec3(51.5f, 25.f, 42.5f);
+		Engine::GetOverlappedObject(setPlayer_1, Left_BludCircle_1, 2.f);
+
+		for (auto& obj : setPlayer_1)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+				->TakeDamage(0, _vec3(51.5f, 25.f, 42.5f), this, DT_SATON_SYMBOL);
+		}
+
+		DEBUG_SPHERE(Left_BludCircle_1, 10.f, 6.2f);
+		IM_LOG("Create Left_Blue_1 Circle");
+
+
+		set<CGameObject*> setPlayer_2;
+		_vec3 Left_BludCircle_2 = _vec3(57.5f, 25.f, 38.5f);
+		Engine::GetOverlappedObject(setPlayer_2, Left_BludCircle_2, 2.f);
+
+		for (auto& obj : setPlayer_2)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+				->TakeDamage(0, _vec3(57.5f, 25.f, 38.5f), this, DT_SATON_SYMBOL);
+		}
+
+		DEBUG_SPHERE(Left_BludCircle_2, 10.f, 6.2f);
+		IM_LOG("Create Left_Blue_2 Circle");
+
+
+		set<CGameObject*> setPlayer_3;
+		_vec3 Right_RedCircle_3 = _vec3(67.5f, 25.f, 38.5f);
+		Engine::GetOverlappedObject(setPlayer_3, Right_RedCircle_3, 2.f);
+
+		for (auto& obj : setPlayer_3)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+				->TakeDamage(0, _vec3(67.5f, 25.f, 38.5f), this, DT_SATON_SYMBOL);
+		}
+
+		DEBUG_SPHERE(Right_RedCircle_3, 10.f, 6.2f);
+		IM_LOG("Create Right_Red_3 Circle");
+
+		set<CGameObject*> setPlayer_4;
+		_vec3 Left_BlueCircle_4 = _vec3(73.5f, 25.f, 42.5f);
+		Engine::GetOverlappedObject(setPlayer_4, Left_BlueCircle_4, 2.f);
+
+		for (auto& obj : setPlayer_4)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+				->TakeDamage(0, _vec3(73.5f, 25.f, 42.5f), this, DT_SATON_SYMBOL);
+		}
+
+		DEBUG_SPHERE(Left_BlueCircle_4, 10.f, 6.2f);
+		IM_LOG("Create Right_Blue_4 Circle");
+
+
+		if (m_bIsSymbolAttackCycle)
+		{
+			set<CGameObject*> setPlayer;
+			_vec3 KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+
+			Engine::GetOverlappedObject(setPlayer, KoukuPos, 100.f);
+
+			for (auto& obj : setPlayer)
+			{
+				if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+				{
+					CStatComponent* PlayerStatCom = pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC);
+
+					if (!PlayerStatCom->IsSatonSybol())
+					{
+						PlayerStatCom->TakeDamage(40, pPlayer->GetInfo(INFO_POS), this, DT_END);
+					}
+				}
+			}
+			m_bIsSymbolAttackCycle = false;
+		}
+	}
+
+	
 }
 
 void CKouku::Free()
@@ -310,4 +363,26 @@ void CKouku::StateChange()
 	// 	m_pCurAnim = &m_arrAnim[IDLE];
 	// 	return;
 	// }
+}
+
+void CKouku::Symbol_Attack()
+{
+	set<CGameObject*> setPlayer;
+	_vec3 KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+
+	Engine::GetOverlappedObject(setPlayer, KoukuPos, 10.f);
+
+	for (auto& obj : setPlayer)
+	{
+
+		if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+		{
+			CStatComponent* PlayerStatCom = pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC);
+
+			if (!PlayerStatCom->IsSatonSybol())
+			{
+				PlayerStatCom->TakeDamage(20, pPlayer->GetInfo(INFO_POS), this, DT_SATON_SYMBOL);
+			}
+		}
+	}
 }

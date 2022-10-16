@@ -23,6 +23,11 @@ _int CKoukuController::Update_Component(const _float& fTimeDelta)
 		m_fCurDoubleHammerCoolTime += fTimeDelta;
 		m_fCurHorrorAttackCoolTime += fTimeDelta;
 		m_fCurBasicAttackCoolTime += fTimeDelta;
+
+		if (m_bIsSymbolGimmick)
+		{
+			m_fCurSymbolGimmickCoolTime += fTimeDelta;
+		}
 	}
 	CKouku* pKouku = dynamic_cast<CKouku*>(m_pOwner);
 	NULL_CHECK_RETURN(pKouku, 0);
@@ -68,12 +73,24 @@ _int CKoukuController::Update_Component(const _float& fTimeDelta)
 	const _int koukuMaxHP = pkouku->GetMaxHP();
 	const _int koukuHP = pkouku->GetHP();
 
-	if(koukuHP <= koukuMaxHP / 2 && !m_bIsSymbolGimmick)
+	if(koukuHP <= koukuMaxHP / 2 && !m_bIsFirstSymbolGimmick)
 	{
 		pKouku->KoukuSymbol(vTargetPos);
 		m_strState = "KoukuSymbol_On";
+		pKouku->KoukuSymbol_OnOff(true);
+		m_bIsFirstSymbolGimmick = true;
 		m_bIsSymbolGimmick = true;
 	}
+	// ½Éº¼ ±â¹Ífalse·Î µ¹·ÁÁà¾ßÇÔ
+
+	if (m_fCurSymbolGimmickCoolTime >= m_fSymbolGimmickCoolTime && m_bIsSymbolGimmick)
+	{
+		m_fCurSymbolGimmickCoolTime = 0.f;
+		pKouku->KoukuSymbol_OnOff(false);
+		m_bIsSymbolGimmick = false;
+		return 0;
+	}
+
 	//
 	// if (pKouku->Check_SymbolGimmick())
 	// {

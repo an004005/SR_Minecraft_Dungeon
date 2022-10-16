@@ -51,14 +51,16 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 			m_fCurDamagedTime += fTimeDelta;
 	}
 
+
+
 	// 세이튼 장판 기믹 때만 해당되게 구현하기 
-	// if (!m_bSatonSymbol)
-	// {
-	// 	if (m_fDamagedTime < m_fCurDamagedTime)
-	// 		m_bDamaged = false;
-	// 	else
-	// 		m_fCurDamagedTime += fTimeDelta;
-	// }
+	if (m_bSatonSymbol)
+	{
+		if (m_fSatonSymbolTime < m_fCurSatonSymbolTime)
+			m_bSatonSymbol = false;
+		else
+			m_fCurSatonSymbolTime += fTimeDelta;
+	}
 
 	if (!m_bIsSaton)
 	{
