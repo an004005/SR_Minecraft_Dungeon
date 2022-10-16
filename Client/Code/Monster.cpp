@@ -31,7 +31,7 @@ HRESULT CMonster::Ready_Object()
 	m_pStat = Add_Component<CStatComponent>(L"Proto_StatCom", L"Proto_StatCom", ID_DYNAMIC);
 	m_pStat->SetMaxHP(100);
 	m_pStat->SetTransform(m_pRootPart->pTrans);
-
+	
 	return S_OK;
 }
 
@@ -40,7 +40,7 @@ _int CMonster::Update_Object(const _float& fTimeDelta)
 	CSkeletalCube::Update_Object(fTimeDelta);
 	DEBUG_SPHERE(m_pColl->GetCollPos(), m_pColl->GetRadius(), 0.1f);
 	// 테스트 코드
-	// _vec3 diff = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS] - m_pRootPart->pTrans->m_vInfo[INFO_POS];
+	// _vec3 diff = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS] - m_pRootPart->pTrans->m_vInfo[INFO_POS];
 	// D3DXVec3Normalize(&diff, &diff);
 	// m_pRootPart->pTrans->m_vInfo[INFO_POS] += diff * fTimeDelta * 2.f;
 

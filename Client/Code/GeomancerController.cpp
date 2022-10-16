@@ -9,7 +9,8 @@ CGeomancerController::CGeomancerController()
 
 CGeomancerController::CGeomancerController(const CGeomancerController& rhs)
 {
-	m_fCurWallCoolTime = 6.f;
+	m_fCurWallCoolTime = 4.f + CGameUtilMgr::GetRandomFloat(-1.f, 3.f);
+	m_fCurBombCoolTime = CGameUtilMgr::GetRandomFloat(0.f, 3.f);
 }
 
 CGeomancerController::~CGeomancerController()
@@ -30,7 +31,7 @@ _int CGeomancerController::Update_Component(const _float& fTimeDelta)
 	CGeomancer* pGeomancer = dynamic_cast<CGeomancer*>(m_pOwner);
 	NULL_CHECK_RETURN(pGeomancer, 0);
 
-	_vec3 vPos = pGeomancer->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+	_vec3 vPos = pGeomancer->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 	CPlayer* pTargetPlayer = nullptr;
 	_vec3 vTargetPos;
 	_float fTargetDist = 9999.f;
@@ -39,7 +40,7 @@ _int CGeomancerController::Update_Component(const _float& fTimeDelta)
 	{
 		if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(ele.second))
 		{
-			vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+			vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 			_vec3 vDiff = vPos - vTargetPos;
 			_float fDist = D3DXVec3Length(&vDiff);
 
@@ -82,7 +83,7 @@ _int CGeomancerController::Update_Component(const _float& fTimeDelta)
 	{
 		m_fCurBombCoolTime = 0.f;
 
-		const int iBombCnt = rand() % 4 + 1;
+		const int iBombCnt = rand() % 3 + 1;
 		for (int i = 0; i < iBombCnt; ++i)
 		{
 			_vec3 vRand = {_float(rand() % 50 - 25) * 0.1f, 0.f,  _float(rand() % 50 - 25) * 0.1f};

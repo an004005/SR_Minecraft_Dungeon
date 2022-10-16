@@ -11,6 +11,11 @@ class CTerrainRcTex;
 
 END
 
+typedef _int(*BlockIndex)[VTXCNTZ];
+
+template<int VX, int VZ>
+using BlockArray = array<array<_int, VZ>, VX>;
+
 struct MapCubeInfo
 {
 	_matrix matWorld;
@@ -26,7 +31,7 @@ struct MapCubeInfo
 class CTerrainCubeMap : public CGameObject
 {
 	friend class CImGuiMgr;
-public:
+private:
 	explicit CTerrainCubeMap(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual ~CTerrainCubeMap();
 
@@ -49,10 +54,9 @@ public:
 	void			     DeleteCube(int iToDel);
 	void				 AddTex(const MapCubeInfo& tInfo);
 	void			     DeleteTex(_vec3 PickPos);
-	
+	array<array<_int, VTXCNTZ>, VTXCNTX>		 GetBlockIndex() { return m_arrBlock; }
 
 private:
-
 	vector<MapCubeInfo> m_vecTotalCube;
 	vector<MapCubeInfo> m_vecLand;
 	vector<MapCubeInfo> m_vecCollision;
@@ -65,10 +69,10 @@ private:
 	CTexture* m_pCubeTextureCom = nullptr;
 	CTexture* m_pTextureCom = nullptr;
 
-public:
+private:
 	_float			m_fHeight[VTXCNTX][VTXCNTZ];
 	_bool			m_bRendState = false;
-
+	BlockArray<VTXCNTX, VTXCNTZ> m_arrBlock{};
 public:
 	static CTerrainCubeMap*		Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath = L"");
 

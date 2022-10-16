@@ -33,8 +33,11 @@ HRESULT CCreeper::Ready_Object()
 
 	m_pStat->SetMaxHP(100);
 
-	CController* pController = Add_Component<CCreeperController>(L"Proto_CreeperController", L"Proto_CreeperController",
-	                                                             ID_DYNAMIC);
+	m_pStat->SetHurtSound({
+		L"sfx_mob_creeperHurt-001.ogg",
+		L"sfx_mob_creeperHurt-002.ogg",
+		L"sfx_mob_creeperHurt-003.ogg"});
+	CController* pController = Add_Component<CCreeperController>(L"Proto_CreeperController", L"Proto_CreeperController", ID_DYNAMIC);
 	pController->SetOwner(this);
 
 	return S_OK;
@@ -53,6 +56,9 @@ void CCreeper::AnimationEvent(const string& strEvent)
 	else if (strEvent == "AnimStopped")
 	{
 		m_bDelete = true;
+	}
+	else if (strEvent == "Step")
+	{
 	}
 }
 
@@ -172,6 +178,8 @@ void CCreeper::StateChange()
 	if (m_pStat->IsStun())
 	{
 		m_eState = STUN;
+		m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
+		m_pCurAnim = &m_arrAnim[ANIM_IDLE];
 		m_bAttack = false;
 		m_bMove = false;
 		StopCurAnimation();

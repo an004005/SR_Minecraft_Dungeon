@@ -188,7 +188,38 @@ public:
 private:
 	_float m_fTime = 1.f;
 	_float m_fCurTime = 0.f;
+	_bool m_bDoOnce = true;
 };
+
+class CChainLightning : public CGameObject
+{
+public:
+	explicit CChainLightning(LPDIRECT3DDEVICE9 pGraphicDev);
+	virtual ~CChainLightning() override;
+
+public:
+	virtual HRESULT Ready_Object() override;
+	_int Update_Object(const _float& fTimeDelta) override;
+	void Render_Object() override;
+	void PreRender_Particle();
+	void PostRender_Particle();
+	void SetSpark();
+	void SetSparkPos(const _vec3& vBot, const _vec3& vTop);
+
+public:
+	static CChainLightning* Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	CRcShader*			m_pBufferCom = nullptr;
+	Engine::CTransform*			m_pTransCom = nullptr;
+	CTexture*			m_pTexture = nullptr;
+	void Free() override;
+
+private:
+	_float m_fTime = 1.f;
+	_float m_fCurTime = 0.f;
+	_float m_fOffset;
+	_bool m_bSpark = false;
+};
+
 
 enum CIRCLETYPE
 {
@@ -234,7 +265,9 @@ enum CLOUDTYPE
 	ROLL,
 	SHOCKPOWDER,
 	CREEPEREX,
-	DECAL
+	DECAL,
+	GOLEMCLOUD,
+	GOLEMWINDMILL
 };
 
 
@@ -345,6 +378,8 @@ public:
 	void LateUpdate_Object() override;
 	void PreRender_Particle();
 	void PostRender_Particle();
+	void SetPos(const _vec3& vPos);
+	void SetDead() {m_fCurTime = m_fTime; };
 
 public:
 	static CStun* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size);
@@ -493,6 +528,8 @@ public:
 	void LateUpdate_Object() override;
 	void PreRender_Particle();
 	void PostRender_Particle();
+	void SetTransform(_vec3 vPos) { m_pTransCom->m_vInfo[INFO_POS] = vPos; }
+	void IsDead() { m_bDead = true; }
 
 public:
 	static CGradation_Beam* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size);
@@ -506,6 +543,7 @@ private:
 	_float m_fCurTime;
 	_float m_fSpeed;
 	_vec3  m_vVelocity;
+	_bool  m_bDead = false;
 };
 
 class CLazer_Circle : public CGameObject

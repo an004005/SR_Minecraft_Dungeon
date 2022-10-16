@@ -92,7 +92,13 @@ public:
 	void LoadSkeletal(wstring wstrPath);
 	void SaveSkeletal(wstring wstrPath);
 
-	SkeletalPart* Get_SkeletalPart() { return m_pRootPart; }
+	SkeletalPart* Get_SkeletalPart(const string& strPartName)
+	{
+		const auto itr = m_mapParts.find(strPartName);
+		if (itr == m_mapParts.end())
+			return nullptr;
+		return itr->second;
+	}
 
 private:
 	virtual void SaveRecursive(HANDLE hFile, SkeletalPart* pPart);

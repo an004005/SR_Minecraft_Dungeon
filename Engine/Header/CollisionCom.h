@@ -46,6 +46,7 @@ public:
 	
 
 	void SetStop() { m_bStop = true; }
+	void SetStart() { m_bStop = false; }
 
 
 protected:

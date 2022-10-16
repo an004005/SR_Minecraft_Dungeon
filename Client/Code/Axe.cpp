@@ -1,16 +1,17 @@
 #include "stdafx.h"
 #include "..\Header\Axe.h"
 
-#include "AbstFactory.h"
 #include "SkeletalCube.h"
 #include "Player.h"
 #include "Monster.h"
-#include "Particle.h"
 #include "StatComponent.h"
 #include "TerrainCubeMap.h"
+#include "Rune.h"
 
-CAxe::CAxe(LPDIRECT3DDEVICE9 pGraphicDev): CEquipItem(pGraphicDev)
+CAxe::CAxe(LPDIRECT3DDEVICE9 pGraphicDev): CWeapon(pGraphicDev)
 {
+	m_eType = WEAPON_AXE;
+	m_iDamage = 50;
 }
 
 CAxe::~CAxe()
@@ -19,10 +20,12 @@ CAxe::~CAxe()
 
 HRESULT CAxe::Ready_Object()
 {
+	FAILED_CHECK_RETURN(CEquipItem::Ready_Object(), E_FAIL);
+
 	m_pTransCom = Add_Component<Engine::CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 	m_pBufferCom = Add_Component<CVoxelTex>(L"Proto_VoxelTex_Axe", L"Proto_VoxelTex_Axe", ID_STATIC);
 	m_pTextureCom = Add_Component<CTexture>(L"Proto_WeaponTexture", L"Proto_WeaponTexture", ID_STATIC);
-	
+
 	m_arrAnim[ANIM_IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_idle.anim");
 	m_arrAnim[ANIM_IDLE].bLoop = true;
 	m_arrAnim[ANIM_WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_walk.anim");
@@ -33,8 +36,11 @@ HRESULT CAxe::Ready_Object()
 	m_arrAnim[ANIM_RANGE_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/crossbow_attack_start.anim");
 	m_arrAnim[ANIM_LEGACY1] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/shock_powder.anim");
 	m_arrAnim[ANIM_LEGACY2] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/shock_powder.anim");
+	m_arrAnim[ANIM_DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/dead.anim");
 
 	m_eItemType = IT_MELEE;
+	m_iUItexNum = 7;
+
 	return S_OK;
 }
 
@@ -79,18 +85,19 @@ CAxe* CAxe::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 
 _int CAxe::Attack()
 {
-	CPlayer* pPlayer = Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");
+	CPlayer* pPlayer = m_pOwner;
 	if (pPlayer == nullptr)
 		return 0;
 
 	if (m_iAttackCnt == 0)
 	{
 		pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK1]);
+		CSoundMgr::GetInstance()->PlaySound(L"sfx_item_axeSwingSwong-001.ogg", pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS]);
 	}
 	else if (m_iAttackCnt == 1)
 	{
 		pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK2]);
-		CSoundMgr::GetInstance()->PlaySound(L"sfx_Axe_2.ogg", pPlayer->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS]);
+		CSoundMgr::GetInstance()->PlaySound(L"sfx_Axe_2.ogg", pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS]);
 	}
 	m_iAttackCnt = (m_iAttackCnt + 1) % 2;
 
@@ -108,7 +115,7 @@ void CAxe::Collision()
 {
 	set<CGameObject*> objSet;
 
-	CPlayer* pPlayer =Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");
+	CPlayer* pPlayer = m_pOwner;
 	_vec3 vPos = pPlayer->GetInfo(INFO_POS);
 	_vec3 vLook = pPlayer->GetInfo(INFO_LOOK);
 
@@ -125,9 +132,12 @@ void CAxe::Collision()
 			if (m_iAttackCnt == 0) eDT = DT_KNOCK_BACK;
 			if (monster->CheckCC()) eDT = DT_END;
 			monster->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(30, vPos, this, eDT);
+				->TakeDamage(m_iDamage, vPos, this, eDT, m_bCritical);
 		}
 	}
+
+	if (m_pRune)
+		m_pRune->Collision();
 
 	DEBUG_SPHERE(vAttackPos, 3.f, 1.f);
 }

@@ -114,7 +114,7 @@ HRESULT CTerrainWater::Ready_Object()
 
 	m_pBufferCom->Set_UVOption(CGameUtilMgr::s_fTimeDelta * 1, 1.64f, 0.5f,0.5f, 0.1f);
 
-	// CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom_root", ID_DYNAMIC);
+	// CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 	// _vec3 pPos;
 	// pPlayerTransform->Get_Info(INFO_POS, &pPos);
 	m_pTransCom->m_vInfo[INFO_POS] = _vec3(- 100.f, - 10.f, - 100.f);
@@ -150,7 +150,7 @@ _int CTerrainWater::Update_Object(const _float& fTimeDelta)
 	// m_pTransCom->m_vScale *= 4.f;
 	// m_pTransCom->m_vInfo[INFO_POS] = _vec3(- 100.f, - 10.f, - 100.f);
 
-	// IM_LOG("%f, %f, %f", m_pTransCom->m_vInfo[INFO_POS].x, m_pTransCom->m_vInfo[INFO_POS].z, m_pTransCom->m_vScale);
+	//IM_LOG("%f, %f, %f", m_pTransCom->m_vInfo[INFO_POS].x, m_pTransCom->m_vInfo[INFO_POS].z, m_pTransCom->m_vScale);
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
 

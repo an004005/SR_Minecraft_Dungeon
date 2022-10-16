@@ -63,6 +63,7 @@ public:
 	// controller 조종 함수
 	_vec3 Get_TargetPos() { return m_vTargetPos; }
 	void WalkToTarget(const _vec3& vTargetPos) { m_vTargetPos = vTargetPos; }
+	void SetStart() { m_bStartPlay = true; }
 	void Chop(const _vec3& vTargetPos)
 	{
 		m_bChop = true;
@@ -100,7 +101,6 @@ private:
 	// true : PlayAnimationOnce 사용 가능 상태(동작 애니메이션 실행 가능), false: 다른 애니메이션 실행중
 	_bool m_bCanPlayAnim = true; // 현재 실행중인 애니메이션 끊고 애니메이션 실행 가능 여부
 
-	_float m_fSummonCoolTime = 0.f;
 	_vec3 m_vTargetPos = CGameUtilMgr::s_vZero; // controller 입력
 
 	_bool m_bChop = false; // controller 입력
@@ -110,12 +110,12 @@ private:
 
 
 	_bool m_bChopFire = false; // anim event 입력
-	//_bool m_bSummonFire = false; // anim event 입력
 	_bool m_bWindmillFire = false; // anim event 입력
+	_matrix m_matSommonWorld[6];
 
+	ULONGLONG m_dwWindTime = 0;
 
-	
-	
-
+	_bool m_bStartPlay = false;
+	_bool m_bIntroPlay = false;
 };
 

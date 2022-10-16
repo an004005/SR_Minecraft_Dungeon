@@ -7,6 +7,8 @@ CTerrainCubeMap::CTerrainCubeMap(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CGameObject(pGraphicDev)
 {
 	ZeroMemory(&m_fHeight, sizeof(_float) * VTXCNTX * VTXCNTZ);
+	
+
 }
 
 CTerrainCubeMap::~CTerrainCubeMap()
@@ -20,7 +22,7 @@ HRESULT CTerrainCubeMap::Ready_Object(const wstring& wstrPath)
 	m_pTextureCom = Add_Component<CTexture>(L"Proto_PlantTexture", L"Proto_PlantTexture", ID_STATIC);
 
 	LoadMap(wstrPath);
-	
+	 
 
 	return S_OK;
 }
@@ -36,6 +38,7 @@ _int CTerrainCubeMap::Update_Object(const _float & fTimeDelta)
 void CTerrainCubeMap::LateUpdate_Object(void)
 {
 	Engine::CGameObject::LateUpdate_Object();
+	// CTerrainCubeMap* tmp = Get_GameObject<CTerrainCubeMap>(LAYER_ENV, L"TerrainCubeMap");
 }
 
 void CTerrainCubeMap::Render_Object(void)
@@ -224,6 +227,14 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 		vCenter.y = coll.matWorld._42;
 		vCenter.z = coll.matWorld._43;
 		Engine::Add_StaticCollision(vCenter, 0.5f);
+	}
+
+	// BlockTex(블럭마다 소리를 다르게 하기 위해)
+	for (auto& index : m_vecLand)
+	{
+		_vec3 vCenter{ 0.f, 0.f, 0.f };
+		D3DXVec3TransformCoord(&vCenter, &vCenter, &index.matWorld);
+		m_arrBlock[(_int)vCenter.x][(_int)vCenter.z] = index.iTexIdx;
 	}
 
 }

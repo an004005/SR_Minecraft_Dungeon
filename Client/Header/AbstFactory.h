@@ -1,5 +1,6 @@
 #pragma once
 #include <functional>
+#include "Arrow.h"
 
 class CAbstFactory
 {
@@ -30,7 +31,7 @@ public:
 		_ASSERT_CRASH(pCasted != nullptr);
 		Engine::AddGameObject(LAYER_PLAYER, wstrObjTag, pCasted);
 
-		Engine::CTransform* pTrans = pCasted->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC);
+		Engine::CTransform* pTrans = pCasted->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
 		pTrans->Set_WorldDecompose(matWorld);
 
 		return pCasted;
@@ -53,7 +54,7 @@ public:
 		_ASSERT_CRASH(pCasted != nullptr);
 		Engine::AddGameObject(LAYER_ENEMY, wstrObjTag, pCasted);
 
-		Engine::CTransform* pTrans = pCasted->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC);
+		Engine::CTransform* pTrans = pCasted->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
 		pTrans->Set_WorldDecompose(matWorld);
 
 		return pCasted;
@@ -121,7 +122,6 @@ public:
 
 		return pCasted;
 	}
-
 	static void Ready_EnvFactory();
 
 private:
@@ -133,19 +133,19 @@ class CBulletFactory : CAbstFactory
 	friend class CImGuiMgr;
 public:
 	template<typename T>
-	static T* Create(const string& strFactoryTag, const wstring& wstrObjTag, _float fDamage)
+	static T* Create(const string& strFactoryTag, const wstring& wstrObjTag, ArrowParams tArrowParams)
 	{
-		T* pCasted = dynamic_cast<T*>(s_mapBulletSpawner.find(strFactoryTag)->second(fDamage));
+		T* pCasted = dynamic_cast<T*>(s_mapBulletSpawner.find(strFactoryTag)->second(tArrowParams));
 		_ASSERT_CRASH(pCasted != nullptr);
 		Engine::AddGameObject(LAYER_BULLET, wstrObjTag, pCasted);
-
+	
 		return pCasted;
 	}
 
 	template<typename T>
-	static T* Create(const string& strFactoryTag, const wstring& wstrObjTag, _float fDamage, const _vec3& vPos, const _vec3& vLookAt)
+	static T* Create(const string& strFactoryTag, const wstring& wstrObjTag, ArrowParams tArrowParams, const _vec3& vPos, const _vec3& vLookAt)
 	{
-		T* pCasted = Create<T>(strFactoryTag, wstrObjTag, fDamage);
+		T* pCasted = Create<T>(strFactoryTag, wstrObjTag, tArrowParams);
 
 		Engine::CTransform* pTrans = pCasted->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
 		pTrans->m_vInfo[INFO_POS] = vPos;
@@ -157,7 +157,7 @@ public:
 	static void Ready_BulletFactory();
 
 private:
-	static map<string, std::function<CGameObject*(_float)>> s_mapBulletSpawner;
+	static map<string, std::function<CGameObject*(ArrowParams)>> s_mapBulletSpawner;
 
 };
 
@@ -182,7 +182,7 @@ public:
 
 		if (strFactoryTag == "Box")
 		{
-			Engine::CTransform* pTrans = pCasted->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC);
+			Engine::CTransform* pTrans = pCasted->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
 			pTrans->Set_WorldDecompose(matWorld);
 			pTrans->Update_Component(0.f);
 		}
@@ -203,7 +203,7 @@ public:
 
 		if (strFactoryTag == "Box")
 		{
-			Engine::CTransform* pTrans = pCasted->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC);
+			Engine::CTransform* pTrans = pCasted->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
 			pTrans->m_vInfo[INFO_POS] = vPos;
 			pTrans->Update_Component(0.f);
 		}

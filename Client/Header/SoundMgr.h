@@ -21,6 +21,8 @@ private:
 public:
 	void PlaySound(const wstring& pSoundKey, const _vec3& vSoundPos, float fVolume = 1.f);
 	void PlaySoundRandom(const vector<wstring>& vecSoundKey, const _vec3& vSoundPos, float fVolume = 1.f);
+	void PlaySoundChannel(const wstring& pSoundKey, const _vec3& vSoundPos, CHANNELID eID, float fVolume = 1.f);
+
 	void PlayBGM(const wstring& pSoundKey, float fVolume);
 	
 	void StopSound(CHANNELID eID);
@@ -29,7 +31,7 @@ public:
 	void SetChannelVolume(CHANNELID eID, float fVolume);
 	void SetChannelPause(CHANNELID eID, bool bPause);
 
-	void Update_Listener(const wstring& wstrListernTag);
+	void Update_Listener(LAYERID eID, const wstring& wstrListernTag);
 
 private:
 	void Ready_SoundMgr(); 
@@ -47,7 +49,8 @@ private:
 	FMOD_SYSTEM* m_pSystem;
 
 	_vec3 m_vListenerPos = CGameUtilMgr::s_vZero;
-	_float m_fMaxListenDist = 20.f;
+	_float m_fMaxListenDist = 30.f;
+	_float m_fMasterVolume;
 
 };
 

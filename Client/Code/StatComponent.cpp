@@ -1,9 +1,9 @@
 #include "stdafx.h"
-#include "..\Header\StatComponent.h"
+#include "../Header/StatComponent.h"
 #include "AbstFactory.h"
 #include "Particle.h"
 #include "TerrainCubeMap.h"
-#include "Monster.h"
+#include "DamageFontMgr.h"
 
 CStatComponent::CStatComponent()
 {
@@ -30,12 +30,17 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 	if (m_bStun)
 	{
 		if (m_fStunTime < m_fCurStunTime)
+		{
 			m_bStun = false;
+			if (m_pStun)
+				m_pStun->SetDead();
+		}
 		else
+		{
 			m_fCurStunTime += fTimeDelta;
-	
-	
-
+			if (m_pStun)
+				m_pStun->SetPos(m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{0.f, 3.f, 0.f});
+		}
 	}
 
 	if (m_bKnockback)
@@ -49,13 +54,12 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 	if (m_bDamaged)
 	{
 		if (m_fDamagedTime < m_fCurDamagedTime)
-		{
-			m_bStun = false;
-			m_bKnockback = false;
-		}
+			m_bDamaged = false;
 		else
 			m_fCurDamagedTime += fTimeDelta;
 	}
+
+
 
 
 	_vec3& vPos = m_pOwnerTrans->m_vInfo[INFO_POS];
@@ -63,16 +67,23 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 	{
 		vPos.y = m_pCubeMap->GetHeight(vPos.x, vPos.z);
 	}
-	else 
+	else
 	{
 		// ≥ÀπÈ ªÛ≈¬
-		vPos += m_vKnockBackVelocity * fTimeDelta;
-		m_vKnockBackVelocity.y -= 120.f * fTimeDelta;
+		if (m_fPreYPos + 4.f < vPos.y)
+		{
+			m_bKnockback = false;
+		}
 
-		if (vPos.y < m_pCubeMap->GetHeight(vPos.x, vPos.z))
+		vPos += m_vKnockBackVelocity * fTimeDelta;
+
+		m_vKnockBackVelocity.y -= 80.f * fTimeDelta;
+
+		if (vPos.y < m_pCubeMap->GetHeight(vPos.x, vPos.z) || m_bKnockback == false)
 		{
 			m_vKnockBackVelocity = CGameUtilMgr::s_vZero;
 		}
+		
 	}
 
 	return 0;
@@ -107,6 +118,9 @@ void CStatComponent::ModifyHP(_int iModifyingHP)
 		// ««≈∏∞› ¿Ã∆Â∆Æ
 		Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")
 			->Add_Particle(m_pOwnerTrans->m_vInfo[INFO_POS] +_vec3{0.f, 1.2f, 0.f}, CGameUtilMgr::GetRandomFloat(0.15f,0.3f), RED, 20, 0.2f);
+
+		if(m_vHurtSound.size() > 0)
+			CSoundMgr::GetInstance()->PlaySoundRandom(m_vHurtSound, m_pOwnerTrans->m_vInfo[INFO_POS], 0.2f);
 	}
 
 	if (m_iHP <= 0)
@@ -118,23 +132,25 @@ void CStatComponent::ModifyHP(_int iModifyingHP)
 	m_DamageDelegater.broadcast(m_iHP, m_iMaxHP, iModifyingHP);
 }
 
-void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCauser, DamageType eType)
+void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCauser, DamageType eType, _bool bCritical)
 {
-	if (m_bDead) return ;
+	if (m_bDead) return;
 
 	switch (eType)
 	{
 	case DT_STUN:
 		m_bStun = true;
 		m_fCurStunTime = 0.f;
+		m_pStun = CEffectFactory::Create<CStun>("Monster_Stun", L"Monster_Stun", m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{0.f, 3.f, 0.f});
 		break;
 	case DT_KNOCK_BACK:
 		m_bKnockback = true;
 		m_fCurKnockbackTime = 0.f;
+		m_fPreYPos = m_pOwnerTrans->m_vInfo[INFO_POS].y;
 
 		m_vKnockBackVelocity = m_pOwnerTrans->m_vInfo[INFO_POS] - vFromPos;
 		D3DXVec3Normalize(&m_vKnockBackVelocity, &m_vKnockBackVelocity);
-		m_vKnockBackVelocity *= 15.f;
+		m_vKnockBackVelocity *= 10.f;
 		m_vKnockBackVelocity.y = 10.f;
 		break;
 	case DT_END:
@@ -146,5 +162,22 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 
 
 	ModifyHP(-iDamage);
+	if (iDamage != 0)
+	{
+		CDamageFontMgr::GetInstance()->Add_DamageFontFromWorld(
+			iDamage,
+			m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{0.f, 1.5f, 0.f},
+			vFromPos,
+			D3DCOLOR_ARGB(255, 255, 255, 255),
+			bCritical);
+	}
 }
 
+void CStatComponent::Revive()
+{
+	m_iHP = m_iMaxHP;
+	m_bDead = false;
+	m_bStun = false;
+	m_bDamaged = false;
+	m_bKnockback = false;
+}

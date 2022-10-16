@@ -3,6 +3,7 @@
 #include "DynamicCamera.h"
 #include "AbstFactory.h"
 #include "ImGuiFileDialog.h"
+#include "Player.h"
 #include "TerrainCubeMap.h"
 
 CBatchTool::CBatchTool(LPDIRECT3DDEVICE9 pGraphicDev) : CScene(pGraphicDev)
@@ -20,13 +21,12 @@ HRESULT CBatchTool::Ready_Scene()
 	CGameObject* pGameObject = nullptr;
 	pGameObject = m_pCam = CDynamicCamera::Create(m_pGraphicDev, &_vec3(0.f, 10.f, -10.f), &_vec3(0.f, 0.f, 0.f), &_vec3(0.f, 1.f, 0.f));
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(m_arrLayer[LAYER_GAMEOBJ]->Add_GameObject(L"DynamicCamera", pGameObject), E_FAIL);
+	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"DynamicCamera", pGameObject), E_FAIL);
 
 
 	pGameObject = m_pMap = CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/Stage1.map");
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", pGameObject), E_FAIL);
-
 
 	return S_OK;
 }
@@ -96,9 +96,9 @@ _int CBatchTool::Update_Scene(const _float& fTimeDelta)
 			for (const auto& obj : Engine::Get_Layer((LAYERID)i)->Get_MapObject())
 			{
 				CTransform* pTrans = nullptr;
-				if (obj.second->Has_Component(L"Proto_TransformCom_root", ID_DYNAMIC))
+				if (obj.second->Has_Component(L"Proto_TransformCom", ID_DYNAMIC))
 				{
-					pTrans = obj.second->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC);
+					pTrans = obj.second->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
 				}
 				else if (obj.second->Has_Component(L"Proto_TransformCom", ID_DYNAMIC))
 				{
@@ -225,8 +225,8 @@ void CBatchTool::Save(const wstring& wstrPath)
 		WriteFile(hFile, strFactoryTag.c_str(), dwStrByte, &dwByte, nullptr);
 
 		_matrix matWorld;
-		if (e.second->Has_Component(L"Proto_TransformCom_root", ID_DYNAMIC))
-			matWorld = e.second->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_matWorld;
+		if (e.second->Has_Component(L"Proto_TransformCom", ID_DYNAMIC))
+			matWorld = e.second->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_matWorld;
 		else if (e.second->Has_Component(L"Proto_TransformCom", ID_DYNAMIC))
 			matWorld = e.second->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_matWorld;
 		else _CRASH("Fail to load");
@@ -249,8 +249,8 @@ void CBatchTool::Save(const wstring& wstrPath)
 		WriteFile(hFile, strFactoryTag.c_str(), dwStrByte, &dwByte, nullptr);
 
 		_matrix matWorld;
-		if (e.second->Has_Component(L"Proto_TransformCom_root", ID_DYNAMIC))
-			matWorld = e.second->Get_Component<CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_matWorld;
+		if (e.second->Has_Component(L"Proto_TransformCom", ID_DYNAMIC))
+			matWorld = e.second->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_matWorld;
 		else if (e.second->Has_Component(L"Proto_TransformCom", ID_DYNAMIC))
 			matWorld = e.second->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_matWorld;
 		else _CRASH("Fail to load");

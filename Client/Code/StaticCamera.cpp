@@ -22,6 +22,7 @@ HRESULT CStaticCamera::Ready_Object()
 
 	SetMatProj();
 
+	
 	m_pTransform->Rotation(ROT_Y, D3DXToRadian(50.f));
 	m_pTransform->Rotation(ROT_X, D3DXToRadian(55.f));
 
@@ -29,6 +30,12 @@ HRESULT CStaticCamera::Ready_Object()
 	m_fCurShakeTime = 0.f;
 	return S_OK;
 }
+
+void CStaticCamera::Set_Mode()
+{
+	m_pTransform->Rotation(ROT_Y, D3DXToRadian(-50.f));
+}
+
 
 Engine::_int CStaticCamera::Update_Object(const _float& fTimeDelta)
 {
@@ -45,6 +52,8 @@ Engine::_int CStaticCamera::Update_Object(const _float& fTimeDelta)
 		{
 			Safe_Release(m_pCamAnim);
 			m_eMode = CAM_NORMAL;
+			ResetPosition();
+			// cam reset pos to normal
 		}
 		break;
 	default: ;
@@ -86,7 +95,7 @@ void CStaticCamera::SetTarget(CGameObject* pTarget)
 
 	m_pTarget = pTarget;
 	m_pTarget->AddRef();
-	m_pTargetTrans = m_pTarget->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC);
+	m_pTargetTrans = m_pTarget->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
 	m_pTargetTrans->AddRef();
 
 	m_pTransform->m_vInfo[INFO_POS] = m_pTargetTrans->m_vInfo[INFO_POS] + (m_pTransform->m_vInfo[INFO_LOOK] * -
@@ -103,6 +112,11 @@ void CStaticCamera::PlayeCamAnimation(const wstring& wstrAnim)
 	Engine::Get_Layer(LAYER_GAMEOBJ)->Add_GameObject(L"CamAnim", m_pCamAnim);
 	m_pCamAnim->AddRef();
 	m_eMode = CAM_ANIMATION;
+}
+
+void CStaticCamera::ResetPosition()
+{
+	m_pTransform->m_vInfo[INFO_POS] = m_pTargetTrans->m_vInfo[INFO_POS] + (m_pTransform->m_vInfo[INFO_LOOK] * -m_fDistance);
 }
 
 void CStaticCamera::PlayShake(_float fDuration, _float fMagnitude)

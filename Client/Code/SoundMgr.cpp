@@ -7,6 +7,8 @@ IMPLEMENT_SINGLETON(CSoundMgr)
 CSoundMgr::CSoundMgr()
 {
 	Ready_SoundMgr();
+	m_fMasterVolume = 0.8f;
+
 }
 
 CSoundMgr::~CSoundMgr()
@@ -16,6 +18,8 @@ CSoundMgr::~CSoundMgr()
 
 void CSoundMgr::PlaySound(const wstring& pSoundKey, const _vec3& vSoundPos, float fVolume)
 {
+	fVolume *= m_fMasterVolume;
+
 	const _vec3 vDiff = vSoundPos - m_vListenerPos;
 	const _float fDistance = D3DXVec3Length(&vDiff);
 	if (fDistance > m_fMaxListenDist) // 너무 멀다.
@@ -70,6 +74,38 @@ void CSoundMgr::PlaySound(const wstring& pSoundKey, const _vec3& vSoundPos, floa
 void CSoundMgr::PlaySoundRandom(const vector<wstring>& vecSoundKey, const _vec3& vSoundPos, float fVolume)
 {
 	PlaySound(vecSoundKey[rand() % vecSoundKey.size()], vSoundPos, fVolume);
+}
+
+void CSoundMgr::PlaySoundChannel(const wstring& pSoundKey, const _vec3& vSoundPos, CHANNELID eID, float fVolume)
+{
+	fVolume *= m_fMasterVolume;
+
+	const _vec3 vDiff = vSoundPos - m_vListenerPos;
+	const _float fDistance = D3DXVec3Length(&vDiff);
+	if (fDistance > m_fMaxListenDist) // 너무 멀다.
+	{
+		return;
+	}
+
+	map<TCHAR*, FMOD_SOUND*>::iterator iter; 
+
+	// iter = find_if(m_mapSound.begin(), m_mapSound.end(), CTag_Finder(pSoundKey));
+	iter = find_if(m_mapSound.begin(), m_mapSound.end(), 
+		[&](auto& iter)->bool
+	{
+		return !lstrcmp(pSoundKey.c_str(), iter.first);
+	});
+	
+	if (iter == m_mapSound.end())
+		return;
+
+	fVolume = fVolume *  (1.f - (fDistance / m_fMaxListenDist));
+
+	FMOD_System_PlaySound(m_pSystem, iter->second, nullptr, FALSE, &m_pChannelArr[eID]);
+
+	FMOD_Channel_SetVolume(m_pChannelArr[eID], fVolume);
+
+	FMOD_System_Update(m_pSystem);
 }
 
 // void CSoundMgr::PlaySoundRandom(float fVolume, const _vec3& vSoundPos int iNum, TCHAR* ...)
@@ -132,9 +168,9 @@ void CSoundMgr::SetChannelPause(CHANNELID eID, bool bPause)
 	FMOD_Channel_SetPaused(m_pChannelArr[eID], bPause);
 }
 
-void CSoundMgr::Update_Listener(const wstring& wstrListernTag)
+void CSoundMgr::Update_Listener(LAYERID eID, const wstring& wstrListernTag)
 {
-	m_vListenerPos = Engine::Get_Component<CTransform>(LAYER_PLAYER, wstrListernTag, L"Proto_TransformCom_root", ID_DYNAMIC)
+	m_vListenerPos = Engine::Get_Component<CTransform>(eID, wstrListernTag, L"Proto_TransformCom", ID_DYNAMIC)
 		->m_vInfo[INFO_POS];
 }
 

@@ -74,6 +74,7 @@ public:
 	virtual void	Free(void);
 
 public:
+	_uint m_iRenderPriority = 10;
 	// float GetRandomFloat(float lowBound, float highBound);
 	//
 	// void GetRandomVector(

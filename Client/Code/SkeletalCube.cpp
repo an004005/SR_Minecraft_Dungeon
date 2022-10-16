@@ -22,12 +22,12 @@ HRESULT CSkeletalCube::Ready_Object()
 	m_pRootPart = new SkeletalPart;
 	// 루트 부분 수정하지 말기
 
-	m_pRootPart->pTrans = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom_root", ID_DYNAMIC);
+	m_pRootPart->pTrans = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 
 	m_pRootPart->strName = s_strRoot;
 	m_mapParts.insert({s_strRoot, m_pRootPart});
 	m_pRootPart->strTransProto = L"Proto_TransformCom";
-	m_pRootPart->strTransCom = L"Proto_TransformCom_root";
+	m_pRootPart->strTransCom = L"Proto_TransformCom";
 
 	return S_OK;
 }
@@ -466,18 +466,18 @@ void CSkeletalCube::DeleteRecursive(const string& strPart)
 	pToDelete->pTrans->Release();
 
 	{
-		auto itr = m_mapComponent->find(pToDelete->strBufCom);
-		if (itr != m_mapComponent->end())
+		auto itr = m_mapComponent[ID_STATIC].find(pToDelete->strBufCom);
+		if (itr != m_mapComponent[ID_STATIC].end())
 			m_mapComponent[ID_STATIC].erase(itr);
 	}
 	{
-		auto itr = m_mapComponent->find(pToDelete->strTexCom);
-		if (itr != m_mapComponent->end())
+		auto itr = m_mapComponent[ID_STATIC].find(pToDelete->strTexCom);
+		if (itr != m_mapComponent[ID_STATIC].end())
 			m_mapComponent[ID_STATIC].erase(itr);
 	}
 	{
-		auto itr = m_mapComponent->find(pToDelete->strTransCom);
-		if (itr != m_mapComponent->end())
+		auto itr = m_mapComponent[ID_STATIC].find(pToDelete->strTransCom);
+		if (itr != m_mapComponent[ID_STATIC].end())
 			m_mapComponent[ID_STATIC].erase(itr);
 	}
 

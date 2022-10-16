@@ -6,6 +6,8 @@
 #include "EquipItem.h"
 #include "ConsumeItem.h"
 #include "Dynamite.h"
+#include "InventoryUI.h"
+#include "AbstFactory.h"
 #include "Protocol.pb.h"
 #include "ServerPacketHandler.h"
 
@@ -26,6 +28,16 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 {
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pOwner);
 	NULL_CHECK_RETURN(pPlayer, 0);
+	if (pPlayer->IsVisible() == false) return 0;
+
+	//이거 내리면 인벤 안꺼짐
+	if (DIKeyUp(DIK_I))
+	{
+		pPlayer->GetInventory()->OpenInventory();
+	}
+
+	if (pPlayer->GetInventory()->InputLock())
+		return 0;
 
 	// 움직임 입력
 	{
@@ -69,13 +81,14 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 	//box open
 	if (DIKeyDown(DIK_F))
 	{
-		_vec3 vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[
-			INFO_POS];
+		_vec3 vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 		//박스 열기 , 폭탄 줍기
 		pickGameObj(pPlayer, vTargetPos);
 		//아이템 먹기
-		putItem(pPlayer, vTargetPos);
+		putItem(pPlayer, vTargetPos);		
 	}
+
+	
 
 	if (false == CGameUtilMgr::Vec3Cmp(m_vPressDir, m_vPrevPressDir)) // 이동 입력 없으면 방향 계산 안하기
 	{
@@ -222,9 +235,17 @@ void CPlayerController::putItem(CPlayer* pPlayer, const _vec3& vTargetPos)
 	if (!pEquipItem && !pConsumItem)
 		return;
 
-	fEquipItemDist >= fConsumItemDist
-		? pPlayer->GetInventory()->Put(pConsumItem)
-		: pPlayer->GetInventory()->Put(pEquipItem);
+	fEquipItemDist >= fConsumItemDist ? pPlayer->GetInventory()->Put(pConsumItem) : pPlayer->GetInventory()->Put(pEquipItem);
+
+	CSoundMgr::GetInstance()->PlaySoundRandom({
+		L"sfx_item_eatGeneric-001.ogg",
+		L"sfx_item_eatGeneric-002.ogg",
+		L"sfx_item_eatGeneric-003.ogg",
+		L"sfx_item_eatGeneric-004.ogg",
+		L"sfx_item_eatGeneric-005.ogg",
+		L"sfx_item_eatGeneric-006.ogg" },
+		vTargetPos);
+
 }
 
 void CPlayerController::pickGameObj(CPlayer* pPlayer, const _vec3& vTargetPos)
@@ -251,8 +272,7 @@ void CPlayerController::pickGameObj(CPlayer* pPlayer, const _vec3& vTargetPos)
 
 		if (CBox* pGameObj = dynamic_cast<CBox*>(ele.second))
 		{
-			_vec3 vDiff = vTargetPos - pGameObj->Get_Component<Engine::CTransform>(
-				L"Proto_TransformCom_root", ID_DYNAMIC)->m_vInfo[INFO_POS];
+			_vec3 vDiff = vTargetPos - pGameObj->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 			_float fDist = D3DXVec3Length(&vDiff);
 
 			if (fDist < fBoxDist)
@@ -264,13 +284,25 @@ void CPlayerController::pickGameObj(CPlayer* pPlayer, const _vec3& vTargetPos)
 	}
 
 	if (pBox)
+	{
 		pBox->BoxOpen();
+		return;
+	}
 
 	if (pDynamite)
 	{
 		pDynamite->SetState(DYNAMITE_PICK);
 		m_pDynamite = pDynamite;
+		return;
 	}
+	CSoundMgr::GetInstance()->PlaySoundRandom({
+			L"sfx_item_eatGeneric-001.ogg",
+			L"sfx_item_eatGeneric-002.ogg",
+			L"sfx_item_eatGeneric-003.ogg",
+			L"sfx_item_eatGeneric-004.ogg",
+			L"sfx_item_eatGeneric-005.ogg",
+			L"sfx_item_eatGeneric-006.ogg"},
+			vTargetPos);
 }
 
 /*----------------------

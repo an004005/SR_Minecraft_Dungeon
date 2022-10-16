@@ -16,17 +16,29 @@ CBootsOfSwiftness::~CBootsOfSwiftness()
 
 HRESULT CBootsOfSwiftness::Ready_Object()
 {
-	
+	m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
+	m_iUItexNum = 11;
+	m_fCurCoolTime = 5.f;
+	m_fCoolTime = 5.f;
 	return S_OK;
 }
 
 _int CBootsOfSwiftness::Update_Object(const _float & fTimeDelta)
 {
+	if (m_fCoolTime > m_fCurCoolTime)
+	{
+		m_fCurCoolTime += fTimeDelta;
+		m_bUse = false;
+		return OBJ_NOEVENT;
+	}
+
 	if (m_bUse)
 	{
+		m_fCurCoolTime = 0.f;
+
 		m_fAge = 0.f;
 	
-		CPlayer* pPlayer = Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");
+		CPlayer* pPlayer = m_pOwner;
 		pPlayer->SetSpeed(7.5f);
 		_vec3 vPos = pPlayer->GetInfo(INFO_POS);
 
@@ -35,6 +47,8 @@ _int CBootsOfSwiftness::Update_Object(const _float & fTimeDelta)
 		Get_GameObject<CSpeedBoots_Particle>(LAYER_EFFECT, L"Speed_Boots_Particle")->Add_Particle(
 			_vec3(vPos.x, vPos.y + 15.f, vPos.z),
 			1.f, D3DXCOLOR(0.3f, 0.4f, 0.7f, 1.f), 18, m_fLifeTime);
+
+		CSoundMgr::GetInstance()->PlaySound(L"sfx_item_glaiveSwing-004.ogg", vPos);
 		m_bEnd = true;
 		m_bUse = false;
 		
@@ -44,7 +58,7 @@ _int CBootsOfSwiftness::Update_Object(const _float & fTimeDelta)
 
 	if (m_bEnd && m_fAge >= m_fLifeTime)
 	{
-		Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player")->SetSpeed(4.5f);
+		m_pOwner->SetSpeed(4.5f);
 		m_bEnd = false;
 	}
 

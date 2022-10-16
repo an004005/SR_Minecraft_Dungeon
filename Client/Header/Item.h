@@ -1,5 +1,7 @@
 #pragma once
 #include "GameObject.h"
+#include "AbstFactory.h"
+#include "Particle.h"
 
 class CItem : public CGameObject
 {
@@ -24,7 +26,6 @@ public:
 		
 		m_vVelocity = vLook;	
 		m_fPower = fPower;
-	
 	}
 	ITEMSTATE GetItemState() { return m_eItemState; }
 
@@ -35,6 +36,7 @@ protected:
 	_float m_fTime;
 	_bool m_bIdle;
 	CCollisionCom* m_pColl = nullptr;
+	Engine::CTransform*	m_pTransCom = nullptr;
 
 	virtual void Parabola(_vec3 & vPos,const _float& fHeight,const _float& fTimeDelta);
 };
