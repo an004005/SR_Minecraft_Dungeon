@@ -86,7 +86,7 @@ void CLightningRune::Collision()
 	CSoundMgr::GetInstance()->PlaySoundRandom({L"sfx_env_thunderPassing-001_soundWave.ogg", L"sfx_env_thunderPassing-002_soundWave.ogg", L"sfx_env_thunderPassing-003_soundWave.ogg"}, 
 		vOwnerPos);
 
-	CPlayer* pPlayer =m_pOwner;
+	CPlayer* pPlayer = m_pOwner;
 	_vec3 vPos = pPlayer->GetInfo(INFO_POS);
 
 	set<CGameObject*> objSet;

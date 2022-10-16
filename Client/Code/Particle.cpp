@@ -739,7 +739,7 @@ CChainLightning::~CChainLightning()
 
 HRESULT CChainLightning::Ready_Object()
 {
-	m_pBufferCom = Add_Component<CRcShader>(L"Proto_RcShaderCom", L"Proto_RcShaderCom",ID_STATIC);
+	m_pBufferCom = Add_Component<CRcShader>(L"Proto_ChainLightningCom", L"Proto_ChainLightningCom",ID_STATIC);
 	m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom",L"Proto_TransformCom",ID_DYNAMIC);
 	m_pTexture = Add_Component<CTexture>(L"Proto_Electric", L"Proto_Electric", ID_STATIC);
 	m_pBufferCom->Set_TextureOption(_uint(CGameUtilMgr::GetRandomFloat(10.f, 15.f)), 4, 4);
