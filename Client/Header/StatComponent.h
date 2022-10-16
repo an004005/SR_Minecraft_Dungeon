@@ -8,6 +8,7 @@ enum DamageType
 	DT_HUGE_KNOCK_BACK,
 	DT_KOUKU_SYMBOL_BLUE,
 	DT_KOUKU_SYMBOL_RED,
+	DT_KOUKU_FASCINATED,
 	// posion .. etc
 	DT_END
 };
@@ -83,6 +84,14 @@ private:
 
 	_float m_fSatonSymbolTime = 0.3f;
 	_float m_fCurSatonSymbolTime = 0.3f;
+
+	// Saton fascinate
+	_bool m_bFascinated = false;
+	_float m_fSatonFascinated = 2.f;
+	_float m_fCurSatonFascinated = 2.f;
+
+
+
 
 	_bool m_bIsSaton = false;
 

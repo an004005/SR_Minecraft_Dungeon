@@ -26,6 +26,7 @@ HRESULT CSaton::Ready_Object()
 	m_arrAnim[SATON_BIRD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_bird.anim");
 	m_arrAnim[SATON_GRAP] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_grap.anim");
 	m_arrAnim[SATON_SYMBOL] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_symbol.anim");
+	m_arrAnim[SATON_FASCINATE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_fascinate.anim");
 
 	m_pIdleAnim = &m_arrAnim[IDLE];
 	// m_pCurAnim = &m_arrAnim[INTRO];
@@ -73,6 +74,15 @@ void CSaton::AnimationEvent(const string& strEvent)
 	{
 		m_bDelete = true;
 	}
+	else if (strEvent == "MakeMoon") // 플레이어 머리 위에 달 띄우기
+	{
+	}
+	else if (strEvent == "DrawMoon") // 플레이어 위치 받아서 바닥에 달 그리기
+	{
+	}
+	else if (strEvent == "ExplodeMoon") // 바닥에 있던 달 위치에 쇼크파우더 뿌리기 
+	{
+	}
 }
 
 _int CSaton::Update_Object(const _float& fTimeDelta)
@@ -118,6 +128,8 @@ _int CSaton::Update_Object(const _float& fTimeDelta)
 		break;
 	case SATON_SYMBOL:
 		m_strState = "SATON_SYMBOL";
+	case SATON_FASCINATE:
+		m_strState = "SATON_FASCINATE";
 		break;
 	case DEAD:
 		m_strState = "DEAD";
@@ -218,15 +230,15 @@ void CSaton::StateChange()
 		SetOff();
 		return;
 	}
-	//
-	// if (m_bMove && m_bCanPlayAnim)
-	// {
-	// 	m_eState = WALK;
-	// 	RotateToTargetPos(m_vTargetPos, true);
-	// 	m_pIdleAnim = &m_arrAnim[WALK];
-	// 	m_pCurAnim = &m_arrAnim[WALK];
-	// 	return;
-	// }
+	if (m_bSatonFascinate && m_bCanPlayAnim && m_eState == IDLE)
+	{
+		m_eState = SATON_FASCINATE;
+		RotateToTargetPos(m_vTargetPos);
+		PlayAnimationOnce(&m_arrAnim[SATON_FASCINATE]);
+		m_bCanPlayAnim = false;
+		SetOff();
+		return;
+	}
 	if (m_bCanPlayAnim)
 	{
 		m_eState = IDLE;
@@ -235,16 +247,6 @@ void CSaton::StateChange()
 		m_pCurAnim = &m_arrAnim[IDLE];
 		return;
 	}
-
-
-	// if (m_bCanPlayAnim)
-	// {
-	// 	m_eState = IDLE;
-	// 	RotateToTargetPos(m_vTargetPos);
-	// 	m_pIdleAnim = &m_arrAnim[IDLE];
-	// 	m_pCurAnim = &m_arrAnim[IDLE];
-	// 	return;
-	// }
 }
 
 CSaton::~CSaton()

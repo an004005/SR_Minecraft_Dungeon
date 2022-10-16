@@ -13,6 +13,7 @@ private:
 		SATON_BIRD,
 		SATON_GRAP,
 		SATON_SYMBOL,
+		SATON_FASCINATE,
 		DEAD,
 		STATE_END
 	};
@@ -57,6 +58,12 @@ public:
 		m_vTargetPos = vTargetPos;
 	}
 
+	void SatonFascinate(const _vec3& vTargetPos)
+	{
+		m_bSatonFascinate = true;
+		m_vTargetPos = vTargetPos;
+	}
+
 	// controller 조종 함수
 	_vec3 Get_TargetPos() { return m_vTargetPos; }
 	void WalkToTarget(const _vec3& vTargetPos) { m_vTargetPos = vTargetPos; }
@@ -73,6 +80,7 @@ private:
 		m_bSatonGrap = false;
 		m_bSatonBird = false;
 		m_bSatonSymbolAnim = false;
+		m_bSatonFascinate = false;
 	}
 
 	// true : PlayAnimationOnce 사용 가능 상태(동작 애니메이션 실행 가능), false: 다른 애니메이션 실행중
@@ -84,6 +92,8 @@ private:
 	_bool m_bSatonGrap = false;
 	_bool m_bSatonBird = false;
 	_bool m_bSatonSymbolAnim = false;
+	_bool m_bSatonFascinate = false;
+
 	_float m_fTime;
 	_float m_fCurTime;
 	// _bool m_bHammerReady = false;

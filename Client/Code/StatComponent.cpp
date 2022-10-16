@@ -51,6 +51,13 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 			m_fCurDamagedTime += fTimeDelta;
 	}
 
+	if (m_bFascinated)
+	{
+		if (m_fSatonFascinated < m_fCurSatonFascinated)
+			m_bFascinated = false;
+		else
+			m_fCurSatonFascinated += fTimeDelta;
+	}
 
 
 	// 세이튼 장판 기믹 때만 해당되게 구현하기 
@@ -162,6 +169,10 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 		break;
 	case DT_KOUKU_SYMBOL_RED:
 		m_bSatonSymbol_Red = true;
+		m_fCurSatonSymbolTime = 0.f;
+		break;
+	case DT_KOUKU_FASCINATED:
+		m_bFascinated = true;
 		m_fCurSatonSymbolTime = 0.f;
 		break;
 	case DT_END:
