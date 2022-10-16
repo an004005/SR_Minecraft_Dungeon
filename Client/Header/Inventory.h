@@ -11,6 +11,7 @@ class CConsumeItem;
 class CItemSpaceUI;
 class CInventoryUI;
 class CItemUI;
+class CPlayer;
 
 class CInventory :
 	public CGameObject
@@ -36,6 +37,9 @@ public:
 	void TakeOut(CEquipItem* pItem);
 
 	void UseArrow(_uint iArrowCnt) { m_iArrow -= iArrowCnt;}
+	void SetOwner(CPlayer* pOwner) { m_pOwner = pOwner; NULL_CHECK(m_pOwner);}
+
+	void AddDefaultItems();
 
 
 	//아이템 장착
@@ -61,6 +65,7 @@ public:
 	}
 
 private:
+	CPlayer* m_pOwner = nullptr;
 	array<CEquipItem*, (COL * ROW)> m_arrItem{}; //  아이템 스페이스
 	array<CEquipItem*, IT_END> m_arrEquip{};  //  장비 스페이스
 	

@@ -9,6 +9,22 @@ enum ArrowMoveType
 	ARROW_MOVE_END
 };
 
+struct ArrowParams
+{
+	_float fDamage = 0.f;
+	_bool bCiritical = false;
+	COLLISION_TYPE eCollType = COLL_END;
+	ArrowType eType = ARROW_NORMAL;
+	ArrowParams() = default;
+	ArrowParams(_float f_damage, _bool b_ciritical, COLLISION_TYPE e_coll_type, ArrowType e_type)
+		: fDamage(f_damage),
+		  bCiritical(b_ciritical),
+		  eCollType(e_coll_type),
+		  eType(e_type)
+	{
+	}
+};
+
 class CStatComponent;
 class CArrow : public CGameObject
 {
@@ -20,7 +36,7 @@ private:
 public:
 	virtual HRESULT Ready_Object() override;
 	virtual _int Update_Object(const _float& fTimeDelta) override;
-	static CArrow* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float fDamage, COLLISION_TYPE eCollType, ArrowType eType = ARROW_NORMAL);
+	static CArrow* Create(LPDIRECT3DDEVICE9 pGraphicDev, ArrowParams tArrowParams);
 	virtual void Free() override;
 
 	void FireWork();
@@ -39,6 +55,7 @@ private:
 	COLLISION_TYPE m_eCollType = COLL_END;
 
 	_float m_fDamage;
+	_bool m_bCritical;
 
 	_float m_fpSpeed;
 	_float m_fLife;

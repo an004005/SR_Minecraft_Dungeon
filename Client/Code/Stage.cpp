@@ -54,7 +54,7 @@ HRESULT CStage::Ready_Scene(void)
 	// Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 	// 	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
 
-	// CBatchTool::Load(L"../Bin/Resource/Batch/stage1_test.batch");
+	CBatchTool::Load(L"../Bin/Resource/Batch/stage1_test.batch");
 
 	return S_OK;
 }

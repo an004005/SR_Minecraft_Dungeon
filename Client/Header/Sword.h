@@ -1,8 +1,7 @@
 #pragma once
-#include "EquipItem.h"
+#include "Weapon.h"
 
-class CSword :
-	public CEquipItem
+class CSword : public CWeapon
 {
 private:
 	explicit CSword(LPDIRECT3DDEVICE9 pGraphicDev);

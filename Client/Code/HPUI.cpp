@@ -109,7 +109,7 @@ void CHPUI::SetProgress(_int iCurHP, _uint iMaxHP, _int iDamage)
 	vScreen.y = -m_pTransCom->m_vInfo[INFO_POS].y + WINCY / 2 - 60.f;
 
 	if (iDamage < 0)
-		CDamageFontMgr::GetInstance()->Add_DamageFontFromScreen(iDamage, vScreen, D3DCOLOR_ARGB(255, 255, 0, 0));
+		CDamageFontMgr::GetInstance()->Add_DamageFontFromScreen(iDamage, vScreen, D3DCOLOR_ARGB(255, 255, 51, 153));
 	_float fProgress = (_float)iCurHP / (_float) iMaxHP;
 	m_fProgress = fProgress;
 	m_pHeartRed->SetProgress(fProgress);

@@ -14,6 +14,10 @@
 #include "FireworksArrow.h"
 #include "BootsOfSwiftness.h"
 #include "InventoryUI.h"
+#include "PowerRune.h"
+#include "StunRune.h"
+#include "MultiShotRune.h"
+#include "LightningRune.h"
 
 CInventory::CInventory(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CGameObject(pGraphicDev)
@@ -27,30 +31,6 @@ CInventory::~CInventory()
 
 HRESULT CInventory::Ready_Object()
 {
-	m_arrEquip[IT_RANGE] = CItemFactory::Create<CCrossbow>("Crossbow", L"Crossbow", IS_TAKE);
-	m_arrEquip[IT_RANGE]->AddRef();
-
-	m_arrEquip[IT_MELEE] = CItemFactory::Create<CSword>("Sword", L"Sword", IS_TAKE);
-	m_arrEquip[IT_MELEE]->AddRef();
-
-	m_arrItem[0] = CItemFactory::Create<CGlaive>("Glaive", L"Glaive", IS_TAKE);
-	m_arrItem[0]->AddRef();
-
-	m_arrItem[3] = CItemFactory::Create<CAxe>("Axe", L"Axe", IS_TAKE);
-	m_arrItem[3]->AddRef();
-
-	m_arrEquip[IT_LEGACY1] = CItemFactory::Create<CShockPowder>("ShockPowder", L"ShockPowder", IS_TAKE);
-	m_arrEquip[IT_LEGACY1]->AddRef();
-
-
-	m_arrItem[5] = CItemFactory::Create<CFireworksArrow>("FireworksArrow", L"FireworksArrow", IS_TAKE);
-	m_arrItem[5]->AddRef();
-
-
-	//m_pLegacy2 = CItemFactory::Create<CBootsOfSwiftness>("BootsOfSwiftness", L"BootsOfSwiftness", IS_TAKE);
-	//m_pLegacy2->AddRef();
-	//m_arrItem[6] = m_pLegacy3;
-
 	//UI 积己
 	{
 		//硅版 积己
@@ -219,6 +199,7 @@ void CInventory::Put(CEquipItem * pItem)
 			m_arrItem[i] = pItem;
 			m_arrItem[i]->AddRef();
 			m_arrItem[i]->SetState(IS_TAKE);
+			m_arrItem[i]->SetOwner(m_pOwner);
 			break;
 		}
 	}
@@ -239,8 +220,8 @@ void CInventory::Put(CConsumeItem * pItem)
 		break;
 	case IE_HEAL:
 	{
-		CPlayer* pPlayer = Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");
-		pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+		// CPlayer* pPlayer = Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");
+		m_pOwner->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
 			->ModifyHP(15);
 	}
 		break;
@@ -261,6 +242,54 @@ void CInventory::TakeOut(CEquipItem * pItem)
 	if (itr == m_arrItem.end()) return;
 	Safe_Release((*itr));
 	(*itr) = nullptr;
+	m_pOwner = nullptr;
+}
+
+void CInventory::AddDefaultItems()
+{
+	m_arrEquip[IT_RANGE] = CItemFactory::Create<CCrossbow>("Crossbow", L"Crossbow", IS_TAKE);
+	m_arrEquip[IT_RANGE]->AddRef();
+	m_arrEquip[IT_RANGE]->SetOwner(m_pOwner);
+
+	m_arrEquip[IT_MELEE] = CItemFactory::Create<CSword>("Sword", L"Sword", IS_TAKE);
+	m_arrEquip[IT_MELEE]->AddRef();
+	m_arrEquip[IT_MELEE]->SetOwner(m_pOwner);
+
+	m_arrItem[0] = CItemFactory::Create<CGlaive>("Glaive", L"Glaive", IS_TAKE);
+	m_arrItem[0]->AddRef();
+	m_arrItem[0]->SetOwner(m_pOwner);
+
+	m_arrItem[3] = CItemFactory::Create<CAxe>("Axe", L"Axe", IS_TAKE);
+	m_arrItem[3]->AddRef();
+	m_arrItem[3]->SetOwner(m_pOwner);
+
+	// CStunRune* rune = CItemFactory::Create<CStunRune>("StunRune", L"StunRune", IS_TAKE);
+	// dynamic_cast<CWeapon*>(m_arrItem[3])->SetRune(rune);
+	// rune->SetOwner(m_pOwner);
+
+	// CPowerRune* rune = CItemFactory::Create<CPowerRune>("PowerRune", L"PowerRune", IS_TAKE);
+	// dynamic_cast<CWeapon*>(m_arrEquip[IT_RANGE])->SetRune(rune);
+	// rune->SetOwner(m_pOwner);
+
+	// CMultiShotRune* rune = CItemFactory::Create<CMultiShotRune>("MultishotRune", L"MultishotRune", IS_TAKE);
+	// dynamic_cast<CWeapon*>(m_arrEquip[IT_RANGE])->SetRune(rune);
+	// rune->SetOwner(m_pOwner);
+
+	CLightningRune* rune = CItemFactory::Create<CLightningRune>("LightningRune", L"LightningRune");
+	rune->SetOwner(m_pOwner);
+	dynamic_cast<CWeapon*>(m_arrEquip[IT_MELEE])->SetRune(rune);
+
+	m_arrEquip[IT_LEGACY1] = CItemFactory::Create<CShockPowder>("ShockPowder", L"ShockPowder", IS_TAKE);
+	m_arrEquip[IT_LEGACY1]->AddRef();
+	m_arrEquip[IT_LEGACY1]->SetOwner(m_pOwner);
+
+	m_arrItem[5] = CItemFactory::Create<CFireworksArrow>("FireworksArrow", L"FireworksArrow", IS_TAKE);
+	m_arrItem[5]->AddRef();
+	m_arrItem[5]->SetOwner(m_pOwner);
+
+	//m_pLegacy2 = CItemFactory::Create<CBootsOfSwiftness>("BootsOfSwiftness", L"BootsOfSwiftness", IS_TAKE);
+	//m_pLegacy2->AddRef();
+	//m_arrItem[6] = m_pLegacy3;
 }
 
 void CInventory::Equip_Item(SkeletalPart* pSkeletalPart, ITEMTYPE eIT)

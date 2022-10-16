@@ -30,9 +30,17 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 	if (m_bStun)
 	{
 		if (m_fStunTime < m_fCurStunTime)
+		{
 			m_bStun = false;
+			if (m_pStun)
+				m_pStun->SetDead();
+		}
 		else
+		{
 			m_fCurStunTime += fTimeDelta;
+			if (m_pStun)
+				m_pStun->SetPos(m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{0.f, 3.f, 0.f});
+		}
 	}
 
 	if (m_bKnockback)
@@ -124,7 +132,7 @@ void CStatComponent::ModifyHP(_int iModifyingHP)
 	m_DamageDelegater.broadcast(m_iHP, m_iMaxHP, iModifyingHP);
 }
 
-void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCauser, DamageType eType)
+void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCauser, DamageType eType, _bool bCritical)
 {
 	if (m_bDead) return;
 
@@ -133,6 +141,7 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 	case DT_STUN:
 		m_bStun = true;
 		m_fCurStunTime = 0.f;
+		m_pStun = CEffectFactory::Create<CStun>("Monster_Stun", L"Monster_Stun", m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{0.f, 3.f, 0.f});
 		break;
 	case DT_KNOCK_BACK:
 		m_bKnockback = true;
@@ -155,12 +164,12 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 	ModifyHP(-iDamage);
 	if (iDamage != 0)
 	{
-		// if (dynamic_cast<CPlayer*>())
 		CDamageFontMgr::GetInstance()->Add_DamageFontFromWorld(
 			iDamage,
 			m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{0.f, 1.5f, 0.f},
 			vFromPos,
-			D3DCOLOR_ARGB(255, 255, 255, 255));
+			D3DCOLOR_ARGB(255, 255, 255, 255),
+			bCritical);
 	}
 }
 

@@ -21,6 +21,8 @@ private:
 public:
 	void PlaySound(const wstring& pSoundKey, const _vec3& vSoundPos, float fVolume = 1.f);
 	void PlaySoundRandom(const vector<wstring>& vecSoundKey, const _vec3& vSoundPos, float fVolume = 1.f);
+	void PlaySoundChannel(const wstring& pSoundKey, const _vec3& vSoundPos, CHANNELID eID, float fVolume = 1.f);
+
 	void PlayBGM(const wstring& pSoundKey, float fVolume);
 	
 	void StopSound(CHANNELID eID);

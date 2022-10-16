@@ -1,6 +1,6 @@
 #pragma once
-#include "EquipItem.h"
-class CAxe : public CEquipItem
+#include "Weapon.h"
+class CAxe : public CWeapon
 {
 private:
 	explicit CAxe(LPDIRECT3DDEVICE9 pGraphicDev);

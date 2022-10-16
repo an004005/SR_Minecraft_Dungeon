@@ -37,10 +37,11 @@ CPlayer::~CPlayer()
 {
 }
 
-HRESULT CPlayer::Ready_Object()
+HRESULT CPlayer::Ready_Object(const wstring& wstrPath)
 {
 	CSkeletalCube::Ready_Object();
-
+	if (wstrPath.empty() == false)
+		LoadSkeletal(wstrPath);
 
 	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 	m_pCurAnim = m_pIdleAnim;
@@ -77,6 +78,8 @@ HRESULT CPlayer::Ready_Object()
 
 	m_pInventory = CObjectFactory::Create<CInventory>("Inventory", L"Inventory");
 	m_pInventory->AddRef();
+	m_pInventory->SetOwner(this);
+	m_pInventory->AddDefaultItems();
 	m_arrAnim = m_pInventory->CurWeapon(IT_MELEE)->SetarrAnim();
 
 	m_pRootPart->pTrans->Update_Component(0.f);
@@ -256,6 +259,77 @@ void CPlayer::PlayerSpawn()
 	PlayAnimationOnce(&landing);
 	m_bDeadTime = 0.f;
 	SetVisible(true);
+}
+
+
+void CPlayer::SpawnArrow(_uint iDamage, PlayerArrowType eType, _bool bCritical, ArrowType eArrowType)
+{
+	const _vec3 vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + _vec3{0.f, 1.3f, 0.f};
+	_vec3 vLookAt;
+	if (PickTargetEnemy(OUT vLookAt) == false)
+		vLookAt = vPos + m_pRootPart->pTrans->m_vInfo[INFO_LOOK];
+
+	switch (eType)
+	{
+	case PlayerArrowType::NORMAL:
+		CSoundMgr::GetInstance()->PlaySound(L"sfx_item_arrow_fire.ogg", vPos);
+		CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 
+		{_float(iDamage), bCritical, COLL_PLAYER_BULLET, eArrowType},
+			vPos, vLookAt);
+		break;
+	case PlayerArrowType::MULTISHOT:
+		{
+			CSoundMgr::GetInstance()->PlaySound(L"sfx_item_arrow_fire.ogg", vPos);
+
+			_matrix matRot, matRotReverse;
+			D3DXMatrixRotationY(&matRotReverse, D3DXToRadian(-15.f));
+			D3DXMatrixRotationY(&matRot, D3DXToRadian(5.f));
+
+			_vec3 vLook = vLookAt - vPos;
+			D3DXVec3TransformNormal(&vLook, &vLook, &matRotReverse);
+
+			for (int i = 0; i < 5; ++i)
+			{
+				D3DXVec3TransformNormal(&vLook, &vLook, &matRot);
+				CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 
+				{_float(iDamage), bCritical, COLL_PLAYER_BULLET, eArrowType},
+					vPos, vLook + vPos);
+			}
+		}
+		break;
+	case PlayerArrowType::LASER:
+		break;
+	default:;
+	}
+}
+
+_bool CPlayer::PickTargetEnemy(_vec3& vLookAt)
+{
+	// https://gohen.tistory.com/79 참조(광선과 직선 교차판정)
+
+	_vec3 vOrigin, vRayDir;
+	_matrix matView, matProj;
+	D3DVIEWPORT9 ViewPort;
+
+	ZeroMemory(&ViewPort, sizeof(D3DVIEWPORT9));
+	m_pGraphicDev->GetViewport(&ViewPort);
+	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &matProj);
+	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
+	CGameUtilMgr::GetPickingRay(vOrigin, vRayDir, g_hWnd, matView, matProj, ViewPort);
+
+	for (const auto& enemy : Engine::Get_Layer(LAYER_ENEMY)->Get_MapObject())
+	{
+		const auto pColl = enemy.second->Get_Component<CCollisionCom>(L"Proto_CollisionCom", ID_DYNAMIC);
+		const _vec3 vSubject = vOrigin - pColl->GetCollPos();
+		const _float fB = D3DXVec3Dot(&vRayDir, &vSubject);
+		const _float fC = D3DXVec3Dot(&vSubject, &vSubject) - pColl->GetRadius();
+		if (fB * fB  - fC >= 0.f)
+		{
+			vLookAt = pColl->GetCollPos();
+			return true;
+		}
+	}
+	return false;
 }
 
 void CPlayer::SetMoveDir(_float fX, _float fZ)
@@ -472,14 +546,14 @@ CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
 {
 	CPlayer* pInstance = new CPlayer(pGraphicDev);
 
-	if (FAILED(pInstance->Ready_Object()))
+	if (FAILED(pInstance->Ready_Object(wstrPath)))
 	{
 		Safe_Release(pInstance);
 		return nullptr;
 	}
 
-	if (!wstrPath.empty())
-		pInstance->LoadSkeletal(wstrPath);
+	// if (!wstrPath.empty())
+	// 	pInstance->LoadSkeletal(wstrPath);
 
 	return pInstance;
 }
@@ -565,7 +639,7 @@ void CPlayer::WeaponChange(ITEMTYPE eIT)
 {
 	if (m_pWeaponPart == nullptr)
 	{
-		auto& itr = m_mapParts.find("weapon_r");
+		const auto itr = m_mapParts.find("weapon_r");
 		if (itr == m_mapParts.end())
 			return;
 		m_pWeaponPart = itr->second;

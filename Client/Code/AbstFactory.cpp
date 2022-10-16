@@ -47,6 +47,12 @@
 #include "PlayerStartPos.h"
 #include "Kouku.h"
 #include "Saton.h"
+#include "PowerRune.h"
+#include "StunRune.h"
+#include "StormRune.h"
+#include "MultiShotRune.h"
+#include "LightningRune.h"
+#include "LaserShotRune.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -54,7 +60,7 @@ map<string, std::function<CGameObject*()>> CPlayerFactory::s_mapPlayerSpawner;
 map<string, std::function<CGameObject*()>> CEnemyFactory::s_mapEnemySpawner;
 map<string, std::function<CGameObject*()>> CEffectFactory::s_mapEffectSpawner;
 map<string, std::function<CGameObject*()>> CEnvFactory::s_mapEnvSpawner;
-map<string, std::function<CGameObject*(_float)>> CBulletFactory::s_mapBulletSpawner;
+map<string, std::function<CGameObject*(ArrowParams)>> CBulletFactory::s_mapBulletSpawner;
 map<string, std::function<CGameObject*()>> CObjectFactory::s_mapObjectSpawner;
 map<string, std::function<CGameObject*()>> CItemFactory::s_mapItemSpawner;
 map<string, std::function<CGameObject*(_uint)>> CUIFactory::s_mapUISpawner;
@@ -335,6 +341,11 @@ void CEffectFactory::Ready_EffectFactory()
 	{
 		return CHeartParticle::Create(s_pGraphicDev, 1.f);
 	} });
+
+	s_mapEffectSpawner.insert({ "ChainLightning", []()
+	{
+		return CChainLightning::Create(s_pGraphicDev);
+	} });
 }
 
 void CEnvFactory::Ready_EnvFactory()
@@ -359,17 +370,13 @@ void CEnvFactory::Ready_EnvFactory()
 }
 void CBulletFactory::Ready_BulletFactory()
 {
-	s_mapBulletSpawner.insert({"PlayerNormalArrow", [](_float fDamage)
+	s_mapBulletSpawner.insert({"PlayerNormalArrow", [](ArrowParams tArrowParams)
 	{
-		return CArrow::Create(s_pGraphicDev, fDamage, COLL_PLAYER_BULLET);
+		return CArrow::Create(s_pGraphicDev, tArrowParams);
 	}});
-	s_mapBulletSpawner.insert({"EnemyNormalArrow", [](_float fDamage)
+	s_mapBulletSpawner.insert({"EnemyNormalArrow", [](ArrowParams tArrowParams)
 	{
-		return CArrow::Create(s_pGraphicDev, fDamage, COLL_ENEMY_BULLET);
-	}});
-	s_mapBulletSpawner.insert({"PlayerFireWorkArrow", [](_float fDamage)
-	{
-		return CArrow::Create(s_pGraphicDev, fDamage, COLL_PLAYER_BULLET, ARROW_FIREWORK);
+		return CArrow::Create(s_pGraphicDev, tArrowParams);
 	}});
 }
 
@@ -464,6 +471,32 @@ void CItemFactory::Ready_ItemFactory()
 	s_mapItemSpawner.insert({ "FireworksArrow", []()
 	{
 		return CFireworksArrow::Create(s_pGraphicDev);
+	} });
+
+	// rune factories
+	s_mapItemSpawner.insert({ "PowerRune", []()
+	{
+		return CPowerRune::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "StormRune", []()
+	{
+		return CStormRune::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "StunRune", []()
+	{
+		return CStunRune::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "MultishotRune", []()
+	{
+		return CMultiShotRune::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "LightningRune", []()
+	{
+		return CLightningRune::Create(s_pGraphicDev);
+	} });
+	s_mapItemSpawner.insert({ "LasershotRune", []()
+	{
+		return CLaserShotRune::Create(s_pGraphicDev);
 	} });
 }
 
