@@ -54,7 +54,7 @@
 #include "MultiShotRune.h"
 #include "LightningRune.h"
 #include "LaserShotRune.h"
-
+#include "ItemTexUI.h"
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
 map<string, std::function<CGameObject*()>> CPlayerFactory::s_mapPlayerSpawner;
@@ -551,6 +551,10 @@ void CUIFactory::Ready_UIFactory()
 	 s_mapUISpawner.insert({ "ItemUI", [](_uint iTexNum)
 	 {
 		 return CItemUI::Create(s_pGraphicDev, 0);
+	 } });
+	 s_mapUISpawner.insert({ "ItemTexUI", [](_uint iTexNum)
+	 {
+		 return CItemTexUI::Create(s_pGraphicDev, 0);
 	 } });
 	
 }

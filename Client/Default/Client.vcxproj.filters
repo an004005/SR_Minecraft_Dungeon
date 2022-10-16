@@ -434,6 +434,9 @@
     <ClInclude Include="ItemUI.h">
       <Filter>02. GameObject\05. UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\ItemTexUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -772,6 +775,9 @@
       <Filter>02. GameObject\07. Item\Rune</Filter>
     </ClCompile>
     <ClCompile Include="ItemUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ItemTexUI.cpp">
       <Filter>02. GameObject\05. UI</Filter>
     </ClCompile>
   </ItemGroup>

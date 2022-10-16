@@ -13,6 +13,7 @@ class CItemUI;
 class CPlayer;
 class CWeapon;
 class CRune;
+class CItemTexUI;
 
 enum LEGACY_SLOT { LEGACY_SLOT1, LEGACY_SLOT2, LEGACY_SLOT3, LEGACY_SLOT_END };
 
@@ -109,5 +110,7 @@ private:
 
 	CEquipItem*	m_pCurCollItem = nullptr;
 	_int m_iSlotIndex = 0;
+
+	CItemTexUI* m_pItemTexUI = nullptr;
 };
 

@@ -171,6 +171,7 @@
     <ClInclude Include="..\Header\CamAnimation.h" />
     <ClInclude Include="..\Header\CameraTool.h" />
     <ClInclude Include="..\Header\InventoryUI.h" />
+    <ClInclude Include="..\Header\ItemTexUI.h" />
     <ClInclude Include="..\Header\LaserShotRune.h" />
     <ClInclude Include="..\Header\MultiShotRune.h" />
     <ClInclude Include="..\Header\PlayerStartPos.h" />
@@ -279,6 +280,7 @@
     <ClCompile Include="..\Code\CamAnimation.cpp" />
     <ClCompile Include="..\Code\CameraTool.cpp" />
     <ClCompile Include="..\Code\InventoryUI.cpp" />
+    <ClCompile Include="..\Code\ItemTexUI.cpp" />
     <ClCompile Include="..\Code\LaserShotRune.cpp" />
     <ClCompile Include="..\Code\MultiShotRune.cpp" />
     <ClCompile Include="..\Code\PlayerStartPos.cpp" />

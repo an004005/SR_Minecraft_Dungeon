@@ -19,6 +19,8 @@
 #include "MultiShotRune.h"
 #include "LightningRune.h"
 #include "LaserShotRune.h"
+#include "ItemTexUI.h"
+
 CInventory::CInventory(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CGameObject(pGraphicDev)
 {
@@ -78,6 +80,10 @@ HRESULT CInventory::Ready_Object()
 
 		m_pCollFrame = CUIFactory::Create<CItemUI>("ItemUI", L"CollFrame", 0);
 		m_pCollFrame->SetUITexture(4);
+
+		// 텍스쳐
+		fEquipSlotSize = WINCX * 0.09f;
+		m_pItemTexUI = CUIFactory::Create<CItemTexUI>("ItemTexUI", L"ItemTexUI", 0, WINCX * 0.9f, WINCY*0.2f, fEquipSlotSize, fEquipSlotSize);
 	}
 	m_iArrow = 90;
 	m_iEmerald = 0;
@@ -294,6 +300,7 @@ void CInventory::OpenInventory()
 		m_pRuneSlot->Close();
 		m_pCollFrame->Close();
 		m_pClickFrame->Close();
+		m_pItemTexUI->Close();
 	}
 }
 
@@ -615,6 +622,9 @@ void CInventory::MouseTestEvent(CEquipItem * pCurCollItem, CItemUI * pCurCollUI,
 			pCurCollUI->SetPick(true);
 			//클릭시 프레임 생성		
 			CreateClickFrame();
+			//텍스쳐 출력
+			m_pItemTexUI->SetUITexture(pCurCollItem->GetUITexNum());
+			m_pItemTexUI->Open();
 		}
 		else if (MouseKeyPress(DIM_LB))
 		{
