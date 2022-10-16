@@ -21,17 +21,8 @@ HRESULT CInventoryUI::Ready_Object()
 	m_pBufferCom = Add_Component<CRcTex>(L"Proto_RcTexCom", L"Proto_RcTexCom", ID_STATIC);
 	m_pTextureCom = Add_Component<CTexture>(L"Proto_InventoryUI_Texture", L"Proto_InventoryUI_Texture", ID_STATIC);
 	m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
-	m_pTransCom->Set_Scale(WINCX, WINCY, 0.f);
 
-	_vec3 vScale = m_pTransCom->m_vScale;
-	_vec3 vPos = _vec3(WINCX * 0.3f, -WINCY * 0.33f, 0.f);
-	_vec3 vAngle = m_pTransCom->m_vAngle;
-	vScale.x *= 0.1f;
-	vScale.y *= 0.16f;
-
-	CGameUtilMgr::MatWorldComposeEuler(m_matcarveWorld, vScale, vAngle, vPos);
-
-	m_iRenderPriority = 9;
+	m_iRenderPriority = 8;
 	return S_OK;
 }
 
@@ -42,34 +33,20 @@ _int CInventoryUI::Update_Object(const _float & fTimeDelta)
 
 	CUI::Update_Object(fTimeDelta);
 	
-
-	if (m_bWorldSet == false)
-	{
-		_vec3 vScale = m_pTransCom->m_vScale;
-		_vec3 vPos = _vec3(WINCX * 0.37f, WINCY * 0.29f, 0.f);
-		_vec3 vAngle = m_pTransCom->m_vAngle;
-		vScale.x *= 0.1f;
-		vScale.y *= 0.15f;
-		CGameUtilMgr::MatWorldComposeEuler(m_matIonUIWorld, vScale, vAngle, vPos);	
-		m_bWorldSet = true;
-	}
-	
-
 	return OBJ_NOEVENT;
 }
 
 void CInventoryUI::Render_Object()
 {
-	//CUI::Render_Object();
-
+	
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &CGameUtilMgr::s_matIdentity);
 	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
 
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
-	m_pTextureCom->Set_Texture(0);
+	m_pTextureCom->Set_Texture(m_iTexNum);
 	m_pBufferCom->Render_Buffer();
 
-	_vec2 vPos = _vec2(m_matIonUIWorld._41, m_matIonUIWorld._22);
+	/*_vec2 vPos = _vec2(m_matIonUIWorld._41, m_matIonUIWorld._22);
 
 	if (m_iTexNum != 0)
 	{
@@ -91,15 +68,9 @@ void CInventoryUI::Render_Object()
 		Render_Font(L"Gothic_Bold20", wstrItemName[2].c_str(),
 			&_vec2(vPos.x + WINCX * 0.28f, -vPos.y + WINCY *0.55f),
 			D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
-	}
+	}*/
 
 
-	Render_Font(L"Gothic_Bold20", L"효과 부여",
-		&_vec2(vPos.x + WINCX * 0.4f, -vPos.y + WINCY *0.85f),
-		D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
-	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matcarveWorld);
-	m_pTextureCom->Set_Texture(3);
-	m_pBufferCom->Render_Buffer();
 }
 
 void CInventoryUI::Free()
@@ -182,157 +153,57 @@ void CInventoryUI::SetTexture(_int iTexNum)
 		wstrItemName[2] = L"충격 가루는 빠르게 빠져나가고 싶은 사람들을\n위한 믿음직한 도구입니다.";
 	}
 		break;
+	case 15:
+	{
+		//shockpowder
+		wstrItemName[0] = L"레이저 룬";
+		wstrItemName[1] = L"마비 지속시간 2초";
+		wstrItemName[2] = L"충격 가루는 빠르게 빠져나가고 싶은 사람들을\n위한 믿음직한 도구입니다.";
+	}
+	break;
+	case 16:
+	{
+		//shockpowder
+		wstrItemName[0] = L"충격 가루";
+		wstrItemName[1] = L"마비 지속시간 2초";
+		wstrItemName[2] = L"충격 가루는 빠르게 빠져나가고 싶은 사람들을\n위한 믿음직한 도구입니다.";
+	}
+	break;
+	case 17:
+	{
+		//shockpowder
+		wstrItemName[0] = L"충격 가루";
+		wstrItemName[1] = L"마비 지속시간 2초";
+		wstrItemName[2] = L"충격 가루는 빠르게 빠져나가고 싶은 사람들을\n위한 믿음직한 도구입니다.";
+	}
+	break;
+	case 18:
+	{
+		//shockpowder
+		wstrItemName[0] = L"충격 가루";
+		wstrItemName[1] = L"마비 지속시간 2초";
+		wstrItemName[2] = L"충격 가루는 빠르게 빠져나가고 싶은 사람들을\n위한 믿음직한 도구입니다.";
+	}
+	break;
+	case 19:
+	{
+		//shockpowder
+		wstrItemName[0] = L"충격 가루";
+		wstrItemName[1] = L"마비 지속시간 2초";
+		wstrItemName[2] = L"충격 가루는 빠르게 빠져나가고 싶은 사람들을\n위한 믿음직한 도구입니다.";
+	}
+	break;
+	case 20:
+	{
+		//shockpowder
+		wstrItemName[0] = L"충격 가루";
+		wstrItemName[1] = L"마비 지속시간 2초";
+		wstrItemName[2] = L"충격 가루는 빠르게 빠져나가고 싶은 사람들을\n위한 믿음직한 도구입니다.";
+	}
+	break;
 	default:
 		MSG_BOX("input nonTextIndex");
 		break;
 	}
 }
 
-/*------------------------
-* ItemSpace
-------------------------*/
-CItemSpaceUI::CItemSpaceUI(LPDIRECT3DDEVICE9 pGraphicDev) : CInventoryUI(pGraphicDev)
-{
-}
-
-CItemSpaceUI::~CItemSpaceUI()
-{
-}
-
-HRESULT CItemSpaceUI::Ready_Object()
-{
-	D3DXMatrixOrthoLH(&m_ProjMatrix, WINCX, WINCY, 0.f, 1.f);
-
-	m_pBufferCom = Add_Component<CRcTex>(L"Proto_RcTexCom", L"Proto_RcTexCom", ID_STATIC);
-	m_pTextureCom = Add_Component<CTexture>(L"Proto_InventoryUI_Texture", L"Proto_InventoryUI_Texture", ID_STATIC);
-	m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
-
-	
-
-	m_iRenderPriority = 8;
-	return S_OK;
-}
-
-_int CItemSpaceUI::Update_Object(const _float & fTimeDelta)
-{
-	if (m_bWorldSet == false)
-	{
-		_vec3 vScale = m_pTransCom->m_vScale;
-		_vec3 vPos = m_pTransCom->m_vInfo[INFO_POS];
-		_vec3 vAngle = m_pTransCom->m_vAngle;
-		vScale.x *= 0.8f;
-		vScale.y *= 0.8f;
-		CGameUtilMgr::MatWorldComposeEuler(m_matIconWorld, vScale, vAngle, vPos);
-
-		m_bWorldSet = true;
-	}
-
-	if (m_MouseCollFrameWorldSet == false)
-	{
-		_vec3 vScale = m_pTransCom->m_vScale;
-		_vec3 vPos = m_pTransCom->m_vInfo[INFO_POS];
-		_vec3 vAngle = m_pTransCom->m_vAngle;
-		vScale.x *= 1.1f;
-		vScale.y *= 1.1f;
-		CGameUtilMgr::MatWorldComposeEuler(m_matMouseCollFrameWorld, vScale, vAngle, vPos);
-
-		m_MouseCollFrameWorldSet = true;
-	}
-
-	if (m_CurClickFrameWorldSet == false)
-	{
-		_vec3 vScale = m_pTransCom->m_vScale;
-		_vec3 vPos = m_pTransCom->m_vInfo[INFO_POS];
-		_vec3 vAngle = m_pTransCom->m_vAngle;
-		vScale.x *= 1.1f;
-		vScale.y *= 1.1f;
-		CGameUtilMgr::MatWorldComposeEuler(m_matCurClickFrameWorld, vScale, vAngle, vPos);
-
-		m_CurClickFrameWorldSet = true;
-	}
-
-	
-	if (m_bClose)
-		return OBJ_NOEVENT;
-
-
-	CUI::Update_Object(fTimeDelta);
-	return OBJ_NOEVENT;
-}
-
-void CItemSpaceUI::Render_Object()
-{
-	m_pGraphicDev->SetTransform(D3DTS_VIEW, &CGameUtilMgr::s_matIdentity);
-	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
-
-	switch (m_eRenderType)
-	{
-	case SLOT_BASE:
-	{
-		m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
-		m_pTextureCom->Set_Texture(m_iBaseSlot);
-		m_pBufferCom->Render_Buffer();
-	}
-	break;
-	case SLOT_WEAPON:
-	{
-		m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
-		m_pTextureCom->Set_Texture(m_iWeaponSlot);
-		m_pBufferCom->Render_Buffer();
-	}
-	break;
-	case SLOT_LEGACY:
-	{
-		m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
-		m_pTextureCom->Set_Texture(m_iLegacySlot);
-		m_pBufferCom->Render_Buffer();
-	}
-	break;
-	case SLOT_TYPE_END:
-		break;
-	}
-
-	if (m_iIconTexNum != 0)
-	{
-		m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matIconWorld);
-		m_pTextureCom->Set_Texture(m_iIconTexNum);
-		m_pBufferCom->Render_Buffer();
-		m_iIconTexNum = 0;
-	}
-
-	if (m_bMouseCollFrame)
-	{
-		m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matMouseCollFrameWorld);
-		m_pTextureCom->Set_Texture(4);
-		m_pBufferCom->Render_Buffer();
-		m_bMouseCollFrame = false;
-	}
-
-	if (m_bCurClickFrame)
-	{
-		m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matCurClickFrameWorld);
-		m_pTextureCom->Set_Texture(5);
-		m_pBufferCom->Render_Buffer();
-	}
-
-
-}
-
-void CItemSpaceUI::Free()
-{
-	
-	CInventoryUI::Free();
-}
-
-CItemSpaceUI * CItemSpaceUI::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _uint iTexNum)
-{
-	CItemSpaceUI* pInstance = new CItemSpaceUI(pGraphicDev);
-
-	if (FAILED(pInstance->Ready_Object()))
-	{
-		Safe_Release(pInstance);
-		return nullptr;
-	}
-
-	return pInstance;
-}

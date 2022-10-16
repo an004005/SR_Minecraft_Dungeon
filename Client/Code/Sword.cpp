@@ -7,6 +7,8 @@
 #include "StatComponent.h"
 #include "TerrainCubeMap.h"
 #include "Rune.h"
+#include "Inventory.h"
+
 
 CSword::CSword(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CWeapon(pGraphicDev)
@@ -21,7 +23,7 @@ CSword::~CSword()
 
 HRESULT CSword::Ready_Object()
 {
-	FAILED_CHECK_RETURN(CEquipItem::Ready_Object(), E_FAIL);
+	FAILED_CHECK_RETURN(CWeapon::Ready_Object(), E_FAIL);
 
 	m_pTransCom = Add_Component<Engine::CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 	m_pBufferCom = Add_Component<CVoxelTex>(L"Proto_VoxelTex_Sword", L"Proto_VoxelTex_Sword", ID_STATIC);
@@ -43,11 +45,31 @@ HRESULT CSword::Ready_Object()
 	m_eItemType = IT_MELEE;
 	m_iUItexNum = 10;
 
+	m_pItemUI = CUIFactory::Create<CItemUI>("ItemUI", L"SwordUI", 0);
+	m_pItemUI->SetUITexture(m_iUItexNum);
+
 	return S_OK;
 }
 
 _int CSword::Update_Object(const _float & fTimeDelta)
 {
+	//runeslot on/off
+	if (m_pInventory->GetCurClickItem() == this)
+	{
+		if (m_pRune != nullptr)
+		{
+			m_pRune->GetItemUI()->Open();
+		}
+	}
+	else
+	{
+		if (m_pRune != nullptr)
+		{
+			m_pRune->GetItemUI()->Close();
+		}
+	}
+
+
 	if (m_eItemState == IS_TAKE)
 		return 0;
 
@@ -68,7 +90,7 @@ _int CSword::Update_Object(const _float & fTimeDelta)
 
 	Parabola(vPos, fHeight, fTimeDelta);
 
-	CEquipItem::Update_Object(fTimeDelta);
+	CWeapon::Update_Object(fTimeDelta);
 	
 	return 0;
 }
@@ -80,6 +102,25 @@ void CSword::LateUpdate_Object()
 
 void CSword::Render_Object()
 {
+	//runeslot on/off
+	if (m_pInventory->GetCurClickItem() == this)
+	{
+		if (m_pRune != nullptr)
+		{
+			m_pRune->GetItemUI()->Open();
+			m_pInventory->SetRune(m_pRune);
+		}
+	}
+	else
+	{
+		if (m_pRune != nullptr)
+		{
+			m_pRune->GetItemUI()->Close();
+			m_pInventory->SetRune(nullptr);
+		}
+	}
+
+
 	if (m_eItemState == IS_TAKE)
 		return;
 
@@ -103,7 +144,7 @@ CSword * CSword::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 
 void CSword::Free()
 {
-	CEquipItem::Free();
+	CWeapon::Free();
 }
 
 _int CSword::Attack()

@@ -1,37 +1,33 @@
 #pragma once
 #include "UI.h"
 
-/*------------------------
-* BackGround
-------------------------*/
-class CInventoryUI :
-	public CUI
+class CItemUI : public CUI
 {
 private:
-	explicit CInventoryUI(LPDIRECT3DDEVICE9 pGraphicDev);
-	virtual ~CInventoryUI();
+
+	explicit CItemUI(LPDIRECT3DDEVICE9 pGraphicDev);
+	virtual ~CItemUI();
 
 public:
 	virtual HRESULT Ready_Object() override;
 	virtual _int Update_Object(const _float& fTimeDelta) override;
 	virtual void Render_Object() override;
 	virtual void Free() override;
-	static CInventoryUI* Create(LPDIRECT3DDEVICE9 pGraphicDev, const _uint iTexNum);
+	static CItemUI* Create(LPDIRECT3DDEVICE9 pGraphicDev, const _uint iTexNum);
 
 	void Close() { m_bClose = true; }
 	void Open() { m_bClose = false; }
 	_bool IsClosen() { return m_bClose; }
 	void SetUITexture(_int TexIndex) { m_iTexNum = TexIndex; }
-	void SetRenderPriority(_int iPriority) { m_iRenderPriority = iPriority; }
+	void SetPos(const _vec3 vPos) { m_pTransCom->m_vInfo[INFO_POS] = vPos; }
+	void SetSize(const _vec3 vSize) { m_pTransCom->m_vScale = vSize; }
+	_bool IsPick() { return m_bPick; }
+	void SetPick(_bool bPick) { m_bPick = bPick; }
 
 private:
 	_bool m_bClose = true;
-
-private:	
-	wstring wstrItemName[3]{};
-	void SetTexture(_int iTexNum);
+	_bool m_bPick;
 
 
-	//_matrix m_matcarveWorld;
 };
 

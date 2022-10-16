@@ -18,6 +18,9 @@ HRESULT CFireworksArrow::Ready_Object()
 	m_iUItexNum = 13;
 	m_fCurCoolTime = 8.f;
 	m_fCoolTime = 8.f;
+
+	m_pItemUI = CUIFactory::Create<CItemUI>("ItemUI", L"FireWorkUI", 0);
+	m_pItemUI->SetUITexture(m_iUItexNum);
 	return S_OK;
 }
 

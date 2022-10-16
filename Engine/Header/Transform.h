@@ -26,6 +26,7 @@ public:
 	void	SetRotation(const _vec3& vAngle) { m_vAngle = vAngle; }
 	void	Get_WorldMatrix(_matrix* pWorld) const { *pWorld = m_matWorld; }
 	void	Set_WorldMatrix(_matrix* pWorld) { m_matWorld = *pWorld; }
+	void	Set_WorldMatrix(const _matrix* pWorld) { m_matWorld = *pWorld; }
 	void    Set_WorldDecompose(const _matrix& matWorld);
 	void    Set_StopUpdate() { m_bStopUpdate = true; }
 	void    Set_StartUpdate() { m_bStopUpdate = false; }

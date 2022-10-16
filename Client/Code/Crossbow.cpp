@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "TerrainCubeMap.h"
 #include "Rune.h"
+#include "Inventory.h"
 
 CCrossbow::CCrossbow(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CWeapon(pGraphicDev)
@@ -20,7 +21,7 @@ CCrossbow::~CCrossbow()
 
 HRESULT CCrossbow::Ready_Object()
 {
-	FAILED_CHECK_RETURN(CEquipItem::Ready_Object(), E_FAIL);
+	FAILED_CHECK_RETURN(CWeapon::Ready_Object(), E_FAIL);
 	m_pTransCom = Add_Component<Engine::CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 	m_pBufferCom = Add_Component<CVoxelTex>(L"Proto_VoxelTex_Crossbow", L"Proto_VoxelTex_Crossbow", ID_STATIC);
 	m_pTextureCom = Add_Component<CTexture>(L"Proto_WeaponTexture", L"Proto_WeaponTexture", ID_STATIC);
@@ -36,11 +37,31 @@ HRESULT CCrossbow::Ready_Object()
 
 	m_eItemType = IT_RANGE;
 	m_iUItexNum = 8;
+
+	m_pItemUI = CUIFactory::Create<CItemUI>("ItemUI", L"CrossBowUI", 0);
+	m_pItemUI->SetUITexture(m_iUItexNum);
 	return S_OK;
 }
 
 _int CCrossbow::Update_Object(const _float & fTimeDelta)
 {
+	//runeslot on/off
+	if (m_pInventory->GetCurClickItem() == this)
+	{
+		if (m_pRune != nullptr)
+		{
+			m_pRune->GetItemUI()->Open();
+		}
+	}
+	else
+	{
+		if (m_pRune != nullptr)
+		{
+			m_pRune->GetItemUI()->Close();
+		}
+	}
+
+
 	if (m_eItemState == IS_TAKE)
 		return 0;
 
@@ -50,7 +71,7 @@ _int CCrossbow::Update_Object(const _float & fTimeDelta)
 
 	Parabola(vPos, fHeight, fTimeDelta);
 
-	CEquipItem::Update_Object(fTimeDelta);
+	CWeapon::Update_Object(fTimeDelta);
 	return 0;
 }
 
@@ -84,7 +105,7 @@ CCrossbow * CCrossbow::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 
 void CCrossbow::Free()
 {
-	CEquipItem::Free();
+	CWeapon::Free();
 }
 
 _int CCrossbow::Attack()
@@ -104,6 +125,7 @@ _int CCrossbow::Attack()
 
 	if (m_pRune) // rune
 	{
+		m_pOwner->SpawnArrow(m_iDamage, PlayerArrowType::LASER);
 		m_pRune->Use();
 	}
 	else // normal attack

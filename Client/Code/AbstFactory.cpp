@@ -44,6 +44,7 @@
 #include "CameraTool.h"
 #include "BatchTool.h"
 #include "InventoryUI.h"
+#include "ItemUI.h"
 #include "PlayerStartPos.h"
 #include "Kouku.h"
 #include "Saton.h"
@@ -493,7 +494,7 @@ void CItemFactory::Ready_ItemFactory()
 	{
 		return CLightningRune::Create(s_pGraphicDev);
 	} });
-	s_mapItemSpawner.insert({ "LasershotRune", []()
+	s_mapItemSpawner.insert({ "LaserShotRune", []()
 	{
 		return CLaserShotRune::Create(s_pGraphicDev);
 	} });
@@ -542,21 +543,13 @@ void CUIFactory::Ready_UIFactory()
 
 
 
-
-
-
-
-	 
-	 /*--------------------------
-	 아래에 생성, 순서 변경 금지!!
-	 ----------------------------*/
 	 s_mapUISpawner.insert({ "InventoryUI", [](_uint iTexNum)
 	 {
-		 return CInventoryUI::Create(s_pGraphicDev, CNT_EMERALD);
+		 return CInventoryUI::Create(s_pGraphicDev, 0);
 	 } });
-	 s_mapUISpawner.insert({ "ItemSpaceUI", [](_uint iTexNum)
+	 s_mapUISpawner.insert({ "ItemUI", [](_uint iTexNum)
 	 {
-		 return CItemSpaceUI::Create(s_pGraphicDev, CNT_EMERALD);
+		 return CItemUI::Create(s_pGraphicDev, 0);
 	 } });
 	
 }

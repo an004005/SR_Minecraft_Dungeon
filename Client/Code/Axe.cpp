@@ -7,6 +7,8 @@
 #include "StatComponent.h"
 #include "TerrainCubeMap.h"
 #include "Rune.h"
+#include "Inventory.h"
+
 
 CAxe::CAxe(LPDIRECT3DDEVICE9 pGraphicDev): CWeapon(pGraphicDev)
 {
@@ -20,7 +22,7 @@ CAxe::~CAxe()
 
 HRESULT CAxe::Ready_Object()
 {
-	FAILED_CHECK_RETURN(CEquipItem::Ready_Object(), E_FAIL);
+	FAILED_CHECK_RETURN(CWeapon::Ready_Object(), E_FAIL);
 
 	m_pTransCom = Add_Component<Engine::CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 	m_pBufferCom = Add_Component<CVoxelTex>(L"Proto_VoxelTex_Axe", L"Proto_VoxelTex_Axe", ID_STATIC);
@@ -41,11 +43,28 @@ HRESULT CAxe::Ready_Object()
 	m_eItemType = IT_MELEE;
 	m_iUItexNum = 7;
 
+	m_pItemUI = CUIFactory::Create<CItemUI>("ItemUI", L"AxeUI", 0);
+	m_pItemUI->SetUITexture(m_iUItexNum);
 	return S_OK;
 }
 
 _int CAxe::Update_Object(const _float& fTimeDelta)
 {
+	//runeslot on/off
+	if (m_pInventory->GetCurClickItem() == this)
+	{
+		if (m_pRune != nullptr)
+		{
+			m_pRune->GetItemUI()->Open();
+		}
+	}
+	else
+	{
+		if (m_pRune != nullptr)
+		{
+			m_pRune->GetItemUI()->Close();
+		}
+	}
 
 	if (m_eItemState == IS_TAKE)
 		return 0;
@@ -56,7 +75,7 @@ _int CAxe::Update_Object(const _float& fTimeDelta)
 
 	Parabola(vPos, fHeight, fTimeDelta);
 
-	CEquipItem::Update_Object(fTimeDelta);
+	CWeapon::Update_Object(fTimeDelta);
 	return OBJ_NOEVENT;
 }
 
@@ -140,4 +159,9 @@ void CAxe::Collision()
 		m_pRune->Collision();
 
 	DEBUG_SPHERE(vAttackPos, 3.f, 1.f);
+}
+
+void CAxe::Free()
+{
+	CWeapon::Free();
 }

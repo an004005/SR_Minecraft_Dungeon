@@ -3,11 +3,21 @@
 
 CPowerRune::CPowerRune(LPDIRECT3DDEVICE9 pGraphicDev) : CRune(pGraphicDev)
 {
-	m_eTargetType = WEAPON_SWORD | WEAPON_AXE | WEAPON_AXE | WEAPON_CROSSBOW;
+	m_eTargetType = WEAPON_SWORD | WEAPON_AXE | WEAPON_AXE | WEAPON_CROSSBOW | WEAPON_GLAIVE;
+	m_iUItexNum = 20;
+	m_eItemType = IT_RUNE;
 }
 
 CPowerRune::~CPowerRune()
 {
+}
+
+HRESULT CPowerRune::Ready_Object()
+{
+	m_pItemUI = CUIFactory::Create<CItemUI>("ItemUI", L"PowerRuneUI", 0);
+	m_pItemUI->SetUITexture(m_iUItexNum);
+
+	return CRune::Ready_Object();
 }
 
 void CPowerRune::EquipRune(CWeapon* pWeapon)

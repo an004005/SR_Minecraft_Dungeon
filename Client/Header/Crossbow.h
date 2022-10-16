@@ -22,7 +22,6 @@ public:
 	virtual _int Attack() override;
 	virtual void Equipment(SkeletalPart* pSkeletalPart) override;
 	void LoadFireWork() { m_bFireWork = true; }
-
 private:
 	_bool m_bFireWork = false;
 };

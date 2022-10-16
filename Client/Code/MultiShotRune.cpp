@@ -6,6 +6,8 @@
 CMultiShotRune::CMultiShotRune(LPDIRECT3DDEVICE9 pGraphicDev): CRune(pGraphicDev)
 {
 	m_eTargetType = WEAPON_CROSSBOW;
+	m_iUItexNum = 16;
+	m_eItemType = IT_RUNE;
 }
 
 CMultiShotRune::~CMultiShotRune()
@@ -19,6 +21,9 @@ void CMultiShotRune::Use()
 
 void CMultiShotRune::EquipRune(CWeapon* pWeapon)
 {
+	m_pItemUI = CUIFactory::Create<CItemUI>("ItemUI", L"MultiShotRuneUI", 0);
+	m_pItemUI->SetUITexture(m_iUItexNum);
+
 	m_iWeaponDamage = pWeapon->GetDamage();
 }
 

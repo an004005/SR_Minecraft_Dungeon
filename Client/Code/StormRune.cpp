@@ -4,6 +4,8 @@
 CStormRune::CStormRune(LPDIRECT3DDEVICE9 pGraphicDev): CRune(pGraphicDev)
 {
 	m_eTargetType = WEAPON_GLAIVE;
+	m_iUItexNum = 18;
+	m_eItemType = IT_RUNE;
 }
 
 CStormRune::~CStormRune()
@@ -12,6 +14,9 @@ CStormRune::~CStormRune()
 
 HRESULT CStormRune::Ready_Object()
 {
+	m_pItemUI = CUIFactory::Create<CItemUI>("ItemUI", L"StormRuneUI", 0);
+	m_pItemUI->SetUITexture(m_iUItexNum);
+
 	return CRune::Ready_Object();
 }
 

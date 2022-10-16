@@ -11,6 +11,9 @@ enum WeaponType
 };
 
 class CRune;
+class CInventoryUI;
+class CInventory;
+
 class CWeapon : public CEquipItem
 {
 protected:
@@ -18,17 +21,20 @@ protected:
 	virtual ~CWeapon() override;
 
 public:
+	virtual HRESULT Ready_Object() override;
+	virtual _int Update_Object(const _float& fTimeDelta) override;
 	bool SetRune(CRune* pRune);
 	CRune* GetRune() { return m_pRune; }
-
+	_int GetWeaponType() { return m_eType; }
 	void SetDamage(_uint iDamage) { m_iDamage = iDamage;}
 	_uint GetDamage() const { return m_iDamage; }
-
 	virtual void Free() override;
 
 protected:
-	CRune* m_pRune = nullptr;
-	WeaponType m_eType = WEAPON_END;
+	CRune* m_pRune;
+	_int m_eType = WEAPON_END;
 	_uint m_iDamage = 0;
+
+	CInventory* m_pInventory;
 };
 
