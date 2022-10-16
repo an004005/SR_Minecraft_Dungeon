@@ -45,10 +45,10 @@ _int CShockPowder::Update_Object(const _float & fTimeDelta)
 	for (int j = 0; j < 10; j++)
 	{
 		CEffectFactory::Create<CShock_Powder>("Shock_Powder", L"UV_Shock_Powder", vPos);
-		CEffectFactory::Create<CCloud>("ShockPowder_Cloud", L"ShockPowder_Cloud");
+		CEffectFactory::Create<CCloud>("ShockPowder_Cloud", L"ShockPowder_Cloud", vPos);
 	}
 
-	CEffectFactory::Create<CUVCircle>("Shock_Circle", L"Shock_Circle");
+	CEffectFactory::Create<CUVCircle>("Shock_Circle", L"Shock_Circle", vPos);
 
 	CSoundMgr::GetInstance()->PlaySound(L"sfx_item_shockpowder-001.ogg", vPos);
 	m_bUse = false;

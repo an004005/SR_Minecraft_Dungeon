@@ -177,6 +177,46 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 	}
 
 
+	if (g_bOnline)
+	{
+		if (m_fWorldRefreshTime <= m_fCurWorldRefreshTime)
+		{
+			
+			Protocol::C_PLAYER_WORLD playerWorld;
+			playerWorld.mutable_player()->set_id(CClientServiceMgr::GetInstance()->m_iPlayerID);
+			playerWorld.mutable_player()->set_name("Player_test");
+
+			const _matrix& matWorld =	pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_matWorld;
+			{
+				playerWorld.mutable_matworld()->mutable_vright()->set_x(matWorld._11);
+				playerWorld.mutable_matworld()->mutable_vright()->set_y(matWorld._12);
+				playerWorld.mutable_matworld()->mutable_vright()->set_z(matWorld._13);
+				playerWorld.mutable_matworld()->mutable_vright()->set_w(matWorld._14);
+
+				playerWorld.mutable_matworld()->mutable_vup()->set_x(matWorld._21);
+				playerWorld.mutable_matworld()->mutable_vup()->set_y(matWorld._22);
+				playerWorld.mutable_matworld()->mutable_vup()->set_z(matWorld._23);
+				playerWorld.mutable_matworld()->mutable_vup()->set_w(matWorld._24);
+
+				playerWorld.mutable_matworld()->mutable_vlook()->set_x(matWorld._31);
+				playerWorld.mutable_matworld()->mutable_vlook()->set_y(matWorld._32);
+				playerWorld.mutable_matworld()->mutable_vlook()->set_z(matWorld._33);
+				playerWorld.mutable_matworld()->mutable_vlook()->set_w(matWorld._34);
+
+				playerWorld.mutable_matworld()->mutable_vpos()->set_x(matWorld._41);
+				playerWorld.mutable_matworld()->mutable_vpos()->set_y(matWorld._42);
+				playerWorld.mutable_matworld()->mutable_vpos()->set_z(matWorld._43);
+				playerWorld.mutable_matworld()->mutable_vpos()->set_w(matWorld._44);
+				
+			}
+
+			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(playerWorld));
+			m_fCurWorldRefreshTime = 0.f;
+		}
+		else
+			m_fCurWorldRefreshTime += fTimeDelta;
+	}
+
 	return 0;
 }
 
@@ -189,6 +229,7 @@ CPlayerController* CPlayerController::Create()
 {
 	return new CPlayerController;
 }
+
 
 void CPlayerController::putItem(CPlayer* pPlayer, const _vec3& vTargetPos)
 {
@@ -343,15 +384,74 @@ _int CPlayerRemoteController::Update_Component(const _float& fTimeDelta)
 	if (false == CGameUtilMgr::Vec3Cmp(m_vPressDir, m_vPrevPressDir)) // 이동 입력 없으면 방향 계산 안하기
 	{
 		D3DXVec3Normalize(&m_vMoveDir, &m_vPressDir);
-		_float fCamYaw = Engine::Get_Component<Engine::CTransform>(LAYER_ENV, L"StaticCamera", L"Proto_TransformCom",
-		                                                           ID_DYNAMIC)->
-		                 m_vAngle.y;
+		_float fCamYaw = Engine::Get_Component<Engine::CTransform>(LAYER_ENV, L"StaticCamera", L"Proto_TransformCom",ID_DYNAMIC)
+			->m_vAngle.y;
 		_matrix matYaw;
 		D3DXMatrixRotationY(&matYaw, fCamYaw);
 		D3DXVec3TransformNormal(&m_vMoveDir, &m_vMoveDir, &matYaw);
 		pPlayer->SetMoveDir(m_vMoveDir.x, m_vMoveDir.z);
 
 		m_vPrevPressDir = m_vPressDir;
+	}
+
+
+	if (m_bWorldSet)
+	{
+		pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)
+			->Set_WorldDecompose(m_matWorld);
+
+		m_bWorldSet.store(false);
+	}
+
+	if (m_bYawActionSet)
+	{
+		pPlayer->RotateTo(m_fYaw);
+		if (m_iYawAction & PLAYER_ROLL)
+		{
+			pPlayer->RollPress();
+		}
+		if (m_iYawAction & PLAYER_ML)
+		{
+			pPlayer->MeleeAttackPress(true);
+		}
+
+		m_iYawAction.store(0);
+		m_bYawActionSet.store(false);
+	}
+	else
+	{
+		pPlayer->MeleeAttackPress(false);
+	}
+
+	if (m_bActionSet)
+	{
+		if (m_iAction & PLAYER_POTION)
+			pPlayer->UsePotion();
+		if (m_iAction & PLAYER_1)
+			pPlayer->Legacy1Press();
+		if (m_iAction & PLAYER_2)
+			pPlayer->Legacy2Press();
+		if (m_iAction & PLAYER_3)
+			pPlayer->Legacy3Press();
+
+		m_iAction.store(0);
+		m_bActionSet.store(false);
+	}
+
+	if (m_bArrowActionSet)
+	{
+		if (m_iArrowAction & PLAYER_MR)
+		{
+			pPlayer->RangeAttackPress(true);
+			pPlayer->SetArrowLookAt(m_vLookAt);
+		}
+
+		m_iArrowAction.store(0);
+		m_bArrowActionSet.store(false);
+	}
+	else
+	{
+		pPlayer->RangeAttackPress(false);
 	}
 
 	return 0;
@@ -365,4 +465,25 @@ CComponent* CPlayerRemoteController::Clone()
 CPlayerRemoteController* CPlayerRemoteController::Create()
 {
 	return new CPlayerRemoteController;
+}
+
+void CPlayerRemoteController::SetYawAction(_float fYaw, _uint iAction)
+{
+	m_fYaw = fYaw;
+	m_iYawAction.store(iAction);
+	m_bYawActionSet.store(true);
+}
+
+void CPlayerRemoteController::SetAction(_uint iAction)
+{
+	m_iAction.store(iAction);
+	m_bActionSet.store(true);
+}
+
+void CPlayerRemoteController::SetArrow(_float fYaw, _vec3 vLookAt, _uint iAction)
+{
+	m_fYaw = fYaw;
+	m_vLookAt = vLookAt;
+	m_bArrowActionSet.store(true);
+	m_iArrowAction.store(iAction);
 }

@@ -64,7 +64,7 @@ _int CMainApp::Update_MainApp(const _float & fTimeDelta)
     ImGui::NewFrame();
 
 	CImGuiMgr::LoggerWindow();
-	CImGuiMgr::SceneSwitcher();
+	// CImGuiMgr::SceneSwitcher();
 
 	m_pManagementClass->Update_Scene(fTimeDelta);
 

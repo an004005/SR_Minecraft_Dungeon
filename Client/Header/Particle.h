@@ -407,6 +407,7 @@ public:
 	void LateUpdate_Object() override;
 	void PreRender_Particle();
 	void PostRender_Particle();
+	void SetFollow(CTransform* pFollow) {m_pFollow = pFollow; m_pFollow->AddRef();}
 
 public:
 	static CHealCircle* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size, _float _rad);
@@ -420,6 +421,8 @@ private:
 	_float m_fCurTime;
 	_float m_fSpeed;
 	_float m_fRad;
+
+	CTransform* m_pFollow = nullptr;
 };
 
 class CHeartParticle : public CGameObject
@@ -435,6 +438,7 @@ public:
 	void LateUpdate_Object() override;
 	void PreRender_Particle();
 	void PostRender_Particle();
+	void SetFollow(CTransform* pFollow) {m_pFollow = pFollow; m_pFollow->AddRef();}
 
 public:
 	static CHeartParticle* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size);
@@ -451,6 +455,8 @@ private:
 
 	_float tmp;
 	_float desk;
+
+	CTransform* m_pFollow = nullptr;
 };
 
 

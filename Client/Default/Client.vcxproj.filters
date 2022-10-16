@@ -440,12 +440,6 @@
     <ClInclude Include="..\Header\Struct.pb.h">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\ClientServiceMgr.h">
-      <Filter>Network</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\Enum.pb.h">
-      <Filter>Network</Filter>
-    </ClInclude>
     <ClInclude Include="..\Header\ServerPacketHandler.h">
       <Filter>Network</Filter>
     </ClInclude>

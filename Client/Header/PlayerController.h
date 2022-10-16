@@ -5,18 +5,7 @@ class CSkeletalCube;
 class CPlayer;
 class CDynamite;
 
-enum PlayerInputMask
-{
-	PLAYER_W = 1,
-	PLAYER_A = 1 << 1,
-	PLAYER_S = 1 << 2,
-	PLAYER_D = 1 << 3,
-	PLAYER_ML = 1 << 4,
-	PLAYER_MR = 1 << 5,
-	PLAYER_1 = 1 << 6,
-	PLAYER_2 = 1 << 7,
-	PLAYER_3 = 1 << 8,
-};
+
 
 class CPlayerController : public CController
 {
@@ -41,6 +30,10 @@ protected:
 	CDynamite* m_pDynamite = nullptr;
 
 	_uint m_iPlayerInputMask = 0;
+	_uint m_iPreInputMask = 0;
+
+	_float m_fWorldRefreshTime = 1.f;
+	_float m_fCurWorldRefreshTime = 1.f;
 };
 
 /*----------------------
@@ -59,4 +52,31 @@ public:
 	static CPlayerRemoteController* Create();
 
 	void SetInputMask(_uint iPlayerInputMask) { m_iPlayerInputMask = iPlayerInputMask; }
+	void SetWorld(const _matrix& matWorld)
+	{
+		if (!m_bWorldSet)
+		{
+			m_matWorld = matWorld;
+			m_bWorldSet.store(true);
+		}
+	}
+
+	void SetYawAction(_float fYaw, _uint iAction);
+	void SetAction(_uint iAction);
+	void SetArrow(_float fYaw, _vec3 vLookAt, _uint iAction);
+
+private:
+	Atomic<_bool> m_bWorldSet{false};
+	_matrix m_matWorld;
+
+	Atomic<_bool> m_bYawActionSet{false};
+	Atomic<_uint> m_iYawAction{0};
+	_float m_fYaw;
+
+	Atomic<_bool> m_bActionSet{false};
+	Atomic<_uint> m_iAction{0};
+
+	Atomic<_bool> m_bArrowActionSet{false};
+	Atomic<_uint> m_iArrowAction{0};
+	_vec3 m_vLookAt;
 };

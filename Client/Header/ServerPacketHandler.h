@@ -15,6 +15,12 @@ enum : uint16
 	PKT_S_PLAYER_INPUT = 1006,
 	PKT_C_PLAYER_WORLD = 1007,
 	PKT_S_PLAYER_WORLD = 1008,
+	PKT_C_PLAYER_YAW_ACTION = 1009,
+	PKT_S_PLAYER_YAW_ACTION = 1010,
+	PKT_C_PLAYER_ACTION = 1011,
+	PKT_S_PLAYER_ACTION = 1012,
+	PKT_C_PLAYER_ARROW = 1013,
+	PKT_S_PLAYER_ARROW = 1014,
 };
 
 // Custom Handlers
@@ -24,6 +30,9 @@ bool Handle_S_ENTER_GAME(PacketSessionRef& session, Protocol::S_ENTER_GAME& pkt)
 bool Handle_S_OTHER_PLAYER(PacketSessionRef& session, Protocol::S_OTHER_PLAYER& pkt);
 bool Handle_S_PLAYER_INPUT(PacketSessionRef& session, Protocol::S_PLAYER_INPUT& pkt);
 bool Handle_S_PLAYER_WORLD(PacketSessionRef& session, Protocol::S_PLAYER_WORLD& pkt);
+bool Handle_S_PLAYER_YAW_ACTION(PacketSessionRef& session, Protocol::S_PLAYER_YAW_ACTION& pkt);
+bool Handle_S_PLAYER_ACTION(PacketSessionRef& session, Protocol::S_PLAYER_ACTION& pkt);
+bool Handle_S_PLAYER_ARROW(PacketSessionRef& session, Protocol::S_PLAYER_ARROW& pkt);
 
 class ServerPacketHandler
 {
@@ -37,6 +46,9 @@ public:
 		GPacketHandler[PKT_S_OTHER_PLAYER] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_OTHER_PLAYER>(Handle_S_OTHER_PLAYER, session, buffer, len); };
 		GPacketHandler[PKT_S_PLAYER_INPUT] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_PLAYER_INPUT>(Handle_S_PLAYER_INPUT, session, buffer, len); };
 		GPacketHandler[PKT_S_PLAYER_WORLD] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_PLAYER_WORLD>(Handle_S_PLAYER_WORLD, session, buffer, len); };
+		GPacketHandler[PKT_S_PLAYER_YAW_ACTION] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_PLAYER_YAW_ACTION>(Handle_S_PLAYER_YAW_ACTION, session, buffer, len); };
+		GPacketHandler[PKT_S_PLAYER_ACTION] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_PLAYER_ACTION>(Handle_S_PLAYER_ACTION, session, buffer, len); };
+		GPacketHandler[PKT_S_PLAYER_ARROW] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_PLAYER_ARROW>(Handle_S_PLAYER_ARROW, session, buffer, len); };
 	}
 
 	static bool HandlePacket(PacketSessionRef& session, BYTE* buffer, int32 len)
@@ -48,6 +60,9 @@ public:
 	static SendBufferRef MakeSendBuffer(Protocol::C_ENTER_GAME& pkt) { return MakeSendBuffer(pkt, PKT_C_ENTER_GAME); }
 	static SendBufferRef MakeSendBuffer(Protocol::C_PLAYER_INPUT& pkt) { return MakeSendBuffer(pkt, PKT_C_PLAYER_INPUT); }
 	static SendBufferRef MakeSendBuffer(Protocol::C_PLAYER_WORLD& pkt) { return MakeSendBuffer(pkt, PKT_C_PLAYER_WORLD); }
+	static SendBufferRef MakeSendBuffer(Protocol::C_PLAYER_YAW_ACTION& pkt) { return MakeSendBuffer(pkt, PKT_C_PLAYER_YAW_ACTION); }
+	static SendBufferRef MakeSendBuffer(Protocol::C_PLAYER_ACTION& pkt) { return MakeSendBuffer(pkt, PKT_C_PLAYER_ACTION); }
+	static SendBufferRef MakeSendBuffer(Protocol::C_PLAYER_ARROW& pkt) { return MakeSendBuffer(pkt, PKT_C_PLAYER_ARROW); }
 
 private:
 	template<typename PacketType, typename ProcessFunc>

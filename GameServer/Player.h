@@ -4,7 +4,7 @@ class Player
 {
 public:
 
-	uint64					playerId = 0;
+	uint32					playerId = 0;
 	string					name;
 	Protocol::PlayerSkin	type = Protocol::PLAYER_TYPE_STEVE;
 	weak_ptr<GameSession>			ownerSession; // Cycle

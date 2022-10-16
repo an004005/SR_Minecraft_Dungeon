@@ -17,6 +17,7 @@
 #include "Inventory.h"
 #include "Emerald.h"
 #include "PlayerStartPos.h"
+#include "ServerPacketHandler.h"
 #include "TerrainCubeMap.h"
 
 /*-----------------------
@@ -137,7 +138,7 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 		m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * m_fRollSpeed * fTimeDelta;
 		if (m_dwRollDust + 300 < GetTickCount())
 		{
-			CEffectFactory::Create<CCloud>("Roll_Cloud", L"Roll_Cloud");
+			CEffectFactory::Create<CCloud>("Roll_Cloud", L"Roll_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 			m_dwRollDust = GetTickCount();
 		}
 		break;
@@ -228,7 +229,7 @@ void CPlayer::AnimationEvent(const string& strEvent)
 
 		if (m_dwWalkDust + 500 < GetTickCount())
 		{
-			CEffectFactory::Create<CCloud>("Walk_Cloud", L"Walk_Cloud");
+			CEffectFactory::Create<CCloud>("Walk_Cloud", L"Walk_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 			m_dwWalkDust = GetTickCount();
 		}
 	}
@@ -275,42 +276,98 @@ void CPlayer::PlayerSpawn()
 
 void CPlayer::SpawnArrow(_uint iDamage, PlayerArrowType eType, _bool bCritical, ArrowType eArrowType)
 {
-	const _vec3 vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + _vec3{0.f, 1.3f, 0.f};
 	_vec3 vLookAt;
-	if (PickTargetEnemy(OUT vLookAt) == false)
-		vLookAt = vPos + m_pRootPart->pTrans->m_vInfo[INFO_LOOK];
+	const _vec3 vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + _vec3{0.f, 1.3f, 0.f};
 
-	switch (eType)
+	if (m_bRemote == false)
 	{
-	case PlayerArrowType::NORMAL:
-		CSoundMgr::GetInstance()->PlaySound(L"sfx_item_arrow_fire.ogg", vPos);
-		CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 
-		{_float(iDamage), bCritical, COLL_PLAYER_BULLET, eArrowType},
-			vPos, vLookAt);
-		break;
-	case PlayerArrowType::MULTISHOT:
+		if (PickTargetEnemy(OUT vLookAt) == false)
+			vLookAt = vPos + m_pRootPart->pTrans->m_vInfo[INFO_LOOK];
+
+		// pkt
+		if (g_bOnline)
 		{
-			CSoundMgr::GetInstance()->PlaySound(L"sfx_item_arrow_fire.ogg", vPos);
-
-			_matrix matRot, matRotReverse;
-			D3DXMatrixRotationY(&matRotReverse, D3DXToRadian(-15.f));
-			D3DXMatrixRotationY(&matRot, D3DXToRadian(5.f));
-
-			_vec3 vLook = vLookAt - vPos;
-			D3DXVec3TransformNormal(&vLook, &vLook, &matRotReverse);
-
-			for (int i = 0; i < 5; ++i)
-			{
-				D3DXVec3TransformNormal(&vLook, &vLook, &matRot);
-				CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 
-				{_float(iDamage), bCritical, COLL_PLAYER_BULLET, eArrowType},
-					vPos, vLook + vPos);
-			}
+			Protocol::C_PLAYER_ARROW arrowActionPkt;
+			arrowActionPkt.mutable_player()->set_id(CClientServiceMgr::GetInstance()->m_iPlayerID);
+			arrowActionPkt.mutable_player()->set_name("Player_test");
+			arrowActionPkt.set_yaw(GetYawToCursor());
+			arrowActionPkt.mutable_vlookat()->set_x(vLookAt.x);
+			arrowActionPkt.mutable_vlookat()->set_y(vLookAt.y);
+			arrowActionPkt.mutable_vlookat()->set_z(vLookAt.z);
+			arrowActionPkt.set_actionbit(PLAYER_MR);
+		
+			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(arrowActionPkt));
 		}
-		break;
-	case PlayerArrowType::LASER:
-		break;
-	default:;
+
+		switch (eType)
+		{
+		case PlayerArrowType::NORMAL:
+			CSoundMgr::GetInstance()->PlaySound(L"sfx_item_arrow_fire.ogg", vPos);
+			CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 
+			{_float(iDamage), bCritical, COLL_PLAYER_BULLET, eArrowType},
+				vPos, vLookAt);
+			break;
+		case PlayerArrowType::MULTISHOT:
+			{
+				CSoundMgr::GetInstance()->PlaySound(L"sfx_item_arrow_fire.ogg", vPos);
+
+				_matrix matRot, matRotReverse;
+				D3DXMatrixRotationY(&matRotReverse, D3DXToRadian(-15.f));
+				D3DXMatrixRotationY(&matRot, D3DXToRadian(5.f));
+
+				_vec3 vLook = vLookAt - vPos;
+				D3DXVec3TransformNormal(&vLook, &vLook, &matRotReverse);
+
+				for (int i = 0; i < 5; ++i)
+				{
+					D3DXVec3TransformNormal(&vLook, &vLook, &matRot);
+					CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 
+					{_float(iDamage), bCritical, COLL_PLAYER_BULLET, eArrowType},
+						vPos, vLook + vPos);
+				}
+			}
+			break;
+		case PlayerArrowType::LASER:
+			break;
+		default:;
+		}
+	}
+	else
+	{
+		vLookAt = m_vArrowLookAt;
+
+		switch (eType)
+		{
+		case PlayerArrowType::NORMAL:
+			CSoundMgr::GetInstance()->PlaySound(L"sfx_item_arrow_fire.ogg", vPos);
+			CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 
+			{_float(iDamage), bCritical, COLL_PLAYER_BULLET, eArrowType},
+				vPos, vLookAt);
+			break;
+		case PlayerArrowType::MULTISHOT:
+			{
+				CSoundMgr::GetInstance()->PlaySound(L"sfx_item_arrow_fire.ogg", vPos);
+
+				_matrix matRot, matRotReverse;
+				D3DXMatrixRotationY(&matRotReverse, D3DXToRadian(-15.f));
+				D3DXMatrixRotationY(&matRot, D3DXToRadian(5.f));
+
+				_vec3 vLook = vLookAt - vPos;
+				D3DXVec3TransformNormal(&vLook, &vLook, &matRotReverse);
+
+				for (int i = 0; i < 5; ++i)
+				{
+					D3DXVec3TransformNormal(&vLook, &vLook, &matRot);
+					CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 
+					{_float(iDamage), bCritical, COLL_PLAYER_BULLET, eArrowType},
+						vPos, vLook + vPos);
+				}
+			}
+			break;
+		case PlayerArrowType::LASER:
+			break;
+		default:;
+		}
 	}
 }
 
@@ -360,8 +417,6 @@ void CPlayer::AttackState()
 	{
 		m_bCanPlayAnim = false;
 		m_iAttackCnt = m_pInventory->CurWeapon(IT_MELEE)->Attack();// 애니메이션 실행
-
-
 	}
 	else if (m_bRangeAttack)
 	{
@@ -369,7 +424,11 @@ void CPlayer::AttackState()
 		WeaponChange(IT_RANGE);
 		m_bCanPlayAnim = false;
 		m_iAttackCnt = m_pInventory->CurWeapon(IT_RANGE)->Attack();
-		m_pInventory->UseArrow(1);
+		if (m_bRemote == false)
+		{
+			m_pInventory->UseArrow(1);
+		}
+
 	}
 
 #pragma region Lazer 
@@ -429,11 +488,26 @@ void CPlayer::StateChange()
 	{
 		CSoundMgr::GetInstance()->PlaySound(L"sfx_player_stepCloth-003.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 		m_eState = ROLL;
-		RotateToCursor();
+		if (m_bRemote == false)
+		{
+			RotateToCursor();
+			m_CurRollCoolTime = 0.f;
+
+			if (g_bOnline)
+			{
+				Protocol::C_PLAYER_YAW_ACTION yawActionPkt;
+				yawActionPkt.mutable_player()->set_id(CClientServiceMgr::GetInstance()->m_iPlayerID);
+				yawActionPkt.mutable_player()->set_name("Player_test");
+				yawActionPkt.set_yaw(GetYawToCursor());
+				yawActionPkt.set_actionbit(PLAYER_ROLL);
+			
+				CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(yawActionPkt));
+			}
+		}
 		m_bCanPlayAnim = false;
 		PlayAnimationOnce(&m_arrAnim[ANIM_ROLL]);
 		m_bRoll = false;
-		m_CurRollCoolTime = 0.f;
+
 		return;
 	}
 
@@ -450,6 +524,16 @@ void CPlayer::StateChange()
 		m_bCanPlayAnim = false;
 		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY1]);
 		m_pInventory->CurWeapon(IT_LEGACY1)->Use();
+
+		if (g_bOnline && m_bRemote == false)
+		{
+			Protocol::C_PLAYER_ACTION actionPkt;
+			actionPkt.mutable_player()->set_id(CClientServiceMgr::GetInstance()->m_iPlayerID);
+			actionPkt.mutable_player()->set_name("Player_test");
+			actionPkt.set_actionbit(PLAYER_1);
+		
+			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(actionPkt));
+		}
 		return;
 	}
 
@@ -466,6 +550,16 @@ void CPlayer::StateChange()
 		m_bCanPlayAnim = false;
 		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY2]);
 		m_pInventory->CurWeapon(IT_LEGACY2)->Use();
+
+		if (g_bOnline && m_bRemote == false)
+		{
+			Protocol::C_PLAYER_ACTION actionPkt;
+			actionPkt.mutable_player()->set_id(CClientServiceMgr::GetInstance()->m_iPlayerID);
+			actionPkt.mutable_player()->set_name("Player_test");
+			actionPkt.set_actionbit(PLAYER_2);
+		
+			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(actionPkt));
+		}
 		return;
 	}
 
@@ -482,13 +576,36 @@ void CPlayer::StateChange()
 		m_bCanPlayAnim = false;
 		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY2]);
 		m_pInventory->CurWeapon(IT_LEGACY3)->Use();
+
+		if (g_bOnline && m_bRemote == false)
+		{
+			Protocol::C_PLAYER_ACTION actionPkt;
+			actionPkt.mutable_player()->set_id(CClientServiceMgr::GetInstance()->m_iPlayerID);
+			actionPkt.mutable_player()->set_name("Player_test");
+			actionPkt.set_actionbit(PLAYER_3);
+		
+			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(actionPkt));
+		}
 		return;
 	}
 
 	if (m_bMeleeAttack && m_bCanPlayAnim)
 	{
 		m_eState = ATTACK;
-		RotateToCursor();
+		if (m_bRemote == false)
+		{
+			RotateToCursor();
+			if (g_bOnline)
+			{
+				Protocol::C_PLAYER_YAW_ACTION yawActionPkt;
+				yawActionPkt.mutable_player()->set_id(CClientServiceMgr::GetInstance()->m_iPlayerID);
+				yawActionPkt.mutable_player()->set_name("Player_test");
+				yawActionPkt.set_yaw(GetYawToCursor());
+				yawActionPkt.set_actionbit(PLAYER_ML);
+			
+				CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(yawActionPkt));
+			}
+		}
 		WeaponChange(IT_MELEE);
 		return;
 	}
@@ -496,7 +613,8 @@ void CPlayer::StateChange()
 	if (m_bRangeAttack && m_bCanPlayAnim && m_pInventory->GetArrowCnt() > 0)
 	{
 		m_eState = ATTACK;
-		RotateToCursor();
+		if (m_bRemote == false)
+			RotateToCursor();
 		m_bDelay = true;
 		WeaponChange(IT_MELEE);
 		return;
@@ -530,16 +648,49 @@ void CPlayer::StateChange()
 
 void CPlayer::UsePotion()
 {
-	if (s_PotionCollTime <= m_CurPotionCoolTime)
+	if (m_bRemote == false)
 	{
-		m_pStat->ModifyHP(_int(_float(m_pStat->GetMaxHP()) * 0.7f));
-		m_CurPotionCoolTime = 0.f;
+		if (s_PotionCollTime <= m_CurPotionCoolTime)
+		{
+			m_pStat->ModifyHP(_int(_float(m_pStat->GetMaxHP()) * 0.7f));
+			m_CurPotionCoolTime = 0.f;
 
+			// particle
+			CEffectFactory::Create<CHealCircle>("Heal_Circle_L", L"Heal_Circle_L", m_pRootPart->pTrans->m_vInfo[INFO_POS])
+				->SetFollow(m_pRootPart->pTrans);
+			for (int i = 0; i < 12; i++)
+			{
+				CEffectFactory::Create<CHeartParticle>("HeartParticle", L"HeartParticle", m_pRootPart->pTrans->m_vInfo[INFO_POS])
+					->SetFollow(m_pRootPart->pTrans);
+			}
+			
+			CSoundMgr::GetInstance()->PlaySoundRandom({
+				L"sfx_ui_healthsynergy-001.ogg",
+				L"sfx_ui_healthsynergy-002.ogg",
+				L"sfx_ui_healthsynergy-003.ogg",
+				L"sfx_ui_healthsynergy-004.ogg" },
+				m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+
+			if (g_bOnline)
+			{
+				Protocol::C_PLAYER_ACTION actionPkt;
+				actionPkt.mutable_player()->set_id(CClientServiceMgr::GetInstance()->m_iPlayerID);
+				actionPkt.mutable_player()->set_name("Player_test");
+				actionPkt.set_actionbit(PLAYER_POTION);
+			
+				CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(actionPkt));
+			}
+		}
+	}
+	else
+	{
 		// particle
-		CEffectFactory::Create<CHealCircle>("Heal_Circle_L", L"Heal_Circle_L");
+		CEffectFactory::Create<CHealCircle>("Heal_Circle_L", L"Heal_Circle_L", m_pRootPart->pTrans->m_vInfo[INFO_POS])
+			->SetFollow(m_pRootPart->pTrans);
 		for (int i = 0; i < 12; i++)
 		{
-			CEffectFactory::Create<CHeartParticle>("HeartParticle", L"HeartParticle");
+			CEffectFactory::Create<CHeartParticle>("HeartParticle", L"HeartParticle", m_pRootPart->pTrans->m_vInfo[INFO_POS])
+				->SetFollow(m_pRootPart->pTrans);
 		}
 		
 		CSoundMgr::GetInstance()->PlaySoundRandom({
@@ -549,8 +700,6 @@ void CPlayer::UsePotion()
 			L"sfx_ui_healthsynergy-004.ogg" },
 			m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 	}
-
-
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath, _bool bRemote)
@@ -568,6 +717,60 @@ CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath,
 	// 	pInstance->LoadSkeletal(wstrPath);
 
 	return pInstance;
+}
+
+_float CPlayer::GetYawToCursor()
+{
+	POINT ptMouse{};
+
+	GetCursorPos(&ptMouse);
+	ScreenToClient(g_hWnd, &ptMouse);
+
+	_vec3 vPoint;
+	_vec3 vAt;
+
+	D3DVIEWPORT9 ViewPort;
+	ZeroMemory(&ViewPort, sizeof(D3DVIEWPORT9));
+	m_pGraphicDev->GetViewport(&ViewPort);
+
+	// 뷰포트 -> 투영
+	vPoint.x = (_float)ptMouse.x / ((_float)ViewPort.Width * 0.5f) - 1.f;
+	vPoint.y = (_float)ptMouse.y / -((_float)ViewPort.Height * 0.5f) + 1.f;
+	vPoint.z = 0.f;
+	vAt.x = vPoint.x;
+	vAt.y = vPoint.y;
+	vAt.z = 1.f;
+
+	_matrix matProj;
+	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &matProj);
+	D3DXMatrixInverse(&matProj, nullptr, &matProj);
+	D3DXVec3TransformCoord(&vPoint, &vPoint, &matProj);
+	D3DXVec3TransformCoord(&vAt, &vAt, &matProj);
+
+	_matrix matView;
+	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
+	D3DXMatrixInverse(&matView, nullptr, &matView);
+	D3DXVec3TransformCoord(&vPoint, &vPoint, &matView);
+	D3DXVec3TransformCoord(&vAt, &vAt, &matView);
+
+	D3DXPLANE tmpPlane;
+	D3DXPlaneFromPointNormal(&tmpPlane, &m_pRootPart->pTrans->m_vInfo[INFO_POS], &CGameUtilMgr::s_vUp);
+
+	_vec3 vLookAt;
+	D3DXPlaneIntersectLine(&vLookAt, &tmpPlane, &vPoint, &vAt);
+
+	_vec3 vLook = vLookAt - m_pRootPart->pTrans->m_vInfo[INFO_POS];
+	D3DXVec3Normalize(&vLook, &vLook);
+
+	const _vec2 v2Look{0.f, 1.f};
+	_vec2 v2ToDest{vLook.x, vLook.z};
+
+	const _float fDot = D3DXVec2Dot(&v2Look, &v2ToDest);
+
+	if (vLook.x < 0)
+		return -acosf(fDot);
+	else
+		return acosf(fDot);
 }
 
 void CPlayer::RotateToCursor()
@@ -640,6 +843,15 @@ void CPlayer::RotateToMove()
 		m_pRootPart->pTrans->m_vAngle.y = -acosf(fDot);
 	else
 		m_pRootPart->pTrans->m_vAngle.y = acosf(fDot);
+}
+
+void CPlayer::RotateTo(_float fYaw)
+{
+	m_pRootPart->pTrans->m_vAngle.y = fYaw;
+	m_pRootPart->pTrans->Update_Component(0.f);
+
+	m_pIdleAnim = &m_arrAnim[ANIM_WALK];
+	m_pCurAnim = m_pIdleAnim;
 }
 
 void CPlayer::Legacy4Press()
