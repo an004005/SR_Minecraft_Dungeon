@@ -36,7 +36,7 @@ public:
 	virtual _int Update_Object(const _float& fTimeDelta) override;
 	virtual void LateUpdate_Object() override;
 	virtual void Free() override;
-	static CZombie* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
+	static CZombie* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath, _bool bRemote = false);
 
 	virtual void StateChange();
 

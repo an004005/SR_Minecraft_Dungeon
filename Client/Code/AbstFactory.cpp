@@ -118,6 +118,10 @@ void CEnemyFactory::Ready_EnemyFactory()
 	{
 		return CZombie::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Zombie.cube");
 	} });
+	s_mapEnemySpawner.insert({"Zombie_Remote", []()
+	{
+		return CZombie::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Zombie.cube", true);
+	} });
 	s_mapEnemySpawner.insert({ "Geomancer", []()
 	{
 	return CGeomancer::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Geomancer.cube");

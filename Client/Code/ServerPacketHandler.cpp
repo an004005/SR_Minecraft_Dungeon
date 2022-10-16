@@ -153,3 +153,23 @@ bool Handle_S_PLAYER_ARROW(PacketSessionRef& session, Protocol::S_PLAYER_ARROW& 
 
 	return true;
 }
+
+bool Handle_S_SPAWN_MONSTER(PacketSessionRef& session, Protocol::S_SPAWN_MONSTER& pkt)
+{
+	return true;
+}
+
+bool Handle_S_MONSTER_SET_TARGET(PacketSessionRef& session, Protocol::S_MONSTER_SET_TARGET& pkt)
+{
+	return true;
+}
+
+bool Handle_S_MONSTER_WORLD(PacketSessionRef& session, Protocol::S_MONSTER_WORLD& pkt)
+{
+	return true;
+}
+
+bool Handle_S_MONSTER_ATTACK(PacketSessionRef& session, Protocol::S_MONSTER_ATTACK& pkt)
+{
+	return true;
+}

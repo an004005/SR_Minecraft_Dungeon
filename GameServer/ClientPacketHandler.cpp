@@ -48,7 +48,7 @@ bool Handle_C_LOGIN(PacketSessionRef& session, Protocol::C_LOGIN& pkt)
 	// GameSession에 플레이 정보를 저장 (메모리)
 
 	// ID 발급 (DB 아이디가 아니고, 인게임 아이디)
-	static Atomic<uint64> idGenerator = 1;
+	static Atomic<uint64> idGenerator{0};
 
 	{
 		PlayerRef playerRef = MakeShared<Player>();
@@ -169,6 +169,16 @@ bool Handle_C_PLAYER_ARROW(PacketSessionRef& session, Protocol::C_PLAYER_ARROW& 
 
 	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(arrowPkt));
 
+	return true;
+}
+
+bool Handle_C_MONSTER_WORLD(PacketSessionRef& session, Protocol::C_MONSTER_WORLD& pkt)
+{
+	return true;
+}
+
+bool Handle_C_MONSTER_ATTACK(PacketSessionRef& session, Protocol::C_MONSTER_ATTACK& pkt)
+{
 	return true;
 }
 

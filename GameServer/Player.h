@@ -8,5 +8,6 @@ public:
 	string					name;
 	Protocol::PlayerSkin	type = Protocol::PLAYER_TYPE_STEVE;
 	weak_ptr<GameSession>			ownerSession; // Cycle
+	array<float, 3> vPos;
 };
 

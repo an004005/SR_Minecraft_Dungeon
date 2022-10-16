@@ -31,6 +31,9 @@
     <ClInclude Include="Room.h">
       <Filter>Main</Filter>
     </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>Main</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameServer.cpp">
@@ -62,6 +65,9 @@
     </ClCompile>
     <ClCompile Include="ClientPacketHandler.cpp">
       <Filter>Protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>Main</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
