@@ -253,3 +253,5 @@ Client/Default/imgui.ini
 
 Libraries/Libs/Protobuf/Debug
 Libraries/Libs/ServerCore
+!Common/Protobuf/bin/
+!Common\Protobuf\bin\
