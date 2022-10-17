@@ -26,6 +26,8 @@
 #include "Renderer.h"
 #include "GameUtilMgr.h"
 #include "Collider.h"
+#include "RcBossHPTex.h"
+
 
 
 BEGIN(Engine)

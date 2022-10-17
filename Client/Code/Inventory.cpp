@@ -20,6 +20,7 @@
 #include "LightningRune.h"
 #include "LaserShotRune.h"
 #include "ItemTexUI.h"
+#include "StormRune.h"
 
 CInventory::CInventory(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CGameObject(pGraphicDev)
@@ -114,7 +115,7 @@ _int CInventory::Update_Object(const _float & fTimeDelta)
 					pItemUI->SetSize(vSize);
 					pItemUI->Open();
 				}
-				MouseTestEvent(m_arrItem[i], pItemUI, i);
+				MouseEvent(m_arrItem[i], pItemUI, i);
 			}
 			
 		}
@@ -131,7 +132,7 @@ _int CInventory::Update_Object(const _float & fTimeDelta)
 				pItemUI->SetSize(vSize);
 				pItemUI->Open();
 			}
-			MouseTestEvent(m_pMelee, pItemUI, 0);
+			MouseEvent(m_pMelee, pItemUI, 0);
 		}
 
 		if (m_pRange != nullptr)
@@ -146,7 +147,7 @@ _int CInventory::Update_Object(const _float & fTimeDelta)
 				pItemUI->SetSize(vSize);
 				pItemUI->Open();
 			}
-			MouseTestEvent(m_pRange, pItemUI, 0);
+			MouseEvent(m_pRange, pItemUI, 0);
 		}
 
 		
@@ -166,7 +167,7 @@ _int CInventory::Update_Object(const _float & fTimeDelta)
 					pItemUI->SetSize(vSize);
 					pItemUI->Open();
 				}
-					MouseTestEvent(m_arrLegacy[i], pItemUI, i);
+					MouseEvent(m_arrLegacy[i], pItemUI, i);
 				
 			}
 		}
@@ -180,7 +181,7 @@ _int CInventory::Update_Object(const _float & fTimeDelta)
 			pItemUI->SetPos({ vPos.x, vPos.y, 0.f });
 			pItemUI->SetSize(vSize);
 			m_pRuneSlot->Open();
-			MouseTestEvent(m_pRune, pItemUI, 0);
+			MouseEvent(m_pRune, pItemUI, 0);
 		}	
 	}
 
@@ -381,19 +382,21 @@ void CInventory::AddDefaultItems()
 	m_arrItem[1]->AddRef();
 	m_arrItem[1]->SetOwner(m_pOwner);
 
-	m_arrItem[4] = CItemFactory::Create<CStunRune>("StunRune", L"StunRune", IS_TAKE);
-	m_arrItem[4]->AddRef();
-	m_arrItem[4]->SetOwner(m_pOwner);
-	//dynamic_cast<CCrossbow*>(m_arrEquip[IT_RANGE])->SetRune(dynamic_cast<CLaserShotRune*>(m_arrItem[1]));
+	m_arrItem[2] = CItemFactory::Create<CStormRune>("StormRune", L"StormRune", IS_TAKE);
+	m_arrItem[2]->AddRef();
+	m_arrItem[2]->SetOwner(m_pOwner);
 
 	m_arrItem[3] = CItemFactory::Create<CAxe>("Axe", L"Axe", IS_TAKE);
 	m_arrItem[3]->AddRef();
 	m_arrItem[3]->SetOwner(m_pOwner);
 
+	m_arrItem[4] = CItemFactory::Create<CStunRune>("StunRune", L"StunRune", IS_TAKE);
+	m_arrItem[4]->AddRef();
+	m_arrItem[4]->SetOwner(m_pOwner);
 
-	// CStunRune* rune = CItemFactory::Create<CStunRune>("StunRune", L"StunRune", IS_TAKE);
-	// dynamic_cast<CWeapon*>(m_arrItem[3])->SetRune(rune);
-	// rune->SetOwner(m_pOwner);
+	m_arrItem[5] = CItemFactory::Create<CFireworksArrow>("FireworksArrow", L"FireworksArrow", IS_TAKE);
+	m_arrItem[5]->AddRef();
+	m_arrItem[5]->SetOwner(m_pOwner);
 
 	m_arrItem[6] = CItemFactory::Create<CPowerRune>("PowerRune", L"PowerRune", IS_TAKE);
 	m_arrItem[6]->AddRef();
@@ -402,14 +405,6 @@ void CInventory::AddDefaultItems()
 	m_arrLegacy[LEGACY_SLOT1] = CItemFactory::Create<CShockPowder>("ShockPowder", L"ShockPowder", IS_TAKE);
 	m_arrLegacy[LEGACY_SLOT1]->AddRef();
 	m_arrLegacy[LEGACY_SLOT1]->SetOwner(m_pOwner);
-
-	m_arrItem[5] = CItemFactory::Create<CFireworksArrow>("FireworksArrow", L"FireworksArrow", IS_TAKE);
-	m_arrItem[5]->AddRef();
-	m_arrItem[5]->SetOwner(m_pOwner);
-
-	//m_pLegacy2 = CItemFactory::Create<CBootsOfSwiftness>("BootsOfSwiftness", L"BootsOfSwiftness", IS_TAKE);
-	//m_pLegacy2->AddRef();
-	//m_arrItem[6] = m_pLegacy3;
 }
 
 void CInventory::Equip_Item(SkeletalPart* pSkeletalPart, ITEMTYPE eIT)
@@ -577,7 +572,7 @@ void CInventory::CreateCollFrame(CEquipItem* pCurCollItem)
 
 }
 
-void CInventory::MouseTestEvent(CEquipItem * pCurCollItem, CItemUI * pCurCollUI, _int iSlotIndex)
+void CInventory::MouseEvent(CEquipItem * pCurCollItem, CItemUI * pCurCollUI, _int iSlotIndex)
 {
 	//for sound
 	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
@@ -587,6 +582,8 @@ void CInventory::MouseTestEvent(CEquipItem * pCurCollItem, CItemUI * pCurCollUI,
 	_vec3& vIconSize = pCurCollUI->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vScale;
 	_float fX = vIconPos.x + WINCX / 2;
 	_float fY = -vIconPos.y + WINCY / 2;
+
+	
 	
 	RECT	rcUI = { LONG(fX - vIconSize.x * 0.5f), LONG(fY - vIconSize.y * 0.5f), LONG(fX + vIconSize.x * 0.5f), LONG(fY + vIconSize.y * 0.5f) };
 	

@@ -8,6 +8,7 @@
 #include "Particle.h"
 #include "SphereEffect.h"
 #include "StaticCamera.h"
+#include "BossHPUI.h"
 
 CRedStoneMonstrosity::CRedStoneMonstrosity(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
 {
@@ -48,6 +49,8 @@ HRESULT CRedStoneMonstrosity::Ready_Object()
 
 	CController* pController = Add_Component<CRedStoneMonstrosityController>(L"Proto_RedStoneMonstrosityController", L"Proto_RedStoneMonstrosityController", ID_DYNAMIC);
 	pController->SetOwner(this);
+
+	
 
 	//cc면역
 	m_bCantCC = true;
@@ -93,6 +96,9 @@ void CRedStoneMonstrosity::AnimationEvent(const string& strEvent)
 	}
 	else if (strEvent == "AnimStopped")
 	{
+		if (m_pBossHPUI)
+			m_pBossHPUI->KillHpbar();
+
 		m_bDelete = true;
 	}
 	else if (strEvent == "SpitFire")
@@ -179,13 +185,19 @@ _int CRedStoneMonstrosity::Update_Object(const _float& fTimeDelta)
 
 	CMonster::Update_Object(fTimeDelta);
 
+	if(m_pBossHPUI)
+		m_pBossHPUI->SetCurHp(m_pStat->GetHP());
+
 	if (!m_bStartPlay)
 		return OBJ_NOEVENT;
 	
 
+
 	if (!m_bIntroPlay && m_bStartPlay)
 	{
 		PlayAnimationOnce(&m_arrAnim[INTRO]);
+		m_pBossHPUI = CUIFactory::Create<CBossHPUI>("BossHPUI", L"BossHPUI", -1, WINCX * 0.5f, WINCY * 0.15f, 500, 25);
+		m_pBossHPUI->SetOwner(L"레드 스톤 몬스터", this, m_pStat->GetMaxHP());
 		m_bIntroPlay = true;
 	}
 
@@ -306,6 +318,7 @@ void CRedStoneMonstrosity::StateChange()
 		return;
 	}
 
+	
 
 	if (m_bChop && m_bCanPlayAnim)
 	{

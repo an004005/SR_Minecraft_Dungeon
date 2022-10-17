@@ -55,6 +55,8 @@
 #include "LightningRune.h"
 #include "LaserShotRune.h"
 #include "ItemTexUI.h"
+#include "BossHPUI.h"
+
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
 map<string, std::function<CGameObject*()>> CPlayerFactory::s_mapPlayerSpawner;
@@ -510,6 +512,10 @@ void CUIFactory::Ready_UIFactory()
 	 s_mapUISpawner.insert({ "HPUI", [](_uint iTexNum)
 	 {
 	 	return CHPUI::Create(s_pGraphicDev, -1);//not used
+	 } });
+	 s_mapUISpawner.insert({ "BossHPUI", [](_uint iTexNum)
+	 {
+		 return CBossHPUI::Create(s_pGraphicDev, -1);//not used
 	 } });
 	 s_mapUISpawner.insert({ "PotionCoolTime", [](_uint iTexNum)
 	 {
