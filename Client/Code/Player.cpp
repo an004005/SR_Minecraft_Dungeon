@@ -61,7 +61,7 @@ HRESULT CPlayer::Ready_Object(const wstring& wstrPath)
 	m_CurPotionCoolTime = 20.f;
 
 	m_pStat = Add_Component<CStatComponent>(L"Proto_StatCom", L"Proto_StatCom", ID_DYNAMIC);
-	m_pStat->SetMaxHP(100);
+	m_pStat->SetMaxHP(10);
 	m_pStat->SetTransform(m_pRootPart->pTrans);
 	m_pStat->SetHurtSound({
 		L"DLC_sfx_mob_whisperer_hit_1.ogg",
@@ -105,6 +105,7 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 		m_CurRollCoolTime += fTimeDelta;
 	if (s_PotionCollTime > m_CurPotionCoolTime)
 		m_CurPotionCoolTime += fTimeDelta;
+
 
 	// 상태 변경 조건 설정
 	StateChange();

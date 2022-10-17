@@ -178,6 +178,7 @@
     <ClInclude Include="..\Header\PlayerStartPos.h" />
     <ClInclude Include="..\Header\Kouku.h" />
     <ClInclude Include="..\Header\KoukuController.h" />
+    <ClInclude Include="..\Header\PlayerUI.h" />
     <ClInclude Include="..\Header\Posion.h" />
     <ClInclude Include="..\Header\AnimationTool.h" />
     <ClInclude Include="..\Header\Apple.h" />
@@ -288,6 +289,7 @@
     <ClCompile Include="..\Code\PlayerStartPos.cpp" />
     <ClCompile Include="..\Code\Kouku.cpp" />
     <ClCompile Include="..\Code\KoukuController.cpp" />
+    <ClCompile Include="..\Code\PlayerUI.cpp" />
     <ClCompile Include="..\Code\Posion.cpp" />
     <ClCompile Include="..\Code\AnimationTool.cpp" />
     <ClCompile Include="..\Code\Apple.cpp" />

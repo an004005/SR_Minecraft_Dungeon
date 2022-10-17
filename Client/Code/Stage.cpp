@@ -13,6 +13,8 @@
 #include "Box.h"
 #include "Dynamite.h"
 #include "BossHPUI.h"
+#include "StatComponent.h"
+#include "PlayerUI.h"
 
 //monster
 #include "Monster.h"
@@ -55,7 +57,7 @@ HRESULT CStage::Ready_Scene(void)
 	// Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 	// 	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
 
-	//CBatchTool::Load(L"../Bin/Resource/Batch/stage1_test.batch");
+	CBatchTool::Load(L"../Bin/Resource/Batch/stage1_test.batch");
 
 	return S_OK;
 }
@@ -68,6 +70,33 @@ _int CStage::Update_Scene(const _float & fTimeDelta)
 	//Engine::Get_Component<CTransform>(LAYER_UI, L"UI_HP", L"Proto_TransformCom", ID_DYNAMIC)
 	//	->m_vAngle.y += D3DXToRadian(40.f) * fTimeDelta;
 
+
+	if (CPlayer* pPlayer = Get_GameObjectUnCheck<CPlayer>(LAYER_PLAYER, L"Player"))
+	{
+		
+		if (pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)->IsDead())
+		{
+			
+			if (m_bPlayerAlive)
+			{
+				pPlayerUI = CUIFactory::Create<CPlayerUI>("PlayerUI", L"PlayerDead", 0, WINCX * 0.5f, WINCY * 0.5f, WINCX, WINCY);
+				pPlayerUI->Open();
+				pPlayerUI->SetUITexture(25);		
+			}
+			m_bPlayerAlive = false;
+			
+		}
+		else
+		{
+			if (pPlayerUI != nullptr)
+			{
+				pPlayerUI->Close();
+				pPlayerUI = nullptr;		
+			}
+			m_bPlayerAlive = true;
+		}
+	}
+	
 	Engine::GetFont();
 
 	CSoundMgr::GetInstance()->Update_Listener(LAYER_ENV, L"StaticCamera");
@@ -163,8 +192,8 @@ HRESULT CStage::Ready_Layer_GameLogic()
 		/*CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 45.f, 0.f ,23.f });
 		CEnemyFactory::Create<CEnchanter>("Enchanter", L"Enchanter", matWorld);*/
 
-		 CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 3.f, 0.f ,16.f });
-		 CEnemyFactory::Create<CRedStoneMonstrosity>("RedStoneMonstrosity", L"RedStoneMonstrosity", matWorld);
+		 //CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 3.f, 0.f ,16.f });
+		// CEnemyFactory::Create<CRedStoneMonstrosity>("RedStoneMonstrosity", L"RedStoneMonstrosity", matWorld);
 	}
 	
 	// CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {6.f, 0.f ,6.f});

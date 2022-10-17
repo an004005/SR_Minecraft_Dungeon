@@ -5,7 +5,7 @@
 #include "TerrainCubeMap.h"
 
 class CArrowCubeMgr;
-
+class CPlayerUI;
 class CTerrainWater;
 
 class CStage : public Engine::CScene
@@ -31,6 +31,7 @@ public:
 
 private:
 	virtual void	Free(void);
-
+	_bool m_bPlayerAlive = false;
+	CPlayerUI* pPlayerUI = nullptr;
 };
 
