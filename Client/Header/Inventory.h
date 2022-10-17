@@ -99,7 +99,7 @@ private:
 
 	//arrItem 이면 equipstate = flase, arrEquip이면 equipstate = true
 	//void MouseEvent(CItemSpaceUI* pItemSpaceUI, CEquipItem* pEquipItem, _int index, _bool bEquipState);
-	void MouseTestEvent(CEquipItem* pCurCollItem, CItemUI* pCurCollUI, _int iSlotIndex);
+	void MouseEvent(CEquipItem* pCurCollItem, CItemUI* pCurCollUI, _int iSlotIndex);
 	_uint m_iEmerald = 0;
 	_uint m_iArrow = 0;
 	_bool m_bLock = false;

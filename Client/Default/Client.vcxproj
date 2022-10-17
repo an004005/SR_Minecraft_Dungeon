@@ -166,6 +166,7 @@
   <ItemGroup>
     <ClInclude Include="..\Header\AbstFactory.h" />
     <ClInclude Include="..\Header\BatchTool.h" />
+    <ClInclude Include="..\Header\BossHPUI.h" />
     <ClInclude Include="..\Header\DamageFontMgr.h" />
     <ClInclude Include="..\Header\FireworksArrow.h" />
     <ClInclude Include="..\Header\CamAnimation.h" />
@@ -275,6 +276,7 @@
   <ItemGroup>
     <ClCompile Include="..\Code\AbstFactory.cpp" />
     <ClCompile Include="..\Code\BatchTool.cpp" />
+    <ClCompile Include="..\Code\BossHPUI.cpp" />
     <ClCompile Include="..\Code\DamageFontMgr.cpp" />
     <ClCompile Include="..\Code\FireworksArrow.cpp" />
     <ClCompile Include="..\Code\CamAnimation.cpp" />
