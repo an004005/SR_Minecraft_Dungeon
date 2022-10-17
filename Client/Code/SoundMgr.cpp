@@ -76,6 +76,38 @@ void CSoundMgr::PlaySoundRandom(const vector<wstring>& vecSoundKey, const _vec3&
 	PlaySound(vecSoundKey[rand() % vecSoundKey.size()], vSoundPos, fVolume);
 }
 
+void CSoundMgr::PlaySoundChannel(const wstring& pSoundKey, const _vec3& vSoundPos, CHANNELID eID, float fVolume)
+{
+	fVolume *= m_fMasterVolume;
+
+	const _vec3 vDiff = vSoundPos - m_vListenerPos;
+	const _float fDistance = D3DXVec3Length(&vDiff);
+	if (fDistance > m_fMaxListenDist) // 너무 멀다.
+	{
+		return;
+	}
+
+	map<TCHAR*, FMOD_SOUND*>::iterator iter; 
+
+	// iter = find_if(m_mapSound.begin(), m_mapSound.end(), CTag_Finder(pSoundKey));
+	iter = find_if(m_mapSound.begin(), m_mapSound.end(), 
+		[&](auto& iter)->bool
+	{
+		return !lstrcmp(pSoundKey.c_str(), iter.first);
+	});
+	
+	if (iter == m_mapSound.end())
+		return;
+
+	fVolume = fVolume *  (1.f - (fDistance / m_fMaxListenDist));
+
+	FMOD_System_PlaySound(m_pSystem, iter->second, nullptr, FALSE, &m_pChannelArr[eID]);
+
+	FMOD_Channel_SetVolume(m_pChannelArr[eID], fVolume);
+
+	FMOD_System_Update(m_pSystem);
+}
+
 // void CSoundMgr::PlaySoundRandom(float fVolume, const _vec3& vSoundPos int iNum, TCHAR* ...)
 // {
 // 	va_list VA_LIST;

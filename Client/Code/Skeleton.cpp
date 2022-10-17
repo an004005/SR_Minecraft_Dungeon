@@ -55,7 +55,11 @@ void CSkeleton::AnimationEvent(const string& strEvent)
 	if (strEvent == "AttackFire")
 	{
 		//m_bAttackFire = true;
-		CBulletFactory::Create<CGameObject>("EnemyNormalArrow", L"SkeletonArrow", 10.f, m_pRootPart->pTrans->m_vInfo[INFO_POS] + _vec3{0.f, 1.f, 0.f}, m_vTargetPos);
+		
+		CBulletFactory::Create<CGameObject>("EnemyNormalArrow", L"SkeletonArrow", 
+		{10.f, false, COLL_ENEMY_BULLET, ARROW_NORMAL}, 
+			m_pRootPart->pTrans->m_vInfo[INFO_POS] + _vec3{0.f, 1.f, 0.f}, 
+			m_vTargetPos);
 	}
 
 	else if (strEvent == "ActionEnd")

@@ -17,6 +17,8 @@
 #include "Inventory.h"
 #include "Emerald.h"
 #include "PlayerStartPos.h"
+#include "TerrainCubeMap.h"
+#include "LaserShotRune.h"
 
 /*-----------------------
  *    CCharacter
@@ -36,10 +38,11 @@ CPlayer::~CPlayer()
 {
 }
 
-HRESULT CPlayer::Ready_Object()
+HRESULT CPlayer::Ready_Object(const wstring& wstrPath)
 {
 	CSkeletalCube::Ready_Object();
-
+	if (wstrPath.empty() == false)
+		LoadSkeletal(wstrPath);
 
 	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 	m_pCurAnim = m_pIdleAnim;
@@ -76,12 +79,17 @@ HRESULT CPlayer::Ready_Object()
 
 	m_pInventory = CObjectFactory::Create<CInventory>("Inventory", L"Inventory");
 	m_pInventory->AddRef();
+	m_pInventory->SetOwner(this);
+	m_pInventory->AddDefaultItems();
 	m_arrAnim = m_pInventory->CurWeapon(IT_MELEE)->SetarrAnim();
 
 	m_pRootPart->pTrans->Update_Component(0.f);
 	//test
 	// PlayerSpawn();
 
+	//큐브의 인덱스를 받아옴
+	CTerrainCubeMap* pTerrainCube = Get_GameObject<CTerrainCubeMap>(LAYER_ENV, L"TerrainCubeMap");
+	arrBlock = pTerrainCube->GetBlockIndex();
 	return S_OK;
 }
 
@@ -164,6 +172,10 @@ void CPlayer::LateUpdate_Object()
 		m_bApplyMeleeAttack = false;
 		m_bApplyMeleeAttackNext = true;
 	}
+
+	
+
+	
 }
 
 void CPlayer::Render_Object()
@@ -203,7 +215,21 @@ void CPlayer::AnimationEvent(const string& strEvent)
 	}
 	else if (strEvent == "step")
 	{
-		CSoundMgr::GetInstance()->PlaySoundRandom({ L"sfx_player_stepStone-001.ogg", L"sfx_player_stepStone-002.ogg" ,L"sfx_player_stepStone-003.ogg" }, m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+		if ((_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].x <= 0 || (_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].z <= 0 ||
+			(_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].x > 129 || (_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].z > 129)
+			return;
+
+		if (arrBlock[(_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].x][(_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].z] == 13)
+		{
+			CSoundMgr::GetInstance()->PlaySoundRandom({ L"sfx_player_stepGrass-001.ogg", L"sfx_player_stepGrass-002.ogg" ,L"sfx_player_stepGrass-003.ogg" }, m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+		}
+		else if (arrBlock[(_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].x][(_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].z] == 15)
+		{
+			CSoundMgr::GetInstance()->PlaySound(L"DLC_Ice_SluiceGate_Water_LOOP.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+
+		}
+		else
+			CSoundMgr::GetInstance()->PlaySoundRandom({ L"sfx_player_stepStone-001.ogg", L"sfx_player_stepStone-002.ogg" ,L"sfx_player_stepStone-003.ogg" }, m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 
 		if (m_dwWalkDust + 500 < GetTickCount())
 		{
@@ -251,6 +277,79 @@ void CPlayer::PlayerSpawn()
 	SetVisible(true);
 }
 
+
+void CPlayer::SpawnArrow(_uint iDamage, PlayerArrowType eType, _bool bCritical, ArrowType eArrowType)
+{
+	const _vec3 vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + _vec3{0.f, 1.3f, 0.f};
+	_vec3 vLookAt;
+	if (PickTargetEnemy(OUT vLookAt) == false)
+		vLookAt = vPos + m_pRootPart->pTrans->m_vInfo[INFO_LOOK];
+
+	switch (eType)
+	{
+	case PlayerArrowType::NORMAL:
+		CSoundMgr::GetInstance()->PlaySound(L"sfx_item_arrow_fire.ogg", vPos);
+		CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 
+		{_float(iDamage), bCritical, COLL_PLAYER_BULLET, eArrowType},
+			vPos, vLookAt);
+		break;
+	case PlayerArrowType::MULTISHOT:
+		{
+			CSoundMgr::GetInstance()->PlaySound(L"sfx_item_arrow_fire.ogg", vPos);
+
+			_matrix matRot, matRotReverse;
+			D3DXMatrixRotationY(&matRotReverse, D3DXToRadian(-15.f));
+			D3DXMatrixRotationY(&matRot, D3DXToRadian(5.f));
+
+			_vec3 vLook = vLookAt - vPos;
+			D3DXVec3TransformNormal(&vLook, &vLook, &matRotReverse);
+
+			for (int i = 0; i < 5; ++i)
+			{
+				D3DXVec3TransformNormal(&vLook, &vLook, &matRot);
+				CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 
+				{_float(iDamage), bCritical, COLL_PLAYER_BULLET, eArrowType},
+					vPos, vLook + vPos);
+			}
+		}
+		break;
+	case PlayerArrowType::LASER:
+		m_bLaser = true;
+		m_fCurLaserTime = 0.f;
+		break;
+	default:;
+	}
+}
+
+_bool CPlayer::PickTargetEnemy(_vec3& vLookAt)
+{
+	// https://gohen.tistory.com/79 참조(광선과 직선 교차판정)
+
+	_vec3 vOrigin, vRayDir;
+	_matrix matView, matProj;
+	D3DVIEWPORT9 ViewPort;
+
+	ZeroMemory(&ViewPort, sizeof(D3DVIEWPORT9));
+	m_pGraphicDev->GetViewport(&ViewPort);
+	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &matProj);
+	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
+	CGameUtilMgr::GetPickingRay(vOrigin, vRayDir, g_hWnd, matView, matProj, ViewPort);
+
+	for (const auto& enemy : Engine::Get_Layer(LAYER_ENEMY)->Get_MapObject())
+	{
+		const auto pColl = enemy.second->Get_Component<CCollisionCom>(L"Proto_CollisionCom", ID_DYNAMIC);
+		const _vec3 vSubject = vOrigin - pColl->GetCollPos();
+		const _float fB = D3DXVec3Dot(&vRayDir, &vSubject);
+		const _float fC = D3DXVec3Dot(&vSubject, &vSubject) - pColl->GetRadius();
+		if (fB * fB  - fC >= 0.f)
+		{
+			vLookAt = pColl->GetCollPos();
+			return true;
+		}
+	}
+	return false;
+}
+
 void CPlayer::SetMoveDir(_float fX, _float fZ)
 {
 	m_vMoveDirNormal.x = fX;
@@ -281,22 +380,8 @@ void CPlayer::AttackState()
 	}
 
 
-
-#pragma region Lazer 
-	 //CEffectFactory::Create<CLazer>("Lazer_Beam", L"Lazer_Beam");
-	 //for (int i = 0; i < 12; i++)
-	 //{
-	 //	CEffectFactory::Create<CLazer_Circle>("Lazer_Beam_Circle", L"Lazer_Beam_Circle");
-	 //}
-#pragma endregion 
-
 #pragma region Loading Box 
  	 //CEffectFactory::Create<CCrack>("LoadingBox", L"LoadingBox");
-#pragma endregion
-
-#pragma region Item DropEffect 
-	// CEffectFactory::Create<CGradation_Beam>("Gradation_Beam", L"Gradation_Beam");
-	// Get_GameObject<C3DBaseTexture>(LAYER_EFFECT, L"3D_Base")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 3.f, D3DXCOLOR(1.f, 1.f, 0.f, 0.f), 1, 30.f,1);
 #pragma endregion
 
 #pragma region Lava_Paticle
@@ -317,11 +402,13 @@ void CPlayer::StateChange()
 	{
 		if (m_bReserveStop == false)
 		{
+			CSoundMgr::GetInstance()->PlaySound(L"sfx_playerDead-001_soundWave.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 			m_eState = DEAD;
 			PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
 			m_bRoll = false;
 			m_bCanPlayAnim = false;
 			m_bMove = false;
+			m_bLaser = false;
 			m_bCanPlayAnim = false;
 			m_pColl->SetStop();
 		}
@@ -332,6 +419,7 @@ void CPlayer::StateChange()
 	{
 		m_eState = STUN;
 		m_bRoll = false;
+		m_fCurLaserTime = 3.f;
 		return;
 	}
 
@@ -341,12 +429,28 @@ void CPlayer::StateChange()
 		m_eState = ROLL;
 		RotateToCursor();
 		m_bCanPlayAnim = false;
+		m_fCurLaserTime = 3.f;
 		PlayAnimationOnce(&m_arrAnim[ANIM_ROLL]);
 		m_bRoll = false;
 		m_CurRollCoolTime = 0.f;
 		return;
 	}
 
+	if (m_bLaser && m_bCanPlayAnim)
+	{
+		if (m_fLaserTime < m_fCurLaserTime)
+		{
+			m_bLaser = false;
+			Get_GameObject<CLaserShotRune>(LAYER_ITEM, L"LaserShotRune")->KillLaser();
+		}
+		else
+		{
+			Get_GameObject<CLaserShotRune>(LAYER_ITEM, L"LaserShotRune")->Collision();
+			m_fCurLaserTime += CGameUtilMgr::s_fTimeDelta;
+			return;
+		}	
+	}
+	
 	if (m_bLegacy1 && m_bCanPlayAnim)
 	{
 		m_bLegacy1 = false;
@@ -451,29 +555,30 @@ void CPlayer::UsePotion()
 		{
 			CEffectFactory::Create<CHeartParticle>("HeartParticle", L"HeartParticle");
 		}
-		// particle
+		
+		CSoundMgr::GetInstance()->PlaySoundRandom({
+			L"sfx_ui_healthsynergy-001.ogg",
+			L"sfx_ui_healthsynergy-002.ogg",
+			L"sfx_ui_healthsynergy-003.ogg",
+			L"sfx_ui_healthsynergy-004.ogg" },
+			m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 	}
 
-	CSoundMgr::GetInstance()->PlaySoundRandom({
-		L"sfx_ui_healthsynergy-001.ogg",
-		L"sfx_ui_healthsynergy-002.ogg",
-		L"sfx_ui_healthsynergy-003.ogg",
-		L"sfx_ui_healthsynergy-004.ogg"},
-		m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+
 }
 
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
 {
 	CPlayer* pInstance = new CPlayer(pGraphicDev);
 
-	if (FAILED(pInstance->Ready_Object()))
+	if (FAILED(pInstance->Ready_Object(wstrPath)))
 	{
 		Safe_Release(pInstance);
 		return nullptr;
 	}
 
-	if (!wstrPath.empty())
-		pInstance->LoadSkeletal(wstrPath);
+	// if (!wstrPath.empty())
+	// 	pInstance->LoadSkeletal(wstrPath);
 
 	return pInstance;
 }
@@ -559,7 +664,7 @@ void CPlayer::WeaponChange(ITEMTYPE eIT)
 {
 	if (m_pWeaponPart == nullptr)
 	{
-		auto& itr = m_mapParts.find("weapon_r");
+		const auto itr = m_mapParts.find("weapon_r");
 		if (itr == m_mapParts.end())
 			return;
 		m_pWeaponPart = itr->second;

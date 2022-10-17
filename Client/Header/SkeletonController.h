@@ -19,7 +19,7 @@ private:
 	_float m_fCurAttackCoolTime = 0.f;
 	_float m_fAttackCoolTime = 3.f;
 
-	_float m_fAttackRange = 15.f; // 사정거리
+	_float m_fAttackRange = 17.f; // 사정거리
 	_float m_fRunDist = 7.f;
 };
 

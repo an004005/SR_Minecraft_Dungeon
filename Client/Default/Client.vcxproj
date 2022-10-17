@@ -171,6 +171,9 @@
     <ClInclude Include="..\Header\CamAnimation.h" />
     <ClInclude Include="..\Header\CameraTool.h" />
     <ClInclude Include="..\Header\InventoryUI.h" />
+    <ClInclude Include="..\Header\ItemTexUI.h" />
+    <ClInclude Include="..\Header\LaserShotRune.h" />
+    <ClInclude Include="..\Header\MultiShotRune.h" />
     <ClInclude Include="..\Header\PlayerStartPos.h" />
     <ClInclude Include="..\Header\Kouku.h" />
     <ClInclude Include="..\Header\KoukuController.h" />
@@ -214,11 +217,13 @@
     <ClInclude Include="..\Header\Particle.h" />
     <ClInclude Include="..\Header\Player.h" />
     <ClInclude Include="..\Header\PlayerController.h" />
+    <ClInclude Include="..\Header\PowerRune.h" />
     <ClInclude Include="..\Header\RedStoneMonstrosityBullet.h" />
     <ClInclude Include="..\Header\RedStoneCube.h" />
     <ClInclude Include="..\Header\RedStoneCubeController.h" />
     <ClInclude Include="..\Header\RedStoneMonstrosity.h" />
     <ClInclude Include="..\Header\RedStoneMonstrosityController.h" />
+    <ClInclude Include="..\Header\Rune.h" />
     <ClInclude Include="..\Header\Saton.h" />
     <ClInclude Include="..\Header\SatonCircle.h" />
     <ClInclude Include="..\Header\SatonController.h" />
@@ -231,10 +236,14 @@
     <ClInclude Include="..\Header\Stage.h" />
     <ClInclude Include="..\Header\StatComponent.h" />
     <ClInclude Include="..\Header\StaticCamera.h" />
+    <ClInclude Include="..\Header\StormRune.h" />
+    <ClInclude Include="..\Header\StunRune.h" />
     <ClInclude Include="..\Header\Sword.h" />
     <ClInclude Include="..\Header\Terrain.h" />
     <ClInclude Include="..\Header\TerrainCubeMap.h" />
     <ClInclude Include="..\Header\TestCube.h" />
+    <ClInclude Include="..\Header\Trigger.h" />
+    <ClInclude Include="..\Header\Weapon.h" />
     <ClInclude Include="..\Header\Zombie.h" />
     <ClInclude Include="..\Header\ZombieController.h" />
     <ClInclude Include="..\Header\UI.h" />
@@ -257,6 +266,8 @@
     <ClInclude Include="imstb_textedit.h" />
     <ClInclude Include="imstb_truetype.h" />
     <ClInclude Include="ImZoomSlider.h" />
+    <ClInclude Include="ItemUI.h" />
+    <ClInclude Include="LightningRune.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stb\stb_image.h" />
     <ClInclude Include="stdafx.h" />
@@ -270,6 +281,9 @@
     <ClCompile Include="..\Code\CamAnimation.cpp" />
     <ClCompile Include="..\Code\CameraTool.cpp" />
     <ClCompile Include="..\Code\InventoryUI.cpp" />
+    <ClCompile Include="..\Code\ItemTexUI.cpp" />
+    <ClCompile Include="..\Code\LaserShotRune.cpp" />
+    <ClCompile Include="..\Code\MultiShotRune.cpp" />
     <ClCompile Include="..\Code\PlayerStartPos.cpp" />
     <ClCompile Include="..\Code\Kouku.cpp" />
     <ClCompile Include="..\Code\KoukuController.cpp" />
@@ -313,11 +327,13 @@
     <ClCompile Include="..\Code\Particle.cpp" />
     <ClCompile Include="..\Code\Player.cpp" />
     <ClCompile Include="..\Code\PlayerController.cpp" />
+    <ClCompile Include="..\Code\PowerRune.cpp" />
     <ClCompile Include="..\Code\RedStoneMonstrosityBullet.cpp" />
     <ClCompile Include="..\Code\RedStoneCube.cpp" />
     <ClCompile Include="..\Code\RedStoneCubeController.cpp" />
     <ClCompile Include="..\Code\RedStoneMonstrosity.cpp" />
     <ClCompile Include="..\Code\RedStoneMonstrosityController.cpp" />
+    <ClCompile Include="..\Code\Rune.cpp" />
     <ClCompile Include="..\Code\Saton.cpp" />
     <ClCompile Include="..\Code\SatonCircle.cpp" />
     <ClCompile Include="..\Code\SatonController.cpp" />
@@ -330,10 +346,14 @@
     <ClCompile Include="..\Code\Stage.cpp" />
     <ClCompile Include="..\Code\StatComponent.cpp" />
     <ClCompile Include="..\Code\StaticCamera.cpp" />
+    <ClCompile Include="..\Code\StormRune.cpp" />
+    <ClCompile Include="..\Code\StunRune.cpp" />
     <ClCompile Include="..\Code\Sword.cpp" />
     <ClCompile Include="..\Code\Terrain.cpp" />
     <ClCompile Include="..\Code\TerrainCubeMap.cpp" />
     <ClCompile Include="..\Code\TestCube.cpp" />
+    <ClCompile Include="..\Code\Trigger.cpp" />
+    <ClCompile Include="..\Code\Weapon.cpp" />
     <ClCompile Include="..\Code\Zombie.cpp" />
     <ClCompile Include="..\Code\ZombieController.cpp" />
     <ClCompile Include="..\Code\UI.cpp" />
@@ -391,6 +411,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="ItemUI.cpp" />
+    <ClCompile Include="LightningRune.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

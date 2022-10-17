@@ -1,8 +1,7 @@
 #pragma once
-#include "EquipItem.h"
+#include "Weapon.h"
 
-class CSword :
-	public CEquipItem
+class CSword : public CWeapon
 {
 private:
 	explicit CSword(LPDIRECT3DDEVICE9 pGraphicDev);
@@ -23,6 +22,6 @@ public:
 	virtual void Equipment(SkeletalPart* pSkeletalPart) override;
 	virtual void Collision() override;
 
-	
+	_bool m_bCreateOnce = false;
 };
 

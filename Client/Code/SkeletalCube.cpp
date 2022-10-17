@@ -461,18 +461,18 @@ void CSkeletalCube::DeleteRecursive(const string& strPart)
 	pToDelete->pTrans->Release();
 
 	{
-		auto itr = m_mapComponent->find(pToDelete->strBufCom);
-		if (itr != m_mapComponent->end())
+		auto itr = m_mapComponent[ID_STATIC].find(pToDelete->strBufCom);
+		if (itr != m_mapComponent[ID_STATIC].end())
 			m_mapComponent[ID_STATIC].erase(itr);
 	}
 	{
-		auto itr = m_mapComponent->find(pToDelete->strTexCom);
-		if (itr != m_mapComponent->end())
+		auto itr = m_mapComponent[ID_STATIC].find(pToDelete->strTexCom);
+		if (itr != m_mapComponent[ID_STATIC].end())
 			m_mapComponent[ID_STATIC].erase(itr);
 	}
 	{
-		auto itr = m_mapComponent->find(pToDelete->strTransCom);
-		if (itr != m_mapComponent->end())
+		auto itr = m_mapComponent[ID_STATIC].find(pToDelete->strTransCom);
+		if (itr != m_mapComponent[ID_STATIC].end())
 			m_mapComponent[ID_STATIC].erase(itr);
 	}
 

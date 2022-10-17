@@ -39,7 +39,7 @@ void CDamageFontMgr::Update_DamageFontMgr(const _float& fTimeDelta)
 	m_pGraphicDev->GetViewport(&m_ViewPort);
 }
 
-void CDamageFontMgr::Add_DamageFontFromWorld(_int iDamage, const _vec3& vPos, const _vec3& vFrom, D3DXCOLOR Color)
+void CDamageFontMgr::Add_DamageFontFromWorld(_int iDamage, const _vec3& vPos, const _vec3& vFrom, D3DXCOLOR Color, _bool bCritical)
 {
 	_vec3 vPosToScreen = vPos;
 	D3DXVec3TransformCoord(&vPosToScreen, &vPosToScreen, &m_matViewProj);
@@ -54,23 +54,42 @@ void CDamageFontMgr::Add_DamageFontFromWorld(_int iDamage, const _vec3& vPos, co
 
 	_vec3 vDir = vPosToScreen - vFromToScreen;
 
-	m_vecDamageFont.push_back({iDamage, {vDir.x, vDir.y}, {vPosToScreen.x, vPosToScreen.y}, Color});
+	const _vec2 vScreenPos = {vPosToScreen.x, vPosToScreen.y};
+	for (auto& damageFont : m_vecDamageFont)
+	{
+		const _vec2 vDiff = vScreenPos - damageFont.vPos;
+		if (D3DXVec2LengthSq(&vDiff) < 100.f)
+			damageFont.vPos += damageFont.vDir * 0.15f * m_fSpeed;
+	}
+
+	m_vecDamageFont.push_back({iDamage, {vDir.x, vDir.y}, vScreenPos, Color, bCritical});
 }
 
 void CDamageFontMgr::Add_DamageFontFromScreen(_int iDamage, const _vec2& vScreen, D3DXCOLOR Color)
 {
-	m_vecDamageFont.push_back({iDamage, {0.f, 0.f}, vScreen, Color});
+	m_vecDamageFont.push_back({iDamage, {0.f, 0.f}, vScreen, Color, false});
 }
 
 void CDamageFontMgr::Render_DamageFontMgr()
 {
 	for (const auto& damageFont : m_vecDamageFont)
 	{
-		Engine::Render_Font(
-			L"Gothic_Bold20", 
-			to_wstring(damageFont.iDamage).c_str(),
-			&damageFont.vPos,
-			damageFont.Color);
+		if (damageFont.bCritical)
+		{
+			Engine::Render_Font(
+				L"Gothic_Bold30", 
+				to_wstring(damageFont.iDamage).c_str(),
+				&damageFont.vPos,
+				D3DCOLOR_ARGB(255, 255, 0, 0));
+		}
+		else
+		{
+			Engine::Render_Font(
+				L"Gothic_Bold20", 
+				to_wstring(damageFont.iDamage).c_str(),
+				&damageFont.vPos,
+				damageFont.Color);	
+		}
 	}
 }
 

@@ -5,6 +5,7 @@ enum DamageType
 {
 	DT_STUN,
 	DT_KNOCK_BACK,
+	DT_STIFFEN,
 	DT_HUGE_KNOCK_BACK,
 	DT_KOUKU_SYMBOL_BLUE,
 	DT_KOUKU_SYMBOL_RED,
@@ -14,7 +15,7 @@ enum DamageType
 };
 
 class CTerrainCubeMap;
-
+class CStun;
 class CStatComponent : public CComponent
 {
 protected:
@@ -35,7 +36,7 @@ public:
 	_uint GetMaxHP() const { return m_iMaxHP;}
 
 	void ModifyHP(_int iModifyingHP);
-	void TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCauser, DamageType eType = DT_END);
+	void TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCauser, DamageType eType = DT_END, _bool bCritical = false);
 
 	_bool IsStun() const { return m_bStun || m_bKnockback; }
 	_bool IsDead() const { return m_bDead; }
@@ -65,11 +66,17 @@ private:
 	_bool m_bStun = false;
 	_float m_fStunTime = 2.f;
 	_float m_fCurStunTime = 2.f;
+	CStun* m_pStun = nullptr;
 
 	// knock back
 	_bool m_bKnockback = false;
 	_float m_fKnockbackTime = 0.3f;
 	_float m_fCurKnockbackTime = 0.3f;
+	_float m_fPreYPos = 0.f;
+
+	_bool m_bStiffen = false;
+	_float m_fStiffeTime = 10.2f;
+	_float m_fCurStiffeTime = 0.2f;
 
 	_vec3 m_vKnockBackVelocity = CGameUtilMgr::s_vZero;
 

@@ -7,6 +7,8 @@ CTerrainCubeMap::CTerrainCubeMap(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CGameObject(pGraphicDev)
 {
 	ZeroMemory(&m_fHeight, sizeof(_float) * VTXCNTX * VTXCNTZ);
+	
+
 }
 
 CTerrainCubeMap::~CTerrainCubeMap()
@@ -230,11 +232,9 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 	// BlockTex(블럭마다 소리를 다르게 하기 위해)
 	for (auto& index : m_vecLand)
 	{
-		//_vec3 vCenter{ 0.f, 0.f, 0.f };
-		//D3DXVec3TransformCoord(&vCenter, &vCenter, &index.matWorld);
-		_float fX = index.matWorld._41; //vCenter.x - 0.5f;
-		_float fZ = index.matWorld._43;//vCenter.z - 0.5f;
-		m_fBlock[(_int)fX][(_int)fZ] = index.iTexIdx;
+		_vec3 vCenter{ 0.f, 0.f, 0.f };
+		D3DXVec3TransformCoord(&vCenter, &vCenter, &index.matWorld);
+		m_arrBlock[(_int)vCenter.x][(_int)vCenter.z] = index.iTexIdx;
 	}
 
 }

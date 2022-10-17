@@ -5,10 +5,14 @@
 #include "StatComponent.h"
 #include "Monster.h"
 #include "TerrainCubeMap.h"
+#include "Rune.h"
+#include "Inventory.h"
 
 CGlaive::CGlaive(LPDIRECT3DDEVICE9 pGraphicDev)
-	:CEquipItem(pGraphicDev)
+	:CWeapon(pGraphicDev)
 {
+	m_eType = WEAPON_GLAIVE;
+	m_iDamage = 35;
 }
 
 
@@ -19,6 +23,7 @@ CGlaive::~CGlaive()
 
 HRESULT CGlaive::Ready_Object()
 {
+	FAILED_CHECK_RETURN(CWeapon::Ready_Object(), E_FAIL);
 	m_pTransCom = Add_Component<Engine::CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 	m_pBufferCom = Add_Component<CVoxelTex>(L"Proto_VoxelTex_Glaive", L"Proto_VoxelTex_Glaive", ID_STATIC);
 	m_pTextureCom = Add_Component<Engine::CTexture>(L"Proto_WeaponTexture", L"Proto_WeaponTexture", ID_STATIC);
@@ -38,11 +43,32 @@ HRESULT CGlaive::Ready_Object()
 	m_eItemType = IT_MELEE;
 	m_iUItexNum = 9;
 
+	_float fItemSpaceSize = WINCX * 0.08f;
+	m_pItemUI = CUIFactory::Create<CItemUI>("ItemUI", L"GlaiveUI", 0/*, WINCX * 0.4f, WINCY*0.25f, fItemSpaceSize, fItemSpaceSize*/);
+	m_pItemUI->SetUITexture(m_iUItexNum);
+
 	return S_OK;
 }
 
 _int CGlaive::Update_Object(const _float & fTimeDelta)
 {
+	//runeslot on/off
+	if (m_pInventory->GetCurClickItem() == this)
+	{
+		if (m_pRune != nullptr)
+		{
+			m_pRune->GetItemUI()->Open();
+		}
+	}
+	else
+	{
+		if (m_pRune != nullptr)
+		{
+			m_pRune->GetItemUI()->Close();			
+		}
+	}
+
+
 	if (m_eItemState == IS_TAKE)
 		return 0;
 
@@ -53,7 +79,7 @@ _int CGlaive::Update_Object(const _float & fTimeDelta)
 	Parabola(vPos, fHeight, fTimeDelta);
 
 	
-	CEquipItem::Update_Object(fTimeDelta);
+	CWeapon::Update_Object(fTimeDelta);
 	return 0;
 }
 
@@ -75,7 +101,7 @@ void CGlaive::Render_Object()
 
 _int CGlaive::Attack()
 {
-	CPlayer* pPlayer = Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");
+	CPlayer* pPlayer = m_pOwner;
 	if (pPlayer == nullptr)
 		return 0;
 
@@ -115,7 +141,7 @@ CGlaive * CGlaive::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 
 void CGlaive::Free()
 {
-	CEquipItem::Free();
+	CWeapon::Free();
 }
 
 void CGlaive::Equipment(SkeletalPart * pSkeletalPart)
@@ -129,7 +155,7 @@ void CGlaive::Collision()
 {
 	set<CGameObject*> objSet;
 
-	CPlayer* pPlayer = Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");
+	CPlayer* pPlayer = m_pOwner;
 	_vec3 vPos = pPlayer->GetInfo(INFO_POS);
 	_vec3 vLook = pPlayer->GetInfo(INFO_LOOK);
 
@@ -143,9 +169,12 @@ void CGlaive::Collision()
 			if (m_iAttackCnt == 0) eDT = DT_KNOCK_BACK;
 			if (monster->CheckCC()) eDT = DT_END;
 			monster->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(30, vPos, this, eDT);
+				->TakeDamage(m_iDamage, vPos, this, eDT, m_bCritical);
 		}
 	}
+
+	if (m_pRune)
+		m_pRune->Collision();
 
 	DEBUG_SPHERE(vAttackPos, 2.5f, 1.f);
 }
