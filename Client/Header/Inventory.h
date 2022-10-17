@@ -70,6 +70,7 @@ public:
 			return 0;
 		return m_arrLegacy[eType]->GetUITexNum();
 	}
+	void ResetWeaponEquipped();
 
 	void SetRune(CRune* pRune) { m_pRune = pRune; }
 	void CreateClickFrame();

@@ -31,9 +31,19 @@ HRESULT CLightningRune::Ready_Object()
 
 _int CLightningRune::Update_Object(const _float& fTimeDelta)
 {
-	if (m_bDelete) return OBJ_DEAD;
-
 	CRune::Update_Object(fTimeDelta);
+	if (m_bDelete) return OBJ_DEAD;
+	if (m_pEquippedWeapon && m_pEquippedWeapon->IsEquipped() == false)
+	{
+		if (m_vecSparks.empty() == false)
+		{
+			for(auto& e : m_vecSparks)
+				Safe_Release(e);
+			m_vecSparks.clear();
+		}
+
+		return OBJ_NOEVENT;
+	}
 
 	if (m_bSpark)
 	{

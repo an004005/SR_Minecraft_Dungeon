@@ -187,39 +187,40 @@ _int CInventory::Update_Object(const _float & fTimeDelta)
 		}	
 	}
 
-	if (g_bOnline && m_bEquipChange)
+	if (m_bEquipChange)
 	{
-		Protocol::C_PLAYER_EQUIP equipPkt;
-		equipPkt.mutable_player()->set_id(CClientServiceMgr::GetInstance()->m_iPlayerID);
-		equipPkt.mutable_player()->set_name("test player");
-
-		array<Protocol::EquipState, 5> arrEquipProtocol{};
-		GetProtocolFromEquip(arrEquipProtocol[0], m_pMelee);
-		GetProtocolFromEquip(arrEquipProtocol[1], m_pRange);
-		GetProtocolFromEquip(arrEquipProtocol[2], m_arrLegacy[LEGACY_SLOT1]);
-		arrEquipProtocol[2].set_legacyslot(1);
-		arrEquipProtocol[2].set_type(Protocol::LEGACY);
-		GetProtocolFromEquip(arrEquipProtocol[3], m_arrLegacy[LEGACY_SLOT2]);
-		arrEquipProtocol[3].set_legacyslot(2);
-		arrEquipProtocol[3].set_type(Protocol::LEGACY);
-		GetProtocolFromEquip(arrEquipProtocol[4], m_arrLegacy[LEGACY_SLOT3]);
-		arrEquipProtocol[4].set_legacyslot(3);
-		arrEquipProtocol[4].set_type(Protocol::LEGACY);
-
-
-		for (int i = 0; i < 5; ++i)
+		if (g_bOnline)
 		{
-			string tmp;
-			arrEquipProtocol[i].SerializeToString(&tmp);
+			Protocol::C_PLAYER_EQUIP equipPkt;
+			equipPkt.mutable_player()->set_id(CClientServiceMgr::GetInstance()->m_iPlayerID);
+			equipPkt.mutable_player()->set_name("test player");
 
-			if (false == google::protobuf::util::MessageDifferencer::Equals(arrEquipProtocol[i], m_arrPreEquipProtocol[i]))
+			array<Protocol::EquipState, 5> arrEquipProtocol{};
+			GetProtocolFromEquip(arrEquipProtocol[0], m_pMelee);
+			GetProtocolFromEquip(arrEquipProtocol[1], m_pRange);
+			GetProtocolFromEquip(arrEquipProtocol[2], m_arrLegacy[LEGACY_SLOT1]);
+			arrEquipProtocol[2].set_legacyslot(1);
+			arrEquipProtocol[2].set_type(Protocol::LEGACY);
+			GetProtocolFromEquip(arrEquipProtocol[3], m_arrLegacy[LEGACY_SLOT2]);
+			arrEquipProtocol[3].set_legacyslot(2);
+			arrEquipProtocol[3].set_type(Protocol::LEGACY);
+			GetProtocolFromEquip(arrEquipProtocol[4], m_arrLegacy[LEGACY_SLOT3]);
+			arrEquipProtocol[4].set_legacyslot(3);
+			arrEquipProtocol[4].set_type(Protocol::LEGACY);
+
+
+			for (int i = 0; i < 5; ++i)
 			{
-				equipPkt.mutable_state()->CopyFrom(arrEquipProtocol[i]);
-				CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(equipPkt));
-				m_arrPreEquipProtocol[i] = arrEquipProtocol[i];
+				if (false == google::protobuf::util::MessageDifferencer::Equals(arrEquipProtocol[i], m_arrPreEquipProtocol[i]))
+				{
+					equipPkt.mutable_state()->CopyFrom(arrEquipProtocol[i]);
+					CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(equipPkt));
+					m_arrPreEquipProtocol[i] = arrEquipProtocol[i];
+				}
 			}
 		}
 
+		ResetWeaponEquipped();
 		m_bEquipChange = false;
 	}
 	return 0;
@@ -513,6 +514,20 @@ CEquipItem * CInventory::CurWeapon(ITEMTYPE eIT)
 
 	return nullptr;
 	
+}
+
+void CInventory::ResetWeaponEquipped()
+{
+	if (CWeapon* pWeapon = dynamic_cast<CWeapon*>(m_pMelee))
+		pWeapon->SetEquip(true);
+	if (CWeapon* pWeapon = dynamic_cast<CWeapon*>(m_pRange))
+		pWeapon->SetEquip(true);
+
+	for (auto& pItem : m_arrItem)
+	{
+		if (CWeapon* pWeapon = dynamic_cast<CWeapon*>(pItem))
+			pWeapon->SetEquip(false);
+	}
 }
 
 void CInventory::CreateClickFrame()
@@ -809,8 +824,8 @@ void CInventory::MouseTestEvent(CEquipItem * pCurCollItem, CItemUI * pCurCollUI,
 
 				if (m_arrItem[i] == pCurCollItem)
 				{
-					if (g_bOnline) // 보관함 -> 장비창(룬, 무기, 유물)
-						m_bEquipChange = true;
+					 // 보관함 -> 장비창(룬, 무기, 유물)
+					m_bEquipChange = true;
 
 					switch (m_arrItem[i]->GetItemType())
 					{
@@ -892,8 +907,8 @@ void CInventory::MouseTestEvent(CEquipItem * pCurCollItem, CItemUI * pCurCollUI,
 					{
 						if (m_arrItem[j] == nullptr)
 						{
-							if (g_bOnline) // 레거시 창 -> 보관함
-								m_bEquipChange = true;
+							 // 레거시 창 -> 보관함
+							m_bEquipChange = true;
 							m_arrLegacy[i] = m_arrItem[j];
 							m_arrItem[j] = pCurCollItem;
 							return;
@@ -913,8 +928,8 @@ void CInventory::MouseTestEvent(CEquipItem * pCurCollItem, CItemUI * pCurCollUI,
 					{
 						if (m_arrItem[i] == nullptr)
 						{
-							if (g_bOnline) // 룬창 -> 보관함
-								m_bEquipChange = true;
+							 // 룬창 -> 보관함
+							m_bEquipChange = true;
 							m_arrItem[i] = pRune;
 							return;
 						}
