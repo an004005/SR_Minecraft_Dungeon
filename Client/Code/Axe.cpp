@@ -14,6 +14,7 @@ CAxe::CAxe(LPDIRECT3DDEVICE9 pGraphicDev): CWeapon(pGraphicDev)
 {
 	m_eType = WEAPON_AXE;
 	m_iDamage = 50;
+	m_strFactoryTag = "Axe";
 }
 
 CAxe::~CAxe()
@@ -76,6 +77,8 @@ _int CAxe::Update_Object(const _float& fTimeDelta)
 	Parabola(vPos, fHeight, fTimeDelta);
 
 	CWeapon::Update_Object(fTimeDelta);
+	if (m_bDelete) return OBJ_DEAD;
+
 	return OBJ_NOEVENT;
 }
 

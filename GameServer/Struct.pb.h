@@ -46,6 +46,9 @@ struct TableStruct_Struct_2eproto {
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Struct_2eproto;
 namespace Protocol {
+class EquipState;
+struct EquipStateDefaultTypeInternal;
+extern EquipStateDefaultTypeInternal _EquipState_default_instance_;
 class Matrix;
 struct MatrixDefaultTypeInternal;
 extern MatrixDefaultTypeInternal _Matrix_default_instance_;
@@ -60,6 +63,7 @@ struct Vec4DefaultTypeInternal;
 extern Vec4DefaultTypeInternal _Vec4_default_instance_;
 }  // namespace Protocol
 PROTOBUF_NAMESPACE_OPEN
+template<> ::Protocol::EquipState* Arena::CreateMaybeMessage<::Protocol::EquipState>(Arena*);
 template<> ::Protocol::Matrix* Arena::CreateMaybeMessage<::Protocol::Matrix>(Arena*);
 template<> ::Protocol::Player* Arena::CreateMaybeMessage<::Protocol::Player>(Arena*);
 template<> ::Protocol::Vec3* Arena::CreateMaybeMessage<::Protocol::Vec3>(Arena*);
@@ -233,6 +237,197 @@ class Player final :
 };
 // -------------------------------------------------------------------
 
+class EquipState final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.EquipState) */ {
+ public:
+  inline EquipState() : EquipState(nullptr) {}
+  ~EquipState() override;
+  explicit PROTOBUF_CONSTEXPR EquipState(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  EquipState(const EquipState& from);
+  EquipState(EquipState&& from) noexcept
+    : EquipState() {
+    *this = ::std::move(from);
+  }
+
+  inline EquipState& operator=(const EquipState& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline EquipState& operator=(EquipState&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const EquipState& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const EquipState* internal_default_instance() {
+    return reinterpret_cast<const EquipState*>(
+               &_EquipState_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    1;
+
+  friend void swap(EquipState& a, EquipState& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(EquipState* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(EquipState* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  EquipState* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<EquipState>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const EquipState& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const EquipState& from) {
+    EquipState::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(EquipState* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.EquipState";
+  }
+  protected:
+  explicit EquipState(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kNameFieldNumber = 2,
+    kRuneFieldNumber = 3,
+    kTypeFieldNumber = 1,
+    kLegacySlotFieldNumber = 4,
+  };
+  // string name = 2;
+  void clear_name();
+  const std::string& name() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_name(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_name();
+  PROTOBUF_NODISCARD std::string* release_name();
+  void set_allocated_name(std::string* name);
+  private:
+  const std::string& _internal_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_name(const std::string& value);
+  std::string* _internal_mutable_name();
+  public:
+
+  // string rune = 3;
+  void clear_rune();
+  const std::string& rune() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_rune(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_rune();
+  PROTOBUF_NODISCARD std::string* release_rune();
+  void set_allocated_rune(std::string* rune);
+  private:
+  const std::string& _internal_rune() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_rune(const std::string& value);
+  std::string* _internal_mutable_rune();
+  public:
+
+  // .Protocol.EquipType type = 1;
+  void clear_type();
+  ::Protocol::EquipType type() const;
+  void set_type(::Protocol::EquipType value);
+  private:
+  ::Protocol::EquipType _internal_type() const;
+  void _internal_set_type(::Protocol::EquipType value);
+  public:
+
+  // uint32 legacySlot = 4;
+  void clear_legacyslot();
+  uint32_t legacyslot() const;
+  void set_legacyslot(uint32_t value);
+  private:
+  uint32_t _internal_legacyslot() const;
+  void _internal_set_legacyslot(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.EquipState)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr rune_;
+    int type_;
+    uint32_t legacyslot_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Struct_2eproto;
+};
+// -------------------------------------------------------------------
+
 class Vec3 final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.Vec3) */ {
  public:
@@ -281,7 +476,7 @@ class Vec3 final :
                &_Vec3_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    1;
+    2;
 
   friend void swap(Vec3& a, Vec3& b) {
     a.Swap(&b);
@@ -451,7 +646,7 @@ class Vec4 final :
                &_Vec4_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    3;
 
   friend void swap(Vec4& a, Vec4& b) {
     a.Swap(&b);
@@ -632,7 +827,7 @@ class Matrix final :
                &_Matrix_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    4;
 
   friend void swap(Matrix& a, Matrix& b) {
     a.Swap(&b);
@@ -878,6 +1073,150 @@ inline void Player::set_allocated_name(std::string* name) {
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   // @@protoc_insertion_point(field_set_allocated:Protocol.Player.name)
+}
+
+// -------------------------------------------------------------------
+
+// EquipState
+
+// .Protocol.EquipType type = 1;
+inline void EquipState::clear_type() {
+  _impl_.type_ = 0;
+}
+inline ::Protocol::EquipType EquipState::_internal_type() const {
+  return static_cast< ::Protocol::EquipType >(_impl_.type_);
+}
+inline ::Protocol::EquipType EquipState::type() const {
+  // @@protoc_insertion_point(field_get:Protocol.EquipState.type)
+  return _internal_type();
+}
+inline void EquipState::_internal_set_type(::Protocol::EquipType value) {
+  
+  _impl_.type_ = value;
+}
+inline void EquipState::set_type(::Protocol::EquipType value) {
+  _internal_set_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.EquipState.type)
+}
+
+// string name = 2;
+inline void EquipState::clear_name() {
+  _impl_.name_.ClearToEmpty();
+}
+inline const std::string& EquipState::name() const {
+  // @@protoc_insertion_point(field_get:Protocol.EquipState.name)
+  return _internal_name();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void EquipState::set_name(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.name_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.EquipState.name)
+}
+inline std::string* EquipState::mutable_name() {
+  std::string* _s = _internal_mutable_name();
+  // @@protoc_insertion_point(field_mutable:Protocol.EquipState.name)
+  return _s;
+}
+inline const std::string& EquipState::_internal_name() const {
+  return _impl_.name_.Get();
+}
+inline void EquipState::_internal_set_name(const std::string& value) {
+  
+  _impl_.name_.Set(value, GetArenaForAllocation());
+}
+inline std::string* EquipState::_internal_mutable_name() {
+  
+  return _impl_.name_.Mutable(GetArenaForAllocation());
+}
+inline std::string* EquipState::release_name() {
+  // @@protoc_insertion_point(field_release:Protocol.EquipState.name)
+  return _impl_.name_.Release();
+}
+inline void EquipState::set_allocated_name(std::string* name) {
+  if (name != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.name_.SetAllocated(name, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.name_.IsDefault()) {
+    _impl_.name_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:Protocol.EquipState.name)
+}
+
+// string rune = 3;
+inline void EquipState::clear_rune() {
+  _impl_.rune_.ClearToEmpty();
+}
+inline const std::string& EquipState::rune() const {
+  // @@protoc_insertion_point(field_get:Protocol.EquipState.rune)
+  return _internal_rune();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void EquipState::set_rune(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.rune_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.EquipState.rune)
+}
+inline std::string* EquipState::mutable_rune() {
+  std::string* _s = _internal_mutable_rune();
+  // @@protoc_insertion_point(field_mutable:Protocol.EquipState.rune)
+  return _s;
+}
+inline const std::string& EquipState::_internal_rune() const {
+  return _impl_.rune_.Get();
+}
+inline void EquipState::_internal_set_rune(const std::string& value) {
+  
+  _impl_.rune_.Set(value, GetArenaForAllocation());
+}
+inline std::string* EquipState::_internal_mutable_rune() {
+  
+  return _impl_.rune_.Mutable(GetArenaForAllocation());
+}
+inline std::string* EquipState::release_rune() {
+  // @@protoc_insertion_point(field_release:Protocol.EquipState.rune)
+  return _impl_.rune_.Release();
+}
+inline void EquipState::set_allocated_rune(std::string* rune) {
+  if (rune != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.rune_.SetAllocated(rune, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.rune_.IsDefault()) {
+    _impl_.rune_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:Protocol.EquipState.rune)
+}
+
+// uint32 legacySlot = 4;
+inline void EquipState::clear_legacyslot() {
+  _impl_.legacyslot_ = 0u;
+}
+inline uint32_t EquipState::_internal_legacyslot() const {
+  return _impl_.legacyslot_;
+}
+inline uint32_t EquipState::legacyslot() const {
+  // @@protoc_insertion_point(field_get:Protocol.EquipState.legacySlot)
+  return _internal_legacyslot();
+}
+inline void EquipState::_internal_set_legacyslot(uint32_t value) {
+  
+  _impl_.legacyslot_ = value;
+}
+inline void EquipState::set_legacyslot(uint32_t value) {
+  _internal_set_legacyslot(value);
+  // @@protoc_insertion_point(field_set:Protocol.EquipState.legacySlot)
 }
 
 // -------------------------------------------------------------------
@@ -1395,6 +1734,8 @@ inline void Matrix::set_allocated_vpos(::Protocol::Vec4* vpos) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

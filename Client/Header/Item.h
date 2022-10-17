@@ -28,6 +28,8 @@ public:
 		m_fPower = fPower;
 	}
 	ITEMSTATE GetItemState() { return m_eItemState; }
+	void SetDelete() { m_bDelete = true; }
+	const string& GetFactoryTag() const { return m_strFactoryTag;}
 
 protected:
 	ITEMSTATE	m_eItemState;
@@ -37,6 +39,9 @@ protected:
 	_bool m_bIdle;
 	CCollisionCom* m_pColl = nullptr;
 	Engine::CTransform*	m_pTransCom = nullptr;
+
+	_bool m_bDelete = false;
+	string m_strFactoryTag;
 
 	virtual void Parabola(_vec3 & vPos,const _float& fHeight,const _float& fTimeDelta);
 };

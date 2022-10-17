@@ -6,6 +6,7 @@ CStormRune::CStormRune(LPDIRECT3DDEVICE9 pGraphicDev): CRune(pGraphicDev)
 	m_eTargetType = WEAPON_GLAIVE;
 	m_iUItexNum = 18;
 	m_eItemType = IT_RUNE;
+	m_strFactoryTag = "StormRune";
 }
 
 CStormRune::~CStormRune()
@@ -22,6 +23,8 @@ HRESULT CStormRune::Ready_Object()
 
 _int CStormRune::Update_Object(const _float& fTimeDelta)
 {
+	if (m_bDelete) return OBJ_DEAD;
+
 	return CRune::Update_Object(fTimeDelta);
 }
 

@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "PlayerController.h"
 #include "ZombieController.h"
+#include "RemoteInventory.h"
 
 PacketHandlerFunc GPacketHandler[UINT16_MAX];
 
@@ -156,6 +157,19 @@ bool Handle_S_PLAYER_ARROW(PacketSessionRef& session, Protocol::S_PLAYER_ARROW& 
 
 bool Handle_S_PLAYER_EQUIP(PacketSessionRef& session, Protocol::S_PLAYER_EQUIP& pkt)
 {
+	if (pkt.success() == false)
+		return true;
+	if (pkt.player().id() == CClientServiceMgr::GetInstance()->m_iPlayerID)
+		return true;
+
+	if (CPlayer* pPlayer = Get_GameObjectUnCheck<CPlayer>(LAYER_PLAYER, L"Player_Remote_" + to_wstring(pkt.player().id())))
+	{
+		if (CRemoteInventory* pInven = dynamic_cast<CRemoteInventory*>(pPlayer->GetInventory()))
+		{
+			pInven->SetEquipStateChange(pkt.state());
+		}
+	}
+
 	return true;
 }
 

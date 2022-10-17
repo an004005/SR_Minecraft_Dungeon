@@ -5,6 +5,7 @@
 CFireworksArrow::CFireworksArrow(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CEquipItem(pGraphicDev)
 {
+	m_strFactoryTag = "FireworksArrow";
 }
 
 
@@ -43,6 +44,8 @@ _int CFireworksArrow::Update_Object(const _float & fTimeDelta)
 	m_bUse = false;
 
 	CEquipItem::Update_Object(fTimeDelta);
+	if (m_bDelete) return OBJ_DEAD;
+
 	return OBJ_NOEVENT;
 }
 

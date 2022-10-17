@@ -9,6 +9,14 @@ message Player
 	string name = 2; // name
 }
 
+message EquipState
+{
+	EquipType type = 1;
+	string name = 2; // factory tag
+	string rune = 3;
+	uint32 legacySlot = 4;
+}
+
 message Vec3
 {
 	float x = 1;

@@ -15,6 +15,7 @@ CSword::CSword(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	m_eType = WEAPON_SWORD;
 	m_iDamage = 25;
+	m_strFactoryTag = "Sword";
 }
 
 CSword::~CSword()
@@ -91,7 +92,9 @@ _int CSword::Update_Object(const _float & fTimeDelta)
 	Parabola(vPos, fHeight, fTimeDelta);
 
 	CWeapon::Update_Object(fTimeDelta);
-	
+
+	if (m_bDelete) return OBJ_DEAD;
+
 	return 0;
 }
 

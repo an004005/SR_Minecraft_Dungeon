@@ -20,6 +20,9 @@
 #include "LightningRune.h"
 #include "LaserShotRune.h"
 #include "ItemTexUI.h"
+#include <google/protobuf/util/message_differencer.h>
+
+#include "ServerPacketHandler.h"
 
 CInventory::CInventory(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CGameObject(pGraphicDev)
@@ -184,6 +187,41 @@ _int CInventory::Update_Object(const _float & fTimeDelta)
 		}	
 	}
 
+	if (g_bOnline && m_bEquipChange)
+	{
+		Protocol::C_PLAYER_EQUIP equipPkt;
+		equipPkt.mutable_player()->set_id(CClientServiceMgr::GetInstance()->m_iPlayerID);
+		equipPkt.mutable_player()->set_name("test player");
+
+		array<Protocol::EquipState, 5> arrEquipProtocol{};
+		GetProtocolFromEquip(arrEquipProtocol[0], m_pMelee);
+		GetProtocolFromEquip(arrEquipProtocol[1], m_pRange);
+		GetProtocolFromEquip(arrEquipProtocol[2], m_arrLegacy[LEGACY_SLOT1]);
+		arrEquipProtocol[2].set_legacyslot(1);
+		arrEquipProtocol[2].set_type(Protocol::LEGACY);
+		GetProtocolFromEquip(arrEquipProtocol[3], m_arrLegacy[LEGACY_SLOT2]);
+		arrEquipProtocol[3].set_legacyslot(2);
+		arrEquipProtocol[3].set_type(Protocol::LEGACY);
+		GetProtocolFromEquip(arrEquipProtocol[4], m_arrLegacy[LEGACY_SLOT3]);
+		arrEquipProtocol[4].set_legacyslot(3);
+		arrEquipProtocol[4].set_type(Protocol::LEGACY);
+
+
+		for (int i = 0; i < 5; ++i)
+		{
+			string tmp;
+			arrEquipProtocol[i].SerializeToString(&tmp);
+
+			if (false == google::protobuf::util::MessageDifferencer::Equals(arrEquipProtocol[i], m_arrPreEquipProtocol[i]))
+			{
+				equipPkt.mutable_state()->CopyFrom(arrEquipProtocol[i]);
+				CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(equipPkt));
+				m_arrPreEquipProtocol[i] = arrEquipProtocol[i];
+			}
+		}
+
+		m_bEquipChange = false;
+	}
 	return 0;
 }
 
@@ -390,6 +428,17 @@ void CInventory::AddDefaultItems()
 	m_arrItem[3]->AddRef();
 	m_arrItem[3]->SetOwner(m_pOwner);
 
+	// test
+	m_arrItem[8] = CItemFactory::Create<CRune>("LightningRune", L"LightningRune", IS_TAKE);
+	m_arrItem[8]->AddRef();
+	m_arrItem[8]->SetOwner(m_pOwner);
+	
+	m_arrItem[9] = CItemFactory::Create<CRune>("MultishotRune", L"MultishotRune", IS_TAKE);
+	m_arrItem[9]->SetOwner(m_pOwner);
+	m_arrItem[9]->AddRef();
+
+
+	// test
 
 	// CStunRune* rune = CItemFactory::Create<CStunRune>("StunRune", L"StunRune", IS_TAKE);
 	// dynamic_cast<CWeapon*>(m_arrItem[3])->SetRune(rune);
@@ -437,7 +486,6 @@ void CInventory::Equip_Item(SkeletalPart* pSkeletalPart, ITEMTYPE eIT)
 		m_arrLegacy[LEGACY_SLOT3]->Equipment(pSkeletalPart);
 		break;
 	}
-	
 }
 
 CEquipItem * CInventory::CurWeapon(ITEMTYPE eIT)
@@ -577,6 +625,77 @@ void CInventory::CreateCollFrame(CEquipItem* pCurCollItem)
 
 }
 
+void CInventory::GetProtocolFromEquip(Protocol::EquipState& state, CEquipItem* pEquipItem)
+{
+	if (pEquipItem == nullptr)
+	{
+		return;
+	}
+
+	switch (pEquipItem->GetItemType())
+	{
+		case IT_MELEE:
+			state.set_type(Protocol::EquipType::MELEE);
+			break;
+		case IT_RANGE:
+			state.set_type(Protocol::EquipType::RANGE);
+			break;
+		case IT_END: // legacy
+			state.set_type(Protocol::EquipType::LEGACY);
+			break;
+		case IT_RUNE:
+			break;
+		default: 
+			_CRASH("wrong item type");
+	}
+
+	state.set_name(pEquipItem->GetFactoryTag());
+
+	if (CWeapon* pWeapon = dynamic_cast<CWeapon*>(pEquipItem))
+	{
+		if (pWeapon->GetRune())
+		{
+			state.set_rune(pWeapon->GetRune()->GetFactoryTag());
+		}
+	}
+}
+
+CEquipItem* CInventory::GetEquipFromProtocol(const Protocol::EquipState& state)
+{
+	string strFactoryTag = state.name();
+	if (strFactoryTag.empty()) return nullptr;
+
+	wstring tmp;
+	tmp.assign(strFactoryTag.begin(), strFactoryTag.end());
+	CEquipItem* pEquip = CItemFactory::Create<CEquipItem>(state.name(), tmp, IS_TAKE);
+	pEquip->AddRef();
+	pEquip->SetOwner(m_pOwner);
+
+	switch (state.type())
+	{
+		case Protocol::MELEE:
+		case Protocol::RANGE:
+			if (state.rune().empty() == false)
+			{
+				wstring tmpRune;
+				tmpRune.assign(state.rune().begin(), state.rune().end());
+				CRune* pRune = CItemFactory::Create<CRune>(state.rune(), tmpRune, IS_TAKE);
+				pRune->AddRef();
+				pRune->SetOwner(m_pOwner);
+				dynamic_cast<CWeapon*>(pEquip)->SetRune(pRune);
+			}
+			break;
+		case Protocol::LEGACY:
+			break;
+		case Protocol::EquipType_INT_MIN_SENTINEL_DO_NOT_USE_: 
+		case Protocol::EquipType_INT_MAX_SENTINEL_DO_NOT_USE_: 
+		default:
+			_CRASH("wrong state type");
+	}
+
+	return pEquip;
+}
+
 void CInventory::MouseTestEvent(CEquipItem * pCurCollItem, CItemUI * pCurCollUI, _int iSlotIndex)
 {
 	//for sound
@@ -616,7 +735,7 @@ void CInventory::MouseTestEvent(CEquipItem * pCurCollItem, CItemUI * pCurCollUI,
 				m_pRune = pWeapon->GetRune();
 			}
 			else
-				m_pRuneSlot->Close();			
+				m_pRuneSlot->Close();
 
 		
 			pCurCollUI->SetPick(true);
@@ -690,6 +809,9 @@ void CInventory::MouseTestEvent(CEquipItem * pCurCollItem, CItemUI * pCurCollUI,
 
 				if (m_arrItem[i] == pCurCollItem)
 				{
+					if (g_bOnline) // 보관함 -> 장비창(룬, 무기, 유물)
+						m_bEquipChange = true;
+
 					switch (m_arrItem[i]->GetItemType())
 					{
 					case IT_MELEE:
@@ -728,7 +850,7 @@ void CInventory::MouseTestEvent(CEquipItem * pCurCollItem, CItemUI * pCurCollUI,
 								//Safe_Release(pRune);
 								return;
 							}
-						}				
+						}
 						else if(pWeapon && pWeapon->GetRune() != nullptr)
 						{
 							if (pRune && pWeapon->SetRune(pRune))
@@ -739,13 +861,14 @@ void CInventory::MouseTestEvent(CEquipItem * pCurCollItem, CItemUI * pCurCollUI,
 							}
 							
 						}
-				
 						return;
 					}
 					default:
 						MSG_BOX("유물인가?");
 						break;
 					}
+					
+
 
 				}
 			}
@@ -769,11 +892,15 @@ void CInventory::MouseTestEvent(CEquipItem * pCurCollItem, CItemUI * pCurCollUI,
 					{
 						if (m_arrItem[j] == nullptr)
 						{
+							if (g_bOnline) // 레거시 창 -> 보관함
+								m_bEquipChange = true;
 							m_arrLegacy[i] = m_arrItem[j];
 							m_arrItem[j] = pCurCollItem;
 							return;
 						}
 					}
+
+
 				}
 			}
 
@@ -785,13 +912,17 @@ void CInventory::MouseTestEvent(CEquipItem * pCurCollItem, CItemUI * pCurCollUI,
 					for (_int i = 0; i < COL * ROW; ++i)
 					{
 						if (m_arrItem[i] == nullptr)
-						{				
+						{
+							if (g_bOnline) // 룬창 -> 보관함
+								m_bEquipChange = true;
 							m_arrItem[i] = pRune;
 							return;
 						}
 					}
 				}
-				
+
+
+
 				return;
 			}
 

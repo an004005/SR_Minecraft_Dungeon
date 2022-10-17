@@ -8,3 +8,10 @@ enum PlayerSkin
 	PLAYER_TYPE_ESHE = 2;
 	PLAYER_TYPE_COPPER = 3;
 }
+
+enum EquipType
+{
+	MELEE = 0;
+	RANGE = 1;
+	LEGACY = 2;
+}

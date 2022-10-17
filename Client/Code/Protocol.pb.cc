@@ -243,11 +243,8 @@ struct S_PLAYER_ARROWDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 S_PLAYER_ARROWDefaultTypeInternal _S_PLAYER_ARROW_default_instance_;
 PROTOBUF_CONSTEXPR C_PLAYER_EQUIP::C_PLAYER_EQUIP(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.equip_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.rune_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.legacy_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.player_)*/nullptr
-  , /*decltype(_impl_.legacynum_)*/0u
+    /*decltype(_impl_.player_)*/nullptr
+  , /*decltype(_impl_.state_)*/nullptr
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct C_PLAYER_EQUIPDefaultTypeInternal {
   PROTOBUF_CONSTEXPR C_PLAYER_EQUIPDefaultTypeInternal()
@@ -260,12 +257,9 @@ struct C_PLAYER_EQUIPDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 C_PLAYER_EQUIPDefaultTypeInternal _C_PLAYER_EQUIP_default_instance_;
 PROTOBUF_CONSTEXPR S_PLAYER_EQUIP::S_PLAYER_EQUIP(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.equip_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.rune_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.legacy_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.player_)*/nullptr
+    /*decltype(_impl_.player_)*/nullptr
+  , /*decltype(_impl_.state_)*/nullptr
   , /*decltype(_impl_.success_)*/false
-  , /*decltype(_impl_.legacynum_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct S_PLAYER_EQUIPDefaultTypeInternal {
   PROTOBUF_CONSTEXPR S_PLAYER_EQUIPDefaultTypeInternal()
@@ -510,10 +504,7 @@ const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::C_PLAYER_EQUIP, _impl_.player_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::C_PLAYER_EQUIP, _impl_.equip_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::C_PLAYER_EQUIP, _impl_.rune_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::C_PLAYER_EQUIP, _impl_.legacy_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::C_PLAYER_EQUIP, _impl_.legacynum_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_PLAYER_EQUIP, _impl_.state_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::S_PLAYER_EQUIP, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -522,10 +513,7 @@ const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::S_PLAYER_EQUIP, _impl_.success_),
   PROTOBUF_FIELD_OFFSET(::Protocol::S_PLAYER_EQUIP, _impl_.player_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::S_PLAYER_EQUIP, _impl_.equip_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::S_PLAYER_EQUIP, _impl_.rune_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::S_PLAYER_EQUIP, _impl_.legacy_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::S_PLAYER_EQUIP, _impl_.legacynum_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_PLAYER_EQUIP, _impl_.state_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::C_SPAWN_MONSTER, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -599,13 +587,13 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 109, -1, -1, sizeof(::Protocol::C_PLAYER_ARROW)},
   { 119, -1, -1, sizeof(::Protocol::S_PLAYER_ARROW)},
   { 130, -1, -1, sizeof(::Protocol::C_PLAYER_EQUIP)},
-  { 141, -1, -1, sizeof(::Protocol::S_PLAYER_EQUIP)},
-  { 153, -1, -1, sizeof(::Protocol::C_SPAWN_MONSTER)},
-  { 162, -1, -1, sizeof(::Protocol::S_SPAWN_MONSTER)},
-  { 172, -1, -1, sizeof(::Protocol::C_MONSTER_SET_TARGET)},
-  { 181, -1, -1, sizeof(::Protocol::S_MONSTER_SET_TARGET)},
-  { 191, -1, -1, sizeof(::Protocol::C_MONSTER_WORLD)},
-  { 199, -1, -1, sizeof(::Protocol::S_MONSTER_WORLD)},
+  { 138, -1, -1, sizeof(::Protocol::S_PLAYER_EQUIP)},
+  { 147, -1, -1, sizeof(::Protocol::C_SPAWN_MONSTER)},
+  { 156, -1, -1, sizeof(::Protocol::S_SPAWN_MONSTER)},
+  { 166, -1, -1, sizeof(::Protocol::C_MONSTER_SET_TARGET)},
+  { 175, -1, -1, sizeof(::Protocol::S_MONSTER_SET_TARGET)},
+  { 185, -1, -1, sizeof(::Protocol::C_MONSTER_WORLD)},
+  { 193, -1, -1, sizeof(::Protocol::S_MONSTER_WORLD)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -669,26 +657,25 @@ const char descriptor_table_protodef_Protocol_2eproto[] PROTOBUF_SECTION_VARIABL
   "_ARROW\022\017\n\007success\030\001 \001(\010\022 \n\006player\030\002 \001(\0132"
   "\020.Protocol.Player\022\013\n\003yaw\030\003 \001(\002\022\037\n\007vLookA"
   "t\030\004 \001(\0132\016.Protocol.Vec3\022\021\n\tactionBit\030\005 \001"
-  "(\r\"r\n\016C_PLAYER_EQUIP\022 \n\006player\030\001 \001(\0132\020.P"
-  "rotocol.Player\022\r\n\005equip\030\002 \001(\t\022\014\n\004rune\030\003 "
-  "\001(\t\022\016\n\006legacy\030\004 \001(\t\022\021\n\tlegacyNum\030\005 \001(\r\"\203"
-  "\001\n\016S_PLAYER_EQUIP\022\017\n\007success\030\001 \001(\010\022 \n\006pl"
-  "ayer\030\002 \001(\0132\020.Protocol.Player\022\r\n\005equip\030\003 "
-  "\001(\t\022\014\n\004rune\030\004 \001(\t\022\016\n\006legacy\030\005 \001(\t\022\021\n\tleg"
-  "acyNum\030\006 \001(\r\"P\n\017C_SPAWN_MONSTER\022\n\n\002id\030\001 "
-  "\001(\r\022\017\n\007factory\030\002 \001(\t\022 \n\006matrix\030\003 \001(\0132\020.P"
-  "rotocol.Matrix\"a\n\017S_SPAWN_MONSTER\022\017\n\007suc"
-  "cess\030\001 \001(\010\022\n\n\002id\030\002 \001(\r\022\017\n\007factory\030\003 \001(\t\022"
-  " \n\006matrix\030\004 \001(\0132\020.Protocol.Matrix\"L\n\024C_M"
-  "ONSTER_SET_TARGET\022\017\n\007bAttack\030\001 \001(\010\022\021\n\tmo"
-  "nsterID\030\002 \001(\r\022\020\n\010playerID\030\003 \001(\r\"]\n\024S_MON"
-  "STER_SET_TARGET\022\017\n\007success\030\001 \001(\010\022\017\n\007bAtt"
-  "ack\030\002 \001(\010\022\021\n\tmonsterID\030\003 \001(\r\022\020\n\010playerID"
-  "\030\004 \001(\r\"H\n\017C_MONSTER_WORLD\022\021\n\tmonsterID\030\001"
-  " \001(\r\022\"\n\010matWorld\030\002 \001(\0132\020.Protocol.Matrix"
-  "\"Y\n\017S_MONSTER_WORLD\022\017\n\007success\030\001 \001(\010\022\021\n\t"
-  "monsterID\030\002 \001(\r\022\"\n\010matWorld\030\003 \001(\0132\020.Prot"
-  "ocol.Matrixb\006proto3"
+  "(\r\"W\n\016C_PLAYER_EQUIP\022 \n\006player\030\001 \001(\0132\020.P"
+  "rotocol.Player\022#\n\005state\030\002 \001(\0132\024.Protocol"
+  ".EquipState\"h\n\016S_PLAYER_EQUIP\022\017\n\007success"
+  "\030\001 \001(\010\022 \n\006player\030\002 \001(\0132\020.Protocol.Player"
+  "\022#\n\005state\030\003 \001(\0132\024.Protocol.EquipState\"P\n"
+  "\017C_SPAWN_MONSTER\022\n\n\002id\030\001 \001(\r\022\017\n\007factory\030"
+  "\002 \001(\t\022 \n\006matrix\030\003 \001(\0132\020.Protocol.Matrix\""
+  "a\n\017S_SPAWN_MONSTER\022\017\n\007success\030\001 \001(\010\022\n\n\002i"
+  "d\030\002 \001(\r\022\017\n\007factory\030\003 \001(\t\022 \n\006matrix\030\004 \001(\013"
+  "2\020.Protocol.Matrix\"L\n\024C_MONSTER_SET_TARG"
+  "ET\022\017\n\007bAttack\030\001 \001(\010\022\021\n\tmonsterID\030\002 \001(\r\022\020"
+  "\n\010playerID\030\003 \001(\r\"]\n\024S_MONSTER_SET_TARGET"
+  "\022\017\n\007success\030\001 \001(\010\022\017\n\007bAttack\030\002 \001(\010\022\021\n\tmo"
+  "nsterID\030\003 \001(\r\022\020\n\010playerID\030\004 \001(\r\"H\n\017C_MON"
+  "STER_WORLD\022\021\n\tmonsterID\030\001 \001(\r\022\"\n\010matWorl"
+  "d\030\002 \001(\0132\020.Protocol.Matrix\"Y\n\017S_MONSTER_W"
+  "ORLD\022\017\n\007success\030\001 \001(\010\022\021\n\tmonsterID\030\002 \001(\r"
+  "\022\"\n\010matWorld\030\003 \001(\0132\020.Protocol.Matrixb\006pr"
+  "oto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_Protocol_2eproto_deps[2] = {
   &::descriptor_table_Enum_2eproto,
@@ -696,7 +683,7 @@ static const ::_pbi::DescriptorTable* const descriptor_table_Protocol_2eproto_de
 };
 static ::_pbi::once_flag descriptor_table_Protocol_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Protocol_2eproto = {
-    false, false, 2139, descriptor_table_protodef_Protocol_2eproto,
+    false, false, 2084, descriptor_table_protodef_Protocol_2eproto,
     "Protocol.proto",
     &descriptor_table_Protocol_2eproto_once, descriptor_table_Protocol_2eproto_deps, 2, 23,
     schemas, file_default_instances, TableStruct_Protocol_2eproto::offsets,
@@ -4421,17 +4408,28 @@ void S_PLAYER_ARROW::InternalSwap(S_PLAYER_ARROW* other) {
 class C_PLAYER_EQUIP::_Internal {
  public:
   static const ::Protocol::Player& player(const C_PLAYER_EQUIP* msg);
+  static const ::Protocol::EquipState& state(const C_PLAYER_EQUIP* msg);
 };
 
 const ::Protocol::Player&
 C_PLAYER_EQUIP::_Internal::player(const C_PLAYER_EQUIP* msg) {
   return *msg->_impl_.player_;
 }
+const ::Protocol::EquipState&
+C_PLAYER_EQUIP::_Internal::state(const C_PLAYER_EQUIP* msg) {
+  return *msg->_impl_.state_;
+}
 void C_PLAYER_EQUIP::clear_player() {
   if (GetArenaForAllocation() == nullptr && _impl_.player_ != nullptr) {
     delete _impl_.player_;
   }
   _impl_.player_ = nullptr;
+}
+void C_PLAYER_EQUIP::clear_state() {
+  if (GetArenaForAllocation() == nullptr && _impl_.state_ != nullptr) {
+    delete _impl_.state_;
+  }
+  _impl_.state_ = nullptr;
 }
 C_PLAYER_EQUIP::C_PLAYER_EQUIP(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
@@ -4443,42 +4441,17 @@ C_PLAYER_EQUIP::C_PLAYER_EQUIP(const C_PLAYER_EQUIP& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   C_PLAYER_EQUIP* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.equip_){}
-    , decltype(_impl_.rune_){}
-    , decltype(_impl_.legacy_){}
-    , decltype(_impl_.player_){nullptr}
-    , decltype(_impl_.legacynum_){}
+      decltype(_impl_.player_){nullptr}
+    , decltype(_impl_.state_){nullptr}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.equip_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.equip_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_equip().empty()) {
-    _this->_impl_.equip_.Set(from._internal_equip(), 
-      _this->GetArenaForAllocation());
-  }
-  _impl_.rune_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.rune_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_rune().empty()) {
-    _this->_impl_.rune_.Set(from._internal_rune(), 
-      _this->GetArenaForAllocation());
-  }
-  _impl_.legacy_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.legacy_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_legacy().empty()) {
-    _this->_impl_.legacy_.Set(from._internal_legacy(), 
-      _this->GetArenaForAllocation());
-  }
   if (from._internal_has_player()) {
     _this->_impl_.player_ = new ::Protocol::Player(*from._impl_.player_);
   }
-  _this->_impl_.legacynum_ = from._impl_.legacynum_;
+  if (from._internal_has_state()) {
+    _this->_impl_.state_ = new ::Protocol::EquipState(*from._impl_.state_);
+  }
   // @@protoc_insertion_point(copy_constructor:Protocol.C_PLAYER_EQUIP)
 }
 
@@ -4487,25 +4460,10 @@ inline void C_PLAYER_EQUIP::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.equip_){}
-    , decltype(_impl_.rune_){}
-    , decltype(_impl_.legacy_){}
-    , decltype(_impl_.player_){nullptr}
-    , decltype(_impl_.legacynum_){0u}
+      decltype(_impl_.player_){nullptr}
+    , decltype(_impl_.state_){nullptr}
     , /*decltype(_impl_._cached_size_)*/{}
   };
-  _impl_.equip_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.equip_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  _impl_.rune_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.rune_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  _impl_.legacy_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.legacy_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
 C_PLAYER_EQUIP::~C_PLAYER_EQUIP() {
@@ -4519,10 +4477,8 @@ C_PLAYER_EQUIP::~C_PLAYER_EQUIP() {
 
 inline void C_PLAYER_EQUIP::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.equip_.Destroy();
-  _impl_.rune_.Destroy();
-  _impl_.legacy_.Destroy();
   if (this != internal_default_instance()) delete _impl_.player_;
+  if (this != internal_default_instance()) delete _impl_.state_;
 }
 
 void C_PLAYER_EQUIP::SetCachedSize(int size) const {
@@ -4535,14 +4491,14 @@ void C_PLAYER_EQUIP::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.equip_.ClearToEmpty();
-  _impl_.rune_.ClearToEmpty();
-  _impl_.legacy_.ClearToEmpty();
   if (GetArenaForAllocation() == nullptr && _impl_.player_ != nullptr) {
     delete _impl_.player_;
   }
   _impl_.player_ = nullptr;
-  _impl_.legacynum_ = 0u;
+  if (GetArenaForAllocation() == nullptr && _impl_.state_ != nullptr) {
+    delete _impl_.state_;
+  }
+  _impl_.state_ = nullptr;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -4560,40 +4516,10 @@ const char* C_PLAYER_EQUIP::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // string equip = 2;
+      // .Protocol.EquipState state = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
-          auto str = _internal_mutable_equip();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "Protocol.C_PLAYER_EQUIP.equip"));
-        } else
-          goto handle_unusual;
-        continue;
-      // string rune = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
-          auto str = _internal_mutable_rune();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "Protocol.C_PLAYER_EQUIP.rune"));
-        } else
-          goto handle_unusual;
-        continue;
-      // string legacy = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
-          auto str = _internal_mutable_legacy();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "Protocol.C_PLAYER_EQUIP.legacy"));
-        } else
-          goto handle_unusual;
-        continue;
-      // uint32 legacyNum = 5;
-      case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
-          _impl_.legacynum_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_state(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -4634,40 +4560,11 @@ uint8_t* C_PLAYER_EQUIP::_InternalSerialize(
         _Internal::player(this).GetCachedSize(), target, stream);
   }
 
-  // string equip = 2;
-  if (!this->_internal_equip().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_equip().data(), static_cast<int>(this->_internal_equip().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "Protocol.C_PLAYER_EQUIP.equip");
-    target = stream->WriteStringMaybeAliased(
-        2, this->_internal_equip(), target);
-  }
-
-  // string rune = 3;
-  if (!this->_internal_rune().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_rune().data(), static_cast<int>(this->_internal_rune().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "Protocol.C_PLAYER_EQUIP.rune");
-    target = stream->WriteStringMaybeAliased(
-        3, this->_internal_rune(), target);
-  }
-
-  // string legacy = 4;
-  if (!this->_internal_legacy().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_legacy().data(), static_cast<int>(this->_internal_legacy().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "Protocol.C_PLAYER_EQUIP.legacy");
-    target = stream->WriteStringMaybeAliased(
-        4, this->_internal_legacy(), target);
-  }
-
-  // uint32 legacyNum = 5;
-  if (this->_internal_legacynum() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(5, this->_internal_legacynum(), target);
+  // .Protocol.EquipState state = 2;
+  if (this->_internal_has_state()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(2, _Internal::state(this),
+        _Internal::state(this).GetCachedSize(), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -4686,27 +4583,6 @@ size_t C_PLAYER_EQUIP::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string equip = 2;
-  if (!this->_internal_equip().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_equip());
-  }
-
-  // string rune = 3;
-  if (!this->_internal_rune().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_rune());
-  }
-
-  // string legacy = 4;
-  if (!this->_internal_legacy().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_legacy());
-  }
-
   // .Protocol.Player player = 1;
   if (this->_internal_has_player()) {
     total_size += 1 +
@@ -4714,9 +4590,11 @@ size_t C_PLAYER_EQUIP::ByteSizeLong() const {
         *_impl_.player_);
   }
 
-  // uint32 legacyNum = 5;
-  if (this->_internal_legacynum() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_legacynum());
+  // .Protocol.EquipState state = 2;
+  if (this->_internal_has_state()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.state_);
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -4737,21 +4615,13 @@ void C_PLAYER_EQUIP::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const :
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_equip().empty()) {
-    _this->_internal_set_equip(from._internal_equip());
-  }
-  if (!from._internal_rune().empty()) {
-    _this->_internal_set_rune(from._internal_rune());
-  }
-  if (!from._internal_legacy().empty()) {
-    _this->_internal_set_legacy(from._internal_legacy());
-  }
   if (from._internal_has_player()) {
     _this->_internal_mutable_player()->::Protocol::Player::MergeFrom(
         from._internal_player());
   }
-  if (from._internal_legacynum() != 0) {
-    _this->_internal_set_legacynum(from._internal_legacynum());
+  if (from._internal_has_state()) {
+    _this->_internal_mutable_state()->::Protocol::EquipState::MergeFrom(
+        from._internal_state());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -4769,24 +4639,10 @@ bool C_PLAYER_EQUIP::IsInitialized() const {
 
 void C_PLAYER_EQUIP::InternalSwap(C_PLAYER_EQUIP* other) {
   using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.equip_, lhs_arena,
-      &other->_impl_.equip_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.rune_, lhs_arena,
-      &other->_impl_.rune_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.legacy_, lhs_arena,
-      &other->_impl_.legacy_, rhs_arena
-  );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(C_PLAYER_EQUIP, _impl_.legacynum_)
-      + sizeof(C_PLAYER_EQUIP::_impl_.legacynum_)
+      PROTOBUF_FIELD_OFFSET(C_PLAYER_EQUIP, _impl_.state_)
+      + sizeof(C_PLAYER_EQUIP::_impl_.state_)
       - PROTOBUF_FIELD_OFFSET(C_PLAYER_EQUIP, _impl_.player_)>(
           reinterpret_cast<char*>(&_impl_.player_),
           reinterpret_cast<char*>(&other->_impl_.player_));
@@ -4803,17 +4659,28 @@ void C_PLAYER_EQUIP::InternalSwap(C_PLAYER_EQUIP* other) {
 class S_PLAYER_EQUIP::_Internal {
  public:
   static const ::Protocol::Player& player(const S_PLAYER_EQUIP* msg);
+  static const ::Protocol::EquipState& state(const S_PLAYER_EQUIP* msg);
 };
 
 const ::Protocol::Player&
 S_PLAYER_EQUIP::_Internal::player(const S_PLAYER_EQUIP* msg) {
   return *msg->_impl_.player_;
 }
+const ::Protocol::EquipState&
+S_PLAYER_EQUIP::_Internal::state(const S_PLAYER_EQUIP* msg) {
+  return *msg->_impl_.state_;
+}
 void S_PLAYER_EQUIP::clear_player() {
   if (GetArenaForAllocation() == nullptr && _impl_.player_ != nullptr) {
     delete _impl_.player_;
   }
   _impl_.player_ = nullptr;
+}
+void S_PLAYER_EQUIP::clear_state() {
+  if (GetArenaForAllocation() == nullptr && _impl_.state_ != nullptr) {
+    delete _impl_.state_;
+  }
+  _impl_.state_ = nullptr;
 }
 S_PLAYER_EQUIP::S_PLAYER_EQUIP(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
@@ -4825,45 +4692,19 @@ S_PLAYER_EQUIP::S_PLAYER_EQUIP(const S_PLAYER_EQUIP& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   S_PLAYER_EQUIP* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.equip_){}
-    , decltype(_impl_.rune_){}
-    , decltype(_impl_.legacy_){}
-    , decltype(_impl_.player_){nullptr}
+      decltype(_impl_.player_){nullptr}
+    , decltype(_impl_.state_){nullptr}
     , decltype(_impl_.success_){}
-    , decltype(_impl_.legacynum_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.equip_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.equip_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_equip().empty()) {
-    _this->_impl_.equip_.Set(from._internal_equip(), 
-      _this->GetArenaForAllocation());
-  }
-  _impl_.rune_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.rune_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_rune().empty()) {
-    _this->_impl_.rune_.Set(from._internal_rune(), 
-      _this->GetArenaForAllocation());
-  }
-  _impl_.legacy_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.legacy_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_legacy().empty()) {
-    _this->_impl_.legacy_.Set(from._internal_legacy(), 
-      _this->GetArenaForAllocation());
-  }
   if (from._internal_has_player()) {
     _this->_impl_.player_ = new ::Protocol::Player(*from._impl_.player_);
   }
-  ::memcpy(&_impl_.success_, &from._impl_.success_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.legacynum_) -
-    reinterpret_cast<char*>(&_impl_.success_)) + sizeof(_impl_.legacynum_));
+  if (from._internal_has_state()) {
+    _this->_impl_.state_ = new ::Protocol::EquipState(*from._impl_.state_);
+  }
+  _this->_impl_.success_ = from._impl_.success_;
   // @@protoc_insertion_point(copy_constructor:Protocol.S_PLAYER_EQUIP)
 }
 
@@ -4872,26 +4713,11 @@ inline void S_PLAYER_EQUIP::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.equip_){}
-    , decltype(_impl_.rune_){}
-    , decltype(_impl_.legacy_){}
-    , decltype(_impl_.player_){nullptr}
+      decltype(_impl_.player_){nullptr}
+    , decltype(_impl_.state_){nullptr}
     , decltype(_impl_.success_){false}
-    , decltype(_impl_.legacynum_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
   };
-  _impl_.equip_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.equip_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  _impl_.rune_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.rune_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  _impl_.legacy_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.legacy_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
 S_PLAYER_EQUIP::~S_PLAYER_EQUIP() {
@@ -4905,10 +4731,8 @@ S_PLAYER_EQUIP::~S_PLAYER_EQUIP() {
 
 inline void S_PLAYER_EQUIP::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.equip_.Destroy();
-  _impl_.rune_.Destroy();
-  _impl_.legacy_.Destroy();
   if (this != internal_default_instance()) delete _impl_.player_;
+  if (this != internal_default_instance()) delete _impl_.state_;
 }
 
 void S_PLAYER_EQUIP::SetCachedSize(int size) const {
@@ -4921,16 +4745,15 @@ void S_PLAYER_EQUIP::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.equip_.ClearToEmpty();
-  _impl_.rune_.ClearToEmpty();
-  _impl_.legacy_.ClearToEmpty();
   if (GetArenaForAllocation() == nullptr && _impl_.player_ != nullptr) {
     delete _impl_.player_;
   }
   _impl_.player_ = nullptr;
-  ::memset(&_impl_.success_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.legacynum_) -
-      reinterpret_cast<char*>(&_impl_.success_)) + sizeof(_impl_.legacynum_));
+  if (GetArenaForAllocation() == nullptr && _impl_.state_ != nullptr) {
+    delete _impl_.state_;
+  }
+  _impl_.state_ = nullptr;
+  _impl_.success_ = false;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -4956,40 +4779,10 @@ const char* S_PLAYER_EQUIP::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // string equip = 3;
+      // .Protocol.EquipState state = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
-          auto str = _internal_mutable_equip();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "Protocol.S_PLAYER_EQUIP.equip"));
-        } else
-          goto handle_unusual;
-        continue;
-      // string rune = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
-          auto str = _internal_mutable_rune();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "Protocol.S_PLAYER_EQUIP.rune"));
-        } else
-          goto handle_unusual;
-        continue;
-      // string legacy = 5;
-      case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
-          auto str = _internal_mutable_legacy();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "Protocol.S_PLAYER_EQUIP.legacy"));
-        } else
-          goto handle_unusual;
-        continue;
-      // uint32 legacyNum = 6;
-      case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
-          _impl_.legacynum_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_state(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -5036,40 +4829,11 @@ uint8_t* S_PLAYER_EQUIP::_InternalSerialize(
         _Internal::player(this).GetCachedSize(), target, stream);
   }
 
-  // string equip = 3;
-  if (!this->_internal_equip().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_equip().data(), static_cast<int>(this->_internal_equip().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "Protocol.S_PLAYER_EQUIP.equip");
-    target = stream->WriteStringMaybeAliased(
-        3, this->_internal_equip(), target);
-  }
-
-  // string rune = 4;
-  if (!this->_internal_rune().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_rune().data(), static_cast<int>(this->_internal_rune().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "Protocol.S_PLAYER_EQUIP.rune");
-    target = stream->WriteStringMaybeAliased(
-        4, this->_internal_rune(), target);
-  }
-
-  // string legacy = 5;
-  if (!this->_internal_legacy().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_legacy().data(), static_cast<int>(this->_internal_legacy().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "Protocol.S_PLAYER_EQUIP.legacy");
-    target = stream->WriteStringMaybeAliased(
-        5, this->_internal_legacy(), target);
-  }
-
-  // uint32 legacyNum = 6;
-  if (this->_internal_legacynum() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(6, this->_internal_legacynum(), target);
+  // .Protocol.EquipState state = 3;
+  if (this->_internal_has_state()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(3, _Internal::state(this),
+        _Internal::state(this).GetCachedSize(), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -5088,27 +4852,6 @@ size_t S_PLAYER_EQUIP::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string equip = 3;
-  if (!this->_internal_equip().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_equip());
-  }
-
-  // string rune = 4;
-  if (!this->_internal_rune().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_rune());
-  }
-
-  // string legacy = 5;
-  if (!this->_internal_legacy().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_legacy());
-  }
-
   // .Protocol.Player player = 2;
   if (this->_internal_has_player()) {
     total_size += 1 +
@@ -5116,14 +4859,16 @@ size_t S_PLAYER_EQUIP::ByteSizeLong() const {
         *_impl_.player_);
   }
 
+  // .Protocol.EquipState state = 3;
+  if (this->_internal_has_state()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.state_);
+  }
+
   // bool success = 1;
   if (this->_internal_success() != 0) {
     total_size += 1 + 1;
-  }
-
-  // uint32 legacyNum = 6;
-  if (this->_internal_legacynum() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_legacynum());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -5144,24 +4889,16 @@ void S_PLAYER_EQUIP::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const :
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_equip().empty()) {
-    _this->_internal_set_equip(from._internal_equip());
-  }
-  if (!from._internal_rune().empty()) {
-    _this->_internal_set_rune(from._internal_rune());
-  }
-  if (!from._internal_legacy().empty()) {
-    _this->_internal_set_legacy(from._internal_legacy());
-  }
   if (from._internal_has_player()) {
     _this->_internal_mutable_player()->::Protocol::Player::MergeFrom(
         from._internal_player());
   }
+  if (from._internal_has_state()) {
+    _this->_internal_mutable_state()->::Protocol::EquipState::MergeFrom(
+        from._internal_state());
+  }
   if (from._internal_success() != 0) {
     _this->_internal_set_success(from._internal_success());
-  }
-  if (from._internal_legacynum() != 0) {
-    _this->_internal_set_legacynum(from._internal_legacynum());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -5179,24 +4916,10 @@ bool S_PLAYER_EQUIP::IsInitialized() const {
 
 void S_PLAYER_EQUIP::InternalSwap(S_PLAYER_EQUIP* other) {
   using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.equip_, lhs_arena,
-      &other->_impl_.equip_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.rune_, lhs_arena,
-      &other->_impl_.rune_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.legacy_, lhs_arena,
-      &other->_impl_.legacy_, rhs_arena
-  );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(S_PLAYER_EQUIP, _impl_.legacynum_)
-      + sizeof(S_PLAYER_EQUIP::_impl_.legacynum_)
+      PROTOBUF_FIELD_OFFSET(S_PLAYER_EQUIP, _impl_.success_)
+      + sizeof(S_PLAYER_EQUIP::_impl_.success_)
       - PROTOBUF_FIELD_OFFSET(S_PLAYER_EQUIP, _impl_.player_)>(
           reinterpret_cast<char*>(&_impl_.player_),
           reinterpret_cast<char*>(&other->_impl_.player_));

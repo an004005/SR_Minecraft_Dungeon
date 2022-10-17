@@ -9,6 +9,7 @@
 CShockPowder::CShockPowder(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CEquipItem(pGraphicDev)
 {
+	m_strFactoryTag = "ShockPowder";
 }
 
 
@@ -43,7 +44,7 @@ _int CShockPowder::Update_Object(const _float & fTimeDelta)
 	m_fCurCoolTime = 0.f;
 
 	CPlayer* pPlayer = m_pOwner;
-	_vec3 vPos = pPlayer->GetInfo(INFO_POS);
+	_vec3 vPos = pPlayer->GetInfo(INFO_POS) + _vec3{0.f, 0.5f, 0.f};
 
 	for (int j = 0; j < 10; j++)
 	{
@@ -57,6 +58,7 @@ _int CShockPowder::Update_Object(const _float & fTimeDelta)
 	m_bUse = false;
 	m_bColl = true;
 	CEquipItem::Update_Object(fTimeDelta);
+	if (m_bDelete) return OBJ_DEAD;
 
 	return OBJ_NOEVENT;
 }

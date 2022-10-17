@@ -9,7 +9,7 @@
 #include "StaticCamera.h"
 #include "TerrainCubeMap.h"
 #include "Terrain.h"
-
+#include "DamageFontMgr.h"
 
 CNetStage::CNetStage(LPDIRECT3DDEVICE9 pGraphicDev) : CScene(pGraphicDev)
 {
@@ -66,6 +66,7 @@ HRESULT CNetStage::Ready_Scene()
 _int CNetStage::Update_Scene(const _float& fTimeDelta)
 {
 	CSoundMgr::GetInstance()->Update_Listener(LAYER_ENV, L"StaticCamera");
+	CDamageFontMgr::GetInstance()->Update_DamageFontMgr(fTimeDelta);
 	return Engine::CScene::Update_Scene(fTimeDelta);
 }
 
@@ -76,6 +77,7 @@ void CNetStage::LateUpdate_Scene()
 
 void CNetStage::Render_Scene()
 {
+	CDamageFontMgr::GetInstance()->Render_DamageFontMgr();
 	CArrowCubeMgr::GetInst().Render_Buffer(); // todo : 렌더러에서 동작하게 바꾸기
 }
 

@@ -2906,54 +2906,9 @@ class C_PLAYER_EQUIP final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kEquipFieldNumber = 2,
-    kRuneFieldNumber = 3,
-    kLegacyFieldNumber = 4,
     kPlayerFieldNumber = 1,
-    kLegacyNumFieldNumber = 5,
+    kStateFieldNumber = 2,
   };
-  // string equip = 2;
-  void clear_equip();
-  const std::string& equip() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_equip(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_equip();
-  PROTOBUF_NODISCARD std::string* release_equip();
-  void set_allocated_equip(std::string* equip);
-  private:
-  const std::string& _internal_equip() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_equip(const std::string& value);
-  std::string* _internal_mutable_equip();
-  public:
-
-  // string rune = 3;
-  void clear_rune();
-  const std::string& rune() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_rune(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_rune();
-  PROTOBUF_NODISCARD std::string* release_rune();
-  void set_allocated_rune(std::string* rune);
-  private:
-  const std::string& _internal_rune() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_rune(const std::string& value);
-  std::string* _internal_mutable_rune();
-  public:
-
-  // string legacy = 4;
-  void clear_legacy();
-  const std::string& legacy() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_legacy(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_legacy();
-  PROTOBUF_NODISCARD std::string* release_legacy();
-  void set_allocated_legacy(std::string* legacy);
-  private:
-  const std::string& _internal_legacy() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_legacy(const std::string& value);
-  std::string* _internal_mutable_legacy();
-  public:
-
   // .Protocol.Player player = 1;
   bool has_player() const;
   private:
@@ -2972,14 +2927,23 @@ class C_PLAYER_EQUIP final :
       ::Protocol::Player* player);
   ::Protocol::Player* unsafe_arena_release_player();
 
-  // uint32 legacyNum = 5;
-  void clear_legacynum();
-  uint32_t legacynum() const;
-  void set_legacynum(uint32_t value);
+  // .Protocol.EquipState state = 2;
+  bool has_state() const;
   private:
-  uint32_t _internal_legacynum() const;
-  void _internal_set_legacynum(uint32_t value);
+  bool _internal_has_state() const;
   public:
+  void clear_state();
+  const ::Protocol::EquipState& state() const;
+  PROTOBUF_NODISCARD ::Protocol::EquipState* release_state();
+  ::Protocol::EquipState* mutable_state();
+  void set_allocated_state(::Protocol::EquipState* state);
+  private:
+  const ::Protocol::EquipState& _internal_state() const;
+  ::Protocol::EquipState* _internal_mutable_state();
+  public:
+  void unsafe_arena_set_allocated_state(
+      ::Protocol::EquipState* state);
+  ::Protocol::EquipState* unsafe_arena_release_state();
 
   // @@protoc_insertion_point(class_scope:Protocol.C_PLAYER_EQUIP)
  private:
@@ -2989,11 +2953,8 @@ class C_PLAYER_EQUIP final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr equip_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr rune_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr legacy_;
     ::Protocol::Player* player_;
-    uint32_t legacynum_;
+    ::Protocol::EquipState* state_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -3122,55 +3083,10 @@ class S_PLAYER_EQUIP final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kEquipFieldNumber = 3,
-    kRuneFieldNumber = 4,
-    kLegacyFieldNumber = 5,
     kPlayerFieldNumber = 2,
+    kStateFieldNumber = 3,
     kSuccessFieldNumber = 1,
-    kLegacyNumFieldNumber = 6,
   };
-  // string equip = 3;
-  void clear_equip();
-  const std::string& equip() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_equip(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_equip();
-  PROTOBUF_NODISCARD std::string* release_equip();
-  void set_allocated_equip(std::string* equip);
-  private:
-  const std::string& _internal_equip() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_equip(const std::string& value);
-  std::string* _internal_mutable_equip();
-  public:
-
-  // string rune = 4;
-  void clear_rune();
-  const std::string& rune() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_rune(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_rune();
-  PROTOBUF_NODISCARD std::string* release_rune();
-  void set_allocated_rune(std::string* rune);
-  private:
-  const std::string& _internal_rune() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_rune(const std::string& value);
-  std::string* _internal_mutable_rune();
-  public:
-
-  // string legacy = 5;
-  void clear_legacy();
-  const std::string& legacy() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_legacy(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_legacy();
-  PROTOBUF_NODISCARD std::string* release_legacy();
-  void set_allocated_legacy(std::string* legacy);
-  private:
-  const std::string& _internal_legacy() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_legacy(const std::string& value);
-  std::string* _internal_mutable_legacy();
-  public:
-
   // .Protocol.Player player = 2;
   bool has_player() const;
   private:
@@ -3189,6 +3105,24 @@ class S_PLAYER_EQUIP final :
       ::Protocol::Player* player);
   ::Protocol::Player* unsafe_arena_release_player();
 
+  // .Protocol.EquipState state = 3;
+  bool has_state() const;
+  private:
+  bool _internal_has_state() const;
+  public:
+  void clear_state();
+  const ::Protocol::EquipState& state() const;
+  PROTOBUF_NODISCARD ::Protocol::EquipState* release_state();
+  ::Protocol::EquipState* mutable_state();
+  void set_allocated_state(::Protocol::EquipState* state);
+  private:
+  const ::Protocol::EquipState& _internal_state() const;
+  ::Protocol::EquipState* _internal_mutable_state();
+  public:
+  void unsafe_arena_set_allocated_state(
+      ::Protocol::EquipState* state);
+  ::Protocol::EquipState* unsafe_arena_release_state();
+
   // bool success = 1;
   void clear_success();
   bool success() const;
@@ -3196,15 +3130,6 @@ class S_PLAYER_EQUIP final :
   private:
   bool _internal_success() const;
   void _internal_set_success(bool value);
-  public:
-
-  // uint32 legacyNum = 6;
-  void clear_legacynum();
-  uint32_t legacynum() const;
-  void set_legacynum(uint32_t value);
-  private:
-  uint32_t _internal_legacynum() const;
-  void _internal_set_legacynum(uint32_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:Protocol.S_PLAYER_EQUIP)
@@ -3215,12 +3140,9 @@ class S_PLAYER_EQUIP final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr equip_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr rune_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr legacy_;
     ::Protocol::Player* player_;
+    ::Protocol::EquipState* state_;
     bool success_;
-    uint32_t legacynum_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -6339,174 +6261,89 @@ inline void C_PLAYER_EQUIP::set_allocated_player(::Protocol::Player* player) {
   // @@protoc_insertion_point(field_set_allocated:Protocol.C_PLAYER_EQUIP.player)
 }
 
-// string equip = 2;
-inline void C_PLAYER_EQUIP::clear_equip() {
-  _impl_.equip_.ClearToEmpty();
+// .Protocol.EquipState state = 2;
+inline bool C_PLAYER_EQUIP::_internal_has_state() const {
+  return this != internal_default_instance() && _impl_.state_ != nullptr;
 }
-inline const std::string& C_PLAYER_EQUIP::equip() const {
-  // @@protoc_insertion_point(field_get:Protocol.C_PLAYER_EQUIP.equip)
-  return _internal_equip();
+inline bool C_PLAYER_EQUIP::has_state() const {
+  return _internal_has_state();
 }
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void C_PLAYER_EQUIP::set_equip(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.equip_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:Protocol.C_PLAYER_EQUIP.equip)
+inline const ::Protocol::EquipState& C_PLAYER_EQUIP::_internal_state() const {
+  const ::Protocol::EquipState* p = _impl_.state_;
+  return p != nullptr ? *p : reinterpret_cast<const ::Protocol::EquipState&>(
+      ::Protocol::_EquipState_default_instance_);
 }
-inline std::string* C_PLAYER_EQUIP::mutable_equip() {
-  std::string* _s = _internal_mutable_equip();
-  // @@protoc_insertion_point(field_mutable:Protocol.C_PLAYER_EQUIP.equip)
-  return _s;
+inline const ::Protocol::EquipState& C_PLAYER_EQUIP::state() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_PLAYER_EQUIP.state)
+  return _internal_state();
 }
-inline const std::string& C_PLAYER_EQUIP::_internal_equip() const {
-  return _impl_.equip_.Get();
-}
-inline void C_PLAYER_EQUIP::_internal_set_equip(const std::string& value) {
-  
-  _impl_.equip_.Set(value, GetArenaForAllocation());
-}
-inline std::string* C_PLAYER_EQUIP::_internal_mutable_equip() {
-  
-  return _impl_.equip_.Mutable(GetArenaForAllocation());
-}
-inline std::string* C_PLAYER_EQUIP::release_equip() {
-  // @@protoc_insertion_point(field_release:Protocol.C_PLAYER_EQUIP.equip)
-  return _impl_.equip_.Release();
-}
-inline void C_PLAYER_EQUIP::set_allocated_equip(std::string* equip) {
-  if (equip != nullptr) {
+inline void C_PLAYER_EQUIP::unsafe_arena_set_allocated_state(
+    ::Protocol::EquipState* state) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.state_);
+  }
+  _impl_.state_ = state;
+  if (state) {
     
   } else {
     
   }
-  _impl_.equip_.SetAllocated(equip, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.equip_.IsDefault()) {
-    _impl_.equip_.Set("", GetArenaForAllocation());
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.C_PLAYER_EQUIP.state)
+}
+inline ::Protocol::EquipState* C_PLAYER_EQUIP::release_state() {
+  
+  ::Protocol::EquipState* temp = _impl_.state_;
+  _impl_.state_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
   }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:Protocol.C_PLAYER_EQUIP.equip)
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
 }
-
-// string rune = 3;
-inline void C_PLAYER_EQUIP::clear_rune() {
-  _impl_.rune_.ClearToEmpty();
-}
-inline const std::string& C_PLAYER_EQUIP::rune() const {
-  // @@protoc_insertion_point(field_get:Protocol.C_PLAYER_EQUIP.rune)
-  return _internal_rune();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void C_PLAYER_EQUIP::set_rune(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.rune_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:Protocol.C_PLAYER_EQUIP.rune)
-}
-inline std::string* C_PLAYER_EQUIP::mutable_rune() {
-  std::string* _s = _internal_mutable_rune();
-  // @@protoc_insertion_point(field_mutable:Protocol.C_PLAYER_EQUIP.rune)
-  return _s;
-}
-inline const std::string& C_PLAYER_EQUIP::_internal_rune() const {
-  return _impl_.rune_.Get();
-}
-inline void C_PLAYER_EQUIP::_internal_set_rune(const std::string& value) {
+inline ::Protocol::EquipState* C_PLAYER_EQUIP::unsafe_arena_release_state() {
+  // @@protoc_insertion_point(field_release:Protocol.C_PLAYER_EQUIP.state)
   
-  _impl_.rune_.Set(value, GetArenaForAllocation());
+  ::Protocol::EquipState* temp = _impl_.state_;
+  _impl_.state_ = nullptr;
+  return temp;
 }
-inline std::string* C_PLAYER_EQUIP::_internal_mutable_rune() {
+inline ::Protocol::EquipState* C_PLAYER_EQUIP::_internal_mutable_state() {
   
-  return _impl_.rune_.Mutable(GetArenaForAllocation());
+  if (_impl_.state_ == nullptr) {
+    auto* p = CreateMaybeMessage<::Protocol::EquipState>(GetArenaForAllocation());
+    _impl_.state_ = p;
+  }
+  return _impl_.state_;
 }
-inline std::string* C_PLAYER_EQUIP::release_rune() {
-  // @@protoc_insertion_point(field_release:Protocol.C_PLAYER_EQUIP.rune)
-  return _impl_.rune_.Release();
+inline ::Protocol::EquipState* C_PLAYER_EQUIP::mutable_state() {
+  ::Protocol::EquipState* _msg = _internal_mutable_state();
+  // @@protoc_insertion_point(field_mutable:Protocol.C_PLAYER_EQUIP.state)
+  return _msg;
 }
-inline void C_PLAYER_EQUIP::set_allocated_rune(std::string* rune) {
-  if (rune != nullptr) {
+inline void C_PLAYER_EQUIP::set_allocated_state(::Protocol::EquipState* state) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.state_);
+  }
+  if (state) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(state));
+    if (message_arena != submessage_arena) {
+      state = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, state, submessage_arena);
+    }
     
   } else {
     
   }
-  _impl_.rune_.SetAllocated(rune, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.rune_.IsDefault()) {
-    _impl_.rune_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:Protocol.C_PLAYER_EQUIP.rune)
-}
-
-// string legacy = 4;
-inline void C_PLAYER_EQUIP::clear_legacy() {
-  _impl_.legacy_.ClearToEmpty();
-}
-inline const std::string& C_PLAYER_EQUIP::legacy() const {
-  // @@protoc_insertion_point(field_get:Protocol.C_PLAYER_EQUIP.legacy)
-  return _internal_legacy();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void C_PLAYER_EQUIP::set_legacy(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.legacy_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:Protocol.C_PLAYER_EQUIP.legacy)
-}
-inline std::string* C_PLAYER_EQUIP::mutable_legacy() {
-  std::string* _s = _internal_mutable_legacy();
-  // @@protoc_insertion_point(field_mutable:Protocol.C_PLAYER_EQUIP.legacy)
-  return _s;
-}
-inline const std::string& C_PLAYER_EQUIP::_internal_legacy() const {
-  return _impl_.legacy_.Get();
-}
-inline void C_PLAYER_EQUIP::_internal_set_legacy(const std::string& value) {
-  
-  _impl_.legacy_.Set(value, GetArenaForAllocation());
-}
-inline std::string* C_PLAYER_EQUIP::_internal_mutable_legacy() {
-  
-  return _impl_.legacy_.Mutable(GetArenaForAllocation());
-}
-inline std::string* C_PLAYER_EQUIP::release_legacy() {
-  // @@protoc_insertion_point(field_release:Protocol.C_PLAYER_EQUIP.legacy)
-  return _impl_.legacy_.Release();
-}
-inline void C_PLAYER_EQUIP::set_allocated_legacy(std::string* legacy) {
-  if (legacy != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.legacy_.SetAllocated(legacy, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.legacy_.IsDefault()) {
-    _impl_.legacy_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:Protocol.C_PLAYER_EQUIP.legacy)
-}
-
-// uint32 legacyNum = 5;
-inline void C_PLAYER_EQUIP::clear_legacynum() {
-  _impl_.legacynum_ = 0u;
-}
-inline uint32_t C_PLAYER_EQUIP::_internal_legacynum() const {
-  return _impl_.legacynum_;
-}
-inline uint32_t C_PLAYER_EQUIP::legacynum() const {
-  // @@protoc_insertion_point(field_get:Protocol.C_PLAYER_EQUIP.legacyNum)
-  return _internal_legacynum();
-}
-inline void C_PLAYER_EQUIP::_internal_set_legacynum(uint32_t value) {
-  
-  _impl_.legacynum_ = value;
-}
-inline void C_PLAYER_EQUIP::set_legacynum(uint32_t value) {
-  _internal_set_legacynum(value);
-  // @@protoc_insertion_point(field_set:Protocol.C_PLAYER_EQUIP.legacyNum)
+  _impl_.state_ = state;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C_PLAYER_EQUIP.state)
 }
 
 // -------------------------------------------------------------------
@@ -6618,174 +6455,89 @@ inline void S_PLAYER_EQUIP::set_allocated_player(::Protocol::Player* player) {
   // @@protoc_insertion_point(field_set_allocated:Protocol.S_PLAYER_EQUIP.player)
 }
 
-// string equip = 3;
-inline void S_PLAYER_EQUIP::clear_equip() {
-  _impl_.equip_.ClearToEmpty();
+// .Protocol.EquipState state = 3;
+inline bool S_PLAYER_EQUIP::_internal_has_state() const {
+  return this != internal_default_instance() && _impl_.state_ != nullptr;
 }
-inline const std::string& S_PLAYER_EQUIP::equip() const {
-  // @@protoc_insertion_point(field_get:Protocol.S_PLAYER_EQUIP.equip)
-  return _internal_equip();
+inline bool S_PLAYER_EQUIP::has_state() const {
+  return _internal_has_state();
 }
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void S_PLAYER_EQUIP::set_equip(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.equip_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:Protocol.S_PLAYER_EQUIP.equip)
+inline const ::Protocol::EquipState& S_PLAYER_EQUIP::_internal_state() const {
+  const ::Protocol::EquipState* p = _impl_.state_;
+  return p != nullptr ? *p : reinterpret_cast<const ::Protocol::EquipState&>(
+      ::Protocol::_EquipState_default_instance_);
 }
-inline std::string* S_PLAYER_EQUIP::mutable_equip() {
-  std::string* _s = _internal_mutable_equip();
-  // @@protoc_insertion_point(field_mutable:Protocol.S_PLAYER_EQUIP.equip)
-  return _s;
+inline const ::Protocol::EquipState& S_PLAYER_EQUIP::state() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_PLAYER_EQUIP.state)
+  return _internal_state();
 }
-inline const std::string& S_PLAYER_EQUIP::_internal_equip() const {
-  return _impl_.equip_.Get();
-}
-inline void S_PLAYER_EQUIP::_internal_set_equip(const std::string& value) {
-  
-  _impl_.equip_.Set(value, GetArenaForAllocation());
-}
-inline std::string* S_PLAYER_EQUIP::_internal_mutable_equip() {
-  
-  return _impl_.equip_.Mutable(GetArenaForAllocation());
-}
-inline std::string* S_PLAYER_EQUIP::release_equip() {
-  // @@protoc_insertion_point(field_release:Protocol.S_PLAYER_EQUIP.equip)
-  return _impl_.equip_.Release();
-}
-inline void S_PLAYER_EQUIP::set_allocated_equip(std::string* equip) {
-  if (equip != nullptr) {
+inline void S_PLAYER_EQUIP::unsafe_arena_set_allocated_state(
+    ::Protocol::EquipState* state) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.state_);
+  }
+  _impl_.state_ = state;
+  if (state) {
     
   } else {
     
   }
-  _impl_.equip_.SetAllocated(equip, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.equip_.IsDefault()) {
-    _impl_.equip_.Set("", GetArenaForAllocation());
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.S_PLAYER_EQUIP.state)
+}
+inline ::Protocol::EquipState* S_PLAYER_EQUIP::release_state() {
+  
+  ::Protocol::EquipState* temp = _impl_.state_;
+  _impl_.state_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
   }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:Protocol.S_PLAYER_EQUIP.equip)
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
 }
-
-// string rune = 4;
-inline void S_PLAYER_EQUIP::clear_rune() {
-  _impl_.rune_.ClearToEmpty();
-}
-inline const std::string& S_PLAYER_EQUIP::rune() const {
-  // @@protoc_insertion_point(field_get:Protocol.S_PLAYER_EQUIP.rune)
-  return _internal_rune();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void S_PLAYER_EQUIP::set_rune(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.rune_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:Protocol.S_PLAYER_EQUIP.rune)
-}
-inline std::string* S_PLAYER_EQUIP::mutable_rune() {
-  std::string* _s = _internal_mutable_rune();
-  // @@protoc_insertion_point(field_mutable:Protocol.S_PLAYER_EQUIP.rune)
-  return _s;
-}
-inline const std::string& S_PLAYER_EQUIP::_internal_rune() const {
-  return _impl_.rune_.Get();
-}
-inline void S_PLAYER_EQUIP::_internal_set_rune(const std::string& value) {
+inline ::Protocol::EquipState* S_PLAYER_EQUIP::unsafe_arena_release_state() {
+  // @@protoc_insertion_point(field_release:Protocol.S_PLAYER_EQUIP.state)
   
-  _impl_.rune_.Set(value, GetArenaForAllocation());
+  ::Protocol::EquipState* temp = _impl_.state_;
+  _impl_.state_ = nullptr;
+  return temp;
 }
-inline std::string* S_PLAYER_EQUIP::_internal_mutable_rune() {
+inline ::Protocol::EquipState* S_PLAYER_EQUIP::_internal_mutable_state() {
   
-  return _impl_.rune_.Mutable(GetArenaForAllocation());
+  if (_impl_.state_ == nullptr) {
+    auto* p = CreateMaybeMessage<::Protocol::EquipState>(GetArenaForAllocation());
+    _impl_.state_ = p;
+  }
+  return _impl_.state_;
 }
-inline std::string* S_PLAYER_EQUIP::release_rune() {
-  // @@protoc_insertion_point(field_release:Protocol.S_PLAYER_EQUIP.rune)
-  return _impl_.rune_.Release();
+inline ::Protocol::EquipState* S_PLAYER_EQUIP::mutable_state() {
+  ::Protocol::EquipState* _msg = _internal_mutable_state();
+  // @@protoc_insertion_point(field_mutable:Protocol.S_PLAYER_EQUIP.state)
+  return _msg;
 }
-inline void S_PLAYER_EQUIP::set_allocated_rune(std::string* rune) {
-  if (rune != nullptr) {
+inline void S_PLAYER_EQUIP::set_allocated_state(::Protocol::EquipState* state) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.state_);
+  }
+  if (state) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(state));
+    if (message_arena != submessage_arena) {
+      state = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, state, submessage_arena);
+    }
     
   } else {
     
   }
-  _impl_.rune_.SetAllocated(rune, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.rune_.IsDefault()) {
-    _impl_.rune_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:Protocol.S_PLAYER_EQUIP.rune)
-}
-
-// string legacy = 5;
-inline void S_PLAYER_EQUIP::clear_legacy() {
-  _impl_.legacy_.ClearToEmpty();
-}
-inline const std::string& S_PLAYER_EQUIP::legacy() const {
-  // @@protoc_insertion_point(field_get:Protocol.S_PLAYER_EQUIP.legacy)
-  return _internal_legacy();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void S_PLAYER_EQUIP::set_legacy(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.legacy_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:Protocol.S_PLAYER_EQUIP.legacy)
-}
-inline std::string* S_PLAYER_EQUIP::mutable_legacy() {
-  std::string* _s = _internal_mutable_legacy();
-  // @@protoc_insertion_point(field_mutable:Protocol.S_PLAYER_EQUIP.legacy)
-  return _s;
-}
-inline const std::string& S_PLAYER_EQUIP::_internal_legacy() const {
-  return _impl_.legacy_.Get();
-}
-inline void S_PLAYER_EQUIP::_internal_set_legacy(const std::string& value) {
-  
-  _impl_.legacy_.Set(value, GetArenaForAllocation());
-}
-inline std::string* S_PLAYER_EQUIP::_internal_mutable_legacy() {
-  
-  return _impl_.legacy_.Mutable(GetArenaForAllocation());
-}
-inline std::string* S_PLAYER_EQUIP::release_legacy() {
-  // @@protoc_insertion_point(field_release:Protocol.S_PLAYER_EQUIP.legacy)
-  return _impl_.legacy_.Release();
-}
-inline void S_PLAYER_EQUIP::set_allocated_legacy(std::string* legacy) {
-  if (legacy != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.legacy_.SetAllocated(legacy, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.legacy_.IsDefault()) {
-    _impl_.legacy_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:Protocol.S_PLAYER_EQUIP.legacy)
-}
-
-// uint32 legacyNum = 6;
-inline void S_PLAYER_EQUIP::clear_legacynum() {
-  _impl_.legacynum_ = 0u;
-}
-inline uint32_t S_PLAYER_EQUIP::_internal_legacynum() const {
-  return _impl_.legacynum_;
-}
-inline uint32_t S_PLAYER_EQUIP::legacynum() const {
-  // @@protoc_insertion_point(field_get:Protocol.S_PLAYER_EQUIP.legacyNum)
-  return _internal_legacynum();
-}
-inline void S_PLAYER_EQUIP::_internal_set_legacynum(uint32_t value) {
-  
-  _impl_.legacynum_ = value;
-}
-inline void S_PLAYER_EQUIP::set_legacynum(uint32_t value) {
-  _internal_set_legacynum(value);
-  // @@protoc_insertion_point(field_set:Protocol.S_PLAYER_EQUIP.legacyNum)
+  _impl_.state_ = state;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S_PLAYER_EQUIP.state)
 }
 
 // -------------------------------------------------------------------

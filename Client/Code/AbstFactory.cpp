@@ -57,6 +57,7 @@
 #include "NetStage.h"
 
 #include "ItemTexUI.h"
+#include "RemoteInventory.h"
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
 map<string, std::function<CGameObject*()>> CPlayerFactory::s_mapPlayerSpawner;
@@ -413,6 +414,10 @@ void CObjectFactory::Ready_ObjectFactory()
 	s_mapObjectSpawner.insert({ "Inventory", []()
 	{
 		return CInventory::Create(s_pGraphicDev);
+	} });
+	s_mapObjectSpawner.insert({ "RemoteInventory", []()
+	{
+		return CRemoteInventory::Create(s_pGraphicDev);
 	} });
 	s_mapObjectSpawner.insert({ "Dynamite", []()
 	{

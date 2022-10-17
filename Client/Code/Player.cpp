@@ -88,12 +88,23 @@ HRESULT CPlayer::Ready_Object(const wstring& wstrPath)
 	m_dwWalkDust = GetTickCount();
 	m_dwRollDust = GetTickCount();
 
+	if (m_bRemote)
+	{
+		m_pInventory = CObjectFactory::Create<CInventory>("RemoteInventory", L"RemoteInventory");
+		m_pInventory->AddRef();
+		m_pInventory->SetOwner(this);
+		m_pInventory->AddDefaultItems();
+		m_arrAnim = m_pInventory->CurWeapon(IT_MELEE)->SetarrAnim();
+	}
+	else
+	{
+		m_pInventory = CObjectFactory::Create<CInventory>("Inventory", L"Inventory");
+		m_pInventory->AddRef();
+		m_pInventory->SetOwner(this);
+		m_pInventory->AddDefaultItems();
+		m_arrAnim = m_pInventory->CurWeapon(IT_MELEE)->SetarrAnim();
+	}
 
-	m_pInventory = CObjectFactory::Create<CInventory>("Inventory", L"Inventory");
-	m_pInventory->AddRef();
-	m_pInventory->SetOwner(this);
-	m_pInventory->AddDefaultItems();
-	m_arrAnim = m_pInventory->CurWeapon(IT_MELEE)->SetarrAnim();
 
 	m_pRootPart->pTrans->Update_Component(0.f);
 	//test
@@ -191,7 +202,7 @@ void CPlayer::Render_Object()
 		m_pGraphicDev->GetViewport(&viewport);
 
 		_vec2 vScreen;
-		CGameUtilMgr::World2Screen(vScreen, m_pColl->GetCollPos(), matView, matProj, viewport);
+		CGameUtilMgr::World2Screen(vScreen, m_pColl->GetCollPos() + _vec3{0.f, 1.5f, 0.f}, matView, matProj, viewport);
 
 		Engine::Render_Font(L"Gothic_Bold20", to_wstring(m_iID).c_str(), &vScreen, D3DCOLOR_ARGB(255, 0, 0, 0));
 
@@ -452,7 +463,7 @@ void CPlayer::AttackState()
 		{
 			m_pInventory->UseArrow(1);
 		}
-
+	}
 
 #pragma region Loading Box 
  	 //CEffectFactory::Create<CCrack>("LoadingBox", L"LoadingBox");

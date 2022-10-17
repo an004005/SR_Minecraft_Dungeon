@@ -182,6 +182,15 @@ bool Handle_C_PLAYER_ARROW(PacketSessionRef& session, Protocol::C_PLAYER_ARROW& 
 
 bool Handle_C_PLAYER_EQUIP(PacketSessionRef& session, Protocol::C_PLAYER_EQUIP& pkt)
 {
+	Protocol::S_PLAYER_EQUIP equipPkt;
+	equipPkt.set_success(true);
+	equipPkt.mutable_player()->CopyFrom(pkt.player());
+	equipPkt.mutable_state()->CopyFrom(pkt.state());
+
+	std::cout << "Player Equip Change :  " << pkt.player().id() << endl;
+
+	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(equipPkt));
+
 	return true;
 }
 

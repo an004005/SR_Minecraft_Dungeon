@@ -13,6 +13,7 @@ CGlaive::CGlaive(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	m_eType = WEAPON_GLAIVE;
 	m_iDamage = 35;
+	m_strFactoryTag = "Glaive";
 }
 
 
@@ -80,6 +81,9 @@ _int CGlaive::Update_Object(const _float & fTimeDelta)
 
 	
 	CWeapon::Update_Object(fTimeDelta);
+
+	if (m_bDelete) return OBJ_DEAD;
+
 	return 0;
 }
 

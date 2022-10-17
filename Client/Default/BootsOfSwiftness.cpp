@@ -7,6 +7,7 @@
 CBootsOfSwiftness::CBootsOfSwiftness(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CEquipItem(pGraphicDev)
 {
+	m_strFactoryTag = "BootsOfSwiftness";
 }
 
 
@@ -68,6 +69,8 @@ _int CBootsOfSwiftness::Update_Object(const _float & fTimeDelta)
 
 
 	CEquipItem::Update_Object(fTimeDelta);
+	if (m_bDelete) return OBJ_DEAD;
+
 	return OBJ_NOEVENT;
 }
 
