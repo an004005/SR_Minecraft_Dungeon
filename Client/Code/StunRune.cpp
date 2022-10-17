@@ -7,6 +7,8 @@
 CStunRune::CStunRune(LPDIRECT3DDEVICE9 pGraphicDev) : CRune(pGraphicDev)
 {
 	m_eTargetType = WEAPON_AXE;
+	m_iUItexNum = 19;
+	m_eItemType = IT_RUNE;
 }
 
 CStunRune::~CStunRune()
@@ -15,6 +17,9 @@ CStunRune::~CStunRune()
 
 HRESULT CStunRune::Ready_Object()
 {
+	m_pItemUI = CUIFactory::Create<CItemUI>("ItemUI", L"StunRuneUI", 0);
+	m_pItemUI->SetUITexture(m_iUItexNum);
+
 	return CRune::Ready_Object();
 }
 

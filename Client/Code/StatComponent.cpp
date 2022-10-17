@@ -51,6 +51,14 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 			m_fCurKnockbackTime += fTimeDelta;
 	}
 
+	if (m_bStiffen)
+	{
+		if (m_fStiffeTime < m_fCurStiffeTime)
+			m_bStiffen = false;
+		else
+			m_fCurStiffeTime += fTimeDelta;
+	}
+
 	if (m_bDamaged)
 	{
 		if (m_fDamagedTime < m_fCurDamagedTime)
@@ -82,8 +90,7 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 		if (vPos.y < m_pCubeMap->GetHeight(vPos.x, vPos.z) || m_bKnockback == false)
 		{
 			m_vKnockBackVelocity = CGameUtilMgr::s_vZero;
-		}
-		
+		}		
 	}
 
 	return 0;
@@ -152,6 +159,14 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 		D3DXVec3Normalize(&m_vKnockBackVelocity, &m_vKnockBackVelocity);
 		m_vKnockBackVelocity *= 10.f;
 		m_vKnockBackVelocity.y = 10.f;
+		break;
+	case DT_STIFFEN:
+		m_bStiffen = true;
+		m_fCurStiffeTime = 0.f;
+
+		m_vKnockBackVelocity = m_pOwnerTrans->m_vInfo[INFO_POS] - vFromPos;
+		D3DXVec3Normalize(&m_vKnockBackVelocity, &m_vKnockBackVelocity);
+		m_vKnockBackVelocity *= 15.f;
 		break;
 	case DT_END:
 		break;

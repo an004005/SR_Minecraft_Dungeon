@@ -20,6 +20,10 @@ HRESULT CBootsOfSwiftness::Ready_Object()
 	m_iUItexNum = 11;
 	m_fCurCoolTime = 5.f;
 	m_fCoolTime = 5.f;
+
+	m_pItemUI = CUIFactory::Create<CItemUI>("ItemUI", L"BootsUI", 0);
+	m_pItemUI->SetUITexture(m_iUItexNum);
+
 	return S_OK;
 }
 

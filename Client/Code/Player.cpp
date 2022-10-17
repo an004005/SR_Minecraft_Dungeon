@@ -18,6 +18,7 @@
 #include "Emerald.h"
 #include "PlayerStartPos.h"
 #include "TerrainCubeMap.h"
+#include "LaserShotRune.h"
 
 /*-----------------------
  *    CCharacter
@@ -160,6 +161,10 @@ void CPlayer::LateUpdate_Object()
 		m_bApplyMeleeAttack = false;
 		m_bApplyMeleeAttackNext = true;
 	}
+
+	
+
+	
 }
 
 void CPlayer::Render_Object()
@@ -298,6 +303,8 @@ void CPlayer::SpawnArrow(_uint iDamage, PlayerArrowType eType, _bool bCritical, 
 		}
 		break;
 	case PlayerArrowType::LASER:
+		m_bLaser = true;
+		m_fCurLaserTime = 0.f;
 		break;
 	default:;
 	}
@@ -361,20 +368,9 @@ void CPlayer::AttackState()
 		m_pInventory->UseArrow(1);
 	}
 
-#pragma region Lazer 
-	 //CEffectFactory::Create<CLazer>("Lazer_Beam", L"Lazer_Beam");
-	 //for (int i = 0; i < 12; i++)
-	 //{
-	 //	CEffectFactory::Create<CLazer_Circle>("Lazer_Beam_Circle", L"Lazer_Beam_Circle");
-	 //}
-#pragma endregion 
 
 #pragma region Loading Box 
  	 //CEffectFactory::Create<CCrack>("LoadingBox", L"LoadingBox");
-#pragma endregion
-
-#pragma region Item DropEffect 
-	
 #pragma endregion
 
 #pragma region Lava_Paticle
@@ -401,6 +397,7 @@ void CPlayer::StateChange()
 			m_bRoll = false;
 			m_bCanPlayAnim = false;
 			m_bMove = false;
+			m_bLaser = false;
 			m_bCanPlayAnim = false;
 			m_pColl->SetStop();
 		}
@@ -411,6 +408,7 @@ void CPlayer::StateChange()
 	{
 		m_eState = STUN;
 		m_bRoll = false;
+		m_fCurLaserTime = 3.f;
 		return;
 	}
 
@@ -420,12 +418,28 @@ void CPlayer::StateChange()
 		m_eState = ROLL;
 		RotateToCursor();
 		m_bCanPlayAnim = false;
+		m_fCurLaserTime = 3.f;
 		PlayAnimationOnce(&m_arrAnim[ANIM_ROLL]);
 		m_bRoll = false;
 		m_CurRollCoolTime = 0.f;
 		return;
 	}
 
+	if (m_bLaser && m_bCanPlayAnim)
+	{
+		if (m_fLaserTime < m_fCurLaserTime)
+		{
+			m_bLaser = false;
+			Get_GameObject<CLaserShotRune>(LAYER_ITEM, L"LaserShotRune")->KillLaser();
+		}
+		else
+		{
+			Get_GameObject<CLaserShotRune>(LAYER_ITEM, L"LaserShotRune")->Collision();
+			m_fCurLaserTime += CGameUtilMgr::s_fTimeDelta;
+			return;
+		}	
+	}
+	
 	if (m_bLegacy1 && m_bCanPlayAnim)
 	{
 		m_bLegacy1 = false;

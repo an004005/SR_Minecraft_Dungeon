@@ -22,6 +22,9 @@ HRESULT CShockPowder::Ready_Object()
 	m_iUItexNum = 14;
 	m_fCurCoolTime = 10.f;
 	m_fCoolTime = 10.f;
+
+	m_pItemUI = CUIFactory::Create<CItemUI>("ItemUI", L"ShockPowderUI", 0);
+	m_pItemUI->SetUITexture(m_iUItexNum);
 	return S_OK;
 }
 

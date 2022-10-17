@@ -3,6 +3,7 @@
 
 CEquipItem::CEquipItem(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CItem(pGraphicDev)
+	, m_pItemUI(nullptr)
 {
 	m_eItemType = IT_END;
 	m_iAttackCnt = 0;
