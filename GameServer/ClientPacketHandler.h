@@ -23,12 +23,12 @@ enum : uint16
 	PKT_S_PLAYER_ARROW = 1014,
 	PKT_C_PLAYER_EQUIP = 1015,
 	PKT_S_PLAYER_EQUIP = 1016,
-	PKT_S_SPAWN_MONSTER = 1017,
-	PKT_S_MONSTER_SET_TARGET = 1018,
-	PKT_C_MONSTER_WORLD = 1019,
-	PKT_S_MONSTER_WORLD = 1020,
-	PKT_C_MONSTER_ATTACK = 1021,
-	PKT_S_MONSTER_ATTACK = 1022,
+	PKT_C_SPAWN_MONSTER = 1017,
+	PKT_S_SPAWN_MONSTER = 1018,
+	PKT_C_MONSTER_SET_TARGET = 1019,
+	PKT_S_MONSTER_SET_TARGET = 1020,
+	PKT_C_MONSTER_WORLD = 1021,
+	PKT_S_MONSTER_WORLD = 1022,
 };
 
 // Custom Handlers
@@ -41,8 +41,9 @@ bool Handle_C_PLAYER_YAW_ACTION(PacketSessionRef& session, Protocol::C_PLAYER_YA
 bool Handle_C_PLAYER_ACTION(PacketSessionRef& session, Protocol::C_PLAYER_ACTION& pkt);
 bool Handle_C_PLAYER_ARROW(PacketSessionRef& session, Protocol::C_PLAYER_ARROW& pkt);
 bool Handle_C_PLAYER_EQUIP(PacketSessionRef& session, Protocol::C_PLAYER_EQUIP& pkt);
+bool Handle_C_SPAWN_MONSTER(PacketSessionRef& session, Protocol::C_SPAWN_MONSTER& pkt);
+bool Handle_C_MONSTER_SET_TARGET(PacketSessionRef& session, Protocol::C_MONSTER_SET_TARGET& pkt);
 bool Handle_C_MONSTER_WORLD(PacketSessionRef& session, Protocol::C_MONSTER_WORLD& pkt);
-bool Handle_C_MONSTER_ATTACK(PacketSessionRef& session, Protocol::C_MONSTER_ATTACK& pkt);
 
 class ClientPacketHandler
 {
@@ -59,8 +60,9 @@ public:
 		GPacketHandler[PKT_C_PLAYER_ACTION] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_PLAYER_ACTION>(Handle_C_PLAYER_ACTION, session, buffer, len); };
 		GPacketHandler[PKT_C_PLAYER_ARROW] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_PLAYER_ARROW>(Handle_C_PLAYER_ARROW, session, buffer, len); };
 		GPacketHandler[PKT_C_PLAYER_EQUIP] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_PLAYER_EQUIP>(Handle_C_PLAYER_EQUIP, session, buffer, len); };
+		GPacketHandler[PKT_C_SPAWN_MONSTER] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_SPAWN_MONSTER>(Handle_C_SPAWN_MONSTER, session, buffer, len); };
+		GPacketHandler[PKT_C_MONSTER_SET_TARGET] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_MONSTER_SET_TARGET>(Handle_C_MONSTER_SET_TARGET, session, buffer, len); };
 		GPacketHandler[PKT_C_MONSTER_WORLD] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_MONSTER_WORLD>(Handle_C_MONSTER_WORLD, session, buffer, len); };
-		GPacketHandler[PKT_C_MONSTER_ATTACK] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_MONSTER_ATTACK>(Handle_C_MONSTER_ATTACK, session, buffer, len); };
 	}
 
 	static bool HandlePacket(PacketSessionRef& session, BYTE* buffer, int32 len)
@@ -80,7 +82,6 @@ public:
 	static SendBufferRef MakeSendBuffer(Protocol::S_SPAWN_MONSTER& pkt) { return MakeSendBuffer(pkt, PKT_S_SPAWN_MONSTER); }
 	static SendBufferRef MakeSendBuffer(Protocol::S_MONSTER_SET_TARGET& pkt) { return MakeSendBuffer(pkt, PKT_S_MONSTER_SET_TARGET); }
 	static SendBufferRef MakeSendBuffer(Protocol::S_MONSTER_WORLD& pkt) { return MakeSendBuffer(pkt, PKT_S_MONSTER_WORLD); }
-	static SendBufferRef MakeSendBuffer(Protocol::S_MONSTER_ATTACK& pkt) { return MakeSendBuffer(pkt, PKT_S_MONSTER_ATTACK); }
 
 private:
 	template<typename PacketType, typename ProcessFunc>

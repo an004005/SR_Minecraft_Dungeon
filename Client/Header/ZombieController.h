@@ -21,6 +21,9 @@ protected:
 
 	_float m_fDetectRange = 12.f; // 사정거리
 	_float m_fAttackDist = 2.f; // 공격 사거리
+
+	_float m_fWorldRefreshTime = 1.f;
+	_float m_fCurWorldRefreshTime = 1.f;
 };
 
 class CZombieRemoteController : public CZombieController
@@ -36,9 +39,24 @@ public:
 	static CZombieRemoteController* Create();
 
 	void SetTarget(_uint iTargetID);
-
+	void SetAttack()
+	{
+		m_bAttackSet.store(true);
+	}
+	void SetWorld(const _matrix& matWorld)
+	{
+		m_matWorld = matWorld;
+		m_bWorldSet.store(true);
+	}
 
 private:
+	Atomic<_bool> m_bWorldSet{false};
+	_matrix m_matWorld;
+
+	_vec3 m_vTargetPos;
+
 	Atomic<_bool> m_bTargetSet{false};
 	_uint m_iTargetID = 0;
+
+	Atomic<_bool> m_bAttackSet{false};
 };

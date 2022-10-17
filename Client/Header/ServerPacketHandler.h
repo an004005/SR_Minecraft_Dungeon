@@ -23,12 +23,12 @@ enum : uint16
 	PKT_S_PLAYER_ARROW = 1014,
 	PKT_C_PLAYER_EQUIP = 1015,
 	PKT_S_PLAYER_EQUIP = 1016,
-	PKT_S_SPAWN_MONSTER = 1017,
-	PKT_S_MONSTER_SET_TARGET = 1018,
-	PKT_C_MONSTER_WORLD = 1019,
-	PKT_S_MONSTER_WORLD = 1020,
-	PKT_C_MONSTER_ATTACK = 1021,
-	PKT_S_MONSTER_ATTACK = 1022,
+	PKT_C_SPAWN_MONSTER = 1017,
+	PKT_S_SPAWN_MONSTER = 1018,
+	PKT_C_MONSTER_SET_TARGET = 1019,
+	PKT_S_MONSTER_SET_TARGET = 1020,
+	PKT_C_MONSTER_WORLD = 1021,
+	PKT_S_MONSTER_WORLD = 1022,
 };
 
 // Custom Handlers
@@ -45,7 +45,6 @@ bool Handle_S_PLAYER_EQUIP(PacketSessionRef& session, Protocol::S_PLAYER_EQUIP& 
 bool Handle_S_SPAWN_MONSTER(PacketSessionRef& session, Protocol::S_SPAWN_MONSTER& pkt);
 bool Handle_S_MONSTER_SET_TARGET(PacketSessionRef& session, Protocol::S_MONSTER_SET_TARGET& pkt);
 bool Handle_S_MONSTER_WORLD(PacketSessionRef& session, Protocol::S_MONSTER_WORLD& pkt);
-bool Handle_S_MONSTER_ATTACK(PacketSessionRef& session, Protocol::S_MONSTER_ATTACK& pkt);
 
 class ServerPacketHandler
 {
@@ -66,7 +65,6 @@ public:
 		GPacketHandler[PKT_S_SPAWN_MONSTER] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_SPAWN_MONSTER>(Handle_S_SPAWN_MONSTER, session, buffer, len); };
 		GPacketHandler[PKT_S_MONSTER_SET_TARGET] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_MONSTER_SET_TARGET>(Handle_S_MONSTER_SET_TARGET, session, buffer, len); };
 		GPacketHandler[PKT_S_MONSTER_WORLD] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_MONSTER_WORLD>(Handle_S_MONSTER_WORLD, session, buffer, len); };
-		GPacketHandler[PKT_S_MONSTER_ATTACK] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_MONSTER_ATTACK>(Handle_S_MONSTER_ATTACK, session, buffer, len); };
 	}
 
 	static bool HandlePacket(PacketSessionRef& session, BYTE* buffer, int32 len)
@@ -82,8 +80,9 @@ public:
 	static SendBufferRef MakeSendBuffer(Protocol::C_PLAYER_ACTION& pkt) { return MakeSendBuffer(pkt, PKT_C_PLAYER_ACTION); }
 	static SendBufferRef MakeSendBuffer(Protocol::C_PLAYER_ARROW& pkt) { return MakeSendBuffer(pkt, PKT_C_PLAYER_ARROW); }
 	static SendBufferRef MakeSendBuffer(Protocol::C_PLAYER_EQUIP& pkt) { return MakeSendBuffer(pkt, PKT_C_PLAYER_EQUIP); }
+	static SendBufferRef MakeSendBuffer(Protocol::C_SPAWN_MONSTER& pkt) { return MakeSendBuffer(pkt, PKT_C_SPAWN_MONSTER); }
+	static SendBufferRef MakeSendBuffer(Protocol::C_MONSTER_SET_TARGET& pkt) { return MakeSendBuffer(pkt, PKT_C_MONSTER_SET_TARGET); }
 	static SendBufferRef MakeSendBuffer(Protocol::C_MONSTER_WORLD& pkt) { return MakeSendBuffer(pkt, PKT_C_MONSTER_WORLD); }
-	static SendBufferRef MakeSendBuffer(Protocol::C_MONSTER_ATTACK& pkt) { return MakeSendBuffer(pkt, PKT_C_MONSTER_ATTACK); }
 
 private:
 	template<typename PacketType, typename ProcessFunc>

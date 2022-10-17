@@ -52,6 +52,17 @@ BEGIN(Engine)
 
 		return pCasted;
 	}
+	template <typename T>
+	T* Get_ComponentUnCheck(LAYERID eLayerID,
+	                                 const wstring& pObjTag,
+	                                 const wstring& pComponentTag,
+	                                 COMPONENTID eID)
+	{
+		CComponent* pComponent = CManagement::GetInstance()->Get_Component(eLayerID, pObjTag, pComponentTag, eID);
+		T* pCasted = dynamic_cast<T*>(pComponent);
+
+		return pCasted;
+	}
 
 	template <typename T>
 	T* Get_GameObjectUnCheck(LAYERID eLayerID, const wstring& pObjTag)

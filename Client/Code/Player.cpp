@@ -177,7 +177,22 @@ void CPlayer::LateUpdate_Object()
 void CPlayer::Render_Object()
 {
 	if (m_bVisible)
+	{
+		_matrix matView, matProj;
+		D3DVIEWPORT9 viewport;
+		ZeroMemory(&viewport, sizeof(D3DVIEWPORT9));
+		m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
+		m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &matProj);
+		m_pGraphicDev->GetViewport(&viewport);
+
+		_vec2 vScreen;
+		CGameUtilMgr::World2Screen(vScreen, m_pColl->GetCollPos(), matView, matProj, viewport);
+
+		Engine::Render_Font(L"Gothic_Bold20", to_wstring(m_iID).c_str(), &vScreen, D3DCOLOR_ARGB(255, 0, 0, 0));
+
+		// CGameUtilMgr::World2Screen()
 		CSkeletalCube::Render_Object();
+	}
 }
 
 void CPlayer::Free()

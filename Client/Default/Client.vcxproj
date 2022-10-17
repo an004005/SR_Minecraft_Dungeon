@@ -166,6 +166,7 @@
   <ItemGroup>
     <ClInclude Include="..\Header\AbstFactory.h" />
     <ClInclude Include="..\Header\BatchTool.h" />
+    <ClInclude Include="..\Header\ClientServiceMgr.h" />
     <ClInclude Include="..\Header\DamageFontMgr.h" />
     <ClInclude Include="..\Header\FireworksArrow.h" />
     <ClInclude Include="..\Header\CamAnimation.h" />

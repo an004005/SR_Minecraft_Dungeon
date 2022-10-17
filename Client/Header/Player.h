@@ -114,6 +114,8 @@ public:
 	void SetSpeed(_float fSpeed) { m_fSpeed = fSpeed; }
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath, _bool bRemote = false);
 
+	void SetName(const string& strName) {m_strName = strName;}
+
 
 	_float GetYawToCursor();
 private:
@@ -123,6 +125,8 @@ private:
 	CInventory* m_pInventory = nullptr;
 
 protected:
+	string m_strName;
+
 	SkeletalPart* m_pWeaponPart = nullptr;
 	CStatComponent* m_pStat = nullptr;
 	CCollisionCom* m_pColl = nullptr;

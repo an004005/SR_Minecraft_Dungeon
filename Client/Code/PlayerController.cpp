@@ -187,28 +187,7 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 			playerWorld.mutable_player()->set_name("Player_test");
 
 			const _matrix& matWorld =	pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_matWorld;
-			{
-				playerWorld.mutable_matworld()->mutable_vright()->set_x(matWorld._11);
-				playerWorld.mutable_matworld()->mutable_vright()->set_y(matWorld._12);
-				playerWorld.mutable_matworld()->mutable_vright()->set_z(matWorld._13);
-				playerWorld.mutable_matworld()->mutable_vright()->set_w(matWorld._14);
-
-				playerWorld.mutable_matworld()->mutable_vup()->set_x(matWorld._21);
-				playerWorld.mutable_matworld()->mutable_vup()->set_y(matWorld._22);
-				playerWorld.mutable_matworld()->mutable_vup()->set_z(matWorld._23);
-				playerWorld.mutable_matworld()->mutable_vup()->set_w(matWorld._24);
-
-				playerWorld.mutable_matworld()->mutable_vlook()->set_x(matWorld._31);
-				playerWorld.mutable_matworld()->mutable_vlook()->set_y(matWorld._32);
-				playerWorld.mutable_matworld()->mutable_vlook()->set_z(matWorld._33);
-				playerWorld.mutable_matworld()->mutable_vlook()->set_w(matWorld._34);
-
-				playerWorld.mutable_matworld()->mutable_vpos()->set_x(matWorld._41);
-				playerWorld.mutable_matworld()->mutable_vpos()->set_y(matWorld._42);
-				playerWorld.mutable_matworld()->mutable_vpos()->set_z(matWorld._43);
-				playerWorld.mutable_matworld()->mutable_vpos()->set_w(matWorld._44);
-				
-			}
+			CClientServiceMgr::Mat2Pkt(matWorld, *playerWorld.mutable_matworld());
 
 			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(playerWorld));
 			m_fCurWorldRefreshTime = 0.f;

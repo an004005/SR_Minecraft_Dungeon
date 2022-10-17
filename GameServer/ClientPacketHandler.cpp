@@ -90,6 +90,14 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 	auto sendBuffer = ClientPacketHandler::MakeSendBuffer(enterPkt);
 	session->Send(sendBuffer);
 
+
+	// send mon spawn
+	Protocol::S_SPAWN_MONSTER monPkt;
+	monPkt.set_success(true);
+	monPkt.set_id(1);
+	monPkt.set_factory("Zombie");
+	session->Send(ClientPacketHandler::MakeSendBuffer(monPkt));
+
 	return true;
 }
 
@@ -177,13 +185,50 @@ bool Handle_C_PLAYER_EQUIP(PacketSessionRef& session, Protocol::C_PLAYER_EQUIP& 
 	return true;
 }
 
-bool Handle_C_MONSTER_WORLD(PacketSessionRef& session, Protocol::C_MONSTER_WORLD& pkt)
+bool Handle_C_SPAWN_MONSTER(PacketSessionRef& session, Protocol::C_SPAWN_MONSTER& pkt)
 {
+	// Protocol::S_SPAWN_MONSTER monPkt;
+	// monPkt.set_success(true);
+	// monPkt.set_id(pkt.id());
+	// monPkt.set_factory(pkt.factory());
+	// monPkt.mutable_matrix()->CopyFrom(pkt.matrix());
+	//
+	// GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(monPkt));
+
 	return true;
 }
 
-bool Handle_C_MONSTER_ATTACK(PacketSessionRef& session, Protocol::C_MONSTER_ATTACK& pkt)
+bool Handle_C_MONSTER_SET_TARGET(PacketSessionRef& session, Protocol::C_MONSTER_SET_TARGET& pkt)
 {
+	Protocol::S_MONSTER_SET_TARGET monPkt;
+	monPkt.set_success(true);
+	monPkt.set_monsterid(pkt.monsterid());
+	monPkt.set_playerid(pkt.playerid());
+	monPkt.set_battack(pkt.battack());
+	if (pkt.battack())
+	{
+		cout << "Monster " << pkt.monsterid() << " attack to " << pkt.playerid() <<endl;
+	}
+	else
+	{
+		cout << "Monster " << pkt.monsterid() << " move to " << pkt.playerid() <<endl;
+	}
+
+	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(monPkt));
+	return true;
+}
+
+bool Handle_C_MONSTER_WORLD(PacketSessionRef& session, Protocol::C_MONSTER_WORLD& pkt)
+{
+	Protocol::S_MONSTER_WORLD monPkt;
+	monPkt.set_success(true);
+	monPkt.set_monsterid(pkt.monsterid());
+	monPkt.mutable_matworld()->CopyFrom(pkt.matworld());
+
+	cout << "Monster " << pkt.monsterid() << " world renew" << endl;
+
+	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(monPkt));
+
 	return true;
 }
 

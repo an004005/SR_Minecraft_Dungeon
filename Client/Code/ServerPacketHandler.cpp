@@ -4,8 +4,11 @@
 #include "AbstFactory.h"
 #include "Player.h"
 #include "PlayerController.h"
+#include "ZombieController.h"
 
 PacketHandlerFunc GPacketHandler[UINT16_MAX];
+
+
 
 // Á÷Á¢ ÄÁÅÙÃ÷ ÀÛ¾÷ÀÚ
 
@@ -42,9 +45,24 @@ bool Handle_S_ENTER_GAME(PacketSessionRef& session, Protocol::S_ENTER_GAME& pkt)
 
 	if (CClientServiceMgr::GetInstance()->m_iPlayerID == pkt.player().id())
 	{
-		Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player")->PlayerSpawn();
+		CPlayer* pPlayer = Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");
+		pPlayer->PlayerSpawn();
+		pPlayer->SetID(CClientServiceMgr::GetInstance()->m_iPlayerID);
 		return true;
 	}
+
+	// if (CClientServiceMgr::GetInstance()->m_iPlayerID == 0) // host player spawn monster
+	// {
+	// 	Protocol::C_SPAWN_MONSTER monPkt;
+	// 	monPkt.set_id(1);
+	// 	_matrix matWorld = CGameUtilMgr::s_matIdentity;
+	// 	CEnemyFactory::Create<CGameObject>("Zombie", L"Zombie_1", matWorld);
+	//
+	// 	monPkt.set_factory("Zombie");
+	// 	CClientServiceMgr::Mat2Pkt(matWorld, *monPkt.mutable_matrix());
+	//
+	// 	session->Send(ServerPacketHandler::MakeSendBuffer(monPkt));
+	// }
 
 	return true;
 }
@@ -53,12 +71,13 @@ bool Handle_S_OTHER_PLAYER(PacketSessionRef& session, Protocol::S_OTHER_PLAYER& 
 {
 	for (int i = 0; i < pkt.player_size(); ++i)
 	{
-		Protocol::Player* pPlayer = pkt.mutable_player(i);
-		if (pPlayer->id() == CClientServiceMgr::GetInstance()->m_iPlayerID)
+		Protocol::Player* pPlayerPkt = pkt.mutable_player(i);
+		if (pPlayerPkt->id() == CClientServiceMgr::GetInstance()->m_iPlayerID)
 			continue;
 
-		CPlayerFactory::Create<CPlayer>("Steve_Remote", L"Player_Remote_" + to_wstring(pPlayer->id()), CGameUtilMgr::s_matIdentity)
-			->PlayerSpawn();
+		CPlayer* pPlayer = CPlayerFactory::Create<CPlayer>("Steve_Remote", L"Player_Remote_" + to_wstring(pPlayerPkt->id()), CGameUtilMgr::s_matIdentity);
+		pPlayer->SetID(pPlayerPkt->id());
+		pPlayer->PlayerSpawn();
 	}
 
 	return true;
@@ -84,27 +103,7 @@ bool Handle_S_PLAYER_WORLD(PacketSessionRef& session, Protocol::S_PLAYER_WORLD& 
 
 
 	_matrix matWorld;
-	{
-		matWorld._11 = pkt.matworld().vright().x();
-		matWorld._12 = pkt.matworld().vright().y();
-		matWorld._13 = pkt.matworld().vright().z();
-		matWorld._14 = pkt.matworld().vright().w();
-
-		matWorld._21 = pkt.matworld().vup().x();
-		matWorld._22 = pkt.matworld().vup().y();
-		matWorld._23 = pkt.matworld().vup().z();
-		matWorld._24 = pkt.matworld().vup().w();
-
-		matWorld._31 = pkt.matworld().vlook().x();
-		matWorld._32 = pkt.matworld().vlook().y();
-		matWorld._33 = pkt.matworld().vlook().z();
-		matWorld._34 = pkt.matworld().vlook().w();
-
-		matWorld._41 = pkt.matworld().vpos().x();
-		matWorld._42 = pkt.matworld().vpos().y();
-		matWorld._43 = pkt.matworld().vpos().z();
-		matWorld._44 = pkt.matworld().vpos().w();
-	}
+	CClientServiceMgr::Pkt2mat(pkt.matworld(), matWorld);
 	Engine::Get_Component<CPlayerRemoteController>(LAYER_PLAYER, L"Player_Remote_" + to_wstring(pkt.player().id()), L"Proto_PlayerRemoteController",  ID_DYNAMIC)
 		->SetWorld(matWorld);
 
@@ -144,9 +143,10 @@ bool Handle_S_PLAYER_ARROW(PacketSessionRef& session, Protocol::S_PLAYER_ARROW& 
 		return true;
 
 	_vec3 vLookAt;
-	vLookAt.x =  pkt.vlookat().x();
-	vLookAt.y =  pkt.vlookat().y();
-	vLookAt.z =  pkt.vlookat().z();
+	// vLookAt.x =  pkt.vlookat().x();
+	// vLookAt.y =  pkt.vlookat().y();
+	// vLookAt.z =  pkt.vlookat().z();
+	pkt.vlookat().SerializeToArray(&vLookAt, sizeof(_vec3));
 
 	Engine::Get_Component<CPlayerRemoteController>(LAYER_PLAYER, L"Player_Remote_" + to_wstring(pkt.player().id()), L"Proto_PlayerRemoteController",  ID_DYNAMIC)
 		->SetArrow(pkt.yaw(), vLookAt, pkt.actionbit());
@@ -161,20 +161,64 @@ bool Handle_S_PLAYER_EQUIP(PacketSessionRef& session, Protocol::S_PLAYER_EQUIP& 
 
 bool Handle_S_SPAWN_MONSTER(PacketSessionRef& session, Protocol::S_SPAWN_MONSTER& pkt)
 {
+	if (pkt.success() == false)
+		return true;
+
+	wstring tmp;
+	tmp.assign(pkt.factory().begin(), pkt.factory().end());
+	if (CClientServiceMgr::GetInstance()->m_iPlayerID == 0) // host 
+	{
+		_matrix matWorld = CGameUtilMgr::s_matIdentity;
+		matWorld._41 = 3.f;
+		matWorld._43 = 7.f;
+		CEnemyFactory::Create<CGameObject>(pkt.factory(), tmp + L"_" + to_wstring(pkt.id()), matWorld)
+			->SetID(pkt.id());
+	}
+	else
+	{
+		_matrix matWorld = CGameUtilMgr::s_matIdentity;
+		CEnemyFactory::Create<CGameObject>(pkt.factory() + "_Remote", tmp + L"_Remote_" + to_wstring(pkt.id()), matWorld)
+			->SetID(pkt.id());
+	}
+
 	return true;
 }
 
 bool Handle_S_MONSTER_SET_TARGET(PacketSessionRef& session, Protocol::S_MONSTER_SET_TARGET& pkt)
 {
+	if (pkt.success() == false)
+		return true;
+	if (CClientServiceMgr::GetInstance()->m_iPlayerID == 0) // host 
+		return true;
+
+	CZombieRemoteController* pCon = Engine::Get_ComponentUnCheck<CZombieRemoteController>(LAYER_ENEMY, L"Zombie_Remote_" + to_wstring(pkt.monsterid()), L"Proto_ZombieRemoteController",  ID_DYNAMIC);
+	if (pCon)
+	{
+		if (pkt.battack())
+			pCon->SetAttack();
+
+		pCon->SetTarget(pkt.playerid());
+	}
+
 	return true;
 }
 
 bool Handle_S_MONSTER_WORLD(PacketSessionRef& session, Protocol::S_MONSTER_WORLD& pkt)
 {
+	if (pkt.success() == false)
+		return true;
+	if (CClientServiceMgr::GetInstance()->m_iPlayerID == 0) // host 
+		return true;
+
+	CZombieRemoteController* pCon = Engine::Get_ComponentUnCheck<CZombieRemoteController>(LAYER_ENEMY, L"Zombie_Remote_" + to_wstring(pkt.monsterid()), L"Proto_ZombieRemoteController",  ID_DYNAMIC);
+	if (pCon)
+	{
+		_matrix matWorld;
+		CClientServiceMgr::Pkt2mat(pkt.matworld(), matWorld);
+		pCon->SetWorld(matWorld);
+	}
+
+
 	return true;
 }
 
-bool Handle_S_MONSTER_ATTACK(PacketSessionRef& session, Protocol::S_MONSTER_ATTACK& pkt)
-{
-	return true;
-}

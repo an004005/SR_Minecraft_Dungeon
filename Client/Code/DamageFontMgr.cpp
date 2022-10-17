@@ -31,38 +31,31 @@ void CDamageFontMgr::Update_DamageFontMgr(const _float& fTimeDelta)
 		}
 	}
 
-	_matrix view, proj;
-	m_pGraphicDev->GetTransform(D3DTS_VIEW, &view);
-	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &proj);
-	m_matViewProj = view * proj;
+	m_pGraphicDev->GetTransform(D3DTS_VIEW, &m_matView);
+	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &m_matProj);
 	ZeroMemory(&m_ViewPort, sizeof(D3DVIEWPORT9));
 	m_pGraphicDev->GetViewport(&m_ViewPort);
 }
 
 void CDamageFontMgr::Add_DamageFontFromWorld(_int iDamage, const _vec3& vPos, const _vec3& vFrom, D3DXCOLOR Color, _bool bCritical)
 {
-	_vec3 vPosToScreen = vPos;
-	D3DXVec3TransformCoord(&vPosToScreen, &vPosToScreen, &m_matViewProj);
+	_vec2 vScreen;
+	_vec2 vFromScreen;
 
-	vPosToScreen.x = m_ViewPort.Width * ( vPosToScreen.x + 1.0f ) / 2.0f + m_ViewPort.X;
-	vPosToScreen.y = m_ViewPort.Height * ( 2.0f - ( vPosToScreen.y + 1.0f ) ) / 2.0f + m_ViewPort.Y;
+	CGameUtilMgr::World2Screen(vScreen, vPos, m_matView, m_matProj, m_ViewPort);
+	CGameUtilMgr::World2Screen(vFromScreen, vFrom, m_matView, m_matProj, m_ViewPort);
 
-	_vec3 vFromToScreen = vFrom;
-	D3DXVec3TransformCoord(&vFromToScreen, &vFromToScreen, &m_matViewProj);
-	vFromToScreen.x = (_float)m_ViewPort.Width * ( vFromToScreen.x + 1.0f ) / 2.0f + (_float)m_ViewPort.X;
-	vFromToScreen.y = (_float)m_ViewPort.Height * ( 2.0f - ( vFromToScreen.y + 1.0f ) ) / 2.0f + (_float)m_ViewPort.Y;
 
-	_vec3 vDir = vPosToScreen - vFromToScreen;
+	_vec2 vDir = vScreen - vFromScreen;
 
-	const _vec2 vScreenPos = {vPosToScreen.x, vPosToScreen.y};
 	for (auto& damageFont : m_vecDamageFont)
 	{
-		const _vec2 vDiff = vScreenPos - damageFont.vPos;
+		const _vec2 vDiff = vScreen - damageFont.vPos;
 		if (D3DXVec2LengthSq(&vDiff) < 100.f)
 			damageFont.vPos += damageFont.vDir * 0.15f * m_fSpeed;
 	}
 
-	m_vecDamageFont.push_back({iDamage, {vDir.x, vDir.y}, vScreenPos, Color, bCritical});
+	m_vecDamageFont.push_back({iDamage, vDir, vScreen, Color, bCritical});
 }
 
 void CDamageFontMgr::Add_DamageFontFromScreen(_int iDamage, const _vec2& vScreen, D3DXCOLOR Color)

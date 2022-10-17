@@ -127,37 +127,45 @@ message S_PLAYER_EQUIP
 
 // test
 
-message S_SPAWN_MONSTER
+message C_SPAWN_MONSTER
 {
 	uint32 id = 1;
 	string factory = 2;
+	Matrix matrix = 3;
+}
+
+message S_SPAWN_MONSTER
+{
+	bool success = 1;
+	uint32 id = 2; // monter id
+	string factory = 3;
+	Matrix matrix = 4;
+}
+
+message C_MONSTER_SET_TARGET
+{
+	bool bAttack = 1;
+	uint32 monsterID = 2;
+	uint32 playerID = 3;
 }
 
 message S_MONSTER_SET_TARGET
 {
-	uint32 playerID = 1;
+	bool success = 1;
+	bool bAttack = 2;
+	uint32 monsterID = 3;
+	uint32 playerID = 4;
 }
 
 message C_MONSTER_WORLD
 {
-	uint32 id = 1;
+	uint32 monsterID = 1;
 	Matrix matWorld = 2;
 }
 
 message S_MONSTER_WORLD
 {
 	bool success = 1;
-	uint32 id = 2;
+	uint32 monsterID = 2;
 	Matrix matWorld = 3;
-}
-
-message C_MONSTER_ATTACK
-{
-	uint32 id = 1;
-}
-
-message S_MONSTER_ATTACK
-{
-	bool success = 1;
-	uint32 id = 2;
 }
