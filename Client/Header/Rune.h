@@ -14,6 +14,8 @@ public:
 	virtual void EquipRune(CWeapon* pWeapon) {}
 	virtual void UnEquipRune(CWeapon* pWeapon) {}
 
+	_uint GetTargetType() { return m_eTargetType; }
+	virtual void Free() override;
 protected:
 	_uint m_eTargetType = WEAPON_END;
 };

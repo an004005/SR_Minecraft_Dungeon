@@ -9,6 +9,8 @@
 CLightningRune::CLightningRune(LPDIRECT3DDEVICE9 pGraphicDev): CRune(pGraphicDev)
 {
 	m_eTargetType = WEAPON_SWORD;
+	m_iUItexNum = 17;
+	m_eItemType = IT_RUNE;
 }
 
 CLightningRune::~CLightningRune()
@@ -17,6 +19,9 @@ CLightningRune::~CLightningRune()
 
 HRESULT CLightningRune::Ready_Object()
 {
+	m_pItemUI = CUIFactory::Create<CItemUI>("ItemUI", L"LightningRuneUI", 0);
+	m_pItemUI->SetUITexture(m_iUItexNum);
+
 	return CRune::Ready_Object();
 }
 

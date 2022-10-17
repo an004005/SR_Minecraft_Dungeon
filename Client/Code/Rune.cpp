@@ -12,6 +12,12 @@ CRune::~CRune()
 HRESULT CRune::Ready_Object()
 {
 	m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
+	
 	return S_OK;
+}
+
+void CRune::Free()
+{
+	CEquipItem::Free();
 }
 

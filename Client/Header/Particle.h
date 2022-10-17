@@ -513,10 +513,10 @@ public:
 	CTransform*			m_pTransCom = nullptr;
 	CTexture*			m_pTexture = nullptr;
 	void Free() override;
+	void KillLaser() { m_bDead = true; }
 
 private:
-	_float m_fTime;
-	_float m_fCurTime;
+	_bool m_bDead = false;
 	_float m_fSpeed;
 	_vec3  m_vVelocity; 
 };

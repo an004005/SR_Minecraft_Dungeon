@@ -7,6 +7,7 @@ private:
 	virtual ~CPowerRune() override;
 
 public:
+	virtual HRESULT Ready_Object() override;
 	virtual void EquipRune(CWeapon* pWeapon) override;
 	virtual void UnEquipRune(CWeapon* pWeapon) override;
 	static CPowerRune* Create(LPDIRECT3DDEVICE9 pGraphicDev);
