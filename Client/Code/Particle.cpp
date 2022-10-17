@@ -626,18 +626,24 @@ _int CMoonParticle::Update_Object(const _float& fTimeDelta)
 	{
 		if (i->_bIsAlive)
 		{
-			i->_vPosition += i->_vVelocity * fTimeDelta;
 			i->_fAge += fTimeDelta;
-
 			CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 			_vec3 pPos;
 			pPlayerTransform->Get_Info(INFO_POS, &pPos);
-
-			if (i->_vPosition.y >= pPos.y + 3.f)
+			if (i->_color == D3DXCOLOR(1.f, 1.f, 1.f, 1.f))
 			{
-				i->_vPosition.y = pPos.y;
+				i->_vPosition = pPos;
+				i->_vPosition.y = pPos.y + 3.f;
 			}
+			else
+			{
+				i->_vPosition += i->_vVelocity * fTimeDelta;
 
+				if(i->_vPosition.y >= pPos.y + 3.f)
+				{
+					i->_vPosition.y = pPos.y;
+				}
+			}
 			if (i->_fAge > i->_fLifeTime)
 			{
 				i->_bIsAlive = false;
@@ -663,24 +669,48 @@ void CMoonParticle::Reset_Particle(Attribute* _Attribute)
 	_Attribute->_bIsAlive = true;
 	m_fSize = _Attribute->_fSize;
 
-	_Attribute->_vPosition.x += CGameUtilMgr::GetRandomFloat(-0.25f, 0.25f);
-	_Attribute->_vPosition.z += CGameUtilMgr::GetRandomFloat(-0.25f, 0.25f);
+	
 
+	if (_Attribute->_color == D3DXCOLOR(1.f, 1.f, 1.f, 1.f))
+	{
+		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
+		_vec3 pPos;
+		pPlayerTransform->Get_Info(INFO_POS, &pPos);
 
-	_vec3 min = _vec3(0.f, 0.0f, 0.f);
-	_vec3 max = _vec3(0.f, 1.0f, 0.f);
+		_vec3 min = _vec3(0.f, 0.0f, 0.f);
+		_vec3 max = _vec3(0.f, 1.0f, 0.f);
 
-	GetRandomVector(
-		&_Attribute->_vVelocity,
-		&min,
-		&max);
+		GetRandomVector(
+			&_Attribute->_vVelocity,
+			&min,
+			&max);
+		
+		D3DXVec3Normalize(
+			&_Attribute->_vVelocity,
+			&_Attribute->_vVelocity);
+		
+		_Attribute->_vVelocity *= 0.1f;
 
-	D3DXVec3Normalize(
-		&_Attribute->_vVelocity,
-		&_Attribute->_vVelocity);
+	}
+	else
+	{
+		_Attribute->_vPosition.x += CGameUtilMgr::GetRandomFloat(-0.25f, 0.25f);
+		_Attribute->_vPosition.z += CGameUtilMgr::GetRandomFloat(-0.25f, 0.25f);
 
-	_Attribute->_vVelocity *= CGameUtilMgr::GetRandomFloat(3.f,6.f);
+		_vec3 min = _vec3(0.f, 0.0f, 0.f);
+		_vec3 max = _vec3(0.f, 1.0f, 0.f);
 
+		GetRandomVector(
+			&_Attribute->_vVelocity,
+			&min,
+			&max);
+
+		D3DXVec3Normalize(
+			&_Attribute->_vVelocity,
+			&_Attribute->_vVelocity);
+
+		_Attribute->_vVelocity *= CGameUtilMgr::GetRandomFloat(3.f, 6.f);
+	}
 	_Attribute->_fAge = 0.0f;
 }
 
@@ -991,7 +1021,7 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 	else if (_type == ROLL)
 	{
 		m_pBufferCom = Add_Component<CRcShader>(L"Proto_RollCloudCom", L"Proto_RollCloudCom", ID_STATIC);
-		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransFormCom_CloudEffect", ID_DYNAMIC);
+		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture(0));
 		m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
 		m_pBufferCom->Set_TextureOption(15, 4, 2);
@@ -1017,7 +1047,7 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 	else if (_type == SHOCKPOWDER)
 	{
 		m_pBufferCom = Add_Component<CRcShader>(L"Proto_ShockPowderCloudCom", L"Proto_ShockPowderCloudCom", ID_STATIC);
-		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransFormCom_CloudEffect", ID_DYNAMIC);
+		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture(0));
 		m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
 		m_pBufferCom->Set_TextureOption(20, 4, 2);
@@ -1150,7 +1180,7 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 	else if (_type == GOLEMWINDMILL)
 	{
 		m_pBufferCom = Add_Component<CRcShader>(L"Proto_ShockPowderCloudCom", L"Proto_ShockPowderCloudCom", ID_STATIC);
-		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransFormCom_CloudEffect", ID_DYNAMIC);
+		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture(0));
 		m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
 		m_pBufferCom->Set_TextureOption(20, 4, 2);

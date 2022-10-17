@@ -1,5 +1,7 @@
 #pragma once
 #include "Monster.h"
+#include "Particle.h"
+
 class CController;
 
 class CSaton :	public CMonster
@@ -58,16 +60,29 @@ public:
 		m_vTargetPos = vTargetPos;
 	}
 
-	void SatonFascinate(const _vec3& vTargetPos)
+	void SatonFascinate(const _vec3& vBossTargetPos, const _vec3& vMoonTargetPos)
 	{
 		m_bSatonFascinate = true;
-		m_vTargetPos = vTargetPos;
+		m_vTargetPos = vBossTargetPos;
+		Engine::Get_GameObject<CMoonParticle>(LAYER_EFFECT, L"MoonParticle")->Add_Particle(m_vTargetPos, 1.f, D3DXCOLOR(1.f,1.f,1.f,1.f), 1, 3.f, 0);
 	}
+
+	void SatonDrawMoon(const _vec3& vMoonTargetPos)
+	{
+		m_vTargetPos = vMoonTargetPos;
+		m_vExplodMoonPos = vMoonTargetPos;
+		m_vTargetPos.y += 1.f;
+		m_vExplodMoonPos.y += 1.f;
+		Engine::Get_GameObject<CMoonParticle>(LAYER_EFFECT, L"MoonParticle")->Add_Particle(m_vTargetPos, 1.f, RED, 1, 2.f, 0);
+
+	}
+
+	void SatonShockPowder(void);
+
 
 	// controller 조종 함수
 	_vec3 Get_TargetPos() { return m_vTargetPos; }
 	void WalkToTarget(const _vec3& vTargetPos) { m_vTargetPos = vTargetPos; }
-
 
 	//m_bMove = true;
 private:
@@ -93,7 +108,10 @@ private:
 	_bool m_bSatonBird = false;
 	_bool m_bSatonSymbolAnim = false;
 	_bool m_bSatonFascinate = false;
+	_bool m_bStatonExplodeMoon = false;
 
+
+	_vec3 m_vExplodMoonPos;
 	_float m_fTime;
 	_float m_fCurTime;
 	// _bool m_bHammerReady = false;

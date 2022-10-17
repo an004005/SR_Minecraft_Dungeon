@@ -167,12 +167,6 @@ void CKouku::LateUpdate_Object()
 {
 	CMonster::LateUpdate_Object();
 
-	// CEffectFactory::Create<CHealCircle>("Blue_Circle", L"Blue_Circle", _vec3(51.5f, 25.f, 42.5f));
-	// CEffectFactory::Create<CHealCircle>("Blue_Circle", L"Blue_Circle", _vec3(57.5f, 25.f, 38.5f));
-	// CEffectFactory::Create<CHealCircle>("Red_Circle", L"Red_Circle", _vec3(67.5f, 25.f, 38.5f));
-	// CEffectFactory::Create<CHealCircle>("Blue_Circle", L"Blue_Circle", _vec3(73.5f, 25.f, 42.5f));
-
-
 	if (m_bIsSymbolGimmick)
 	{
 		set<CGameObject*> setPlayer_1;

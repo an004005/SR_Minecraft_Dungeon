@@ -2,10 +2,10 @@
 #include "Saton.h"
 #include "AbstFactory.h"
 #include "Kouku.h"
+#include "Particle.h"
 #include "SatonController.h"
 #include "Skeleton.h"
 #include "StatComponent.h"
-
 
 CSaton::CSaton(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
 {
@@ -76,12 +76,14 @@ void CSaton::AnimationEvent(const string& strEvent)
 	}
 	else if (strEvent == "MakeMoon") // 플레이어 머리 위에 달 띄우기
 	{
+
 	}
 	else if (strEvent == "DrawMoon") // 플레이어 위치 받아서 바닥에 달 그리기
 	{
 	}
 	else if (strEvent == "ExplodeMoon") // 바닥에 있던 달 위치에 쇼크파우더 뿌리기 
 	{
+		m_bStatonExplodeMoon = true;
 	}
 }
 
@@ -102,7 +104,6 @@ _int CSaton::Update_Object(const _float& fTimeDelta)
 	// NULL_CHECK_RETURN(pkouku, 0);
 	//
 	// _vec3 vPos = saton->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
-
 
 	// 상태 변경 조건 설정
 	StateChange();
@@ -156,6 +157,40 @@ _int CSaton::Update_Object(const _float& fTimeDelta)
 void CSaton::LateUpdate_Object()
 {
 	CMonster::LateUpdate_Object();
+
+	if (m_bStatonExplodeMoon)
+	{
+		set<CGameObject*> setPlayer;
+		// _vec3 KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+
+		Engine::GetOverlappedObject(setPlayer, m_vExplodMoonPos, 3.5f);
+
+		for (auto& obj : setPlayer)
+		{
+
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+			{
+				CStatComponent* PlayerStatCom = pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC);
+
+				if (!PlayerStatCom->IsSatonSymbol_Blue())
+				{
+					PlayerStatCom->TakeDamage(0, pPlayer->GetInfo(INFO_POS), this, DT_STUN);
+				}
+			}
+		}
+
+		for (int j = 0; j < 10; j++)
+		{
+			CEffectFactory::Create<CShock_Powder>("Shock_Powder", L"UV_Shock_Powder",
+				_vec3(m_vExplodMoonPos.x + CGameUtilMgr::GetRandomFloat(-3.f,3.f),
+					m_vExplodMoonPos.y, m_vExplodMoonPos.z + CGameUtilMgr::GetRandomFloat(-3.f, 3.f)));
+			CEffectFactory::Create<CCloud>("ShockPowder_Cloud", L"ShockPowder_Cloud", m_vExplodMoonPos);
+		}
+
+		CEffectFactory::Create<CUVCircle>("Shock_Circle", L"Shock_Circle");
+		CSoundMgr::GetInstance()->PlaySound(L"sfx_item_shockpowder-001.ogg", m_vExplodMoonPos);
+		m_bStatonExplodeMoon = false;
+	}
 }
 
 void CSaton::Free()
@@ -248,6 +283,11 @@ void CSaton::StateChange()
 		m_pCurAnim = &m_arrAnim[IDLE];
 		return;
 	}
+}
+
+void CSaton::SatonShockPowder()
+{
+
 }
 
 CSaton::~CSaton()

@@ -19,11 +19,16 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 		// m_fCurFirstHammerCoolTime += fTimeDelta;
 		// m_fCurSatonBirdCoolTime += fTimeDelta;
 		// m_fCurSatonGrapCoolTime += fTimeDelta;
-		m_fCurSatonFascinateTime += fTimeDelta;
+		m_fCurSatonFascinateCoolTime += fTimeDelta;
+
+		if(m_bIsDrawMoon)
+		{
+			m_fCurSatonDrawMoonCoolTime += fTimeDelta;
+		}
 	}
 
-	IM_BEGIN("Saton_CoolTIme");
-	ImGui::Text("Fascinate Cur CoolTime : %f", m_fCurSatonFascinateTime);
+	IM_BEGIN("Saton_CoolTime");
+	ImGui::Text("Fascinate Cur CoolTime : %f", m_fCurSatonFascinateCoolTime);
 
 
 	IM_END;
@@ -35,37 +40,39 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 	_vec3 vPos = saton->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 	_vec3 vTargetPos;
 	_float fTargetDist = 9999.f;
-
-	if (m_fCurTargetingCoolTime > m_fTargetingCoolTime)
+	if (!m_bIsGimmick_On)
 	{
-		for (auto& ele : Get_Layer(LAYER_PLAYER)->Get_MapObject())
+		if (m_fCurTargetingCoolTime > m_fTargetingCoolTime)
 		{
-			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(ele.second))
+			for (auto& ele : Get_Layer(LAYER_PLAYER)->Get_MapObject())
 			{
-				vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
-				_vec3 vDiff = vTargetPos - vPos;
-				_float fDist = D3DXVec3Length(&vDiff);
-
-				if (fTargetDist > fDist) // 플레이어 감지
+				if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(ele.second))
 				{
-					m_pTargetPlayer = pPlayer;
-					fTargetDist = fDist;
+					vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
+					_vec3 vDiff = vTargetPos - vPos;
+					_float fDist = D3DXVec3Length(&vDiff);
+
+					if (fTargetDist > fDist) // 플레이어 감지
+					{
+						m_pTargetPlayer = pPlayer;
+						fTargetDist = fDist;
+					}
 				}
 			}
+			m_fCurTargetingCoolTime = 0.f;
+
+			if (fTargetDist > 20.f)
+				m_pTargetPlayer = nullptr;
 		}
-		m_fCurTargetingCoolTime = 0.f;
+		else
+		{
+			m_fCurTargetingCoolTime += fTimeDelta;
+			if (m_pTargetPlayer == nullptr) return 0;
 
-		if (fTargetDist > 20.f)
-			m_pTargetPlayer = nullptr;
-	}
-	else
-	{
-		m_fCurTargetingCoolTime += fTimeDelta;
-		if (m_pTargetPlayer == nullptr) return 0;
-
-		vTargetPos = m_pTargetPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
-		_vec3 vDiff = vTargetPos - vPos;
-		_float fDist = D3DXVec3Length(&vDiff);
+			vTargetPos = m_pTargetPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
+			_vec3 vDiff = vTargetPos - vPos;
+			_float fDist = D3DXVec3Length(&vDiff);
+		}
 	}
 
 	CKouku* pKouku = Engine::Get_GameObject<CKouku>(LAYER_ENEMY, L"Kouku");
@@ -76,14 +83,13 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 		saton->SatonSymbolAnim(_vec3(m_vLookFront));
 		m_bIsKoukuSymbol = !m_bIsKoukuSymbol;
 	}
-
+	
 	if (m_fCurFirstHammerCoolTime >= m_fFirstHammerCoolTime && fTargetDist <= m_fFirstHammerDist)
 	{
 		m_fCurFirstHammerCoolTime = 0.f;
 		saton->FirstAttack(vTargetPos);
 		return 0;
 	}
-
 	if (m_fCurSatonBirdCoolTime >= m_fSatonBirdCoolTime && fTargetDist <= m_fSatonBirdkDist)
 	{
 		m_fCurSatonBirdCoolTime = 0.f;
@@ -91,11 +97,21 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 		return 0;
 	}
 
-	if (m_fCurSatonFascinateTime >= m_fSatonFascinateCoolTime && fTargetDist <= m_fSatonFascinateDist)
+	if (m_fCurSatonFascinateCoolTime >= m_fSatonFascinateCoolTime && fTargetDist <= m_fSatonFascinateDist)
 	{
-		m_fCurSatonFascinateTime = 0.f;
-		saton->SatonFascinate(m_vLookFront);
+		m_fCurSatonFascinateCoolTime = 0.f;
+		saton->SatonFascinate(m_vLookFront, vTargetPos);
+		m_fSatonFascinateCoolTime = 60.f;
+
+		m_bIsDrawMoon = true;
 		return 0;
+	}
+	
+	if(m_fCurSatonDrawMoonCoolTime >= m_fSatonDrawMoonCoolTime && fTargetDist <= m_fSatonFascinateDist)
+	{
+		m_fCurSatonDrawMoonCoolTime = 0.f;
+		saton->SatonDrawMoon(vTargetPos);
+		m_bIsDrawMoon = false;
 	}
 
 	if (m_fCurSatonGrapCoolTime >= m_fSatonGrapCoolTime && fTargetDist <= m_fSatonGrapkDist)

@@ -91,12 +91,6 @@ _int CKoukuController::Update_Component(const _float& fTimeDelta)
 		return 0;
 	}
 
-	//
-	// if (pKouku->Check_SymbolGimmick())
-	// {
-	// 	pKouku->KoukuSymbol(vTargetPos);
-	// }
-
 	if (m_fCurDoubleHammerCoolTime >= m_fDoubleHammerCoolTime && fTargetDist <= m_fDoubleHammerDist)
 	{
 		m_fCurDoubleHammerCoolTime = 0.f;
