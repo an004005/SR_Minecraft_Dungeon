@@ -21,6 +21,8 @@ HRESULT CTrigger::Ready_Object()
 
 _int CTrigger::Update_Object(const _float& fTimeDelta)
 {
+	if (m_bDelete) return OBJ_DEAD;
+
 	CGameObject::Update_Object(fTimeDelta);
 
 	if (m_fCurTriggerFreq < m_fTriggerFreq)
@@ -35,7 +37,8 @@ void CTrigger::LateUpdate_Object()
 	{
 		set<CGameObject*> setObj;
 		Engine::GetOverlappedObject(setObj, m_pTransform->m_vInfo[INFO_POS], m_fRadius);
-		m_pTriggerFunction(setObj);
+		if (m_pTriggerFunction(setObj))
+			m_bDelete = true;
 		m_fCurTriggerFreq = 0.f;
 	}
 }
