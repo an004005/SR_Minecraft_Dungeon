@@ -30,6 +30,14 @@ public:
 	_uint GetDamage() const { return m_iDamage; }
 	void SetCritical(_bool bCritical) {m_bCritical = bCritical;}
 
+	_bool IsEquipped() const { return m_bEquipped; }
+	void SetEquip(_bool bEquipped)
+	{
+		m_bEquipped = bEquipped;
+		if (m_bEquipped == false)
+			m_iAttackCnt = 0;
+	}
+
 	virtual void Free() override;
 
 protected:
@@ -39,5 +47,7 @@ protected:
 	_bool m_bCritical = false;
 
 	CInventory* m_pInventory;
+
+	_bool m_bEquipped = false;
 };
 

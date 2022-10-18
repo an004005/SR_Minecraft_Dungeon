@@ -25,5 +25,7 @@ private:
 	SkeletalPart* m_WeaponBot = nullptr;
 
 	vector<CChainLightning*> m_vecSparks;
+
+	CWeapon* m_pEquippedWeapon = nullptr;
 };
 

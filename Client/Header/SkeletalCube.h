@@ -60,6 +60,8 @@ struct CubeAnimFrame
 	static CubeAnimFrame Load(const wstring& wstrPath);
 	void Save(const wstring& wstrPath);
 	void SortFrame(const string& strPart);
+
+	static map<wstring, CubeAnimFrame> s_mapFrame;
 };
 
 class CSkeletalCube : public CGameObject

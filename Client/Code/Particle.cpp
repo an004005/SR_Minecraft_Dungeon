@@ -839,10 +839,11 @@ HRESULT CUVCircle::Ready_Object(_float _size, CIRCLETYPE _type)
 	if (_type == SHOCK)
 	{
 		m_pBufferCom->Set_TextureOption(2, 4, 2);
-		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
-		_vec3 pPos;
-		pPlayerTransform->Get_Info(INFO_POS, &pPos);
-		m_pTransCom->Set_Pos(pPos.x, pPos.y + 0.5f, pPos.z);
+		// CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
+		// _vec3 pPos;
+		// pPlayerTransform->Get_Info(INFO_POS, &pPos);
+		// m_pTransCom->Set_Pos(pPos.x, pPos.y + 0.5f, pPos.z);
+		m_pTransCom->m_vInfo[INFO_POS].y += 0.5f;
 		m_pTransCom->Set_Scale(_size, _size, _size);
 	}
 	else if (_type == FIREWORK)
@@ -960,10 +961,10 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture(0));
 		m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
 		m_pBufferCom->Set_TextureOption(5, 4, 2);
-		CTransform*	pPlayer = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
-		_vec3 pPos;
-		pPlayer->Get_Info(INFO_POS, &pPos);
-		m_pTransCom->Set_Pos(pPos.x, pPos.y, pPos.z);
+		// CTransform*	pPlayer = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
+		// _vec3 pPos;
+		// pPlayer->Get_Info(INFO_POS, &pPos);
+		// m_pTransCom->Set_Pos(pPos.x, pPos.y, pPos.z);
 		m_pTransCom->Set_Scale(_size, _size, _size);
 		m_fTime = 0.5f;
 		m_fCurTime = 0.f;
@@ -985,14 +986,15 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 	else if (_type == ROLL)
 	{
 		m_pBufferCom = Add_Component<CRcShader>(L"Proto_RollCloudCom", L"Proto_RollCloudCom", ID_STATIC);
-		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransFormCom_CloudEffect", ID_DYNAMIC);
+		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture(0));
 		m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
 		m_pBufferCom->Set_TextureOption(15, 4, 2);
-		CTransform*	pPlayer = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
-		_vec3 pPos;
-		pPlayer->Get_Info(INFO_POS, &pPos);
-		m_pTransCom->Set_Pos(pPos.x, pPos.y + 0.5f, pPos.z);
+		// CTransform*	pPlayer = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
+		// _vec3 pPos;
+		// pPlayer->Get_Info(INFO_POS, &pPos);
+		// m_pTransCom->Set_Pos(pPos.x, pPos.y + 0.5f, pPos.z);
+		m_pTransCom->m_vInfo[INFO_POS].y += 0.5f;
 		m_pTransCom->Set_Scale(_size, _size, _size);
 		m_fTime = 1.5f;
 		m_fCurTime = 0.f;
@@ -1011,14 +1013,15 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 	else if (_type == SHOCKPOWDER)
 	{
 		m_pBufferCom = Add_Component<CRcShader>(L"Proto_ShockPowderCloudCom", L"Proto_ShockPowderCloudCom", ID_STATIC);
-		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransFormCom_CloudEffect", ID_DYNAMIC);
+		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture(0));
 		m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
 		m_pBufferCom->Set_TextureOption(20, 4, 2);
-		CTransform*	pPlayer = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
-		_vec3 pPos;
-		pPlayer->Get_Info(INFO_POS, &pPos);
-		m_pTransCom->Set_Pos(pPos.x, pPos.y + 0.5f, pPos.z);
+		// CTransform*	pPlayer = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
+		// _vec3 pPos;
+		// pPlayer->Get_Info(INFO_POS, &pPos);
+		// m_pTransCom->Set_Pos(pPos.x, pPos.y + 0.5f, pPos.z);
+		m_pTransCom->m_vInfo[INFO_POS].y += 0.5f;
 		m_pTransCom->Set_Scale(_size, _size, _size);
 		m_fTime = 1.8f;
 		m_fCurTime = 0.f;
@@ -1766,8 +1769,8 @@ HRESULT CHealCircle::Ready_Object(_float _size, _float _rad)
 	// _vec3 pPos;
 	// pPlayerTransform->Get_Info(INFO_POS, &pPos);
 	// m_pTransCom->Set_Pos(pPos.x, pPos.y+1.5f, pPos.z);
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
-	m_pTransCom->m_vInfo[INFO_POS].y = pPlayerTransform->m_vInfo[INFO_POS].y;
+	// CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
+	// m_pTransCom->m_vInfo[INFO_POS].y = pPlayerTransform->m_vInfo[INFO_POS].y;
 
 	m_pTransCom->Set_Scale(_size, _size, _size);
 	m_fSpeed = 4.f;
@@ -1787,18 +1790,12 @@ _int CHealCircle::Update_Object(const _float& fTimeDelta)
 		return OBJ_DEAD;
 	}
 
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
-	_vec3 pPos;
-	pPlayerTransform->Get_Info(INFO_POS, &pPos);
+	const _vec3& pPos = m_pFollow->m_vInfo[INFO_POS];
+
 	m_pTransCom->m_vInfo[INFO_POS].x = pPos.x;
 	m_pTransCom->m_vInfo[INFO_POS].z = pPos.z;
 
-
-	// Set_Pos(pPos.x, pPos.y + 1.5f, pPos.z);
-
 	m_pTransCom->m_vInfo[INFO_POS].y += fTimeDelta * 10.f;
-
-	// m_pTransCom->m_vScale *= 61.5f * fTimeDelta;
 
 	if(m_pTransCom->m_vInfo[INFO_POS].y >= pPos.y + 3.f)
 	{
@@ -1807,9 +1804,6 @@ _int CHealCircle::Update_Object(const _float& fTimeDelta)
 
 	m_fCurTime += fTimeDelta;
 	
-
-	// m_pTransCom->m_vAngle.y += D3DXToRadian(50.f) * fTimeDelta * m_fSpeed;
-
 	m_pBufferCom->m_matWorld = m_pTransCom->m_matWorld;
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
@@ -1848,6 +1842,7 @@ CHealCircle* CHealCircle::Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size, _f
 
 void CHealCircle::Free()
 {
+	Safe_Release(m_pFollow);
 	CGameObject::Free();
 }
 
@@ -1876,8 +1871,8 @@ HRESULT CHeartParticle::Ready_Object(_float _size)
 	m_fTime = 1.5f;
 	m_fCurTime = 0.f;
 
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
-	m_pTransCom->m_vInfo[INFO_POS].y = pPlayerTransform->m_vInfo[INFO_POS].y;
+	// CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
+	// m_pTransCom->m_vInfo[INFO_POS].y = pPlayerTransform->m_vInfo[INFO_POS].y;
 
 	m_pTransCom->Update_Component(0.f);
 	return S_OK;
@@ -1895,23 +1890,15 @@ _int CHeartParticle::Update_Object(const _float& fTimeDelta)
 
 	if(_int(fTimeDelta)% 2 == 0)
 		m_pTransCom->m_vScale *= fTimeDelta * 58.5f;
-	// else 
-	// 	m_pTransCom->m_vScale *= fTimeDelta * 61.f;
 
 	m_pTransCom->m_vAngle.y += D3DXToRadian(CGameUtilMgr::GetRandomFloat(-40.f, 60.f)) * fTimeDelta * m_fSpeed;
 
-	// m_pTransCom->m_vInfo[INFO_POS].x += acosf(D3DXToRadian(20.f)) * fTimeDelta * 10.f;
-	// m_pTransCom->m_vInfo[INFO_POS].y += sinf(D3DXToRadian(20.f)) * fTimeDelta * 10.f;
-	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 	_vec3 pPos;
-	pPlayerTransform->Get_Info(INFO_POS, &pPos);
-	// m_pTransCom->Set_Pos(pPos.x + CGameUtilMgr::GetRandomFloat(-1.f, 1.f), pPos.y, pPos.z + CGameUtilMgr::GetRandomFloat(-1.f, 1.f));
+	m_pFollow->Get_Info(INFO_POS, &pPos);
 
 	m_pTransCom->m_vInfo[INFO_POS].x = pPos.x +tmp;
 	m_pTransCom->m_vInfo[INFO_POS].z = pPos.z + desk;
 
-	// 	+ CGameUtilMgr::GetRandomFloat(-1.f, 1.f);
-	// +CGameUtilMgr::GetRandomFloat(-1.f, 1.f);
 	m_pTransCom->m_vInfo[INFO_POS].y += fTimeDelta * m_fSpeed;
 
 
@@ -1954,6 +1941,7 @@ CHeartParticle* CHeartParticle::Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _si
 
 void CHeartParticle::Free()
 {
+	Safe_Release(m_pFollow);
 	CGameObject::Free();
 }
 #pragma endregion

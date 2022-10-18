@@ -51,6 +51,8 @@ public:
 		return Find_Component(pComponentTag, eID) != nullptr;
 	}
 
+	_bool IsRemove() const { return m_bRemote; }
+
 
 public:
 	virtual		HRESULT		Ready_Object(void);
@@ -58,6 +60,8 @@ public:
 	virtual		void		LateUpdate_Object(void);
 	virtual		void		Render_Object(void);
 	void		Delete_Component(const wstring& pComponentTag, COMPONENTID eID);
+	void SetID(_uint iID) {m_iID = iID;}
+	_uint GetID() const { return m_iID; }
 
 private:
 	CComponent*		Find_Component(const wstring& pComponentTag, COMPONENTID eID);
@@ -66,6 +70,8 @@ protected:
 	LPDIRECT3DDEVICE9					m_pGraphicDev;
 	map<wstring, CComponent*>		m_mapComponent[ID_END];
 
+	_bool m_bRemote = false;
+	_uint m_iID = 0;
 
 public:
 	virtual void	Free(void);

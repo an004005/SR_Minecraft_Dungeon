@@ -8,10 +8,25 @@ CMultiShotRune::CMultiShotRune(LPDIRECT3DDEVICE9 pGraphicDev): CRune(pGraphicDev
 	m_eTargetType = WEAPON_CROSSBOW;
 	m_iUItexNum = 16;
 	m_eItemType = IT_RUNE;
+	m_strFactoryTag = "MultishotRune";
 }
 
 CMultiShotRune::~CMultiShotRune()
 {
+}
+
+HRESULT CMultiShotRune::Ready_Object()
+{
+	CRune::Ready_Object();
+	m_pItemUI = CUIFactory::Create<CItemUI>("ItemUI", L"MultiShotRuneUI", 0);
+	m_pItemUI->SetUITexture(m_iUItexNum);
+	return S_OK;
+}
+
+_int CMultiShotRune::Update_Object(const _float& fTimeDelta)
+{
+	if (m_bDelete) return OBJ_DEAD;
+	return CRune::Update_Object(fTimeDelta);
 }
 
 void CMultiShotRune::Use()
@@ -30,8 +45,7 @@ void CMultiShotRune::Use()
 
 void CMultiShotRune::EquipRune(CWeapon* pWeapon)
 {
-	m_pItemUI = CUIFactory::Create<CItemUI>("ItemUI", L"MultiShotRuneUI", 0);
-	m_pItemUI->SetUITexture(m_iUItexNum);
+
 
 	m_iWeaponDamage = pWeapon->GetDamage();
 	m_pWeapon = pWeapon;
@@ -52,4 +66,10 @@ CMultiShotRune* CMultiShotRune::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 		return nullptr;
 	}
 	return pInstance;
+}
+
+void CMultiShotRune::Free()
+{
+	m_pItemUI->SetDelete();
+	CRune::Free();
 }

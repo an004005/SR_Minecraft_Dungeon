@@ -9,6 +9,7 @@ CStunRune::CStunRune(LPDIRECT3DDEVICE9 pGraphicDev) : CRune(pGraphicDev)
 	m_eTargetType = WEAPON_AXE;
 	m_iUItexNum = 19;
 	m_eItemType = IT_RUNE;
+	m_strFactoryTag = "StunRune";
 }
 
 CStunRune::~CStunRune()
@@ -25,6 +26,8 @@ HRESULT CStunRune::Ready_Object()
 
 _int CStunRune::Update_Object(const _float& fTimeDelta)
 {
+	if (m_bDelete) return OBJ_DEAD;
+
 	return CRune::Update_Object(fTimeDelta);
 }
 
@@ -40,6 +43,7 @@ void CStunRune::Render_Object()
 
 void CStunRune::Free()
 {
+	m_pItemUI->SetDelete();
 	CRune::Free();
 }
 

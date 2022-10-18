@@ -52,7 +52,9 @@ void CManagement::AddGameObject(LAYERID eLayerID, const wstring& pObjTag, CGameO
 		return;
 
 	NULL_CHECK(m_pScene);
+	m_mtx.lock();
 	m_pScene->AddGameObject(eLayerID, pObjTag, pObject);
+	m_mtx.unlock();
 }
 
 void CManagement::SwitchSceneLoading(CScene* pLoading, std::function<CScene*()>& pSceneCreate, long long delay)
