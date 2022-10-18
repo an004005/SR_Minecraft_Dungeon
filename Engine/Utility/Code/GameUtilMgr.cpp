@@ -232,6 +232,20 @@ void CGameUtilMgr::GetPickingRay(_vec3& vOrigin, _vec3& vRayDir, HWND hWnd, cons
 	D3DXVec3Normalize(&vRayDir, &vRayDir);
 }
 
+void CGameUtilMgr::World2Screen(_vec2& vScreen, const _vec3& vPos, const _matrix& matView, const _matrix& matProj,
+	const D3DVIEWPORT9& ViewPort)
+{
+	const _matrix matViewProj = matView * matProj;
+
+	_vec3 vPosToScreen;
+	D3DXVec3TransformCoord(&vPosToScreen, &vPos, &matViewProj);
+
+	vPosToScreen.x = (_float)ViewPort.Width * ( vPosToScreen.x + 1.0f ) / 2.0f + (_float)ViewPort.X;
+	vPosToScreen.y = (_float)ViewPort.Height * ( 2.0f - ( vPosToScreen.y + 1.0f ) ) / 2.0f + (_float)ViewPort.Y;
+
+	vScreen = {vPosToScreen.x, vPosToScreen.y};
+}
+
 DWORD CGameUtilMgr::FtoDw(_float f)
 {
 	return *((DWORD*)&f);

@@ -14,6 +14,7 @@ CAxe::CAxe(LPDIRECT3DDEVICE9 pGraphicDev): CWeapon(pGraphicDev)
 {
 	m_eType = WEAPON_AXE;
 	m_iDamage = 50;
+	m_strFactoryTag = "Axe";
 }
 
 CAxe::~CAxe()
@@ -50,17 +51,19 @@ HRESULT CAxe::Ready_Object()
 
 _int CAxe::Update_Object(const _float& fTimeDelta)
 {
+	if (m_bDelete) return OBJ_DEAD;
+
 	//runeslot on/off
 	if (m_pInventory->GetCurClickItem() == this)
 	{
-		if (m_pRune != nullptr)
+		if (m_pRune != nullptr && m_pRune->GetItemUI())
 		{
 			m_pRune->GetItemUI()->Open();
 		}
 	}
 	else
 	{
-		if (m_pRune != nullptr)
+		if (m_pRune != nullptr && m_pRune->GetItemUI())
 		{
 			m_pRune->GetItemUI()->Close();
 		}
@@ -76,6 +79,7 @@ _int CAxe::Update_Object(const _float& fTimeDelta)
 	Parabola(vPos, fHeight, fTimeDelta);
 
 	CWeapon::Update_Object(fTimeDelta);
+
 	return OBJ_NOEVENT;
 }
 
@@ -163,5 +167,6 @@ void CAxe::Collision()
 
 void CAxe::Free()
 {
+	m_pItemUI->SetDelete();
 	CWeapon::Free();
 }

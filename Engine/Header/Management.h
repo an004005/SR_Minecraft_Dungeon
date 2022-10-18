@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "Engine_Include.h"
 #include <atomic>
+#include <mutex>
 
 BEGIN(Engine)
 
@@ -40,6 +41,7 @@ private:
 	CScene* m_pLoadingScene = nullptr;
 	vector<CScene*> m_vecScene;
 	std::atomic<bool> m_bLoading{false};
+	std::mutex m_mtx;
 
 public:
 	virtual void Free(void);

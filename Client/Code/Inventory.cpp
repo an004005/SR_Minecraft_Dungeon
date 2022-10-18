@@ -21,6 +21,9 @@
 #include "LaserShotRune.h"
 #include "ItemTexUI.h"
 #include "StormRune.h"
+#include <google/protobuf/util/message_differencer.h>
+
+#include "ServerPacketHandler.h"
 
 CInventory::CInventory(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CGameObject(pGraphicDev)
@@ -185,6 +188,43 @@ _int CInventory::Update_Object(const _float & fTimeDelta)
 		}	
 	}
 
+	if (m_bEquipChange)
+	{
+		if (g_bOnline)
+		{
+			Protocol::C_PLAYER_EQUIP equipPkt;
+			equipPkt.mutable_player()->set_id(CClientServiceMgr::GetInstance()->m_iPlayerID);
+			equipPkt.mutable_player()->set_name("test player");
+
+			array<Protocol::EquipState, 5> arrEquipProtocol{};
+			GetProtocolFromEquip(arrEquipProtocol[0], m_pMelee);
+			GetProtocolFromEquip(arrEquipProtocol[1], m_pRange);
+			GetProtocolFromEquip(arrEquipProtocol[2], m_arrLegacy[LEGACY_SLOT1]);
+			arrEquipProtocol[2].set_legacyslot(1);
+			arrEquipProtocol[2].set_type(Protocol::LEGACY);
+			GetProtocolFromEquip(arrEquipProtocol[3], m_arrLegacy[LEGACY_SLOT2]);
+			arrEquipProtocol[3].set_legacyslot(2);
+			arrEquipProtocol[3].set_type(Protocol::LEGACY);
+			GetProtocolFromEquip(arrEquipProtocol[4], m_arrLegacy[LEGACY_SLOT3]);
+			arrEquipProtocol[4].set_legacyslot(3);
+			arrEquipProtocol[4].set_type(Protocol::LEGACY);
+
+
+			for (int i = 0; i < 5; ++i)
+			{
+				if (false == google::protobuf::util::MessageDifferencer::Equals(arrEquipProtocol[i], m_arrPreEquipProtocol[i]))
+				{
+					equipPkt.mutable_state()->CopyFrom(arrEquipProtocol[i]);
+					CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(equipPkt));
+					m_arrPreEquipProtocol[i] = arrEquipProtocol[i];
+				}
+			}
+		}
+
+		IM_LOG("Change item");
+		ResetWeaponEquipped();
+		m_bEquipChange = false;
+	}
 	return 0;
 }
 
@@ -366,45 +406,62 @@ void CInventory::TakeOut(CEquipItem * pItem)
 void CInventory::AddDefaultItems()
 {
 	m_pRange = CItemFactory::Create<CCrossbow>("Crossbow", L"Crossbow", IS_TAKE);
-	m_pRange->AddRef();
+	//m_pRange->AddRef();
 	m_pRange->SetOwner(m_pOwner);
 	
 
 	m_pMelee = CItemFactory::Create<CSword>("Sword", L"Sword", IS_TAKE);
-	m_pMelee->AddRef();
+	//m_pMelee->AddRef();
 	m_pMelee->SetOwner(m_pOwner);
 
 	m_arrItem[0] = CItemFactory::Create<CGlaive>("Glaive", L"Glaive", IS_TAKE);
-	m_arrItem[0]->AddRef();
+	// m_arrItem[0]->AddRef();
 	m_arrItem[0]->SetOwner(m_pOwner);
 
 	m_arrItem[1] = CItemFactory::Create<CLaserShotRune>("LaserShotRune", L"LaserShotRune", IS_TAKE);
-	m_arrItem[1]->AddRef();
+	// m_arrItem[1]->AddRef();
 	m_arrItem[1]->SetOwner(m_pOwner);
 
-	m_arrItem[2] = CItemFactory::Create<CStormRune>("StormRune", L"StormRune", IS_TAKE);
-	m_arrItem[2]->AddRef();
-	m_arrItem[2]->SetOwner(m_pOwner);
+	m_arrItem[4] = CItemFactory::Create<CStunRune>("StunRune", L"StunRune", IS_TAKE);
+	// m_arrItem[4]->AddRef();
+	m_arrItem[4]->SetOwner(m_pOwner);
+	//dynamic_cast<CCrossbow*>(m_arrEquip[IT_RANGE])->SetRune(dynamic_cast<CLaserShotRune*>(m_arrItem[1]));
 
 	m_arrItem[3] = CItemFactory::Create<CAxe>("Axe", L"Axe", IS_TAKE);
-	m_arrItem[3]->AddRef();
+	// m_arrItem[3]->AddRef();
 	m_arrItem[3]->SetOwner(m_pOwner);
 
-	m_arrItem[4] = CItemFactory::Create<CStunRune>("StunRune", L"StunRune", IS_TAKE);
-	m_arrItem[4]->AddRef();
-	m_arrItem[4]->SetOwner(m_pOwner);
+	// test
+	m_arrItem[8] = CItemFactory::Create<CRune>("LightningRune", L"LightningRune", IS_TAKE);
+	// m_arrItem[8]->AddRef();
+	m_arrItem[8]->SetOwner(m_pOwner);
+	
+	m_arrItem[9] = CItemFactory::Create<CRune>("MultishotRune", L"MultishotRune", IS_TAKE);
+	m_arrItem[9]->SetOwner(m_pOwner);
+	// m_arrItem[9]->AddRef();
+
+
+	// test
 
 	m_arrItem[5] = CItemFactory::Create<CFireworksArrow>("FireworksArrow", L"FireworksArrow", IS_TAKE);
 	m_arrItem[5]->AddRef();
 	m_arrItem[5]->SetOwner(m_pOwner);
 
 	m_arrItem[6] = CItemFactory::Create<CPowerRune>("PowerRune", L"PowerRune", IS_TAKE);
-	m_arrItem[6]->AddRef();
+	// m_arrItem[6]->AddRef();
 	m_arrItem[6]->SetOwner(m_pOwner);
 
 	m_arrLegacy[LEGACY_SLOT1] = CItemFactory::Create<CShockPowder>("ShockPowder", L"ShockPowder", IS_TAKE);
-	m_arrLegacy[LEGACY_SLOT1]->AddRef();
+	// m_arrLegacy[LEGACY_SLOT1]->AddRef();
 	m_arrLegacy[LEGACY_SLOT1]->SetOwner(m_pOwner);
+
+	m_arrItem[5] = CItemFactory::Create<CFireworksArrow>("FireworksArrow", L"FireworksArrow", IS_TAKE);
+	// m_arrItem[5]->AddRef();
+	m_arrItem[5]->SetOwner(m_pOwner);
+
+	//m_pLegacy2 = CItemFactory::Create<CBootsOfSwiftness>("BootsOfSwiftness", L"BootsOfSwiftness", IS_TAKE);
+	//m_pLegacy2->AddRef();
+	//m_arrItem[6] = m_pLegacy3;
 }
 
 void CInventory::Equip_Item(SkeletalPart* pSkeletalPart, ITEMTYPE eIT)
@@ -432,7 +489,6 @@ void CInventory::Equip_Item(SkeletalPart* pSkeletalPart, ITEMTYPE eIT)
 		m_arrLegacy[LEGACY_SLOT3]->Equipment(pSkeletalPart);
 		break;
 	}
-	
 }
 
 CEquipItem * CInventory::CurWeapon(ITEMTYPE eIT)
@@ -460,6 +516,20 @@ CEquipItem * CInventory::CurWeapon(ITEMTYPE eIT)
 
 	return nullptr;
 	
+}
+
+void CInventory::ResetWeaponEquipped()
+{
+	if (CWeapon* pWeapon = dynamic_cast<CWeapon*>(m_pMelee))
+		pWeapon->SetEquip(true);
+	if (CWeapon* pWeapon = dynamic_cast<CWeapon*>(m_pRange))
+		pWeapon->SetEquip(true);
+
+	for (auto& pItem : m_arrItem)
+	{
+		if (CWeapon* pWeapon = dynamic_cast<CWeapon*>(pItem))
+			pWeapon->SetEquip(false);
+	}
 }
 
 void CInventory::CreateClickFrame()
@@ -572,7 +642,78 @@ void CInventory::CreateCollFrame(CEquipItem* pCurCollItem)
 
 }
 
-void CInventory::MouseEvent(CEquipItem * pCurCollItem, CItemUI * pCurCollUI, _int iSlotIndex)
+void CInventory::GetProtocolFromEquip(Protocol::EquipState& state, CEquipItem* pEquipItem)
+{
+	if (pEquipItem == nullptr)
+	{
+		return;
+	}
+
+	switch (pEquipItem->GetItemType())
+	{
+		case IT_MELEE:
+			state.set_type(Protocol::EquipType::MELEE);
+			break;
+		case IT_RANGE:
+			state.set_type(Protocol::EquipType::RANGE);
+			break;
+		case IT_END: // legacy
+			state.set_type(Protocol::EquipType::LEGACY);
+			break;
+		case IT_RUNE:
+			break;
+		default: 
+			_CRASH("wrong item type");
+	}
+
+	state.set_name(pEquipItem->GetFactoryTag());
+
+	if (CWeapon* pWeapon = dynamic_cast<CWeapon*>(pEquipItem))
+	{
+		if (pWeapon->GetRune())
+		{
+			state.set_rune(pWeapon->GetRune()->GetFactoryTag());
+		}
+	}
+}
+
+CEquipItem* CInventory::GetEquipFromProtocol(const Protocol::EquipState& state)
+{
+	string strFactoryTag = state.name();
+	if (strFactoryTag.empty()) return nullptr;
+
+	wstring tmp;
+	tmp.assign(strFactoryTag.begin(), strFactoryTag.end());
+	CEquipItem* pEquip = CItemFactory::Create<CEquipItem>(state.name(), tmp, IS_TAKE);
+	//pEquip->AddRef();
+	pEquip->SetOwner(m_pOwner);
+
+	switch (state.type())
+	{
+		case Protocol::MELEE:
+		case Protocol::RANGE:
+			if (state.rune().empty() == false)
+			{
+				wstring tmpRune;
+				tmpRune.assign(state.rune().begin(), state.rune().end());
+				CRune* pRune = CItemFactory::Create<CRune>(state.rune(), tmpRune, IS_TAKE);
+				//pRune->AddRef();
+				pRune->SetOwner(m_pOwner);
+				dynamic_cast<CWeapon*>(pEquip)->SetRune(pRune);
+			}
+			break;
+		case Protocol::LEGACY:
+			break;
+		case Protocol::EquipType_INT_MIN_SENTINEL_DO_NOT_USE_: 
+		case Protocol::EquipType_INT_MAX_SENTINEL_DO_NOT_USE_: 
+		default:
+			_CRASH("wrong state type");
+	}
+
+	return pEquip;
+}
+
+void CInventory::MouseEvent(CEquipItem* pCurCollItem, CItemUI* pCurCollUI, _int iSlotIndex)
 {
 	//for sound
 	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
@@ -613,7 +754,7 @@ void CInventory::MouseEvent(CEquipItem * pCurCollItem, CItemUI * pCurCollUI, _in
 				m_pRune = pWeapon->GetRune();
 			}
 			else
-				m_pRuneSlot->Close();			
+				m_pRuneSlot->Close();
 
 		
 			pCurCollUI->SetPick(true);
@@ -687,6 +828,9 @@ void CInventory::MouseEvent(CEquipItem * pCurCollItem, CItemUI * pCurCollUI, _in
 
 				if (m_arrItem[i] == pCurCollItem)
 				{
+					 // 보관함 -> 장비창(룬, 무기, 유물)
+					m_bEquipChange = true;
+
 					switch (m_arrItem[i]->GetItemType())
 					{
 					case IT_MELEE:
@@ -725,7 +869,7 @@ void CInventory::MouseEvent(CEquipItem * pCurCollItem, CItemUI * pCurCollUI, _in
 								//Safe_Release(pRune);
 								return;
 							}
-						}				
+						}
 						else if(pWeapon && pWeapon->GetRune() != nullptr)
 						{
 							if (pRune && pWeapon->SetRune(pRune))
@@ -736,13 +880,14 @@ void CInventory::MouseEvent(CEquipItem * pCurCollItem, CItemUI * pCurCollUI, _in
 							}
 							
 						}
-				
 						return;
 					}
 					default:
 						MSG_BOX("유물인가?");
 						break;
 					}
+					
+
 
 				}
 			}
@@ -766,11 +911,15 @@ void CInventory::MouseEvent(CEquipItem * pCurCollItem, CItemUI * pCurCollUI, _in
 					{
 						if (m_arrItem[j] == nullptr)
 						{
+							 // 레거시 창 -> 보관함
+							m_bEquipChange = true;
 							m_arrLegacy[i] = m_arrItem[j];
 							m_arrItem[j] = pCurCollItem;
 							return;
 						}
 					}
+
+
 				}
 			}
 
@@ -782,13 +931,17 @@ void CInventory::MouseEvent(CEquipItem * pCurCollItem, CItemUI * pCurCollUI, _in
 					for (_int i = 0; i < COL * ROW; ++i)
 					{
 						if (m_arrItem[i] == nullptr)
-						{				
+						{
+							 // 룬창 -> 보관함
+							m_bEquipChange = true;
 							m_arrItem[i] = pRune;
 							return;
 						}
 					}
 				}
-				
+
+
+
 				return;
 			}
 

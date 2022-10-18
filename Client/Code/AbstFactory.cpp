@@ -54,7 +54,10 @@
 #include "MultiShotRune.h"
 #include "LightningRune.h"
 #include "LaserShotRune.h"
+#include "NetStage.h"
+
 #include "ItemTexUI.h"
+#include "RemoteInventory.h"
 #include "BossHPUI.h"
 #include "PlayerUI.h"
 
@@ -108,6 +111,11 @@ void CPlayerFactory::Ready_PlayerFactory()
 	{
 		return CPlayer::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Copper.cube");
 	}});
+
+	s_mapPlayerSpawner.insert({"Steve_Remote", []()
+	{
+		return CPlayer::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Steve.cube", true);
+	}});
 }
 
 void CEnemyFactory::Ready_EnemyFactory()
@@ -115,6 +123,10 @@ void CEnemyFactory::Ready_EnemyFactory()
 	s_mapEnemySpawner.insert({"Zombie", []()
 	{
 		return CZombie::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Zombie.cube");
+	} });
+	s_mapEnemySpawner.insert({"Zombie_Remote", []()
+	{
+		return CZombie::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Zombie.cube", true);
 	} });
 	s_mapEnemySpawner.insert({ "Geomancer", []()
 	{
@@ -406,6 +418,10 @@ void CObjectFactory::Ready_ObjectFactory()
 	{
 		return CInventory::Create(s_pGraphicDev);
 	} });
+	s_mapObjectSpawner.insert({ "RemoteInventory", []()
+	{
+		return CRemoteInventory::Create(s_pGraphicDev);
+	} });
 	s_mapObjectSpawner.insert({ "Dynamite", []()
 	{
 		return CDynamite::Create(s_pGraphicDev);
@@ -604,6 +620,11 @@ void CSceneFactory::Ready_SceneFactory()
 		s_mapSceneSpawner.insert({"Batch Tool", []()
 		{
 			return CBatchTool::Create(s_pGraphicDev);
+		}});
+
+		s_mapSceneSpawner.insert({"NetTest", []()
+		{
+			return CNetStage::Create(s_pGraphicDev);
 		}});
 	}
 }

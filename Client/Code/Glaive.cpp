@@ -13,6 +13,7 @@ CGlaive::CGlaive(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	m_eType = WEAPON_GLAIVE;
 	m_iDamage = 35;
+	m_strFactoryTag = "Glaive";
 }
 
 
@@ -52,17 +53,19 @@ HRESULT CGlaive::Ready_Object()
 
 _int CGlaive::Update_Object(const _float & fTimeDelta)
 {
+	if (m_bDelete) return OBJ_DEAD;
+
 	//runeslot on/off
 	if (m_pInventory->GetCurClickItem() == this)
 	{
-		if (m_pRune != nullptr)
+		if (m_pRune != nullptr && m_pRune->GetItemUI())
 		{
 			m_pRune->GetItemUI()->Open();
 		}
 	}
 	else
 	{
-		if (m_pRune != nullptr)
+		if (m_pRune != nullptr && m_pRune->GetItemUI())
 		{
 			m_pRune->GetItemUI()->Close();			
 		}
@@ -82,6 +85,8 @@ _int CGlaive::Update_Object(const _float & fTimeDelta)
 
 	
 	CWeapon::Update_Object(fTimeDelta);
+
+
 	return 0;
 }
 

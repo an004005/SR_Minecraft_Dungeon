@@ -6,11 +6,14 @@
 #include "StatComponent.h"
 #include <random>
 
+#include "Inventory.h"
+
 CLightningRune::CLightningRune(LPDIRECT3DDEVICE9 pGraphicDev): CRune(pGraphicDev)
 {
 	m_eTargetType = WEAPON_SWORD;
 	m_iUItexNum = 17;
 	m_eItemType = IT_RUNE;
+	m_strFactoryTag = "LightningRune";
 }
 
 CLightningRune::~CLightningRune()
@@ -19,15 +22,29 @@ CLightningRune::~CLightningRune()
 
 HRESULT CLightningRune::Ready_Object()
 {
+	CRune::Ready_Object();
 	m_pItemUI = CUIFactory::Create<CItemUI>("ItemUI", L"LightningRuneUI", 0);
 	m_pItemUI->SetUITexture(m_iUItexNum);
 
-	return CRune::Ready_Object();
+	return S_OK;
 }
 
 _int CLightningRune::Update_Object(const _float& fTimeDelta)
 {
+	if (m_bDelete) return OBJ_DEAD;
+
 	CRune::Update_Object(fTimeDelta);
+	if (m_pEquippedWeapon && m_pEquippedWeapon->IsEquipped() == false)
+	{
+		if (m_vecSparks.empty() == false)
+		{
+			for(auto& e : m_vecSparks)
+				Safe_Release(e);
+			m_vecSparks.clear();
+		}
+
+		return OBJ_NOEVENT;
+	}
 
 	if (m_bSpark)
 	{
@@ -41,7 +58,6 @@ _int CLightningRune::Update_Object(const _float& fTimeDelta)
 			pSpark->SetSpark();
 			
 			m_vecSparks.push_back(pSpark);
-
 
 			m_fCurSparkTime = 0.f;
 		}
@@ -65,8 +81,8 @@ _int CLightningRune::Update_Object(const _float& fTimeDelta)
 				++itr;
 			}
 		}
-
 	}
+	
 
 	return OBJ_NOEVENT;
 }
@@ -131,20 +147,25 @@ void CLightningRune::EquipRune(CWeapon* pWeapon)
 	m_bSpark = true;
 	m_WeaponTop = m_pOwner->Get_SkeletalPart("weapon_top");
 	m_WeaponBot = m_pOwner->Get_SkeletalPart("weapon_bot");
+	m_pEquippedWeapon = pWeapon;
 }
 
 void CLightningRune::UnEquipRune(CWeapon* pWeapon)
 {
 	for(auto& e : m_vecSparks)
 		Safe_Release(e);
+	m_vecSparks.clear();
 	m_bSpark = false;
 	m_WeaponTop = nullptr;
 	m_WeaponBot = nullptr;
+	m_pEquippedWeapon = nullptr;
 }
 
 void CLightningRune::Free()
 {
+	m_pItemUI->SetDelete();
 	for(auto& e : m_vecSparks)
 		Safe_Release(e);
+	m_vecSparks.clear();
 	CRune::Free();
 }

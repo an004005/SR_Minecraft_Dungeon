@@ -9,6 +9,7 @@ CStormRune::CStormRune(LPDIRECT3DDEVICE9 pGraphicDev): CRune(pGraphicDev)
 	m_eTargetType = WEAPON_GLAIVE;
 	m_iUItexNum = 18;
 	m_eItemType = IT_RUNE;
+	m_strFactoryTag = "StormRune";
 }
 
 CStormRune::~CStormRune()

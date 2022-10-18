@@ -13,6 +13,7 @@ CCrossbow::CCrossbow(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	m_eType = WEAPON_CROSSBOW;
 	m_iDamage = 20;
+	m_strFactoryTag = "Crossbow";
 }
 
 
@@ -46,17 +47,19 @@ HRESULT CCrossbow::Ready_Object()
 
 _int CCrossbow::Update_Object(const _float & fTimeDelta)
 {
+	if (m_bDelete) return OBJ_DEAD;
+
 	//runeslot on/off
 	if (m_pInventory->GetCurClickItem() == this)
 	{
-		if (m_pRune != nullptr)
+		if (m_pRune != nullptr && m_pRune->GetItemUI())
 		{
 			m_pRune->GetItemUI()->Open();
 		}
 	}
 	else
 	{
-		if (m_pRune != nullptr)
+		if (m_pRune != nullptr && m_pRune->GetItemUI())
 		{
 			m_pRune->GetItemUI()->Close();
 		}
@@ -73,6 +76,7 @@ _int CCrossbow::Update_Object(const _float & fTimeDelta)
 	Parabola(vPos, fHeight, fTimeDelta);
 
 	CWeapon::Update_Object(fTimeDelta);
+
 	return 0;
 }
 
@@ -132,7 +136,6 @@ _int CCrossbow::Attack()
 	}
 	else
 	{
-		m_pOwner->SpawnArrow(m_iDamage, PlayerArrowType::LASER);
 		m_pRune->Use();
 	}
 
@@ -145,5 +148,6 @@ void CCrossbow::Equipment(SkeletalPart* pSkeletalPart)
 	pSkeletalPart->pBuf = m_pBufferCom;
 	pSkeletalPart->pTex = m_pTextureCom;
 	pSkeletalPart->iTexIdx = 2;
+	m_iAttackCnt = 0;
 }
 

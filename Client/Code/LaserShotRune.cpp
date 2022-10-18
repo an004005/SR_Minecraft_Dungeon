@@ -8,6 +8,7 @@ CLaserShotRune::CLaserShotRune(LPDIRECT3DDEVICE9 pGraphicDev): CRune(pGraphicDev
 	m_eTargetType = WEAPON_CROSSBOW;
 	m_iUItexNum = 15;
 	m_eItemType = IT_RUNE;
+	m_strFactoryTag = "LaserShotRune";
 }
 
 CLaserShotRune::~CLaserShotRune()
@@ -24,6 +25,8 @@ HRESULT CLaserShotRune::Ready_Object()
 
 _int CLaserShotRune::Update_Object(const _float & fTimeDelta)
 {
+	if (m_bDelete) return OBJ_DEAD;
+
 	if (!m_bUse)
 		return OBJ_NOEVENT;
 
@@ -51,6 +54,7 @@ void CLaserShotRune::Render_Object()
 
 void CLaserShotRune::Free()
 {
+	m_pItemUI->SetDelete();
 	CRune::Free();
 }
 
@@ -86,6 +90,10 @@ void CLaserShotRune::Collision()
 		m_fCurLaserTime += CGameUtilMgr::s_fTimeDelta;
 }
 
+void CLaserShotRune::Use()
+{
+	m_pOwner->SpawnArrow(8, PlayerArrowType::LASER);
+}
 
 
 CLaserShotRune* CLaserShotRune::Create(LPDIRECT3DDEVICE9 pGraphicDev)

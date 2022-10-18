@@ -6,6 +6,7 @@ CPowerRune::CPowerRune(LPDIRECT3DDEVICE9 pGraphicDev) : CRune(pGraphicDev)
 	m_eTargetType = WEAPON_SWORD | WEAPON_AXE | WEAPON_AXE | WEAPON_CROSSBOW | WEAPON_GLAIVE;
 	m_iUItexNum = 20;
 	m_eItemType = IT_RUNE;
+	m_strFactoryTag = "PowerRune";
 }
 
 CPowerRune::~CPowerRune()
@@ -18,6 +19,12 @@ HRESULT CPowerRune::Ready_Object()
 	m_pItemUI->SetUITexture(m_iUItexNum);
 
 	return CRune::Ready_Object();
+}
+
+_int CPowerRune::Update_Object(const _float& fTimeDelta)
+{
+	if (m_bDelete) return OBJ_DEAD;
+	return CRune::Update_Object(fTimeDelta);
 }
 
 void CPowerRune::EquipRune(CWeapon* pWeapon)
@@ -44,5 +51,11 @@ CPowerRune* CPowerRune::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 		return nullptr;
 	}
 	return pInstance;
+}
+
+void CPowerRune::Free()
+{
+	m_pItemUI->SetDelete();
+	CRune::Free();
 }
 

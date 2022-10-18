@@ -62,6 +62,5 @@ bool CWeapon::SetRune(CRune* pRune)
 
 void CWeapon::Free()
 {
-	Safe_Release(m_pRune);
 	CEquipItem::Free();
 }

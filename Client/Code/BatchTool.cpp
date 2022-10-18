@@ -149,7 +149,7 @@ CBatchTool* CBatchTool::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 void CBatchTool::Load(const wstring& wstrPath)
 {
 	// 적, 게임 오브젝트 만 로드합니다.
-	HANDLE hFile = CreateFile(wstrPath.c_str(), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE hFile = CreateFile(wstrPath.c_str(), GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 	if (INVALID_HANDLE_VALUE == hFile)
 	{
 		MSG_BOX("Fail to Load CubeAnimFrame");

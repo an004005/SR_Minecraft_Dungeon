@@ -13,6 +13,7 @@ public:
 	virtual void Render_Object() override;
 	virtual void Free() override;
 	virtual void Collision() override;
+	virtual void Use() override;
 
 public:
 	static CLaserShotRune* Create(LPDIRECT3DDEVICE9 pGraphicDev);
