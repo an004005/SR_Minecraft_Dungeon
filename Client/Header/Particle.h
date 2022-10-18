@@ -485,6 +485,7 @@ private:
 	_float m_fTime;
 	_float m_fCurTime;
 	_float m_fSpeed;
+	_vec3 vLook;
 };
 
 class CLazer : public CGameObject

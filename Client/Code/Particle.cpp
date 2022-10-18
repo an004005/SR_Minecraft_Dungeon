@@ -1655,11 +1655,16 @@ HRESULT CLava_Particle::Ready_Object(_float _size, LAVATYPE _type)
 
 	if (_type == FALLINLAVA)
 	{
-		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
-		_vec3 pPos;
-		pPlayerTransform->Get_Info(INFO_POS, &pPos);
-		m_pTransCom->Set_Pos(pPos.x, pPos.y, pPos.z);
+		CPlayer* pPlayer = Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");
+		//SkeletalPart* pWeaponPart = pPlayer->Get_SkeletalPart("weapon_r");
+	
+		SkeletalPart* m_WeaponTop = pPlayer->Get_SkeletalPart("weapon_top");
+		SkeletalPart* m_WeaponBot = pPlayer->Get_SkeletalPart("weapon_bot");
 
+		//vLook = m_WeaponTop->GetWorldMat() - m_WeaponBot->pTrans->m_vInfo[INFO_POS];
+		//D3DXVec3Normalize(&vLook, &vLook);
+
+		m_pTransCom->m_vInfo[INFO_POS] = m_WeaponBot->pTrans->m_vInfo[INFO_POS];
 		m_pTransCom->Set_Scale(_size, _size, _size);
 		m_fSpeed = 3.f;
 		m_fTime = 0.6f;
@@ -1667,15 +1672,15 @@ HRESULT CLava_Particle::Ready_Object(_float _size, LAVATYPE _type)
 	}
 	else if (_type == FUZEPARTICLE)
 	{
-		// CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
-		// _vec3 pPos;
-		// pPlayerTransform->Get_Info(INFO_POS, &pPos);
-		// m_pTransCom->Set_Pos(pPos.x, pPos.y, pPos.z);
-		//
-		// m_pTransCom->Set_Scale(_size, _size, _size);
-		// m_fSpeed = 3.f;
-		// m_fTime = 0.6f;
-		// m_fCurTime = 0.f;
+		 //CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
+		 //_vec3 pPos;
+		 //pPlayerTransform->Get_Info(INFO_POS, &pPos);
+		 //m_pTransCom->Set_Pos(pPos.x, pPos.y, pPos.z);
+		
+		 //m_pTransCom->Set_Scale(_size, _size, _size);
+		 //m_fSpeed = 3.f;
+		 //m_fTime = 0.6f;
+		 //m_fCurTime = 0.f;
 	}
 	
 	m_pTransCom->Update_Component(0.f);
@@ -1694,7 +1699,7 @@ _int CLava_Particle::Update_Object(const _float& fTimeDelta)
 
 	m_pTransCom->m_vAngle.y += D3DXToRadian(CGameUtilMgr::GetRandomFloat(-40.f,60.f)) * fTimeDelta * m_fSpeed;
 
-	m_pTransCom->m_vInfo[INFO_POS].x += 5.f * fTimeDelta * m_fSpeed;
+	m_pTransCom->m_vInfo[INFO_POS] += vLook * fTimeDelta * 1.f;
 
 	m_pBufferCom->m_matWorld = m_pTransCom->m_matWorld;
 

@@ -72,6 +72,8 @@ _int CGlaive::Update_Object(const _float & fTimeDelta)
 	if (m_eItemState == IS_TAKE)
 		return 0;
 
+	m_pRune == nullptr ? m_pRune->UnEquipRune(this) : m_pRune->EquipRune(this);
+
 	_vec3& vPos = m_pTransCom->m_vInfo[INFO_POS];
 	CTerrainCubeMap* pCubeMap = Get_GameObject<CTerrainCubeMap>(LAYER_ENV, L"TerrainCubeMap");
 	_float fHeight = pCubeMap->GetHeight(vPos.x, vPos.z);

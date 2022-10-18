@@ -370,9 +370,6 @@ void CPlayer::AttackState()
  	 //CEffectFactory::Create<CCrack>("LoadingBox", L"LoadingBox");
 #pragma endregion
 
-#pragma region Lava_Paticle
-	// CEffectFactory::Create<CLava_Particle>("Lava_Particle", L"Lava_Particle");
-#pragma endregion
 
 #pragma region Attack_Basic
 	// Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.3f, RED, 4, 0.2f);

@@ -15,5 +15,12 @@ public:
 	virtual void Collision() override;
 	virtual void Use() override;
 	static CStormRune* Create(LPDIRECT3DDEVICE9 pGraphicDev);
+
+	virtual void EquipRune(CWeapon* pWeapon) override;
+	virtual void UnEquipRune(CWeapon* pWeapon) override;
+
+private:
+	_float m_fFlameTime = 1.f;
+	_float m_fCurFlameTime = 1.f;
 };
 
