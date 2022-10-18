@@ -422,6 +422,10 @@ void CInventory::AddDefaultItems()
 	// m_arrItem[1]->AddRef();
 	m_arrItem[1]->SetOwner(m_pOwner);
 
+	m_arrItem[2] = CItemFactory::Create<CStormRune>("StormRune", L"StormRune", IS_TAKE);
+	m_arrItem[2]->SetOwner(m_pOwner);
+
+
 	m_arrItem[4] = CItemFactory::Create<CStunRune>("StunRune", L"StunRune", IS_TAKE);
 	// m_arrItem[4]->AddRef();
 	m_arrItem[4]->SetOwner(m_pOwner);
