@@ -61,6 +61,7 @@
 #include "BossHPUI.h"
 #include "PlayerUI.h"
 #include "ClearUI.h"
+#include "Trigger.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -440,6 +441,10 @@ void CObjectFactory::Ready_ObjectFactory()
 	s_mapObjectSpawner.insert({ "BirdsBrown", []()
 	{
 		return CBirdsBrown::Create(s_pGraphicDev, BIRD_BROWN);
+	} });
+	s_mapObjectSpawner.insert({ "Trigger", []()
+	{
+		return CTrigger::Create(s_pGraphicDev);
 	} });
 }
 
