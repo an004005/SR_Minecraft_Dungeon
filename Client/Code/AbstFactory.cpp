@@ -59,7 +59,9 @@
 #include "ItemTexUI.h"
 #include "RemoteInventory.h"
 #include "BossHPUI.h"
+#include "EditBox.h"
 #include "PlayerUI.h"
+#include "Logo.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -583,7 +585,10 @@ void CUIFactory::Ready_UIFactory()
 	 {
 		 return CPlayerUI::Create(s_pGraphicDev, 0);
 	 } });
-
+	 s_mapUISpawner.insert({ "EditBox", [](_uint iTexNum)
+	 {
+		 return CEditBox::Create(s_pGraphicDev);
+	 } });
 	
 }
 
@@ -625,6 +630,10 @@ void CSceneFactory::Ready_SceneFactory()
 		s_mapSceneSpawner.insert({"NetTest", []()
 		{
 			return CNetStage::Create(s_pGraphicDev);
+		}});
+		s_mapSceneSpawner.insert({"Logo", []()
+		{
+			return CLogo::Create(s_pGraphicDev);
 		}});
 	}
 }

@@ -18,6 +18,15 @@ public:
 	static CUI*			Create(LPDIRECT3DDEVICE9 pGraphicDev, const _uint iTexNum);
 	virtual void		Free(void);
 
+	void SetButton(std::function<void()> pCallback) {m_bButtom = true; m_pCallback = pCallback; }
+	void SetText(const wstring& wstrFont, const wstring& wstrText, const _vec2& vOffset, const D3DXCOLOR& color)
+	{
+		m_wstrFont = wstrFont;
+		m_wstrText = wstrText;
+		m_vTextOffset = vOffset;
+		m_TextColor = color;
+	}
+	void SetDelete() { m_bDelete = true; }
 protected:
 	CRcTex*				m_pBufferCom = nullptr;
 	CTransform*			m_pTransCom = nullptr;
@@ -25,6 +34,16 @@ protected:
 	_uint m_iTexNum = 0;
 
 	_matrix				m_ProjMatrix;
+
+	_bool m_bButtom = false;
+	std::function<void()> m_pCallback = nullptr;
+
+	wstring m_wstrFont;
+	wstring m_wstrText;
+	_vec2 m_vTextOffset;
+	D3DXCOLOR m_TextColor;
+
+	_bool m_bDelete = false;
 };
 
 /*------------------------

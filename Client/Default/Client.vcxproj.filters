@@ -460,6 +460,10 @@
     <ClInclude Include="..\Header\PlayerUI.h">
       <Filter>02. GameObject\05. UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\Logo.h">
+      <Filter>01. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\EditBox.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -826,6 +830,10 @@
     <ClCompile Include="..\Code\PlayerUI.cpp">
       <Filter>02. GameObject\05. UI</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\Logo.cpp">
+      <Filter>01. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\EditBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">

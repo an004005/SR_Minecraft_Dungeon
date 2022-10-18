@@ -21,6 +21,7 @@
 #include "RedStoneCubeController.h"
 #include "RedStoneMonstrosityController.h"
 #include "DamageFontMgr.h"
+#include "ObjectStoreMgr.h"
 #include "SatonController.h"
 
 USING(Engine)
@@ -154,7 +155,7 @@ HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 * ppGraphicDev)
 	// 매니저 초기화
 	CArrowCubeMgr::Create(m_pGraphicDev);
 	CDamageFontMgr::GetInstance()->SetGraphicDev(m_pGraphicDev);
-	
+	CObjectStoreMgr::GetInstance();
 
 	return S_OK;
 }
@@ -167,7 +168,8 @@ HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement
 	FAILED_CHECK_RETURN(Engine::Create_Management(pGraphicDev, ppManagement), E_FAIL);
 	(*ppManagement)->AddRef();
 
-	 CSceneFactory::LoadScene("Loading1", "Stage_Default", true ,0);
+	 // CSceneFactory::LoadScene("Loading1", "Stage_Default", true ,0);
+	 CSceneFactory::LoadScene("Loading1", "Logo", true ,0);
 	//CSceneFactory::LoadScene("Loading1", "NetTest", true ,0);
 
 	return S_OK;
@@ -286,7 +288,7 @@ HRESULT CMainApp::Ready_Proto()
 
 	// UI
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_RcTexCom", CRcTex::Create(m_pGraphicDev)), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_UI_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/UI/UI_%d.png", TEX_NORMAL, 26)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_UI_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/UI/UI_%d.png", TEX_NORMAL, 29)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_InventoryUI_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/UI/InventoryUI/UI_%d.png", TEX_NORMAL, 21)), E_FAIL);
 
 	// FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Loading", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Loading/loading%d.png", TEX_NORMAL, 1)), E_FAIL);
@@ -327,6 +329,7 @@ void CMainApp::Free(void)
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
 
+	CObjectStoreMgr::DestroyInstance();
 	CArrowCubeMgr::DeleteInst();
 	CDamageFontMgr::DestroyInstance();
 	CAbstFactory::ReleaseGraphicDev();

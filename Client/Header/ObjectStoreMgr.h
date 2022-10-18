@@ -9,11 +9,12 @@ private:
 	virtual ~CObjectStoreMgr() override;
 
 public:
-
+	void SetPlayerName(const string& strPlayerName) { m_strPlayerName = strPlayerName; }
 
 	virtual void Free() override;
 
 private:
-	vector<CScene*> m_vecScene;
+	string m_strPlayerName;
+	
 };
 
