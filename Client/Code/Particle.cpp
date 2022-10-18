@@ -1658,27 +1658,19 @@ HRESULT CLava_Particle::Ready_Object(_float _size, LAVATYPE _type)
 
 	if (_type == FALLINLAVA)
 	{
-		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
-		_vec3 pPos;
-		pPlayerTransform->Get_Info(INFO_POS, &pPos);
-		m_pTransCom->Set_Pos(pPos.x, pPos.y, pPos.z);
-
-		m_pTransCom->Set_Scale(_size, _size, _size);
-		m_fSpeed = 3.f;
-		m_fTime = 0.6f;
-		m_fCurTime = 0.f;
+		m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
 	}
 	else if (_type == FUZEPARTICLE)
 	{
-		// CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
-		// _vec3 pPos;
-		// pPlayerTransform->Get_Info(INFO_POS, &pPos);
-		// m_pTransCom->Set_Pos(pPos.x, pPos.y, pPos.z);
-		//
-		// m_pTransCom->Set_Scale(_size, _size, _size);
-		// m_fSpeed = 3.f;
-		// m_fTime = 0.6f;
-		// m_fCurTime = 0.f;
+		 //CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
+		 //_vec3 pPos;
+		 //pPlayerTransform->Get_Info(INFO_POS, &pPos);
+		 //m_pTransCom->Set_Pos(pPos.x, pPos.y, pPos.z);
+		
+		 //m_pTransCom->Set_Scale(_size, _size, _size);
+		 //m_fSpeed = 3.f;
+		 //m_fTime = 0.6f;
+		 //m_fCurTime = 0.f;
 	}
 	
 	m_pTransCom->Update_Component(0.f);
@@ -1687,19 +1679,16 @@ HRESULT CLava_Particle::Ready_Object(_float _size, LAVATYPE _type)
 
 _int CLava_Particle::Update_Object(const _float& fTimeDelta)
 {
-	if (m_fCurTime >= m_fTime)
+	if (m_fCurTime > m_fTime)
 		return OBJ_DEAD;
-
-	
-	m_fCurTime += fTimeDelta;
 
 	CGameObject::Update_Object(fTimeDelta);
 
-	m_pTransCom->m_vAngle.y += D3DXToRadian(CGameUtilMgr::GetRandomFloat(-40.f,60.f)) * fTimeDelta * m_fSpeed;
-
-	m_pTransCom->m_vInfo[INFO_POS].x += 5.f * fTimeDelta * m_fSpeed;
+	m_fCurTime += fTimeDelta;
 
 	m_pBufferCom->m_matWorld = m_pTransCom->m_matWorld;
+
+	m_pTransCom->Set_Scale(CGameUtilMgr::GetRandomFloat(1.5f, 2.5f), CGameUtilMgr::GetRandomFloat(1.5f, 2.5f), CGameUtilMgr::GetRandomFloat(1.5f, 2.5f));
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
 
@@ -1708,9 +1697,8 @@ _int CLava_Particle::Update_Object(const _float& fTimeDelta)
 
 void CLava_Particle::Render_Object()
 {
-	CGameObject::Render_Object();
+	m_pBufferCom->Check_Alpha(true);
 	m_pBufferCom->Render_Buffer();
-
 }
 
 void CLava_Particle::LateUpdate_Object()
@@ -1720,10 +1708,30 @@ void CLava_Particle::LateUpdate_Object()
 
 void CLava_Particle::PreRender_Particle()
 {
+	m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
+	m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+
+	m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, false);
 }
 
 void CLava_Particle::PostRender_Particle()
 {
+	m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, true);
+}
+
+void CLava_Particle::SetFlame()
+{
+	m_bFlame = true;
+	m_fOffset = CGameUtilMgr::GetRandomFloat(0.f, 1.f);
+	m_pTransCom->Update_Component(0.f);
+}
+
+void CLava_Particle::SetFlamePos(const _vec3 & vBot, const _vec3 & vTop)
+{
+	D3DXVec3Lerp(&m_pTransCom->m_vInfo[INFO_POS],
+		&vBot,
+		&vTop,
+		m_fOffset);
 }
 
 CLava_Particle* CLava_Particle::Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size, LAVATYPE _type)
