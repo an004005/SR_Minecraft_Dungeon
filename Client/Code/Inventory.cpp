@@ -713,7 +713,7 @@ CEquipItem* CInventory::GetEquipFromProtocol(const Protocol::EquipState& state)
 	return pEquip;
 }
 
-void CInventory::MouseTestEvent(CEquipItem * pCurCollItem, CItemUI * pCurCollUI, _int iSlotIndex)
+void CInventory::MouseEvent(CEquipItem* pCurCollItem, CItemUI* pCurCollUI, _int iSlotIndex)
 {
 	//for sound
 	CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
