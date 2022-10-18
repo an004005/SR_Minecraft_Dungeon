@@ -31,7 +31,7 @@ private:
 	_float m_fFirstHammerCoolTime = 15.f;
 	_float m_fSatonBirdCoolTime = 25.f;
 	_float m_fSatonGrapCoolTime = 30.f;
-	_float m_fSatonFascinateCoolTime = 5.f;
+	_float m_fSatonFascinateCoolTime = 10000.f;
 	_float m_fSatonDrawMoonCoolTime = 2.f;
 	_float m_fTargetingCoolTime = 3.f;
 
@@ -47,5 +47,8 @@ private:
 	_bool m_bIsKoukuSymbol = false;
 
 	_float m_fDist = 5.f;
+
+	_float m_fTargetDist = 9999.f;
+
 };
 

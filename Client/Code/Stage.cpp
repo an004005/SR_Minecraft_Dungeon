@@ -151,6 +151,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	CEffectFactory::Create<CSpeedBoots>("Speed_Boots", L"Speed_Boots");
 	CEffectFactory::Create<CSpeedBoots_Particle>("Speed_Boots_Particle", L"Speed_Boots_Particle");
 	CEffectFactory::Create<CMoonParticle>("MoonParticle", L"MoonParticle");
+	CEffectFactory::Create<CFascinated_Effect>("Fascinate_Effect", L"Fascinate_Effect");
 
 	
 	//monsters
@@ -163,7 +164,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 3.f, 3.f, 3.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 21.5f ,47.8f });
 		CEnemyFactory::Create<CSaton>("Saton", L"Saton", matWorld);
 
-		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 0.7f, 0.7f, 0.7f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 25.f ,42.4f });
+		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 0.7f, 0.7f, 0.7f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 25.f ,44.8f });
 		CEnemyFactory::Create<CKouku>("Kouku", L"Kouku", matWorld);
 
 

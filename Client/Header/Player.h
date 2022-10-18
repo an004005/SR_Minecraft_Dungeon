@@ -28,6 +28,7 @@ private:
 		STUN,
 		ROLL,
 		LEGACY,
+		FASCINATE,
 		DEAD,
 		STATE_END
 	};
@@ -80,6 +81,12 @@ public:
 	void Legacy2Press() { m_bLegacy2 = true; }
 	void Legacy3Press() { m_bLegacy3 = true; }
 	void Legacy4Press();
+
+	// 매혹 전용 함수
+	void WalkToTarget(const _vec3& vTargetPos) { m_vTargetPos = vTargetPos; }
+	void RotationToSaton(void);
+	// ~매혹 전용 함수
+
 
 	void UsePotion();
 	//
@@ -141,6 +148,7 @@ protected:
 	_bool m_bDelay = false;
 	iBlockIndex<VTXCNTX, VTXCNTZ> arrBlock{};
 
+	_vec3 m_vTargetPos;
 
 	string m_strStatus;
 

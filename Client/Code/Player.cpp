@@ -98,61 +98,63 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 	CSkeletalCube::Update_Object(fTimeDelta);
 	DEBUG_SPHERE(m_pColl->GetCollPos(), m_pColl->GetRadius(), 0.1f);
 
-	if (m_pStat->IsSatonSymbol_Blue())
-		m_strStatus = "Saton_Symboled";
+	if (m_pStat->IsSatonFascinate())
+		m_strStatus = "Fascinate";
 	else
-		m_strStatus = "nothing";
+		m_strStatus = "Nothing";
 
+		if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
+			m_bCanPlayAnim = true;
 
+		if (s_RollCoolTime > m_CurRollCoolTime)
+			m_CurRollCoolTime += fTimeDelta;
+		if (s_PotionCollTime > m_CurPotionCoolTime)
+			m_CurPotionCoolTime += fTimeDelta;
+
+		// 상태 변경 조건 설정
+		StateChange();
+		m_bRoll = false;
+
+		// 각 상태에 따른 프레임 마다 실행할 함수 지정
+		switch (m_eState)
+		{
+		case IDLE:
+			break;
+		case WALK:
+			m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_vMoveDirNormal * m_fSpeed * fTimeDelta;
+			break;
+		case ATTACK:
+			AttackState(); // 근접, 원거리 분기하기
+			break;
+		case STUN:
+			break;
+		case ROLL:
+			m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * m_fRollSpeed * fTimeDelta;
+			if (m_dwRollDust + 300 < GetTickCount())
+			{
+				CEffectFactory::Create<CCloud>("Roll_Cloud", L"Roll_Cloud");
+				m_dwRollDust = GetTickCount();
+			}
+			break;
+		case LEGACY:
+			break;
+		case FASCINATE:
+			RotationToSaton();
+			m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_vTargetPos * m_fSpeed * fTimeDelta;
+			break;
+		case DEAD:
+			if (m_bDeadTime > 3.f)
+				PlayerSpawn();
+			m_bDeadTime += fTimeDelta;
+			break;
+		default:
+			break;
+		}
+	//}
 	IM_BEGIN("player");
 	ImGui::Text("%s", m_strStatus.c_str());
 	// ImGui::Text("%f, %f, %f", m_pColl->GetCollPos().x, m_pColl->GetCollPos(). m_pColl->GetCollPos().z);
 	IM_END;
-
-	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
-		m_bCanPlayAnim = true;
-
-	if (s_RollCoolTime > m_CurRollCoolTime)
-		m_CurRollCoolTime += fTimeDelta;
-	if (s_PotionCollTime > m_CurPotionCoolTime)
-		m_CurPotionCoolTime += fTimeDelta;
-
-	// 상태 변경 조건 설정
-	StateChange();
-	m_bRoll = false;
-
-	// 각 상태에 따른 프레임 마다 실행할 함수 지정
-	switch (m_eState)
-	{
-	case IDLE:
-		break;
-	case WALK:
-		m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_vMoveDirNormal * m_fSpeed * fTimeDelta;
-		break;
-	case ATTACK:
-		AttackState(); // 근접, 원거리 분기하기
-		break;
-	case STUN:
-		break;
-	case ROLL:
-		m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * m_fRollSpeed * fTimeDelta;
-		if (m_dwRollDust + 300 < GetTickCount())
-		{
-			CEffectFactory::Create<CCloud>("Roll_Cloud", L"Roll_Cloud");
-			m_dwRollDust = GetTickCount();
-		}
-		break;
-	case LEGACY:
-		break;
-	case DEAD:
-		if (m_bDeadTime > 3.f) 
-			PlayerSpawn();
-		m_bDeadTime += fTimeDelta;
-		break;
-	default:
-		break;
-	}
-
 	return OBJ_NOEVENT;
 }
 
@@ -423,6 +425,16 @@ void CPlayer::StateChange()
 		return;
 	}
 
+	if (m_pStat->IsSatonFascinate())
+	{
+		m_strStatus = "Fascinate";
+		m_eState = FASCINATE;
+		m_bRoll = false;
+		m_pIdleAnim = &m_arrAnim[ANIM_WALK];
+		m_pCurAnim = &m_arrAnim[ANIM_WALK];
+		return;
+	}
+
 	if (m_bRoll && s_RollCoolTime <= m_CurRollCoolTime)
 	{
 		CSoundMgr::GetInstance()->PlaySound(L"sfx_player_stepCloth-003.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
@@ -540,6 +552,28 @@ void CPlayer::StateChange()
 	}
 
 
+}
+
+void CPlayer::RotationToSaton(void)
+{
+	_vec3 vLook = _vec3(62.5f, 0.f, 44.5f) -m_pRootPart->pTrans->m_vInfo[INFO_POS];
+
+	D3DXVec3Normalize(&vLook, &vLook);
+
+	m_pRootPart->pTrans->m_vInfo[INFO_LOOK] = -vLook;
+
+	m_vTargetPos = vLook;
+
+	const _vec2 v2Look{ 0.f, 1.f };
+
+	_vec2 v2ToDest{ vLook.x, vLook.z };
+
+	const _float fDot = D3DXVec2Dot(&v2Look, &v2ToDest);
+
+	if (vLook.x < 0)
+		m_pRootPart->pTrans->m_vAngle.y = -acosf(fDot);
+	else
+		m_pRootPart->pTrans->m_vAngle.y = acosf(fDot);
 }
 
 void CPlayer::UsePotion()

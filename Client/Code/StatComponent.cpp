@@ -69,10 +69,12 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 
 	if (m_bFascinated)
 	{
-		if (m_fSatonFascinated < m_fCurSatonFascinated)
+		if (m_fSatonFascinatedTime < m_fCurSatonFascinatedTime)
 			m_bFascinated = false;
 		else
-			m_fCurSatonFascinated += fTimeDelta;
+		{
+			m_fCurSatonFascinatedTime += fTimeDelta;
+		}
 	}
 
 
@@ -82,9 +84,16 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 		if (m_fSatonSymbolTime < m_fCurSatonSymbolTime)
 			m_bSatonSymbol_Blue = false;
 		else
+		{
 			m_fCurSatonSymbolTime += fTimeDelta;
+
+		}
 	}
 
+	// if(m_fCurSatonSymbolTime)
+	// {
+	// 	Engine::Get_GameObject<CFascinated_Effect>(LAYER_EFFECT, L"Fascinate_Effect")->Add_Particle(m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{ 0.f, 3.f, 0.f }, 1.f, RED, 1, 0.1f, 0);
+	// }
 
 
 	_vec3& vPos = m_pOwnerTrans->m_vInfo[INFO_POS];
@@ -202,9 +211,10 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 		m_bSatonSymbol_Red = true;
 		m_fCurSatonSymbolTime = 0.f;
 		break;
-	case DT_KOUKU_FASCINATED:
+	case DT_SATON_FASCINATED:
 		m_bFascinated = true;
 		m_fCurSatonSymbolTime = 0.f;
+		Engine::Get_GameObject<CFascinated_Effect>(LAYER_EFFECT, L"Fascinate_Effect")->Add_Particle(m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{ 0.f, 3.f, 0.f }, 1.f, RED, 1, 4.f, 0);
 		break;
 	case DT_END:
 		break;
@@ -233,4 +243,8 @@ void CStatComponent::Revive()
 	m_bStun = false;
 	m_bDamaged = false;
 	m_bKnockback = false;
+	m_bSatonSymbol_Red = false;
+	m_bSatonSymbol_Blue = false;
+	m_bFascinated = false;
+
 }

@@ -42,7 +42,7 @@ HRESULT CSaton::Ready_Object()
 	CController* pController = Add_Component<CSatonController>(L"Proto_SatonController", L"Proto_SatonController", ID_DYNAMIC);
 	pController->SetOwner(this);
 	m_fCurTime = 0.f;
-	m_fTime = 2.2f;
+	m_fTime = 1.f;
 	//cc면역
 	m_bCantCC = true;
 
@@ -74,6 +74,19 @@ void CSaton::AnimationEvent(const string& strEvent)
 	{
 		m_bDelete = true;
 	}
+	else if (strEvent == "Ready_Attack")
+	{
+		// 레디어택, 어택 써클 둘다 생성
+		CEffectFactory::AttackRange_Create("Attack_Range_Circle", L"Attack_Range_Circle",
+			m_pRootPart->pTrans->m_vInfo[INFO_POS] + m_pRootPart->pTrans->m_vInfo[INFO_POS] * 3.f, READY_CIRCLE
+			, CGameUtilMgr::s_vZero, _vec3(3.f, 3.f, 3.f), 500, 500);
+
+
+	}
+	else if (strEvent == "Second_Attack")
+	{
+		// 어택 써클만 생성
+	}
 	else if (strEvent == "MakeMoon") // 플레이어 머리 위에 달 띄우기
 	{
 
@@ -83,7 +96,12 @@ void CSaton::AnimationEvent(const string& strEvent)
 	}
 	else if (strEvent == "ExplodeMoon") // 바닥에 있던 달 위치에 쇼크파우더 뿌리기 
 	{
+
 		m_bStatonExplodeMoon = true;
+	}
+	else if (strEvent == "FascinateEnd")
+	{
+		PlayAnimationOnce(&m_arrAnim[FIRSTATTACK]);
 	}
 }
 
@@ -97,7 +115,16 @@ _int CSaton::Update_Object(const _float& fTimeDelta)
 	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
 		m_bCanPlayAnim = true;
 
+	if(m_bSatonDrawMoon)
+	{
+		m_fCurTime += fTimeDelta;
 
+		if (m_fCurTime >= m_fTime)
+		{
+			m_bSatonDrawMoonPair = true;
+			m_fCurTime = 0.f;
+		}
+	}
 
 
 	//
@@ -139,11 +166,6 @@ _int CSaton::Update_Object(const _float& fTimeDelta)
 		break;
 	}
 
-	// if (m_eState != HORROR_ATTACK)
-	// {
-	// 	if (m_fCurTime > m_fTime)
-	// 		m_fCurTime = 0.f;
-	// }
 
 	IM_BEGIN("StatePos");
 
@@ -163,7 +185,7 @@ void CSaton::LateUpdate_Object()
 		set<CGameObject*> setPlayer;
 		// _vec3 KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
 
-		Engine::GetOverlappedObject(setPlayer, m_vExplodMoonPos, 3.5f);
+		Engine::GetOverlappedObject(setPlayer, m_vExplodMoonPos, 4.f);
 
 		for (auto& obj : setPlayer)
 		{
@@ -186,12 +208,41 @@ void CSaton::LateUpdate_Object()
 					m_vExplodMoonPos.y, m_vExplodMoonPos.z + CGameUtilMgr::GetRandomFloat(-3.f, 3.f)));
 			CEffectFactory::Create<CCloud>("ShockPowder_Cloud", L"ShockPowder_Cloud", m_vExplodMoonPos);
 		}
-
-		CEffectFactory::Create<CUVCircle>("Shock_Circle", L"Shock_Circle");
+		CEffectFactory::Create<CUVCircle>("Shock_Circle", L"Shock_Circle", m_vExplodMoonPos);
 		CSoundMgr::GetInstance()->PlaySound(L"sfx_item_shockpowder-001.ogg", m_vExplodMoonPos);
 		m_bStatonExplodeMoon = false;
 	}
+
+
+	if(m_bSatonDrawMoon && m_bSatonDrawMoonPair)
+	{
+		set<CGameObject*> setPlayer;
+		_vec3 SatonPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+
+		Engine::GetOverlappedObject(setPlayer, SatonPos, 100.f);
+
+		for (auto& obj : setPlayer)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+			{
+				CStatComponent* PlayerStatCom = pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC);
+				PlayerStatCom->TakeDamage(0, pPlayer->GetInfo(INFO_POS), this, DT_SATON_FASCINATED);
+			}
+		}
+		m_bSatonDrawMoon = false;
+		m_bSatonDrawMoonPair = false;
+	}
 }
+
+
+	
+
+
+
+
+
+
+
 
 void CSaton::Free()
 {

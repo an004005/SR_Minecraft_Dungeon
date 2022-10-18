@@ -31,6 +31,7 @@ HRESULT CKouku::Ready_Object()
 	m_arrAnim[HAMMER_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_hamer.anim");
 	m_arrAnim[HORROR_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_runattack.anim");
 	m_arrAnim[SYMBOL_HIDE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_hide.anim");
+	m_arrAnim[REST] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_rest.anim");
 
 	m_pIdleAnim = &m_arrAnim[IDLE];
 	// m_pCurAnim = &m_arrAnim[INTRO];
@@ -51,8 +52,8 @@ HRESULT CKouku::Ready_Object()
 	//cc면역
 	m_bCantCC = true;
 
-	m_bCanPlayAnim = false;
-	PlayAnimationOnce(&m_arrAnim[IDLE]);
+	// m_bCanPlayAnim = false;
+	// PlayAnimationOnce(&m_arrAnim[IDLE]);
 
 	return S_OK;
 }
@@ -85,11 +86,16 @@ void CKouku::AnimationEvent(const string& strEvent)
 		Get_GameObject<CMoonParticle>(LAYER_EFFECT, L"MoonParticle")->Add_Particle(_vec3(67.5f, 25.f, 38.5f), 1.f, RED, 12, 6.2f);
 		Get_GameObject<CMoonParticle>(LAYER_EFFECT, L"MoonParticle")->Add_Particle(_vec3(73.5f, 25.f, 42.5f), 1.f, BLUE, 12, 6.2f);
 
-		m_pRootPart->pTrans->m_vInfo[INFO_POS] = _vec3(62.5f, 0.f, 40.5f);
+		
 	}
 	else if (strEvent == "SymbolAttack")
 	{
-		m_bIsSymbolAttackCycle = true;
+		m_bIsSymbolAttackCycle = true; // 이벤트 간격 늘리기 완료
+	}
+	else if (strEvent == "KoukuHide")
+	{
+		m_pRootPart->pTrans->m_vInfo[INFO_POS] = _vec3(62.5f, 0.f, 48.7f);
+		PlayAnimationOnce(&m_arrAnim[REST]);
 	}
 
 	else if (strEvent == "AnimStopped")
@@ -336,15 +342,7 @@ void CKouku::StateChange()
 		return;
 	}
 	//
-	// if (m_bMove && m_bCanPlayAnim)
-	// {
-	// 	m_eState = WALK;
-	// 	RotateToTargetPos(m_vTargetPos, true);
-	// 	m_pIdleAnim = &m_arrAnim[WALK];
-	// 	m_pCurAnim = &m_arrAnim[WALK];
-	// 	return;
-	// }
-	if (m_bCanPlayAnim)
+	if (m_bMove && m_bCanPlayAnim)
 	{
 		m_eState = WALK;
 		RotateToTargetPos(m_vTargetPos);
@@ -352,16 +350,24 @@ void CKouku::StateChange()
 		m_pCurAnim = &m_arrAnim[WALK];
 		return;
 	}
-
-
 	// if (m_bCanPlayAnim)
 	// {
-	// 	m_eState = IDLE;
+	// 	m_eState = WALK;
 	// 	RotateToTargetPos(m_vTargetPos);
-	// 	m_pIdleAnim = &m_arrAnim[IDLE];
-	// 	m_pCurAnim = &m_arrAnim[IDLE];
+	// 	m_pIdleAnim = &m_arrAnim[WALK];
+	// 	m_pCurAnim = &m_arrAnim[WALK];
 	// 	return;
 	// }
+
+
+	if (m_bCanPlayAnim)
+	{
+		m_eState = IDLE;
+		// RotateToTargetPos(m_vTargetPos);
+		m_pIdleAnim = &m_arrAnim[IDLE];
+		m_pCurAnim = &m_arrAnim[IDLE];
+		return;
+	}
 }
 
 void CKouku::Symbol_Attack()

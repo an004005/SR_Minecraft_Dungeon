@@ -9,13 +9,15 @@ enum DamageType
 	DT_HUGE_KNOCK_BACK,
 	DT_KOUKU_SYMBOL_BLUE,
 	DT_KOUKU_SYMBOL_RED,
-	DT_KOUKU_FASCINATED,
+	DT_SATON_FASCINATED,
 	// posion .. etc
 	DT_END
 };
 
 class CTerrainCubeMap;
 class CStun;
+class CFascinate_Effect;
+
 class CStatComponent : public CComponent
 {
 protected:
@@ -43,6 +45,7 @@ public:
 	_bool IsDamaged() const { return m_bDamaged; }
 	_bool IsSatonSymbol_Blue() const { return m_bSatonSymbol_Blue; }
 	_bool IsSatonSymbol_Red() const { return m_bSatonSymbol_Red; }
+	_bool IsSatonFascinate() const { return m_bFascinated; }
 
 	void IsSaton() { m_bIsSaton = !m_bIsSaton; }
 
@@ -94,9 +97,9 @@ private:
 
 	// Saton fascinate
 	_bool m_bFascinated = false;
-	_float m_fSatonFascinated = 2.f;
-	_float m_fCurSatonFascinated = 2.f;
-
+	_float m_fSatonFascinatedTime = 4.f;
+	_float m_fCurSatonFascinatedTime = 0.f;
+	// CFascinate_Effect* m_pFascinate = nullptr;
 
 
 

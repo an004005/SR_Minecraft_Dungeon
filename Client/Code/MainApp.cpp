@@ -213,6 +213,8 @@ HRESULT CMainApp::Ready_Proto()
 
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Stun", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/JJH/Stun.png", TEX_NORMAL)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Heal", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/JJH/Heal_Circle1.png", TEX_NORMAL)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Attack_Circle", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/JJH/T_Radial_Gradient.png", TEX_NORMAL)), E_FAIL);
+
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Heal_Particle", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/JJH/Heart_Particle.png", TEX_NORMAL)), E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Lava_Particle", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/JJH/Lava_Particlel.png", TEX_NORMAL)), E_FAIL);
@@ -234,6 +236,7 @@ HRESULT CMainApp::Ready_Proto()
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_StunCom", CRcShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/UVAnimation.fx", _vec2(0.0f, 0.0f), _vec2(1.f, 0.0f), _vec2(1.f, 1.0f), _vec2(0.0f, 1.f))), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_HealCom", CRcShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/UVAnimation_Crack.fx", _vec2(0.0f, 0.0f), _vec2(1.f, 0.0f), _vec2(1.f, 1.0f), _vec2(0.0f, 1.f))), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_BlueCom", CRcShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/UVAnimation_BlueCircle.fx", _vec2(0.0f, 0.0f), _vec2(1.f, 0.0f), _vec2(1.f, 1.0f), _vec2(0.0f, 1.f))), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Attack_Range_CircleCom", CRcShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/Attack_Range_Circle.fx", _vec2(0.0f, 0.0f), _vec2(1.f, 0.0f), _vec2(1.f, 1.0f), _vec2(0.0f, 1.f))), E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_LazerCircleCom", CRcShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/UVAnimation_LazerCircle.fx", _vec2(0.0f, 0.0f), _vec2(1.f, 0.0f), _vec2(1.f, 1.0f), _vec2(0.0f, 1.f))), E_FAIL);
 

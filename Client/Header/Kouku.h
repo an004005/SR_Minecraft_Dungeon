@@ -16,6 +16,7 @@ private:
 		BASIC_ATTACK,
 		SYMBOL_HIDE,
 		WALK,
+		REST,
 		DEAD,
 		STATE_END
 	};
@@ -60,6 +61,10 @@ public:
 		m_vTargetPos = vTargetPos;
 	}
 
+	void KoukuRest(const _vec3& vTargetPos)
+	{
+		m_bIsKoukuRest = true;
+	}
 	void Symbol_Attack(void);
 
 	void KoukuSymbol_OnOff(_bool _trueison) { m_bIsSymbolGimmick = _trueison; }
@@ -68,7 +73,8 @@ public:
 
 	// controller 조종 함수
 	_vec3 Get_TargetPos() { return m_vTargetPos; }
-	void WalkToTarget(const _vec3& vTargetPos) { m_vTargetPos = vTargetPos; }
+
+	void WalkToTarget(const _vec3& vTargetPos) { m_vTargetPos = vTargetPos; m_bMove = true; }
 	//m_bMove = true;
 private:
 	CKoukuState m_eState = STATE_END;
@@ -94,6 +100,8 @@ private:
 	_bool m_bKoukuSymbol = false;
 	_bool m_bIsSymbolGimmick = false;
 	_bool m_bIsSymbolAttackCycle = false;
+
+	_bool m_bIsKoukuRest = false;
 
 	_uint m_iRedSymbolCnt;
 

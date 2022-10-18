@@ -159,6 +159,10 @@ void CEffectFactory::Ready_EffectFactory()
 		return C3DBaseTexture::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/3DView_Spotlight_Pattern.png");
 	} });
 
+	s_mapEffectSpawner.insert({ "Fascinate_Effect", []()
+	{
+		return CFascinated_Effect::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/Fascinate.png");
+	} });
 
 	s_mapEffectSpawner.insert({ "Attack_Basic", []()
 	{
@@ -359,6 +363,11 @@ void CEffectFactory::Ready_EffectFactory()
 	s_mapEffectSpawner.insert({ "ChainLightning", []()
 	{
 		return CChainLightning::Create(s_pGraphicDev);
+	} });
+
+	s_mapEffectSpawner.insert({ "Attack_Range_Circle", []()
+	{
+		return CAttack_Range_Circle::Create(s_pGraphicDev);
 	} });
 }
 

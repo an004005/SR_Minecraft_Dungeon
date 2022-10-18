@@ -74,7 +74,7 @@ public:
 		m_vTargetPos.y += 1.f;
 		m_vExplodMoonPos.y += 1.f;
 		Engine::Get_GameObject<CMoonParticle>(LAYER_EFFECT, L"MoonParticle")->Add_Particle(m_vTargetPos, 1.f, RED, 1, 2.f, 0);
-
+		m_bSatonDrawMoon = true;
 	}
 
 	void SatonShockPowder(void);
@@ -96,6 +96,7 @@ private:
 		m_bSatonBird = false;
 		m_bSatonSymbolAnim = false;
 		m_bSatonFascinate = false;
+		m_bSatonDrawMoon = false;
 	}
 
 	// true : PlayAnimationOnce 사용 가능 상태(동작 애니메이션 실행 가능), false: 다른 애니메이션 실행중
@@ -108,6 +109,9 @@ private:
 	_bool m_bSatonBird = false;
 	_bool m_bSatonSymbolAnim = false;
 	_bool m_bSatonFascinate = false;
+	_bool m_bSatonDrawMoon = false;
+	_bool m_bSatonDrawMoonPair = false;
+
 	_bool m_bStatonExplodeMoon = false;
 
 

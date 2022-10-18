@@ -16,9 +16,9 @@ CSatonController::CSatonController(const CSatonController& rhs)
 _int CSatonController::Update_Component(const _float& fTimeDelta)
 {
 	{
-		// m_fCurFirstHammerCoolTime += fTimeDelta;
-		// m_fCurSatonBirdCoolTime += fTimeDelta;
-		// m_fCurSatonGrapCoolTime += fTimeDelta;
+		m_fCurFirstHammerCoolTime += fTimeDelta;
+		m_fCurSatonBirdCoolTime += fTimeDelta;
+		m_fCurSatonGrapCoolTime += fTimeDelta;
 		m_fCurSatonFascinateCoolTime += fTimeDelta;
 
 		if(m_bIsDrawMoon)
@@ -39,7 +39,7 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 
 	_vec3 vPos = saton->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 	_vec3 vTargetPos;
-	_float fTargetDist = 9999.f;
+	// _float fTargetDist = 9999.f;
 	if (!m_bIsGimmick_On)
 	{
 		if (m_fCurTargetingCoolTime > m_fTargetingCoolTime)
@@ -52,16 +52,16 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 					_vec3 vDiff = vTargetPos - vPos;
 					_float fDist = D3DXVec3Length(&vDiff);
 
-					if (fTargetDist > fDist) // 플레이어 감지
+					if (m_fTargetDist > fDist) // 플레이어 감지
 					{
 						m_pTargetPlayer = pPlayer;
-						fTargetDist = fDist;
+						m_fTargetDist = fDist;
 					}
 				}
 			}
 			m_fCurTargetingCoolTime = 0.f;
 
-			if (fTargetDist > 20.f)
+			if (m_fTargetDist > 20.f)
 				m_pTargetPlayer = nullptr;
 		}
 		else
@@ -84,20 +84,20 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 		m_bIsKoukuSymbol = !m_bIsKoukuSymbol;
 	}
 	
-	if (m_fCurFirstHammerCoolTime >= m_fFirstHammerCoolTime && fTargetDist <= m_fFirstHammerDist)
+	if (m_fCurFirstHammerCoolTime >= m_fFirstHammerCoolTime && m_fTargetDist <= m_fFirstHammerDist)
 	{
 		m_fCurFirstHammerCoolTime = 0.f;
 		saton->FirstAttack(vTargetPos);
 		return 0;
 	}
-	if (m_fCurSatonBirdCoolTime >= m_fSatonBirdCoolTime && fTargetDist <= m_fSatonBirdkDist)
+	if (m_fCurSatonBirdCoolTime >= m_fSatonBirdCoolTime && m_fTargetDist <= m_fSatonBirdkDist)
 	{
 		m_fCurSatonBirdCoolTime = 0.f;
 		saton->SatonBird(vTargetPos);
 		return 0;
 	}
 
-	if (m_fCurSatonFascinateCoolTime >= m_fSatonFascinateCoolTime && fTargetDist <= m_fSatonFascinateDist)
+	if (m_fCurSatonFascinateCoolTime >= m_fSatonFascinateCoolTime && m_fTargetDist <= m_fSatonFascinateDist)
 	{
 		m_fCurSatonFascinateCoolTime = 0.f;
 		saton->SatonFascinate(m_vLookFront, vTargetPos);
@@ -107,14 +107,14 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 		return 0;
 	}
 	
-	if(m_fCurSatonDrawMoonCoolTime >= m_fSatonDrawMoonCoolTime && fTargetDist <= m_fSatonFascinateDist)
+	if(m_fCurSatonDrawMoonCoolTime >= m_fSatonDrawMoonCoolTime && m_fTargetDist <= m_fSatonFascinateDist)
 	{
 		m_fCurSatonDrawMoonCoolTime = 0.f;
 		saton->SatonDrawMoon(vTargetPos);
 		m_bIsDrawMoon = false;
 	}
 
-	if (m_fCurSatonGrapCoolTime >= m_fSatonGrapCoolTime && fTargetDist <= m_fSatonGrapkDist)
+	if (m_fCurSatonGrapCoolTime >= m_fSatonGrapCoolTime && m_fTargetDist <= m_fSatonGrapkDist)
 	{
 		m_fCurSatonGrapCoolTime = 0.f;
 		saton->SatonGrap(vTargetPos);

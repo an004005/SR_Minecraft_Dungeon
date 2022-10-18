@@ -107,6 +107,133 @@ void CAttack_P::Free()
 }
 #pragma endregion
 
+#pragma region Attack_Range_Circle
+CAttack_Range_Circle::~CAttack_Range_Circle()
+{
+}
+
+HRESULT CAttack_Range_Circle::Ready_Object()
+{
+	m_pBufferCom = Add_Component<CRcShader>(L"Proto_Attack_Range_CircleCom", L"Proto_Attack_Range_CircleCom", ID_STATIC);
+	m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
+	m_pTexture = Add_Component<CTexture>(L"Proto_Attack_Circle", L"Proto_Attack_Circle", ID_STATIC);
+	m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
+	m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
+	m_pBufferCom->Set_TextureOption(0, 0, 0);
+	// m_pTransCom->m_vInfo[INFO_POS].y + 2.f;
+	if (m_ATKRNGOption._eRangeType == READY_CIRCLE)
+	{
+		m_pTransCom->m_vScale *= 10.f;// m_ATKRNGOption._vMaxSize;
+		m_fSpeed = 0.f; // ¾È¾¸
+		m_fCurTime = 0.f;
+	}
+	else if (m_ATKRNGOption._eRangeType == ATTACK_CIRCLE)
+	{
+		m_pTransCom->m_vScale = m_ATKRNGOption._vMinSize;
+		m_fCurTime = 0.f;
+	}
+	m_pTransCom->Update_Component(0.f);
+
+	return S_OK;
+}
+
+_int CAttack_Range_Circle::Update_Object(const _float& fTimeDelta)
+{
+	CGameObject::Update_Object(fTimeDelta);
+
+	if (m_fCurTime >= m_ATKRNGOption._fLifeTime)
+	{
+		return OBJ_DEAD;
+	}
+	m_fCurTime += fTimeDelta;
+
+	m_ATKRNGOption._fAcc += fTimeDelta;
+
+	if (m_ATKRNGOption._eRangeType == READY_CIRCLE)
+	{
+	}
+	else if (m_ATKRNGOption._eRangeType == ATTACK_CIRCLE)
+	{
+		if(m_ATKRNGOption._fAcc > m_ATKRNGOption._fMaxAcc)
+		{
+			m_fCurTime = m_fTime;
+		}
+		else
+		{
+			D3DXVec3Lerp(&m_ATKRNGOption._vLerpScale, &m_ATKRNGOption._vMinSize, &m_ATKRNGOption._vMaxSize, m_ATKRNGOption._fAcc);
+			m_pTransCom->m_vScale = m_ATKRNGOption._vLerpScale;
+		}
+	}
+
+	m_pBufferCom->m_matWorld = m_pTransCom->m_matWorld;
+
+	Add_RenderGroup(RENDER_NONALPHA, this);
+	return OBJ_NOEVENT;
+}
+
+void CAttack_Range_Circle::Render_Object()
+{
+	CGameObject::Render_Object();
+	m_pBufferCom->Render_Buffer();
+}
+
+void CAttack_Range_Circle::LateUpdate_Object()
+{
+	CGameObject::LateUpdate_Object();
+}
+
+void CAttack_Range_Circle::PreRender_Particle()
+{
+}
+
+void CAttack_Range_Circle::PostRender_Particle()
+{
+}
+
+void CAttack_Range_Circle::SetLerp(ATKRNGOPTION* _circleoption)
+{
+	m_ATKRNGOption._eRangeType = _circleoption->_eRangeType;
+	m_ATKRNGOption._fAcc = _circleoption->_fAcc;
+	m_ATKRNGOption._fMaxAcc = _circleoption->_fMaxAcc;
+	m_ATKRNGOption._iTotalFrame = _circleoption->_iTotalFrame;
+	m_ATKRNGOption._iNextFrame = _circleoption->_iNextFrame;
+	m_ATKRNGOption._vMinSize = _circleoption->_vMinSize;
+	m_ATKRNGOption._vMaxSize = _circleoption->_vMaxSize;
+	m_ATKRNGOption._fLifeTime = _circleoption->_fLifeTime;
+	m_ATKRNGOption._vLerpScale = CGameUtilMgr::s_vZero;
+	m_fTime = 0.f;
+
+	// if (m_ATKRNGOption._eRangeType == READY_CIRCLE)
+	// {
+	// 	m_pTransCom->m_vScale *= 10.f;// m_ATKRNGOption._vMaxSize;
+	// 	m_fSpeed = 0.f; // ¾È¾¸
+	// 	m_fCurTime = 0.f;
+	// }
+	// else if (m_ATKRNGOption._eRangeType == ATTACK_CIRCLE)
+	// {
+	// 	m_pTransCom->m_vScale = m_ATKRNGOption._vMinSize;
+	// 	m_fCurTime = 0.f;
+	// }
+	// m_pTransCom->Update_Component(0.f);
+}
+
+CAttack_Range_Circle* CAttack_Range_Circle::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+{
+	CAttack_Range_Circle* Inst = new CAttack_Range_Circle(pGraphicDev);
+
+	if (FAILED(Inst->Ready_Object()))
+	{
+		return nullptr;
+	}
+	return Inst;
+}
+
+void CAttack_Range_Circle::Free()
+{
+	CGameObject::Free();
+}
+#pragma endregion
+
 #pragma region 3DBase
 C3DBaseTexture::~C3DBaseTexture()
 {
@@ -745,8 +872,99 @@ void CMoonParticle::Free()
 {
 	CParticleSystem::Free();
 }
+#pragma endregion
+
+#pragma region Fascinate_Effect
+
+CFascinated_Effect::~CFascinated_Effect()
+{
+}
+
+_int CFascinated_Effect::Update_Object(const _float& fTimeDelta)
+{
+
+	std::list<Attribute>::iterator i;
+
+	for (i = m_ParticlesList.begin(); i != m_ParticlesList.end(); i++)
+	{
+		if (i->_bIsAlive)
+		{
+			i->_fAge += fTimeDelta;
+			CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
+			_vec3 pPos;
+			pPlayerTransform->Get_Info(INFO_POS, &pPos);
+			i->_vPosition = pPos;
+			i->_vPosition.y = pPos.y + 3.f;
+			if (i->_fAge > i->_fLifeTime)
+			{
+				i->_bIsAlive = false;
+			}
+		}
+	}
+	RemoveDeadParticles();
+	CParticleSystem::Update_Object(fTimeDelta);
+	return OBJ_NOEVENT;
+}
+
+void CFascinated_Effect::Render_Object()
+{
+	CParticleSystem::Render_Object();
+}
+
+void CFascinated_Effect::Reset_Particle(Attribute* _Attribute)
+{
+	_Attribute->_bIsAlive = true;
+	m_fSize = _Attribute->_fSize;
+
+	_vec3 min = _vec3(0.f, 0.0f, 0.f);
+	_vec3 max = _vec3(0.f, 1.0f, 0.f);
+
+	GetRandomVector(
+		&_Attribute->_vVelocity,
+		&min,
+		&max);
+
+	D3DXVec3Normalize(
+		&_Attribute->_vVelocity,
+		&_Attribute->_vVelocity);
+
+	_Attribute->_vVelocity *= 0.1f;
 
 
+	_Attribute->_fAge = 0.0f;
+}
+
+void CFascinated_Effect::PreRender_Particle()
+{
+	CParticleSystem::PreRender_Particle();
+	// m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
+	// m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, false);
+}
+
+void CFascinated_Effect::PostRender_Particle()
+{
+	CParticleSystem::PostRender_Particle();
+	m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, true);
+}
+
+CFascinated_Effect* CFascinated_Effect::Create(LPDIRECT3DDEVICE9 pGraphicDev, LPCWSTR _TexFileName)
+{
+	CFascinated_Effect* Inst = new CFascinated_Effect(pGraphicDev);
+	Inst->m_dwVtxBf_Size = 4096 * 2;
+	Inst->m_dwVtxBf_Offset = 0;
+	Inst->m_dwVtxBf_BatchSize = 1024 * 2;
+	if (FAILED(Inst->Ready_Object(_TexFileName)))
+	{
+		return nullptr;
+	}
+	return Inst;
+}
+
+void CFascinated_Effect::Free()
+{
+	CParticleSystem::Free();
+}
 #pragma endregion
 
 #pragma endregion
@@ -1563,9 +1781,6 @@ void CCrack::Free()
 }
 #pragma endregion
 
-
-
-
 #pragma region GolemSpit
 CGolemSpit::~CGolemSpit()
 {
@@ -1879,7 +2094,6 @@ void CLava_Particle::Free()
 
 
 #pragma endregion
-
 
 #pragma region HealCircle
 
