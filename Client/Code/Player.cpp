@@ -61,7 +61,7 @@ HRESULT CPlayer::Ready_Object(const wstring& wstrPath)
 	m_CurPotionCoolTime = 20.f;
 
 	m_pStat = Add_Component<CStatComponent>(L"Proto_StatCom", L"Proto_StatCom", ID_DYNAMIC);
-	m_pStat->SetMaxHP(10);
+	m_pStat->SetMaxHP(30);
 	m_pStat->SetTransform(m_pRootPart->pTrans);
 	m_pStat->SetHurtSound({
 		L"DLC_sfx_mob_whisperer_hit_1.ogg",
@@ -135,9 +135,6 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 	case LEGACY:
 		break;
 	case DEAD:
-		if (m_bDeadTime > 3.f) 
-			PlayerSpawn();
-		m_bDeadTime += fTimeDelta;
 		break;
 	default:
 		break;
@@ -263,7 +260,6 @@ void CPlayer::PlayerSpawn()
 	m_bStopAnim = false;
 	m_bCanPlayAnim = false;
 	PlayAnimationOnce(&landing);
-	m_bDeadTime = 0.f;
 	SetVisible(true);
 }
 

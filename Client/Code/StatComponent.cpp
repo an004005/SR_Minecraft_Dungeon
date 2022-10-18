@@ -175,7 +175,6 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 		break;
 	}
 
-
 	ModifyHP(-iDamage);
 	if (iDamage != 0)
 	{
