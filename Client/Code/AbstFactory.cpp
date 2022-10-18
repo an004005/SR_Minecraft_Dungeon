@@ -60,6 +60,7 @@
 #include "RemoteInventory.h"
 #include "BossHPUI.h"
 #include "PlayerUI.h"
+#include "ClearUI.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -582,6 +583,10 @@ void CUIFactory::Ready_UIFactory()
 	 s_mapUISpawner.insert({ "PlayerUI", [](_uint iTexNum)
 	 {
 		 return CPlayerUI::Create(s_pGraphicDev, 0);
+	 } });
+	 s_mapUISpawner.insert({ "ClearUI", [](_uint iTexNum)
+	 {
+		 return CClearUI::Create(s_pGraphicDev, 0);
 	 } });
 
 	
