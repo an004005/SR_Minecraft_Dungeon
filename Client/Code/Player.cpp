@@ -151,7 +151,7 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 		m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * m_fRollSpeed * fTimeDelta;
 		if (m_dwRollDust + 300 < GetTickCount())
 		{
-			CEffectFactory::Create<CCloud>("Roll_Cloud", L"Roll_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+			CEffectFactory::Create<CCloud>("Roll_Cloud", L"Roll_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS] + _vec3{0.f, 0.5f, 0.f});
 			m_dwRollDust = GetTickCount();
 		}
 		break;
@@ -200,7 +200,7 @@ void CPlayer::Render_Object()
 		m_pGraphicDev->GetViewport(&viewport);
 
 		_vec2 vScreen;
-		CGameUtilMgr::World2Screen(vScreen, m_pColl->GetCollPos() + _vec3{0.f, 1.5f, 0.f}, matView, matProj, viewport);
+		CGameUtilMgr::World2Screen(vScreen, m_pColl->GetCollPos() + _vec3{0.f, 2.f, 0.f}, matView, matProj, viewport);
 
 		Engine::Render_Font(L"Gothic_Bold20", to_wstring(m_iID).c_str(), &vScreen, D3DCOLOR_ARGB(255, 0, 0, 0));
 
@@ -230,10 +230,13 @@ void CPlayer::AnimationEvent(const string& strEvent)
 		{
 			Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 				->PlayShake(0.15f, 0.4f);
-			CEffectFactory::Create<CCrack>("Exe_Decal", L"Exe_Decal");
+			_vec3 vDecalPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 3.f;
+			vDecalPos.y = 0.5f + Get_GameObject<CTerrainCubeMap>(LAYER_ENV, L"TerrainCubeMap")->GetHeight(vDecalPos.x, vDecalPos.z);
+
+			CEffectFactory::Create<CCrack>("Exe_Decal", L"Exe_Decal", vDecalPos);
 			for (int i = 0; i < 5; i++)
 			{
-				CEffectFactory::Create<CCloud>("Decal_Cloud", L"Decal_Cloud");
+				CEffectFactory::Create<CCloud>("Decal_Cloud", L"Decal_Cloud", vDecalPos);
 			}
 		}
 		// axe crack
@@ -258,7 +261,7 @@ void CPlayer::AnimationEvent(const string& strEvent)
 
 		if (m_dwWalkDust + 500 < GetTickCount())
 		{
-			CEffectFactory::Create<CCloud>("Walk_Cloud", L"Walk_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+			CEffectFactory::Create<CCloud>("Walk_Cloud", L"Walk_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS] + _vec3{0.f, 0.5f, 0.f});
 			m_dwWalkDust = GetTickCount();
 		}
 	}
@@ -270,7 +273,7 @@ void CPlayer::AnimationEvent(const string& strEvent)
 	{
 		CSoundMgr::GetInstance()->PlaySound(L"sfx_player_landing.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 		for (int j = 0; j < 15; j++)
-			CEffectFactory::Create<CCloud>("ShockPowder_Cloud", L"ShockPowder_Cloud");
+			CEffectFactory::Create<CCloud>("ShockPowder_Cloud", L"ShockPowder_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS] + _vec3{0.f, 0.5f, 0.f});
 	}
 	else if (strEvent == "visible")
 	{

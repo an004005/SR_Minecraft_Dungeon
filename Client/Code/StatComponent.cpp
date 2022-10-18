@@ -190,7 +190,8 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 void CStatComponent::Revive()
 {
 	m_iHP = m_iMaxHP;
-	ModifyHP(0);
+	_int tmp = 0;
+	m_DamageDelegater.broadcast(m_iHP, m_iMaxHP, tmp);
 	m_bDead = false;
 	m_bStun = false;
 	m_bDamaged = false;

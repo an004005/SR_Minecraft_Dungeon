@@ -101,8 +101,6 @@ _int CStage::Update_Scene(const _float & fTimeDelta)
 		}
 	}
 	
-	Engine::GetFont();
-
 	CSoundMgr::GetInstance()->Update_Listener(LAYER_ENV, L"StaticCamera");
 	CDamageFontMgr::GetInstance()->Update_DamageFontMgr(fTimeDelta);
 	return Engine::CScene::Update_Scene(fTimeDelta);

@@ -22,7 +22,7 @@ public:
 	}
 	void SetProgress(_float fProgress)
 	{
-		if (m_fProgress < 0.f || m_fProgress > 1.f)
+		if (fProgress < 0.f || fProgress > 1.f)
 			return;
 		m_fProgress = fProgress;
 	}
