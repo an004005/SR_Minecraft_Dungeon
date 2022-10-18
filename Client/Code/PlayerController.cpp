@@ -421,6 +421,7 @@ _int CPlayerRemoteController::Update_Component(const _float& fTimeDelta)
 	{
 		if (m_iArrowAction & PLAYER_MR)
 		{
+			pPlayer->RotateTo(m_fYaw);
 			pPlayer->RangeAttackPress(true);
 			pPlayer->SetArrowLookAt(m_vLookAt);
 		}

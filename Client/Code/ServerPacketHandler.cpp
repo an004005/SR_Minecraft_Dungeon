@@ -144,10 +144,9 @@ bool Handle_S_PLAYER_ARROW(PacketSessionRef& session, Protocol::S_PLAYER_ARROW& 
 		return true;
 
 	_vec3 vLookAt;
-	// vLookAt.x =  pkt.vlookat().x();
-	// vLookAt.y =  pkt.vlookat().y();
-	// vLookAt.z =  pkt.vlookat().z();
-	pkt.vlookat().SerializeToArray(&vLookAt, sizeof(_vec3));
+	vLookAt.x =  pkt.vlookat().x();
+	vLookAt.y =  pkt.vlookat().y();
+	vLookAt.z =  pkt.vlookat().z();
 
 	Engine::Get_Component<CPlayerRemoteController>(LAYER_PLAYER, L"Player_Remote_" + to_wstring(pkt.player().id()), L"Proto_PlayerRemoteController",  ID_DYNAMIC)
 		->SetArrow(pkt.yaw(), vLookAt, pkt.actionbit());
