@@ -64,8 +64,12 @@ _int CStormRune::Update_Object(const _float& fTimeDelta)
 		const _matrix matBot = m_WeaponBot->GetWorldMat();
 
 		
-		const _vec3 vBot{ matBot._41, matBot._42, matBot._43 };
-		const _vec3 vTop{ matTop._41, matTop._42, matTop._43 };
+		_vec3 vBot{ matBot._41, matBot._42, matBot._43 };
+		_vec3 vTop{ matTop._41, matTop._42, matTop._43 };
+		_vec3 vToTop = vTop - vBot;
+		D3DXVec3Normalize(&vToTop, &vToTop);
+		vTop += vToTop * 1.5f ;
+		vBot += vToTop;
 
 		for (auto itr = m_vecFlame.begin(); itr != m_vecFlame.end();)
 		{
@@ -115,8 +119,8 @@ void CStormRune::Render_Object()
 void CStormRune::Free()
 {
 	m_pItemUI->SetDelete();
-	/*for (auto& e : m_vecFlame)
-		Safe_Release(e);*/
+	for (auto& e : m_vecFlame)
+		Safe_Release(e);
 	m_vecFlame.clear();
 	CRune::Free();
 	CRune::Free();

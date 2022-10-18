@@ -1688,7 +1688,7 @@ _int CLava_Particle::Update_Object(const _float& fTimeDelta)
 
 	m_pBufferCom->m_matWorld = m_pTransCom->m_matWorld;
 
-	m_pTransCom->Set_Scale(CGameUtilMgr::GetRandomFloat(0.5f, 1.5f), CGameUtilMgr::GetRandomFloat(0.5f, 1.5f), CGameUtilMgr::GetRandomFloat(0.5f, 1.5f));
+	m_pTransCom->Set_Scale(CGameUtilMgr::GetRandomFloat(1.5f, 2.5f), CGameUtilMgr::GetRandomFloat(1.5f, 2.5f), CGameUtilMgr::GetRandomFloat(1.5f, 2.5f));
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
 
