@@ -92,7 +92,7 @@ void CKouku::AnimationEvent(const string& strEvent)
 	{
 		m_bIsSymbolAttackCycle = true; // 이벤트 간격 늘리기 완료
 	}
-	else if (strEvent == "KoukuHide")
+	else if (strEvent == "Kouku_Hide")
 	{
 		m_pRootPart->pTrans->m_vInfo[INFO_POS] = _vec3(62.5f, 0.f, 48.7f);
 		PlayAnimationOnce(&m_arrAnim[REST]);
