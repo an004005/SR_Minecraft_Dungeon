@@ -9,7 +9,7 @@
 #include "SphereEffect.h"
 #include "StaticCamera.h"
 #include "BossHPUI.h"
-
+#include "ClearUI.h"
 CRedStoneMonstrosity::CRedStoneMonstrosity(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
 {
 }
@@ -39,7 +39,7 @@ HRESULT CRedStoneMonstrosity::Ready_Object()
 	m_eState = INTRO;
 	m_fSpeed = 2.f;
 
-	m_pStat->SetMaxHP(1000);
+	m_pStat->SetMaxHP(100);
 
 	m_pStat->SetHurtSound({
 		L"sfx_mob_redstoneGolemHurt-001.ogg",
@@ -98,6 +98,9 @@ void CRedStoneMonstrosity::AnimationEvent(const string& strEvent)
 	{
 		if (m_pBossHPUI)
 			m_pBossHPUI->KillHpbar();
+
+		CClearUI* pClearUI = CUIFactory::Create<CClearUI>("ClearUI", L"ClearUI", 0, WINCX * 0.5f, WINCY * 0.5f, WINCX, WINCY);
+		pClearUI->SetUITexture(26);
 
 		m_bDelete = true;
 	}
