@@ -1,6 +1,7 @@
 #pragma once
 #include "EquipItem.h"
 #include "GameObject.h"
+#include "Protocol.pb.h"
 
 #define COL 4
 #define ROW 3
@@ -20,7 +21,7 @@ enum LEGACY_SLOT { LEGACY_SLOT1, LEGACY_SLOT2, LEGACY_SLOT3, LEGACY_SLOT_END };
 class CInventory :
 	public CGameObject
 {
-private:
+protected:
 	explicit CInventory(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual ~CInventory();
 
@@ -69,12 +70,19 @@ public:
 			return 0;
 		return m_arrLegacy[eType]->GetUITexNum();
 	}
+	void ResetWeaponEquipped();
 
 	void SetRune(CRune* pRune) { m_pRune = pRune; }
 	void CreateClickFrame();
 	void CreateCollFrame(CEquipItem* pCurCollItem);
 
-private:
+protected:
+	// for network
+	void GetProtocolFromEquip(OUT Protocol::EquipState& state, CEquipItem* pEquipItem);
+	CEquipItem* GetEquipFromProtocol(const Protocol::EquipState& state);
+	// for network
+
+protected:
 	CPlayer* m_pOwner = nullptr;
 	array<CEquipItem*, (COL * ROW)> m_arrItem{}; //  아이템 스페이스
 	CEquipItem* m_pMelee = nullptr;
@@ -99,7 +107,7 @@ private:
 
 	//arrItem 이면 equipstate = flase, arrEquip이면 equipstate = true
 	//void MouseEvent(CItemSpaceUI* pItemSpaceUI, CEquipItem* pEquipItem, _int index, _bool bEquipState);
-	void MouseTestEvent(CEquipItem* pCurCollItem, CItemUI* pCurCollUI, _int iSlotIndex);
+	void MouseEvent(CEquipItem* pCurCollItem, CItemUI* pCurCollUI, _int iSlotIndex);
 	_uint m_iEmerald = 0;
 	_uint m_iArrow = 0;
 	_bool m_bLock = false;
@@ -112,5 +120,11 @@ private:
 	_int m_iSlotIndex = 0;
 
 	CItemTexUI* m_pItemTexUI = nullptr;
+
+
+	// equip network
+	_bool m_bEquipChange = false;
+	 // melee, range, legacy1, 2, 3
+	array<Protocol::EquipState, 5> m_arrPreEquipProtocol{};
 };
 

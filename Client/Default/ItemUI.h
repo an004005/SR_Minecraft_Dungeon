@@ -24,10 +24,12 @@ public:
 	_bool IsPick() { return m_bPick; }
 	void SetPick(_bool bPick) { m_bPick = bPick; }
 
+	void SetDelete() { m_bDelete = true;}
+
 private:
 	_bool m_bClose = true;
 	_bool m_bPick;
-
+	_bool m_bDelete = false;
 
 };
 

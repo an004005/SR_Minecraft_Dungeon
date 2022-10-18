@@ -165,50 +165,50 @@ void CItemTexUI::SetTexture(_int iTexNum)
 	break;
 	case 15:
 	{
-		//shockpowder
+		//Laser
 		wstrItemName[0] = L"레이저 룬";
-		wstrItemName[1] = L"마비 지속시간 2초";
+		wstrItemName[1] = L"레이저 유지 시간 2초";
 		wstrItemName[2] = L"충격 가루는 빠르게 빠져나가고 싶은 사람들을\n위한 믿음직한 도구입니다.";
 	}
 	break;
 	case 16:
 	{
-		//shockpowder
-		wstrItemName[0] = L"충격 가루";
-		wstrItemName[1] = L"마비 지속시간 2초";
+		//multishot
+		wstrItemName[0] = L"멀티샷";
+		wstrItemName[1] = L"화살 5발이 동시에 나간다";
 		wstrItemName[2] = L"충격 가루는 빠르게 빠져나가고 싶은 사람들을\n위한 믿음직한 도구입니다.";
 	}
 	break;
 	case 17:
 	{
-		//shockpowder
-		wstrItemName[0] = L"충격 가루";
-		wstrItemName[1] = L"마비 지속시간 2초";
+		//썬더
+		wstrItemName[0] = L"번개 룬";
+		wstrItemName[1] = L"검에 번개 속성 부여";
 		wstrItemName[2] = L"충격 가루는 빠르게 빠져나가고 싶은 사람들을\n위한 믿음직한 도구입니다.";
 	}
 	break;
 	case 18:
 	{
-		//shockpowder
-		wstrItemName[0] = L"충격 가루";
-		wstrItemName[1] = L"마비 지속시간 2초";
+		//토네이도
+		wstrItemName[0] = L"회오리 룬";
+		wstrItemName[1] = L"글레이브에 바람 속성 부여";
 		wstrItemName[2] = L"충격 가루는 빠르게 빠져나가고 싶은 사람들을\n위한 믿음직한 도구입니다.";
 	}
 	break;
 	case 19:
 	{
-		//shockpowder
-		wstrItemName[0] = L"충격 가루";
-		wstrItemName[1] = L"마비 지속시간 2초";
+		//기절 룬
+		wstrItemName[0] = L"기절 룬";
+		wstrItemName[1] = L"도끼에 기절 효과 부여";
 		wstrItemName[2] = L"충격 가루는 빠르게 빠져나가고 싶은 사람들을\n위한 믿음직한 도구입니다.";
 	}
 	break;
 	case 20:
 	{
-		//shockpowder
-		wstrItemName[0] = L"충격 가루";
-		wstrItemName[1] = L"마비 지속시간 2초";
-		wstrItemName[2] = L"충격 가루는 빠르게 빠져나가고 싶은 사람들을\n위한 믿음직한 도구입니다.";
+		//공격력 증가
+		wstrItemName[0] = L"공격 룬";
+		wstrItemName[1] = L"공격력 증가";
+		wstrItemName[2] = L"공격력이 증가한다.";
 	}
 	break;
 	default:

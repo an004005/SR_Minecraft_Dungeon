@@ -8,6 +8,22 @@ enum class PlayerArrowType
 	LASER
 };
 
+enum PlayerInputMask
+{
+	PLAYER_W = 1,
+	PLAYER_A = 1 << 1,
+	PLAYER_S = 1 << 2,
+	PLAYER_D = 1 << 3,
+
+	PLAYER_ML = 1 << 4,
+	PLAYER_MR = 1 << 5,
+	PLAYER_1 = 1 << 6,
+	PLAYER_2 = 1 << 7,
+	PLAYER_3 = 1 << 8,
+	PLAYER_ROLL = 1 << 9,
+	PLAYER_POTION = 1 << 10,
+};
+
 class CController;
 class CStatComponent;
 class CInventory;
@@ -81,6 +97,7 @@ public:
 	void Legacy2Press() { m_bLegacy2 = true; }
 	void Legacy3Press() { m_bLegacy3 = true; }
 	void Legacy4Press();
+	void SetArrowLookAt(const _vec3& vLookAt) {m_vArrowLookAt = vLookAt;}
 
 	// 매혹 전용 함수
 	void WalkToTarget(const _vec3& vTargetPos) { m_vTargetPos = vTargetPos; }
@@ -89,6 +106,8 @@ public:
 
 
 	void UsePotion();
+
+	void RotateTo(_float fYaw);
 	//
 
 	// UI용 함수
@@ -100,14 +119,21 @@ public:
 	//아이템 변경(임시)
 	void WeaponChange(ITEMTYPE eIT);
 	void SetSpeed(_float fSpeed) { m_fSpeed = fSpeed; }
-	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
+	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath, _bool bRemote = false);
 
+	void SetName(const string& strName) {m_strName = strName;}
+
+
+	_float GetYawToCursor();
 private:
 	void RotateToCursor();
 	void RotateToMove();
+
 	CInventory* m_pInventory = nullptr;
 
 protected:
+	string m_strName;
+
 	SkeletalPart* m_pWeaponPart = nullptr;
 	CStatComponent* m_pStat = nullptr;
 	CCollisionCom* m_pColl = nullptr;
@@ -153,12 +179,13 @@ protected:
 	string m_strStatus;
 
 	_bool m_bVisible = false;
-	_float m_bDeadTime = 0.f;
 
 	_bool m_bLaser = false;
 	_float m_fLaserTime = 2.f;
 	_float m_fCurLaserTime = 0.f;
 
+
+	_vec3 m_vArrowLookAt; // for remote player
 };
 
 

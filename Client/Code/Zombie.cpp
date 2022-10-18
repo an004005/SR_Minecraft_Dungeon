@@ -38,8 +38,17 @@ HRESULT CZombie::Ready_Object()
 		L"DLC_sfx_mob_monster_Hurt-002.ogg" ,
 		L"DLC_sfx_mob_monster_Hurt-003.ogg" });
 
-	CController* pController = Add_Component<CZombieController>(L"Proto_ZombieController", L"Proto_ZombieController", ID_DYNAMIC);
-	pController->SetOwner(this);
+	if (m_bRemote)
+	{
+		CController* pController = Add_Component<CZombieController>(L"Proto_ZombieRemoteController", L"Proto_ZombieRemoteController", ID_DYNAMIC);
+		pController->SetOwner(this);
+	}
+	else
+	{
+		CController* pController = Add_Component<CZombieController>(L"Proto_ZombieController", L"Proto_ZombieController", ID_DYNAMIC);
+		pController->SetOwner(this);
+	}
+
 
 	return S_OK;
 }
@@ -136,9 +145,10 @@ void CZombie::Free()
 	CMonster::Free();
 }
 
-CZombie* CZombie::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
+CZombie* CZombie::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath, _bool bRemote)
 {
 	CZombie* pInstance = new CZombie(pGraphicDev);
+	pInstance->m_bRemote = bRemote;
 
 	if (FAILED(pInstance->Ready_Object()))
 	{

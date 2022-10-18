@@ -9,6 +9,7 @@
 CShockPowder::CShockPowder(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CEquipItem(pGraphicDev)
 {
+	m_strFactoryTag = "ShockPowder";
 }
 
 
@@ -30,6 +31,8 @@ HRESULT CShockPowder::Ready_Object()
 
 _int CShockPowder::Update_Object(const _float & fTimeDelta)
 {
+	if (m_bDelete) return OBJ_DEAD;
+
 	if (m_fCoolTime > m_fCurCoolTime)
 	{
 		m_fCurCoolTime += fTimeDelta;
@@ -43,15 +46,15 @@ _int CShockPowder::Update_Object(const _float & fTimeDelta)
 	m_fCurCoolTime = 0.f;
 
 	CPlayer* pPlayer = m_pOwner;
-	_vec3 vPos = pPlayer->GetInfo(INFO_POS);
+	_vec3 vPos = pPlayer->GetInfo(INFO_POS) + _vec3{0.f, 0.5f, 0.f};
 
 	for (int j = 0; j < 10; j++)
 	{
 		CEffectFactory::Create<CShock_Powder>("Shock_Powder", L"UV_Shock_Powder", vPos);
-		CEffectFactory::Create<CCloud>("ShockPowder_Cloud", L"ShockPowder_Cloud");
+		CEffectFactory::Create<CCloud>("ShockPowder_Cloud", L"ShockPowder_Cloud", vPos);
 	}
 
-	CEffectFactory::Create<CUVCircle>("Shock_Circle", L"Shock_Circle");
+	CEffectFactory::Create<CUVCircle>("Shock_Circle", L"Shock_Circle", vPos);
 
 	CSoundMgr::GetInstance()->PlaySound(L"sfx_item_shockpowder-001.ogg", vPos);
 	m_bUse = false;

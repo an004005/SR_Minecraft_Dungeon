@@ -21,6 +21,7 @@ public:
 	static _float Vec3LenXZ(const _vec3& v1);
 	static _float GetRandomFloat(_float lowBound, _float highBound);
 	static void GetPickingRay(OUT _vec3& vOrigin, OUT _vec3& vRayDir, HWND hWnd, const _matrix& matView, const _matrix& matProj, const D3DVIEWPORT9& ViewPort);
+	static void World2Screen(OUT _vec2& vScreen, const _vec3& vPos, const _matrix& matView, const _matrix& matProj, const D3DVIEWPORT9& ViewPort);
 
 	static DWORD FtoDw(_float f);
 	static const _vec3 s_vZero;

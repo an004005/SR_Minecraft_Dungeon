@@ -192,6 +192,7 @@ call CopyUtility.bat</Command>
     <ClInclude Include="..\..\Header\Management.h" />
     <ClInclude Include="..\..\Header\ParticleSystem.h" />
     <ClInclude Include="..\..\Header\ProtoMgr.h" />
+    <ClInclude Include="..\..\Header\RcBossHPTex.h" />
     <ClInclude Include="..\..\Header\RcShader.h" />
     <ClInclude Include="..\..\Header\RcTex.h" />
     <ClInclude Include="..\..\Header\Renderer.h" />
@@ -221,6 +222,7 @@ call CopyUtility.bat</Command>
     <ClCompile Include="..\Code\Management.cpp" />
     <ClCompile Include="..\Code\ParticleSystem.cpp" />
     <ClCompile Include="..\Code\ProtoMgr.cpp" />
+    <ClCompile Include="..\Code\RcBossHPTex.cpp" />
     <ClCompile Include="..\Code\RcShader.cpp" />
     <ClCompile Include="..\Code\RcTex.cpp" />
     <ClCompile Include="..\Code\Renderer.cpp" />

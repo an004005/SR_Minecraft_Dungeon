@@ -41,7 +41,8 @@ private:
 	vector<DamageFont> m_vecDamageFont;
 	_float m_fSpeed;
 
-	_matrix m_matViewProj;
+	_matrix m_matView;
+	_matrix m_matProj;
 	D3DVIEWPORT9 m_ViewPort;
 };
 

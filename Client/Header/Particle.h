@@ -505,6 +505,7 @@ public:
 	void LateUpdate_Object() override;
 	void PreRender_Particle();
 	void PostRender_Particle();
+	void SetFollow(CTransform* pFollow) {m_pFollow = pFollow; m_pFollow->AddRef();}
 
 public:
 	static CHealCircle* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size, _float _rad, HealCircleType _type);
@@ -518,6 +519,8 @@ private:
 	_float m_fCurTime;
 	_float m_fSpeed;
 	_float m_fRad;
+
+	CTransform* m_pFollow = nullptr;
 
 	HealCircleType m_eType;
 };
@@ -535,6 +538,7 @@ public:
 	void LateUpdate_Object() override;
 	void PreRender_Particle();
 	void PostRender_Particle();
+	void SetFollow(CTransform* pFollow) {m_pFollow = pFollow; m_pFollow->AddRef();}
 
 public:
 	static CHeartParticle* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size);
@@ -551,6 +555,8 @@ private:
 
 	_float tmp;
 	_float desk;
+
+	CTransform* m_pFollow = nullptr;
 };
 
 
@@ -573,18 +579,21 @@ public:
 	void LateUpdate_Object() override;
 	void PreRender_Particle();
 	void PostRender_Particle();
+	void SetFlame();
+	void SetFlamePos(const _vec3& vBot, const _vec3& vTop);
 
 public:
-		static CLava_Particle* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size,LAVATYPE _type);
-	CRcShader*			m_pBufferCom = nullptr;
-	CTransform*			m_pTransCom = nullptr;
-	CTexture*			m_pTexture = nullptr;
+	static CLava_Particle* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size, LAVATYPE _type);
+	CRcShader*				m_pBufferCom = nullptr;
+	Engine::CTransform*		m_pTransCom = nullptr;
+	CTexture*				m_pTexture = nullptr;
 	void Free() override;
 
 private:
-	_float m_fTime;
-	_float m_fCurTime;
-	_float m_fSpeed;
+	_float m_fTime = 1.f;
+	_float m_fCurTime = 0.f;
+	_float m_fOffset;
+	_bool m_bFlame = false;
 };
 
 class CLazer : public CGameObject
