@@ -22,7 +22,7 @@
 #include "RedStoneMonstrosityController.h"
 #include "DamageFontMgr.h"
 #include "SatonController.h"
-
+#include "EndermanController.h"
 USING(Engine)
 
 CMainApp::CMainApp()
@@ -280,6 +280,8 @@ HRESULT CMainApp::Ready_Proto()
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_RedStoneMonstrosityController", CRedStoneMonstrosityController::Create()), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_KoukuController", CKoukuController::Create()), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_SatonController", CSatonController::Create()), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_EndermanController", CEndermanController::Create()), E_FAIL);
+
 	// remote controller
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_PlayerRemoteController", CPlayerRemoteController::Create()), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_ZombieRemoteController", CZombieRemoteController::Create()), E_FAIL);

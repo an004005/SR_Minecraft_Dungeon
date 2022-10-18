@@ -62,6 +62,7 @@
 #include "PlayerUI.h"
 #include "ClearUI.h"
 #include "Trigger.h"
+#include "Enderman.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -163,6 +164,11 @@ void CEnemyFactory::Ready_EnemyFactory()
 	s_mapEnemySpawner.insert({ "Saton", []()
 	{
 		return CSaton::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/saton.cube");
+	} });
+
+	s_mapEnemySpawner.insert({ "Enderman", []()
+	{
+		return CEnderman::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Enderman.cube");
 	} });
 }
 
