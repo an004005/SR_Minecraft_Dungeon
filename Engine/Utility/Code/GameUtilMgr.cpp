@@ -246,6 +246,11 @@ void CGameUtilMgr::World2Screen(_vec2& vScreen, const _vec3& vPos, const _matrix
 	vScreen = {vPosToScreen.x, vPosToScreen.y};
 }
 
+_float CGameUtilMgr::FloatLerp(_float f1, _float f2, _float fS)
+{
+	return f1 + fS * (f2 - f1);
+}
+
 DWORD CGameUtilMgr::FtoDw(_float f)
 {
 	return *((DWORD*)&f);

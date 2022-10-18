@@ -86,6 +86,7 @@ public:
 	static CSkeletalCube* Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrPath = L"");
 
 	virtual void PlayAnimationOnce(CubeAnimFrame* frame, bool bReserveStop = false);
+	virtual void PlayAnimationLoop(CubeAnimFrame* frame);
 	virtual void StopCurAnimation();
 	void SetAnimationSpeed(_float fAnimSpeed) { m_fAnimSpeed = fAnimSpeed; }
 

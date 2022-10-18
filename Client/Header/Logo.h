@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene.h"
+#include "SkeletalCube.h"
 
 class CEditBox;
 class CUI;
@@ -10,6 +11,16 @@ enum LogoState
 	MOVETO_PLAYER,
 	SELECT_PLAYER,
 	LOGO_STATE_END
+};
+
+
+enum CharacterSelect
+{
+	CHAR_STEVE,
+	CHAR_ESHE,
+	CHAR_COPPER,
+	CHAR_PRIDE,
+	CHAR_END
 };
 
 class CLogo : public CScene
@@ -23,8 +34,6 @@ public:
 	virtual _int Update_Scene(const _float& fTimeDelta) override;
 	virtual void LateUpdate_Scene(void) override;
 	virtual void Render_Scene(void) override;
-
-	void Confirm();
 
 public:
 	static CLogo*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
@@ -46,5 +55,15 @@ private:
 
 	CSkeletalCube* m_pCamMove = nullptr;
 	_vec3 m_vCamSelectPos = {2.5f, 2.5f, 2.5f};
+
+
+	_uint m_iCharNum = 0;
+	CharacterSelect m_eChar = CHAR_STEVE;
+
+	_float m_fDestYaw = 0.f;
+	_float m_fStartYaw;
+	_bool m_bMove = false;
+
+	CubeAnimFrame m_Idle;
 };
 

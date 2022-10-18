@@ -118,6 +118,18 @@ void CPlayerFactory::Ready_PlayerFactory()
 	{
 		return CPlayer::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Steve.cube", true);
 	}});
+	s_mapPlayerSpawner.insert({"Pride_Remote", []()
+	{
+		return CPlayer::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Pride.cube", true);
+	}});
+	s_mapPlayerSpawner.insert({"Eshe_Remote", []()
+	{
+		return CPlayer::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Eshe.cube", true);
+	}});
+	s_mapPlayerSpawner.insert({"Copper_Remote", []()
+	{
+		return CPlayer::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Copper.cube", true);
+	}});
 }
 
 void CEnemyFactory::Ready_EnemyFactory()

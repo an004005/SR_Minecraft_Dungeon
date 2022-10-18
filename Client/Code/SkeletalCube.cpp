@@ -279,6 +279,15 @@ void CSkeletalCube::PlayAnimationOnce(CubeAnimFrame* frame, bool bReserveStop)
 	m_bReserveStop = bReserveStop;
 }
 
+void CSkeletalCube::PlayAnimationLoop(CubeAnimFrame* frame)
+{
+	m_fAccTime = 0.f;
+	m_pCurAnim = frame;
+	m_pCurAnim->bLoop = true;
+	m_pIdleAnim = frame;
+	m_pIdleAnim->bLoop = true;
+}
+
 void CSkeletalCube::StopCurAnimation()
 {
 	if (m_pCurAnim)
