@@ -43,6 +43,7 @@ void CStunRune::Render_Object()
 
 void CStunRune::Free()
 {
+	m_pItemUI->SetDelete();
 	CRune::Free();
 }
 

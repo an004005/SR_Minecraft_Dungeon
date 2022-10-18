@@ -54,6 +54,7 @@ void CLaserShotRune::Render_Object()
 
 void CLaserShotRune::Free()
 {
+	m_pItemUI->SetDelete();
 	CRune::Free();
 }
 

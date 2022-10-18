@@ -32,9 +32,6 @@ _int CRemoteInventory::Update_Object(const _float& fTimeDelta)
 
 		for (auto& state : equipStateList)
 		{
-			string tmp;
-			state.SerializeToString(&tmp);
-
 			CEquipItem* pDelete = nullptr;
 			switch (state.type())
 			{
@@ -45,10 +42,10 @@ _int CRemoteInventory::Update_Object(const _float& fTimeDelta)
 						if (pRune)
 						{
 							pRune->SetDelete();
-							Safe_Release(pRune);
+							// Safe_Release(pRune);
 						}
 						pWeapon->SetDelete();
-						Safe_Release(m_pMelee);
+						// Safe_Release(m_pMelee);
 						m_pMelee = GetEquipFromProtocol(state);
 						m_pOwner->WeaponChange(IT_MELEE);
 					}
@@ -60,10 +57,10 @@ _int CRemoteInventory::Update_Object(const _float& fTimeDelta)
 						if (pRune)
 						{
 							pRune->SetDelete();
-							Safe_Release(pRune);
+							// Safe_Release(pRune);
 						}
 						pWeapon->SetDelete();
-						Safe_Release(m_pRange);
+						// Safe_Release(m_pRange);
 						m_pRange = GetEquipFromProtocol(state);
 						m_pOwner->WeaponChange(IT_RANGE);
 					}
@@ -78,7 +75,7 @@ _int CRemoteInventory::Update_Object(const _float& fTimeDelta)
 						if (pDelete)
 						{
 							pDelete->SetDelete();
-							Safe_Release(pDelete);
+							// Safe_Release(pDelete);
 						}
 
 						m_arrLegacy[eSlot] = GetEquipFromProtocol(state);
@@ -91,6 +88,7 @@ _int CRemoteInventory::Update_Object(const _float& fTimeDelta)
 			}
 
 		}
+		ResetWeaponEquipped();
 	}
 
 	return S_OK;

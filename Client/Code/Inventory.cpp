@@ -220,6 +220,7 @@ _int CInventory::Update_Object(const _float & fTimeDelta)
 			}
 		}
 
+		IM_LOG("Change item");
 		ResetWeaponEquipped();
 		m_bEquipChange = false;
 	}
@@ -404,39 +405,39 @@ void CInventory::TakeOut(CEquipItem * pItem)
 void CInventory::AddDefaultItems()
 {
 	m_pRange = CItemFactory::Create<CCrossbow>("Crossbow", L"Crossbow", IS_TAKE);
-	m_pRange->AddRef();
+	//m_pRange->AddRef();
 	m_pRange->SetOwner(m_pOwner);
 	
 
 	m_pMelee = CItemFactory::Create<CSword>("Sword", L"Sword", IS_TAKE);
-	m_pMelee->AddRef();
+	//m_pMelee->AddRef();
 	m_pMelee->SetOwner(m_pOwner);
 
 	m_arrItem[0] = CItemFactory::Create<CGlaive>("Glaive", L"Glaive", IS_TAKE);
-	m_arrItem[0]->AddRef();
+	// m_arrItem[0]->AddRef();
 	m_arrItem[0]->SetOwner(m_pOwner);
 
 	m_arrItem[1] = CItemFactory::Create<CLaserShotRune>("LaserShotRune", L"LaserShotRune", IS_TAKE);
-	m_arrItem[1]->AddRef();
+	// m_arrItem[1]->AddRef();
 	m_arrItem[1]->SetOwner(m_pOwner);
 
 	m_arrItem[4] = CItemFactory::Create<CStunRune>("StunRune", L"StunRune", IS_TAKE);
-	m_arrItem[4]->AddRef();
+	// m_arrItem[4]->AddRef();
 	m_arrItem[4]->SetOwner(m_pOwner);
 	//dynamic_cast<CCrossbow*>(m_arrEquip[IT_RANGE])->SetRune(dynamic_cast<CLaserShotRune*>(m_arrItem[1]));
 
 	m_arrItem[3] = CItemFactory::Create<CAxe>("Axe", L"Axe", IS_TAKE);
-	m_arrItem[3]->AddRef();
+	// m_arrItem[3]->AddRef();
 	m_arrItem[3]->SetOwner(m_pOwner);
 
 	// test
 	m_arrItem[8] = CItemFactory::Create<CRune>("LightningRune", L"LightningRune", IS_TAKE);
-	m_arrItem[8]->AddRef();
+	// m_arrItem[8]->AddRef();
 	m_arrItem[8]->SetOwner(m_pOwner);
 	
 	m_arrItem[9] = CItemFactory::Create<CRune>("MultishotRune", L"MultishotRune", IS_TAKE);
 	m_arrItem[9]->SetOwner(m_pOwner);
-	m_arrItem[9]->AddRef();
+	// m_arrItem[9]->AddRef();
 
 
 	// test
@@ -446,15 +447,15 @@ void CInventory::AddDefaultItems()
 	// rune->SetOwner(m_pOwner);
 
 	m_arrItem[6] = CItemFactory::Create<CPowerRune>("PowerRune", L"PowerRune", IS_TAKE);
-	m_arrItem[6]->AddRef();
+	// m_arrItem[6]->AddRef();
 	m_arrItem[6]->SetOwner(m_pOwner);
 
 	m_arrLegacy[LEGACY_SLOT1] = CItemFactory::Create<CShockPowder>("ShockPowder", L"ShockPowder", IS_TAKE);
-	m_arrLegacy[LEGACY_SLOT1]->AddRef();
+	// m_arrLegacy[LEGACY_SLOT1]->AddRef();
 	m_arrLegacy[LEGACY_SLOT1]->SetOwner(m_pOwner);
 
 	m_arrItem[5] = CItemFactory::Create<CFireworksArrow>("FireworksArrow", L"FireworksArrow", IS_TAKE);
-	m_arrItem[5]->AddRef();
+	// m_arrItem[5]->AddRef();
 	m_arrItem[5]->SetOwner(m_pOwner);
 
 	//m_pLegacy2 = CItemFactory::Create<CBootsOfSwiftness>("BootsOfSwiftness", L"BootsOfSwiftness", IS_TAKE);
@@ -683,7 +684,7 @@ CEquipItem* CInventory::GetEquipFromProtocol(const Protocol::EquipState& state)
 	wstring tmp;
 	tmp.assign(strFactoryTag.begin(), strFactoryTag.end());
 	CEquipItem* pEquip = CItemFactory::Create<CEquipItem>(state.name(), tmp, IS_TAKE);
-	pEquip->AddRef();
+	//pEquip->AddRef();
 	pEquip->SetOwner(m_pOwner);
 
 	switch (state.type())
@@ -695,7 +696,7 @@ CEquipItem* CInventory::GetEquipFromProtocol(const Protocol::EquipState& state)
 				wstring tmpRune;
 				tmpRune.assign(state.rune().begin(), state.rune().end());
 				CRune* pRune = CItemFactory::Create<CRune>(state.rune(), tmpRune, IS_TAKE);
-				pRune->AddRef();
+				//pRune->AddRef();
 				pRune->SetOwner(m_pOwner);
 				dynamic_cast<CWeapon*>(pEquip)->SetRune(pRune);
 			}

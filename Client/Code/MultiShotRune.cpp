@@ -67,3 +67,9 @@ CMultiShotRune* CMultiShotRune::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 	}
 	return pInstance;
 }
+
+void CMultiShotRune::Free()
+{
+	m_pItemUI->SetDelete();
+	CRune::Free();
+}

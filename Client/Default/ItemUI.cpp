@@ -24,6 +24,7 @@ HRESULT CItemUI::Ready_Object()
 
 _int CItemUI::Update_Object(const _float & fTimeDelta)
 {
+	if (m_bDelete) return OBJ_DEAD;
 
 	if (m_bClose)
 		return OBJ_NOEVENT;

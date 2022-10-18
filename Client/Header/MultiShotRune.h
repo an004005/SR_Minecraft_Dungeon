@@ -13,6 +13,7 @@ public:
 	virtual void EquipRune(CWeapon* pWeapon) override;
 	virtual void UnEquipRune(CWeapon* pWeapon) override;
 	static CMultiShotRune* Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	virtual void Free() override;
 
 private:
 	_uint m_iWeaponDamage = 0;

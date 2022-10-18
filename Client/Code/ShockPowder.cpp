@@ -31,6 +31,8 @@ HRESULT CShockPowder::Ready_Object()
 
 _int CShockPowder::Update_Object(const _float & fTimeDelta)
 {
+	if (m_bDelete) return OBJ_DEAD;
+
 	if (m_fCoolTime > m_fCurCoolTime)
 	{
 		m_fCurCoolTime += fTimeDelta;
@@ -58,7 +60,6 @@ _int CShockPowder::Update_Object(const _float & fTimeDelta)
 	m_bUse = false;
 	m_bColl = true;
 	CEquipItem::Update_Object(fTimeDelta);
-	if (m_bDelete) return OBJ_DEAD;
 
 	return OBJ_NOEVENT;
 }

@@ -47,17 +47,19 @@ HRESULT CCrossbow::Ready_Object()
 
 _int CCrossbow::Update_Object(const _float & fTimeDelta)
 {
+	if (m_bDelete) return OBJ_DEAD;
+
 	//runeslot on/off
 	if (m_pInventory->GetCurClickItem() == this)
 	{
-		if (m_pRune != nullptr)
+		if (m_pRune != nullptr && m_pRune->GetItemUI())
 		{
 			m_pRune->GetItemUI()->Open();
 		}
 	}
 	else
 	{
-		if (m_pRune != nullptr)
+		if (m_pRune != nullptr && m_pRune->GetItemUI())
 		{
 			m_pRune->GetItemUI()->Close();
 		}
@@ -74,7 +76,6 @@ _int CCrossbow::Update_Object(const _float & fTimeDelta)
 	Parabola(vPos, fHeight, fTimeDelta);
 
 	CWeapon::Update_Object(fTimeDelta);
-	if (m_bDelete) return OBJ_DEAD;
 
 	return 0;
 }
