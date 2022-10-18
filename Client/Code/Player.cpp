@@ -71,7 +71,7 @@ HRESULT CPlayer::Ready_Object(const wstring& wstrPath)
 	m_CurPotionCoolTime = 20.f;
 
 	m_pStat = Add_Component<CStatComponent>(L"Proto_StatCom", L"Proto_StatCom", ID_DYNAMIC);
-	m_pStat->SetMaxHP(30);
+	m_pStat->SetMaxHP(300);
 	m_pStat->SetTransform(m_pRootPart->pTrans);
 	m_pStat->SetHurtSound({
 		L"DLC_sfx_mob_whisperer_hit_1.ogg",
@@ -155,7 +155,7 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 		m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * m_fRollSpeed * fTimeDelta;
 		if (m_dwRollDust + 300 < GetTickCount())
 		{
-			CEffectFactory::Create<CCloud>("Roll_Cloud", L"Roll_Cloud");
+			CEffectFactory::Create<CCloud>("Roll_Cloud", L"Roll_Cloud",m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 			m_dwRollDust = GetTickCount();
 		}
 		break;
@@ -170,6 +170,9 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 	default:
 		break;
 	}
+
+	
+	IM_LOG("%f, %f, %f", m_pRootPart->pTrans->m_vInfo[INFO_POS].x, m_pRootPart->pTrans->m_vInfo[INFO_POS].y, m_pRootPart->pTrans->m_vInfo[INFO_POS].z);
 
 	return OBJ_NOEVENT;
 }
@@ -278,7 +281,7 @@ void CPlayer::AnimationEvent(const string& strEvent)
 	{
 		CSoundMgr::GetInstance()->PlaySound(L"sfx_player_landing.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 		for (int j = 0; j < 15; j++)
-			CEffectFactory::Create<CCloud>("ShockPowder_Cloud", L"ShockPowder_Cloud");
+			CEffectFactory::Create<CCloud>("ShockPowder_Cloud", L"ShockPowder_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 	}
 	else if (strEvent == "visible")
 	{

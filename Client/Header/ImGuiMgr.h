@@ -39,7 +39,7 @@ public:
 private:
 	static void SkeletalRecursive(SkeletalPart* Part, string& strSelected, ImGuiTreeNodeFlags baseFlags);
 
-private:
+public:
 	static ImGuiTextBuffer s_log;
 	static SkeletalPart* s_SelectedPart; // for AnimationEditor
 	static _bool s_bShowColl;

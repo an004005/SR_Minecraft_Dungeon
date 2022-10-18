@@ -241,6 +241,7 @@
     <ClInclude Include="..\Header\SoundMgr.h" />
     <ClInclude Include="..\Header\SphereEffect.h" />
     <ClInclude Include="..\Header\Stage.h" />
+    <ClInclude Include="..\Header\Stage_Kouku.h" />
     <ClInclude Include="..\Header\StatComponent.h" />
     <ClInclude Include="..\Header\StaticCamera.h" />
     <ClInclude Include="..\Header\StormRune.h" />
@@ -366,6 +367,7 @@
     <ClCompile Include="..\Code\SoundMgr.cpp" />
     <ClCompile Include="..\Code\SphereEffect.cpp" />
     <ClCompile Include="..\Code\Stage.cpp" />
+    <ClCompile Include="..\Code\Stage_Kouku.cpp" />
     <ClCompile Include="..\Code\StatComponent.cpp" />
     <ClCompile Include="..\Code\StaticCamera.cpp" />
     <ClCompile Include="..\Code\Struct.pb.cc">

@@ -67,11 +67,11 @@ void CKouku::AnimationEvent(const string& strEvent)
 			CEffectFactory::Create<CCloud>("Creeper_Cloud", L"Creeper_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 		}
 	}
-	else if (strEvent == "HorrorAttack")
-	{
-		m_bHorrorAttack = true;
-		m_bCountable = true;
-	}
+	// else if (strEvent == "HorrorAttack")
+	// {
+	// 	m_bHorrorAttack = true;
+	// 	m_bCountable = true;
+	// }
 	else if (strEvent == "SymbolStart")
 	{
 		for (int i = 0; i < 40; i++)
@@ -97,18 +97,56 @@ void CKouku::AnimationEvent(const string& strEvent)
 		m_pRootPart->pTrans->m_vInfo[INFO_POS] = _vec3(62.5f, 0.f, 48.7f);
 		// PlayAnimationOnce(&m_arrAnim[REST]);
 	}
-
-	else if (strEvent == "AnimStopped")
+	else if (strEvent == "Ready_Circle")
 	{
-		m_bDelete = true;
+		// 더블 해머 1타
+		m_vKoukuHammerPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+		CEffectFactory::AttackRange_Create("Attack_Range_Circle", L"Attack_Range_Circle", m_vKoukuHammerPos
+			, READY_CIRCLE, CGameUtilMgr::s_vZero, _vec3(4.f, 4.f, 4.f), 35, 35);
+
+
+		CEffectFactory::AttackRange_Create("Attack_Range_Circle", L"Attack_Range_Circle", m_vKoukuHammerPos
+			, ATTACK_CIRCLE, CGameUtilMgr::s_vZero, _vec3(4.f, 4.f, 4.f), 100, 35);
+	}
+	else if(strEvent == "BasicAttackColl_1")
+	{
+		m_bIsBasicAttackColl = true; // 완료
+	}
+	else if (strEvent == "DoubleHammer_1")
+	{
+		m_bIsDoubleHammerColl_1 = true;
+
+		// 더블 해머 2타
+		m_vKoukuHammerPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 5.f;;
+		CEffectFactory::AttackRange_Create("Attack_Range_Circle", L"Attack_Range_Circle", m_vKoukuHammerPos
+			, READY_CIRCLE, CGameUtilMgr::s_vZero, _vec3(5.f, 5.f, 5.f), 34, 34);
+
+		CEffectFactory::AttackRange_Create("Attack_Range_Circle", L"Attack_Range_Circle", m_vKoukuHammerPos
+			, ATTACK_CIRCLE, CGameUtilMgr::s_vZero, _vec3(5.f, 5.f, 5.f), 100, 34);
+	}
+	else if (strEvent == "DoubleHammer_2")
+	{
+		m_bIsDoubleHammerColl_2 = true;
+	}
+	else if (strEvent == "HorrorAttack_Start")
+	{
+		m_bCountable = true;
+	}
+	else if (strEvent == "Horror_Attack")
+	{
+		m_bIsHorrorAttack = true;
 		m_bCountable = false;
 	}
+	else if (strEvent == "HorrorAttack_End")
+	{
+		m_bIsHorrorAttack = false;
+	}
+
 }
 
 _int CKouku::Update_Object(const _float& fTimeDelta)
 {
 	if (m_bDelete) return OBJ_DEAD;
-
 
 	CMonster::Update_Object(fTimeDelta);
 
@@ -138,9 +176,9 @@ _int CKouku::Update_Object(const _float& fTimeDelta)
 	case HORROR_ATTACK:
 		m_fCurTime += fTimeDelta;
 
-		if (m_fCurTime <= m_fTime)
+		if (m_fCurTime <= m_fTime && !m_bCountable)
 		{
-			m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * m_fSpeed * fTimeDelta;
+			m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 4.f * fTimeDelta;
 		}
 		m_strState = "HORROR_ATTACK";
 		break;
@@ -261,7 +299,73 @@ void CKouku::LateUpdate_Object()
 		}
 	}
 
-	
+	if(m_bIsBasicAttackColl)
+	{
+		set<CGameObject*> Player;
+		_vec3 KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+		_vec3 FromPos = KoukuPos + m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 2;
+		Engine::GetOverlappedObject(Player, KoukuPos, 3.f);
+
+		for (auto& obj : Player)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+				->TakeDamage(15, FromPos, this, DT_KNOCK_BACK);
+		}
+
+		m_bIsBasicAttackColl = false;
+	}
+
+	if (m_bIsDoubleHammerColl_1)
+	{
+		set<CGameObject*> Player;
+		_vec3 KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+		// _vec3 FromPos = KoukuPos + m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 2;
+		Engine::GetOverlappedObject(Player, KoukuPos, 4.f);
+
+		for (auto& obj : Player)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+				->TakeDamage(20, KoukuPos, this, DT_KNOCK_BACK);
+		}
+
+		m_bIsDoubleHammerColl_1 = false;
+	}
+
+	if (m_bIsDoubleHammerColl_2)
+	{
+		set<CGameObject*> Player;
+		_vec3 KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+		_vec3 FromPos = KoukuPos + m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 5;
+		Engine::GetOverlappedObject(Player, KoukuPos, 5.f);
+
+		for (auto& obj : Player)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+				->TakeDamage(20, FromPos, this, DT_KNOCK_BACK);
+		}
+
+		m_bIsDoubleHammerColl_2 = false;
+	}
+
+	if(m_bIsHorrorAttack)
+	{
+		set<CGameObject*> Player;
+		_vec3 KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+		// _vec3 FromPos = KoukuPos + m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 5;
+		Engine::GetOverlappedObject(Player, KoukuPos, 2.5f);
+
+		for (auto& obj : Player)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+				->TakeDamage(5, KoukuPos, this, DT_KNOCK_BACK);
+		}
+
+		// m_bIsHorrorAttack = false;
+	}
 }
 
 void CKouku::Free()

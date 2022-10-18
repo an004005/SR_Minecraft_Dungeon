@@ -108,9 +108,22 @@ private:
 	_bool m_bMove = false;
 	_float m_fTime;
 	_float m_fCurTime;
+	// _bool m_bHammerReady = false;
 
-	
-	_bool m_bHammerReady = false;
+
+	// Collider
+	_bool m_bIsBasicAttackColl = false;
+	// _bool m_bIsBasicAttackColl_2 = false;
+
+	_bool m_bIsDoubleHammerColl_1 = false;
+	_bool m_bIsDoubleHammerColl_2 = false;
+
+	_bool m_bIsHorrorAttack = false;
+
+	_bool m_bIsCounter = false;
+	// ~Collider
+
+	_vec3 m_vKoukuHammerPos;
 
 };
 

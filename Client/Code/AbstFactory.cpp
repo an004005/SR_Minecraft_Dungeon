@@ -60,6 +60,7 @@
 #include "RemoteInventory.h"
 #include "BossHPUI.h"
 #include "PlayerUI.h"
+#include "Stage_Kouku.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -627,6 +628,12 @@ void CSceneFactory::Ready_SceneFactory()
 		{
 			return CStage::Create(s_pGraphicDev);
 		}});
+
+		s_mapSceneSpawner.insert({ "Stage_Kouku", []()
+		{
+			return CStage_Kouku::Create(s_pGraphicDev);
+		} });
+
 		s_mapSceneSpawner.insert({"Animation Tool", []()
 		{
 			return CAnimationTool::Create(s_pGraphicDev);

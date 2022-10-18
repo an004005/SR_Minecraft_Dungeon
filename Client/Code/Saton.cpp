@@ -19,6 +19,7 @@ CSaton::CSaton(const CMonster& rhs) : CMonster(rhs)
 HRESULT CSaton::Ready_Object()
 {
 	CMonster::Ready_Object();
+	m_pColl->SetCollType(COLL_WALL);
 
 	// m_arrAnim[INTRO] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/RedStoneMonstrosity/intro.anim");
 	m_arrAnim[FIRSTATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_doubleattack.anim");
@@ -208,8 +209,6 @@ void CSaton::LateUpdate_Object()
 	if (m_bStatonExplodeMoon)
 	{
 		set<CGameObject*> setPlayer;
-		// _vec3 KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
-
 		Engine::GetOverlappedObject(setPlayer, m_vExplodMoonPos, 4.f);
 
 		for (auto& obj : setPlayer)
@@ -225,7 +224,6 @@ void CSaton::LateUpdate_Object()
 				}
 			}
 		}
-
 		for (int j = 0; j < 10; j++)
 		{
 			CEffectFactory::Create<CShock_Powder>("Shock_Powder", L"UV_Shock_Powder",
@@ -280,9 +278,29 @@ void CSaton::LateUpdate_Object()
 
 	if(m_bIsAttack_2_Coll)
 	{
-		
+			_vec3& vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 2.8f;
+
+			set<CGameObject*> setObj;
+			Engine::GetOverlappedObject(setObj, m_vATKRNGCirclePos, 6.f);
+
+			for (auto& obj : setObj)
+			{
+				if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+				{
+					pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+						->TakeDamage(10, vPos, this, DT_HUGE_KNOCK_BACK);
+					IM_LOG("damage");
+					break;
+				}
+			}
+			m_bIsAttack_2_Coll = false;
 	}
+
+	
+
+
 }
+
 
 
 	

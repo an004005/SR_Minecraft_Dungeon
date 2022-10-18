@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "..\Header\Stage.h"
+#include "..\Header\Stage_Kouku.h"
 
 #include "StaticCamera.h"
 #include "Terrain.h"
@@ -35,17 +35,17 @@
 // object
 #include "Birds.h"
 #include "BirdsBrown.h"
-CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
+CStage_Kouku::CStage_Kouku(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
 {
 }
 
 
-CStage::~CStage()
+CStage_Kouku::~CStage_Kouku()
 {
 }
 
-HRESULT CStage::Ready_Scene(void)
+HRESULT CStage_Kouku::Ready_Scene(void)
 {
 	if (FAILED(Engine::CScene::Ready_Scene()))
 		return E_FAIL;
@@ -53,25 +53,11 @@ HRESULT CStage::Ready_Scene(void)
 	FAILED_CHECK_RETURN(Ready_Layer_Environment(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_GameLogic(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_UI(), E_FAIL);
-
-	// Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
-	// 	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
-
-	// CBatchTool::Load(L"../Bin/Resource/Batch/stage1_test.batch");
-
 	return S_OK;
 }
 
-_int CStage::Update_Scene(const _float & fTimeDelta)
+_int CStage_Kouku::Update_Scene(const _float & fTimeDelta)
 {
-	// m_pTransform->Get_Info(INFO_POS, &_vec3(0.f, -0.5f, 0.f));
-	// m_pTransform->Set_Scale(0.f, 1.f, 0.f);
-	//CUIFactory::Create<CUI>("UI_HP", L"UI", 600.f, 650.f - fY, 55.f, 40.f);
-	//Engine::Get_Component<CTransform>(LAYER_UI, L"UI_HP", L"Proto_TransformCom", ID_DYNAMIC)
-	//	->m_vAngle.y += D3DXToRadian(40.f) * fTimeDelta;
-
-	
-
 	if(m_pPlayer != nullptr)
 	{
 		if (m_pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)->IsDead())
@@ -108,31 +94,18 @@ _int CStage::Update_Scene(const _float & fTimeDelta)
 	return Engine::CScene::Update_Scene(fTimeDelta);
 }
 
-void CStage::LateUpdate_Scene(void)
+void CStage_Kouku::LateUpdate_Scene(void)
 {
-	
-	//IM_BEGIN("cam");
-	//if (ImGui::Button("Play Anim"))
-	//{
-	//	// m_pCamAnim->GetCamWorld(pStaticCamTransform->m_matWorld);
-
-	//	_matrix matView;
-	//	Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
-	//		->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/WorldTest.anim");
-	//	//m_pCam->m_bStop = true;
-	//}
-
-	//IM_END;
 	Engine::CScene::LateUpdate_Scene();
 }
 
-void CStage::Render_Scene(void)
+void CStage_Kouku::Render_Scene(void)
 {
 	CArrowCubeMgr::GetInst().Render_Buffer(); // todo : 렌더러에서 동작하게 바꾸기
 	CDamageFontMgr::GetInstance()->Render_DamageFontMgr();
 }
 
-HRESULT CStage::Ready_Layer_Environment()
+HRESULT CStage_Kouku::Ready_Layer_Environment()
 {
 	CGameObject*		pGameObject = nullptr;
 
@@ -147,55 +120,101 @@ HRESULT CStage::Ready_Layer_Environment()
 	pGameObject = pMap =  CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/koukusaton_test.map");
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", pGameObject), E_FAIL);
-	//
-	// pMap->SetHeight(60, 25, 25.000000);
-	// pMap->SetHeight(60, 26, 25.000000);
-	// pMap->SetHeight(60, 27, 25.000000);
-	// pMap->SetHeight(60, 28, 25.000000);
-	// pMap->SetHeight(60, 29, 25.000000);
-	// pMap->SetHeight(59, 30, 25.000000);
-	// pMap->SetHeight(60, 30, 25.000000);
-	// pMap->SetHeight(63, 30, 25.000000);
-	// pMap->SetHeight(49, 31, 25.000000);
-	// pMap->SetHeight(60, 31, 25.000000);
-	// pMap->SetHeight(61, 31, 25.000000);
-	// pMap->SetHeight(62, 32, 25.000000);
-	// pMap->SetHeight(72, 32, 25.000000);
-	// pMap->SetHeight(53, 33, 25.000000);
-	// pMap->SetHeight(58, 34, 25.000000);
-	// pMap->SetHeight(60, 34, 25.000000);
-	// pMap->SetHeight(63, 34, 25.000000);
-	// pMap->SetHeight(64, 34, 25.000000);
-	// pMap->SetHeight(56, 35, 25.000000);
-	// pMap->SetHeight(62, 35, 25.000000);
-	// pMap->SetHeight(39, 36, 25.000000);
-	// pMap->SetHeight(57, 36, 25.000000);
-	// pMap->SetHeight(66, 36, 25.000000);
-	// pMap->SetHeight(50, 37, 25.000000);
-	// pMap->SetHeight(56, 37, 25.000000);
-	// pMap->SetHeight(58, 37, 25.000000);
-	// pMap->SetHeight(60, 37, 25.000000);
-	// pMap->SetHeight(62, 37, 25.000000);
-	// pMap->SetHeight(64, 37, 25.000000);
-	// pMap->SetHeight(66, 37, 25.000000);
-	// pMap->SetHeight(72, 38, 25.000000);
-	// pMap->SetHeight(74, 38, 25.000000);
-	// pMap->SetHeight(79, 38, 25.000000);
-	// pMap->SetHeight(62, 39, 25.000000);
-	// pMap->SetHeight(71, 39, 25.000000);
-	// pMap->SetHeight(72, 39, 25.000000);
-	// pMap->SetHeight(75, 41, 25.000000);
-	// pMap->SetHeight(41, 42, 25.000000);
-	// pMap->SetHeight(37, 43, 25.000000);
-	// pMap->SetHeight(54, 43, 25.000000);
-	// pMap->SetHeight(60, 43, 25.000000);
-	// pMap->SetHeight(83, 43, 25.000000);
-	// pMap->SetHeight(74, 45, 25.000000);
-	// pMap->SetHeight(38, 47, 25.000000);
-	// pMap->SetHeight(66, 47, 25.000000);
-	// pMap->SetHeight(82, 49, 25.000000);
 
+	pMap->SetHeight(60, 25, 25.000000);
+	pMap->SetHeight(60, 26, 25.000000);
+	pMap->SetHeight(60, 27, 25.000000);
+	pMap->SetHeight(60, 28, 25.000000);
+	pMap->SetHeight(60, 29, 25.000000);
+	pMap->SetHeight(59, 30, 25.000000);
+	pMap->SetHeight(60, 30, 25.000000);
+	pMap->SetHeight(63, 30, 25.000000);
+	pMap->SetHeight(49, 31, 25.000000);
+	pMap->SetHeight(60, 31, 25.000000);
+	pMap->SetHeight(61, 31, 25.000000);
+	pMap->SetHeight(62, 32, 25.000000);
+	pMap->SetHeight(72, 32, 25.000000);
+	pMap->SetHeight(53, 33, 25.000000);
+	pMap->SetHeight(58, 34, 25.000000);
+	pMap->SetHeight(60, 34, 25.000000);
+	pMap->SetHeight(63, 34, 25.000000);
+	pMap->SetHeight(64, 34, 25.000000);
+	pMap->SetHeight(56, 35, 25.000000);
+	pMap->SetHeight(62, 35, 25.000000);
+	pMap->SetHeight(39, 36, 25.000000);
+	pMap->SetHeight(57, 36, 25.000000);
+	pMap->SetHeight(66, 36, 25.000000);
+	pMap->SetHeight(50, 37, 25.000000);
+	pMap->SetHeight(56, 37, 25.000000);
+	pMap->SetHeight(58, 37, 25.000000);
+	pMap->SetHeight(60, 37, 25.000000);
+	pMap->SetHeight(62, 37, 25.000000);
+	pMap->SetHeight(64, 37, 25.000000);
+	pMap->SetHeight(66, 37, 25.000000);
+	pMap->SetHeight(72, 38, 25.000000);
+	pMap->SetHeight(74, 38, 25.000000);
+	pMap->SetHeight(79, 38, 25.000000);
+	pMap->SetHeight(62, 39, 25.000000);
+	pMap->SetHeight(71, 39, 25.000000);
+	pMap->SetHeight(72, 39, 25.000000);
+	pMap->SetHeight(75, 41, 25.000000);
+	pMap->SetHeight(41, 42, 25.000000);
+	pMap->SetHeight(37, 43, 25.000000);
+	pMap->SetHeight(54, 43, 25.000000);
+	pMap->SetHeight(60, 43, 25.000000);
+	pMap->SetHeight(83, 43, 25.000000);
+	pMap->SetHeight(74, 45, 25.000000);
+	pMap->SetHeight(38, 47, 25.000000);
+	pMap->SetHeight(66, 47, 25.000000);
+	pMap->SetHeight(82, 49, 25.000000);
 
+	// for (int z = 49; z >= 0; --z)
+	// 	pMap->SetHeight(z, 49, 0.f);
+
+	for(int z = 33; z< VTXCNTZ; ++z) // 왼쪽
+	{
+		for(int x = 40; x>=0; --x)
+		{
+			pMap->SetHeight(x, z, 0.f);
+		}
+	}
+	for (int z = 33; z< VTXCNTZ; ++z) // 오른쪽
+	{
+		for (int x = 84; x < VTXCNTX; ++x)
+		{
+			pMap->SetHeight(x, z, 0.f);
+		}
+	}
+
+	for (int x = 41; x < VTXCNTX; ++x) // 아래
+	{
+		for (int z = 32; z >= 0; --z)
+		{
+			pMap->SetHeight(x, z, 0.f);
+		}
+	}
+
+	for (int x = 41; x < VTXCNTX; ++x) // 위
+	{
+		for (int z = 49; z < VTXCNTZ; ++z)
+		{
+			pMap->SetHeight(x, z, 0.f);
+		}
+	}
+	for (int z = 37; z >= 0; --z) // 왼쪽 아래 
+	{
+		for (int x = 48; x >= 0; --x)
+		{
+			pMap->SetHeight(x, z, 0.f);
+		}
+	}
+	for (int z = 39; z >= 0; --z) // 오른쪽 아래 
+	{
+		for (int x = 78; x < VTXCNTX; ++x)
+		{
+			pMap->SetHeight(x, z, 0.f);
+		}
+	}
 	//  Birds
 
 	for (int i = 0; i < 10; ++i)
@@ -208,13 +227,9 @@ HRESULT CStage::Ready_Layer_Environment()
 	return S_OK;
 }
 
-HRESULT CStage::Ready_Layer_GameLogic()
+HRESULT CStage_Kouku::Ready_Layer_GameLogic()
 {
 	_matrix matWorld;
-
-	 // CObjectFactory::Create<CBox>("Box", L"Box" , { 2.f, 7.5f, 6.f });
-	//CObjectFactory::Create<CBox>("Box", L"Box2", { 4.f, 9.f, 15.f });
-	// CObjectFactory::Create<CDynamite>("Dynamite", L"Dynamite");
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 0.f ,42.7f });
 	m_pPlayer = CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld);
@@ -232,40 +247,16 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	
 	//monsters
 	{	
-	
-		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 1.f, 0.f ,3.f });
-		//CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
-		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 55.f, 0.f ,28.f });
-		//CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
 		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 3.f, 3.f, 3.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 21.5f ,47.8f });
 		CEnemyFactory::Create<CSaton>("Saton", L"Saton", matWorld);
 
 		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 0.7f, 0.7f, 0.7f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 25.f ,44.8f });
 		CEnemyFactory::Create<CKouku>("Kouku", L"Kouku", matWorld);
-
-
-	/*	 CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 43.f, 0.f , 21.f });
-		 CEnemyFactory::Create<CCreeper>("Creeper", L"Creeper", matWorld);*/
-
-		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 45.f, 0.f ,23.f });
-		//CEnemyFactory::Create<CSkeleton>("Skeleton", L"Skeleton", matWorld);
-
-		/*CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 45.f, 0.f ,23.f });
-		CEnemyFactory::Create<CEnchanter>("Enchanter", L"Enchanter", matWorld);*/
-
-		 //CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 3.f, 0.f ,16.f });
-		// CEnemyFactory::Create<CRedStoneMonstrosity>("RedStoneMonstrosity", L"RedStoneMonstrosity", matWorld);
 	}
-	
-	// CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {6.f, 0.f ,6.f});
-	// CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
-	// CEnemyFactory::Create<CMonster>("Zombie", L"TestZombie", matWorld);
-
-
 	return S_OK;
 }
 
-HRESULT CStage::Ready_Layer_UI()
+HRESULT CStage_Kouku::Ready_Layer_UI()
 {
 	// 플레이어 생성하고 생성하기
 	CUIFactory::Create<CUI>("HPUI", L"HPUI", -1, WINCX/2, WINCY - 50, 100, 80);
@@ -287,9 +278,9 @@ HRESULT CStage::Ready_Layer_UI()
 
 
 
-CStage * CStage::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CStage_Kouku * CStage_Kouku::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 {
-	CStage *	pInstance = new CStage(pGraphicDev);
+	CStage_Kouku *	pInstance = new CStage_Kouku(pGraphicDev);
 
 	if (FAILED(pInstance->Ready_Scene()))
 	{
@@ -301,7 +292,7 @@ CStage * CStage::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 }
 
 
-void CStage::Free(void)
+void CStage_Kouku::Free(void)
 {
 
 

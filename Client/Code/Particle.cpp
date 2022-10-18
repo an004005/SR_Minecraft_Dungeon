@@ -2270,6 +2270,9 @@ _int CHealCircle::Update_Object(const _float& fTimeDelta)
 
 	m_pBufferCom->m_matWorld = m_pTransCom->m_matWorld;
 
+	m_fCurTime += fTimeDelta;
+
+
 	Add_RenderGroup(RENDER_NONALPHA, this);
 	return OBJ_NOEVENT;
 }

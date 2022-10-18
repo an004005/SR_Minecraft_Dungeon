@@ -29,8 +29,11 @@ private:
 
 	_float m_fBasicAttackCoolTime = 10.f;
 	_float m_fDoubleHammerCoolTime = 20.f;
-	_float m_fHorrorAttackCoolTime = 20.f;
-	_float m_fSymbolGimmickCoolTime = 6.2f;
+	// _float m_fHorrorAttackCoolTime = 20.f;
+	_float m_fHorrorAttackCoolTime = 5.f;
+
+	_float m_fSymbolGimmickCoolTime = 6.2f
+	;
 	_float m_fTargetingCoolTime = 3.f; 
 
 	_float m_fDoubleHammerDist = 8.f;
