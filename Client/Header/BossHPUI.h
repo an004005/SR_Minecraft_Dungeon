@@ -30,8 +30,11 @@ public:
 
 	//죽기 전에 사용
 	void KillHpbar() { m_bDead = true; }
-	
 
+	//디폴트 0.435f
+	void SetNamePos(_float fPos) { m_fNamePosx = fPos; m_bNameSet = true; }
+
+	void SetRender(_bool bRend) { m_bRend = bRend; }
 private:
 	array<CRcBossHPTex*, 5> m_pHeart{};
 
@@ -40,11 +43,14 @@ private:
 
 	_int m_iCurHp = 0;
 	_float m_fPersent = 0;
-
+	_float m_fNamePosx = 0.435f;
 	_bool m_bDead = false;
 	CGameObject* m_pOwner = nullptr;
 	wstring m_wstrName = L"";
 	wstring m_strLine = L"X ";
 	wstring m_strNum = L"";
+
+	_bool m_bNameSet = false;
+	_bool m_bRend = true;
 };
 

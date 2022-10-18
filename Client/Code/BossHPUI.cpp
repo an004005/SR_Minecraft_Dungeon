@@ -34,9 +34,11 @@ _int CBossHPUI::Update_Object(const _float & fTimeDelta)
 	if (m_bDead)
 		return OBJ_DEAD;
 
+	if (!m_bRend)
+		return OBJ_NOEVENT;
+	
 	CUI::Update_Object(fTimeDelta);
 
-	
 	if (m_iProgress != m_iCurHp)
 	{
 		if (m_iCurHp > m_fPersent * 4)
@@ -77,6 +79,7 @@ _int CBossHPUI::Update_Object(const _float & fTimeDelta)
 		
 		m_iProgress = m_iCurHp;
 	}
+
 	
 	return OBJ_NOEVENT;
 }
@@ -84,11 +87,10 @@ _int CBossHPUI::Update_Object(const _float & fTimeDelta)
 void CBossHPUI::Render_Object()
 {
 	
+
 	Render_Font(L"Gothic_Regular25", m_wstrName.c_str(),
-		&_vec2( WINCX * 0.435f, WINCY *0.07f),
+		&_vec2( WINCX * m_fNamePosx, WINCY *0.07f),
 		D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
-
-
 
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &CGameUtilMgr::s_matIdentity);
 	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
