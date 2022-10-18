@@ -119,6 +119,8 @@ HRESULT CPlayer::Ready_Object(const wstring& wstrPath)
 _int CPlayer::Update_Object(const _float& fTimeDelta)
 {
 	CSkeletalCube::Update_Object(fTimeDelta);
+
+		
 	DEBUG_SPHERE(m_pColl->GetCollPos(), m_pColl->GetRadius(), 0.1f);
 
 	if (m_pStat->IsSatonFascinate())
@@ -195,6 +197,7 @@ void CPlayer::LateUpdate_Object()
 	}
 
 	
+	if (m_pRootPart->pTrans->m_vInfo[INFO_POS].y < 21.f) { m_pStat->TakeDamage(m_pStat->GetMaxHP(), CGameUtilMgr::s_vZero, this); }
 
 	
 }

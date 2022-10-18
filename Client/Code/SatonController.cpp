@@ -16,7 +16,7 @@ CSatonController::CSatonController(const CSatonController& rhs)
 _int CSatonController::Update_Component(const _float& fTimeDelta)
 {
 	{
-		// m_fCurFirstHammerCoolTime += fTimeDelta;
+		m_fCurFirstHammerCoolTime += fTimeDelta;
 		// m_fCurSatonBirdCoolTime += fTimeDelta;
 		// m_fCurSatonGrapCoolTime += fTimeDelta;
 		// m_fCurSatonFascinateCoolTime += fTimeDelta;

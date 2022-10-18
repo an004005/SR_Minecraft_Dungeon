@@ -35,6 +35,8 @@
 // object
 #include "Birds.h"
 #include "BirdsBrown.h"
+#include "PlayerStartPos.h"
+
 CStage_Kouku::CStage_Kouku(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
 {
@@ -114,7 +116,7 @@ HRESULT CStage_Kouku::Ready_Layer_Environment()
 	
 	// Terrain
 	CEnvFactory::Create<CTerrainWater>("WaterTerrain", L"WaterTerrain");
-
+	
 	// TerrainCubeMap
 	CTerrainCubeMap* pMap;
 	pGameObject = pMap =  CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/koukusaton_test.map");
@@ -234,7 +236,10 @@ HRESULT CStage_Kouku::Ready_Layer_GameLogic()
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 0.f ,42.7f });
 	m_pPlayer = CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld);
 	m_pPlayer->PlayerSpawn();
-	
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 0.f ,42.7f });
+	CObjectFactory::Create<CPlayerStartPos>("PlayerPos", L"PlayerPos", matWorld);
+
 	CEffectFactory::Create<C3DBaseTexture>("3D_Base", L"3D_Base");
 	CEffectFactory::Create<CAttack_P>("Attack_Basic", L"Attack_Basic");
 	CEffectFactory::Create<CFireWork_Fuze>("FireWork_Fuze", L"FireWork_Fuze");

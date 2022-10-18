@@ -112,7 +112,7 @@ HRESULT CTerrainWater::Ready_Object()
 	m_pBufferCom->Set_Texture(m_pTextureCom->GetDXTexture());
 	m_pBufferCom->Set_TextureOption(0, 0, 0);
 
-	m_pBufferCom->Set_UVOption(CGameUtilMgr::s_fTimeDelta * 1, 1.64f, 0.5f,0.5f, 0.1f);
+	m_pBufferCom->Set_UVOption(CGameUtilMgr::s_fTimeDelta * 1, 1.64f, 0.5f,0.5f, 0.3f);
 
 	// CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 	// _vec3 pPos;
