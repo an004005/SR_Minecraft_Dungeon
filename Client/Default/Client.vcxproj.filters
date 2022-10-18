@@ -440,6 +440,9 @@
     <ClInclude Include="..\Header\BossHPUI.h">
       <Filter>02. GameObject\05. UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\PlayerUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -784,6 +787,9 @@
       <Filter>02. GameObject\05. UI</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\BossHPUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\PlayerUI.cpp">
       <Filter>02. GameObject\05. UI</Filter>
     </ClCompile>
   </ItemGroup>

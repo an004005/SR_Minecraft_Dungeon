@@ -56,6 +56,7 @@
 #include "LaserShotRune.h"
 #include "ItemTexUI.h"
 #include "BossHPUI.h"
+#include "PlayerUI.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -562,6 +563,11 @@ void CUIFactory::Ready_UIFactory()
 	 {
 		 return CItemTexUI::Create(s_pGraphicDev, 0);
 	 } });
+	 s_mapUISpawner.insert({ "PlayerUI", [](_uint iTexNum)
+	 {
+		 return CPlayerUI::Create(s_pGraphicDev, 0);
+	 } });
+
 	
 }
 
