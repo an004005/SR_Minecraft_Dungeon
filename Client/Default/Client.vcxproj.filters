@@ -454,6 +454,12 @@
     <ClInclude Include="..\Header\RemoteInventory.h">
       <Filter>02. GameObject\06. Inventory</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\BossHPUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\PlayerUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -813,6 +819,12 @@
     <ClCompile Include="ItemUI.cpp" />
     <ClCompile Include="..\Code\RemoteInventory.cpp">
       <Filter>02. GameObject\06. Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\BossHPUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\PlayerUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

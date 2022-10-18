@@ -20,6 +20,7 @@
 #include "LightningRune.h"
 #include "LaserShotRune.h"
 #include "ItemTexUI.h"
+#include "StormRune.h"
 #include <google/protobuf/util/message_differencer.h>
 
 #include "ServerPacketHandler.h"
@@ -117,7 +118,7 @@ _int CInventory::Update_Object(const _float & fTimeDelta)
 					pItemUI->SetSize(vSize);
 					pItemUI->Open();
 				}
-				MouseTestEvent(m_arrItem[i], pItemUI, i);
+				MouseEvent(m_arrItem[i], pItemUI, i);
 			}
 			
 		}
@@ -134,7 +135,7 @@ _int CInventory::Update_Object(const _float & fTimeDelta)
 				pItemUI->SetSize(vSize);
 				pItemUI->Open();
 			}
-			MouseTestEvent(m_pMelee, pItemUI, 0);
+			MouseEvent(m_pMelee, pItemUI, 0);
 		}
 
 		if (m_pRange != nullptr)
@@ -149,7 +150,7 @@ _int CInventory::Update_Object(const _float & fTimeDelta)
 				pItemUI->SetSize(vSize);
 				pItemUI->Open();
 			}
-			MouseTestEvent(m_pRange, pItemUI, 0);
+			MouseEvent(m_pRange, pItemUI, 0);
 		}
 
 		
@@ -169,7 +170,7 @@ _int CInventory::Update_Object(const _float & fTimeDelta)
 					pItemUI->SetSize(vSize);
 					pItemUI->Open();
 				}
-					MouseTestEvent(m_arrLegacy[i], pItemUI, i);
+					MouseEvent(m_arrLegacy[i], pItemUI, i);
 				
 			}
 		}
@@ -183,7 +184,7 @@ _int CInventory::Update_Object(const _float & fTimeDelta)
 			pItemUI->SetPos({ vPos.x, vPos.y, 0.f });
 			pItemUI->SetSize(vSize);
 			m_pRuneSlot->Open();
-			MouseTestEvent(m_pRune, pItemUI, 0);
+			MouseEvent(m_pRune, pItemUI, 0);
 		}	
 	}
 
@@ -442,9 +443,9 @@ void CInventory::AddDefaultItems()
 
 	// test
 
-	// CStunRune* rune = CItemFactory::Create<CStunRune>("StunRune", L"StunRune", IS_TAKE);
-	// dynamic_cast<CWeapon*>(m_arrItem[3])->SetRune(rune);
-	// rune->SetOwner(m_pOwner);
+	m_arrItem[5] = CItemFactory::Create<CFireworksArrow>("FireworksArrow", L"FireworksArrow", IS_TAKE);
+	m_arrItem[5]->AddRef();
+	m_arrItem[5]->SetOwner(m_pOwner);
 
 	m_arrItem[6] = CItemFactory::Create<CPowerRune>("PowerRune", L"PowerRune", IS_TAKE);
 	// m_arrItem[6]->AddRef();
@@ -722,6 +723,8 @@ void CInventory::MouseTestEvent(CEquipItem * pCurCollItem, CItemUI * pCurCollUI,
 	_vec3& vIconSize = pCurCollUI->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vScale;
 	_float fX = vIconPos.x + WINCX / 2;
 	_float fY = -vIconPos.y + WINCY / 2;
+
+	
 	
 	RECT	rcUI = { LONG(fX - vIconSize.x * 0.5f), LONG(fY - vIconSize.y * 0.5f), LONG(fX + vIconSize.x * 0.5f), LONG(fY + vIconSize.y * 0.5f) };
 	

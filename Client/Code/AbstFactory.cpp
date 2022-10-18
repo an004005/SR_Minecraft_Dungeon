@@ -58,6 +58,9 @@
 
 #include "ItemTexUI.h"
 #include "RemoteInventory.h"
+#include "BossHPUI.h"
+#include "PlayerUI.h"
+
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
 map<string, std::function<CGameObject*()>> CPlayerFactory::s_mapPlayerSpawner;
@@ -527,6 +530,10 @@ void CUIFactory::Ready_UIFactory()
 	 {
 	 	return CHPUI::Create(s_pGraphicDev, -1);//not used
 	 } });
+	 s_mapUISpawner.insert({ "BossHPUI", [](_uint iTexNum)
+	 {
+		 return CBossHPUI::Create(s_pGraphicDev, -1);//not used
+	 } });
 	 s_mapUISpawner.insert({ "PotionCoolTime", [](_uint iTexNum)
 	 {
 	 	return CCoolTimeUI::Create(s_pGraphicDev, -1, CoolTimeTarget::POTION);
@@ -572,6 +579,11 @@ void CUIFactory::Ready_UIFactory()
 	 {
 		 return CItemTexUI::Create(s_pGraphicDev, 0);
 	 } });
+	 s_mapUISpawner.insert({ "PlayerUI", [](_uint iTexNum)
+	 {
+		 return CPlayerUI::Create(s_pGraphicDev, 0);
+	 } });
+
 	
 }
 

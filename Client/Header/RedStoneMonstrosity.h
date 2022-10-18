@@ -28,6 +28,7 @@
 //};
 
 class CController;
+class CBossHPUI;
 
 class CRedStoneMonstrosity : public CMonster
 {
@@ -107,7 +108,7 @@ private:
 	_bool m_bSpit = false; // controller 입력
 	_bool m_bSummon = false; // controller 입력
 	_bool m_bWindmill = false; // controller 입력
-
+	
 
 	_bool m_bChopFire = false; // anim event 입력
 	_bool m_bWindmillFire = false; // anim event 입력
@@ -117,5 +118,7 @@ private:
 
 	_bool m_bStartPlay = false;
 	_bool m_bIntroPlay = false;
+
+	CBossHPUI* m_pBossHPUI = nullptr;
 };
 

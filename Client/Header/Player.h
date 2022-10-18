@@ -168,7 +168,6 @@ protected:
 	iBlockIndex<VTXCNTX, VTXCNTZ> arrBlock{};
 
 	_bool m_bVisible = false;
-	_float m_bDeadTime = 0.f;
 
 	_bool m_bLaser = false;
 	_float m_fLaserTime = 2.f;

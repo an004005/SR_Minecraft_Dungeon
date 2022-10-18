@@ -166,6 +166,7 @@
   <ItemGroup>
     <ClInclude Include="..\Header\AbstFactory.h" />
     <ClInclude Include="..\Header\BatchTool.h" />
+    <ClInclude Include="..\Header\BossHPUI.h" />
     <ClInclude Include="..\Header\ClientServiceMgr.h" />
     <ClInclude Include="..\Header\DamageFontMgr.h" />
     <ClInclude Include="..\Header\FireworksArrow.h" />
@@ -179,6 +180,7 @@
     <ClInclude Include="..\Header\Kouku.h" />
     <ClInclude Include="..\Header\KoukuController.h" />
     <ClInclude Include="..\Header\NetStage.h" />
+    <ClInclude Include="..\Header\PlayerUI.h" />
     <ClInclude Include="..\Header\Posion.h" />
     <ClInclude Include="..\Header\AnimationTool.h" />
     <ClInclude Include="..\Header\Apple.h" />
@@ -281,6 +283,7 @@
   <ItemGroup>
     <ClCompile Include="..\Code\AbstFactory.cpp" />
     <ClCompile Include="..\Code\BatchTool.cpp" />
+    <ClCompile Include="..\Code\BossHPUI.cpp" />
     <ClCompile Include="..\Code\DamageFontMgr.cpp" />
     <ClCompile Include="..\Code\ClientServiceMgr.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
@@ -298,6 +301,7 @@
     <ClCompile Include="..\Code\PlayerStartPos.cpp" />
     <ClCompile Include="..\Code\Kouku.cpp" />
     <ClCompile Include="..\Code\KoukuController.cpp" />
+    <ClCompile Include="..\Code\PlayerUI.cpp" />
     <ClCompile Include="..\Code\NetStage.cpp" />
     <ClCompile Include="..\Code\Posion.cpp" />
     <ClCompile Include="..\Code\AnimationTool.cpp" />

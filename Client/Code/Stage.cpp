@@ -12,6 +12,9 @@
 #include "ArrowCubeMgr.h"
 #include "Box.h"
 #include "Dynamite.h"
+#include "BossHPUI.h"
+#include "StatComponent.h"
+#include "PlayerUI.h"
 
 //monster
 #include "Monster.h"
@@ -67,6 +70,37 @@ _int CStage::Update_Scene(const _float & fTimeDelta)
 	//Engine::Get_Component<CTransform>(LAYER_UI, L"UI_HP", L"Proto_TransformCom", ID_DYNAMIC)
 	//	->m_vAngle.y += D3DXToRadian(40.f) * fTimeDelta;
 
+	
+
+	if(m_pPlayer != nullptr)
+	{
+		if (m_pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)->IsDead())
+		{
+			if (m_fDeadTime > 3.f)
+				m_pPlayer->PlayerSpawn();
+			m_fDeadTime += fTimeDelta;
+
+			if (m_bPlayerAlive)
+			{
+				m_pPlayerUI = CUIFactory::Create<CPlayerUI>("PlayerUI", L"PlayerDead", 0, WINCX * 0.5f, WINCY * 0.5f, WINCX, WINCY);
+				m_pPlayerUI->Open();
+				m_pPlayerUI->SetUITexture(25);
+			}
+			m_bPlayerAlive = false;
+			
+		}
+		else
+		{
+			if (m_pPlayerUI != nullptr)
+			{
+				m_pPlayerUI->Close();
+				m_pPlayerUI = nullptr;
+			}
+			m_bPlayerAlive = true;
+			m_fDeadTime = 0.f;
+		}
+	}
+	
 	Engine::GetFont();
 
 	CSoundMgr::GetInstance()->Update_Listener(LAYER_ENV, L"StaticCamera");
@@ -133,8 +167,8 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	// CObjectFactory::Create<CDynamite>("Dynamite", L"Dynamite");
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 0.f, 0.f ,0.f });
-	CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld)->PlayerSpawn();
-
+	m_pPlayer = CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld);
+	m_pPlayer->PlayerSpawn();
 	
 	CEffectFactory::Create<C3DBaseTexture>("3D_Base", L"3D_Base");
 	CEffectFactory::Create<CAttack_P>("Attack_Basic", L"Attack_Basic");
@@ -162,7 +196,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 		/*CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 45.f, 0.f ,23.f });
 		CEnemyFactory::Create<CEnchanter>("Enchanter", L"Enchanter", matWorld);*/
 
-		// CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 3.f, 0.f ,16.f });
+		 //CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 3.f, 0.f ,16.f });
 		// CEnemyFactory::Create<CRedStoneMonstrosity>("RedStoneMonstrosity", L"RedStoneMonstrosity", matWorld);
 	}
 	
