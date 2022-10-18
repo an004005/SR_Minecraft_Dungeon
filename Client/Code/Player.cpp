@@ -282,6 +282,10 @@ void CPlayer::AnimationEvent(const string& strEvent)
 	{
 		SetVisible(true);
 	}
+	else if (strEvent == "RangeFire")
+	{
+		PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK3]);
+	}
 }
 
 void CPlayer::PlayerSpawn()
@@ -458,8 +462,7 @@ void CPlayer::AttackState()
 	}
 	else if (m_bRangeAttack)
 	{
-		//기본이 근거리라 원거리로 바꿔줘야 텍스처가 나옴
-		WeaponChange(IT_RANGE);
+
 		m_bCanPlayAnim = false;
 		m_iAttackCnt = m_pInventory->CurWeapon(IT_RANGE)->Attack();
 		if (m_bRemote == false)
@@ -656,7 +659,7 @@ void CPlayer::StateChange()
 		if (m_bRemote == false)
 			RotateToCursor();
 		m_bDelay = true;
-		WeaponChange(IT_MELEE);
+		WeaponChange(IT_RANGE);
 		return;
 	}
 
@@ -674,6 +677,7 @@ void CPlayer::StateChange()
 
 	if (m_bCanPlayAnim)
 	{
+
 		m_eState = IDLE;
 		m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 		m_pCurAnim = &m_arrAnim[ANIM_IDLE];

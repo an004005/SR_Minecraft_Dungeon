@@ -46,11 +46,11 @@ void CClearUI::Render_Object()
 
 
 	Render_Font(L"Gothic_Bold70", m_wstrCount.c_str(),
-		&_vec2(WINCX * 0.47f, WINCY *0.4f),
+		&_vec2(WINCX * 0.48f, WINCY *0.19f),
 		D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
 
 	Render_Font(L"Gothic_Bold20", L"임무 종료중... ",
-		&_vec2(WINCX * 0.42f, WINCY *0.6f),
+		&_vec2(WINCX * 0.44f, WINCY *0.35f),
 		D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
 }
 

@@ -99,7 +99,7 @@ void CRedStoneMonstrosity::AnimationEvent(const string& strEvent)
 		if (m_pBossHPUI)
 			m_pBossHPUI->KillHpbar();
 
-		CClearUI* pClearUI = CUIFactory::Create<CClearUI>("ClearUI", L"ClearUI", 0, WINCX * 0.5f, WINCY * 0.5f, WINCX, WINCY);
+		CClearUI* pClearUI = CUIFactory::Create<CClearUI>("ClearUI", L"ClearUI", 0, WINCX * 0.5f, WINCY * 0.2f, WINCX* 0.4f, WINCY* 0.4f);
 		pClearUI->SetUITexture(26);
 
 		m_bDelete = true;

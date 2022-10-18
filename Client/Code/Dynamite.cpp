@@ -106,7 +106,7 @@ void CDynamite::LateUpdate_Object()
 			{
 				DamageType eDT = DT_KNOCK_BACK;
 				obj->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-					->TakeDamage(30, m_pTransCom->m_vInfo[INFO_POS], this, eDT);
+					->TakeDamage(300, m_pTransCom->m_vInfo[INFO_POS], this, eDT);
 			}
 		}
 

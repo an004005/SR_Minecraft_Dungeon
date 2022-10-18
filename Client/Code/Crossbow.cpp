@@ -139,6 +139,7 @@ _int CCrossbow::Attack()
 		m_pRune->Use();
 	}
 
+
 	m_bFireWork = false;
 	return m_iAttackCnt;
 }
