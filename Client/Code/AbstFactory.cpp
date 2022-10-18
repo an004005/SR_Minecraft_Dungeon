@@ -60,6 +60,7 @@ LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 map<string, std::function<CGameObject*()>> CPlayerFactory::s_mapPlayerSpawner;
 map<string, std::function<CGameObject*()>> CEnemyFactory::s_mapEnemySpawner;
 map<string, std::function<CGameObject*()>> CEffectFactory::s_mapEffectSpawner;
+map<string, std::function<CGameObject*(const ATKRNGOPTION& circleOption)>> CEffectFactory::s_mapKoukuEffectSpawner;
 map<string, std::function<CGameObject*()>> CEnvFactory::s_mapEnvSpawner;
 map<string, std::function<CGameObject*(ArrowParams)>> CBulletFactory::s_mapBulletSpawner;
 map<string, std::function<CGameObject*()>> CObjectFactory::s_mapObjectSpawner;
@@ -365,9 +366,9 @@ void CEffectFactory::Ready_EffectFactory()
 		return CChainLightning::Create(s_pGraphicDev);
 	} });
 
-	s_mapEffectSpawner.insert({ "Attack_Range_Circle", []()
+	s_mapKoukuEffectSpawner.insert({ "Attack_Range_Circle", [](const ATKRNGOPTION& circleOption)
 	{
-		return CAttack_Range_Circle::Create(s_pGraphicDev);
+		return CAttack_Range_Circle::Create(s_pGraphicDev, circleOption);
 	} });
 }
 

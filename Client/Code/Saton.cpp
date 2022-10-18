@@ -6,6 +6,7 @@
 #include "SatonController.h"
 #include "Skeleton.h"
 #include "StatComponent.h"
+#include "StaticCamera.h"
 
 CSaton::CSaton(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
 {
@@ -74,13 +75,37 @@ void CSaton::AnimationEvent(const string& strEvent)
 	{
 		m_bDelete = true;
 	}
-	else if (strEvent == "Ready_Attack")
+	else if (strEvent == "Ready_Attack_1")
 	{
-		// 레디어택, 어택 써클 둘다 생성
-		CEffectFactory::AttackRange_Create("Attack_Range_Circle", L"Attack_Range_Circle",
-			m_pRootPart->pTrans->m_vInfo[INFO_POS] + m_pRootPart->pTrans->m_vInfo[INFO_POS] * 3.f, READY_CIRCLE
-			, CGameUtilMgr::s_vZero, _vec3(3.f, 3.f, 3.f), 500, 500);
+			
+		m_vATKRNGCirclePos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 2.8f;
+		CEffectFactory::AttackRange_Create("Attack_Range_Circle", L"Attack_Range_Circle", m_vATKRNGCirclePos
+			, READY_CIRCLE, CGameUtilMgr::s_vZero, _vec3(5.f, 5.f, 5.f), 37, 37);
 
+		
+		CEffectFactory::AttackRange_Create("Attack_Range_Circle", L"Attack_Range_Circle", m_vATKRNGCirclePos
+			, ATTACK_CIRCLE, CGameUtilMgr::s_vZero, _vec3(5.f, 5.f, 5.f), 130, 37);
+	}
+	else if (strEvent == "Ready_Attack_2")
+	{
+		 
+		m_vATKRNGCirclePos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 2.8f;
+		CEffectFactory::AttackRange_Create("Attack_Range_Circle", L"Attack_Range_Circle", m_vATKRNGCirclePos
+			, READY_CIRCLE, CGameUtilMgr::s_vZero, _vec3(6.f, 6.f, 6.f), 63, 63);
+
+		
+		CEffectFactory::AttackRange_Create("Attack_Range_Circle", L"Attack_Range_Circle", m_vATKRNGCirclePos
+			, ATTACK_CIRCLE, CGameUtilMgr::s_vZero, _vec3(6.f, 6.f, 6.f), 130, 63);
+		Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+			->PlayShake(0.15f, 0.4f);
+		m_bIsAttack_1_Coll = true;
+	}
+	else if (strEvent == "Attack_2_End")
+	{
+		Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+			->PlayShake(0.2f, 0.4f);
+
+		m_bIsAttack_2_Coll = true;
 
 	}
 	else if (strEvent == "Second_Attack")
@@ -231,6 +256,31 @@ void CSaton::LateUpdate_Object()
 		}
 		m_bSatonDrawMoon = false;
 		m_bSatonDrawMoonPair = false;
+	}
+
+	if(m_bIsAttack_1_Coll)
+	{
+		_vec3& vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 2.8f;
+		
+		set<CGameObject*> setObj;
+		Engine::GetOverlappedObject(setObj, m_vATKRNGCirclePos, 5.f);
+		
+		for (auto& obj : setObj)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+			{
+				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+					->TakeDamage(10, vPos, this, DT_HUGE_KNOCK_BACK);
+				IM_LOG("damage");
+				break;
+			}
+		}
+		m_bIsAttack_1_Coll = false;
+	}
+
+	if(m_bIsAttack_2_Coll)
+	{
+		
 	}
 }
 

@@ -112,25 +112,46 @@ CAttack_Range_Circle::~CAttack_Range_Circle()
 {
 }
 
-HRESULT CAttack_Range_Circle::Ready_Object()
+HRESULT CAttack_Range_Circle::Ready_Object(const ATKRNGOPTION& circleOption)
 {
-	m_pBufferCom = Add_Component<CRcShader>(L"Proto_Attack_Range_CircleCom", L"Proto_Attack_Range_CircleCom", ID_STATIC);
-	m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
-	m_pTexture = Add_Component<CTexture>(L"Proto_Attack_Circle", L"Proto_Attack_Circle", ID_STATIC);
-	m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
-	m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
-	m_pBufferCom->Set_TextureOption(0, 0, 0);
-	// m_pTransCom->m_vInfo[INFO_POS].y + 2.f;
+	
+	// m_pTransCom->m_vInfo[INFO_POS].y += 0.1f; // 위치 올려야됌
+
+	m_ATKRNGOption._eRangeType = circleOption._eRangeType;
+	m_ATKRNGOption._fAcc = circleOption._fAcc;
+	m_ATKRNGOption._fMaxAcc = circleOption._fMaxAcc;
+	m_ATKRNGOption._iTotalFrame = circleOption._iTotalFrame;
+	m_ATKRNGOption._iNextFrame = circleOption._iNextFrame;
+	m_ATKRNGOption._vMinSize = circleOption._vMinSize;
+	m_ATKRNGOption._vMaxSize = circleOption._vMaxSize;
+	m_ATKRNGOption._fLifeTime = circleOption._fLifeTime;
+	m_ATKRNGOption._vLerpScale = CGameUtilMgr::s_vZero;
+	// m_fTime = 0.f;
+	m_fCurTime = 0.f;
+
+
 	if (m_ATKRNGOption._eRangeType == READY_CIRCLE)
 	{
-		m_pTransCom->m_vScale *= 10.f;// m_ATKRNGOption._vMaxSize;
+		m_pBufferCom = Add_Component<CRcShader>(L"Proto_Ready_Range_CircleCom", L"Proto_Ready_Range_CircleCom", ID_STATIC);
+		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
+		m_pTexture = Add_Component<CTexture>(L"Proto_Attack_Circle", L"Proto_Attack_Circle", ID_STATIC);
+		m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
+		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
+		m_pBufferCom->Set_TextureOption(0, 0, 0);
+		m_pTransCom->m_vScale = m_ATKRNGOption._vMaxSize;
 		m_fSpeed = 0.f; // 안씀
-		m_fCurTime = 0.f;
+		tmp = 0.1f;
 	}
 	else if (m_ATKRNGOption._eRangeType == ATTACK_CIRCLE)
 	{
+		m_pBufferCom = Add_Component<CRcShader>(L"Proto_Attack_Range_CircleCom", L"Proto_Attack_Range_CircleCom", ID_STATIC);
+		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
+		m_pTexture = Add_Component<CTexture>(L"Proto_Attack_Circle", L"Proto_Attack_Circle", ID_STATIC);
+		m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
+		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
+		m_pBufferCom->Set_TextureOption(0, 0, 0);
 		m_pTransCom->m_vScale = m_ATKRNGOption._vMinSize;
-		m_fCurTime = 0.f;
+		tmp = 0.15f;
 	}
 	m_pTransCom->Update_Component(0.f);
 
@@ -141,6 +162,9 @@ _int CAttack_Range_Circle::Update_Object(const _float& fTimeDelta)
 {
 	CGameObject::Update_Object(fTimeDelta);
 
+	_vec3& vPos = m_pTransCom->m_vInfo[INFO_POS];
+	vPos.y = Get_GameObject<CTerrainCubeMap>(LAYER_ENV, L"TerrainCubeMap")->GetHeight(vPos.x, vPos.z) + tmp;
+
 	if (m_fCurTime >= m_ATKRNGOption._fLifeTime)
 	{
 		return OBJ_DEAD;
@@ -149,18 +173,16 @@ _int CAttack_Range_Circle::Update_Object(const _float& fTimeDelta)
 
 	m_ATKRNGOption._fAcc += fTimeDelta;
 
-	if (m_ATKRNGOption._eRangeType == READY_CIRCLE)
-	{
-	}
+	if (m_ATKRNGOption._eRangeType == READY_CIRCLE){}
 	else if (m_ATKRNGOption._eRangeType == ATTACK_CIRCLE)
 	{
 		if(m_ATKRNGOption._fAcc > m_ATKRNGOption._fMaxAcc)
 		{
-			m_fCurTime = m_fTime;
+			m_fCurTime = m_ATKRNGOption._fLifeTime;
 		}
 		else
 		{
-			D3DXVec3Lerp(&m_ATKRNGOption._vLerpScale, &m_ATKRNGOption._vMinSize, &m_ATKRNGOption._vMaxSize, m_ATKRNGOption._fAcc);
+			D3DXVec3Lerp(&m_ATKRNGOption._vLerpScale, &m_ATKRNGOption._vMinSize, &m_ATKRNGOption._vMaxSize, m_ATKRNGOption._fAcc / m_ATKRNGOption._fMaxAcc);
 			m_pTransCom->m_vScale = m_ATKRNGOption._vLerpScale;
 		}
 	}
@@ -173,7 +195,7 @@ _int CAttack_Range_Circle::Update_Object(const _float& fTimeDelta)
 
 void CAttack_Range_Circle::Render_Object()
 {
-	CGameObject::Render_Object();
+	// CGameObject::Render_Object();
 	m_pBufferCom->Render_Buffer();
 }
 
@@ -192,16 +214,7 @@ void CAttack_Range_Circle::PostRender_Particle()
 
 void CAttack_Range_Circle::SetLerp(ATKRNGOPTION* _circleoption)
 {
-	m_ATKRNGOption._eRangeType = _circleoption->_eRangeType;
-	m_ATKRNGOption._fAcc = _circleoption->_fAcc;
-	m_ATKRNGOption._fMaxAcc = _circleoption->_fMaxAcc;
-	m_ATKRNGOption._iTotalFrame = _circleoption->_iTotalFrame;
-	m_ATKRNGOption._iNextFrame = _circleoption->_iNextFrame;
-	m_ATKRNGOption._vMinSize = _circleoption->_vMinSize;
-	m_ATKRNGOption._vMaxSize = _circleoption->_vMaxSize;
-	m_ATKRNGOption._fLifeTime = _circleoption->_fLifeTime;
-	m_ATKRNGOption._vLerpScale = CGameUtilMgr::s_vZero;
-	m_fTime = 0.f;
+	
 
 	// if (m_ATKRNGOption._eRangeType == READY_CIRCLE)
 	// {
@@ -217,11 +230,11 @@ void CAttack_Range_Circle::SetLerp(ATKRNGOPTION* _circleoption)
 	// m_pTransCom->Update_Component(0.f);
 }
 
-CAttack_Range_Circle* CAttack_Range_Circle::Create(LPDIRECT3DDEVICE9 pGraphicDev)
+CAttack_Range_Circle* CAttack_Range_Circle::Create(LPDIRECT3DDEVICE9 pGraphicDev,const ATKRNGOPTION& circleOption)
 {
 	CAttack_Range_Circle* Inst = new CAttack_Range_Circle(pGraphicDev);
 
-	if (FAILED(Inst->Ready_Object()))
+	if (FAILED(Inst->Ready_Object(circleOption)))
 	{
 		return nullptr;
 	}

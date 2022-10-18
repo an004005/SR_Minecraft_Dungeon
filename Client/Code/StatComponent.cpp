@@ -197,10 +197,11 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 	case DT_HUGE_KNOCK_BACK:
 		m_bKnockback = true;
 		m_fCurKnockbackTime = 0.f;
+		m_fPreYPos = m_pOwnerTrans->m_vInfo[INFO_POS].y;
 
 		m_vKnockBackVelocity = m_pOwnerTrans->m_vInfo[INFO_POS] - vFromPos;
 		D3DXVec3Normalize(&m_vKnockBackVelocity, &m_vKnockBackVelocity);
-		m_vKnockBackVelocity *= 40.f;
+		m_vKnockBackVelocity *= 45.f;
 		m_vKnockBackVelocity.y = 18.f;
 		break;
 	case DT_KOUKU_SYMBOL_BLUE:

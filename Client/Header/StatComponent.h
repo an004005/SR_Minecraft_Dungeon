@@ -73,8 +73,8 @@ private:
 
 	// knock back
 	_bool m_bKnockback = false;
-	_float m_fKnockbackTime = 0.3f;
-	_float m_fCurKnockbackTime = 0.3f;
+	_float m_fKnockbackTime = 0.5f;
+	_float m_fCurKnockbackTime = 0.5f;
 	_float m_fPreYPos = 0.f;
 
 	_bool m_bStiffen = false;

@@ -28,7 +28,7 @@ private:
 	_float m_fCurSatonDrawMoonCoolTime = 0.f;
 	_float m_fCurTargetingCoolTime = 3.f;
 
-	_float m_fFirstHammerCoolTime = 15.f;
+	_float m_fFirstHammerCoolTime = 5.f;
 	_float m_fSatonBirdCoolTime = 25.f;
 	_float m_fSatonGrapCoolTime = 30.f;
 	_float m_fSatonFascinateCoolTime = 10000.f;

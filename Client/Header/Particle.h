@@ -442,7 +442,7 @@ public:
 	~CAttack_Range_Circle() override;
 
 public:
-	virtual HRESULT Ready_Object();
+	virtual HRESULT Ready_Object(const ATKRNGOPTION& circleOption);
 	_int Update_Object(const _float& fTimeDelta) override;
 	void Render_Object() override;
 	void LateUpdate_Object() override;
@@ -452,7 +452,7 @@ public:
 	void SetLerp(ATKRNGOPTION* _circleoption);
 
 public:
-	static CAttack_Range_Circle* Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CAttack_Range_Circle* Create(LPDIRECT3DDEVICE9 pGraphicDev, const ATKRNGOPTION& circleOption);
 
 	CRcShader*			m_pBufferCom = nullptr;
 	CTransform*			m_pTransCom = nullptr;
@@ -463,7 +463,7 @@ private:
 	_float m_fTime;
 	_float m_fCurTime;
 	_float m_fSpeed;
-
+	_float tmp;
 	ATKRNGOPTION m_ATKRNGOption;
 
 	// _float m_fAcc;

@@ -95,7 +95,7 @@ void CKouku::AnimationEvent(const string& strEvent)
 	else if (strEvent == "Kouku_Hide")
 	{
 		m_pRootPart->pTrans->m_vInfo[INFO_POS] = _vec3(62.5f, 0.f, 48.7f);
-		PlayAnimationOnce(&m_arrAnim[REST]);
+		// PlayAnimationOnce(&m_arrAnim[REST]);
 	}
 
 	else if (strEvent == "AnimStopped")

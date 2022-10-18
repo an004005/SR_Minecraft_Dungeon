@@ -107,8 +107,6 @@ public:
 	static CAttack_Range_Circle* AttackRange_Create(const string& strFactoryTag, const wstring& wstrObjTag, const _vec3& vPos, 
 		ATTACKCIRCLETYPE _type, _vec3 _minsize,_vec3 _maxsize, _uint _totalframe, _uint _nextframe)
 	{
-		CAttack_Range_Circle* pCasted = Create<CAttack_Range_Circle>(strFactoryTag, wstrObjTag);
-		// 레디하고 나서 하는지 확인 , Create가 구조체를 어케 가져갈지
 		ATKRNGOPTION circleoption;
 
 		circleoption._eRangeType = _type;
@@ -117,10 +115,15 @@ public:
 		circleoption._iNextFrame = _nextframe;
 		circleoption._iTotalFrame = _totalframe;
 		circleoption._fAcc = 0.f;
-		circleoption._fMaxAcc = (_float)_nextframe / 60.f;
+		circleoption._fMaxAcc = (_float)_nextframe / 60.f; // 37/60 0.5
 
 		circleoption._fLifeTime = (_float)_totalframe / 60.f;
-		pCasted->SetLerp(&circleoption);
+		//pCasted->SetLerp(&circleoption);
+
+		CAttack_Range_Circle* pCasted = dynamic_cast<CAttack_Range_Circle*>(s_mapKoukuEffectSpawner.find(strFactoryTag)->second(circleoption));
+		_ASSERT_CRASH(pCasted != nullptr);
+		Engine::AddGameObject(LAYER_EFFECT, wstrObjTag, pCasted);
+
 
 		Engine::CTransform* pTrans = pCasted->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
 		pTrans->m_vInfo[INFO_POS] = vPos;
@@ -135,6 +138,7 @@ public:
 
 private:
 	static map<string, std::function<CGameObject*()>> s_mapEffectSpawner;
+	static map<string, std::function<CGameObject*(const ATKRNGOPTION& circleOption)>> s_mapKoukuEffectSpawner;
 };
 
 class CEnvFactory : CAbstFactory

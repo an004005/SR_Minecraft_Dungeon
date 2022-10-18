@@ -76,7 +76,7 @@ float4 UVAnimation_Pass_0_Pixel_Shader_ps_main(PS_INPUT Input) : COLOR
    float4 albedo = tex2D(DiffuseSampler, Input.mUV);
    if (albedo.w > 0)
    {
-	   return float4(1.f, 1.0f, 0.f, 1);
+	   return float4(1.f, 1.f, 0.f, 1);
    }
 
    return float4(0, 0, 0, 0);
@@ -89,8 +89,8 @@ technique UVAnimation
 {
    pass Pass_0
    {
-      VertexShader = compile vs_2_0 UVAnimation_Pass_0_Vertex_Shader_vs_main();
-      PixelShader = compile ps_2_0 UVAnimation_Pass_0_Pixel_Shader_ps_main();
+      VertexShader = compile vs_3_0 UVAnimation_Pass_0_Vertex_Shader_vs_main();
+      PixelShader = compile ps_3_0 UVAnimation_Pass_0_Pixel_Shader_ps_main();
    }
 
 }

@@ -114,6 +114,10 @@ private:
 
 	_bool m_bStatonExplodeMoon = false;
 
+	_bool m_bIsAttack_1_Coll = false;
+	_bool m_bIsAttack_2_Coll = false;
+
+	_vec3 m_vATKRNGCirclePos;
 
 	_vec3 m_vExplodMoonPos;
 	_float m_fTime;
