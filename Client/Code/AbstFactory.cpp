@@ -60,6 +60,9 @@
 #include "RemoteInventory.h"
 #include "BossHPUI.h"
 #include "PlayerUI.h"
+#include "ClearUI.h"
+#include "Trigger.h"
+#include "Enderman.h"
 #include "Stage_Kouku.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
@@ -163,6 +166,11 @@ void CEnemyFactory::Ready_EnemyFactory()
 	s_mapEnemySpawner.insert({ "Saton", []()
 	{
 		return CSaton::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/saton.cube");
+	} });
+
+	s_mapEnemySpawner.insert({ "Enderman", []()
+	{
+		return CEnderman::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Enderman.cube");
 	} });
 }
 
@@ -477,6 +485,10 @@ void CObjectFactory::Ready_ObjectFactory()
 	{
 		return CBirdsBrown::Create(s_pGraphicDev, BIRD_BROWN);
 	} });
+	s_mapObjectSpawner.insert({ "Trigger", []()
+	{
+		return CTrigger::Create(s_pGraphicDev);
+	} });
 }
 
 void CItemFactory::Ready_ItemFactory()
@@ -619,6 +631,10 @@ void CUIFactory::Ready_UIFactory()
 	 s_mapUISpawner.insert({ "PlayerUI", [](_uint iTexNum)
 	 {
 		 return CPlayerUI::Create(s_pGraphicDev, 0);
+	 } });
+	 s_mapUISpawner.insert({ "ClearUI", [](_uint iTexNum)
+	 {
+		 return CClearUI::Create(s_pGraphicDev, 0);
 	 } });
 
 	

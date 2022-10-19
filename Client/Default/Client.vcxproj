@@ -167,8 +167,11 @@
     <ClInclude Include="..\Header\AbstFactory.h" />
     <ClInclude Include="..\Header\BatchTool.h" />
     <ClInclude Include="..\Header\BossHPUI.h" />
+    <ClInclude Include="..\Header\ClearUI.h" />
     <ClInclude Include="..\Header\ClientServiceMgr.h" />
     <ClInclude Include="..\Header\DamageFontMgr.h" />
+    <ClInclude Include="..\Header\Enderman.h" />
+    <ClInclude Include="..\Header\EndermanController.h" />
     <ClInclude Include="..\Header\FireworksArrow.h" />
     <ClInclude Include="..\Header\CamAnimation.h" />
     <ClInclude Include="..\Header\CameraTool.h" />
@@ -286,10 +289,13 @@
     <ClCompile Include="..\Code\AbstFactory.cpp" />
     <ClCompile Include="..\Code\BatchTool.cpp" />
     <ClCompile Include="..\Code\BossHPUI.cpp" />
+    <ClCompile Include="..\Code\ClearUI.cpp" />
     <ClCompile Include="..\Code\DamageFontMgr.cpp" />
     <ClCompile Include="..\Code\ClientServiceMgr.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\Code\Enderman.cpp" />
+    <ClCompile Include="..\Code\EndermanController.cpp" />
     <ClCompile Include="..\Code\Enum.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>

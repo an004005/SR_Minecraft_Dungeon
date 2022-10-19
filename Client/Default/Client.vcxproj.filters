@@ -454,6 +454,33 @@
     <ClInclude Include="..\Header\Stage_Kouku.h">
       <Filter>01. Scene\01. Stage</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\ClientServiceMgr.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\RemoteInventory.h">
+      <Filter>02. GameObject\06. Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\BossHPUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\PlayerUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\EndermanController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Enderman.h">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ItemTexUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ClearUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -811,6 +838,30 @@
     <ClCompile Include="..\Code\Struct.pb.cc" />
     <ClCompile Include="..\Code\Stage_Kouku.cpp">
       <Filter>01. Scene\01. Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RemoteInventory.cpp">
+      <Filter>02. GameObject\06. Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\BossHPUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\PlayerUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\EndermanController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Enderman.cpp">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ItemTexUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ClearUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

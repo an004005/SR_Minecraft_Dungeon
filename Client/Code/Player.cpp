@@ -136,9 +136,16 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 		if (s_PotionCollTime > m_CurPotionCoolTime)
 			m_CurPotionCoolTime += fTimeDelta;
 
-		// 상태 변경 조건 설정
-		StateChange();
-		m_bRoll = false;
+	//IM_BEGIN("TEst"); // 
+
+	//_vec3 vpos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+	//ImGui::Text("%f, %f, %f", vpos.x, vpos.y, vpos.z);
+	//IM_END;
+
+
+	// 상태 변경 조건 설정
+	StateChange();
+	m_bRoll = false;
 
 	// 각 상태에 따른 프레임 마다 실행할 함수 지정
 	switch (m_eState)
@@ -289,6 +296,10 @@ void CPlayer::AnimationEvent(const string& strEvent)
 	else if (strEvent == "visible")
 	{
 		SetVisible(true);
+	}
+	else if (strEvent == "RangeFire")
+	{
+		PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK3]);
 	}
 }
 
@@ -466,8 +477,7 @@ void CPlayer::AttackState()
 	}
 	else if (m_bRangeAttack)
 	{
-		//기본이 근거리라 원거리로 바꿔줘야 텍스처가 나옴
-		WeaponChange(IT_RANGE);
+
 		m_bCanPlayAnim = false;
 		m_iAttackCnt = m_pInventory->CurWeapon(IT_RANGE)->Attack();
 		if (m_bRemote == false)
@@ -674,7 +684,7 @@ void CPlayer::StateChange()
 		if (m_bRemote == false)
 			RotateToCursor();
 		m_bDelay = true;
-		WeaponChange(IT_MELEE);
+		WeaponChange(IT_RANGE);
 		return;
 	}
 
@@ -692,6 +702,7 @@ void CPlayer::StateChange()
 
 	if (m_bCanPlayAnim)
 	{
+
 		m_eState = IDLE;
 		m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 		m_pCurAnim = &m_arrAnim[ANIM_IDLE];
