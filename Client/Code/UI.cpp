@@ -30,7 +30,7 @@ _int CUI::Update_Object(const _float& fTimeDelta)
 	if (m_bDelete) return OBJ_DEAD;
 	Engine::CGameObject::Update_Object(fTimeDelta);
 
-	if (m_bButtom)
+	if (m_bButtom && m_bVisible)
 	{
 		const _vec3& vPos = m_pTransCom->m_vInfo[INFO_POS];
 		const _vec3& vSize = m_pTransCom->m_vScale;
@@ -65,7 +65,7 @@ void CUI::Render_Object(void)
 	// Render_Font(L"Font_Jinji", L"0", &_vec2(1110.f, 640.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
 	// old view, proj 복원은 renderer에 있음
 
-
+	if (m_bVisible == false) return;
 
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &CGameUtilMgr::s_matIdentity);
 	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);

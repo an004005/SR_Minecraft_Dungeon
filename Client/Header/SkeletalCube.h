@@ -87,6 +87,7 @@ public:
 
 	virtual void PlayAnimationOnce(CubeAnimFrame* frame, bool bReserveStop = false);
 	virtual void PlayAnimationLoop(CubeAnimFrame* frame);
+	_bool IsStop() const { return m_bStopAnim; }
 	virtual void StopCurAnimation();
 	void SetAnimationSpeed(_float fAnimSpeed) { m_fAnimSpeed = fAnimSpeed; }
 

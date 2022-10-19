@@ -23,31 +23,34 @@ HRESULT CLogo::Ready_Scene()
 		return E_FAIL;
 	CGameObject* pGameObject = nullptr;
 	_matrix matWorld;
-	m_Idle = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_idle.anim");
 
+	m_vCamSelectPos = {2.5f, 3.f, 2.5f};
+	m_Idle = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/sword_idle.anim");
+	m_Jump = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/CubeMan/jump.anim");
+	
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(0.f), 0.f}, {2.5f, 1.f, 4.7f});
-	pGameObject = CSkeletalCube::Create(m_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Steve.cube");
+	pGameObject = m_arrChar[CHAR_STEVE] = CSkeletalCube::Create(m_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Steve.cube");
 	m_arrLayer[LAYER_ENV]->Add_GameObject(L"Steve", pGameObject);
 	pGameObject->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->Set_WorldDecompose(matWorld);
 	dynamic_cast<CSkeletalCube*>(pGameObject)->PlayAnimationLoop(&m_Idle);
 	dynamic_cast<CSkeletalCube*>(pGameObject)->Get_SkeletalPart("weapon_r")->pBuf = nullptr;
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f), 0.f}, {4.7f, 1.f, 2.5f});
-	pGameObject = CSkeletalCube::Create(m_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Eshe.cube");
+	pGameObject = m_arrChar[CHAR_ESHE] = CSkeletalCube::Create(m_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Eshe.cube");
 	m_arrLayer[LAYER_ENV]->Add_GameObject(L"Eshe", pGameObject);
 	pGameObject->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->Set_WorldDecompose(matWorld);
 	dynamic_cast<CSkeletalCube*>(pGameObject)->PlayAnimationLoop(&m_Idle);
 	dynamic_cast<CSkeletalCube*>(pGameObject)->Get_SkeletalPart("weapon_r")->pBuf = nullptr;
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(180.f), 0.f}, {2.5f, 1.f, 0.3f});
-	pGameObject = CSkeletalCube::Create(m_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Copper.cube");
+	pGameObject = m_arrChar[CHAR_COPPER] = CSkeletalCube::Create(m_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Copper.cube");
 	m_arrLayer[LAYER_ENV]->Add_GameObject(L"Copper", pGameObject);
 	pGameObject->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->Set_WorldDecompose(matWorld);
 	dynamic_cast<CSkeletalCube*>(pGameObject)->PlayAnimationLoop(&m_Idle);
 	dynamic_cast<CSkeletalCube*>(pGameObject)->Get_SkeletalPart("weapon_r")->pBuf = nullptr;
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(270.f), 0.f}, {0.3f, 1.f, 2.5f});
-	pGameObject = CSkeletalCube::Create(m_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Pride.cube");
+	pGameObject = m_arrChar[CHAR_PRIDE] = CSkeletalCube::Create(m_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Pride.cube");
 	m_arrLayer[LAYER_ENV]->Add_GameObject(L"Pride", pGameObject);
 	pGameObject->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->Set_WorldDecompose(matWorld);
 	dynamic_cast<CSkeletalCube*>(pGameObject)->PlayAnimationLoop(&m_Idle);
@@ -74,8 +77,8 @@ HRESULT CLogo::Ready_Scene()
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", pGameObject), E_FAIL);
 
-	m_pLogo = CUIFactory::Create<CUI>("DefaultUI", L"UI", 26, WINCX / 2, 200, WINCX * 0.8, WINCY * 0.3);
-	m_pEdit = CUIFactory::Create<CEditBox>("EditBox", L"EditBox", 26, WINCX / 2, 500, WINCX * 0.3, WINCY * 0.07f);
+	m_pLogo = CUIFactory::Create<CUI>("DefaultUI", L"UI", 26, WINCX / 2, WINCY / 3.6f , WINCX * 0.8, WINCY * 0.3);
+	m_pEdit = CUIFactory::Create<CEditBox>("EditBox", L"EditBox", 26, WINCX / 2, WINCY /1.44f, WINCX * 0.3, WINCY * 0.07f);
 	m_pEdit->SetText(L"Gothic_Regular25", L"이름을 입력하세요.", _vec2{- 100.f, -60.f}, D3DCOLOR_ARGB(255, 255, 255, 255));
 
 	m_pButton = CUIFactory::Create<CUI>("DefaultUI", L"DefaultUI", 27, WINCX / 2, 600, 100, 50);
@@ -96,6 +99,15 @@ HRESULT CLogo::Ready_Scene()
 		bDoor = false;
 	});
 
+	m_pSelectButton = CUIFactory::Create<CUI>("DefaultUI", L"DefaultUI", 29, WINCX / 2, WINCY /1.1338f, 400, 250);
+	m_pSelectButton->SetButton([this]()
+	{
+		m_arrChar[m_iCharNum]->PlayAnimationOnce(&m_Jump, true);
+		CObjectStoreMgr::GetInstance()->SetPlayerSkin((CharacterSelect)m_iCharNum);
+		m_bSelected = true;
+		m_pSelectButton->SetVisible(false);
+	});
+	m_pSelectButton->SetVisible(false);
 	return S_OK;
 }
 
@@ -128,6 +140,27 @@ _int CLogo::Update_Scene(const _float& fTimeDelta)
 			else
 			{
 				eState = SELECT_PLAYER;
+				switch (static_cast<CharacterSelect>(m_iCharNum))
+				{
+				case CHAR_STEVE:
+					m_wstrCharName = L"스티브";
+					break;
+				case CHAR_PRIDE:
+					m_wstrCharName = L"프라이드";
+					break;
+				case CHAR_COPPER:
+					m_wstrCharName = L"코퍼";
+					break;
+				case CHAR_ESHE:
+					m_wstrCharName = L"애쉬";
+					break;
+				case CHAR_END:
+					break;
+				default: ;
+				}
+				_float fWidth = 40.f;
+				_float fHalf = fWidth * _float(m_wstrCharName.size()) / 2;
+				m_pSelectButton->SetText(L"Gothic_Bold40", m_wstrCharName, _vec2{-fHalf, -20.f} , D3DCOLOR_ARGB(255, 255, 255, 255));
 			}
 		}
 		break;
@@ -139,18 +172,54 @@ _int CLogo::Update_Scene(const _float& fTimeDelta)
 				m_bMove = false;
 			_float& fYaw = m_pCamMove->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vAngle.y;
 			fYaw = CGameUtilMgr::FloatLerp(m_fStartYaw, m_fDestYaw, m_fS);
+			m_pSelectButton->SetVisible(false);
 		}
 		else
 		{
-			if (DIKeyDown(DIK_0))
+			if (m_bSelected == false)
 			{
-				m_fStartYaw = m_pCamMove->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vAngle.y;
-				m_fDestYaw = m_fStartYaw + D3DXToRadian(90.f);
-				m_bMove = true;
-				m_fS = 0.f;
+				m_pSelectButton->SetVisible(true);
 
-				++m_iCharNum;
-				m_iCharNum = m_iCharNum % CHAR_END;
+				if (DIKeyDown(DIK_W))
+				{
+					m_fStartYaw = m_pCamMove->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vAngle.y;
+					m_fDestYaw = m_fStartYaw + D3DXToRadian(90.f);
+					m_bMove = true;
+					m_fS = 0.f;
+
+					++m_iCharNum;
+					m_iCharNum = m_iCharNum % CHAR_END;
+
+					switch (static_cast<CharacterSelect>(m_iCharNum))
+					{
+					case CHAR_STEVE:
+						m_wstrCharName = L"스티브";
+						break;
+					case CHAR_PRIDE:
+						m_wstrCharName = L"프라이드";
+						break;
+					case CHAR_COPPER:
+						m_wstrCharName = L"코퍼";
+						break;
+					case CHAR_ESHE:
+						m_wstrCharName = L"애쉬";
+						break;
+					case CHAR_END:
+						break;
+					default: ;
+					}
+					_float fWidth = 40.f;
+					_float fHalf = fWidth * _float(m_wstrCharName.size()) / 2;
+					m_pSelectButton->SetText(L"Gothic_Bold40", m_wstrCharName, _vec2{-fHalf, -20.f} , D3DCOLOR_ARGB(255, 255, 255, 255));
+					m_pSelectButton->SetVisible(false);
+				}
+			}
+			else
+			{
+				if (m_arrChar[m_iCharNum]->IsStop())
+				{
+					CSceneFactory::LoadScene("Loading1", "Stage_Default", true ,500);
+				}
 			}
 		}
 		break;
@@ -171,32 +240,6 @@ void CLogo::Render_Scene()
 {
 	CScene::Render_Scene();
 
-	if (eState == SELECT_PLAYER && m_bMove == false)
-	{
-		wstring name;
-		switch (static_cast<CharacterSelect>(m_iCharNum))
-		{
-		case CHAR_STEVE:
-			name = L"스티브";
-			break;
-		case CHAR_PRIDE:
-			name = L"프라이드";
-			break;
-		case CHAR_COPPER:
-			name = L"코퍼";
-			break;
-		case CHAR_ESHE:
-			name = L"애쉬";
-			break;
-		case CHAR_END:
-			break;
-		default: ;
-		}
-		_float fWidth = 40.f;
-		_float fHalf = fWidth * _float(name.size()) / 2;
-		_vec2 vCenterAligned{(_float)WINCX / 2 - fHalf, _float(WINCY) - 100.f};
-		Engine::Render_Font(L"Gothic_Bold40", name.c_str(), &vCenterAligned, D3DCOLOR_ARGB(255, 255, 255, 255));
-	}
 }
 
 CLogo* CLogo::Create(LPDIRECT3DDEVICE9 pGraphicDev)

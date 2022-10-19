@@ -47,6 +47,7 @@ private:
 	CUI* m_pLogo = nullptr;
 	CEditBox* m_pEdit = nullptr;
 	CUI* m_pButton = nullptr;
+	CUI* m_pSelectButton = nullptr;
 
 	_float m_fS = 0.f;
 	_vec3 m_fLogoTo{};
@@ -54,7 +55,7 @@ private:
 	_vec3 m_fButtonTo{};
 
 	CSkeletalCube* m_pCamMove = nullptr;
-	_vec3 m_vCamSelectPos = {2.5f, 2.5f, 2.5f};
+	_vec3 m_vCamSelectPos;
 
 
 	_uint m_iCharNum = 0;
@@ -65,5 +66,9 @@ private:
 	_bool m_bMove = false;
 
 	CubeAnimFrame m_Idle;
+	CubeAnimFrame m_Jump;
+	array<CSkeletalCube*, CHAR_END> m_arrChar{};
+	_bool m_bSelected = false;
+	wstring m_wstrCharName;
 };
 

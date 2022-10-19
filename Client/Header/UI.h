@@ -27,6 +27,8 @@ public:
 		m_TextColor = color;
 	}
 	void SetDelete() { m_bDelete = true; }
+
+	void SetVisible(_bool bVisible) {m_bVisible = bVisible;}
 protected:
 	CRcTex*				m_pBufferCom = nullptr;
 	CTransform*			m_pTransCom = nullptr;
@@ -44,6 +46,7 @@ protected:
 	D3DXCOLOR m_TextColor;
 
 	_bool m_bDelete = false;
+	_bool m_bVisible = true;
 };
 
 /*------------------------

@@ -289,7 +289,7 @@ HRESULT CMainApp::Ready_Proto()
 
 	// UI
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_RcTexCom", CRcTex::Create(m_pGraphicDev)), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_UI_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/UI/UI_%d.png", TEX_NORMAL, 29)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_UI_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/UI/UI_%d.png", TEX_NORMAL, 30)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_InventoryUI_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/UI/InventoryUI/UI_%d.png", TEX_NORMAL, 21)), E_FAIL);
 
 	// FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Loading", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Loading/loading%d.png", TEX_NORMAL, 1)), E_FAIL);
