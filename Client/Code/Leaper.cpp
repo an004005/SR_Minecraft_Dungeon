@@ -249,6 +249,8 @@ void CLeaper::JumpToPlayer(const _float& fTimeDelta)
 {
 	if (!m_bLanding)
 	{
+		m_pStat->SetJump();
+
 		_float fHeight = Get_GameObject<CTerrainCubeMap>(LAYER_ENV, L"TerrainCubeMap")->GetHeight(m_vJumpTargetPos.x, m_vJumpTargetPos.z);
 		_vec3 vLook = m_vJumpTargetPos - m_pRootPart->pTrans->m_vInfo[INFO_POS];
 		D3DXVec3Normalize(&vLook, &vLook);
