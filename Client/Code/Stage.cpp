@@ -35,6 +35,7 @@
 // object
 #include "Birds.h"
 #include "BirdsBrown.h"
+#include "ObjectStoreMgr.h"
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
 {
@@ -165,7 +166,26 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	// CObjectFactory::Create<CDynamite>("Dynamite", L"Dynamite");
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 0.f, 0.f ,0.f });
-	m_pPlayer = CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld);
+
+	switch (CObjectStoreMgr::GetInstance()->GetPlayerSkin())
+	{
+		case Protocol::PLAYER_TYPE_STEVE:
+			m_pPlayer = CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld);
+			break;
+		case Protocol::PLAYER_TYPE_PRIDE:
+			m_pPlayer = CPlayerFactory::Create<CPlayer>("Pride", L"Player", matWorld);
+			break;
+		case Protocol::PLAYER_TYPE_ESHE:
+			m_pPlayer = CPlayerFactory::Create<CPlayer>("Eshe", L"Player", matWorld);
+			break;
+		case Protocol::PLAYER_TYPE_COPPER:
+			m_pPlayer = CPlayerFactory::Create<CPlayer>("Copper", L"Player", matWorld);
+			break;
+		case Protocol::PlayerSkin_INT_MIN_SENTINEL_DO_NOT_USE_: break;
+		case Protocol::PlayerSkin_INT_MAX_SENTINEL_DO_NOT_USE_: break;
+		default: ;
+	}
+	m_pPlayer->SetName(CObjectStoreMgr::GetInstance()->GetPlayerName());
 	m_pPlayer->PlayerSpawn();
 	
 	CEffectFactory::Create<C3DBaseTexture>("3D_Base", L"3D_Base");

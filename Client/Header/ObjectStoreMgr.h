@@ -13,6 +13,9 @@ private:
 public:
 	void SetPlayerName(const string& strPlayerName) { m_strPlayerName = strPlayerName; }
 	void SetPlayerSkin(CharacterSelect eSkin);
+
+	string GetPlayerName() { return m_strPlayerName;}
+	Protocol::PlayerSkin GetPlayerSkin() { return m_eSkin; }
 	virtual void Free() override;
 
 private:

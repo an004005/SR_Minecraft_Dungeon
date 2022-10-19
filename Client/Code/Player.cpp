@@ -200,11 +200,12 @@ void CPlayer::Render_Object()
 		m_pGraphicDev->GetViewport(&viewport);
 
 		_vec2 vScreen;
-		CGameUtilMgr::World2Screen(vScreen, m_pColl->GetCollPos() + _vec3{0.f, 2.f, 0.f}, matView, matProj, viewport);
+		CGameUtilMgr::World2Screen(vScreen, m_pColl->GetCollPos() + _vec3{0.f, 2.3f, 0.f}, matView, matProj, viewport);
+		const wstring tmp(m_strName.begin(), m_strName.end());
+		_float fHalf = 10.f * _float(tmp.size()) / 2;
+		vScreen.x -= fHalf;
+		Engine::Render_Font(L"Gothic_Bold20", tmp.c_str(), &vScreen, D3DCOLOR_ARGB(255, 255, 255, 255));
 
-		Engine::Render_Font(L"Gothic_Bold20", to_wstring(m_iID).c_str(), &vScreen, D3DCOLOR_ARGB(255, 0, 0, 0));
-
-		// CGameUtilMgr::World2Screen()
 		CSkeletalCube::Render_Object();
 	}
 }

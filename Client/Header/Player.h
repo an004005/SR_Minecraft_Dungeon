@@ -116,7 +116,6 @@ public:
 
 	void SetName(const string& strName) {m_strName = strName;}
 
-
 	_float GetYawToCursor();
 private:
 	void RotateToCursor();
@@ -125,7 +124,7 @@ private:
 	CInventory* m_pInventory = nullptr;
 
 protected:
-	string m_strName;
+	string m_strName = "NoNamed";
 
 	SkeletalPart* m_pWeaponPart = nullptr;
 	CStatComponent* m_pStat = nullptr;
