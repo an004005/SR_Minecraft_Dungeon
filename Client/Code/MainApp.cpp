@@ -21,6 +21,7 @@
 #include "RedStoneCubeController.h"
 #include "RedStoneMonstrosityController.h"
 #include "DamageFontMgr.h"
+#include "ObjectStoreMgr.h"
 #include "SatonController.h"
 #include "EndermanController.h"
 USING(Engine)
@@ -121,6 +122,7 @@ HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 * ppGraphicDev)
 	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Gothic_Bold30", L"Kim jung chul Gothic Bold", 30, 35, FW_NORMAL), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Gothic_Bold70", L"Kim jung chul Gothic Bold", 70, 75, FW_NORMAL), E_FAIL);
 
+	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Gothic_Bold40", L"Kim jung chul Gothic Regular", 40, 45, FW_NORMAL), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Gothic_Regular15", L"Kim jung chul Gothic Regular", 15, 20, FW_NORMAL), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Gothic_Regular25", L"Kim jung chul Gothic Regular", 25, 30, FW_NORMAL), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Font(m_pGraphicDev, L"Gothic_Regular30", L"Kim jung chul Gothic Regular", 30, 35, FW_NORMAL), E_FAIL);
@@ -156,7 +158,7 @@ HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 * ppGraphicDev)
 	// 매니저 초기화
 	CArrowCubeMgr::Create(m_pGraphicDev);
 	CDamageFontMgr::GetInstance()->SetGraphicDev(m_pGraphicDev);
-	
+	CObjectStoreMgr::GetInstance();
 
 	return S_OK;
 }
@@ -169,7 +171,8 @@ HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement
 	FAILED_CHECK_RETURN(Engine::Create_Management(pGraphicDev, ppManagement), E_FAIL);
 	(*ppManagement)->AddRef();
 
-	 CSceneFactory::LoadScene("Loading1", "Stage_Kouku", true ,0);
+	 // CSceneFactory::LoadScene("Loading1", "Stage_Default", true ,0);
+	 CSceneFactory::LoadScene("Loading1", "Logo", true ,0);
 	//CSceneFactory::LoadScene("Loading1", "NetTest", true ,0);
 
 	return S_OK;
@@ -296,7 +299,7 @@ HRESULT CMainApp::Ready_Proto()
 
 	// UI
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_RcTexCom", CRcTex::Create(m_pGraphicDev)), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_UI_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/UI/UI_%d.png", TEX_NORMAL, 27)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_UI_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/UI/UI_%d.png", TEX_NORMAL, 31)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_InventoryUI_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/UI/InventoryUI/UI_%d.png", TEX_NORMAL, 21)), E_FAIL);
 
 	// FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Loading", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Loading/loading%d.png", TEX_NORMAL, 1)), E_FAIL);
@@ -337,6 +340,7 @@ void CMainApp::Free(void)
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
 
+	CObjectStoreMgr::DestroyInstance();
 	CArrowCubeMgr::DeleteInst();
 	CDamageFontMgr::DestroyInstance();
 	CAbstFactory::ReleaseGraphicDev();

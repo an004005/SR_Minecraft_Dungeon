@@ -1441,13 +1441,13 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 		// m_pBufferCom->Set_TextureOption(_uint(CGameUtilMgr::GetRandomFloat(7.f, 15.f)), 4, 2);
 		m_pBufferCom->Set_TextureOption(5, 4, 2);
 
-		CTransform*	pPlayer = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
-		_vec3 pPos;
-		_vec3 pLook;
-		pPlayer->Get_Info(INFO_POS, &pPos);
-		pPlayer->Get_Info(INFO_LOOK, &pLook);
-
-		m_pTransCom->m_vInfo[INFO_POS] = pPos + pLook * 2.f;
+		// CTransform*	pPlayer = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
+		// _vec3 pPos;
+		// _vec3 pLook;
+		// pPlayer->Get_Info(INFO_POS, &pPos);
+		// pPlayer->Get_Info(INFO_LOOK, &pLook);
+		//
+		// m_pTransCom->m_vInfo[INFO_POS] = pPos + pLook * 2.f;
 		// m_pTransCom->Set_Pos(pPos.x, pPos.y, pPos.z);
 		m_pTransCom->Set_Scale(_size, _size, _size);
 		m_fTime = 0.7f;
@@ -1462,8 +1462,8 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 			&min,
 			&max);
 
-		m_vVelocity.x += pLook.x;
-		m_vVelocity.y += pLook.y;
+		// m_vVelocity.x += pLook.x;
+		// m_vVelocity.y += pLook.y;
 
 		D3DXVec3Normalize(&m_vVelocity, &m_vVelocity);
 		// m_vVelocity.x = 0.f;
@@ -1666,14 +1666,14 @@ HRESULT CCrack::Ready_Object(_float _size, CRACKTYPE _type)
 		m_pTexture = Add_Component<CTexture>(L"Proto_Crack", L"Proto_Crack", ID_STATIC);
 		m_pBufferCom->Set_TextureOption(15, 2, 2);
 		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
-		_vec3& vPos = m_pTransCom->m_vInfo[INFO_POS];
-		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
-		_vec3 pPos;
-		_vec3 pLook;
-		pPlayerTransform->Get_Info(INFO_POS, &pPos);
-		pPlayerTransform->Get_Info(INFO_LOOK, &pLook);
-		vPos = pPos + pLook * 3.f;
-		vPos.y = 0.3f + Get_GameObject<CTerrainCubeMap>(LAYER_ENV, L"TerrainCubeMap")->GetHeight(vPos.x, vPos.z);
+		// _vec3& vPos = m_pTransCom->m_vInfo[INFO_POS];
+		// CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
+		// _vec3 pPos;
+		// _vec3 pLook;
+		// pPlayerTransform->Get_Info(INFO_POS, &pPos);
+		// pPlayerTransform->Get_Info(INFO_LOOK, &pLook);
+		// vPos = pPos + pLook * 3.f;
+		// vPos.y = 0.3f + Get_GameObject<CTerrainCubeMap>(LAYER_ENV, L"TerrainCubeMap")->GetHeight(vPos.x, vPos.z);
 
 		m_pTransCom->Set_Scale(_size, _size, _size);
 		m_fTime = 0.6f;

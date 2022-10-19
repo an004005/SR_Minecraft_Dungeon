@@ -172,12 +172,14 @@
     <ClInclude Include="..\Header\DamageFontMgr.h" />
     <ClInclude Include="..\Header\Enderman.h" />
     <ClInclude Include="..\Header\EndermanController.h" />
+    <ClInclude Include="..\Header\EditBox.h" />
     <ClInclude Include="..\Header\FireworksArrow.h" />
     <ClInclude Include="..\Header\CamAnimation.h" />
     <ClInclude Include="..\Header\CameraTool.h" />
     <ClInclude Include="..\Header\InventoryUI.h" />
     <ClInclude Include="..\Header\ItemTexUI.h" />
     <ClInclude Include="..\Header\LaserShotRune.h" />
+    <ClInclude Include="..\Header\Logo.h" />
     <ClInclude Include="..\Header\MultiShotRune.h" />
     <ClInclude Include="..\Header\PlayerStartPos.h" />
     <ClInclude Include="..\Header\Kouku.h" />
@@ -296,6 +298,7 @@
     </ClCompile>
     <ClCompile Include="..\Code\Enderman.cpp" />
     <ClCompile Include="..\Code\EndermanController.cpp" />
+    <ClCompile Include="..\Code\EditBox.cpp" />
     <ClCompile Include="..\Code\Enum.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -305,6 +308,7 @@
     <ClCompile Include="..\Code\InventoryUI.cpp" />
     <ClCompile Include="..\Code\ItemTexUI.cpp" />
     <ClCompile Include="..\Code\LaserShotRune.cpp" />
+    <ClCompile Include="..\Code\Logo.cpp" />
     <ClCompile Include="..\Code\MultiShotRune.cpp" />
     <ClCompile Include="..\Code\PlayerStartPos.cpp" />
     <ClCompile Include="..\Code\Kouku.cpp" />

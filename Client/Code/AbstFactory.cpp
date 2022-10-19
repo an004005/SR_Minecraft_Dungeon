@@ -59,11 +59,13 @@
 #include "ItemTexUI.h"
 #include "RemoteInventory.h"
 #include "BossHPUI.h"
+#include "EditBox.h"
 #include "PlayerUI.h"
 #include "ClearUI.h"
 #include "Trigger.h"
 #include "Enderman.h"
 #include "Stage_Kouku.h"
+#include "Logo.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -120,6 +122,18 @@ void CPlayerFactory::Ready_PlayerFactory()
 	s_mapPlayerSpawner.insert({"Steve_Remote", []()
 	{
 		return CPlayer::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Steve.cube", true);
+	}});
+	s_mapPlayerSpawner.insert({"Pride_Remote", []()
+	{
+		return CPlayer::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Pride.cube", true);
+	}});
+	s_mapPlayerSpawner.insert({"Eshe_Remote", []()
+	{
+		return CPlayer::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Eshe.cube", true);
+	}});
+	s_mapPlayerSpawner.insert({"Copper_Remote", []()
+	{
+		return CPlayer::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Copper.cube", true);
 	}});
 }
 
@@ -638,6 +652,11 @@ void CUIFactory::Ready_UIFactory()
 	 } });
 
 	
+	 s_mapUISpawner.insert({ "EditBox", [](_uint iTexNum)
+	 {
+		 return CEditBox::Create(s_pGraphicDev);
+	 } });
+	
 }
 
 
@@ -684,6 +703,10 @@ void CSceneFactory::Ready_SceneFactory()
 		s_mapSceneSpawner.insert({"NetTest", []()
 		{
 			return CNetStage::Create(s_pGraphicDev);
+		}});
+		s_mapSceneSpawner.insert({"Logo", []()
+		{
+			return CLogo::Create(s_pGraphicDev);
 		}});
 	}
 }
