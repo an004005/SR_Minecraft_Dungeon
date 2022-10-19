@@ -85,6 +85,19 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 		}
 	}
 
+	if (m_bJump)
+	{
+		if (m_fJumpTime < m_fCurJumpTime)
+		{
+			m_bJump = false;
+			m_bGraped = false;
+		}
+		else
+		{
+			m_fCurJumpTime += fTimeDelta;
+		}
+	}
+
 
 	// 세이튼 장판 기믹 때만 해당되게 구현하기 
 	if (m_bSatonSymbol_Blue)
@@ -238,6 +251,10 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 		Engine::Get_GameObject<CFascinated_Effect>(LAYER_EFFECT, L"Fascinate_Effect")->Add_Particle(m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{ 0.f, 3.5f, 0.f }, 1.f, RED, 1, 4.f, 0);
 		break;
 	case DT_SATON_GRAPED:
+		m_bGraped = true;
+		break;
+	case DT_JUMP:
+		m_bJump = true;
 		m_bGraped = true;
 		break;
 	case DT_END:

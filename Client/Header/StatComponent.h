@@ -12,6 +12,7 @@ enum DamageType
 	DT_KOUKU_SYMBOL_RED,
 	DT_SATON_FASCINATED,
 	DT_SATON_GRAPED,
+	DT_JUMP,
 	// posion .. etc
 	DT_END
 };
@@ -41,6 +42,7 @@ public:
 
 	void ModifyHP(_int iModifyingHP);
 	void TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCauser, DamageType eType = DT_END, _bool bCritical = false);
+	void SetJump() { m_bJump = true; }
 
 	_bool IsStun() const { return m_bStun || m_bKnockback; }
 	_bool IsDead() const { return m_bDead; }
@@ -111,6 +113,11 @@ private:
 	// ~Saton Grap
 
 	_bool m_bIsSaton = false;
+
+	//jump
+	_bool m_bJump = false;
+	_float m_fJumpTime = 1.3f;
+	_float m_fCurJumpTime = 1.f;
 
 };
 
