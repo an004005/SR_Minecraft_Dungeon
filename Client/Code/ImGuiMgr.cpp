@@ -205,8 +205,8 @@ void CImGuiMgr::LoggerWindow()
 
 	ImGui::BeginChild("Log");
 	ImGui::SetWindowFontScale(1.1f);
-	ImGui::TextUnformatted(s_log.begin());
-	ImGui::SetScrollHereY(1.f);
+	ImGui::TextUnformatted(s_log.begin(), s_log.end());
+	// ImGui::SetScrollHereY(1.f);
 
 	ImGui::EndChild();
 	ImGui::End();

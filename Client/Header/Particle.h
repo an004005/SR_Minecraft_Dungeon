@@ -158,7 +158,46 @@ private:
 };
 
 
+class CMoonParticle : public CParticleSystem
+{
+public:
+	explicit CMoonParticle(LPDIRECT3DDEVICE9 pGraphicDev) : CParticleSystem(pGraphicDev) {}
+	virtual ~CMoonParticle() override;
 
+public:
+	_int Update_Object(const _float& fTimeDelta) override;
+	void Render_Object() override;
+	void Reset_Particle(Attribute* _Attribute) override;
+	void PreRender_Particle() override;
+	void PostRender_Particle() override;
+	// void Reset_tmp(void) { tmp = 1; }
+public:
+	static CMoonParticle* Create(LPDIRECT3DDEVICE9 pGraphicDev, LPCWSTR _TexFileName);
+
+	void Free() override;
+
+private:
+};
+
+class CFascinated_Effect : public CParticleSystem
+{
+public:
+	explicit CFascinated_Effect(LPDIRECT3DDEVICE9 pGraphicDev) : CParticleSystem(pGraphicDev) {}
+	virtual ~CFascinated_Effect() override;
+
+public:
+	_int Update_Object(const _float& fTimeDelta) override;
+	void Render_Object() override;
+	void Reset_Particle(Attribute* _Attribute) override;
+	void PreRender_Particle() override;
+	void PostRender_Particle() override;
+public:
+	static CFascinated_Effect* Create(LPDIRECT3DDEVICE9 pGraphicDev, LPCWSTR _TexFileName);
+
+	void Free() override;
+
+private:
+};
 #pragma endregion
 
 
@@ -394,6 +433,65 @@ private:
 	_float m_fSpeed;
 };
 
+
+
+class CAttack_Range_Circle : public CGameObject
+{
+public:
+	explicit CAttack_Range_Circle(LPDIRECT3DDEVICE9 pGraphicDev) : CGameObject(pGraphicDev) {}
+	~CAttack_Range_Circle() override;
+
+public:
+	virtual HRESULT Ready_Object(const ATKRNGOPTION& circleOption);
+	_int Update_Object(const _float& fTimeDelta) override;
+	void Render_Object() override;
+	void LateUpdate_Object() override;
+	void PreRender_Particle();
+	void PostRender_Particle();
+	void SetDead() { m_fCurTime = m_fTime; };
+	void SetLerp(ATKRNGOPTION* _circleoption);
+
+public:
+	static CAttack_Range_Circle* Create(LPDIRECT3DDEVICE9 pGraphicDev, const ATKRNGOPTION& circleOption);
+
+	CRcShader*			m_pBufferCom = nullptr;
+	CTransform*			m_pTransCom = nullptr;
+	CTexture*			m_pTexture = nullptr;
+	void Free() override;
+
+private:
+	_float m_fTime;
+	_float m_fCurTime;
+	_float m_fSpeed;
+	_float tmp;
+	ATKRNGOPTION m_ATKRNGOption;
+
+	// _float m_fAcc;
+	// _float m_fMaxAcc;
+	//
+	// _vec3 m_fMinSize;
+	// _vec3 m_fMaxSize;
+	//
+	//
+	//
+	// _uint m_iNextFrame;
+	// _vec3 m_LerpScale;
+	//
+	// ATTACKCIRCLETYPE m_eType;
+	
+};
+
+
+
+
+
+
+enum HealCircleType
+{
+	HEAL,
+	BLUE_CIRCLE,
+	RED_CIRCLE
+};
 class CHealCircle : public CGameObject
 {
 public:
@@ -401,7 +499,7 @@ public:
 	~CHealCircle() override;
 
 public:
-	virtual HRESULT Ready_Object(_float _size,_float _rad);
+	virtual HRESULT Ready_Object(_float _size,_float _rad, HealCircleType _type);
 	_int Update_Object(const _float& fTimeDelta) override;
 	void Render_Object() override;
 	void LateUpdate_Object() override;
@@ -410,7 +508,7 @@ public:
 	void SetFollow(CTransform* pFollow) {m_pFollow = pFollow; m_pFollow->AddRef();}
 
 public:
-	static CHealCircle* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size, _float _rad);
+	static CHealCircle* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size, _float _rad, HealCircleType _type);
 	CRcShader*			m_pBufferCom = nullptr;
 	CTransform*			m_pTransCom = nullptr;
 	CTexture*			m_pTexture = nullptr;
@@ -423,6 +521,8 @@ private:
 	_float m_fRad;
 
 	CTransform* m_pFollow = nullptr;
+
+	HealCircleType m_eType;
 };
 
 class CHeartParticle : public CGameObject
@@ -582,5 +682,7 @@ private:
 	_float m_fSpeed;
 	_vec3  m_vVelocity;
 };
+
+
 #pragma endregion
 

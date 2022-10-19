@@ -37,6 +37,7 @@ private:
 
 public:
 	_float	GetHeight(_float fX, _float fZ) { return m_fHeight[(_int)fX][(_int)fZ]; }
+	void SetHeight(_uint iX, _uint iZ, _float fY) { m_fHeight[iX][iZ] = fY; }
 
 public:
 	virtual HRESULT Ready_Object(const wstring& wstrPath = L"");

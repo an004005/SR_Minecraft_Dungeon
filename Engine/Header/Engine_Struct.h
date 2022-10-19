@@ -94,6 +94,35 @@ namespace Engine
 		_int		_iType;
 	};
 #pragma endregion
+
+
+
+#pragma region Attack_Range
+	enum ATTACKCIRCLETYPE
+	{
+		READY_CIRCLE = 0,
+		ATTACK_CIRCLE
+	};
+	typedef struct AttackRangeOption
+	{
+		_float _fAcc;
+		_float _fMaxAcc;
+
+		_float _fLifeTime;
+		_float _fTime;
+
+		_vec3 _vMinSize;
+		_vec3 _vMaxSize;
+
+		_uint _iTotalFrame;
+		_uint _iNextFrame;
+		_vec3 _vLerpScale;
+
+		ATTACKCIRCLETYPE _eRangeType;
+	}ATKRNGOPTION;
+
+
+#pragma endregion
 }
 
 

@@ -7,6 +7,8 @@ _float h2 = 0.5f;
 _float d2 = 0.5f;
 
 const _vec3 CGameUtilMgr::s_vZero = {0.f, 0.f, 0.f};
+const _vec3 CGameUtilMgr::s_vOne = { 1.f, 1.f, 1.f };
+
 const _vec3 CGameUtilMgr::s_vUp = {0.f, 1.f, 0.f};
 const _matrix CGameUtilMgr::s_matIdentity = {1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f,};
 const _vec3 CGameUtilMgr::s_vFaceCubeVtx[FACE_END][4]{
@@ -244,6 +246,11 @@ void CGameUtilMgr::World2Screen(_vec2& vScreen, const _vec3& vPos, const _matrix
 	vPosToScreen.y = (_float)ViewPort.Height * ( 2.0f - ( vPosToScreen.y + 1.0f ) ) / 2.0f + (_float)ViewPort.Y;
 
 	vScreen = {vPosToScreen.x, vPosToScreen.y};
+}
+
+_float CGameUtilMgr::FloatLerp(_float f1, _float f2, _float fS)
+{
+	return f1 + fS * (f2 - f1);
 }
 
 DWORD CGameUtilMgr::FtoDw(_float f)

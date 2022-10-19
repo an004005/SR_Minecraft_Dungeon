@@ -27,6 +27,7 @@
 
 const _float CPlayer::s_PotionCollTime = 20.f;
 const _float CPlayer::s_RollCoolTime = 3.f;
+_bool CPlayer::s_bDropDead = false;
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev) : CSkeletalCube(pGraphicDev)
 {
@@ -71,7 +72,7 @@ HRESULT CPlayer::Ready_Object(const wstring& wstrPath)
 	m_CurPotionCoolTime = 20.f;
 
 	m_pStat = Add_Component<CStatComponent>(L"Proto_StatCom", L"Proto_StatCom", ID_DYNAMIC);
-	m_pStat->SetMaxHP(30);
+	m_pStat->SetMaxHP(300);
 	m_pStat->SetTransform(m_pRootPart->pTrans);
 	m_pStat->SetHurtSound({
 		L"DLC_sfx_mob_whisperer_hit_1.ogg",
@@ -119,15 +120,22 @@ HRESULT CPlayer::Ready_Object(const wstring& wstrPath)
 _int CPlayer::Update_Object(const _float& fTimeDelta)
 {
 	CSkeletalCube::Update_Object(fTimeDelta);
+
+		
 	DEBUG_SPHERE(m_pColl->GetCollPos(), m_pColl->GetRadius(), 0.1f);
 
-	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
-		m_bCanPlayAnim = true;
+	if (m_pStat->IsSatonFascinate())
+		m_strStatus = "Fascinate";
+	else
+		m_strStatus = "Nothing";
 
-	if (s_RollCoolTime > m_CurRollCoolTime)
-		m_CurRollCoolTime += fTimeDelta;
-	if (s_PotionCollTime > m_CurPotionCoolTime)
-		m_CurPotionCoolTime += fTimeDelta;
+		if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
+			m_bCanPlayAnim = true;
+
+		if (s_RollCoolTime > m_CurRollCoolTime)
+			m_CurRollCoolTime += fTimeDelta;
+		if (s_PotionCollTime > m_CurPotionCoolTime)
+			m_CurPotionCoolTime += fTimeDelta;
 
 	//IM_BEGIN("TEst"); // 
 
@@ -157,17 +165,24 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 		m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * m_fRollSpeed * fTimeDelta;
 		if (m_dwRollDust + 300 < GetTickCount())
 		{
-			CEffectFactory::Create<CCloud>("Roll_Cloud", L"Roll_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+			CEffectFactory::Create<CCloud>("Roll_Cloud", L"Roll_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS] + _vec3{0.f, 0.5f, 0.f});
 			m_dwRollDust = GetTickCount();
 		}
 		break;
 	case LEGACY:
+		break;
+	case FASCINATE:
+		RotationToSaton();
+		m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_vTargetPos * m_fSpeed * fTimeDelta;
 		break;
 	case DEAD:
 		break;
 	default:
 		break;
 	}
+
+	
+	// IM_LOG("%f, %f, %f", m_pRootPart->pTrans->m_vInfo[INFO_POS].x, m_pRootPart->pTrans->m_vInfo[INFO_POS].y, m_pRootPart->pTrans->m_vInfo[INFO_POS].z);
 
 	return OBJ_NOEVENT;
 }
@@ -189,8 +204,8 @@ void CPlayer::LateUpdate_Object()
 		m_bApplyMeleeAttackNext = true;
 	}
 
-	
-
+	if (s_bDropDead)
+		if (m_pRootPart->pTrans->m_vInfo[INFO_POS].y < 21.f) { m_pStat->TakeDamage(m_pStat->GetMaxHP(), CGameUtilMgr::s_vZero, this); }
 	
 }
 
@@ -206,11 +221,12 @@ void CPlayer::Render_Object()
 		m_pGraphicDev->GetViewport(&viewport);
 
 		_vec2 vScreen;
-		CGameUtilMgr::World2Screen(vScreen, m_pColl->GetCollPos() + _vec3{0.f, 1.5f, 0.f}, matView, matProj, viewport);
+		CGameUtilMgr::World2Screen(vScreen, m_pColl->GetCollPos() + _vec3{0.f, 2.3f, 0.f}, matView, matProj, viewport);
+		const wstring tmp(m_strName.begin(), m_strName.end());
+		_float fHalf = 10.f * _float(tmp.size()) / 2;
+		vScreen.x -= fHalf;
+		Engine::Render_Font(L"Gothic_Bold20", tmp.c_str(), &vScreen, D3DCOLOR_ARGB(255, 255, 255, 255));
 
-		Engine::Render_Font(L"Gothic_Bold20", to_wstring(m_iID).c_str(), &vScreen, D3DCOLOR_ARGB(255, 0, 0, 0));
-
-		// CGameUtilMgr::World2Screen()
 		CSkeletalCube::Render_Object();
 	}
 }
@@ -236,10 +252,13 @@ void CPlayer::AnimationEvent(const string& strEvent)
 		{
 			Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 				->PlayShake(0.15f, 0.4f);
-			CEffectFactory::Create<CCrack>("Exe_Decal", L"Exe_Decal");
+			_vec3 vDecalPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 3.f;
+			vDecalPos.y = 0.5f + Get_GameObject<CTerrainCubeMap>(LAYER_ENV, L"TerrainCubeMap")->GetHeight(vDecalPos.x, vDecalPos.z);
+
+			CEffectFactory::Create<CCrack>("Exe_Decal", L"Exe_Decal", vDecalPos);
 			for (int i = 0; i < 5; i++)
 			{
-				CEffectFactory::Create<CCloud>("Decal_Cloud", L"Decal_Cloud");
+				CEffectFactory::Create<CCloud>("Decal_Cloud", L"Decal_Cloud", vDecalPos);
 			}
 		}
 		// axe crack
@@ -264,7 +283,7 @@ void CPlayer::AnimationEvent(const string& strEvent)
 
 		if (m_dwWalkDust + 500 < GetTickCount())
 		{
-			CEffectFactory::Create<CCloud>("Walk_Cloud", L"Walk_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+			CEffectFactory::Create<CCloud>("Walk_Cloud", L"Walk_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS] + _vec3{0.f, 0.5f, 0.f});
 			m_dwWalkDust = GetTickCount();
 		}
 	}
@@ -276,7 +295,7 @@ void CPlayer::AnimationEvent(const string& strEvent)
 	{
 		CSoundMgr::GetInstance()->PlaySound(L"sfx_player_landing.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 		for (int j = 0; j < 15; j++)
-			CEffectFactory::Create<CCloud>("ShockPowder_Cloud", L"ShockPowder_Cloud");
+			CEffectFactory::Create<CCloud>("ShockPowder_Cloud", L"ShockPowder_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS] + _vec3{0.f, 0.5f, 0.f});
 	}
 	else if (strEvent == "visible")
 	{
@@ -511,6 +530,16 @@ void CPlayer::StateChange()
 		return;
 	}
 
+	if (m_pStat->IsSatonFascinate())
+	{
+		m_strStatus = "Fascinate";
+		m_eState = FASCINATE;
+		m_bRoll = false;
+		m_pIdleAnim = &m_arrAnim[ANIM_WALK];
+		m_pCurAnim = &m_arrAnim[ANIM_WALK];
+		return;
+	}
+
 	if (m_bRoll && s_RollCoolTime <= m_CurRollCoolTime)
 	{
 		CSoundMgr::GetInstance()->PlaySound(L"sfx_player_stepCloth-003.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
@@ -688,6 +717,28 @@ void CPlayer::StateChange()
 	}
 
 
+}
+
+void CPlayer::RotationToSaton(void)
+{
+	_vec3 vLook = _vec3(62.5f, 0.f, 44.5f) -m_pRootPart->pTrans->m_vInfo[INFO_POS];
+
+	D3DXVec3Normalize(&vLook, &vLook);
+
+	m_pRootPart->pTrans->m_vInfo[INFO_LOOK] = -vLook;
+
+	m_vTargetPos = vLook;
+
+	const _vec2 v2Look{ 0.f, 1.f };
+
+	_vec2 v2ToDest{ vLook.x, vLook.z };
+
+	const _float fDot = D3DXVec2Dot(&v2Look, &v2ToDest);
+
+	if (vLook.x < 0)
+		m_pRootPart->pTrans->m_vAngle.y = -acosf(fDot);
+	else
+		m_pRootPart->pTrans->m_vAngle.y = acosf(fDot);
 }
 
 void CPlayer::UsePotion()

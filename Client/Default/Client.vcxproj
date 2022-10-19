@@ -172,6 +172,7 @@
     <ClInclude Include="..\Header\DamageFontMgr.h" />
     <ClInclude Include="..\Header\Enderman.h" />
     <ClInclude Include="..\Header\EndermanController.h" />
+    <ClInclude Include="..\Header\EditBox.h" />
     <ClInclude Include="..\Header\FireworksArrow.h" />
     <ClInclude Include="..\Header\CamAnimation.h" />
     <ClInclude Include="..\Header\CameraTool.h" />
@@ -180,6 +181,7 @@
     <ClInclude Include="..\Header\LaserShotRune.h" />
     <ClInclude Include="..\Header\Leaper.h" />
     <ClInclude Include="..\Header\LeaperController.h" />
+    <ClInclude Include="..\Header\Logo.h" />
     <ClInclude Include="..\Header\MultiShotRune.h" />
     <ClInclude Include="..\Header\PlayerStartPos.h" />
     <ClInclude Include="..\Header\Kouku.h" />
@@ -236,6 +238,7 @@
     <ClInclude Include="..\Header\RemoteInventory.h" />
     <ClInclude Include="..\Header\Rune.h" />
     <ClInclude Include="..\Header\Saton.h" />
+    <ClInclude Include="..\Header\SatonCircle.h" />
     <ClInclude Include="..\Header\SatonController.h" />
     <ClInclude Include="..\Header\ServerPacketHandler.h" />
     <ClInclude Include="..\Header\ShockPowder.h" />
@@ -245,6 +248,7 @@
     <ClInclude Include="..\Header\SoundMgr.h" />
     <ClInclude Include="..\Header\SphereEffect.h" />
     <ClInclude Include="..\Header\Stage.h" />
+    <ClInclude Include="..\Header\Stage_Kouku.h" />
     <ClInclude Include="..\Header\StatComponent.h" />
     <ClInclude Include="..\Header\StaticCamera.h" />
     <ClInclude Include="..\Header\StormRune.h" />
@@ -296,6 +300,7 @@
     </ClCompile>
     <ClCompile Include="..\Code\Enderman.cpp" />
     <ClCompile Include="..\Code\EndermanController.cpp" />
+    <ClCompile Include="..\Code\EditBox.cpp" />
     <ClCompile Include="..\Code\Enum.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -307,6 +312,7 @@
     <ClCompile Include="..\Code\LaserShotRune.cpp" />
     <ClCompile Include="..\Code\Leaper.cpp" />
     <ClCompile Include="..\Code\LeaperController.cpp" />
+    <ClCompile Include="..\Code\Logo.cpp" />
     <ClCompile Include="..\Code\MultiShotRune.cpp" />
     <ClCompile Include="..\Code\PlayerStartPos.cpp" />
     <ClCompile Include="..\Code\Kouku.cpp" />
@@ -365,6 +371,7 @@
     <ClCompile Include="..\Code\RemoteInventory.cpp" />
     <ClCompile Include="..\Code\Rune.cpp" />
     <ClCompile Include="..\Code\Saton.cpp" />
+    <ClCompile Include="..\Code\SatonCircle.cpp" />
     <ClCompile Include="..\Code\SatonController.cpp" />
     <ClCompile Include="..\Code\ServerPacketHandler.cpp" />
     <ClCompile Include="..\Code\ShockPowder.cpp" />
@@ -374,6 +381,7 @@
     <ClCompile Include="..\Code\SoundMgr.cpp" />
     <ClCompile Include="..\Code\SphereEffect.cpp" />
     <ClCompile Include="..\Code\Stage.cpp" />
+    <ClCompile Include="..\Code\Stage_Kouku.cpp" />
     <ClCompile Include="..\Code\StatComponent.cpp" />
     <ClCompile Include="..\Code\StaticCamera.cpp" />
     <ClCompile Include="..\Code\Struct.pb.cc">

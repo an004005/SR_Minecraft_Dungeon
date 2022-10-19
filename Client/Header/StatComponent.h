@@ -6,6 +6,12 @@ enum DamageType
 	DT_STUN,
 	DT_KNOCK_BACK,
 	DT_STIFFEN,
+	DT_HUGE_KNOCK_BACK,
+	DT_HIGH_KNOCK_BACK,
+	DT_KOUKU_SYMBOL_BLUE,
+	DT_KOUKU_SYMBOL_RED,
+	DT_SATON_FASCINATED,
+	DT_SATON_GRAPED,
 	DT_JUMP,
 	// posion .. etc
 	DT_END
@@ -13,6 +19,8 @@ enum DamageType
 
 class CTerrainCubeMap;
 class CStun;
+class CFascinate_Effect;
+
 class CStatComponent : public CComponent
 {
 protected:
@@ -38,7 +46,12 @@ public:
 	_bool IsStun() const { return m_bStun || m_bKnockback; }
 	_bool IsDead() const { return m_bDead; }
 	_bool IsDamaged() const { return m_bDamaged; }
+	_bool IsSatonSymbol_Blue() const { return m_bSatonSymbol_Blue; }
+	_bool IsSatonSymbol_Red() const { return m_bSatonSymbol_Red; }
+	_bool IsSatonFascinate() const { return m_bFascinated; }
 
+	void IsSaton() { m_bIsSaton = !m_bIsSaton; }
+	void Graped_Off() { m_bGraped = false; }
 	void Revive();
 
 	// cur hp, max hp, damage
@@ -63,8 +76,8 @@ private:
 
 	// knock back
 	_bool m_bKnockback = false;
-	_float m_fKnockbackTime = 0.3f;
-	_float m_fCurKnockbackTime = 0.3f;
+	_float m_fKnockbackTime = 2.f;
+	_float m_fCurKnockbackTime = 2.f;
 	_float m_fPreYPos = 0.f;
 
 	_bool m_bStiffen = false;
@@ -78,6 +91,27 @@ private:
 	_float m_fDamagedTime = 0.5;
 	_float m_fCurDamagedTime = 0.5;
 
+	// Saton Symbol
+	_bool m_bSatonSymbol_Blue = false;
+	_bool m_bSatonSymbol_Red = false;
+
+	_float m_fSatonSymbolTime = 0.3f;
+	_float m_fCurSatonSymbolTime = 0.3f;
+
+	// Saton fascinate
+	_bool m_bFascinated = false;
+	_float m_fSatonFascinatedTime = 4.f;
+	_float m_fCurSatonFascinatedTime = 0.f;
+	// CFascinate_Effect* m_pFascinate = nullptr;
+
+	// Saton Grap
+	_bool m_bGraped = false;
+	_float m_fHighKnockBackTime = 2.f;
+	_float m_fCurHighKnockBackTime = 2.f;
+
+	// ~Saton Grap
+
+	_bool m_bIsSaton = false;
 
 };
 

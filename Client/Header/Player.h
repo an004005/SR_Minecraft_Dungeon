@@ -44,6 +44,7 @@ private:
 		STUN,
 		ROLL,
 		LEGACY,
+		FASCINATE,
 		DEAD,
 		STATE_END
 	};
@@ -98,6 +99,12 @@ public:
 	void Legacy4Press();
 	void SetArrowLookAt(const _vec3& vLookAt) {m_vArrowLookAt = vLookAt;}
 
+	// 매혹 전용 함수
+	void WalkToTarget(const _vec3& vTargetPos) { m_vTargetPos = vTargetPos; }
+	void RotationToSaton(void);
+	// ~매혹 전용 함수
+
+
 	void UsePotion();
 
 	void RotateTo(_float fYaw);
@@ -116,8 +123,9 @@ public:
 
 	void SetName(const string& strName) {m_strName = strName;}
 
-
 	_float GetYawToCursor();
+
+	static _bool s_bDropDead;
 private:
 	void RotateToCursor();
 	void RotateToMove();
@@ -125,7 +133,7 @@ private:
 	CInventory* m_pInventory = nullptr;
 
 protected:
-	string m_strName;
+	string m_strName = "NoNamed";
 
 	SkeletalPart* m_pWeaponPart = nullptr;
 	CStatComponent* m_pStat = nullptr;
@@ -166,6 +174,10 @@ protected:
 	// 원거리에서 근거리 무기로 다시 돌아올 때 1프레임동안 근거리 무기 위치가 이상한 현상을 막기 위함.
 	_bool m_bDelay = false;
 	iBlockIndex<VTXCNTX, VTXCNTZ> arrBlock{};
+
+	_vec3 m_vTargetPos;
+
+	string m_strStatus;
 
 	_bool m_bVisible = false;
 
