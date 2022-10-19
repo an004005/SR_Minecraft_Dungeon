@@ -16,9 +16,9 @@ CSatonController::CSatonController(const CSatonController& rhs)
 _int CSatonController::Update_Component(const _float& fTimeDelta)
 {
 	{
-		m_fCurFirstHammerCoolTime += fTimeDelta;
+		// m_fCurFirstHammerCoolTime += fTimeDelta;
 		// m_fCurSatonBirdCoolTime += fTimeDelta;
-		// m_fCurSatonGrapCoolTime += fTimeDelta;
+		m_fCurSatonGrapCoolTime += fTimeDelta;
 		// m_fCurSatonFascinateCoolTime += fTimeDelta;
 
 		if(m_bIsDrawMoon)
@@ -77,7 +77,7 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 
 	CKouku* pKouku = Engine::Get_GameObject<CKouku>(LAYER_ENEMY, L"Kouku");
 	m_vLookFront = saton->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_LOOK] - _vec3(62.5f, 0, 45.f);
-	m_vLookFront = pKouku->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
+	_vec3 vLookFront = pKouku->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 	if(pKouku->Check_SymbolGimmick() && !m_bIsKoukuSymbol)
 	{
 		saton->SatonSymbolAnim(_vec3(m_vLookFront));
@@ -117,7 +117,7 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 	if (m_fCurSatonGrapCoolTime >= m_fSatonGrapCoolTime && m_fTargetDist <= m_fSatonGrapkDist)
 	{
 		m_fCurSatonGrapCoolTime = 0.f;
-		saton->SatonGrap(vTargetPos);
+		saton->SatonGrap(vLookFront);
 		return 0;
 	}
 

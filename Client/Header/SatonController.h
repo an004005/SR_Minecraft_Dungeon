@@ -30,7 +30,7 @@ private:
 
 	_float m_fFirstHammerCoolTime = 5.f;
 	_float m_fSatonBirdCoolTime = 25.f;
-	_float m_fSatonGrapCoolTime = 30.f;
+	_float m_fSatonGrapCoolTime = 5.f;
 	_float m_fSatonFascinateCoolTime = 10000.f;
 	_float m_fSatonDrawMoonCoolTime = 2.f;
 	_float m_fTargetingCoolTime = 3.f;

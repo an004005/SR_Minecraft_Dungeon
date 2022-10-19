@@ -7,9 +7,11 @@ enum DamageType
 	DT_KNOCK_BACK,
 	DT_STIFFEN,
 	DT_HUGE_KNOCK_BACK,
+	DT_HIGH_KNOCK_BACK,
 	DT_KOUKU_SYMBOL_BLUE,
 	DT_KOUKU_SYMBOL_RED,
 	DT_SATON_FASCINATED,
+	DT_SATON_GRAPED,
 	// posion .. etc
 	DT_END
 };
@@ -48,7 +50,7 @@ public:
 	_bool IsSatonFascinate() const { return m_bFascinated; }
 
 	void IsSaton() { m_bIsSaton = !m_bIsSaton; }
-
+	void Graped_Off() { m_bGraped = false; }
 	void Revive();
 
 	// cur hp, max hp, damage
@@ -73,8 +75,8 @@ private:
 
 	// knock back
 	_bool m_bKnockback = false;
-	_float m_fKnockbackTime = 0.5f;
-	_float m_fCurKnockbackTime = 0.5f;
+	_float m_fKnockbackTime = 2.f;
+	_float m_fCurKnockbackTime = 2.f;
 	_float m_fPreYPos = 0.f;
 
 	_bool m_bStiffen = false;
@@ -101,7 +103,12 @@ private:
 	_float m_fCurSatonFascinatedTime = 0.f;
 	// CFascinate_Effect* m_pFascinate = nullptr;
 
+	// Saton Grap
+	_bool m_bGraped = false;
+	_float m_fHighKnockBackTime = 2.f;
+	_float m_fCurHighKnockBackTime = 2.f;
 
+	// ~Saton Grap
 
 	_bool m_bIsSaton = false;
 

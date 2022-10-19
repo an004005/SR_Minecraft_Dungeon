@@ -29,7 +29,7 @@ _int CDebugSphere::Update_Object(const _float& fTimeDelta)
 	if (m_fTime < 0.f)
 		return OBJ_DEAD;
 
-	CRenderer::GetInstance()->Add_RenderGroup(RENDER_UI, this);
+	CRenderer::GetInstance()->Add_RenderGroup(RENDER_PRIORITY, this);
 	return OBJ_NOEVENT;
 }
 

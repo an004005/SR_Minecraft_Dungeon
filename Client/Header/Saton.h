@@ -3,7 +3,7 @@
 #include "Particle.h"
 
 class CController;
-
+class CPlayer;
 class CSaton :	public CMonster
 {
 private:
@@ -113,9 +113,12 @@ private:
 	_bool m_bSatonDrawMoonPair = false;
 
 	_bool m_bStatonExplodeMoon = false;
-
+	
 	_bool m_bIsAttack_1_Coll = false;
 	_bool m_bIsAttack_2_Coll = false;
+	_bool m_bIsGrap = false;
+	_bool m_bIsGrapEndAttack = false;
+	
 
 	_vec3 m_vATKRNGCirclePos;
 
@@ -123,5 +126,8 @@ private:
 	_float m_fTime;
 	_float m_fCurTime;
 	// _bool m_bHammerReady = false;
+
+
+	set<CPlayer*> m_pGrabbedList;
 };
 

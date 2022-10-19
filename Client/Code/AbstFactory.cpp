@@ -185,7 +185,6 @@ void CEffectFactory::Ready_EffectFactory()
 	{
 		return CAttack_P::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/flare_alpha.dds");
 	} });
-
 	
 	s_mapEffectSpawner.insert({ "Speed_Boots", []()
 	{
@@ -206,7 +205,10 @@ void CEffectFactory::Ready_EffectFactory()
 	{
 		return CFireWork::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/bump.png");
 	} });
-
+	s_mapEffectSpawner.insert({ "Saton_Particle", []()
+	{
+		return CFireWork::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/torbellino_texture.png");
+	} });
 	s_mapEffectSpawner.insert({ "MoonParticle", []()
 	{
 		return CMoonParticle::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/torbellino_texture.png");
@@ -305,7 +307,18 @@ void CEffectFactory::Ready_EffectFactory()
 	{
 		return CUVCircle::Create(s_pGraphicDev, 3.7f, CREEPER);
 	} });
-
+	s_mapEffectSpawner.insert({ "Kouku_Explosion", []()
+	{
+		return CUVCircle::Create(s_pGraphicDev, 3.f, CREEPER);
+	} });
+	s_mapEffectSpawner.insert({ "Hammer1_Explosion", []()
+	{
+		return CUVCircle::Create(s_pGraphicDev, 5.f, CREEPER);
+	} });
+	s_mapEffectSpawner.insert({ "Hammer2_Explosion", []()
+	{
+		return CUVCircle::Create(s_pGraphicDev, 6.f, CREEPER);
+	} });
 	s_mapEffectSpawner.insert({ "Golem_Circle", []()
 	{
 		return CUVCircle::Create(s_pGraphicDev, 7.f, GOLEM);

@@ -147,53 +147,7 @@ HRESULT CStage::Ready_Layer_Environment()
 	pGameObject = pMap =  CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/koukusaton_test.map");
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", pGameObject), E_FAIL);
-	//
-	// pMap->SetHeight(60, 25, 25.000000);
-	// pMap->SetHeight(60, 26, 25.000000);
-	// pMap->SetHeight(60, 27, 25.000000);
-	// pMap->SetHeight(60, 28, 25.000000);
-	// pMap->SetHeight(60, 29, 25.000000);
-	// pMap->SetHeight(59, 30, 25.000000);
-	// pMap->SetHeight(60, 30, 25.000000);
-	// pMap->SetHeight(63, 30, 25.000000);
-	// pMap->SetHeight(49, 31, 25.000000);
-	// pMap->SetHeight(60, 31, 25.000000);
-	// pMap->SetHeight(61, 31, 25.000000);
-	// pMap->SetHeight(62, 32, 25.000000);
-	// pMap->SetHeight(72, 32, 25.000000);
-	// pMap->SetHeight(53, 33, 25.000000);
-	// pMap->SetHeight(58, 34, 25.000000);
-	// pMap->SetHeight(60, 34, 25.000000);
-	// pMap->SetHeight(63, 34, 25.000000);
-	// pMap->SetHeight(64, 34, 25.000000);
-	// pMap->SetHeight(56, 35, 25.000000);
-	// pMap->SetHeight(62, 35, 25.000000);
-	// pMap->SetHeight(39, 36, 25.000000);
-	// pMap->SetHeight(57, 36, 25.000000);
-	// pMap->SetHeight(66, 36, 25.000000);
-	// pMap->SetHeight(50, 37, 25.000000);
-	// pMap->SetHeight(56, 37, 25.000000);
-	// pMap->SetHeight(58, 37, 25.000000);
-	// pMap->SetHeight(60, 37, 25.000000);
-	// pMap->SetHeight(62, 37, 25.000000);
-	// pMap->SetHeight(64, 37, 25.000000);
-	// pMap->SetHeight(66, 37, 25.000000);
-	// pMap->SetHeight(72, 38, 25.000000);
-	// pMap->SetHeight(74, 38, 25.000000);
-	// pMap->SetHeight(79, 38, 25.000000);
-	// pMap->SetHeight(62, 39, 25.000000);
-	// pMap->SetHeight(71, 39, 25.000000);
-	// pMap->SetHeight(72, 39, 25.000000);
-	// pMap->SetHeight(75, 41, 25.000000);
-	// pMap->SetHeight(41, 42, 25.000000);
-	// pMap->SetHeight(37, 43, 25.000000);
-	// pMap->SetHeight(54, 43, 25.000000);
-	// pMap->SetHeight(60, 43, 25.000000);
-	// pMap->SetHeight(83, 43, 25.000000);
-	// pMap->SetHeight(74, 45, 25.000000);
-	// pMap->SetHeight(38, 47, 25.000000);
-	// pMap->SetHeight(66, 47, 25.000000);
-	// pMap->SetHeight(82, 49, 25.000000);
+
 
 
 	//  Birds

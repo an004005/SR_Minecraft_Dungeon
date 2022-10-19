@@ -51,6 +51,14 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 			m_fCurKnockbackTime += fTimeDelta;
 	}
 
+	if (m_bKnockback)
+	{
+		if (m_fHighKnockBackTime < m_fCurHighKnockBackTime)
+			m_bKnockback = false;
+		else
+			m_fCurHighKnockBackTime += fTimeDelta;
+	}
+
 	if (m_bStiffen)
 	{
 		if (m_fStiffeTime < m_fCurStiffeTime)
@@ -95,28 +103,28 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 	// 	Engine::Get_GameObject<CFascinated_Effect>(LAYER_EFFECT, L"Fascinate_Effect")->Add_Particle(m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{ 0.f, 3.f, 0.f }, 1.f, RED, 1, 0.1f, 0);
 	// }
 
+	
 
-	_vec3& vPos = m_pOwnerTrans->m_vInfo[INFO_POS];
-	if (CGameUtilMgr::Vec3Cmp(m_vKnockBackVelocity, CGameUtilMgr::s_vZero))
+	if (!m_bGraped)
 	{
-		vPos.y = m_pCubeMap->GetHeight(vPos.x, vPos.z);
-	}
-	else
-	{
-		// ณหน้ ป๓ลย
-		if (m_fPreYPos + 4.f < vPos.y)
+		_vec3& vPos = m_pOwnerTrans->m_vInfo[INFO_POS];
+		if (CGameUtilMgr::Vec3Cmp(m_vKnockBackVelocity, CGameUtilMgr::s_vZero))
 		{
-			m_bKnockback = false;
+			vPos.y = m_pCubeMap->GetHeight(vPos.x, vPos.z);
 		}
-
-		vPos += m_vKnockBackVelocity * fTimeDelta;
-
-		m_vKnockBackVelocity.y -= 80.f * fTimeDelta;
-
-		if (vPos.y < m_pCubeMap->GetHeight(vPos.x, vPos.z) || m_bKnockback == false)
+		else
 		{
-			m_vKnockBackVelocity = CGameUtilMgr::s_vZero;
-		}		
+			// ณหน้ ป๓ลย
+
+			vPos += m_vKnockBackVelocity * fTimeDelta;
+
+			m_vKnockBackVelocity.y -= 80.f * fTimeDelta;
+
+			if (vPos.y < m_pCubeMap->GetHeight(vPos.x, vPos.z) || m_bKnockback == false)
+			{
+				m_vKnockBackVelocity = CGameUtilMgr::s_vZero;
+			}
+		}
 	}
 
 	return 0;
@@ -186,6 +194,18 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 		m_vKnockBackVelocity *= 10.f;
 		m_vKnockBackVelocity.y = 10.f;
 		break;
+	case DT_HIGH_KNOCK_BACK:
+		m_bKnockback = true;
+		m_fCurHighKnockBackTime = 0.f;
+		m_fCurKnockbackTime = 0.f;
+		m_fPreYPos = m_pOwnerTrans->m_vInfo[INFO_POS].y;
+		m_pOwnerTrans->m_vInfo[INFO_POS].y += 3.f;
+
+		m_vKnockBackVelocity = m_pOwnerTrans->m_vInfo[INFO_POS] - vFromPos;
+		D3DXVec3Normalize(&m_vKnockBackVelocity, &m_vKnockBackVelocity);
+		m_vKnockBackVelocity *= 10.f;
+		m_vKnockBackVelocity.y = 30.f;
+		break;
 	case DT_STIFFEN:
 		m_bStiffen = true;
 		m_fCurStiffeTime = 0.f;
@@ -215,7 +235,10 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 	case DT_SATON_FASCINATED:
 		m_bFascinated = true;
 		m_fCurSatonSymbolTime = 0.f;
-		Engine::Get_GameObject<CFascinated_Effect>(LAYER_EFFECT, L"Fascinate_Effect")->Add_Particle(m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{ 0.f, 3.f, 0.f }, 1.f, RED, 1, 4.f, 0);
+		Engine::Get_GameObject<CFascinated_Effect>(LAYER_EFFECT, L"Fascinate_Effect")->Add_Particle(m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{ 0.f, 3.5f, 0.f }, 1.f, RED, 1, 4.f, 0);
+		break;
+	case DT_SATON_GRAPED:
+		m_bGraped = true;
 		break;
 	case DT_END:
 		break;

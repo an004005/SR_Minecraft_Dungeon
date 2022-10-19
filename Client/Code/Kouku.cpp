@@ -103,10 +103,9 @@ void CKouku::AnimationEvent(const string& strEvent)
 		m_vKoukuHammerPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
 		CEffectFactory::AttackRange_Create("Attack_Range_Circle", L"Attack_Range_Circle", m_vKoukuHammerPos
 			, READY_CIRCLE, CGameUtilMgr::s_vZero, _vec3(4.f, 4.f, 4.f), 35, 35);
-
-
 		CEffectFactory::AttackRange_Create("Attack_Range_Circle", L"Attack_Range_Circle", m_vKoukuHammerPos
 			, ATTACK_CIRCLE, CGameUtilMgr::s_vZero, _vec3(4.f, 4.f, 4.f), 100, 35);
+		
 	}
 	else if(strEvent == "BasicAttackColl_1")
 	{
@@ -123,6 +122,8 @@ void CKouku::AnimationEvent(const string& strEvent)
 
 		CEffectFactory::AttackRange_Create("Attack_Range_Circle", L"Attack_Range_Circle", m_vKoukuHammerPos
 			, ATTACK_CIRCLE, CGameUtilMgr::s_vZero, _vec3(5.f, 5.f, 5.f), 100, 34);
+		CEffectFactory::Create<CUVCircle>("Hammer1_Explosion", L"Hammer1_Explosion",
+			_vec3(m_vKoukuHammerPos.x, m_vKoukuHammerPos.y + 0.2f, m_vKoukuHammerPos.z));
 	}
 	else if (strEvent == "DoubleHammer_2")
 	{
@@ -312,7 +313,8 @@ void CKouku::LateUpdate_Object()
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
 				->TakeDamage(15, FromPos, this, DT_KNOCK_BACK);
 		}
-
+		CEffectFactory::Create<CUVCircle>("Kouku_Explosion", L"Kouku_Explosion",
+			_vec3(m_vKoukuHammerPos.x, m_vKoukuHammerPos.y + 0.2f, m_vKoukuHammerPos.z));
 		m_bIsBasicAttackColl = false;
 	}
 
@@ -346,7 +348,8 @@ void CKouku::LateUpdate_Object()
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
 				->TakeDamage(20, FromPos, this, DT_KNOCK_BACK);
 		}
-
+		CEffectFactory::Create<CUVCircle>("Hammer1_Explosion", L"Hammer1_Explosion",
+			_vec3(m_vKoukuHammerPos.x, m_vKoukuHammerPos.y + 0.2f, m_vKoukuHammerPos.z));
 		m_bIsDoubleHammerColl_2 = false;
 	}
 

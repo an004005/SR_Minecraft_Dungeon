@@ -99,12 +99,22 @@ void CSaton::AnimationEvent(const string& strEvent)
 			, ATTACK_CIRCLE, CGameUtilMgr::s_vZero, _vec3(6.f, 6.f, 6.f), 130, 63);
 		Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 			->PlayShake(0.15f, 0.4f);
+
+		CEffectFactory::Create<CUVCircle>("Hammer1_Explosion", L"Hammer1_Explosion",
+			_vec3(m_vATKRNGCirclePos.x, m_vATKRNGCirclePos.y + 4.2f, m_vATKRNGCirclePos.z));
+		Get_GameObject<CFireWork>(LAYER_EFFECT, L"Saton_Particle")->Add_Particle(_vec3(m_vATKRNGCirclePos.x, m_vATKRNGCirclePos.y + 4.2f, m_vATKRNGCirclePos.z), 0.5f, D3DXCOLOR(1.0f,0.2f,0.f,0.f), 15, 0.5f);
+		Get_GameObject<CFireWork>(LAYER_EFFECT, L"Saton_Particle")->Add_Particle(_vec3(m_vATKRNGCirclePos.x, m_vATKRNGCirclePos.y + 4.2f, m_vATKRNGCirclePos.z), 0.7f, D3DXCOLOR(0.7f, 0.1f, 0.2f, 0.f), 15, 0.5f);
+
 		m_bIsAttack_1_Coll = true;
 	}
 	else if (strEvent == "Attack_2_End")
 	{
 		Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 			->PlayShake(0.2f, 0.4f);
+		CEffectFactory::Create<CUVCircle>("Hammer2_Explosion", L"Hammer2_Explosion",
+			_vec3(m_vATKRNGCirclePos.x, m_vATKRNGCirclePos.y + 4.2f, m_vATKRNGCirclePos.z));
+		Get_GameObject<CFireWork>(LAYER_EFFECT, L"Saton_Particle")->Add_Particle(_vec3(m_vATKRNGCirclePos.x, m_vATKRNGCirclePos.y + 4.2f, m_vATKRNGCirclePos.z), 0.5f, D3DXCOLOR(1.0f, 0.2f, 0.f, 0.f), 15, 0.5f);
+		Get_GameObject<CFireWork>(LAYER_EFFECT, L"Saton_Particle")->Add_Particle(_vec3(m_vATKRNGCirclePos.x, m_vATKRNGCirclePos.y + 4.2f, m_vATKRNGCirclePos.z), 0.7f, D3DXCOLOR(0.7f, 0.1f, 0.2f, 0.f), 15, 0.5f);
 
 		m_bIsAttack_2_Coll = true;
 
@@ -113,13 +123,24 @@ void CSaton::AnimationEvent(const string& strEvent)
 	{
 		// 어택 써클만 생성
 	}
-	else if (strEvent == "MakeMoon") // 플레이어 머리 위에 달 띄우기
+	else if(strEvent == "Grap_Start")
 	{
-
+		IM_LOG("Grap_Start");
+		m_bIsGrap = true;
 	}
-	else if (strEvent == "DrawMoon") // 플레이어 위치 받아서 바닥에 달 그리기
+	else if (strEvent == "Grap_End")
 	{
+		IM_LOG("Grap End");
+		m_bIsGrap = false;
+		m_bIsGrapEndAttack = true;
 	}
+	// else if (strEvent == "MakeMoon") // 플레이어 머리 위에 달 띄우기
+	// {
+	//
+	// }
+	// else if (strEvent == "DrawMoon") // 플레이어 위치 받아서 바닥에 달 그리기
+	// {
+	// }
 	else if (strEvent == "ExplodeMoon") // 바닥에 있던 달 위치에 쇼크파우더 뿌리기 
 	{
 
@@ -296,9 +317,70 @@ void CSaton::LateUpdate_Object()
 			m_bIsAttack_2_Coll = false;
 	}
 
+	if (m_bIsGrap)
+	{
+		_matrix mat = Get_SkeletalPart("hand")->GetWorldMat();
+
+		_vec3 vPos = _vec3(mat._41, mat._42, mat._43);
+		set<CGameObject*> setObj;
+		Engine::GetOverlappedObject(setObj, vPos, 3.f);
+
+		for (auto& obj : setObj)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+			{
+				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+					->TakeDamage(0, vPos, this, DT_SATON_GRAPED);
+				pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)
+					->Set_Pos(vPos.x,vPos.y-1.5f,vPos.z);
+
+
+				m_pGrabbedList.insert(pPlayer);
+			}
+		}
+		DEBUG_SPHERE(vPos, 3.f, 0.1f);
+	}
+
+	if (m_bIsGrapEndAttack)
+	{
+		_matrix mat = Get_SkeletalPart("hand")->GetWorldMat();
+
+		_vec3 vPos = _vec3(mat._41, mat._42, mat._43);
+
+		for (auto& pPlayer : m_pGrabbedList)
+		{
 	
+			pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+				->TakeDamage(1, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_HIGH_KNOCK_BACK);
+			// pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)
+			// 	->Set_Pos(vPos.x, vPos.y - 1.5f, vPos.z);
+			pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+				->Graped_Off();
+		}
+		m_pGrabbedList.clear();
 
+		// set<CGameObject*> setObj;
+		// Engine::GetOverlappedObject(setObj, vPos, 3.f);
+		//
+		// for (auto& obj : setObj)
+		// {
+		// 	if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+		// 	{
+		// 		pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+		// 			->TakeDamage(30, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_HIGH_KNOCK_BACK);
+		// 		pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+		// 			->Graped_Off();
+		// 		IM_LOG("Grap Player Off");
+		// 		// pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)
+		// 		// 	->Set_Pos(vPos.x, vPos.y - 1.5f, vPos.z);
+		// 		break;
+		// 	}
+		// }
+		// DEBUG_SPHERE(vPos, 3.f, 0.1f);
+		m_bIsGrapEndAttack = false;
+	}
 
+	
 }
 
 
