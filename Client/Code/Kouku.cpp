@@ -376,9 +376,10 @@ void CKouku::Free()
 	CMonster::Free();
 }
 
-CKouku* CKouku::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
+CKouku* CKouku::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath, _bool bRemote)
 {
 	CKouku* pInstance = new CKouku(pGraphicDev);
+	pInstance->m_bRemote = bRemote;
 
 	if (FAILED(pInstance->Ready_Object()))
 	{

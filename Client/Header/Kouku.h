@@ -33,7 +33,7 @@ public:
 	virtual void LateUpdate_Object() override;
 	virtual void Free() override;
 
-	static CKouku* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
+	static CKouku* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath, _bool bRemote = false);
 
 	virtual void StateChange();
 

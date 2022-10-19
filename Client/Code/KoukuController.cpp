@@ -162,3 +162,39 @@ CKoukuController* CKoukuController::Create()
 {
 	return new CKoukuController;
 }
+
+// remote
+
+CKoukuRemoteController::CKoukuRemoteController() : CKoukuController()
+{
+}
+
+CKoukuRemoteController::CKoukuRemoteController(const CKoukuRemoteController& rhs) : CKoukuController(rhs)
+{
+}
+
+CKoukuRemoteController::~CKoukuRemoteController()
+{
+}
+
+_int CKoukuRemoteController::Update_Component(const _float& fTimeDelta)
+{
+
+
+	return 0;
+}
+
+CComponent* CKoukuRemoteController::Clone()
+{
+	return new CKoukuRemoteController(*this);
+}
+
+void CKoukuRemoteController::Free()
+{
+	CKoukuController::Free();
+}
+
+CKoukuRemoteController* CKoukuRemoteController::Create()
+{
+	return new CKoukuRemoteController;
+}

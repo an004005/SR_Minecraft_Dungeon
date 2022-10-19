@@ -4,7 +4,7 @@ class CPlayer;
 
 class CKoukuController :public CController
 {
-private:
+protected:
 	explicit CKoukuController(void);
 	explicit CKoukuController(const CKoukuController& rhs);
 	virtual ~CKoukuController() override;
@@ -16,7 +16,7 @@ public:
 public:
 	static CKoukuController* Create();
 
-private:
+protected:
 	CPlayer* m_pTargetPlayer = nullptr;
 
 
@@ -48,3 +48,25 @@ private:
 	_float m_fTargetDist = 9999.f;
 };
 
+class CKoukuRemoteController : public CKoukuController
+{
+private:
+	explicit CKoukuRemoteController(void);
+	explicit CKoukuRemoteController(const CKoukuRemoteController& rhs);
+	virtual ~CKoukuRemoteController() override;
+
+public:
+	virtual _int Update_Component(const _float& fTimeDelta) override;
+	virtual CComponent* Clone() override;
+	virtual void Free() override;
+public:
+	static CKoukuRemoteController* Create();
+
+
+private:
+	USE_LOCK;
+	// _matrix m_matWorld;
+	//
+	// list<pair<_vec3, Protocol::SatonPattern>> m_patternList;
+
+};
