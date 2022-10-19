@@ -4,6 +4,7 @@
 #include "Skeleton.h"
 #include "StatComponent.h"
 #include "KoukuController.h"
+#include "Particle.h"
 
 CKouku::CKouku(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
 {
@@ -29,6 +30,8 @@ HRESULT CKouku::Ready_Object()
 	m_arrAnim[HAMMER_OUT] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_hammer_o.anim");
 	m_arrAnim[HAMMER_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_hamer.anim");
 	m_arrAnim[HORROR_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_runattack.anim");
+	m_arrAnim[SYMBOL_HIDE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_hide.anim");
+	m_arrAnim[REST] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_rest.anim");
 
 	m_pIdleAnim = &m_arrAnim[IDLE];
 	// m_pCurAnim = &m_arrAnim[INTRO];
@@ -37,7 +40,10 @@ HRESULT CKouku::Ready_Object()
 	m_eState = IDLE;
 	m_fSpeed = 2.f;
 
-	m_pStat->SetMaxHP(1000);
+	m_iRedSymbolCnt = 0;
+
+
+	m_pStat->SetMaxHP(120);
 
 	CController* pController = Add_Component<CKoukuController>(L"Proto_KoukuController", L"Proto_KoukuController", ID_DYNAMIC);
 	pController->SetOwner(this);
@@ -46,45 +52,102 @@ HRESULT CKouku::Ready_Object()
 	//cc면역
 	m_bCantCC = true;
 
-	m_bCanPlayAnim = false;
-	PlayAnimationOnce(&m_arrAnim[IDLE]);
+	// m_bCanPlayAnim = false;
+	// PlayAnimationOnce(&m_arrAnim[IDLE]);
 
 	return S_OK;
 }
 
 void CKouku::AnimationEvent(const string& strEvent)
 {
-	if (strEvent == "DoubleHammer")
+	if (strEvent == "SymbolCloud")
 	{
-		m_bDoubleHammer = true;
+		for (int i = 0; i < 5; i++)
+		{
+			CEffectFactory::Create<CCloud>("Creeper_Cloud", L"Creeper_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+		}
 	}
-	else if (strEvent == "HorrorAttack")
+	// else if (strEvent == "HorrorAttack")
+	// {
+	// 	m_bHorrorAttack = true;
+	// 	m_bCountable = true;
+	// }
+	else if (strEvent == "SymbolStart")
 	{
-		m_bHorrorAttack = true;
+		for (int i = 0; i < 40; i++)
+		{
+			CEffectFactory::Create<CHealCircle>("Blue_Circle", L"Blue_Circle", _vec3(51.5f, 25.f, 42.5f));
+			CEffectFactory::Create<CHealCircle>("Blue_Circle", L"Blue_Circle", _vec3(57.5f, 25.f, 38.5f));
+			CEffectFactory::Create<CHealCircle>("Red_Circle", L"Red_Circle", _vec3(67.5f, 25.f, 38.5f));
+			CEffectFactory::Create<CHealCircle>("Blue_Circle", L"Blue_Circle", _vec3(73.5f, 25.f, 42.5f));
+		}
+		Get_GameObject<CMoonParticle>(LAYER_EFFECT, L"MoonParticle")->Add_Particle(_vec3(51.5f, 25.f, 42.5f), 1.f, BLUE, 12, 6.2f);
+		Get_GameObject<CMoonParticle>(LAYER_EFFECT, L"MoonParticle")->Add_Particle(_vec3(57.5f, 25.f, 38.5f), 1.f, BLUE, 12, 6.2f);
+		Get_GameObject<CMoonParticle>(LAYER_EFFECT, L"MoonParticle")->Add_Particle(_vec3(67.5f, 25.f, 38.5f), 1.f, RED, 12, 6.2f);
+		Get_GameObject<CMoonParticle>(LAYER_EFFECT, L"MoonParticle")->Add_Particle(_vec3(73.5f, 25.f, 42.5f), 1.f, BLUE, 12, 6.2f);
+
+		
+	}
+	else if (strEvent == "SymbolAttack")
+	{
+		m_bIsSymbolAttackCycle = true; // 이벤트 간격 늘리기 완료
+	}
+	else if (strEvent == "Kouku_Hide")
+	{
+		m_pRootPart->pTrans->m_vInfo[INFO_POS] = _vec3(62.5f, 0.f, 48.7f);
+		// PlayAnimationOnce(&m_arrAnim[REST]);
+	}
+	else if (strEvent == "Ready_Circle")
+	{
+		// 더블 해머 1타
+		m_vKoukuHammerPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+		CEffectFactory::AttackRange_Create("Attack_Range_Circle", L"Attack_Range_Circle", m_vKoukuHammerPos
+			, READY_CIRCLE, CGameUtilMgr::s_vZero, _vec3(4.f, 4.f, 4.f), 35, 35);
+		CEffectFactory::AttackRange_Create("Attack_Range_Circle", L"Attack_Range_Circle", m_vKoukuHammerPos
+			, ATTACK_CIRCLE, CGameUtilMgr::s_vZero, _vec3(4.f, 4.f, 4.f), 100, 35);
+		
+	}
+	else if(strEvent == "BasicAttackColl_1")
+	{
+		m_bIsBasicAttackColl = true; // 완료
+	}
+	else if (strEvent == "DoubleHammer_1")
+	{
+		m_bIsDoubleHammerColl_1 = true;
+
+		// 더블 해머 2타
+		m_vKoukuHammerPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 5.f;;
+		CEffectFactory::AttackRange_Create("Attack_Range_Circle", L"Attack_Range_Circle", m_vKoukuHammerPos
+			, READY_CIRCLE, CGameUtilMgr::s_vZero, _vec3(5.f, 5.f, 5.f), 34, 34);
+
+		CEffectFactory::AttackRange_Create("Attack_Range_Circle", L"Attack_Range_Circle", m_vKoukuHammerPos
+			, ATTACK_CIRCLE, CGameUtilMgr::s_vZero, _vec3(5.f, 5.f, 5.f), 100, 34);
+		CEffectFactory::Create<CUVCircle>("Hammer1_Explosion", L"Hammer1_Explosion",
+			_vec3(m_vKoukuHammerPos.x, m_vKoukuHammerPos.y + 0.2f, m_vKoukuHammerPos.z));
+	}
+	else if (strEvent == "DoubleHammer_2")
+	{
+		m_bIsDoubleHammerColl_2 = true;
+	}
+	else if (strEvent == "HorrorAttack_Start")
+	{
 		m_bCountable = true;
 	}
-	else if (strEvent == "BasicAttack")
+	else if (strEvent == "Horror_Attack")
 	{
-		m_bBasicAttack = true;
-	}
-	else if (strEvent == "AnimStopped")
-	{
-		m_bDelete = true;
+		m_bIsHorrorAttack = true;
 		m_bCountable = false;
 	}
-	// else if (strEvent == "SpitFire")
-	// {
-	// 	_matrix matWorld;
-	// 	_vec3 vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
-	// 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { vPos.x, vPos.y + 5.f , vPos.z });
-	// 	CObjectFactory::Create<CRedStoneMonstrosityBullet>("RedStoneMonstrosityBullet", L"RedStoneMonstrosityBullet", matWorld);
-	// }
+	else if (strEvent == "HorrorAttack_End")
+	{
+		m_bIsHorrorAttack = false;
+	}
+
 }
 
 _int CKouku::Update_Object(const _float& fTimeDelta)
 {
 	if (m_bDelete) return OBJ_DEAD;
-
 
 	CMonster::Update_Object(fTimeDelta);
 
@@ -92,7 +155,7 @@ _int CKouku::Update_Object(const _float& fTimeDelta)
 		m_bCanPlayAnim = true;
 
 	// 상태 변경 조건 설정
-	StateChange();
+		StateChange();
 
 	// 각 상태에 따른 프레임 마다 실행할 함수 지정
 	switch (m_eState)
@@ -114,14 +177,20 @@ _int CKouku::Update_Object(const _float& fTimeDelta)
 	case HORROR_ATTACK:
 		m_fCurTime += fTimeDelta;
 
-		if (m_fCurTime <= m_fTime)
+		if (m_fCurTime <= m_fTime && !m_bCountable)
 		{
-			m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * m_fSpeed * fTimeDelta;
+			m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 4.f * fTimeDelta;
 		}
 		m_strState = "HORROR_ATTACK";
 		break;
 	case BASIC_ATTACK:
 		m_strState = "BASICATTACK";
+		break;
+
+	case SYMBOL_HIDE:
+		m_strState = "SYMBOL_HIDE";
+		break;
+
 	case DEAD:
 		break;
 	default:
@@ -134,11 +203,7 @@ _int CKouku::Update_Object(const _float& fTimeDelta)
 			m_fCurTime = 0.f;
 	}
 
-	IM_BEGIN("State");
-
-	ImGui::Text(m_strState.c_str());
-
-	IM_END;
+	
 
 	return OBJ_NOEVENT;
 }
@@ -147,23 +212,163 @@ void CKouku::LateUpdate_Object()
 {
 	CMonster::LateUpdate_Object();
 
-	// if (m_bChopFire)
-	// {
-	// 	set<CGameObject*> setObj;
-	// 	_vec3 vAttackPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + (m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 2.f);
-	// 	Engine::GetOverlappedObject(setObj, vAttackPos, 6.f);
-	//
-	// 	for (auto& obj : setObj)
-	// 	{
-	// 		if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
-	// 			pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-	// 			->TakeDamage(1, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_KNOCK_BACK);
-	// 	}
-	// 	DEBUG_SPHERE(vAttackPos, 6.f, 1.f);
-	// 	IM_LOG("Fire");
-	//
-	// 	m_bChopFire = false;
-	// }
+	if (m_bIsSymbolGimmick)
+	{
+		set<CGameObject*> setPlayer_1;
+		_vec3 Left_BludCircle_1 = _vec3(51.5f, 25.f, 42.5f);
+		Engine::GetOverlappedObject(setPlayer_1, Left_BludCircle_1, 2.f);
+
+		for (auto& obj : setPlayer_1)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+				->TakeDamage(0, _vec3(51.5f, 25.f, 42.5f), this, DT_KOUKU_SYMBOL_BLUE);
+		}
+
+		DEBUG_SPHERE(Left_BludCircle_1, 10.f, 6.2f);
+		IM_LOG("Create Left_Blue_1 Circle");
+
+
+		set<CGameObject*> setPlayer_2;
+		_vec3 Left_BludCircle_2 = _vec3(57.5f, 25.f, 38.5f);
+		Engine::GetOverlappedObject(setPlayer_2, Left_BludCircle_2, 2.f);
+
+		for (auto& obj : setPlayer_2)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+				->TakeDamage(0, _vec3(57.5f, 25.f, 38.5f), this, DT_KOUKU_SYMBOL_BLUE);
+		}
+
+		DEBUG_SPHERE(Left_BludCircle_2, 10.f, 6.2f);
+		IM_LOG("Create Left_Blue_2 Circle");
+
+
+		set<CGameObject*> setPlayer_3;
+		_vec3 Right_RedCircle_3 = _vec3(67.5f, 25.f, 38.5f);
+		Engine::GetOverlappedObject(setPlayer_3, Right_RedCircle_3, 2.f);
+
+
+		m_iRedSymbolCnt = 0;
+		for (auto& obj : setPlayer_3)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+				->TakeDamage(0, _vec3(67.5f, 25.f, 38.5f), this, DT_KOUKU_SYMBOL_RED);
+
+			m_iRedSymbolCnt++;
+		}
+
+		DEBUG_SPHERE(Right_RedCircle_3, 10.f, 6.2f);
+		IM_LOG("Create Right_Red_3 Circle");
+
+		set<CGameObject*> setPlayer_4;
+		_vec3 Left_BlueCircle_4 = _vec3(73.5f, 25.f, 42.5f);
+		Engine::GetOverlappedObject(setPlayer_4, Left_BlueCircle_4, 2.f);
+
+		for (auto& obj : setPlayer_4)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+				->TakeDamage(0, _vec3(73.5f, 25.f, 42.5f), this, DT_KOUKU_SYMBOL_BLUE);
+		}
+
+		DEBUG_SPHERE(Left_BlueCircle_4, 10.f, 6.2f);
+		IM_LOG("Create Right_Blue_4 Circle");
+
+
+		if (m_bIsSymbolAttackCycle)
+		{
+			set<CGameObject*> setPlayer;
+			_vec3 KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+
+			Engine::GetOverlappedObject(setPlayer, KoukuPos, 100.f);
+
+			for (auto& obj : setPlayer)
+			{
+				if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+				{
+					CStatComponent* PlayerStatCom = pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC);
+
+					if (PlayerStatCom->IsSatonSymbol_Blue() == false && m_iRedSymbolCnt != 2)
+					{
+						PlayerStatCom->TakeDamage(20, pPlayer->GetInfo(INFO_POS), this, DT_END);
+					}
+				}
+			}
+			m_bIsSymbolAttackCycle = false;
+		}
+	}
+
+	if(m_bIsBasicAttackColl)
+	{
+		set<CGameObject*> Player;
+		_vec3 KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+		_vec3 FromPos = KoukuPos + m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 2;
+		Engine::GetOverlappedObject(Player, KoukuPos, 3.f);
+
+		for (auto& obj : Player)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+				->TakeDamage(15, FromPos, this, DT_KNOCK_BACK);
+		}
+		CEffectFactory::Create<CUVCircle>("Kouku_Explosion", L"Kouku_Explosion",
+			_vec3(m_vKoukuHammerPos.x, m_vKoukuHammerPos.y + 0.2f, m_vKoukuHammerPos.z));
+		m_bIsBasicAttackColl = false;
+	}
+
+	if (m_bIsDoubleHammerColl_1)
+	{
+		set<CGameObject*> Player;
+		_vec3 KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+		// _vec3 FromPos = KoukuPos + m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 2;
+		Engine::GetOverlappedObject(Player, KoukuPos, 4.f);
+
+		for (auto& obj : Player)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+				->TakeDamage(20, KoukuPos, this, DT_KNOCK_BACK);
+		}
+
+		m_bIsDoubleHammerColl_1 = false;
+	}
+
+	if (m_bIsDoubleHammerColl_2)
+	{
+		set<CGameObject*> Player;
+		_vec3 KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+		_vec3 FromPos = KoukuPos + m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 5;
+		Engine::GetOverlappedObject(Player, KoukuPos, 5.f);
+
+		for (auto& obj : Player)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+				->TakeDamage(20, FromPos, this, DT_KNOCK_BACK);
+		}
+		CEffectFactory::Create<CUVCircle>("Hammer1_Explosion", L"Hammer1_Explosion",
+			_vec3(m_vKoukuHammerPos.x, m_vKoukuHammerPos.y + 0.2f, m_vKoukuHammerPos.z));
+		m_bIsDoubleHammerColl_2 = false;
+	}
+
+	if(m_bIsHorrorAttack)
+	{
+		set<CGameObject*> Player;
+		_vec3 KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+		// _vec3 FromPos = KoukuPos + m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 5;
+		Engine::GetOverlappedObject(Player, KoukuPos, 2.5f);
+
+		for (auto& obj : Player)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+				->TakeDamage(5, KoukuPos, this, DT_KNOCK_BACK);
+		}
+
+		// m_bIsHorrorAttack = false;
+	}
 }
 
 void CKouku::Free()
@@ -232,16 +437,19 @@ void CKouku::StateChange()
 		SetOff();
 		return;
 	}
+
+	if (m_bKoukuSymbol && m_bCanPlayAnim)
+	{
+		m_eState = SYMBOL_HIDE;
+		RotateToTargetPos(m_vTargetPos);
+		PlayAnimationOnce(&m_arrAnim[SYMBOL_HIDE]);
+		m_bMove = false;
+		m_bCanPlayAnim = false;
+		SetOff();
+		return;
+	}
 	//
-	// if (m_bMove && m_bCanPlayAnim)
-	// {
-	// 	m_eState = WALK;
-	// 	RotateToTargetPos(m_vTargetPos, true);
-	// 	m_pIdleAnim = &m_arrAnim[WALK];
-	// 	m_pCurAnim = &m_arrAnim[WALK];
-	// 	return;
-	// }
-	if (m_bCanPlayAnim)
+	if (m_bMove && m_bCanPlayAnim)
 	{
 		m_eState = WALK;
 		RotateToTargetPos(m_vTargetPos);
@@ -249,14 +457,44 @@ void CKouku::StateChange()
 		m_pCurAnim = &m_arrAnim[WALK];
 		return;
 	}
-
-
 	// if (m_bCanPlayAnim)
 	// {
-	// 	m_eState = IDLE;
+	// 	m_eState = WALK;
 	// 	RotateToTargetPos(m_vTargetPos);
-	// 	m_pIdleAnim = &m_arrAnim[IDLE];
-	// 	m_pCurAnim = &m_arrAnim[IDLE];
+	// 	m_pIdleAnim = &m_arrAnim[WALK];
+	// 	m_pCurAnim = &m_arrAnim[WALK];
 	// 	return;
 	// }
+
+
+	if (m_bCanPlayAnim)
+	{
+		m_eState = IDLE;
+		// RotateToTargetPos(m_vTargetPos);
+		m_pIdleAnim = &m_arrAnim[IDLE];
+		m_pCurAnim = &m_arrAnim[IDLE];
+		return;
+	}
+}
+
+void CKouku::Symbol_Attack()
+{
+	set<CGameObject*> setPlayer;
+	_vec3 KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+
+	Engine::GetOverlappedObject(setPlayer, KoukuPos, 10.f);
+
+	for (auto& obj : setPlayer)
+	{
+
+		if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+		{
+			CStatComponent* PlayerStatCom = pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC);
+
+			if (!PlayerStatCom->IsSatonSymbol_Blue())
+			{
+				PlayerStatCom->TakeDamage(20, pPlayer->GetInfo(INFO_POS), this, DT_KOUKU_SYMBOL_BLUE);
+			}
+		}
+	}
 }

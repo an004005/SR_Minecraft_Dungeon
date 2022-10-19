@@ -34,6 +34,8 @@ HRESULT CStaticCamera::Ready_Object()
 void CStaticCamera::Set_Mode()
 {
 	m_pTransform->Rotation(ROT_Y, D3DXToRadian(-50.f));
+	m_pTransform->Rotation(ROT_X, D3DXToRadian(-10.f));
+
 }
 
 

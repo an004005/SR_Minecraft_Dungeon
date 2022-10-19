@@ -24,16 +24,31 @@ private:
 	_float m_fCurFirstHammerCoolTime = 0.f;
 	_float m_fCurSatonBirdCoolTime = 0.f;
 	_float m_fCurSatonGrapCoolTime = 0.f;
+	_float m_fCurSatonFascinateCoolTime = 0.f;
+	_float m_fCurSatonDrawMoonCoolTime = 0.f;
 	_float m_fCurTargetingCoolTime = 3.f;
 
-	_float m_fFirstHammerCoolTime = 15.f;
+	_float m_fFirstHammerCoolTime = 5.f;
 	_float m_fSatonBirdCoolTime = 25.f;
-	_float m_fSatonGrapCoolTime = 30.f;
+	_float m_fSatonGrapCoolTime = 5.f;
+	_float m_fSatonFascinateCoolTime = 10000.f;
+	_float m_fSatonDrawMoonCoolTime = 2.f;
 	_float m_fTargetingCoolTime = 3.f;
-	_float m_fFirstHammerDist = 8.f;
-	_float m_fSatonBirdkDist = 8.f;
-	_float m_fSatonGrapkDist = 5.f;
+
+	_float m_fFirstHammerDist = 20.f;
+	_float m_fSatonBirdkDist = 20.f;
+	_float m_fSatonGrapkDist = 20.f;
+	_float m_fSatonFascinateDist = 30.f;
+
+	_vec3 m_vLookFront;
+
+	_bool m_bIsGimmick_On = false;
+	_bool m_bIsDrawMoon = false;
+	_bool m_bIsKoukuSymbol = false;
 
 	_float m_fDist = 5.f;
+
+	_float m_fTargetDist = 9999.f;
+
 };
 

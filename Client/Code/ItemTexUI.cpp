@@ -168,7 +168,7 @@ void CItemTexUI::SetTexture(_int iTexNum)
 		//Laser
 		wstrItemName[0] = L"레이저 룬";
 		wstrItemName[1] = L"레이저 유지 시간 2초";
-		wstrItemName[2] = L"충격 가루는 빠르게 빠져나가고 싶은 사람들을\n위한 믿음직한 도구입니다.";
+		wstrItemName[2] = L"보우건의 화살이 레이저로 바뀝니다. ";
 	}
 	break;
 	case 16:
@@ -176,7 +176,7 @@ void CItemTexUI::SetTexture(_int iTexNum)
 		//multishot
 		wstrItemName[0] = L"멀티샷";
 		wstrItemName[1] = L"화살 5발이 동시에 나간다";
-		wstrItemName[2] = L"충격 가루는 빠르게 빠져나가고 싶은 사람들을\n위한 믿음직한 도구입니다.";
+		wstrItemName[2] = L"폭죽 화살과 같이 사용하면 어떤일이 일어날까요?";
 	}
 	break;
 	case 17:
@@ -184,7 +184,7 @@ void CItemTexUI::SetTexture(_int iTexNum)
 		//썬더
 		wstrItemName[0] = L"번개 룬";
 		wstrItemName[1] = L"검에 번개 속성 부여";
-		wstrItemName[2] = L"충격 가루는 빠르게 빠져나가고 싶은 사람들을\n위한 믿음직한 도구입니다.";
+		wstrItemName[2] = L"검 주위에 스파크가 튀면서 몬스터들을 감전시킵니다.";
 	}
 	break;
 	case 18:
@@ -192,7 +192,7 @@ void CItemTexUI::SetTexture(_int iTexNum)
 		//토네이도
 		wstrItemName[0] = L"회오리 룬";
 		wstrItemName[1] = L"글레이브에 바람 속성 부여";
-		wstrItemName[2] = L"충격 가루는 빠르게 빠져나가고 싶은 사람들을\n위한 믿음직한 도구입니다.";
+		wstrItemName[2] = L"공격을 맞은 적들은 화상데미지를 입습니다.";
 	}
 	break;
 	case 19:
@@ -200,7 +200,7 @@ void CItemTexUI::SetTexture(_int iTexNum)
 		//기절 룬
 		wstrItemName[0] = L"기절 룬";
 		wstrItemName[1] = L"도끼에 기절 효과 부여";
-		wstrItemName[2] = L"충격 가루는 빠르게 빠져나가고 싶은 사람들을\n위한 믿음직한 도구입니다.";
+		wstrItemName[2] = L"도끼의 공격범위 안에 있는 몬스터들은 기절에 걸립니다.";
 	}
 	break;
 	case 20:
@@ -208,7 +208,7 @@ void CItemTexUI::SetTexture(_int iTexNum)
 		//공격력 증가
 		wstrItemName[0] = L"공격 룬";
 		wstrItemName[1] = L"공격력 증가";
-		wstrItemName[2] = L"공격력이 증가한다.";
+		wstrItemName[2] = L"공격력이 증가합니다.";
 	}
 	break;
 	default:

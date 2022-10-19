@@ -31,6 +31,8 @@
 #include "DamageFontMgr.h"
 #include "Kouku.h"
 #include "Saton.h"
+#include "Trigger.h"
+#include "Enderman.h"
 
 // object
 #include "Birds.h"
@@ -58,7 +60,7 @@ HRESULT CStage::Ready_Scene(void)
 	// Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 	// 	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
 
-	CBatchTool::Load(L"../Bin/Resource/Batch/stage1_test.batch");
+	//CBatchTool::Load(L"../Bin/Resource/Batch/stage1_test.batch");
 
 	return S_OK;
 }
@@ -216,11 +218,34 @@ HRESULT CStage::Ready_Layer_GameLogic()
 
 		 //CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 3.f, 0.f ,16.f });
 		// CEnemyFactory::Create<CRedStoneMonstrosity>("RedStoneMonstrosity", L"RedStoneMonstrosity", matWorld);
+
+		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 3.f, 0.f ,16.f });
+		//CEnemyFactory::Create<CEnderman>("Enderman", L"Enderman", matWorld);
 	}
 	
 	// CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {6.f, 0.f ,6.f});
 	// CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
 	// CEnemyFactory::Create<CMonster>("Zombie", L"TestZombie", matWorld);
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 4.7f, 9.f, 26.f });
+
+
+	CTrigger* trigger =  CObjectFactory::Create<CTrigger>("Trigger", L"Trigger", matWorld);
+	trigger->SetTrigger([](set<CGameObject*>& objSet) {
+		for (auto obj : objSet)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+			{
+				_matrix matWorld;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 4.7f, 9.f, 26.f });
+				CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+				return true;
+			}
+		}
+		return false;
+	}, 5.f);
+
+	// 9 
 
 
 	return S_OK;
@@ -264,7 +289,6 @@ CStage * CStage::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 
 void CStage::Free(void)
 {
-
-
+	Safe_Release(m_pPlayer);
 	CScene::Free();
 }

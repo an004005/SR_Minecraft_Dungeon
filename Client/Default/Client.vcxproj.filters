@@ -95,8 +95,8 @@
     <Filter Include="02. GameObject\07. Item\Weapon">
       <UniqueIdentifier>{3871ea02-a479-440a-9475-0722e825632c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Network">
-      <UniqueIdentifier>{5160ca0a-e483-4dbf-9427-4cdffa80bad0}</UniqueIdentifier>
+    <Filter Include="02. GameObject\Particle">
+      <UniqueIdentifier>{a097aa65-4bb2-4da6-803b-331fe7896605}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -214,7 +214,6 @@
     <ClInclude Include="..\Header\StatComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\Particle.h" />
     <ClInclude Include="..\Header\PlayerController.h">
       <Filter>Controller</Filter>
     </ClInclude>
@@ -434,23 +433,30 @@
     <ClInclude Include="..\Header\LaserShotRune.h">
       <Filter>02. GameObject\07. Item\Rune</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\Protocol.pb.h">
-      <Filter>Network</Filter>
+    <ClInclude Include="ItemUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\Struct.pb.h">
-      <Filter>Network</Filter>
+    <ClInclude Include="..\Header\ItemTexUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\ServerPacketHandler.h">
-      <Filter>Network</Filter>
+    <ClInclude Include="..\Header\Particle.h">
+      <Filter>02. GameObject\Particle</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\NetStage.h">
+    <ClInclude Include="..\Header\SatonCircle.h" />
+    <ClInclude Include="..\Header\BossHPUI.h" />
+    <ClInclude Include="..\Header\ClientServiceMgr.h" />
+    <ClInclude Include="..\Header\NetStage.h" />
+    <ClInclude Include="..\Header\PlayerUI.h" />
+    <ClInclude Include="..\Header\Protocol.pb.h" />
+    <ClInclude Include="..\Header\RemoteInventory.h" />
+    <ClInclude Include="..\Header\ServerPacketHandler.h" />
+    <ClInclude Include="..\Header\Struct.pb.h" />
+    <ClInclude Include="..\Header\Stage_Kouku.h">
       <Filter>01. Scene\01. Stage</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\ClientServiceMgr.h">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\ItemTexUI.h" />
-    <ClInclude Include="ItemUI.h" />
     <ClInclude Include="..\Header\RemoteInventory.h">
       <Filter>02. GameObject\06. Inventory</Filter>
     </ClInclude>
@@ -458,6 +464,21 @@
       <Filter>02. GameObject\05. UI</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\PlayerUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\EndermanController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Enderman.h">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ItemTexUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ClearUI.h">
       <Filter>02. GameObject\05. UI</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Logo.h">
@@ -568,7 +589,6 @@
     <ClCompile Include="..\Code\GeomancerController.cpp">
       <Filter>Controller</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Particle.cpp" />
     <ClCompile Include="..\Code\ZombieController.cpp">
       <Filter>Controller</Filter>
     </ClCompile>
@@ -801,26 +821,28 @@
     <ClCompile Include="..\Code\MultiShotRune.cpp">
       <Filter>02. GameObject\07. Item\Rune</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Struct.pb.cc">
-      <Filter>Network</Filter>
+    <ClCompile Include="ItemUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\ClientServiceMgr.cpp">
-      <Filter>Network</Filter>
+    <ClCompile Include="..\Code\ItemTexUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Enum.pb.cc">
-      <Filter>Network</Filter>
+    <ClCompile Include="..\Code\Particle.cpp">
+      <Filter>02. GameObject\Particle</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Protocol.pb.cc">
-      <Filter>Network</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\ServerPacketHandler.cpp">
-      <Filter>Network</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\NetStage.cpp">
+    <ClCompile Include="..\Code\SatonCircle.cpp" />
+    <ClCompile Include="..\Code\BossHPUI.cpp" />
+    <ClCompile Include="..\Code\ClientServiceMgr.cpp" />
+    <ClCompile Include="..\Code\Enum.pb.cc" />
+    <ClCompile Include="..\Code\PlayerUI.cpp" />
+    <ClCompile Include="..\Code\NetStage.cpp" />
+    <ClCompile Include="..\Code\Protocol.pb.cc" />
+    <ClCompile Include="..\Code\RemoteInventory.cpp" />
+    <ClCompile Include="..\Code\ServerPacketHandler.cpp" />
+    <ClCompile Include="..\Code\Struct.pb.cc" />
+    <ClCompile Include="..\Code\Stage_Kouku.cpp">
       <Filter>01. Scene\01. Stage</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\ItemTexUI.cpp" />
-    <ClCompile Include="ItemUI.cpp" />
     <ClCompile Include="..\Code\RemoteInventory.cpp">
       <Filter>02. GameObject\06. Inventory</Filter>
     </ClCompile>
@@ -828,6 +850,21 @@
       <Filter>02. GameObject\05. UI</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\PlayerUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\EndermanController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Enderman.cpp">
+      <Filter>02. GameObject\01. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ItemTexUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ClearUI.cpp">
       <Filter>02. GameObject\05. UI</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Logo.cpp">

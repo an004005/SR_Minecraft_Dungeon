@@ -25,6 +25,8 @@ public:
 	static _float FloatLerp(_float f1, _float f2, _float fS);
 	static DWORD FtoDw(_float f);
 	static const _vec3 s_vZero;
+	static const _vec3 s_vOne;
+
 	static const _vec3 s_vUp;
 	static const _matrix s_matIdentity;
 	static const _vec3 s_vFaceCubeVtx[FACE_END][4];

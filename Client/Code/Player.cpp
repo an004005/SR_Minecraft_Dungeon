@@ -71,7 +71,7 @@ HRESULT CPlayer::Ready_Object(const wstring& wstrPath)
 	m_CurPotionCoolTime = 20.f;
 
 	m_pStat = Add_Component<CStatComponent>(L"Proto_StatCom", L"Proto_StatCom", ID_DYNAMIC);
-	m_pStat->SetMaxHP(30);
+	m_pStat->SetMaxHP(300);
 	m_pStat->SetTransform(m_pRootPart->pTrans);
 	m_pStat->SetHurtSound({
 		L"DLC_sfx_mob_whisperer_hit_1.ogg",
@@ -119,15 +119,28 @@ HRESULT CPlayer::Ready_Object(const wstring& wstrPath)
 _int CPlayer::Update_Object(const _float& fTimeDelta)
 {
 	CSkeletalCube::Update_Object(fTimeDelta);
+
+		
 	DEBUG_SPHERE(m_pColl->GetCollPos(), m_pColl->GetRadius(), 0.1f);
 
-	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
-		m_bCanPlayAnim = true;
+	if (m_pStat->IsSatonFascinate())
+		m_strStatus = "Fascinate";
+	else
+		m_strStatus = "Nothing";
 
-	if (s_RollCoolTime > m_CurRollCoolTime)
-		m_CurRollCoolTime += fTimeDelta;
-	if (s_PotionCollTime > m_CurPotionCoolTime)
-		m_CurPotionCoolTime += fTimeDelta;
+		if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
+			m_bCanPlayAnim = true;
+
+		if (s_RollCoolTime > m_CurRollCoolTime)
+			m_CurRollCoolTime += fTimeDelta;
+		if (s_PotionCollTime > m_CurPotionCoolTime)
+			m_CurPotionCoolTime += fTimeDelta;
+
+	//IM_BEGIN("TEst"); // 
+
+	//_vec3 vpos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+	//ImGui::Text("%f, %f, %f", vpos.x, vpos.y, vpos.z);
+	//IM_END;
 
 
 	// 상태 변경 조건 설정
@@ -157,11 +170,18 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 		break;
 	case LEGACY:
 		break;
+	case FASCINATE:
+		RotationToSaton();
+		m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_vTargetPos * m_fSpeed * fTimeDelta;
+		break;
 	case DEAD:
 		break;
 	default:
 		break;
 	}
+
+	
+	// IM_LOG("%f, %f, %f", m_pRootPart->pTrans->m_vInfo[INFO_POS].x, m_pRootPart->pTrans->m_vInfo[INFO_POS].y, m_pRootPart->pTrans->m_vInfo[INFO_POS].z);
 
 	return OBJ_NOEVENT;
 }
@@ -184,6 +204,7 @@ void CPlayer::LateUpdate_Object()
 	}
 
 	
+	if (m_pRootPart->pTrans->m_vInfo[INFO_POS].y < 21.f) { m_pStat->TakeDamage(m_pStat->GetMaxHP(), CGameUtilMgr::s_vZero, this); }
 
 	
 }
@@ -279,6 +300,10 @@ void CPlayer::AnimationEvent(const string& strEvent)
 	else if (strEvent == "visible")
 	{
 		SetVisible(true);
+	}
+	else if (strEvent == "RangeFire")
+	{
+		PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK3]);
 	}
 }
 
@@ -456,8 +481,7 @@ void CPlayer::AttackState()
 	}
 	else if (m_bRangeAttack)
 	{
-		//기본이 근거리라 원거리로 바꿔줘야 텍스처가 나옴
-		WeaponChange(IT_RANGE);
+
 		m_bCanPlayAnim = false;
 		m_iAttackCnt = m_pInventory->CurWeapon(IT_RANGE)->Attack();
 		if (m_bRemote == false)
@@ -503,6 +527,16 @@ void CPlayer::StateChange()
 		m_eState = STUN;
 		m_bRoll = false;
 		m_fCurLaserTime = 3.f;
+		return;
+	}
+
+	if (m_pStat->IsSatonFascinate())
+	{
+		m_strStatus = "Fascinate";
+		m_eState = FASCINATE;
+		m_bRoll = false;
+		m_pIdleAnim = &m_arrAnim[ANIM_WALK];
+		m_pCurAnim = &m_arrAnim[ANIM_WALK];
 		return;
 	}
 
@@ -654,7 +688,7 @@ void CPlayer::StateChange()
 		if (m_bRemote == false)
 			RotateToCursor();
 		m_bDelay = true;
-		WeaponChange(IT_MELEE);
+		WeaponChange(IT_RANGE);
 		return;
 	}
 
@@ -672,6 +706,7 @@ void CPlayer::StateChange()
 
 	if (m_bCanPlayAnim)
 	{
+
 		m_eState = IDLE;
 		m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 		m_pCurAnim = &m_arrAnim[ANIM_IDLE];
@@ -682,6 +717,28 @@ void CPlayer::StateChange()
 	}
 
 
+}
+
+void CPlayer::RotationToSaton(void)
+{
+	_vec3 vLook = _vec3(62.5f, 0.f, 44.5f) -m_pRootPart->pTrans->m_vInfo[INFO_POS];
+
+	D3DXVec3Normalize(&vLook, &vLook);
+
+	m_pRootPart->pTrans->m_vInfo[INFO_LOOK] = -vLook;
+
+	m_vTargetPos = vLook;
+
+	const _vec2 v2Look{ 0.f, 1.f };
+
+	_vec2 v2ToDest{ vLook.x, vLook.z };
+
+	const _float fDot = D3DXVec2Dot(&v2Look, &v2ToDest);
+
+	if (vLook.x < 0)
+		m_pRootPart->pTrans->m_vAngle.y = -acosf(fDot);
+	else
+		m_pRootPart->pTrans->m_vAngle.y = acosf(fDot);
 }
 
 void CPlayer::UsePotion()

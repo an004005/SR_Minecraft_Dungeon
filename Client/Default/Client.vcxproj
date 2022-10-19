@@ -167,8 +167,11 @@
     <ClInclude Include="..\Header\AbstFactory.h" />
     <ClInclude Include="..\Header\BatchTool.h" />
     <ClInclude Include="..\Header\BossHPUI.h" />
+    <ClInclude Include="..\Header\ClearUI.h" />
     <ClInclude Include="..\Header\ClientServiceMgr.h" />
     <ClInclude Include="..\Header\DamageFontMgr.h" />
+    <ClInclude Include="..\Header\Enderman.h" />
+    <ClInclude Include="..\Header\EndermanController.h" />
     <ClInclude Include="..\Header\EditBox.h" />
     <ClInclude Include="..\Header\FireworksArrow.h" />
     <ClInclude Include="..\Header\CamAnimation.h" />
@@ -233,6 +236,7 @@
     <ClInclude Include="..\Header\RemoteInventory.h" />
     <ClInclude Include="..\Header\Rune.h" />
     <ClInclude Include="..\Header\Saton.h" />
+    <ClInclude Include="..\Header\SatonCircle.h" />
     <ClInclude Include="..\Header\SatonController.h" />
     <ClInclude Include="..\Header\ServerPacketHandler.h" />
     <ClInclude Include="..\Header\ShockPowder.h" />
@@ -242,6 +246,7 @@
     <ClInclude Include="..\Header\SoundMgr.h" />
     <ClInclude Include="..\Header\SphereEffect.h" />
     <ClInclude Include="..\Header\Stage.h" />
+    <ClInclude Include="..\Header\Stage_Kouku.h" />
     <ClInclude Include="..\Header\StatComponent.h" />
     <ClInclude Include="..\Header\StaticCamera.h" />
     <ClInclude Include="..\Header\StormRune.h" />
@@ -286,10 +291,13 @@
     <ClCompile Include="..\Code\AbstFactory.cpp" />
     <ClCompile Include="..\Code\BatchTool.cpp" />
     <ClCompile Include="..\Code\BossHPUI.cpp" />
+    <ClCompile Include="..\Code\ClearUI.cpp" />
     <ClCompile Include="..\Code\DamageFontMgr.cpp" />
     <ClCompile Include="..\Code\ClientServiceMgr.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\Code\Enderman.cpp" />
+    <ClCompile Include="..\Code\EndermanController.cpp" />
     <ClCompile Include="..\Code\EditBox.cpp" />
     <ClCompile Include="..\Code\Enum.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -359,6 +367,7 @@
     <ClCompile Include="..\Code\RemoteInventory.cpp" />
     <ClCompile Include="..\Code\Rune.cpp" />
     <ClCompile Include="..\Code\Saton.cpp" />
+    <ClCompile Include="..\Code\SatonCircle.cpp" />
     <ClCompile Include="..\Code\SatonController.cpp" />
     <ClCompile Include="..\Code\ServerPacketHandler.cpp" />
     <ClCompile Include="..\Code\ShockPowder.cpp" />
@@ -368,6 +377,7 @@
     <ClCompile Include="..\Code\SoundMgr.cpp" />
     <ClCompile Include="..\Code\SphereEffect.cpp" />
     <ClCompile Include="..\Code\Stage.cpp" />
+    <ClCompile Include="..\Code\Stage_Kouku.cpp" />
     <ClCompile Include="..\Code\StatComponent.cpp" />
     <ClCompile Include="..\Code\StaticCamera.cpp" />
     <ClCompile Include="..\Code\Struct.pb.cc">
