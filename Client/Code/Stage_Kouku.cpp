@@ -110,6 +110,7 @@ void CStage_Kouku::Render_Scene(void)
 HRESULT CStage_Kouku::Ready_Layer_Environment()
 {
 	CGameObject*		pGameObject = nullptr;
+	CPlayer::s_bDropDead = true;
 
 	CStaticCamera* pCAm = CEnvFactory::Create<CStaticCamera>("StaticCamera", L"StaticCamera");
 	pCAm->Set_Mode();

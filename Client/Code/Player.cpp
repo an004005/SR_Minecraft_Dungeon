@@ -27,6 +27,7 @@
 
 const _float CPlayer::s_PotionCollTime = 20.f;
 const _float CPlayer::s_RollCoolTime = 3.f;
+_bool CPlayer::s_bDropDead = false;
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev) : CSkeletalCube(pGraphicDev)
 {
@@ -203,9 +204,8 @@ void CPlayer::LateUpdate_Object()
 		m_bApplyMeleeAttackNext = true;
 	}
 
-	
-	if (m_pRootPart->pTrans->m_vInfo[INFO_POS].y < 21.f) { m_pStat->TakeDamage(m_pStat->GetMaxHP(), CGameUtilMgr::s_vZero, this); }
-
+	if (s_bDropDead)
+		if (m_pRootPart->pTrans->m_vInfo[INFO_POS].y < 21.f) { m_pStat->TakeDamage(m_pStat->GetMaxHP(), CGameUtilMgr::s_vZero, this); }
 	
 }
 
