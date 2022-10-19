@@ -57,6 +57,9 @@ extern C_BOSS_WORLDDefaultTypeInternal _C_BOSS_WORLD_default_instance_;
 class C_ENTER_GAME;
 struct C_ENTER_GAMEDefaultTypeInternal;
 extern C_ENTER_GAMEDefaultTypeInternal _C_ENTER_GAME_default_instance_;
+class C_KOUKU_ATTACK;
+struct C_KOUKU_ATTACKDefaultTypeInternal;
+extern C_KOUKU_ATTACKDefaultTypeInternal _C_KOUKU_ATTACK_default_instance_;
 class C_LOGIN;
 struct C_LOGINDefaultTypeInternal;
 extern C_LOGINDefaultTypeInternal _C_LOGIN_default_instance_;
@@ -105,6 +108,9 @@ extern S_BOSS_WORLDDefaultTypeInternal _S_BOSS_WORLD_default_instance_;
 class S_ENTER_GAME;
 struct S_ENTER_GAMEDefaultTypeInternal;
 extern S_ENTER_GAMEDefaultTypeInternal _S_ENTER_GAME_default_instance_;
+class S_KOUKU_ATTACK;
+struct S_KOUKU_ATTACKDefaultTypeInternal;
+extern S_KOUKU_ATTACKDefaultTypeInternal _S_KOUKU_ATTACK_default_instance_;
 class S_LOGIN;
 struct S_LOGINDefaultTypeInternal;
 extern S_LOGINDefaultTypeInternal _S_LOGIN_default_instance_;
@@ -152,6 +158,7 @@ PROTOBUF_NAMESPACE_OPEN
 template<> ::Protocol::C_BOSS_SPAWN* Arena::CreateMaybeMessage<::Protocol::C_BOSS_SPAWN>(Arena*);
 template<> ::Protocol::C_BOSS_WORLD* Arena::CreateMaybeMessage<::Protocol::C_BOSS_WORLD>(Arena*);
 template<> ::Protocol::C_ENTER_GAME* Arena::CreateMaybeMessage<::Protocol::C_ENTER_GAME>(Arena*);
+template<> ::Protocol::C_KOUKU_ATTACK* Arena::CreateMaybeMessage<::Protocol::C_KOUKU_ATTACK>(Arena*);
 template<> ::Protocol::C_LOGIN* Arena::CreateMaybeMessage<::Protocol::C_LOGIN>(Arena*);
 template<> ::Protocol::C_MONSTER_SET_TARGET* Arena::CreateMaybeMessage<::Protocol::C_MONSTER_SET_TARGET>(Arena*);
 template<> ::Protocol::C_MONSTER_WORLD* Arena::CreateMaybeMessage<::Protocol::C_MONSTER_WORLD>(Arena*);
@@ -168,6 +175,7 @@ template<> ::Protocol::S_ALL_PLAYER_ENTER* Arena::CreateMaybeMessage<::Protocol:
 template<> ::Protocol::S_BOSS_SPAWN* Arena::CreateMaybeMessage<::Protocol::S_BOSS_SPAWN>(Arena*);
 template<> ::Protocol::S_BOSS_WORLD* Arena::CreateMaybeMessage<::Protocol::S_BOSS_WORLD>(Arena*);
 template<> ::Protocol::S_ENTER_GAME* Arena::CreateMaybeMessage<::Protocol::S_ENTER_GAME>(Arena*);
+template<> ::Protocol::S_KOUKU_ATTACK* Arena::CreateMaybeMessage<::Protocol::S_KOUKU_ATTACK>(Arena*);
 template<> ::Protocol::S_LOGIN* Arena::CreateMaybeMessage<::Protocol::S_LOGIN>(Arena*);
 template<> ::Protocol::S_MONSTER_SET_TARGET* Arena::CreateMaybeMessage<::Protocol::S_MONSTER_SET_TARGET>(Arena*);
 template<> ::Protocol::S_MONSTER_WORLD* Arena::CreateMaybeMessage<::Protocol::S_MONSTER_WORLD>(Arena*);
@@ -5967,6 +5975,353 @@ class S_SATON_ATTACK final :
   union { Impl_ _impl_; };
   friend struct ::TableStruct_Protocol_2eproto;
 };
+// -------------------------------------------------------------------
+
+class C_KOUKU_ATTACK final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C_KOUKU_ATTACK) */ {
+ public:
+  inline C_KOUKU_ATTACK() : C_KOUKU_ATTACK(nullptr) {}
+  ~C_KOUKU_ATTACK() override;
+  explicit PROTOBUF_CONSTEXPR C_KOUKU_ATTACK(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  C_KOUKU_ATTACK(const C_KOUKU_ATTACK& from);
+  C_KOUKU_ATTACK(C_KOUKU_ATTACK&& from) noexcept
+    : C_KOUKU_ATTACK() {
+    *this = ::std::move(from);
+  }
+
+  inline C_KOUKU_ATTACK& operator=(const C_KOUKU_ATTACK& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline C_KOUKU_ATTACK& operator=(C_KOUKU_ATTACK&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const C_KOUKU_ATTACK& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const C_KOUKU_ATTACK* internal_default_instance() {
+    return reinterpret_cast<const C_KOUKU_ATTACK*>(
+               &_C_KOUKU_ATTACK_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    33;
+
+  friend void swap(C_KOUKU_ATTACK& a, C_KOUKU_ATTACK& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(C_KOUKU_ATTACK* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(C_KOUKU_ATTACK* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  C_KOUKU_ATTACK* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<C_KOUKU_ATTACK>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const C_KOUKU_ATTACK& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const C_KOUKU_ATTACK& from) {
+    C_KOUKU_ATTACK::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(C_KOUKU_ATTACK* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.C_KOUKU_ATTACK";
+  }
+  protected:
+  explicit C_KOUKU_ATTACK(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kTargetPosFieldNumber = 2,
+    kPatternFieldNumber = 1,
+  };
+  // .Protocol.Vec3 targetPos = 2;
+  bool has_targetpos() const;
+  private:
+  bool _internal_has_targetpos() const;
+  public:
+  void clear_targetpos();
+  const ::Protocol::Vec3& targetpos() const;
+  PROTOBUF_NODISCARD ::Protocol::Vec3* release_targetpos();
+  ::Protocol::Vec3* mutable_targetpos();
+  void set_allocated_targetpos(::Protocol::Vec3* targetpos);
+  private:
+  const ::Protocol::Vec3& _internal_targetpos() const;
+  ::Protocol::Vec3* _internal_mutable_targetpos();
+  public:
+  void unsafe_arena_set_allocated_targetpos(
+      ::Protocol::Vec3* targetpos);
+  ::Protocol::Vec3* unsafe_arena_release_targetpos();
+
+  // .Protocol.KoukuPattern pattern = 1;
+  void clear_pattern();
+  ::Protocol::KoukuPattern pattern() const;
+  void set_pattern(::Protocol::KoukuPattern value);
+  private:
+  ::Protocol::KoukuPattern _internal_pattern() const;
+  void _internal_set_pattern(::Protocol::KoukuPattern value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.C_KOUKU_ATTACK)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::Protocol::Vec3* targetpos_;
+    int pattern_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class S_KOUKU_ATTACK final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S_KOUKU_ATTACK) */ {
+ public:
+  inline S_KOUKU_ATTACK() : S_KOUKU_ATTACK(nullptr) {}
+  ~S_KOUKU_ATTACK() override;
+  explicit PROTOBUF_CONSTEXPR S_KOUKU_ATTACK(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S_KOUKU_ATTACK(const S_KOUKU_ATTACK& from);
+  S_KOUKU_ATTACK(S_KOUKU_ATTACK&& from) noexcept
+    : S_KOUKU_ATTACK() {
+    *this = ::std::move(from);
+  }
+
+  inline S_KOUKU_ATTACK& operator=(const S_KOUKU_ATTACK& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S_KOUKU_ATTACK& operator=(S_KOUKU_ATTACK&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S_KOUKU_ATTACK& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S_KOUKU_ATTACK* internal_default_instance() {
+    return reinterpret_cast<const S_KOUKU_ATTACK*>(
+               &_S_KOUKU_ATTACK_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    34;
+
+  friend void swap(S_KOUKU_ATTACK& a, S_KOUKU_ATTACK& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S_KOUKU_ATTACK* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S_KOUKU_ATTACK* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  S_KOUKU_ATTACK* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<S_KOUKU_ATTACK>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const S_KOUKU_ATTACK& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const S_KOUKU_ATTACK& from) {
+    S_KOUKU_ATTACK::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S_KOUKU_ATTACK* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S_KOUKU_ATTACK";
+  }
+  protected:
+  explicit S_KOUKU_ATTACK(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kTargetPosFieldNumber = 3,
+    kSuccessFieldNumber = 1,
+    kPatternFieldNumber = 2,
+  };
+  // .Protocol.Vec3 targetPos = 3;
+  bool has_targetpos() const;
+  private:
+  bool _internal_has_targetpos() const;
+  public:
+  void clear_targetpos();
+  const ::Protocol::Vec3& targetpos() const;
+  PROTOBUF_NODISCARD ::Protocol::Vec3* release_targetpos();
+  ::Protocol::Vec3* mutable_targetpos();
+  void set_allocated_targetpos(::Protocol::Vec3* targetpos);
+  private:
+  const ::Protocol::Vec3& _internal_targetpos() const;
+  ::Protocol::Vec3* _internal_mutable_targetpos();
+  public:
+  void unsafe_arena_set_allocated_targetpos(
+      ::Protocol::Vec3* targetpos);
+  ::Protocol::Vec3* unsafe_arena_release_targetpos();
+
+  // bool success = 1;
+  void clear_success();
+  bool success() const;
+  void set_success(bool value);
+  private:
+  bool _internal_success() const;
+  void _internal_set_success(bool value);
+  public:
+
+  // .Protocol.KoukuPattern pattern = 2;
+  void clear_pattern();
+  ::Protocol::KoukuPattern pattern() const;
+  void set_pattern(::Protocol::KoukuPattern value);
+  private:
+  ::Protocol::KoukuPattern _internal_pattern() const;
+  void _internal_set_pattern(::Protocol::KoukuPattern value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.S_KOUKU_ATTACK)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::Protocol::Vec3* targetpos_;
+    bool success_;
+    int pattern_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Protocol_2eproto;
+};
 // ===================================================================
 
 
@@ -10171,9 +10526,251 @@ inline void S_SATON_ATTACK::set_allocated_bosspos(::Protocol::Vec3* bosspos) {
   // @@protoc_insertion_point(field_set_allocated:Protocol.S_SATON_ATTACK.BossPos)
 }
 
+// -------------------------------------------------------------------
+
+// C_KOUKU_ATTACK
+
+// .Protocol.KoukuPattern pattern = 1;
+inline void C_KOUKU_ATTACK::clear_pattern() {
+  _impl_.pattern_ = 0;
+}
+inline ::Protocol::KoukuPattern C_KOUKU_ATTACK::_internal_pattern() const {
+  return static_cast< ::Protocol::KoukuPattern >(_impl_.pattern_);
+}
+inline ::Protocol::KoukuPattern C_KOUKU_ATTACK::pattern() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_KOUKU_ATTACK.pattern)
+  return _internal_pattern();
+}
+inline void C_KOUKU_ATTACK::_internal_set_pattern(::Protocol::KoukuPattern value) {
+  
+  _impl_.pattern_ = value;
+}
+inline void C_KOUKU_ATTACK::set_pattern(::Protocol::KoukuPattern value) {
+  _internal_set_pattern(value);
+  // @@protoc_insertion_point(field_set:Protocol.C_KOUKU_ATTACK.pattern)
+}
+
+// .Protocol.Vec3 targetPos = 2;
+inline bool C_KOUKU_ATTACK::_internal_has_targetpos() const {
+  return this != internal_default_instance() && _impl_.targetpos_ != nullptr;
+}
+inline bool C_KOUKU_ATTACK::has_targetpos() const {
+  return _internal_has_targetpos();
+}
+inline const ::Protocol::Vec3& C_KOUKU_ATTACK::_internal_targetpos() const {
+  const ::Protocol::Vec3* p = _impl_.targetpos_;
+  return p != nullptr ? *p : reinterpret_cast<const ::Protocol::Vec3&>(
+      ::Protocol::_Vec3_default_instance_);
+}
+inline const ::Protocol::Vec3& C_KOUKU_ATTACK::targetpos() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_KOUKU_ATTACK.targetPos)
+  return _internal_targetpos();
+}
+inline void C_KOUKU_ATTACK::unsafe_arena_set_allocated_targetpos(
+    ::Protocol::Vec3* targetpos) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.targetpos_);
+  }
+  _impl_.targetpos_ = targetpos;
+  if (targetpos) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.C_KOUKU_ATTACK.targetPos)
+}
+inline ::Protocol::Vec3* C_KOUKU_ATTACK::release_targetpos() {
+  
+  ::Protocol::Vec3* temp = _impl_.targetpos_;
+  _impl_.targetpos_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::Protocol::Vec3* C_KOUKU_ATTACK::unsafe_arena_release_targetpos() {
+  // @@protoc_insertion_point(field_release:Protocol.C_KOUKU_ATTACK.targetPos)
+  
+  ::Protocol::Vec3* temp = _impl_.targetpos_;
+  _impl_.targetpos_ = nullptr;
+  return temp;
+}
+inline ::Protocol::Vec3* C_KOUKU_ATTACK::_internal_mutable_targetpos() {
+  
+  if (_impl_.targetpos_ == nullptr) {
+    auto* p = CreateMaybeMessage<::Protocol::Vec3>(GetArenaForAllocation());
+    _impl_.targetpos_ = p;
+  }
+  return _impl_.targetpos_;
+}
+inline ::Protocol::Vec3* C_KOUKU_ATTACK::mutable_targetpos() {
+  ::Protocol::Vec3* _msg = _internal_mutable_targetpos();
+  // @@protoc_insertion_point(field_mutable:Protocol.C_KOUKU_ATTACK.targetPos)
+  return _msg;
+}
+inline void C_KOUKU_ATTACK::set_allocated_targetpos(::Protocol::Vec3* targetpos) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.targetpos_);
+  }
+  if (targetpos) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(targetpos));
+    if (message_arena != submessage_arena) {
+      targetpos = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, targetpos, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.targetpos_ = targetpos;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C_KOUKU_ATTACK.targetPos)
+}
+
+// -------------------------------------------------------------------
+
+// S_KOUKU_ATTACK
+
+// bool success = 1;
+inline void S_KOUKU_ATTACK::clear_success() {
+  _impl_.success_ = false;
+}
+inline bool S_KOUKU_ATTACK::_internal_success() const {
+  return _impl_.success_;
+}
+inline bool S_KOUKU_ATTACK::success() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_KOUKU_ATTACK.success)
+  return _internal_success();
+}
+inline void S_KOUKU_ATTACK::_internal_set_success(bool value) {
+  
+  _impl_.success_ = value;
+}
+inline void S_KOUKU_ATTACK::set_success(bool value) {
+  _internal_set_success(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_KOUKU_ATTACK.success)
+}
+
+// .Protocol.KoukuPattern pattern = 2;
+inline void S_KOUKU_ATTACK::clear_pattern() {
+  _impl_.pattern_ = 0;
+}
+inline ::Protocol::KoukuPattern S_KOUKU_ATTACK::_internal_pattern() const {
+  return static_cast< ::Protocol::KoukuPattern >(_impl_.pattern_);
+}
+inline ::Protocol::KoukuPattern S_KOUKU_ATTACK::pattern() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_KOUKU_ATTACK.pattern)
+  return _internal_pattern();
+}
+inline void S_KOUKU_ATTACK::_internal_set_pattern(::Protocol::KoukuPattern value) {
+  
+  _impl_.pattern_ = value;
+}
+inline void S_KOUKU_ATTACK::set_pattern(::Protocol::KoukuPattern value) {
+  _internal_set_pattern(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_KOUKU_ATTACK.pattern)
+}
+
+// .Protocol.Vec3 targetPos = 3;
+inline bool S_KOUKU_ATTACK::_internal_has_targetpos() const {
+  return this != internal_default_instance() && _impl_.targetpos_ != nullptr;
+}
+inline bool S_KOUKU_ATTACK::has_targetpos() const {
+  return _internal_has_targetpos();
+}
+inline const ::Protocol::Vec3& S_KOUKU_ATTACK::_internal_targetpos() const {
+  const ::Protocol::Vec3* p = _impl_.targetpos_;
+  return p != nullptr ? *p : reinterpret_cast<const ::Protocol::Vec3&>(
+      ::Protocol::_Vec3_default_instance_);
+}
+inline const ::Protocol::Vec3& S_KOUKU_ATTACK::targetpos() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_KOUKU_ATTACK.targetPos)
+  return _internal_targetpos();
+}
+inline void S_KOUKU_ATTACK::unsafe_arena_set_allocated_targetpos(
+    ::Protocol::Vec3* targetpos) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.targetpos_);
+  }
+  _impl_.targetpos_ = targetpos;
+  if (targetpos) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.S_KOUKU_ATTACK.targetPos)
+}
+inline ::Protocol::Vec3* S_KOUKU_ATTACK::release_targetpos() {
+  
+  ::Protocol::Vec3* temp = _impl_.targetpos_;
+  _impl_.targetpos_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::Protocol::Vec3* S_KOUKU_ATTACK::unsafe_arena_release_targetpos() {
+  // @@protoc_insertion_point(field_release:Protocol.S_KOUKU_ATTACK.targetPos)
+  
+  ::Protocol::Vec3* temp = _impl_.targetpos_;
+  _impl_.targetpos_ = nullptr;
+  return temp;
+}
+inline ::Protocol::Vec3* S_KOUKU_ATTACK::_internal_mutable_targetpos() {
+  
+  if (_impl_.targetpos_ == nullptr) {
+    auto* p = CreateMaybeMessage<::Protocol::Vec3>(GetArenaForAllocation());
+    _impl_.targetpos_ = p;
+  }
+  return _impl_.targetpos_;
+}
+inline ::Protocol::Vec3* S_KOUKU_ATTACK::mutable_targetpos() {
+  ::Protocol::Vec3* _msg = _internal_mutable_targetpos();
+  // @@protoc_insertion_point(field_mutable:Protocol.S_KOUKU_ATTACK.targetPos)
+  return _msg;
+}
+inline void S_KOUKU_ATTACK::set_allocated_targetpos(::Protocol::Vec3* targetpos) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.targetpos_);
+  }
+  if (targetpos) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(
+                reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(targetpos));
+    if (message_arena != submessage_arena) {
+      targetpos = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, targetpos, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.targetpos_ = targetpos;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S_KOUKU_ATTACK.targetPos)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

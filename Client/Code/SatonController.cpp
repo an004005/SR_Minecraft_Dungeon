@@ -245,7 +245,6 @@ _int CSatonRemoteController::Update_Component(const _float& fTimeDelta)
 
 			pattern = m_patternList.front();
 			m_patternList.pop_front();
-			m_patternList.clear();
 		}
 
 		switch (pattern.second)

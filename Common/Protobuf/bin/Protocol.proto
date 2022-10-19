@@ -229,3 +229,15 @@ message S_SATON_ATTACK
 }
 
 // kouku(small)
+message C_KOUKU_ATTACK
+{
+	KoukuPattern pattern = 1;
+	Vec3 targetPos = 2;
+}
+
+message S_KOUKU_ATTACK
+{
+	bool success = 1;
+	KoukuPattern pattern = 2;
+	Vec3 targetPos = 3;
+}

@@ -46,6 +46,9 @@ protected:
 	_float m_fDist = 5.f;
 
 	_float m_fTargetDist = 9999.f;
+
+	_float m_fMoveToTime = 0.2f;
+	_float m_fCurMoveToTime = 0.2f;
 };
 
 class CKoukuRemoteController : public CKoukuController
@@ -62,11 +65,22 @@ public:
 public:
 	static CKoukuRemoteController* Create();
 
+	void SetWorld(const _matrix& matWorld)
+	{
+		m_matWorld = matWorld;
+		m_bWorldSet.store(true);
+	}
+
+	void SetPattern(_vec3 vTargetPos, Protocol::KoukuPattern ePattern)
+	{
+		WRITE_LOCK;
+		m_patternList.push_back({vTargetPos, ePattern});
+	}
 
 private:
 	USE_LOCK;
-	// _matrix m_matWorld;
-	//
-	// list<pair<_vec3, Protocol::SatonPattern>> m_patternList;
-
+	_matrix m_matWorld;
+	Atomic<_bool> m_bWorldSet{false};
+	
+	list<pair<_vec3, Protocol::KoukuPattern>> m_patternList;
 };

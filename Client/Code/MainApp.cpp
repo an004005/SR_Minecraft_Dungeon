@@ -296,6 +296,7 @@ HRESULT CMainApp::Ready_Proto()
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_ZombieRemoteController", CZombieRemoteController::Create()), E_FAIL);
 	// FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_KoukuController", CKoukuController::Create()), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_SatonRemoteController", CSatonRemoteController::Create()), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_KoukuRemoteController", CKoukuRemoteController::Create()), E_FAIL);
 
 
 	// UI

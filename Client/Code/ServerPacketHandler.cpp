@@ -2,6 +2,7 @@
 #include "ServerPacketHandler.h"
 #include "ClientServiceMgr.h"
 #include "AbstFactory.h"
+#include "KoukuController.h"
 #include "Player.h"
 #include "PlayerController.h"
 #include "ZombieController.h"
@@ -173,13 +174,24 @@ bool Handle_S_ALL_PLAYER_ENTER(PacketSessionRef& session, Protocol::S_ALL_PLAYER
 	if (dynamic_cast<CStage_Kouku*>(pCurScene))
 	{
 		_matrix matWorld;
-		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 3.f, 3.f, 3.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 21.5f ,47.8f });
-		Protocol::C_BOSS_SPAWN satonSpawnPkt;
-		satonSpawnPkt.set_factory("Saton");
-		CClientServiceMgr::Mat2Pkt(matWorld, *satonSpawnPkt.mutable_matrix());
+		{
+			CGameUtilMgr::MatWorldComposeEuler(matWorld, { 3.f, 3.f, 3.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 21.5f ,47.8f });
+			Protocol::C_BOSS_SPAWN satonSpawnPkt;
+			satonSpawnPkt.set_factory("Saton");
+			CClientServiceMgr::Mat2Pkt(matWorld, *satonSpawnPkt.mutable_matrix());
 
-		session->Send(ServerPacketHandler::MakeSendBuffer(satonSpawnPkt));
+			session->Send(ServerPacketHandler::MakeSendBuffer(satonSpawnPkt));
+		}
+		{
+			CGameUtilMgr::MatWorldComposeEuler(matWorld, { 0.7f, 0.7f, 0.7f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 25.f ,44.8f });
+			Protocol::C_BOSS_SPAWN koukuSpawnPkt;
+			koukuSpawnPkt.set_factory("Kouku");
+			CClientServiceMgr::Mat2Pkt(matWorld, *koukuSpawnPkt.mutable_matrix());
+			session->Send(ServerPacketHandler::MakeSendBuffer(koukuSpawnPkt));
+		}
 	}
+
+	//todo : 인벤토리 동기화 여기서 하기
 
 	return true;
 }
@@ -291,14 +303,10 @@ bool Handle_S_BOSS_SPAWN(PacketSessionRef& session, Protocol::S_BOSS_SPAWN& pkt)
 	if (CClientServiceMgr::GetInstance()->m_iPlayerID == 0) // if host
 	{
 		CEnemyFactory::Create<CGameObject>(pkt.factory(), wstrFactory, matWorld);
-		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 0.7f, 0.7f, 0.7f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 25.f ,44.8f });
-		CEnemyFactory::Create<CGameObject>("Kouku", L"Kouku", matWorld);
 	}
 	else
 	{
 		CEnemyFactory::Create<CGameObject>(pkt.factory() + "_Remote", wstrFactory + L"_Remote", matWorld);
-		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 0.7f, 0.7f, 0.7f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 25.f ,44.8f });
-		CEnemyFactory::Create<CGameObject>("Kouku", L"Kouku", matWorld);
 	}
 
 	return true;
@@ -323,7 +331,13 @@ bool Handle_S_BOSS_WORLD(PacketSessionRef& session, Protocol::S_BOSS_WORLD& pkt)
 	}
 	else if (pkt.objkey() == "Kouku")
 	{
-		
+		CKoukuRemoteController* pCon = Engine::Get_ComponentUnCheck<CKoukuRemoteController>(LAYER_ENEMY, L"Kouku_Remote", L"Proto_KoukuRemoteController",  ID_DYNAMIC);
+		if (pCon)
+		{
+			_matrix matWorld;
+			CClientServiceMgr::Pkt2mat(pkt.matworld(), matWorld);
+			pCon->SetWorld(matWorld);
+		}
 	}
 
 
@@ -348,6 +362,26 @@ bool Handle_S_SATON_ATTACK(PacketSessionRef& session, Protocol::S_SATON_ATTACK& 
 		pCon->SetPattern(vTargetPos, pkt.pattern());
 	}
 
+	return true;
+}
+
+bool Handle_S_KOUKU_ATTACK(PacketSessionRef& session, Protocol::S_KOUKU_ATTACK& pkt)
+{
+	if (pkt.success() == false)
+		return true;
+	if (CClientServiceMgr::GetInstance()->m_iPlayerID == 0) // host 
+		return true;
+
+	CKoukuRemoteController* pCon = Engine::Get_ComponentUnCheck<CKoukuRemoteController>(LAYER_ENEMY, L"Kouku_Remote", L"Proto_KoukuRemoteController",  ID_DYNAMIC);
+	if (pCon)
+	{
+		_vec3 vTargetPos;
+		vTargetPos.x = pkt.targetpos().x();
+		vTargetPos.y = pkt.targetpos().y();
+		vTargetPos.z = pkt.targetpos().z();
+
+		pCon->SetPattern(vTargetPos, pkt.pattern());
+	}
 	return true;
 }
 

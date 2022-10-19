@@ -2,6 +2,7 @@
 #include "KoukuController.h"
 
 #include "Kouku.h"
+#include "ServerPacketHandler.h"
 #include "StatComponent.h"
 
 
@@ -20,6 +21,8 @@ CKoukuController::~CKoukuController()
 _int CKoukuController::Update_Component(const _float& fTimeDelta)
 {
 	{
+		m_fCurMoveToTime += fTimeDelta;
+
 		m_fCurDoubleHammerCoolTime += fTimeDelta;
 		// m_fCurHorrorAttackCoolTime += fTimeDelta;
 		// m_fCurBasicAttackCoolTime += fTimeDelta;
@@ -80,6 +83,16 @@ _int CKoukuController::Update_Component(const _float& fTimeDelta)
 		pKouku->KoukuSymbol_OnOff(true);
 		m_bIsFirstSymbolGimmick = true;
 		m_bIsSymbolGimmick = true;
+
+		if (g_bOnline)
+		{
+			Protocol::C_KOUKU_ATTACK patternPkt;
+			patternPkt.set_pattern(Protocol::KOUKU_SYMBOL_ON);
+			patternPkt.mutable_targetpos()->set_x(vTargetPos.x);
+			patternPkt.mutable_targetpos()->set_y(vTargetPos.y);
+			patternPkt.mutable_targetpos()->set_z(vTargetPos.z);
+			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(patternPkt));	
+		}
 	}
 	// ½Éº¼ ±â¹Ífalse·Î µ¹·ÁÁà¾ßÇÔ
 
@@ -88,6 +101,13 @@ _int CKoukuController::Update_Component(const _float& fTimeDelta)
 		m_fCurSymbolGimmickCoolTime = 0.f;
 		pKouku->KoukuSymbol_OnOff(false);
 		m_bIsSymbolGimmick = false;
+
+		if (g_bOnline)
+		{
+			Protocol::C_KOUKU_ATTACK patternPkt;
+			patternPkt.set_pattern(Protocol::KOUKU_SYMBOL_OFF);
+			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(patternPkt));	
+		}
 		return 0;
 	}
 
@@ -96,6 +116,16 @@ _int CKoukuController::Update_Component(const _float& fTimeDelta)
 		m_fCurDoubleHammerCoolTime = 0.f;
 		pKouku->DoubleHammer(vTargetPos);
 		m_strState = "DoubleHammer_On";
+
+		if (g_bOnline)
+		{
+			Protocol::C_KOUKU_ATTACK patternPkt;
+			patternPkt.set_pattern(Protocol::KOUKU_HAMMER);
+			patternPkt.mutable_targetpos()->set_x(vTargetPos.x);
+			patternPkt.mutable_targetpos()->set_y(vTargetPos.y);
+			patternPkt.mutable_targetpos()->set_z(vTargetPos.z);
+			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(patternPkt));	
+		}
 		return 0;
 	}
 
@@ -104,6 +134,15 @@ _int CKoukuController::Update_Component(const _float& fTimeDelta)
 		m_fCurBasicAttackCoolTime = 0.f;
 		pKouku->BasicAttack(vTargetPos);
 		m_strState = "BasicAttack_On";
+		if (g_bOnline)
+		{
+			Protocol::C_KOUKU_ATTACK patternPkt;
+			patternPkt.set_pattern(Protocol::KOUKU_BASIC);
+			patternPkt.mutable_targetpos()->set_x(vTargetPos.x);
+			patternPkt.mutable_targetpos()->set_y(vTargetPos.y);
+			patternPkt.mutable_targetpos()->set_z(vTargetPos.z);
+			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(patternPkt));	
+		}
 		return 0;
 	}
 
@@ -112,6 +151,15 @@ _int CKoukuController::Update_Component(const _float& fTimeDelta)
 		m_fCurHorrorAttackCoolTime = 0.f;
 		pKouku->HorrorAttack(vTargetPos);
 		m_strState = "HorrorAttack_On";
+		if (g_bOnline)
+		{
+			Protocol::C_KOUKU_ATTACK patternPkt;
+			patternPkt.set_pattern(Protocol::KOUKU_HORROR);
+			patternPkt.mutable_targetpos()->set_x(vTargetPos.x);
+			patternPkt.mutable_targetpos()->set_y(vTargetPos.y);
+			patternPkt.mutable_targetpos()->set_z(vTargetPos.z);
+			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(patternPkt));	
+		}
 		return 0;
 	}
 
@@ -122,11 +170,33 @@ _int CKoukuController::Update_Component(const _float& fTimeDelta)
 #endif
 
 
-	if(m_fTargetDist > 3.f)
+	if (m_fCurMoveToTime >= m_fMoveToTime)
 	{
+		m_fCurMoveToTime = 0.f;
 
-		pKouku->WalkToTarget(vTargetPos);
+		if (m_fTargetDist > 3.f)
+		{
+			pKouku->WalkToTarget(vTargetPos);
+
+			if (g_bOnline)
+			{
+				Protocol::C_KOUKU_ATTACK patternPkt;
+				patternPkt.set_pattern(Protocol::KOUKU_MoveTo);
+				patternPkt.mutable_targetpos()->set_x(vTargetPos.x);
+				patternPkt.mutable_targetpos()->set_y(vTargetPos.y);
+				patternPkt.mutable_targetpos()->set_z(vTargetPos.z);
+				CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(patternPkt));
+
+
+				Protocol::C_BOSS_WORLD bossWorldPkt;
+				bossWorldPkt.set_objkey("Kouku");
+				const _matrix& matWorld = pKouku->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_matWorld;
+				CClientServiceMgr::Mat2Pkt(matWorld, *bossWorldPkt.mutable_matworld());
+				CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(bossWorldPkt));
+			}
+		}
 	}
+
 	
 		
 	// IM_BEGIN("Kouku_ControlloerData");
@@ -179,7 +249,51 @@ CKoukuRemoteController::~CKoukuRemoteController()
 
 _int CKoukuRemoteController::Update_Component(const _float& fTimeDelta)
 {
+	CKouku* pKouku = dynamic_cast<CKouku*>(m_pOwner);
+	NULL_CHECK_RETURN(pKouku, 0);
 
+	if (m_bWorldSet)
+	{
+		pKouku->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)
+			->Set_WorldDecompose(m_matWorld);
+		m_bWorldSet.store(false);
+	}
+
+	if (m_patternList.empty() == false)
+	{
+		pair<_vec3, Protocol::KoukuPattern> pattern;
+		{
+			WRITE_LOCK;
+			pattern = m_patternList.front();
+			m_patternList.pop_front();
+		}
+
+		switch (pattern.second)
+		{
+			case Protocol::KOUKU_MoveTo:
+				pKouku->WalkToTarget(pattern.first);
+				break;
+			case Protocol::KOUKU_SYMBOL_ON:
+				pKouku->KoukuSymbol(pattern.first);
+				pKouku->KoukuSymbol_OnOff(true);
+				break;
+			case Protocol::KOUKU_SYMBOL_OFF:
+				pKouku->KoukuSymbol_OnOff(false);
+				break;
+			case Protocol::KOUKU_HAMMER:
+				pKouku->DoubleHammer(pattern.first);
+				break;
+			case Protocol::KOUKU_HORROR:
+				pKouku->HorrorAttack(pattern.first);
+				break;
+			case Protocol::KOUKU_BASIC:
+				pKouku->BasicAttack(pattern.first);
+				break;
+			case Protocol::KoukuPattern_INT_MIN_SENTINEL_DO_NOT_USE_: break;
+			case Protocol::KoukuPattern_INT_MAX_SENTINEL_DO_NOT_USE_: break;
+			default: ;
+		}
+	}
 
 	return 0;
 }

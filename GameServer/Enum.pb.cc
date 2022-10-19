@@ -22,7 +22,7 @@ namespace _pbi = _pb::internal;
 
 namespace Protocol {
 }  // namespace Protocol
-static const ::_pb::EnumDescriptor* file_level_enum_descriptors_Enum_2eproto[3];
+static const ::_pb::EnumDescriptor* file_level_enum_descriptors_Enum_2eproto[4];
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_Enum_2eproto = nullptr;
 const uint32_t TableStruct_Enum_2eproto::offsets[1] = {};
 static constexpr ::_pbi::MigrationSchema* schemas = nullptr;
@@ -35,12 +35,15 @@ const char descriptor_table_protodef_Enum_2eproto[] PROTOBUF_SECTION_VARIABLE(pr
   "COPPER\020\003*-\n\tEquipType\022\t\n\005MELEE\020\000\022\t\n\005RANG"
   "E\020\001\022\n\n\006LEGACY\020\002*c\n\014SatonPattern\022\n\n\006MoveT"
   "o\020\000\022\n\n\006HAMMER\020\001\022\010\n\004GRAB\020\002\022\010\n\004BIRD\020\003\022\n\n\006S"
-  "YMBOL\020\004\022\r\n\tFASCINATE\020\005\022\014\n\010DRAWMOON\020\006b\006pr"
-  "oto3"
+  "YMBOL\020\004\022\r\n\tFASCINATE\020\005\022\014\n\010DRAWMOON\020\006*\200\001\n"
+  "\014KoukuPattern\022\020\n\014KOUKU_MoveTo\020\000\022\023\n\017KOUKU"
+  "_SYMBOL_ON\020\001\022\024\n\020KOUKU_SYMBOL_OFF\020\002\022\020\n\014KO"
+  "UKU_HAMMER\020\003\022\020\n\014KOUKU_HORROR\020\004\022\017\n\013KOUKU_"
+  "BASIC\020\005b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_Enum_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Enum_2eproto = {
-    false, false, 284, descriptor_table_protodef_Enum_2eproto,
+    false, false, 415, descriptor_table_protodef_Enum_2eproto,
     "Enum.proto",
     &descriptor_table_Enum_2eproto_once, nullptr, 0, 0,
     schemas, file_default_instances, TableStruct_Enum_2eproto::offsets,
@@ -98,6 +101,24 @@ bool SatonPattern_IsValid(int value) {
     case 4:
     case 5:
     case 6:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* KoukuPattern_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_Enum_2eproto);
+  return file_level_enum_descriptors_Enum_2eproto[3];
+}
+bool KoukuPattern_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
       return true;
     default:
       return false;

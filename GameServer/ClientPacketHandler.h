@@ -39,6 +39,8 @@ enum : uint16
 	PKT_S_BOSS_WORLD = 1030,
 	PKT_C_SATON_ATTACK = 1031,
 	PKT_S_SATON_ATTACK = 1032,
+	PKT_C_KOUKU_ATTACK = 1033,
+	PKT_S_KOUKU_ATTACK = 1034,
 };
 
 // Custom Handlers
@@ -58,6 +60,7 @@ bool Handle_C_MONSTER_WORLD(PacketSessionRef& session, Protocol::C_MONSTER_WORLD
 bool Handle_C_BOSS_SPAWN(PacketSessionRef& session, Protocol::C_BOSS_SPAWN& pkt);
 bool Handle_C_BOSS_WORLD(PacketSessionRef& session, Protocol::C_BOSS_WORLD& pkt);
 bool Handle_C_SATON_ATTACK(PacketSessionRef& session, Protocol::C_SATON_ATTACK& pkt);
+bool Handle_C_KOUKU_ATTACK(PacketSessionRef& session, Protocol::C_KOUKU_ATTACK& pkt);
 
 class ClientPacketHandler
 {
@@ -81,6 +84,7 @@ public:
 		GPacketHandler[PKT_C_BOSS_SPAWN] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_BOSS_SPAWN>(Handle_C_BOSS_SPAWN, session, buffer, len); };
 		GPacketHandler[PKT_C_BOSS_WORLD] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_BOSS_WORLD>(Handle_C_BOSS_WORLD, session, buffer, len); };
 		GPacketHandler[PKT_C_SATON_ATTACK] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_SATON_ATTACK>(Handle_C_SATON_ATTACK, session, buffer, len); };
+		GPacketHandler[PKT_C_KOUKU_ATTACK] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_KOUKU_ATTACK>(Handle_C_KOUKU_ATTACK, session, buffer, len); };
 	}
 
 	static bool HandlePacket(PacketSessionRef& session, BYTE* buffer, int32 len)
@@ -106,6 +110,7 @@ public:
 	static SendBufferRef MakeSendBuffer(Protocol::S_BOSS_SPAWN& pkt) { return MakeSendBuffer(pkt, PKT_S_BOSS_SPAWN); }
 	static SendBufferRef MakeSendBuffer(Protocol::S_BOSS_WORLD& pkt) { return MakeSendBuffer(pkt, PKT_S_BOSS_WORLD); }
 	static SendBufferRef MakeSendBuffer(Protocol::S_SATON_ATTACK& pkt) { return MakeSendBuffer(pkt, PKT_S_SATON_ATTACK); }
+	static SendBufferRef MakeSendBuffer(Protocol::S_KOUKU_ATTACK& pkt) { return MakeSendBuffer(pkt, PKT_S_KOUKU_ATTACK); }
 
 private:
 	template<typename PacketType, typename ProcessFunc>

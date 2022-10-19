@@ -130,6 +130,35 @@ inline bool SatonPattern_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<SatonPattern>(
     SatonPattern_descriptor(), name, value);
 }
+enum KoukuPattern : int {
+  KOUKU_MoveTo = 0,
+  KOUKU_SYMBOL_ON = 1,
+  KOUKU_SYMBOL_OFF = 2,
+  KOUKU_HAMMER = 3,
+  KOUKU_HORROR = 4,
+  KOUKU_BASIC = 5,
+  KoukuPattern_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  KoukuPattern_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool KoukuPattern_IsValid(int value);
+constexpr KoukuPattern KoukuPattern_MIN = KOUKU_MoveTo;
+constexpr KoukuPattern KoukuPattern_MAX = KOUKU_BASIC;
+constexpr int KoukuPattern_ARRAYSIZE = KoukuPattern_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* KoukuPattern_descriptor();
+template<typename T>
+inline const std::string& KoukuPattern_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, KoukuPattern>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function KoukuPattern_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    KoukuPattern_descriptor(), enum_t_value);
+}
+inline bool KoukuPattern_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, KoukuPattern* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<KoukuPattern>(
+    KoukuPattern_descriptor(), name, value);
+}
 // ===================================================================
 
 
@@ -166,6 +195,11 @@ template <> struct is_proto_enum< ::Protocol::SatonPattern> : ::std::true_type {
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::Protocol::SatonPattern>() {
   return ::Protocol::SatonPattern_descriptor();
+}
+template <> struct is_proto_enum< ::Protocol::KoukuPattern> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::Protocol::KoukuPattern>() {
+  return ::Protocol::KoukuPattern_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE

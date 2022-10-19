@@ -26,3 +26,13 @@ enum SatonPattern
 	FASCINATE = 5; // gimmic
 	DRAWMOON = 6; // gimmic
 }
+
+enum KoukuPattern
+{
+	KOUKU_MoveTo = 0;
+	KOUKU_SYMBOL_ON = 1;
+	KOUKU_SYMBOL_OFF = 2;
+	KOUKU_HAMMER = 3;
+	KOUKU_HORROR = 4;
+	KOUKU_BASIC = 5;
+}

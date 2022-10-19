@@ -189,7 +189,7 @@ void CEnemyFactory::Ready_EnemyFactory()
 
 	s_mapEnemySpawner.insert({ "Kouku_Remote", []()
 	{
-		return CKouku::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/kouku.cube");
+		return CKouku::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/kouku.cube", true);
 	} });
 
 	s_mapEnemySpawner.insert({ "Saton_Remote", []()

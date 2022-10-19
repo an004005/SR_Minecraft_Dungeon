@@ -284,3 +284,15 @@ bool Handle_C_SATON_ATTACK(PacketSessionRef& session, Protocol::C_SATON_ATTACK& 
 	return true;
 }
 
+bool Handle_C_KOUKU_ATTACK(PacketSessionRef& session, Protocol::C_KOUKU_ATTACK& pkt)
+{
+	Protocol::S_KOUKU_ATTACK koukuPkt;
+	koukuPkt.set_success(true);
+	koukuPkt.set_pattern(pkt.pattern());
+	koukuPkt.mutable_targetpos()->CopyFrom(pkt.targetpos());
+
+	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(koukuPkt));
+
+	return true;
+}
+

@@ -44,9 +44,17 @@ HRESULT CKouku::Ready_Object()
 
 
 	m_pStat->SetMaxHP(120);
+	if (m_bRemote)
+	{
+		CController* pController = Add_Component<CKoukuRemoteController>(L"Proto_KoukuRemoteController", L"Proto_KoukuRemoteController", ID_DYNAMIC);
+		pController->SetOwner(this);
+	}
+	else
+	{
+		CController* pController = Add_Component<CKoukuController>(L"Proto_KoukuController", L"Proto_KoukuController", ID_DYNAMIC);
+		pController->SetOwner(this);
+	}
 
-	CController* pController = Add_Component<CKoukuController>(L"Proto_KoukuController", L"Proto_KoukuController", ID_DYNAMIC);
-	pController->SetOwner(this);
 	m_fCurTime = 0.f;
 	m_fTime = 2.2f;
 	//cc¸é¿ª
