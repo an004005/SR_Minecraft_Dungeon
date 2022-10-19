@@ -77,11 +77,11 @@ HRESULT CLogo::Ready_Scene()
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", pGameObject), E_FAIL);
 
-	m_pLogo = CUIFactory::Create<CUI>("DefaultUI", L"UI", 26, WINCX / 2, WINCY / 3.6f , WINCX * 0.8, WINCY * 0.3);
+	m_pLogo = CUIFactory::Create<CUI>("DefaultUI", L"UI", 27, WINCX / 2, WINCY / 3.6f , WINCX * 0.8, WINCY * 0.3);
 	m_pEdit = CUIFactory::Create<CEditBox>("EditBox", L"EditBox", 26, WINCX / 2, WINCY /1.44f, WINCX * 0.3, WINCY * 0.07f);
 	m_pEdit->SetText(L"Gothic_Regular25", L"이름을 입력하세요.", _vec2{- 100.f, -60.f}, D3DCOLOR_ARGB(255, 255, 255, 255));
 
-	m_pButton = CUIFactory::Create<CUI>("DefaultUI", L"DefaultUI", 27, WINCX / 2, 600, 100, 50);
+	m_pButton = CUIFactory::Create<CUI>("DefaultUI", L"DefaultUI", 28, WINCX / 2, 600, 100, 50);
 	m_pButton->SetText(L"Gothic_Bold30", L"확인", _vec2{-30.f, -15.f}, D3DCOLOR_ARGB(255, 255, 255, 255));
 	m_pButton->SetButton([this]()
 	{
@@ -99,7 +99,7 @@ HRESULT CLogo::Ready_Scene()
 		bDoor = false;
 	});
 
-	m_pSelectButton = CUIFactory::Create<CUI>("DefaultUI", L"DefaultUI", 29, WINCX / 2, WINCY /1.1338f, 400, 250);
+	m_pSelectButton = CUIFactory::Create<CUI>("DefaultUI", L"DefaultUI", 30, WINCX / 2, WINCY /1.1338f, 400, 250);
 	m_pSelectButton->SetButton([this]()
 	{
 		m_arrChar[m_iCharNum]->PlayAnimationOnce(&m_Jump, true);

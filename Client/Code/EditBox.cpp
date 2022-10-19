@@ -17,7 +17,7 @@ HRESULT CEditBox::Ready_Object()
 	m_pBufferCom = Add_Component<CRcTex>(L"Proto_RcTexCom", L"Proto_RcTexCom", ID_STATIC);
 	m_pTextureCom = Add_Component<CTexture>(L"Proto_UI_Texture", L"Proto_UI_Texture", ID_STATIC);
 	m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
-	m_iTexNum = 28;
+	m_iTexNum = 29;
 	// m_strInputs = "sdfsd";
 
 	return S_OK;
