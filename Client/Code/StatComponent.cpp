@@ -123,7 +123,8 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 		_vec3& vPos = m_pOwnerTrans->m_vInfo[INFO_POS];
 		if (CGameUtilMgr::Vec3Cmp(m_vKnockBackVelocity, CGameUtilMgr::s_vZero))
 		{
-			vPos.y = m_pCubeMap->GetHeight(vPos.x, vPos.z);
+			if(!m_bJump)
+				vPos.y = m_pCubeMap->GetHeight(vPos.x, vPos.z);
 		}
 		else
 		{
@@ -139,6 +140,7 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 			}
 		}
 	}
+
 
 	return 0;
 }
@@ -254,8 +256,6 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 		m_bGraped = true;
 		break;
 	case DT_JUMP:
-		m_bJump = true;
-		m_bGraped = true;
 		break;
 	case DT_END:
 		break;

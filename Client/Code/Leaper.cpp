@@ -3,7 +3,7 @@
 #include "AbstFactory.h"
 #include "StatComponent.h"
 #include "LeaperController.h"
-#include "TerrainCubeMap.h"
+#include "StaticCamera.h"
 
 CLeaper::CLeaper(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
 {
@@ -25,7 +25,7 @@ HRESULT CLeaper::Ready_Object()
 	m_arrAnim[ANIM_WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Leaper/walk.anim");
 	m_arrAnim[ANIM_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Leaper/attack.anim");
 	m_arrAnim[ANIM_JUMP] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Leaper/jump.anim");
-	//m_arrAnim[ANIM_DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Leaper/dead.anim");
+	m_arrAnim[ANIM_DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Leaper/dead.anim");
 
 	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 	m_pCurAnim = m_pIdleAnim;
@@ -34,16 +34,17 @@ HRESULT CLeaper::Ready_Object()
 
 	m_pStat->SetMaxHP(500);
 
-	/*m_pStat->SetHurtSound({
-	L"DLC_sfx_mob_monster_Hurt-001.ogg",
-	L"DLC_sfx_mob_monster_Hurt-002.ogg" ,
-	L"DLC_sfx_mob_monster_Hurt-003.ogg" });*/
+	m_pStat->SetHurtSound({
+	L"DLC_Mob_Leaper_GetHit1.ogg",
+	L"DLC_Mob_Leaper_GetHit2.ogg" ,
+	L"DLC_Mob_Leaper_GetHit3.ogg",
+	L"DLC_Mob_Leaper_GetHit4.ogg" });
 
 
 	CController* pController = Add_Component<CLeaperController>(L"Proto_LeaperController", L"Proto_LeaperController", ID_DYNAMIC);
 	pController->SetOwner(this);
 
-
+	m_bCantCC = true;
 	return S_OK;
 }
 
@@ -53,6 +54,39 @@ void CLeaper::AnimationEvent(const string & strEvent)
 	{
 		m_bAttackFire = true;
 	}
+	else if (strEvent == "Roar")
+	{
+		CSoundMgr::GetInstance()->PlaySoundRandom({
+			L"DLC_Mob_Leaper_Stun1.ogg",
+			L"DLC_Mob_Leaper_Stun2.ogg" ,
+			L"DLC_Mob_Leaper_Stun3.ogg", },
+			m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.3f);
+
+		//카메라 쉐이킹
+		Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+			->PlayShake(0.4f, 0.3f);
+	}
+	else if (strEvent == "JumpStart")
+	{
+		CSoundMgr::GetInstance()->PlaySoundRandom({
+			L"DLC_Mob_Leaper_Leap1.ogg",
+			L"DLC_Mob_Leaper_Leap2.ogg" ,
+			L"DLC_Mob_Leaper_Leap3.ogg", },
+			m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.3f);
+		m_bLanding = false;
+	}
+	else if (strEvent == "JumpFire")
+	{
+		m_bLanding = true;
+		m_bJumpFire = true;
+		m_pStat->SetJump(false);
+		m_fJumpTime = 0.1f;
+
+		//카메라 쉐이킹
+		Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+			->PlayShake(0.2f, 0.5f);
+	}
+	
 	else if (strEvent == "ActionEnd")
 	{
 		m_bCanPlayAnim = true;
@@ -64,11 +98,9 @@ void CLeaper::AnimationEvent(const string & strEvent)
 	else if (strEvent == "Step")
 	{
 		CSoundMgr::GetInstance()->PlaySoundRandom({
-			L"sfx_mob_zombieStepGeneric-001.ogg",
-			L"sfx_mob_zombieStepGeneric-002.ogg",
-			L"sfx_mob_zombieStepGeneric-003.ogg",
-			L"sfx_mob_zombieStepGeneric-004.ogg",
-			L"sfx_mob_zombieStepGeneric-005.ogg", },
+			L"DLC_Mob_Leaper_Walk1.ogg",
+			L"DLC_Mob_Leaper_Walk2.ogg",
+			L"DLC_Mob_Leaper_Walk3.ogg"	},
 			m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.3f);
 	}
 }
@@ -133,16 +165,39 @@ void CLeaper::LateUpdate_Object()
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(25, m_pRootPart->pTrans->m_vInfo[INFO_POS], this);
+				->TakeDamage(20, m_pRootPart->pTrans->m_vInfo[INFO_POS], this);
 		}
 
 
 		CSoundMgr::GetInstance()->PlaySoundRandom({
-			L"sfx_mob_zombieAttack-001.ogg",
-			L"sfx_mob_zombieAttack-002.ogg",
-			L"sfx_mob_zombieAttack-003.ogg",
-			L"sfx_mob_zombieAttack-004.ogg" }, vAttackPos, 0.2f);
+			L"DLC_Mob_Leaper_BasickAttack1.ogg",
+			L"DLC_Mob_Leaper_BasickAttack2.ogg",
+			L"DLC_Mob_Leaper_BasickAttack3.ogg"}, vAttackPos, 0.2f);
 		m_bAttackFire = false;
+	}
+
+	if (m_bJumpFire)
+	{
+		set<CGameObject*> setObj;
+		_vec3 vAttackPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + (m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 4.f);
+		Engine::GetOverlappedObject(setObj, vAttackPos, 5.f);
+
+		for (auto& obj : setObj)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+				->TakeDamage(50, m_pRootPart->pTrans->m_vInfo[INFO_POS], this);
+		}
+
+		for (int j = 0; j < 10; j++)
+		{
+			CEffectFactory::Create<CCloud>("Golem_Windmill", L"Golem_Windmill", vAttackPos);
+		}
+		CEffectFactory::Create<CUVCircle>("Golem_Circle", L"Golem_Circle", vAttackPos);
+
+		DEBUG_SPHERE(vAttackPos, 4.f, 1.f);
+		CSoundMgr::GetInstance()->PlaySound({L"sfx_multi_explode-002.ogg"}, vAttackPos, 0.2f);
+		m_bJumpFire = false;
 	}
 }
 
@@ -174,12 +229,6 @@ void CLeaper::StateChange()
 	{
 		if (m_bReserveStop == false)
 		{
-			CSoundMgr::GetInstance()->PlaySoundRandom({
-				L"sfx_mob_zombieDeath-001.ogg",
-				L"sfx_mob_zombieDeath-002.ogg",
-				L"sfx_mob_zombieDeath-003.ogg" },
-				m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.5f);
-
 			m_eState = State::DEAD;
 			PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
 			m_bAttack = false;
@@ -223,7 +272,6 @@ void CLeaper::StateChange()
 		m_bCanPlayAnim = false;
 		m_bMove = false;
 		m_bJump = false;
-		m_bLanding = false;
 		return;
 	}
 
@@ -249,29 +297,17 @@ void CLeaper::JumpToPlayer(const _float& fTimeDelta)
 {
 	if (!m_bLanding)
 	{
-		m_pStat->SetJump();
+		m_pStat->SetJump(true);
 
-		_float fHeight = Get_GameObject<CTerrainCubeMap>(LAYER_ENV, L"TerrainCubeMap")->GetHeight(m_vJumpTargetPos.x, m_vJumpTargetPos.z);
 		_vec3 vLook = m_vJumpTargetPos - m_pRootPart->pTrans->m_vInfo[INFO_POS];
 		D3DXVec3Normalize(&vLook, &vLook);
 
-		//m_pRootPart->pTrans->m_vInfo[INFO_POS] += vLook * 2.f * fTimeDelta;
-		m_pRootPart->pTrans->m_vInfo[INFO_POS].y += 10.f * fTimeDelta;/*m_fJumpTime * fTimeDelta - (9.8f * m_fJumpTime * m_fJumpTime * fTimeDelta * 0.5f);*/
+		m_pRootPart->pTrans->m_vInfo[INFO_POS] += vLook * 15.f * fTimeDelta;
+		m_pRootPart->pTrans->m_vInfo[INFO_POS].y += 10.f * m_fJumpTime * fTimeDelta - (9.8f * m_fJumpTime * m_fJumpTime * fTimeDelta * 0.5f);
 
 		m_fJumpTime += 3.f * fTimeDelta;
-
 		m_bCanPlayAnim = false;
 		m_bMove = false;
-
-	/*	if (m_vTargetPos.y <= fHeight)
-		{
-			m_vTargetPos.y = fHeight;
-			m_fJumpTime = 0.1f;
-			m_bLanding = true;
-		}*/
-		
-		
-
 	}
 	
 }

@@ -72,7 +72,7 @@ void CRedStoneMonstrosity::AnimationEvent(const string& strEvent)
 		CEffectFactory::Create<CSphereEffect>("Golem_Melee_S", L"Golem_Melee_S");
 		for (int i = 0; i < 15; i++)
 		{
-			CEffectFactory::Create<CCloud>("Golem_Cloud", L"Golem_Cloud");
+			CEffectFactory::Create<CCloud>("Golem_Cloud", L"Golem_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 		}
 		//완전히 찍을 때
 		Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 3.f, D3DXCOLOR(0.88f, 0.35f, 0.24f, 1.0f), 12, 0.8f);
@@ -160,10 +160,10 @@ void CRedStoneMonstrosity::AnimationEvent(const string& strEvent)
 	{
 		for (int j = 0; j < 10; j++)
 		{
-			CEffectFactory::Create<CCloud>("Golem_Windmill", L"Golem_Windmill");
+			CEffectFactory::Create<CCloud>("Golem_Windmill", L"Golem_Windmill", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 		}
 
-		CEffectFactory::Create<CUVCircle>("Golem_Circle", L"Golem_Circle");
+		CEffectFactory::Create<CUVCircle>("Golem_Circle", L"Golem_Circle", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 		m_bWindmillFire = true;
 		m_dwWindTime = GetTickCount64();
 	}
