@@ -59,6 +59,7 @@
 #include "ItemTexUI.h"
 #include "RemoteInventory.h"
 #include "BossHPUI.h"
+#include "Cat_Attack.h"
 #include "EditBox.h"
 #include "PlayerUI.h"
 #include "ClearUI.h"
@@ -136,6 +137,8 @@ void CPlayerFactory::Ready_PlayerFactory()
 	{
 		return CPlayer::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Copper.cube", true);
 	}});
+
+
 }
 
 void CEnemyFactory::Ready_EnemyFactory()
@@ -507,6 +510,20 @@ void CObjectFactory::Ready_ObjectFactory()
 	s_mapObjectSpawner.insert({ "Trigger", []()
 	{
 		return CTrigger::Create(s_pGraphicDev);
+	} });
+
+
+	s_mapObjectSpawner.insert({ "Bori", []()
+	{
+		return CCat_Attack::Create(s_pGraphicDev,L"../Bin/Resource/SkeletalCube/Object/bori.cube");
+	} });
+	s_mapObjectSpawner.insert({ "Rui", []()
+	{
+		return CCat_Attack::Create(s_pGraphicDev,L"../Bin/Resource/SkeletalCube/Object/rui.cube");
+	} });
+	s_mapObjectSpawner.insert({ "Hoddeuk", []()
+	{
+		return CCat_Attack::Create(s_pGraphicDev,L"../Bin/Resource/SkeletalCube/Object/hoddeuk.cube");
 	} });
 }
 

@@ -491,6 +491,7 @@
       <Filter>01. Scene</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\EditBox.h" />
+    <ClInclude Include="..\Header\Cat_Attack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -883,6 +884,7 @@
       <Filter>01. Scene</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\EditBox.cpp" />
+    <ClCompile Include="..\Code\Cat_Attack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">

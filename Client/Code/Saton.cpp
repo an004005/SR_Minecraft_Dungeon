@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Saton.h"
 #include "AbstFactory.h"
+#include "Cat_Attack.h"
 #include "Kouku.h"
 #include "Particle.h"
 #include "SatonController.h"
@@ -134,13 +135,26 @@ void CSaton::AnimationEvent(const string& strEvent)
 		m_bIsGrap = false;
 		m_bIsGrapEndAttack = true;
 	}
-	// else if (strEvent == "MakeMoon") // 플레이어 머리 위에 달 띄우기
-	// {
-	//
-	// }
-	// else if (strEvent == "DrawMoon") // 플레이어 위치 받아서 바닥에 달 그리기
-	// {
-	// }
+	else if (strEvent == "Cat_Spawn")
+	{
+		_matrix mat = Get_SkeletalPart("hat_bot")->GetWorldMat();
+		_vec3 v_scale = CGameUtilMgr::s_vOne;
+		_vec3 vBoriPos = _vec3(mat._41 + CGameUtilMgr::GetRandomFloat(-2.5f,2.5f), mat._42 - 0.5f, mat._43 + CGameUtilMgr::GetRandomFloat(-0.5f, 0.5f));
+		_vec3 vRuiPos = _vec3(mat._41 + CGameUtilMgr::GetRandomFloat(-2.5f, 2.5f), mat._42 - 0.5f, mat._43 + CGameUtilMgr::GetRandomFloat(-0.5f, 0.5f));
+		_vec3 vHoddeukPos = _vec3(mat._41 + CGameUtilMgr::GetRandomFloat(-2.5f, 2.5f), mat._42 - 0.5f, mat._43 + CGameUtilMgr::GetRandomFloat(-0.5f, 0.5f));
+
+		_vec3 vAngle = m_pRootPart->pTrans->m_vAngle;
+		_matrix matBoriWorld, matRuiWorld, matHoddeukWorld;
+		CGameUtilMgr::MatWorldComposeEuler(matBoriWorld,  v_scale ,  vAngle , vBoriPos);
+		CGameUtilMgr::MatWorldComposeEuler(matRuiWorld, v_scale, vAngle, vRuiPos);
+		CGameUtilMgr::MatWorldComposeEuler(matHoddeukWorld, v_scale, vAngle, vHoddeukPos);
+
+		CObjectFactory::Create<CCat_Attack>("Bori", L"Bori", matBoriWorld);
+		CObjectFactory::Create<CCat_Attack>("Rui", L"Rui", matRuiWorld);
+		CObjectFactory::Create<CCat_Attack>("Hoddeuk", L"Hoddeuk", matHoddeukWorld);
+
+	}
+	
 	else if (strEvent == "ExplodeMoon") // 바닥에 있던 달 위치에 쇼크파우더 뿌리기 
 	{
 
