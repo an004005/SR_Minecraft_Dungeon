@@ -1,7 +1,9 @@
 #pragma once
 #include "Monster.h"
-class CController;
+#include "Particle.h"
 
+class CController;
+class CPlayer;
 class CSaton :	public CMonster
 {
 private:
@@ -12,6 +14,8 @@ private:
 		FIRSTATTACK,
 		SATON_BIRD,
 		SATON_GRAP,
+		SATON_SYMBOL,
+		SATON_FASCINATE,
 		DEAD,
 		STATE_END
 	};
@@ -50,9 +54,36 @@ public:
 		m_vTargetPos = vTargetPos;
 	}
 
+	void SatonSymbolAnim(const _vec3& vTargetPos)
+	{
+		m_bSatonSymbolAnim = true;
+		m_vTargetPos = vTargetPos;
+	}
+
+	void SatonFascinate(const _vec3& vBossTargetPos, const _vec3& vMoonTargetPos)
+	{
+		m_bSatonFascinate = true;
+		m_vTargetPos = vBossTargetPos;
+		Engine::Get_GameObject<CMoonParticle>(LAYER_EFFECT, L"MoonParticle")->Add_Particle(m_vTargetPos, 1.f, D3DXCOLOR(1.f,1.f,1.f,1.f), 1, 3.f, 0);
+	}
+
+	void SatonDrawMoon(const _vec3& vMoonTargetPos)
+	{
+		m_vTargetPos = vMoonTargetPos;
+		m_vExplodMoonPos = vMoonTargetPos;
+		m_vTargetPos.y += 1.f;
+		m_vExplodMoonPos.y += 1.f;
+		Engine::Get_GameObject<CMoonParticle>(LAYER_EFFECT, L"MoonParticle")->Add_Particle(m_vTargetPos, 1.f, RED, 1, 2.f, 0);
+		m_bSatonDrawMoon = true;
+	}
+
+	void SatonShockPowder(void);
+
+
 	// controller 조종 함수
 	_vec3 Get_TargetPos() { return m_vTargetPos; }
 	void WalkToTarget(const _vec3& vTargetPos) { m_vTargetPos = vTargetPos; }
+
 	//m_bMove = true;
 private:
 	CStatonState m_eState = STATE_END;
@@ -63,6 +94,9 @@ private:
 		m_bFirstHammerAttack = false;
 		m_bSatonGrap = false;
 		m_bSatonBird = false;
+		m_bSatonSymbolAnim = false;
+		m_bSatonFascinate = false;
+		m_bSatonDrawMoon = false;
 	}
 
 	// true : PlayAnimationOnce 사용 가능 상태(동작 애니메이션 실행 가능), false: 다른 애니메이션 실행중
@@ -73,9 +107,27 @@ private:
 	_bool m_bFirstHammerAttack = false; // controller 입력
 	_bool m_bSatonGrap = false;
 	_bool m_bSatonBird = false;
+	_bool m_bSatonSymbolAnim = false;
+	_bool m_bSatonFascinate = false;
+	_bool m_bSatonDrawMoon = false;
+	_bool m_bSatonDrawMoonPair = false;
 
+	_bool m_bStatonExplodeMoon = false;
+	
+	_bool m_bIsAttack_1_Coll = false;
+	_bool m_bIsAttack_2_Coll = false;
+	_bool m_bIsGrap = false;
+	_bool m_bIsGrapEndAttack = false;
+	
+
+	_vec3 m_vATKRNGCirclePos;
+
+	_vec3 m_vExplodMoonPos;
 	_float m_fTime;
 	_float m_fCurTime;
 	// _bool m_bHammerReady = false;
+
+
+	set<CPlayer*> m_pGrabbedList;
 };
 

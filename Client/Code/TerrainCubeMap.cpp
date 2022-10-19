@@ -134,7 +134,7 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 	ReadFile(hFile, &vecCubeSize, sizeof(size_t), &dwByte, nullptr);
 	ReadFile(hFile, &vecTexSize, sizeof(size_t), &dwByte, nullptr);
 
-	while (vecCubeSize--)
+	for (size_t i = 0; i < vecCubeSize; ++i)
 	{
 		ReadFile(hFile, &tMapCubeInfo, sizeof(MapCubeInfo), &dwByte, nullptr);
 
@@ -157,13 +157,13 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 		}
 	}
 
-	while (vecTexSize--)
+	for (size_t i = 0; i < vecTexSize; ++i)
 	{
 		ReadFile(hFile, &tMapCubeInfo, sizeof(MapCubeInfo), &dwByte, nullptr);
 		m_vecTotalTex.push_back(tMapCubeInfo);
 	}
 
-	ReadFile(hFile, &m_fHeight, sizeof(_float) * VTXCNTX * VTXCNTZ, &dwByte, nullptr);
+	ReadFile(hFile, &m_fHeight, sizeof(m_fHeight), &dwByte, nullptr);
 
 	CloseHandle(hFile);
 
@@ -265,7 +265,7 @@ void CTerrainCubeMap::SaveMap(const wstring & wstrPath)
 	for (auto iter : m_vecTotalTex)
 		WriteFile(hFile, &iter, sizeof(MapCubeInfo), &dwByte, nullptr);
 
-	WriteFile(hFile, &m_fHeight, sizeof(_float) * VTXCNTX * VTXCNTZ, &dwByte, nullptr);
+	WriteFile(hFile, &m_fHeight, sizeof(m_fHeight), &dwByte, nullptr);
 		
 	CloseHandle(hFile);
 }
@@ -286,6 +286,7 @@ void CTerrainCubeMap::Set_CubeCoordinate(void)
 		_float fZ = vCenter.z - 0.5f;
 
 		fLength = itr.fHeight / 2.f + vCenter.y;
+
 
 		if (fLength > m_fHeight[(_int)fX][(_int)fZ])
 			m_fHeight[(_int)fX][(_int)fZ] = fLength;

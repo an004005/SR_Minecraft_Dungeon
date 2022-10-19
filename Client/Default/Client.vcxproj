@@ -234,6 +234,7 @@
     <ClInclude Include="..\Header\RemoteInventory.h" />
     <ClInclude Include="..\Header\Rune.h" />
     <ClInclude Include="..\Header\Saton.h" />
+    <ClInclude Include="..\Header\SatonCircle.h" />
     <ClInclude Include="..\Header\SatonController.h" />
     <ClInclude Include="..\Header\ServerPacketHandler.h" />
     <ClInclude Include="..\Header\ShockPowder.h" />
@@ -243,6 +244,7 @@
     <ClInclude Include="..\Header\SoundMgr.h" />
     <ClInclude Include="..\Header\SphereEffect.h" />
     <ClInclude Include="..\Header\Stage.h" />
+    <ClInclude Include="..\Header\Stage_Kouku.h" />
     <ClInclude Include="..\Header\StatComponent.h" />
     <ClInclude Include="..\Header\StaticCamera.h" />
     <ClInclude Include="..\Header\StormRune.h" />
@@ -361,6 +363,7 @@
     <ClCompile Include="..\Code\RemoteInventory.cpp" />
     <ClCompile Include="..\Code\Rune.cpp" />
     <ClCompile Include="..\Code\Saton.cpp" />
+    <ClCompile Include="..\Code\SatonCircle.cpp" />
     <ClCompile Include="..\Code\SatonController.cpp" />
     <ClCompile Include="..\Code\ServerPacketHandler.cpp" />
     <ClCompile Include="..\Code\ShockPowder.cpp" />
@@ -370,6 +373,7 @@
     <ClCompile Include="..\Code\SoundMgr.cpp" />
     <ClCompile Include="..\Code\SphereEffect.cpp" />
     <ClCompile Include="..\Code\Stage.cpp" />
+    <ClCompile Include="..\Code\Stage_Kouku.cpp" />
     <ClCompile Include="..\Code\StatComponent.cpp" />
     <ClCompile Include="..\Code\StaticCamera.cpp" />
     <ClCompile Include="..\Code\Struct.pb.cc">

@@ -47,6 +47,7 @@ _int CBirds::Update_Object(const _float & fTimeDelta)
 		m_pTransCom->m_vInfo[INFO_POS] += fTimeDelta * m_vDir * m_fSpeed;
 
 		const _float fDist = D3DXVec3Length(&(m_pTransCom->m_vInfo[INFO_POS] - m_vPlayerPos));
+
 		if (fDist > 30.f)
 			return OBJ_DEAD;
 	}
@@ -97,7 +98,6 @@ void CBirds::LateUpdate_Object(void)
 					m_bReverse = true;
 			}
 		}
-
 		m_fCurTriggerFreq = 0.f;
 	}
 }

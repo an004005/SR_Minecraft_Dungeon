@@ -63,12 +63,14 @@
 #include "ClearUI.h"
 #include "Trigger.h"
 #include "Enderman.h"
+#include "Stage_Kouku.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
 map<string, std::function<CGameObject*()>> CPlayerFactory::s_mapPlayerSpawner;
 map<string, std::function<CGameObject*()>> CEnemyFactory::s_mapEnemySpawner;
 map<string, std::function<CGameObject*()>> CEffectFactory::s_mapEffectSpawner;
+map<string, std::function<CGameObject*(const ATKRNGOPTION& circleOption)>> CEffectFactory::s_mapKoukuEffectSpawner;
 map<string, std::function<CGameObject*()>> CEnvFactory::s_mapEnvSpawner;
 map<string, std::function<CGameObject*(ArrowParams)>> CBulletFactory::s_mapBulletSpawner;
 map<string, std::function<CGameObject*()>> CObjectFactory::s_mapObjectSpawner;
@@ -182,12 +184,15 @@ void CEffectFactory::Ready_EffectFactory()
 		return C3DBaseTexture::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/3DView_Spotlight_Pattern.png");
 	} });
 
+	s_mapEffectSpawner.insert({ "Fascinate_Effect", []()
+	{
+		return CFascinated_Effect::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/Fascinate.png");
+	} });
 
 	s_mapEffectSpawner.insert({ "Attack_Basic", []()
 	{
 		return CAttack_P::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/flare_alpha.dds");
 	} });
-
 	
 	s_mapEffectSpawner.insert({ "Speed_Boots", []()
 	{
@@ -207,6 +212,14 @@ void CEffectFactory::Ready_EffectFactory()
 	s_mapEffectSpawner.insert({ "FireWork", []()
 	{
 		return CFireWork::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/bump.png");
+	} });
+	s_mapEffectSpawner.insert({ "Saton_Particle", []()
+	{
+		return CFireWork::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/torbellino_texture.png");
+	} });
+	s_mapEffectSpawner.insert({ "MoonParticle", []()
+	{
+		return CMoonParticle::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/torbellino_texture.png");
 	} });
 
 	/**********************
@@ -302,7 +315,18 @@ void CEffectFactory::Ready_EffectFactory()
 	{
 		return CUVCircle::Create(s_pGraphicDev, 3.7f, CREEPER);
 	} });
-
+	s_mapEffectSpawner.insert({ "Kouku_Explosion", []()
+	{
+		return CUVCircle::Create(s_pGraphicDev, 3.f, CREEPER);
+	} });
+	s_mapEffectSpawner.insert({ "Hammer1_Explosion", []()
+	{
+		return CUVCircle::Create(s_pGraphicDev, 5.f, CREEPER);
+	} });
+	s_mapEffectSpawner.insert({ "Hammer2_Explosion", []()
+	{
+		return CUVCircle::Create(s_pGraphicDev, 6.f, CREEPER);
+	} });
 	s_mapEffectSpawner.insert({ "Golem_Circle", []()
 	{
 		return CUVCircle::Create(s_pGraphicDev, 7.f, GOLEM);
@@ -320,14 +344,22 @@ void CEffectFactory::Ready_EffectFactory()
 
 	s_mapEffectSpawner.insert({ "Heal_Circle_R",[]()
 	{
-		return CHealCircle::Create(s_pGraphicDev, 1.4f, 90.f);
+		return CHealCircle::Create(s_pGraphicDev, 1.4f, 90.f, HEAL);
 	} });
-
+	
 	s_mapEffectSpawner.insert({ "Heal_Circle_L",[]()
 	{
-		return CHealCircle::Create(s_pGraphicDev, 1.4f, 90.f);
+		return CHealCircle::Create(s_pGraphicDev, 1.4f, 90.f,HEAL);
 	} });
 
+	s_mapEffectSpawner.insert({ "Red_Circle",[]()
+	{
+		return CHealCircle::Create(s_pGraphicDev, 2.f, 90.f, RED_CIRCLE);
+	} });
+	s_mapEffectSpawner.insert({ "Blue_Circle",[]()
+	{
+		return CHealCircle::Create(s_pGraphicDev, 2.f, 90.f,BLUE_CIRCLE);
+	} });
 	s_mapEffectSpawner.insert({ "Lava_Particle",[]()
 	{
 		return CLava_Particle::Create(s_pGraphicDev, 1.f, FALLINLAVA);
@@ -369,6 +401,11 @@ void CEffectFactory::Ready_EffectFactory()
 	s_mapEffectSpawner.insert({ "ChainLightning", []()
 	{
 		return CChainLightning::Create(s_pGraphicDev);
+	} });
+
+	s_mapKoukuEffectSpawner.insert({ "Attack_Range_Circle", [](const ATKRNGOPTION& circleOption)
+	{
+		return CAttack_Range_Circle::Create(s_pGraphicDev, circleOption);
 	} });
 }
 
@@ -620,6 +657,12 @@ void CSceneFactory::Ready_SceneFactory()
 		{
 			return CStage::Create(s_pGraphicDev);
 		}});
+
+		s_mapSceneSpawner.insert({ "Stage_Kouku", []()
+		{
+			return CStage_Kouku::Create(s_pGraphicDev);
+		} });
+
 		s_mapSceneSpawner.insert({"Animation Tool", []()
 		{
 			return CAnimationTool::Create(s_pGraphicDev);
