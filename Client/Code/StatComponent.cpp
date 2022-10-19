@@ -51,13 +51,13 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 			m_fCurKnockbackTime += fTimeDelta;
 	}
 
-	if (m_bKnockback)
-	{
-		if (m_fHighKnockBackTime < m_fCurHighKnockBackTime)
-			m_bKnockback = false;
-		else
-			m_fCurHighKnockBackTime += fTimeDelta;
-	}
+	//if (m_bKnockback)
+	//{
+	//	if (m_fHighKnockBackTime < m_fCurHighKnockBackTime)
+	//		m_bKnockback = false;
+	//	else
+	//		m_fCurHighKnockBackTime += fTimeDelta;
+	//}
 
 	if (m_bStiffen)
 	{
