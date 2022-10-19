@@ -1233,7 +1233,7 @@ HRESULT CUVCircle::Ready_Object(_float _size, CIRCLETYPE _type)
 		//골렘 포인터로 바꿔야함 손 위치 받아오기 
 		m_pBufferCom->Set_TextureOption(3, 4, 2);
 
-		CTransform* pGolem= nullptr;
+		/*CTransform* pGolem= nullptr;
 		for (auto& e : Get_Layer(LAYER_ENEMY)->Get_MapObject())
 		{
 			if (CRedStoneMonstrosity* red = dynamic_cast<CRedStoneMonstrosity*>(e.second))
@@ -1243,7 +1243,7 @@ HRESULT CUVCircle::Ready_Object(_float _size, CIRCLETYPE _type)
 		}
 		_vec3 pPos;
 		pGolem->Get_Info(INFO_POS, &pPos);
-		m_pTransCom->Set_Pos(pPos.x, pPos.y + 0.5f, pPos.z);
+		m_pTransCom->Set_Pos(pPos.x, pPos.y + 0.5f, pPos.z);*/
 		m_pTransCom->Set_Scale(_size, _size, _size);
 	}
 
@@ -1470,7 +1470,7 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 		// m_vVelocity.z = 0.f;
 
 	}
-	else if (_type == GOLEMCLOUD)
+	else if (_type == MONSTERCLOUD)
 	{
 		m_pBufferCom = Add_Component<CRcShader>(L"Proto_WalkCloudCom", L"Proto_WalkCloudCom", ID_STATIC);
 		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
@@ -1479,36 +1479,38 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 		// m_pBufferCom->Set_TextureOption(_uint(CGameUtilMgr::GetRandomFloat(7.f, 15.f)), 4, 2);
 		m_pBufferCom->Set_TextureOption(5, 4, 2);
 
-		CTransform* pGolem= nullptr;
+	/*	CTransform* pGolem= nullptr;
 		for (auto& e : Get_Layer(LAYER_ENEMY)->Get_MapObject())
 		{
 			if (CRedStoneMonstrosity* red = dynamic_cast<CRedStoneMonstrosity*>(e.second))
 			{
 				pGolem = red->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
 			}
-		}
-		_vec3 pPos;
-		_vec3 pLook;
-		pGolem->Get_Info(INFO_POS, &pPos);
-		pGolem->Get_Info(INFO_LOOK, &pLook);
+		}*/
+		/*_vec3 pPos;
+		_vec3 pLook;*/
 
-		m_pTransCom->m_vInfo[INFO_POS] = pPos + pLook * 2.f;
+
+		//pGolem->Get_Info(INFO_POS, &pPos);
+		//pGolem->Get_Info(INFO_LOOK, &pLook);
+
+		//m_pTransCom->m_vInfo[INFO_POS] = pPos + pLook * 2.f;
 		// m_pTransCom->Set_Pos(pPos.x, pPos.y, pPos.z);
 		m_pTransCom->Set_Scale(_size, _size, _size);
 		m_fTime = 0.7f;
 		m_fCurTime = 0.f;
 		m_fSpeed = 3.5f;
 
-		_vec3 min = _vec3(-1.0f, 1.0f, -1.0f);
-		_vec3 max = _vec3(1.0f, 1.0f, 1.0f);
+		_vec3 min = _vec3(-2.0f, 1.0f, -2.0f);
+		_vec3 max = _vec3(2.0f, 1.0f, 2.0f);
 
 		CGameUtilMgr::GetRandomVector(
 			&m_vVelocity,
 			&min,
 			&max);
 
-		m_vVelocity.x += pLook.x;
-		m_vVelocity.y += pLook.y;
+		//m_vVelocity.x += pLook.x;
+		//m_vVelocity.y += pLook.y;
 
 		D3DXVec3Normalize(&m_vVelocity, &m_vVelocity);
 	}
@@ -1519,7 +1521,7 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture(0));
 		m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
 		m_pBufferCom->Set_TextureOption(20, 4, 2);
-		CTransform* pGolem= nullptr;
+		/*CTransform* pGolem= nullptr;
 		for (auto& e : Get_Layer(LAYER_ENEMY)->Get_MapObject())
 		{
 			if (CRedStoneMonstrosity* red = dynamic_cast<CRedStoneMonstrosity*>(e.second))
@@ -1529,7 +1531,7 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 		}
 		_vec3 pPos;
 		pGolem->Get_Info(INFO_POS, &pPos);
-		m_pTransCom->Set_Pos(pPos.x, pPos.y + 2.f, pPos.z);
+		m_pTransCom->Set_Pos(pPos.x, pPos.y + 2.f, pPos.z);*/
 		m_pTransCom->Set_Scale(_size, _size, _size);
 		m_fTime = 3.f;
 		m_fCurTime = 0.f;

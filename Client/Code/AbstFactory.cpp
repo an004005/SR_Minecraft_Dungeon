@@ -275,7 +275,7 @@ void CEffectFactory::Ready_EffectFactory()
 	} });
 	s_mapEffectSpawner.insert({ "Golem_Cloud", []()
 	{
-		return CCloud::Create(s_pGraphicDev, 2.f,GOLEMCLOUD);
+		return CCloud::Create(s_pGraphicDev, 2.f, MONSTERCLOUD);
 	} });
 	s_mapEffectSpawner.insert({ "Golem_Windmill", []()
 	{
