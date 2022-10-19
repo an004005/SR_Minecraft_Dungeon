@@ -41,8 +41,17 @@ HRESULT CSaton::Ready_Object()
 	// m_pRootPart->pTrans->Set_Pos(62.5f, 20.5f, 49.4f);
 	m_pRootPart->pTrans->m_vInfo[INFO_POS].y = 20.5f;
 
-	CController* pController = Add_Component<CSatonController>(L"Proto_SatonController", L"Proto_SatonController", ID_DYNAMIC);
-	pController->SetOwner(this);
+	if (m_bRemote)
+	{
+		CController* pController = Add_Component<CSatonController>(L"Proto_SatonRemoteController", L"Proto_SatonRemoteController", ID_DYNAMIC);
+		pController->SetOwner(this);
+	}
+	else
+	{
+		CController* pController = Add_Component<CSatonController>(L"Proto_SatonController", L"Proto_SatonController", ID_DYNAMIC);
+		pController->SetOwner(this);
+	}
+
 	m_fCurTime = 0.f;
 	m_fTime = 1.f;
 	//cc¸é¿ª
@@ -399,10 +408,10 @@ void CSaton::Free()
 	CMonster::Free();
 }
 
-CSaton* CSaton::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
+CSaton* CSaton::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath, _bool bRemote)
 {
 	CSaton* pInstance = new CSaton(pGraphicDev);
-
+	pInstance->m_bRemote = bRemote;
 	if (FAILED(pInstance->Ready_Object()))
 	{
 		Safe_Release(pInstance);

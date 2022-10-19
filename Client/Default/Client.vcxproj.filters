@@ -98,6 +98,9 @@
     <Filter Include="02. GameObject\Particle">
       <UniqueIdentifier>{a097aa65-4bb2-4da6-803b-331fe7896605}</UniqueIdentifier>
     </Filter>
+    <Filter Include="network">
+      <UniqueIdentifier>{42fb0a63-e782-4979-b687-946596b8bea0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\MainApp.h">
@@ -443,14 +446,7 @@
       <Filter>02. GameObject\Particle</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\SatonCircle.h" />
-    <ClInclude Include="..\Header\BossHPUI.h" />
-    <ClInclude Include="..\Header\ClientServiceMgr.h" />
     <ClInclude Include="..\Header\NetStage.h" />
-    <ClInclude Include="..\Header\PlayerUI.h" />
-    <ClInclude Include="..\Header\Protocol.pb.h" />
-    <ClInclude Include="..\Header\RemoteInventory.h" />
-    <ClInclude Include="..\Header\ServerPacketHandler.h" />
-    <ClInclude Include="..\Header\Struct.pb.h" />
     <ClInclude Include="..\Header\Stage_Kouku.h">
       <Filter>01. Scene\01. Stage</Filter>
     </ClInclude>
@@ -484,7 +480,33 @@
     <ClInclude Include="..\Header\Logo.h">
       <Filter>01. Scene</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\EditBox.h" />
+    <ClInclude Include="..\Header\ClientServiceMgr.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Struct.pb.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ServerPacketHandler.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Protocol.pb.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Enum.pb.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\EditBox.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\BossHPUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\PlayerUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\RemoteInventory.h">
+      <Filter>02. GameObject\06. Inventory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -831,15 +853,7 @@
       <Filter>02. GameObject\Particle</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\SatonCircle.cpp" />
-    <ClCompile Include="..\Code\BossHPUI.cpp" />
-    <ClCompile Include="..\Code\ClientServiceMgr.cpp" />
-    <ClCompile Include="..\Code\Enum.pb.cc" />
-    <ClCompile Include="..\Code\PlayerUI.cpp" />
     <ClCompile Include="..\Code\NetStage.cpp" />
-    <ClCompile Include="..\Code\Protocol.pb.cc" />
-    <ClCompile Include="..\Code\RemoteInventory.cpp" />
-    <ClCompile Include="..\Code\ServerPacketHandler.cpp" />
-    <ClCompile Include="..\Code\Struct.pb.cc" />
     <ClCompile Include="..\Code\Stage_Kouku.cpp">
       <Filter>01. Scene\01. Stage</Filter>
     </ClCompile>
@@ -870,7 +884,33 @@
     <ClCompile Include="..\Code\Logo.cpp">
       <Filter>01. Scene</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\EditBox.cpp" />
+    <ClCompile Include="..\Code\ClientServiceMgr.cpp">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Enum.pb.cc">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Struct.pb.cc">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ServerPacketHandler.cpp">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Protocol.pb.cc">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\EditBox.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\BossHPUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\PlayerUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\RemoteInventory.cpp">
+      <Filter>02. GameObject\06. Inventory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">

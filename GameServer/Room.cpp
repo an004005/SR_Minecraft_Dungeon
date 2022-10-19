@@ -8,6 +8,11 @@
 
 shared_ptr<Room> GRoom = make_shared<Room>();
 
+Room::Room()
+{
+	_playerNum = 2;
+}
+
 void Room::Enter(PlayerRef player)
 {
 	_players[player->playerId] = player;
@@ -26,6 +31,13 @@ void Room::Enter(PlayerRef player)
 		auto sendBuffer = ClientPacketHandler::MakeSendBuffer(otherPkt);
 		DoAsync(&Room::Broadcast, sendBuffer);
 	}
+
+	if (_players.size() == _playerNum)
+	{
+		Protocol::S_ALL_PLAYER_ENTER allPkt;
+		allPkt.set_success(true);
+		DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(allPkt));
+	}
 }
 
 void Room::Leave(PlayerRef player)
@@ -41,5 +53,35 @@ void Room::Broadcast(SendBufferRef sendBuffer)
 		{
 			locked->Send(sendBuffer);
 		}
+	}
+}
+
+void Room::Dead(uint64 iID)
+{
+	_players.find(iID)->second->m_bDead = true;
+
+	uint64 iDeadCnt = 0;
+	for (auto& p : _players)
+	{
+		if (p.second->m_bDead)
+			++iDeadCnt;
+	}
+
+	Protocol::S_PLAYER_DEAD deadPkt;
+	deadPkt.set_success(true);
+	deadPkt.mutable_player()->set_id(iID);
+
+	DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(deadPkt));
+
+
+	if (iDeadCnt == _playerNum)
+	{
+		for (auto& p : _players)
+			p.second->m_bDead = false;
+
+		Protocol::S_PLAYER_RESPAWN respawnPkt;
+		respawnPkt.set_success(true);
+
+		DoTimer(3000, &Room::Broadcast, ClientPacketHandler::MakeSendBuffer(respawnPkt));
 	}
 }

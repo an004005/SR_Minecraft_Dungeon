@@ -39,8 +39,9 @@ public:
 	_int GetHP() const { return m_iHP; }
 	_uint GetMaxHP() const { return m_iMaxHP;}
 
-	void ModifyHP(_int iModifyingHP);
+	void ModifyHP(_int iModifyingHP, _bool bEffect = true);
 	void TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCauser, DamageType eType = DT_END, _bool bCritical = false);
+	void SetDead();
 
 	_bool IsStun() const { return m_bStun || m_bKnockback; }
 	_bool IsDead() const { return m_bDead; }

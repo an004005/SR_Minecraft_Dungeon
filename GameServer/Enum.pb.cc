@@ -22,7 +22,7 @@ namespace _pbi = _pb::internal;
 
 namespace Protocol {
 }  // namespace Protocol
-static const ::_pb::EnumDescriptor* file_level_enum_descriptors_Enum_2eproto[2];
+static const ::_pb::EnumDescriptor* file_level_enum_descriptors_Enum_2eproto[3];
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_Enum_2eproto = nullptr;
 const uint32_t TableStruct_Enum_2eproto::offsets[1] = {};
 static constexpr ::_pbi::MigrationSchema* schemas = nullptr;
@@ -33,11 +33,14 @@ const char descriptor_table_protodef_Enum_2eproto[] PROTOBUF_SECTION_VARIABLE(pr
   "PLAYER_TYPE_STEVE\020\000\022\025\n\021PLAYER_TYPE_PRIDE"
   "\020\001\022\024\n\020PLAYER_TYPE_ESHE\020\002\022\026\n\022PLAYER_TYPE_"
   "COPPER\020\003*-\n\tEquipType\022\t\n\005MELEE\020\000\022\t\n\005RANG"
-  "E\020\001\022\n\n\006LEGACY\020\002b\006proto3"
+  "E\020\001\022\n\n\006LEGACY\020\002*c\n\014SatonPattern\022\n\n\006MoveT"
+  "o\020\000\022\n\n\006HAMMER\020\001\022\010\n\004GRAB\020\002\022\010\n\004BIRD\020\003\022\n\n\006S"
+  "YMBOL\020\004\022\r\n\tFASCINATE\020\005\022\014\n\010DRAWMOON\020\006b\006pr"
+  "oto3"
   ;
 static ::_pbi::once_flag descriptor_table_Enum_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Enum_2eproto = {
-    false, false, 183, descriptor_table_protodef_Enum_2eproto,
+    false, false, 284, descriptor_table_protodef_Enum_2eproto,
     "Enum.proto",
     &descriptor_table_Enum_2eproto_once, nullptr, 0, 0,
     schemas, file_default_instances, TableStruct_Enum_2eproto::offsets,
@@ -76,6 +79,25 @@ bool EquipType_IsValid(int value) {
     case 0:
     case 1:
     case 2:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SatonPattern_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_Enum_2eproto);
+  return file_level_enum_descriptors_Enum_2eproto[2];
+}
+bool SatonPattern_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
       return true;
     default:
       return false;

@@ -76,6 +76,7 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 	// uint64 index = playerPkt.id();
 	gameSession->_currentPlayer->name = playerPkt.name();
 	gameSession->_currentPlayer->type = pkt.playerskin();
+	gameSession->_currentPlayer->playerId = playerPkt.id();
 	std::cout << "Enter Player :  " << playerPkt.id() << " " << playerPkt.name() << endl;
 
 	Protocol::S_ENTER_GAME enterPkt;
@@ -194,6 +195,12 @@ bool Handle_C_PLAYER_EQUIP(PacketSessionRef& session, Protocol::C_PLAYER_EQUIP& 
 	return true;
 }
 
+bool Handle_C_PLAYER_DEAD(PacketSessionRef& session, Protocol::C_PLAYER_DEAD& pkt)
+{
+	GRoom->DoAsync(&Room::Dead, pkt.player().id());
+	return true;
+}
+
 bool Handle_C_SPAWN_MONSTER(PacketSessionRef& session, Protocol::C_SPAWN_MONSTER& pkt)
 {
 	// Protocol::S_SPAWN_MONSTER monPkt;
@@ -237,6 +244,42 @@ bool Handle_C_MONSTER_WORLD(PacketSessionRef& session, Protocol::C_MONSTER_WORLD
 	cout << "Monster " << pkt.monsterid() << " world renew" << endl;
 
 	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(monPkt));
+
+	return true;
+}
+
+bool Handle_C_BOSS_SPAWN(PacketSessionRef& session, Protocol::C_BOSS_SPAWN& pkt)
+{
+	Protocol::S_BOSS_SPAWN bossSpawnPkt;
+	bossSpawnPkt.set_success(true);
+	bossSpawnPkt.set_factory(pkt.factory());
+	bossSpawnPkt.mutable_matrix()->CopyFrom(pkt.matrix());
+
+	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(bossSpawnPkt));
+
+	return true;
+}
+
+bool Handle_C_BOSS_WORLD(PacketSessionRef& session, Protocol::C_BOSS_WORLD& pkt)
+{
+	Protocol::S_BOSS_WORLD worldPkt;
+	worldPkt.set_success(true);
+	worldPkt.set_objkey(pkt.objkey());
+	worldPkt.mutable_matworld()->CopyFrom(pkt.matworld());
+
+	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(worldPkt));
+
+	return true;
+}
+
+bool Handle_C_SATON_ATTACK(PacketSessionRef& session, Protocol::C_SATON_ATTACK& pkt)
+{
+	Protocol::S_SATON_ATTACK satonPkt;
+	satonPkt.set_success(true);
+	satonPkt.set_pattern(pkt.pattern());
+	satonPkt.mutable_targetpos()->CopyFrom(pkt.targetpos());
+
+	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(satonPkt));
 
 	return true;
 }

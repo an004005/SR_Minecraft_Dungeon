@@ -4,7 +4,7 @@ class CPlayer;
 
 class CSatonController :public CController
 {
-private:
+protected:
 	explicit CSatonController(void);
 	explicit CSatonController(const CSatonController& rhs);
 	virtual ~CSatonController() override;
@@ -16,7 +16,7 @@ public:
 public:
 	static CSatonController* Create();
 
-private:
+protected:
 	CPlayer* m_pTargetPlayer = nullptr;
 
 
@@ -31,7 +31,7 @@ private:
 	_float m_fFirstHammerCoolTime = 5.f;
 	_float m_fSatonBirdCoolTime = 25.f;
 	_float m_fSatonGrapCoolTime = 5.f;
-	_float m_fSatonFascinateCoolTime = 10000.f;
+	_float m_fSatonFascinateCoolTime = 10.f;
 	_float m_fSatonDrawMoonCoolTime = 2.f;
 	_float m_fTargetingCoolTime = 3.f;
 
@@ -50,5 +50,40 @@ private:
 
 	_float m_fTargetDist = 9999.f;
 
+	_float m_fLookAtTime = 0.2f;
+	_float m_fCurLookAtTime = 0.2f;
+
 };
 
+class CSatonRemoteController : public CSatonController
+{
+private:
+	explicit CSatonRemoteController(void);
+	explicit CSatonRemoteController(const CSatonRemoteController& rhs);
+	virtual ~CSatonRemoteController() override;
+
+public:
+	virtual _int Update_Component(const _float& fTimeDelta) override;
+	virtual CComponent* Clone() override;
+	virtual void Free() override;
+public:
+	static CSatonRemoteController* Create();
+
+	void SetWorld(const _matrix& matWorld)
+	{
+		m_matWorld = matWorld;
+	}
+
+	void SetPattern(_vec3 vTargetPos, Protocol::SatonPattern ePattern)
+	{
+		WRITE_LOCK;
+		m_patternList.push_back({vTargetPos, ePattern});
+	}
+
+private:
+	USE_LOCK;
+	_matrix m_matWorld;
+
+	list<pair<_vec3, Protocol::SatonPattern>> m_patternList;
+
+};

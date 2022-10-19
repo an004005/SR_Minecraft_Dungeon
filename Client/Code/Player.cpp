@@ -222,9 +222,13 @@ void CPlayer::Render_Object()
 
 		_vec2 vScreen;
 		CGameUtilMgr::World2Screen(vScreen, m_pColl->GetCollPos() + _vec3{0.f, 2.3f, 0.f}, matView, matProj, viewport);
-		const wstring tmp(m_strName.begin(), m_strName.end());
+		wstring tmp(m_strName.begin(), m_strName.end());
+#ifdef _DEBUG
+		tmp = tmp + to_wstring(m_iID);
+#endif
 		_float fHalf = 10.f * _float(tmp.size()) / 2;
 		vScreen.x -= fHalf;
+
 		Engine::Render_Font(L"Gothic_Bold20", tmp.c_str(), &vScreen, D3DCOLOR_ARGB(255, 255, 255, 255));
 
 		CSkeletalCube::Render_Object();
@@ -509,7 +513,8 @@ void CPlayer::StateChange()
 	{
 		if (m_bReserveStop == false)
 		{
-			CSoundMgr::GetInstance()->PlaySound(L"sfx_playerDead-001_soundWave.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+			if (m_bRemote == false)
+				CSoundMgr::GetInstance()->PlaySound(L"sfx_playerDead-001_soundWave.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 			m_eState = DEAD;
 			PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
 			m_bRoll = false;
@@ -518,6 +523,13 @@ void CPlayer::StateChange()
 			m_bLaser = false;
 			m_bCanPlayAnim = false;
 			m_pColl->SetStop();
+
+			if (g_bOnline && m_bRemote == false)
+			{
+				Protocol::C_PLAYER_DEAD deadPkt;
+				deadPkt.mutable_player()->set_id(CClientServiceMgr::GetInstance()->m_iPlayerID);
+				CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(deadPkt));
+			}
 		}
 		return;
 	}
@@ -779,6 +791,8 @@ void CPlayer::UsePotion()
 	}
 	else
 	{
+		m_pStat->ModifyHP(_int(_float(m_pStat->GetMaxHP()) * 0.7f));
+
 		// particle
 		CEffectFactory::Create<CHealCircle>("Heal_Circle_L", L"Heal_Circle_L", m_pRootPart->pTrans->m_vInfo[INFO_POS])
 			->SetFollow(m_pRootPart->pTrans);

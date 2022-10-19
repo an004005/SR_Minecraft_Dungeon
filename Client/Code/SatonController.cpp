@@ -3,6 +3,7 @@
 
 #include "Kouku.h"
 #include "Saton.h"
+#include "ServerPacketHandler.h"
 #include "StatComponent.h"
 
 CSatonController::CSatonController()
@@ -11,15 +12,21 @@ CSatonController::CSatonController()
 
 CSatonController::CSatonController(const CSatonController& rhs)
 {
+	m_fSatonFascinateCoolTime = 10000.f;
+}
+
+CSatonController::~CSatonController()
+{
 }
 
 _int CSatonController::Update_Component(const _float& fTimeDelta)
 {
 	{
-		// m_fCurFirstHammerCoolTime += fTimeDelta;
+		m_fCurLookAtTime += fTimeDelta;
+		m_fCurFirstHammerCoolTime += fTimeDelta;
 		// m_fCurSatonBirdCoolTime += fTimeDelta;
 		m_fCurSatonGrapCoolTime += fTimeDelta;
-		// m_fCurSatonFascinateCoolTime += fTimeDelta;
+		m_fCurSatonFascinateCoolTime += fTimeDelta;
 
 		if(m_bIsDrawMoon)
 		{
@@ -27,11 +34,11 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 		}
 	}
 
+#ifdef _DEBUG
 	IM_BEGIN("Saton_CoolTime");
 	ImGui::Text("Fascinate Cur CoolTime : %f", m_fCurSatonFascinateCoolTime);
-
-
 	IM_END;
+#endif
 
 
 	CSaton* saton = dynamic_cast<CSaton*>(m_pOwner);
@@ -82,18 +89,44 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 	{
 		saton->SatonSymbolAnim(_vec3(m_vLookFront));
 		m_bIsKoukuSymbol = !m_bIsKoukuSymbol;
+
+		if (g_bOnline)
+		{
+			Protocol::C_SATON_ATTACK patternPkt;
+			patternPkt.set_pattern(Protocol::SYMBOL);
+			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(patternPkt));	
+		}
 	}
 	
 	if (m_fCurFirstHammerCoolTime >= m_fFirstHammerCoolTime && m_fTargetDist <= m_fFirstHammerDist)
 	{
 		m_fCurFirstHammerCoolTime = 0.f;
 		saton->FirstAttack(vTargetPos);
+		if (g_bOnline)
+		{
+			Protocol::C_SATON_ATTACK patternPkt;
+			patternPkt.set_pattern(Protocol::HAMMER);
+			patternPkt.mutable_targetpos()->set_x(vTargetPos.x);
+			patternPkt.mutable_targetpos()->set_y(vTargetPos.y);
+			patternPkt.mutable_targetpos()->set_z(vTargetPos.z);
+			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(patternPkt));	
+		}
+
 		return 0;
 	}
 	if (m_fCurSatonBirdCoolTime >= m_fSatonBirdCoolTime && m_fTargetDist <= m_fSatonBirdkDist)
 	{
 		m_fCurSatonBirdCoolTime = 0.f;
 		saton->SatonBird(vTargetPos);
+		if (g_bOnline)
+		{
+			Protocol::C_SATON_ATTACK patternPkt;
+			patternPkt.set_pattern(Protocol::BIRD);
+			patternPkt.mutable_targetpos()->set_x(vTargetPos.x);
+			patternPkt.mutable_targetpos()->set_y(vTargetPos.y);
+			patternPkt.mutable_targetpos()->set_z(vTargetPos.z);
+			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(patternPkt));	
+		}
 		return 0;
 	}
 
@@ -104,6 +137,16 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 		m_fSatonFascinateCoolTime = 60.f;
 
 		m_bIsDrawMoon = true;
+
+		if (g_bOnline)
+		{
+			Protocol::C_SATON_ATTACK patternPkt;
+			patternPkt.set_pattern(Protocol::FASCINATE);
+			patternPkt.mutable_targetpos()->set_x(vTargetPos.x);
+			patternPkt.mutable_targetpos()->set_y(vTargetPos.y);
+			patternPkt.mutable_targetpos()->set_z(vTargetPos.z);
+			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(patternPkt));	
+		}
 		return 0;
 	}
 	
@@ -111,6 +154,15 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 	{
 		m_fCurSatonDrawMoonCoolTime = 0.f;
 		saton->SatonDrawMoon(vTargetPos);
+		if (g_bOnline)
+		{
+			Protocol::C_SATON_ATTACK patternPkt;
+			patternPkt.set_pattern(Protocol::DRAWMOON);
+			patternPkt.mutable_targetpos()->set_x(vTargetPos.x);
+			patternPkt.mutable_targetpos()->set_y(vTargetPos.y);
+			patternPkt.mutable_targetpos()->set_z(vTargetPos.z);
+			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(patternPkt));	
+		}
 		m_bIsDrawMoon = false;
 	}
 
@@ -118,12 +170,35 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 	{
 		m_fCurSatonGrapCoolTime = 0.f;
 		saton->SatonGrap(vLookFront);
+		if (g_bOnline)
+		{
+			Protocol::C_SATON_ATTACK patternPkt;
+			patternPkt.set_pattern(Protocol::GRAB);
+			patternPkt.mutable_targetpos()->set_x(vLookFront.x);
+			patternPkt.mutable_targetpos()->set_y(vLookFront.y);
+			patternPkt.mutable_targetpos()->set_z(vLookFront.z);
+			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(patternPkt));	
+		}
 		return 0;
 	}
 
-	_vec3  Pos = saton->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS] - _vec3(62.5f, 21.5f, 47.f);
+	if (m_fCurLookAtTime >= m_fLookAtTime)
+	{
+		m_fCurLookAtTime = 0.f;
+		// _vec3  Pos = saton->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS] - _vec3(62.5f, 21.5f, 47.f);
+		saton->WalkToTarget(vTargetPos);
 
-	saton->WalkToTarget(vTargetPos);
+		if (g_bOnline)
+		{
+			Protocol::C_SATON_ATTACK patternPkt;
+			patternPkt.set_pattern(Protocol::MoveTo);
+			patternPkt.mutable_targetpos()->set_x(vLookFront.x);
+			patternPkt.mutable_targetpos()->set_y(vLookFront.y);
+			patternPkt.mutable_targetpos()->set_z(vLookFront.z);
+			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(patternPkt));	
+		}
+	}
+
 
 	return 0;
 }
@@ -143,6 +218,87 @@ CSatonController* CSatonController::Create()
 	return new CSatonController;
 }
 
-CSatonController::~CSatonController()
+// remote
+CSatonRemoteController::CSatonRemoteController() : CSatonController()
 {
 }
+
+CSatonRemoteController::CSatonRemoteController(const CSatonRemoteController& rhs) : CSatonController(rhs)
+{
+}
+
+CSatonRemoteController::~CSatonRemoteController()
+{
+}
+
+_int CSatonRemoteController::Update_Component(const _float& fTimeDelta)
+{
+	CSaton* saton = dynamic_cast<CSaton*>(m_pOwner);
+	NULL_CHECK_RETURN(saton, 0);
+
+
+	if (m_patternList.empty() == false)
+	{
+		pair<_vec3, Protocol::SatonPattern> pattern;
+		{
+			WRITE_LOCK;
+
+			pattern = m_patternList.front();
+			m_patternList.pop_front();
+			m_patternList.clear();
+		}
+
+		switch (pattern.second)
+		{
+			case Protocol::MoveTo:
+				saton->WalkToTarget(pattern.first);
+				break;
+			case Protocol::HAMMER:
+				saton->FirstAttack(pattern.first);
+				break;
+			case Protocol::GRAB:
+				saton->SatonGrap(pattern.first);
+				break;
+			case Protocol::BIRD:
+				saton->SatonBird(pattern.first);
+				break;
+			case Protocol::SYMBOL:
+				m_vLookFront = saton->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_LOOK] - _vec3(62.5f, 0, 45.f);
+				saton->SatonSymbolAnim(m_vLookFront);
+
+				break;
+			case Protocol::FASCINATE:
+				m_vLookFront = saton->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_LOOK] - _vec3(62.5f, 0, 45.f);
+				saton->SatonFascinate(m_vLookFront, pattern.first);
+				break;
+			case Protocol::DRAWMOON:
+				saton->SatonBird(pattern.first);
+				break;
+			case Protocol::SatonPattern_INT_MIN_SENTINEL_DO_NOT_USE_: break;
+			case Protocol::SatonPattern_INT_MAX_SENTINEL_DO_NOT_USE_: break;
+			default: ;
+		}
+
+
+
+	}
+
+
+	return OBJ_NOEVENT;
+}
+
+CComponent* CSatonRemoteController::Clone()
+{
+	return new CSatonRemoteController(*this);
+}
+
+void CSatonRemoteController::Free()
+{
+	CSatonController::Free();
+}
+
+CSatonRemoteController* CSatonRemoteController::Create()
+{
+	return new CSatonRemoteController;
+}
+

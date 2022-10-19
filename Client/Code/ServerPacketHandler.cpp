@@ -6,6 +6,9 @@
 #include "PlayerController.h"
 #include "ZombieController.h"
 #include "RemoteInventory.h"
+#include "Stage_Kouku.h"
+#include "SatonController.h"
+#include "StatComponent.h"
 
 PacketHandlerFunc GPacketHandler[UINT16_MAX];
 
@@ -51,19 +54,6 @@ bool Handle_S_ENTER_GAME(PacketSessionRef& session, Protocol::S_ENTER_GAME& pkt)
 		pPlayer->SetID(CClientServiceMgr::GetInstance()->m_iPlayerID);
 		return true;
 	}
-
-	// if (CClientServiceMgr::GetInstance()->m_iPlayerID == 0) // host player spawn monster
-	// {
-	// 	Protocol::C_SPAWN_MONSTER monPkt;
-	// 	monPkt.set_id(1);
-	// 	_matrix matWorld = CGameUtilMgr::s_matIdentity;
-	// 	CEnemyFactory::Create<CGameObject>("Zombie", L"Zombie_1", matWorld);
-	//
-	// 	monPkt.set_factory("Zombie");
-	// 	CClientServiceMgr::Mat2Pkt(matWorld, *monPkt.mutable_matrix());
-	//
-	// 	session->Send(ServerPacketHandler::MakeSendBuffer(monPkt));
-	// }
 
 	return true;
 }
@@ -172,6 +162,60 @@ bool Handle_S_PLAYER_EQUIP(PacketSessionRef& session, Protocol::S_PLAYER_EQUIP& 
 	return true;
 }
 
+bool Handle_S_ALL_PLAYER_ENTER(PacketSessionRef& session, Protocol::S_ALL_PLAYER_ENTER& pkt)
+{
+	if (pkt.success() == false)
+		return true;
+	if (CClientServiceMgr::GetInstance()->m_iPlayerID != 0) // if not host
+		return true;
+
+	CScene* pCurScene = CManagement::GetInstance()->GetScene();
+	if (dynamic_cast<CStage_Kouku*>(pCurScene))
+	{
+		_matrix matWorld;
+		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 3.f, 3.f, 3.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 21.5f ,47.8f });
+		Protocol::C_BOSS_SPAWN satonSpawnPkt;
+		satonSpawnPkt.set_factory("Saton");
+		CClientServiceMgr::Mat2Pkt(matWorld, *satonSpawnPkt.mutable_matrix());
+
+		session->Send(ServerPacketHandler::MakeSendBuffer(satonSpawnPkt));
+	}
+
+	return true;
+}
+
+bool Handle_S_PLAYER_DEAD(PacketSessionRef& session, Protocol::S_PLAYER_DEAD& pkt)
+{
+	if (pkt.success() == false)
+		return true;
+	if (CClientServiceMgr::GetInstance()->m_iPlayerID == pkt.player().id()) 
+		return true;
+
+	if (CPlayer* pPlayer = Get_GameObjectUnCheck<CPlayer>(LAYER_PLAYER, L"Player_Remote_" + to_wstring(pkt.player().id())))
+	{
+		pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)->SetDead();
+	}
+
+
+	return true;
+}
+
+bool Handle_S_PLAYER_RESPAWN(PacketSessionRef& session, Protocol::S_PLAYER_RESPAWN& pkt)
+{
+	if (pkt.success() == false)
+		return true;
+
+	for (auto& e : Get_Layer(LAYER_PLAYER)->Get_MapObject())
+	{
+		if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(e.second))
+		{
+			pPlayer->PlayerSpawn();
+		}
+	}
+
+	return true;
+}
+
 bool Handle_S_SPAWN_MONSTER(PacketSessionRef& session, Protocol::S_SPAWN_MONSTER& pkt)
 {
 	if (pkt.success() == false)
@@ -231,6 +275,78 @@ bool Handle_S_MONSTER_WORLD(PacketSessionRef& session, Protocol::S_MONSTER_WORLD
 		pCon->SetWorld(matWorld);
 	}
 
+
+	return true;
+}
+
+bool Handle_S_BOSS_SPAWN(PacketSessionRef& session, Protocol::S_BOSS_SPAWN& pkt)
+{
+	if (pkt.success() == false)
+		return true;
+
+	wstring wstrFactory(pkt.factory().begin(), pkt.factory().end());
+	_matrix matWorld;
+	CClientServiceMgr::Pkt2mat(pkt.matrix(), matWorld);
+
+	if (CClientServiceMgr::GetInstance()->m_iPlayerID == 0) // if host
+	{
+		CEnemyFactory::Create<CGameObject>(pkt.factory(), wstrFactory, matWorld);
+		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 0.7f, 0.7f, 0.7f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 25.f ,44.8f });
+		CEnemyFactory::Create<CGameObject>("Kouku", L"Kouku", matWorld);
+	}
+	else
+	{
+		CEnemyFactory::Create<CGameObject>(pkt.factory() + "_Remote", wstrFactory + L"_Remote", matWorld);
+		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 0.7f, 0.7f, 0.7f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 25.f ,44.8f });
+		CEnemyFactory::Create<CGameObject>("Kouku", L"Kouku", matWorld);
+	}
+
+	return true;
+}
+
+bool Handle_S_BOSS_WORLD(PacketSessionRef& session, Protocol::S_BOSS_WORLD& pkt)
+{
+	if (pkt.success() == false)
+		return true;
+	if (CClientServiceMgr::GetInstance()->m_iPlayerID == 0) // host 
+		return true;
+
+	if (pkt.objkey() == "Saton")
+	{
+		CSatonRemoteController* pCon = Engine::Get_ComponentUnCheck<CSatonRemoteController>(LAYER_ENEMY, L"Saton_Remote", L"Proto_SatonRemoteController",  ID_DYNAMIC);
+		if (pCon)
+		{
+			_matrix matWorld;
+			CClientServiceMgr::Pkt2mat(pkt.matworld(), matWorld);
+			pCon->SetWorld(matWorld);
+		}
+	}
+	else if (pkt.objkey() == "Kouku")
+	{
+		
+	}
+
+
+	return true;
+}
+
+bool Handle_S_SATON_ATTACK(PacketSessionRef& session, Protocol::S_SATON_ATTACK& pkt)
+{
+	if (pkt.success() == false)
+		return true;
+	if (CClientServiceMgr::GetInstance()->m_iPlayerID == 0) // host 
+		return true;
+
+	CSatonRemoteController* pCon = Engine::Get_ComponentUnCheck<CSatonRemoteController>(LAYER_ENEMY, L"Saton_Remote", L"Proto_SatonRemoteController",  ID_DYNAMIC);
+	if (pCon)
+	{
+		_vec3 vTargetPos;
+		vTargetPos.x = pkt.targetpos().x();
+		vTargetPos.y = pkt.targetpos().y();
+		vTargetPos.z = pkt.targetpos().z();
+
+		pCon->SetPattern(vTargetPos, pkt.pattern());
+	}
 
 	return true;
 }

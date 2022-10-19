@@ -115,11 +115,11 @@ _int CKoukuController::Update_Component(const _float& fTimeDelta)
 		return 0;
 	}
 
-
-
+#ifdef _DEBUG
 	IM_BEGIN("test");
 	ImGui::Text("%f", m_fTargetDist);
 	IM_END;
+#endif
 
 
 	if(m_fTargetDist > 3.f)

@@ -35,6 +35,5 @@ private:
 	_bool m_bPlayerAlive = false;
 	CPlayerUI* m_pPlayerUI = nullptr;
 	CPlayer* m_pPlayer = nullptr;
-	_float m_fDeadTime = 0.f;
 };
 

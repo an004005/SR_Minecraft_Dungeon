@@ -172,8 +172,8 @@ HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement
 	(*ppManagement)->AddRef();
 
 	 // CSceneFactory::LoadScene("Loading1", "Stage_Default", true ,0);
-	 CSceneFactory::LoadScene("Loading1", "Logo", true ,0);
-	//CSceneFactory::LoadScene("Loading1", "NetTest", true ,0);
+	 // CSceneFactory::LoadScene("Loading1", "Logo", true ,0);
+	CSceneFactory::LoadScene("Loading1", "Stage_Kouku", true ,0);
 
 	return S_OK;
 }
@@ -294,7 +294,8 @@ HRESULT CMainApp::Ready_Proto()
 	// remote controller
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_PlayerRemoteController", CPlayerRemoteController::Create()), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_ZombieRemoteController", CZombieRemoteController::Create()), E_FAIL);
-
+	// FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_KoukuController", CKoukuController::Create()), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_SatonRemoteController", CSatonRemoteController::Create()), E_FAIL);
 
 
 	// UI

@@ -186,6 +186,16 @@ void CEnemyFactory::Ready_EnemyFactory()
 	{
 		return CEnderman::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Enderman.cube");
 	} });
+
+	s_mapEnemySpawner.insert({ "Kouku_Remote", []()
+	{
+		return CKouku::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/kouku.cube");
+	} });
+
+	s_mapEnemySpawner.insert({ "Saton_Remote", []()
+	{
+		return CSaton::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/saton.cube", true);
+	} });
 }
 
 void CEffectFactory::Ready_EffectFactory()

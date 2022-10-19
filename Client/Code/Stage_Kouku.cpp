@@ -6,34 +6,20 @@
 #include "Player.h"
 #include "AbstFactory.h"
 
-#include "DynamicCamera.h"
 #include "Particle.h"
-#include "Arrow.h"
 #include "ArrowCubeMgr.h"
-#include "Box.h"
-#include "Dynamite.h"
-#include "BossHPUI.h"
 #include "StatComponent.h"
 #include "PlayerUI.h"
 
 //monster
-#include "Monster.h"
-#include "Geomancer.h"
-#include "Zombie.h"
-#include "Creeper.h"
-#include "Skeleton.h"
-#include "Enchanter.h"
-#include "RedStoneCube.h"
-#include "RedStoneMonstrosity.h"
+
 #include "UI.h"
 #include "CoolTimeUI.h"
-#include "BatchTool.h"
 #include "DamageFontMgr.h"
 #include "Kouku.h"
 #include "Saton.h"
 
 // object
-#include "Birds.h"
 #include "BirdsBrown.h"
 #include "PlayerStartPos.h"
 
@@ -55,6 +41,9 @@ HRESULT CStage_Kouku::Ready_Scene(void)
 	FAILED_CHECK_RETURN(Ready_Layer_Environment(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_GameLogic(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_UI(), E_FAIL);
+
+	CClientServiceMgr::GetInstance()->ReadyClientService();
+
 	return S_OK;
 }
 
@@ -64,18 +53,14 @@ _int CStage_Kouku::Update_Scene(const _float & fTimeDelta)
 	{
 		if (m_pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)->IsDead())
 		{
-			if (m_fDeadTime > 3.f)
-				m_pPlayer->PlayerSpawn();
-			m_fDeadTime += fTimeDelta;
-
 			if (m_bPlayerAlive)
 			{
 				m_pPlayerUI = CUIFactory::Create<CPlayerUI>("PlayerUI", L"PlayerDead", 0, WINCX * 0.5f, WINCY * 0.5f, WINCX, WINCY);
 				m_pPlayerUI->Open();
 				m_pPlayerUI->SetUITexture(25);
+				m_pPlayerUI->SetNoCount();
 			}
 			m_bPlayerAlive = false;
-			
 		}
 		else
 		{
@@ -85,7 +70,6 @@ _int CStage_Kouku::Update_Scene(const _float & fTimeDelta)
 				m_pPlayerUI = nullptr;
 			}
 			m_bPlayerAlive = true;
-			m_fDeadTime = 0.f;
 		}
 	}
 	
@@ -124,6 +108,7 @@ HRESULT CStage_Kouku::Ready_Layer_Environment()
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", pGameObject), E_FAIL);
 
+	{
 	pMap->SetHeight(60, 25, 25.000000);
 	pMap->SetHeight(60, 26, 25.000000);
 	pMap->SetHeight(60, 27, 25.000000);
@@ -218,15 +203,8 @@ HRESULT CStage_Kouku::Ready_Layer_Environment()
 			pMap->SetHeight(x, z, 0.f);
 		}
 	}
-	//  Birds
-
-	for (int i = 0; i < 10; ++i)
-	{
-		CBirdsBrown* bird = CObjectFactory::Create<CBirdsBrown>("BirdsBrown", L"BirdsWhite");
-		bird->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->Set_Pos(3.f, 9.5f, 18.f + i);
-
 	}
-	
+
 	return S_OK;
 }
 
@@ -236,7 +214,7 @@ HRESULT CStage_Kouku::Ready_Layer_GameLogic()
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 0.f ,42.7f });
 	m_pPlayer = CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld);
-	m_pPlayer->PlayerSpawn();
+	// m_pPlayer->PlayerSpawn();
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 0.f ,42.7f });
 	CObjectFactory::Create<CPlayerStartPos>("PlayerPos", L"PlayerPos", matWorld);
@@ -254,11 +232,11 @@ HRESULT CStage_Kouku::Ready_Layer_GameLogic()
 	
 	//monsters
 	{	
-		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 3.f, 3.f, 3.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 21.5f ,47.8f });
-		CEnemyFactory::Create<CSaton>("Saton", L"Saton", matWorld);
+		// CGameUtilMgr::MatWorldComposeEuler(matWorld, { 3.f, 3.f, 3.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 21.5f ,47.8f });
+		// CEnemyFactory::Create<CSaton>("Saton", L"Saton", matWorld);
 
-		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 0.7f, 0.7f, 0.7f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 25.f ,44.8f });
-		CEnemyFactory::Create<CKouku>("Kouku", L"Kouku", matWorld);
+		// CGameUtilMgr::MatWorldComposeEuler(matWorld, { 0.7f, 0.7f, 0.7f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 25.f ,44.8f });
+		// CEnemyFactory::Create<CKouku>("Kouku", L"Kouku", matWorld);
 	}
 	return S_OK;
 }
@@ -301,6 +279,7 @@ CStage_Kouku * CStage_Kouku::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 
 void CStage_Kouku::Free(void)
 {
+	CClientServiceMgr::DestroyInstance();
 
 
 	CScene::Free();
