@@ -3,7 +3,7 @@
 class CEndermanController :
 	public CController
 {
-public:
+private:
 	explicit CEndermanController(void);
 	explicit CEndermanController(const CEndermanController& rhs);
 	virtual ~CEndermanController();

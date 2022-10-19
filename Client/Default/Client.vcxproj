@@ -178,6 +178,8 @@
     <ClInclude Include="..\Header\InventoryUI.h" />
     <ClInclude Include="..\Header\ItemTexUI.h" />
     <ClInclude Include="..\Header\LaserShotRune.h" />
+    <ClInclude Include="..\Header\Leaper.h" />
+    <ClInclude Include="..\Header\LeaperController.h" />
     <ClInclude Include="..\Header\MultiShotRune.h" />
     <ClInclude Include="..\Header\PlayerStartPos.h" />
     <ClInclude Include="..\Header\Kouku.h" />
@@ -303,6 +305,8 @@
     <ClCompile Include="..\Code\InventoryUI.cpp" />
     <ClCompile Include="..\Code\ItemTexUI.cpp" />
     <ClCompile Include="..\Code\LaserShotRune.cpp" />
+    <ClCompile Include="..\Code\Leaper.cpp" />
+    <ClCompile Include="..\Code\LeaperController.cpp" />
     <ClCompile Include="..\Code\MultiShotRune.cpp" />
     <ClCompile Include="..\Code\PlayerStartPos.cpp" />
     <ClCompile Include="..\Code\Kouku.cpp" />

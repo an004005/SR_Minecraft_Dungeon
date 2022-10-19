@@ -37,10 +37,10 @@ HRESULT CEnderman::Ready_Object()
 
 	m_pStat->SetMaxHP(500);
 
-	/*m_pStat->SetHurtSound({
+	m_pStat->SetHurtSound({
 		L"DLC_sfx_mob_monster_Hurt-001.ogg",
 		L"DLC_sfx_mob_monster_Hurt-002.ogg" ,
-		L"DLC_sfx_mob_monster_Hurt-003.ogg" });*/
+		L"DLC_sfx_mob_monster_Hurt-003.ogg" });
 
 	
 	CController* pController = Add_Component<CEndermanController>(L"Proto_EndermanController", L"Proto_EndermanController", ID_DYNAMIC);

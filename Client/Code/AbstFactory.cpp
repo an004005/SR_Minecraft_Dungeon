@@ -63,6 +63,7 @@
 #include "ClearUI.h"
 #include "Trigger.h"
 #include "Enderman.h"
+#include "Leaper.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -169,6 +170,10 @@ void CEnemyFactory::Ready_EnemyFactory()
 	s_mapEnemySpawner.insert({ "Enderman", []()
 	{
 		return CEnderman::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Enderman.cube");
+	} });
+	s_mapEnemySpawner.insert({ "Leaper", []()
+	{
+		return CLeaper::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Leaper.cube");
 	} });
 }
 

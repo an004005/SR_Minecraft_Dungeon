@@ -52,11 +52,7 @@ _int CEndermanController::Update_Component(const _float & fTimeDelta)
 
 	pEnderman->SetTarget(vTargetPos);
 
-	IM_BEGIN("Test"); // 
-
-	ImGui::Text("%f", m_fCurClockingCollTime);
-	IM_END;
-
+	
 	if (m_fCurClockingCollTime > m_fClockingCollTime)
 	{
 		pEnderman->DoClocking(vTargetLook);

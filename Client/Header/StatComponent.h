@@ -6,6 +6,7 @@ enum DamageType
 	DT_STUN,
 	DT_KNOCK_BACK,
 	DT_STIFFEN,
+	DT_JUMP,
 	// posion .. etc
 	DT_END
 };
