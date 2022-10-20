@@ -38,53 +38,35 @@ void CBox::AnimationEvent(const string& strEvent)
 
 		for (_int i = 0; i < 5; ++i)
 		{
-			iRandNum = rand() % 8;
+			iRandNum = rand() % 4;
 			m_fCreateItem[iRandNum](m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 		}
 
-		m_fCreateItem[7](m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+		m_fCreateItem[3](m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 	}
 	
 }
 
 void CBox::InitFunction()
 {
+	
+
 	m_fCreateItem[0] = [this](const _vec3& vPos) {
-		CGlaive* pGlaive = CItemFactory::Create<CGlaive>("Glaive", L"Glaive", vPos, IS_DROP);
-		pGlaive->SetVelocity(vPos, 15.f);
-	};
-
-	m_fCreateItem[1] = [this](const _vec3& vPos) {
-		CAxe* pAxe = CItemFactory::Create<CAxe>("Axe", L"Axe", vPos, IS_DROP);
-		pAxe->SetVelocity(vPos, 15.f);
-	};
-
-	m_fCreateItem[2] = [this](const _vec3& vPos) {
-		CSword* pSword = CItemFactory::Create<CSword>("Sword", L"Sword", vPos, IS_DROP);
-		pSword->SetVelocity(vPos, 15.f);
-	};
-
-	m_fCreateItem[3] = [this](const _vec3& vPos) {
-		CCrossbow* pCrossbow = CItemFactory::Create<CCrossbow>("Crossbow", L"Crossbow", vPos, IS_DROP);
-		pCrossbow->SetVelocity(vPos, 15.f);
-	};
-
-	m_fCreateItem[4] = [this](const _vec3& vPos) {
 		CApple* pApple = CItemFactory::Create<CApple>("Apple", L"Apple", vPos, IS_DROP);
 		pApple->SetVelocity(vPos, 15.f);
 	};
 
-	m_fCreateItem[5] = [this](const _vec3& vPos) {
+	m_fCreateItem[1] = [this](const _vec3& vPos) {
 		CBread* pBread = CItemFactory::Create<CBread>("Bread", L"Bread", vPos, IS_DROP);
 		pBread->SetVelocity(vPos, 15.f);
 	};
 
-	m_fCreateItem[6] = [this](const _vec3& vPos) {
+	m_fCreateItem[2] = [this](const _vec3& vPos) {
 		CPosion* pPosion = CItemFactory::Create<CPosion>("Posion", L"Posion", vPos, IS_DROP);
 		pPosion->SetVelocity(vPos, 15.f);
 	};
 
-	m_fCreateItem[7] = [this](const _vec3& vPos) {
+	m_fCreateItem[3] = [this](const _vec3& vPos) {
 		CArrowBundle* pArrowBundle = CItemFactory::Create<CArrowBundle>("ArrowBundle", L"ArrowBundle", vPos, IS_DROP);
 		pArrowBundle->SetVelocity(vPos, 15.f);
 	};

@@ -45,7 +45,7 @@ _int CLeaperController::Update_Component(const _float & fTimeDelta)
 		}
 	}
 
-	if (pTargetPlayer = nullptr)
+	if (pTargetPlayer == nullptr)
 		return 0;
 
 	pLeaper->SetTarget(vTargetPos);

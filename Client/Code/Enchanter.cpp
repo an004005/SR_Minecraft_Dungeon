@@ -102,13 +102,13 @@ void CEnchanter::LateUpdate_Object()
 	{
 		set<CGameObject*> setObj;
 		_vec3 vAttackPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + (m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 2.f);
-		Engine::GetOverlappedObject(setObj, vAttackPos, 1.f);
+		Engine::GetOverlappedObject(setObj, vAttackPos, 2.5f);
 
 		for (auto& obj : setObj)
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(1, m_pRootPart->pTrans->m_vInfo[INFO_POS], this);
+				->TakeDamage(30, m_pRootPart->pTrans->m_vInfo[INFO_POS], this);
 		}
 		DEBUG_SPHERE(vAttackPos, 1.f, 1.f);
 		IM_LOG("Fire");

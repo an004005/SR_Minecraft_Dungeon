@@ -33,9 +33,9 @@ HRESULT CEnderman::Ready_Object()
 	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 	m_pCurAnim = m_pIdleAnim;
 	m_eState = IDLE;
-	m_fSpeed = 3.f;
+	m_fSpeed = 3.5f;
 
-	m_pStat->SetMaxHP(500);
+	m_pStat->SetMaxHP(2000);
 
 	m_pStat->SetHurtSound({
 		L"sfx_mob_endermanHit-001.ogg",
@@ -100,7 +100,7 @@ _int CEnderman::Update_Object(const _float & fTimeDelta)
 		m_pBossHPUI->SetRender(true);
 	}
 
-	if (m_bClocking)
+	if (m_bClocking && 	m_eState != DEAD)
 	{
 		m_pBossHPUI->SetRender(false);
 		return OBJ_NOEVENT;
@@ -151,7 +151,7 @@ void CEnderman::LateUpdate_Object()
 
 		set<CGameObject*> setObj;
 		_vec3 vAttackPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + (m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 2.f);
-		Engine::GetOverlappedObject(setObj, vAttackPos, 2.f);
+		Engine::GetOverlappedObject(setObj, vAttackPos, 2.5f);
 
 		for (auto& obj : setObj)
 		{
