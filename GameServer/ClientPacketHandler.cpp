@@ -299,6 +299,7 @@ bool Handle_C_BOSS_WORLD(PacketSessionRef& session, Protocol::C_BOSS_WORLD& pkt)
 	worldPkt.set_success(true);
 	worldPkt.set_objkey(pkt.objkey());
 	worldPkt.mutable_matworld()->CopyFrom(pkt.matworld());
+	worldPkt.set_ihp(pkt.ihp());
 
 	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(worldPkt));
 

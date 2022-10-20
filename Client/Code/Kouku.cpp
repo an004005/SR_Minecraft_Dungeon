@@ -458,6 +458,11 @@ void CKouku::Kouku_Stun_Success()
 			m_pStat->TakeDamage(0, KoukuPos, this, DT_STUN);
 			Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 				->PlayShake(0.1f, 1.f);
+			if (g_bOnline)
+			{
+				
+			}
+
 			m_bCountable = false;
 		}
 	}

@@ -203,7 +203,7 @@ _int CKoukuController::Update_Component(const _float& fTimeDelta)
 				bossWorldPkt.set_objkey("Kouku");
 				const _matrix& matWorld = pKouku->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_matWorld;
 				CClientServiceMgr::Mat2Pkt(matWorld, *bossWorldPkt.mutable_matworld());
-				bossWorldPkt.set_ihp(koukuHP);
+				bossWorldPkt.set_ihp((_uint)koukuHP);
 				CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(bossWorldPkt));
 			}
 		}
