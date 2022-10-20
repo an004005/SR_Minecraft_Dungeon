@@ -47,11 +47,9 @@ HRESULT CKouku::Ready_Object()
 	m_iRedSymbolCnt = 0;
 
 
-	m_pStat->SetMaxHP(1000);
+	m_pStat->SetMaxHP(10000);
 
 
-
-	m_pStat->SetMaxHP(120);
 	if (m_bRemote)
 	{
 		CController* pController = Add_Component<CKoukuRemoteController>(L"Proto_KoukuRemoteController", L"Proto_KoukuRemoteController", ID_DYNAMIC);

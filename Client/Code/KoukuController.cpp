@@ -8,10 +8,16 @@
 
 CKoukuController::CKoukuController()
 {
+	m_fBasicAttackCoolTime = 5.f;
+	m_fDoubleHammerCoolTime = 13.f;
+	m_fHorrorAttackCoolTime = 19.f;
 }
 
 CKoukuController::CKoukuController(const CKoukuController& rhs)
 {
+	m_fBasicAttackCoolTime = 5.f;
+	m_fDoubleHammerCoolTime = 13.f;
+	m_fHorrorAttackCoolTime = 19.f;
 }
 
 CKoukuController::~CKoukuController()
@@ -21,11 +27,11 @@ CKoukuController::~CKoukuController()
 _int CKoukuController::Update_Component(const _float& fTimeDelta)
 {
 	{
-		// m_fCurMoveToTime += fTimeDelta;
+		m_fCurMoveToTime += fTimeDelta;
 
-		// m_fCurDoubleHammerCoolTime += fTimeDelta;
-		// m_fCurHorrorAttackCoolTime += fTimeDelta;
-		// m_fCurBasicAttackCoolTime += fTimeDelta;
+		m_fCurDoubleHammerCoolTime += fTimeDelta;
+		m_fCurHorrorAttackCoolTime += fTimeDelta;
+		m_fCurBasicAttackCoolTime += fTimeDelta;
 
 		if (m_bIsSymbolGimmick)
 		{

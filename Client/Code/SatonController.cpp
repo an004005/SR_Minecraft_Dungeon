@@ -8,12 +8,18 @@
 
 CSatonController::CSatonController()
 {
+	m_fSatonFascinateCoolTime = 60.f;
+	m_fSatonGrapCoolTime = 19.f;
+	m_fSatonBirdCoolTime = 27.f;
+	m_fFirstHammerCoolTime = 7.f;
 }
 
 CSatonController::CSatonController(const CSatonController& rhs)
 {
-	m_fSatonFascinateCoolTime = 8.f;
-	m_fSatonGrapCoolTime = 11.f;
+	m_fSatonFascinateCoolTime = 60.f;
+	m_fSatonGrapCoolTime = 19.f;
+	m_fSatonBirdCoolTime = 27.f;
+	m_fFirstHammerCoolTime = 7.f;
 }
 
 CSatonController::~CSatonController()
@@ -24,9 +30,9 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 {
 	{
 		m_fCurLookAtTime += fTimeDelta;
-		// m_fCurFirstHammerCoolTime += fTimeDelta;
-		// m_fCurSatonBirdCoolTime += fTimeDelta;
-		// m_fCurSatonGrapCoolTime += fTimeDelta;
+		m_fCurFirstHammerCoolTime += fTimeDelta;
+		m_fCurSatonBirdCoolTime += fTimeDelta;
+		m_fCurSatonGrapCoolTime += fTimeDelta;
 		m_fCurSatonFascinateCoolTime += fTimeDelta;
 
 		if(m_bIsDrawMoon)
@@ -138,7 +144,7 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 	{
 		m_fCurSatonFascinateCoolTime = 0.f;
 		saton->SatonFascinate(m_vLookFront, vTargetPos);
-		// m_fSatonFascinateCoolTime = 60.f;
+		m_fSatonFascinateCoolTime = 60.f;
 
 		m_bIsDrawMoon = true;
 
