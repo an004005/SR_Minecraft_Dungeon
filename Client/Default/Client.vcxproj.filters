@@ -512,6 +512,7 @@
     <ClInclude Include="..\Header\Cat2.h">
       <Filter>02. GameObject\Object</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\BossStage.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -925,6 +926,7 @@
     <ClCompile Include="..\Code\Cat2.cpp">
       <Filter>02. GameObject\Object</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\BossStage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">

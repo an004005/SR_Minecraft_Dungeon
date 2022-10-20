@@ -64,7 +64,7 @@ HRESULT CStage::Ready_Scene(void)
 	// Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 	// 	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
 
-	CBatchTool::Load(L"../Bin/Resource/Batch/ASDF.batch");
+	CBatchTool::Load(L"../Bin/Resource/Batch/STAE_FINAL3T.batch");
 
 	return S_OK;
 }
@@ -209,7 +209,6 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	//monsters
 	{	
 	
-		 //CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 3.f, 0.f ,16.f });
 		// CEnemyFactory::Create<CRedStoneMonstrosity>("RedStoneMonstrosity", L"RedStoneMonstrosity", matWorld);
 
 		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.3f, 1.3f, 1.3f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 51.f, 4.f, 95.f });
@@ -501,7 +500,7 @@ void CStage::CreateTrigger()
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 			{
-				CSceneFactory::LoadScene("Loading1", "Stage_Start", true, 500);
+				CSceneFactory::LoadScene("Loading1", "Stage_Boss", true, 500);
 				return true;
 			}
 		}

@@ -100,7 +100,7 @@ _int CEnderman::Update_Object(const _float & fTimeDelta)
 		m_pBossHPUI->SetRender(true);
 	}
 
-	if (m_bClocking)
+	if (m_bClocking && 	m_eState != DEAD)
 	{
 		m_pBossHPUI->SetRender(false);
 		return OBJ_NOEVENT;

@@ -50,11 +50,11 @@ HRESULT CRedStoneMonstrosity::Ready_Object()
 	CController* pController = Add_Component<CRedStoneMonstrosityController>(L"Proto_RedStoneMonstrosityController", L"Proto_RedStoneMonstrosityController", ID_DYNAMIC);
 	pController->SetOwner(this);
 
-	
+	m_pBossHPUI = CUIFactory::Create<CBossHPUI>("BossHPUI", L"BossHPUI", -1, WINCX * 0.5f, WINCY * 0.15f, 500, 25);
+	m_pBossHPUI->SetOwner(L"레드 스톤 몬스터", this, m_pStat->GetMaxHP());
 
 	//cc면역
 	m_bCantCC = true;
-
 	m_bCanPlayAnim = false;
 
 	return S_OK;
@@ -196,11 +196,9 @@ _int CRedStoneMonstrosity::Update_Object(const _float& fTimeDelta)
 	
 
 
-	if (!m_bIntroPlay && m_bStartPlay)
+	if (!m_bIntroPlay)
 	{
 		PlayAnimationOnce(&m_arrAnim[INTRO]);
-		m_pBossHPUI = CUIFactory::Create<CBossHPUI>("BossHPUI", L"BossHPUI", -1, WINCX * 0.5f, WINCY * 0.15f, 500, 25);
-		m_pBossHPUI->SetOwner(L"레드 스톤 몬스터", this, m_pStat->GetMaxHP());
 		m_bIntroPlay = true;
 	}
 

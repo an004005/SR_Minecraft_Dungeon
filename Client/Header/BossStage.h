@@ -1,15 +1,14 @@
 #pragma once
 #include "Scene.h"
-#include "TerrainCubeMap.h"
 
 class CPlayer;
-class CMapUI;
 
-class CStartStage : public CScene
+class CBossStage :
+	public CScene
 {
 private:
-	explicit CStartStage(LPDIRECT3DDEVICE9 pGraphicDev);
-	virtual ~CStartStage();
+	explicit CBossStage(LPDIRECT3DDEVICE9 pGraphicDev);
+	virtual ~CBossStage();
 
 public:
 	virtual HRESULT Ready_Scene(void) override;
@@ -24,11 +23,10 @@ private:
 	_vec3			m_vDir;
 
 public:
-	static CStartStage*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CBossStage*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
 private:
 	virtual void	Free(void);
 	CPlayer* m_pPlayer = nullptr;
-	CMapUI* m_pMapUI = nullptr;
 };
 
