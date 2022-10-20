@@ -327,7 +327,7 @@ enum CLOUDTYPE
 	SHOCKPOWDER,
 	CREEPEREX,
 	DECAL,
-	GOLEMCLOUD,
+	MONSTERCLOUD,
 	GOLEMWINDMILL
 };
 
@@ -352,6 +352,7 @@ public:
 	Engine::CTransform*			m_pTransCom = nullptr;
 	CTexture*			m_pTexture = nullptr;
 	void Free() override;
+	void SetMatrix(_matrix* matWorld) { m_pTransCom->Set_WorldMatrix(matWorld); }
 
 private:
 	_float m_fTime;

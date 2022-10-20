@@ -19,8 +19,7 @@ private:
 	_float m_fAttakCollTime = 2.f;
 	_float m_fCurAttackCollTime = 0.f;
 
-	//_float m_fJumpCollTime = 8.f;
-	_float m_fJumpCollTime = 3.f;
+	_float m_fJumpCollTime = 8.f;
 	_float m_fCurJumpCollTime = 0.f;
 };
 

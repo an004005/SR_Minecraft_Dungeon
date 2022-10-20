@@ -42,7 +42,7 @@ public:
 
 	void ModifyHP(_int iModifyingHP);
 	void TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCauser, DamageType eType = DT_END, _bool bCritical = false);
-	void SetJump() { m_bJump = true; }
+	void SetJump(_bool bJump) { m_bJump = bJump; }
 
 	_bool IsStun() const { return m_bStun || m_bKnockback; }
 	_bool IsDead() const { return m_bDead; }
@@ -116,7 +116,7 @@ private:
 
 	//jump
 	_bool m_bJump = false;
-	_float m_fJumpTime = 1.3f;
+	_float m_fJumpTime = 3.f;
 	_float m_fCurJumpTime = 1.f;
 
 };

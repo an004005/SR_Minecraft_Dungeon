@@ -67,6 +67,7 @@ private:
 	_float m_fJumpTime = 0.1f;
 	_bool m_bLanding = true;
 	_vec3 m_vJumpTargetPos;
+	_bool m_bJumpFire = false;
 
 };
 

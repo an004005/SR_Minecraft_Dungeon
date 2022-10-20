@@ -51,15 +51,15 @@ _int CLeaperController::Update_Component(const _float & fTimeDelta)
 	pLeaper->SetTarget(vTargetPos);
 
 
-	/*if (fTargetDist < 3.f && m_fCurAttackCollTime > m_fAttakCollTime)
+	if (fTargetDist < 3.f && m_fCurAttackCollTime > m_fAttakCollTime)
 	{	
 		pLeaper->DoAttack();
 		m_fCurAttackCollTime = 0.f;
 		return 0;
 
-	}*/
+	}
 
-	if (fTargetDist < 5.f && m_fCurJumpCollTime > m_fJumpCollTime)
+	if (fTargetDist < 10.f && m_fCurJumpCollTime > m_fJumpCollTime)
 	{
 		pLeaper->DoJump();
 		m_fCurJumpCollTime = 0.f;
