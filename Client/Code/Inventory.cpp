@@ -89,7 +89,7 @@ HRESULT CInventory::Ready_Object()
 		fEquipSlotSize = WINCX * 0.09f;
 		m_pItemTexUI = CUIFactory::Create<CItemTexUI>("ItemTexUI", L"ItemTexUI", 0, WINCX * 0.9f, WINCY*0.2f, fEquipSlotSize, fEquipSlotSize);
 	}
-	m_iArrow = 90;
+	m_iArrow = 50;
 	m_iEmerald = 0;
 
 	return S_OK;
@@ -193,8 +193,8 @@ _int CInventory::Update_Object(const _float & fTimeDelta)
 		if (g_bOnline)
 		{
 			Protocol::C_PLAYER_EQUIP equipPkt;
-			equipPkt.mutable_player()->set_id(CClientServiceMgr::GetInstance()->m_iPlayerID);
-			equipPkt.mutable_player()->set_name("test player");
+			equipPkt.mutable_player()->set_id(m_pOwner->GetID());
+			equipPkt.mutable_player()->set_name(m_pOwner->GetName());
 
 			array<Protocol::EquipState, 5> arrEquipProtocol{};
 			GetProtocolFromEquip(arrEquipProtocol[0], m_pMelee);
@@ -374,7 +374,7 @@ void CInventory::Put(CConsumeItem * pItem)
 		m_iEmerald++;
 		break;
 	case IE_ARROW:
-		m_iArrow += 40;
+		m_iArrow += 20;
 		break;
 	case IE_HEAL:
 	{

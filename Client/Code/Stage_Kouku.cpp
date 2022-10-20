@@ -21,6 +21,7 @@
 
 // object
 #include "BirdsBrown.h"
+#include "ObjectStoreMgr.h"
 #include "PlayerStartPos.h"
 
 CStage_Kouku::CStage_Kouku(LPDIRECT3DDEVICE9 pGraphicDev)
@@ -72,8 +73,14 @@ _int CStage_Kouku::Update_Scene(const _float & fTimeDelta)
 			m_bPlayerAlive = true;
 		}
 	}
+	else
+	{
+		if (CPlayer* pPlayer = Get_GameObjectUnCheck<CPlayer>(LAYER_PLAYER, L"Player"))
+		{
+			m_pPlayer = pPlayer;
+		}
+	}
 	
-	Engine::GetFont();
 
 	CSoundMgr::GetInstance()->Update_Listener(LAYER_ENV, L"StaticCamera");
 	CDamageFontMgr::GetInstance()->Update_DamageFontMgr(fTimeDelta);
@@ -213,11 +220,34 @@ HRESULT CStage_Kouku::Ready_Layer_GameLogic()
 	_matrix matWorld;
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 0.f ,42.7f });
-	m_pPlayer = CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld);
+	// m_pPlayer = CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld);
 	// m_pPlayer->PlayerSpawn();
+
+	switch (CObjectStoreMgr::GetInstance()->GetPlayerSkin())
+	{
+	case Protocol::PLAYER_TYPE_STEVE:
+		CPlayerFactory::Create<CPlayer>("Steve", L"Player");
+		break;
+	case Protocol::PLAYER_TYPE_PRIDE:
+		CPlayerFactory::Create<CPlayer>("Pride", L"Player");
+		break;
+	case Protocol::PLAYER_TYPE_ESHE:
+		CPlayerFactory::Create<CPlayer>("Eshe", L"Player");
+		break;
+	case Protocol::PLAYER_TYPE_COPPER:
+		CPlayerFactory::Create<CPlayer>("Copper", L"Player");
+		break;
+	case Protocol::PlayerSkin_INT_MIN_SENTINEL_DO_NOT_USE_:
+	case Protocol::PlayerSkin_INT_MAX_SENTINEL_DO_NOT_USE_:
+	default:
+		_CRASH("Wrong Skin");
+	}
+
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 0.f ,42.7f });
 	CObjectFactory::Create<CPlayerStartPos>("PlayerPos", L"PlayerPos", matWorld);
+
+
 
 	CEffectFactory::Create<C3DBaseTexture>("3D_Base", L"3D_Base");
 	CEffectFactory::Create<CAttack_P>("Attack_Basic", L"Attack_Basic");

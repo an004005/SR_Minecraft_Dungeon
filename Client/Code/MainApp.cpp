@@ -173,8 +173,8 @@ HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement
 	(*ppManagement)->AddRef();
 
 	 // CSceneFactory::LoadScene("Loading1", "Stage_Default", true ,0);
-	 CSceneFactory::LoadScene("Loading1", "Logo", true ,0);
-	//CSceneFactory::LoadScene("Loading1", "Stage_Kouku", true ,0);
+	 // CSceneFactory::LoadScene("Loading1", "Logo", true ,0);
+	CSceneFactory::LoadScene("Loading1", "Stage_Kouku", true ,0);
 
 	return S_OK;
 }

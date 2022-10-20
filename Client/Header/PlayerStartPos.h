@@ -13,9 +13,11 @@ public:
 	virtual void Free() override;
 	static CPlayerStartPos* Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
+	_uint GetID() const { return m_iID; }
 	_matrix GetWorld() const { return m_pTransform->m_matWorld; }
 
 private:
 	CTransform* m_pTransform = nullptr;
+	_uint m_iID = 0;
 };
 

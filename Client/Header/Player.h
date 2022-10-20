@@ -124,6 +124,7 @@ public:
 	void SetName(const string& strName) {m_strName = strName;}
 
 	_float GetYawToCursor();
+	string GetName() { return m_strName;}
 
 	static _bool s_bDropDead;
 private:

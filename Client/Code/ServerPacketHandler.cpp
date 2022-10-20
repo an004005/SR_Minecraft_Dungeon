@@ -51,28 +51,7 @@ bool Handle_S_ENTER_GAME(PacketSessionRef& session, Protocol::S_ENTER_GAME& pkt)
 
 	if (CClientServiceMgr::GetInstance()->m_iPlayerID == pkt.player().id())
 	{
-		CPlayer* pPlayer = nullptr;
-
-		switch (pkt.playerskin())
-		{
-		case Protocol::PLAYER_TYPE_STEVE:
-			pPlayer = CPlayerFactory::Create<CPlayer>("Steve", L"Player");
-			break;
-		case Protocol::PLAYER_TYPE_PRIDE:
-			pPlayer = CPlayerFactory::Create<CPlayer>("Pride", L"Player");
-			break;
-		case Protocol::PLAYER_TYPE_ESHE:
-			pPlayer = CPlayerFactory::Create<CPlayer>("Eshe", L"Player");
-			break;
-		case Protocol::PLAYER_TYPE_COPPER:
-			pPlayer = CPlayerFactory::Create<CPlayer>("Copper", L"Player");
-			break;
-		case Protocol::PlayerSkin_INT_MIN_SENTINEL_DO_NOT_USE_:
-		case Protocol::PlayerSkin_INT_MAX_SENTINEL_DO_NOT_USE_:
-		default:
-			_CRASH("Wrong Skin");
-		}
-		
+		CPlayer* pPlayer = Get_GameObjectUnCheck<CPlayer>(LAYER_PLAYER, L"Player");
 
 		pPlayer->PlayerSpawn();
 		pPlayer->SetID(CClientServiceMgr::GetInstance()->m_iPlayerID);
@@ -236,8 +215,6 @@ bool Handle_S_ALL_PLAYER_ENTER(PacketSessionRef& session, Protocol::S_ALL_PLAYER
 			session->Send(ServerPacketHandler::MakeSendBuffer(koukuSpawnPkt));
 		}
 	}
-
-	//todo : 인벤토리 동기화 여기서 하기
 
 	return true;
 }

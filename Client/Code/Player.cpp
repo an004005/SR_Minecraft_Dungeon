@@ -20,6 +20,7 @@
 #include "ServerPacketHandler.h"
 #include "TerrainCubeMap.h"
 #include "LaserShotRune.h"
+#include "ObjectStoreMgr.h"
 
 /*-----------------------
  *    CCharacter
@@ -95,15 +96,27 @@ HRESULT CPlayer::Ready_Object(const wstring& wstrPath)
 		m_pInventory->AddRef();
 		m_pInventory->SetOwner(this);
 		m_pInventory->AddDefaultItems();
+		m_pInventory->SetArrow(100);
 		m_arrAnim = m_pInventory->CurWeapon(IT_MELEE)->SetarrAnim();
 	}
 	else
 	{
-		m_pInventory = CObjectFactory::Create<CInventory>("Inventory", L"Inventory");
+		if (CObjectStoreMgr::GetInstance()->GetInventory())
+		{
+			m_pInventory = CObjectStoreMgr::GetInstance()->GetInventory();
+			m_pInventory->SetArrow(50);
+		}
+		else
+		{
+			m_pInventory = CObjectFactory::Create<CInventory>("Inventory", L"Inventory");
+			CObjectStoreMgr::GetInstance()->StoreInventory(m_pInventory);
+		}
 		m_pInventory->AddRef();
 		m_pInventory->SetOwner(this);
 		m_pInventory->AddDefaultItems();
 		m_arrAnim = m_pInventory->CurWeapon(IT_MELEE)->SetarrAnim();
+		if (g_bOnline)
+			m_pInventory->RefreshInventory();
 	}
 
 
@@ -321,8 +334,19 @@ void CPlayer::PlayerSpawn()
 	{
 		if (CPlayerStartPos* pStartPos = dynamic_cast<CPlayerStartPos*>(obj.second))
 		{
-			m_pRootPart->pTrans->Set_WorldDecompose(pStartPos->GetWorld());
-			break;
+			if (g_bOnline)
+			{
+				if (pStartPos->GetID() == m_iID)
+				{
+					m_pRootPart->pTrans->Set_WorldDecompose(pStartPos->GetWorld());
+					break;
+				}
+			}
+			else
+			{
+				m_pRootPart->pTrans->Set_WorldDecompose(pStartPos->GetWorld());
+				break;
+			}
 		}
 	}
 
