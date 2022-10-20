@@ -218,7 +218,7 @@ _int CLogo::Update_Scene(const _float& fTimeDelta)
 			{
 				if (m_arrChar[m_iCharNum]->IsStop())
 				{
-					CSceneFactory::LoadScene("Loading1", "Stage_Default", true ,500);
+					CSceneFactory::LoadScene("Loading1", "Stage_Start", true ,500);
 				}
 			}
 		}

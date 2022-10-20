@@ -69,6 +69,9 @@
 #include "Stage_Kouku.h"
 #include "Logo.h"
 #include "Leaper.h"
+#include "MapUI.h"
+#include "StartStage.h"
+#include "MapTable.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -530,6 +533,11 @@ void CObjectFactory::Ready_ObjectFactory()
 	{
 		return CCat_Attack::Create(s_pGraphicDev,L"../Bin/Resource/SkeletalCube/Object/hoddeuk.cube");
 	} });
+	s_mapObjectSpawner.insert({ "MapTable", []()
+	{
+		return CMapTable::Create(s_pGraphicDev);
+	} });
+	
 }
 
 void CItemFactory::Ready_ItemFactory()
@@ -681,11 +689,13 @@ void CUIFactory::Ready_UIFactory()
 	 {
 		 return CClearUI::Create(s_pGraphicDev, 0);
 	 } });
-
-	
 	 s_mapUISpawner.insert({ "EditBox", [](_uint iTexNum)
 	 {
 		 return CEditBox::Create(s_pGraphicDev);
+	 } });
+	 s_mapUISpawner.insert({ "MapUI", [](_uint iTexNum)
+	 {
+		 return CMapUI::Create(s_pGraphicDev, 0);
 	 } });
 	
 }
@@ -739,5 +749,9 @@ void CSceneFactory::Ready_SceneFactory()
 		{
 			return CLogo::Create(s_pGraphicDev);
 		}});
+		s_mapSceneSpawner.insert({ "Stage_Start", []()
+		{
+			return CStartStage::Create(s_pGraphicDev);
+		} });
 	}
 }
