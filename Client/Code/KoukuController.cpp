@@ -20,8 +20,8 @@ CKoukuController::~CKoukuController()
 _int CKoukuController::Update_Component(const _float& fTimeDelta)
 {
 	{
-		m_fCurDoubleHammerCoolTime += fTimeDelta;
-		// m_fCurHorrorAttackCoolTime += fTimeDelta;
+		// m_fCurDoubleHammerCoolTime += fTimeDelta;
+		m_fCurHorrorAttackCoolTime += fTimeDelta;
 		// m_fCurBasicAttackCoolTime += fTimeDelta;
 
 		if (m_bIsSymbolGimmick)

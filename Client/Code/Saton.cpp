@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Saton.h"
 #include "AbstFactory.h"
+#include "Cat_Attack.h"
 #include "Kouku.h"
 #include "Particle.h"
 #include "SatonController.h"
@@ -134,13 +135,29 @@ void CSaton::AnimationEvent(const string& strEvent)
 		m_bIsGrap = false;
 		m_bIsGrapEndAttack = true;
 	}
-	// else if (strEvent == "MakeMoon") // 플레이어 머리 위에 달 띄우기
-	// {
-	//
-	// }
-	// else if (strEvent == "DrawMoon") // 플레이어 위치 받아서 바닥에 달 그리기
-	// {
-	// }
+	else if (strEvent == "Cat_Spawn")
+	{
+		_matrix mat = Get_SkeletalPart("hat_bot")->GetWorldMat();
+		_vec3 v_scale = CGameUtilMgr::s_vOne;
+		_vec3 vBoriPos = _vec3(mat._41 + CGameUtilMgr::GetRandomFloat(-2.5f,2.5f), mat._42 - 0.5f, mat._43 + CGameUtilMgr::GetRandomFloat(-0.5f, 0.5f));
+		_vec3 vRuiPos = _vec3(mat._41 + CGameUtilMgr::GetRandomFloat(-2.5f, 2.5f), mat._42 - 0.5f, mat._43 + CGameUtilMgr::GetRandomFloat(-0.5f, 0.5f));
+		_vec3 vHoddeukPos = _vec3(mat._41 + CGameUtilMgr::GetRandomFloat(-2.5f, 2.5f), mat._42 - 0.5f, mat._43 + CGameUtilMgr::GetRandomFloat(-0.5f, 0.5f));
+		
+		_vec3 vAngle = m_pRootPart->pTrans->m_vAngle;
+		_matrix matBoriWorld, matRuiWorld, matHoddeukWorld;
+		CGameUtilMgr::MatWorldComposeEuler(matBoriWorld,  v_scale ,  vAngle , vBoriPos);
+		CGameUtilMgr::MatWorldComposeEuler(matRuiWorld, v_scale, vAngle, vRuiPos);
+		CGameUtilMgr::MatWorldComposeEuler(matHoddeukWorld, v_scale, vAngle, vHoddeukPos);
+		
+		CObjectFactory::Create<CCat_Attack>("Bori", L"Bori", matBoriWorld);
+		CObjectFactory::Create<CCat_Attack>("Rui", L"Rui", matRuiWorld);
+		CObjectFactory::Create<CCat_Attack>("Hoddeuk", L"Hoddeuk", matHoddeukWorld);
+		m_bIsCatColl = true; 
+	}
+	else if(strEvent == "Cat_Dead")
+	{
+		m_bIsCatColl = false;
+	}
 	else if (strEvent == "ExplodeMoon") // 바닥에 있던 달 위치에 쇼크파우더 뿌리기 
 	{
 
@@ -359,28 +376,47 @@ void CSaton::LateUpdate_Object()
 		}
 		m_pGrabbedList.clear();
 
-		// set<CGameObject*> setObj;
-		// Engine::GetOverlappedObject(setObj, vPos, 3.f);
-		//
-		// for (auto& obj : setObj)
-		// {
-		// 	if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
-		// 	{
-		// 		pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-		// 			->TakeDamage(30, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_HIGH_KNOCK_BACK);
-		// 		pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-		// 			->Graped_Off();
-		// 		IM_LOG("Grap Player Off");
-		// 		// pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)
-		// 		// 	->Set_Pos(vPos.x, vPos.y - 1.5f, vPos.z);
-		// 		break;
-		// 	}
-		// }
-		// DEBUG_SPHERE(vPos, 3.f, 0.1f);
 		m_bIsGrapEndAttack = false;
 	}
 
+	if(m_bIsCatColl)
+	{
+		_vec3& vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 2.f;
+		_vec3& vPos_2 = m_pRootPart->pTrans->m_vInfo[INFO_POS] + m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 4.f;
+		vPos.y = 25.f;
+		vPos_2.y = 25.f;
+
+		set<CGameObject*> setObj1,setObj2;
+		Engine::GetOverlappedObject(setObj1, vPos, 3.f);
+		Engine::GetOverlappedObject(setObj2, vPos_2, 3.f);
+
+		for (auto& obj : setObj1)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+			{
+				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+					->TakeDamage(30, vPos, this, DT_KNOCK_BACK);
+
+				IM_LOG("damage");
+				break;
+			}
+		}
+		DEBUG_SPHERE(vPos, 3.f, 0.1f);
 	
+
+	for (auto& obj : setObj2)
+	{
+		if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+		{
+			pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+				->TakeDamage(30, vPos_2, this, DT_KNOCK_BACK);
+
+			IM_LOG("damage");
+			break;
+		}
+	}
+		DEBUG_SPHERE(vPos_2, 3.f, 0.1f);
+	}
 }
 
 

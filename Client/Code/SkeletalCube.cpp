@@ -213,6 +213,7 @@ void CSkeletalCube::AnimFrameConsume(_float fTimeDelta)
 		if (m_bReserveStop)
 		{
 			m_bStopAnim = true;
+			m_bReserveStop = false;
 			AnimationEvent("AnimStopped");
 			return;
 		}

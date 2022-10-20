@@ -7,6 +7,7 @@
 #include "TerrainCubeMap.h"
 #include "Rune.h"
 #include "Inventory.h"
+#include "Kouku.h"
 
 CGlaive::CGlaive(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CWeapon(pGraphicDev)
@@ -172,6 +173,13 @@ void CGlaive::Collision()
 	{
 		if (CMonster* monster = dynamic_cast<CMonster*>(obj))
 		{
+			if (CKouku* pKouku = dynamic_cast<CKouku*>(obj))
+			{
+				if (pKouku->Kouku_Stun() && m_iAttackCnt == 0)
+				{
+					pKouku->Kouku_Stun_Success();
+				}
+			}
 			DamageType eDT = DT_END;
 			if (m_iAttackCnt == 0) eDT = DT_KNOCK_BACK;
 			if (monster->CheckCC()) eDT = DT_END;

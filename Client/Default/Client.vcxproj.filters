@@ -500,6 +500,7 @@
     <ClInclude Include="..\Header\MapTable.h">
       <Filter>02. GameObject\Object</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\Cat_Attack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -901,6 +902,7 @@
     <ClCompile Include="..\Code\MapTable.cpp">
       <Filter>02. GameObject\Object</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\Cat_Attack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
