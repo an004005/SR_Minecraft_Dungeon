@@ -204,8 +204,10 @@ void CPlayer::LateUpdate_Object()
 		m_bApplyMeleeAttackNext = true;
 	}
 
-	if (s_bDropDead)
-		if (m_pRootPart->pTrans->m_vInfo[INFO_POS].y < 21.f) { m_pStat->TakeDamage(m_pStat->GetMaxHP(), CGameUtilMgr::s_vZero, this); }
+	if (m_eState != DEAD && s_bDropDead && m_pRootPart->pTrans->m_vInfo[INFO_POS].y < 15.f)
+	{
+		m_pStat->SetDead();
+	}
 	
 }
 

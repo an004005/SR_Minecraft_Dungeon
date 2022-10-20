@@ -41,10 +41,15 @@ _int CKoukuController::Update_Component(const _float& fTimeDelta)
 
 	if (m_fCurTargetingCoolTime > m_fTargetingCoolTime)
 	{
+		m_pTargetPlayer = nullptr;
+		m_fTargetDist = 9999.f;
 		for (auto& ele : Get_Layer(LAYER_PLAYER)->Get_MapObject())
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(ele.second))
 			{
+				if (pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)->IsDead())
+						continue;
+
 				vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 				_vec3 vDiff = vTargetPos - vPos;
 				_float fDist = D3DXVec3Length(&vDiff);

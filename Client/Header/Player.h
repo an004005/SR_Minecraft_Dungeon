@@ -186,6 +186,8 @@ protected:
 	_float m_fCurLaserTime = 0.f;
 
 
+
+
 	_vec3 m_vArrowLookAt; // for remote player
 };
 

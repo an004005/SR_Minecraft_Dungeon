@@ -10,6 +10,7 @@
 #include "Stage_Kouku.h"
 #include "SatonController.h"
 #include "StatComponent.h"
+#include "ObjectStoreMgr.h"
 
 PacketHandlerFunc GPacketHandler[UINT16_MAX];
 
@@ -32,10 +33,10 @@ bool Handle_S_LOGIN(PacketSessionRef& session, Protocol::S_LOGIN& pkt)
 	CClientServiceMgr::GetInstance()->m_iPlayerID = pkt.playerid();
 
 	Protocol::C_ENTER_GAME enterPkt;
-
+	
 	enterPkt.mutable_player()->set_id(pkt.playerid());
-	enterPkt.mutable_player()->set_name("Player_test");
-	enterPkt.set_playerskin(Protocol::PLAYER_TYPE_STEVE);
+	enterPkt.mutable_player()->set_name(CObjectStoreMgr::GetInstance()->GetPlayerName());
+	enterPkt.set_playerskin(CObjectStoreMgr::GetInstance()->GetPlayerSkin());
 
 	auto SendBuffer = ServerPacketHandler::MakeSendBuffer(enterPkt);
 	session->Send(SendBuffer);
@@ -50,9 +51,32 @@ bool Handle_S_ENTER_GAME(PacketSessionRef& session, Protocol::S_ENTER_GAME& pkt)
 
 	if (CClientServiceMgr::GetInstance()->m_iPlayerID == pkt.player().id())
 	{
-		CPlayer* pPlayer = Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player");
+		CPlayer* pPlayer = nullptr;
+
+		switch (pkt.playerskin())
+		{
+		case Protocol::PLAYER_TYPE_STEVE:
+			pPlayer = CPlayerFactory::Create<CPlayer>("Steve", L"Player");
+			break;
+		case Protocol::PLAYER_TYPE_PRIDE:
+			pPlayer = CPlayerFactory::Create<CPlayer>("Pride", L"Player");
+			break;
+		case Protocol::PLAYER_TYPE_ESHE:
+			pPlayer = CPlayerFactory::Create<CPlayer>("Eshe", L"Player");
+			break;
+		case Protocol::PLAYER_TYPE_COPPER:
+			pPlayer = CPlayerFactory::Create<CPlayer>("Copper", L"Player");
+			break;
+		case Protocol::PlayerSkin_INT_MIN_SENTINEL_DO_NOT_USE_:
+		case Protocol::PlayerSkin_INT_MAX_SENTINEL_DO_NOT_USE_:
+		default:
+			_CRASH("Wrong Skin");
+		}
+		
+
 		pPlayer->PlayerSpawn();
 		pPlayer->SetID(CClientServiceMgr::GetInstance()->m_iPlayerID);
+		pPlayer->SetName(pkt.player().name());
 		return true;
 	}
 
@@ -64,11 +88,33 @@ bool Handle_S_OTHER_PLAYER(PacketSessionRef& session, Protocol::S_OTHER_PLAYER& 
 	for (int i = 0; i < pkt.player_size(); ++i)
 	{
 		Protocol::Player* pPlayerPkt = pkt.mutable_player(i);
+		Protocol::PlayerSkin eSkin = pkt.playerskin(i);
 		if (pPlayerPkt->id() == CClientServiceMgr::GetInstance()->m_iPlayerID)
 			continue;
 
-		CPlayer* pPlayer = CPlayerFactory::Create<CPlayer>("Steve_Remote", L"Player_Remote_" + to_wstring(pPlayerPkt->id()), CGameUtilMgr::s_matIdentity);
+		CPlayer* pPlayer = nullptr;
+		switch (eSkin)
+		{
+		case Protocol::PLAYER_TYPE_STEVE:
+			pPlayer = CPlayerFactory::Create<CPlayer>("Steve_Remote", L"Player_Remote_" + to_wstring(pPlayerPkt->id()), CGameUtilMgr::s_matIdentity);
+			break;
+		case Protocol::PLAYER_TYPE_PRIDE:
+			pPlayer = CPlayerFactory::Create<CPlayer>("Pride_Remote", L"Player_Remote_" + to_wstring(pPlayerPkt->id()), CGameUtilMgr::s_matIdentity);
+			break;
+		case Protocol::PLAYER_TYPE_ESHE:
+			pPlayer = CPlayerFactory::Create<CPlayer>("Eshe_Remote", L"Player_Remote_" + to_wstring(pPlayerPkt->id()), CGameUtilMgr::s_matIdentity);
+			break;
+		case Protocol::PLAYER_TYPE_COPPER:
+			pPlayer = CPlayerFactory::Create<CPlayer>("Copper_Remote", L"Player_Remote_" + to_wstring(pPlayerPkt->id()), CGameUtilMgr::s_matIdentity);
+			break;
+		case Protocol::PlayerSkin_INT_MIN_SENTINEL_DO_NOT_USE_:
+		case Protocol::PlayerSkin_INT_MAX_SENTINEL_DO_NOT_USE_:
+		default:
+			_CRASH("Wrong Skin");
+		}
+
 		pPlayer->SetID(pPlayerPkt->id());
+		pPlayer->SetName(pPlayerPkt->name());
 		pPlayer->PlayerSpawn();
 	}
 

@@ -112,6 +112,5 @@ private:
 	// ~Saton Grap
 
 	_bool m_bIsSaton = false;
-
 };
 
