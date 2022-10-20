@@ -137,7 +137,7 @@ void CKouku::AnimationEvent(const string& strEvent)
 	else if (strEvent == "Countable")
 	{
 		m_bCountable = true;
-		Get_GameObject<CFireWork>(LAYER_EFFECT, L"FireWork")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.3f, D3DXCOLOR(1.f, 0.4f, 0.25f, 0), 256, 0.4f);
+		Get_GameObject<CFireWork_Kouku>(LAYER_EFFECT, L"Counter_Particle")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.6f, D3DXCOLOR(0.5f, 0.5f, 1.f, 0), 256, 0.4f);
 
 		//파티클 추가
 	}

@@ -235,6 +235,10 @@ void CEffectFactory::Ready_EffectFactory()
 	{
 		return CFireWork::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/bump.png");
 	} });
+	s_mapEffectSpawner.insert({ "Counter_Particle", []()
+	{
+		return CFireWork_Kouku::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/bump.png");
+	} });
 	s_mapEffectSpawner.insert({ "Saton_Particle", []()
 	{
 		return CFireWork::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/torbellino_texture.png");
@@ -507,11 +511,11 @@ void CObjectFactory::Ready_ObjectFactory()
 	{
 		return CBirdsBrown::Create(s_pGraphicDev, BIRD_BROWN);
 	} });
+
 	s_mapObjectSpawner.insert({ "Trigger", []()
 	{
 		return CTrigger::Create(s_pGraphicDev);
 	} });
-
 
 	s_mapObjectSpawner.insert({ "Bori", []()
 	{

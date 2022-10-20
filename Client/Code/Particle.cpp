@@ -753,6 +753,99 @@ void CFireWork::Free()
 
 #pragma endregion
 
+CFireWork_Kouku::~CFireWork_Kouku()
+{
+}
+
+_int CFireWork_Kouku::Update_Object(const _float& fTimeDelta)
+{
+	std::list<Attribute>::iterator i;
+
+	for (i = m_ParticlesList.begin(); i != m_ParticlesList.end(); i++)
+	{
+		if (i->_bIsAlive)
+		{
+			i->_vPosition += i->_vVelocity * fTimeDelta;
+	
+			i->_fAge += fTimeDelta;
+
+			if (i->_fAge > i->_fLifeTime)
+			{
+				i->_bIsAlive = false;
+			}
+		}
+	}
+
+	RemoveDeadParticles();
+	CParticleSystem::Update_Object(fTimeDelta);
+
+	return OBJ_NOEVENT;
+}
+
+void CFireWork_Kouku::Render_Object()
+{
+	CParticleSystem::Render_Object();
+}
+
+void CFireWork_Kouku::Reset_Particle(Attribute* _Attribute)
+{
+	_Attribute->_bIsAlive = true;
+	m_fSize = _Attribute->_fSize;
+
+	_vec3 min = _vec3(-1.0f, 0.0f, -1.0f);
+	_vec3 max = _vec3(1.0f, 1.0f, 1.0f);
+
+	GetRandomVector(
+		&_Attribute->_vVelocity,
+		&min,
+		&max);
+
+	D3DXVec3Normalize(
+		&_Attribute->_vVelocity,
+		&_Attribute->_vVelocity);
+
+	_Attribute->_vVelocity *= 10.f;
+	_Attribute->_vVelocity.y = 0.f;
+
+	_Attribute->_fAge = 0.0f;
+}
+
+void CFireWork_Kouku::PreRender_Particle()
+{
+	CParticleSystem::PreRender_Particle();
+	m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
+	m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, false);
+}
+
+void CFireWork_Kouku::PostRender_Particle()
+{
+	CParticleSystem::PostRender_Particle();
+	m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, true);
+}
+
+CFireWork_Kouku* CFireWork_Kouku::Create(LPDIRECT3DDEVICE9 pGraphicDev, LPCWSTR _TexFileName)
+{
+	CFireWork_Kouku* Inst = new CFireWork_Kouku(pGraphicDev);
+	Inst->Reset_tmp();
+	Inst->m_dwVtxBf_Size = 4096 * 2;
+	Inst->m_dwVtxBf_Offset = 0;
+	Inst->m_dwVtxBf_BatchSize = 1024 * 2;
+	if (FAILED(Inst->Ready_Object(_TexFileName)))
+	{
+		return nullptr;
+	}
+	return Inst;
+}
+
+void CFireWork_Kouku::Free()
+{
+	CParticleSystem::Free();
+}
+
+
+
+
 #pragma region MoonParticle
 CMoonParticle::~CMoonParticle()
 {
