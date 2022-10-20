@@ -55,6 +55,8 @@
 #include "LightningRune.h"
 #include "LaserShotRune.h"
 #include "NetStage.h"
+#include "Cat.h"
+#include "Cat2.h"
 
 #include "ItemTexUI.h"
 #include "RemoteInventory.h"
@@ -65,6 +67,7 @@
 #include "ClearUI.h"
 #include "Trigger.h"
 #include "Enderman.h"
+#include "KoukuHpUI.h"
 #include "Stage_Kouku.h"
 #include "Logo.h"
 #include "Leaper.h"
@@ -537,6 +540,15 @@ void CObjectFactory::Ready_ObjectFactory()
 		return CMapTable::Create(s_pGraphicDev);
 	} });
 	
+	s_mapObjectSpawner.insert({ "Cat", []()
+	{
+		return CCat::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Object/cat.cube");
+	} });
+
+	s_mapObjectSpawner.insert({ "Cat2", []()
+	{
+		return CCat2::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Object/cat.cube");
+	} });
 }
 
 void CItemFactory::Ready_ItemFactory()
@@ -630,6 +642,10 @@ void CUIFactory::Ready_UIFactory()
 	 s_mapUISpawner.insert({ "BossHPUI", [](_uint iTexNum)
 	 {
 		 return CBossHPUI::Create(s_pGraphicDev, -1);//not used
+	 } });
+	 s_mapUISpawner.insert({ "KoukuHPUI", [](_uint iTexNum)
+	 {
+		 return CKoukuHpUI::Create(s_pGraphicDev, -1);//not used
 	 } });
 	 s_mapUISpawner.insert({ "PotionCoolTime", [](_uint iTexNum)
 	 {
