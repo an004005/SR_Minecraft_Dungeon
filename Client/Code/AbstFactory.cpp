@@ -47,6 +47,8 @@
 #include "PlayerStartPos.h"
 #include "Kouku.h"
 #include "Saton.h"
+#include "Cat.h"
+#include "Cat2.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -410,6 +412,15 @@ void CObjectFactory::Ready_ObjectFactory()
 	s_mapObjectSpawner.insert({ "PlayerPos", []()
 	{
 		return CPlayerStartPos::Create(s_pGraphicDev);
+	} });
+	s_mapObjectSpawner.insert({ "Cat", []()
+	{
+		return CCat::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Object/cat.cube");
+	} });
+
+	s_mapObjectSpawner.insert({ "Cat2", []()
+	{
+		return CCat2::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Object/cat.cube");
 	} });
 }
 

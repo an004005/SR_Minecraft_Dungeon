@@ -32,6 +32,8 @@
 // object
 #include "Birds.h"
 #include "BirdsBrown.h"
+#include "Cat.h"
+#include "Cat2.h"
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
 {
@@ -132,10 +134,15 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	//CObjectFactory::Create<CBox>("Box", L"Box2", { 4.f, 9.f, 15.f });
 	// CObjectFactory::Create<CDynamite>("Dynamite", L"Dynamite");
 
-	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 0.f, 0.f ,0.f });
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 1.f, 0.f ,1.f });
 	CPlayerFactory::Create<CPlayer>("Steve", L"Player", matWorld)->PlayerSpawn();
 
-	
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 5.f, 7.f ,10.f });
+	CObjectFactory::Create<CCat>("Cat", L"Cat", matWorld);
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f ,1.f }, { 0.f, D3DXToRadian(90.f), 0.f }, { 33.f, 0.f, 109.f });
+	CObjectFactory::Create<CCat2>("Cat2", L"Cat2", matWorld);
+
 	CEffectFactory::Create<C3DBaseTexture>("3D_Base", L"3D_Base");
 	CEffectFactory::Create<CAttack_P>("Attack_Basic", L"Attack_Basic");
 	CEffectFactory::Create<CFireWork_Fuze>("FireWork_Fuze", L"FireWork_Fuze");

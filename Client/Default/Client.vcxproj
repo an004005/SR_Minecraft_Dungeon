@@ -166,6 +166,8 @@
   <ItemGroup>
     <ClInclude Include="..\Header\AbstFactory.h" />
     <ClInclude Include="..\Header\BatchTool.h" />
+    <ClInclude Include="..\Header\Cat.h" />
+    <ClInclude Include="..\Header\Cat2.h" />
     <ClInclude Include="..\Header\DamageFontMgr.h" />
     <ClInclude Include="..\Header\FireworksArrow.h" />
     <ClInclude Include="..\Header\CamAnimation.h" />
@@ -181,7 +183,6 @@
     <ClInclude Include="..\Header\ArrowBundle.h" />
     <ClInclude Include="..\Header\ArrowCubeMgr.h" />
     <ClInclude Include="..\Header\Axe.h" />
-
     <ClInclude Include="..\Header\BirdsBrown.h" />
     <ClInclude Include="..\Header\Box.h" />
     <ClInclude Include="..\Header\Bread.h" />
@@ -265,6 +266,7 @@
   <ItemGroup>
     <ClCompile Include="..\Code\AbstFactory.cpp" />
     <ClCompile Include="..\Code\BatchTool.cpp" />
+    <ClCompile Include="..\Code\Cat2.cpp" />
     <ClCompile Include="..\Code\DamageFontMgr.cpp" />
     <ClCompile Include="..\Code\FireworksArrow.cpp" />
     <ClCompile Include="..\Code\CamAnimation.cpp" />
@@ -338,6 +340,7 @@
     <ClCompile Include="..\Code\UI.cpp" />
     <ClCompile Include="..\Code\UITool.cpp" />
     <ClCompile Include="BootsOfSwiftness.cpp" />
+    <ClCompile Include="Cat.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="GraphEditor.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
