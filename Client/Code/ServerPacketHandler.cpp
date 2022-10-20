@@ -232,9 +232,16 @@ bool Handle_S_PLAYER_DEAD(PacketSessionRef& session, Protocol::S_PLAYER_DEAD& pk
 	if (CClientServiceMgr::GetInstance()->m_iPlayerID == pkt.player().id()) 
 		return true;
 
-	if (CPlayer* pPlayer = Get_GameObjectUnCheck<CPlayer>(LAYER_PLAYER, L"Player_Remote_" + to_wstring(pkt.player().id())))
+	for (auto& e : Get_Layer(LAYER_PLAYER)->Get_MapObject())
 	{
-		pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)->SetDead();
+		if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(e.second))
+		{
+			if (pPlayer->GetID() == pkt.player().id())
+			{
+				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)->SetDead();
+				break;
+			}
+		}
 	}
 
 	return true;
@@ -248,9 +255,21 @@ bool Handle_S_PLAYER_RESPAWN(PacketSessionRef& session, Protocol::S_PLAYER_RESPA
 	if (CClientServiceMgr::GetInstance()->m_iPlayerID == pkt.player().id()) 
 		return true;
 
-	if (CPlayer* pPlayer = Get_GameObjectUnCheck<CPlayer>(LAYER_PLAYER, L"Player_Remote_" + to_wstring(pkt.player().id())))
+	// if (CPlayer* pPlayer = Get_GameObjectUnCheck<CPlayer>(LAYER_PLAYER, L"Player_Remote_" + to_wstring(pkt.player().id())))
+	// {
+	// 	pPlayer->PlayerSpawn();
+	// }
+
+	for (auto& e : Get_Layer(LAYER_PLAYER)->Get_MapObject())
 	{
-		pPlayer->PlayerSpawn();
+		if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(e.second))
+		{
+			if (pPlayer->GetID() == pkt.player().id())
+			{
+				pPlayer->PlayerSpawn();
+				break;
+			}
+		}
 	}
 
 	return true;
@@ -413,7 +432,7 @@ bool Handle_S_BOSS_WORLD(PacketSessionRef& session, Protocol::S_BOSS_WORLD& pkt)
 		{
 			_matrix matWorld;
 			CClientServiceMgr::Pkt2mat(pkt.matworld(), matWorld);
-			pCon->SetWorld(matWorld);
+			pCon->SetWorld(matWorld, pkt.ihp());
 		}
 	}
 

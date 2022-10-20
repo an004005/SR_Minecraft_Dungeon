@@ -518,6 +518,7 @@ PROTOBUF_CONSTEXPR C_BOSS_WORLD::C_BOSS_WORLD(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.objkey_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.matworld_)*/nullptr
+  , /*decltype(_impl_.ihp_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct C_BOSS_WORLDDefaultTypeInternal {
   PROTOBUF_CONSTEXPR C_BOSS_WORLDDefaultTypeInternal()
@@ -533,6 +534,7 @@ PROTOBUF_CONSTEXPR S_BOSS_WORLD::S_BOSS_WORLD(
     /*decltype(_impl_.objkey_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.matworld_)*/nullptr
   , /*decltype(_impl_.success_)*/false
+  , /*decltype(_impl_.ihp_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct S_BOSS_WORLDDefaultTypeInternal {
   PROTOBUF_CONSTEXPR S_BOSS_WORLDDefaultTypeInternal()
@@ -905,6 +907,7 @@ const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::C_BOSS_WORLD, _impl_.objkey_),
   PROTOBUF_FIELD_OFFSET(::Protocol::C_BOSS_WORLD, _impl_.matworld_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_BOSS_WORLD, _impl_.ihp_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::S_BOSS_WORLD, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -914,6 +917,7 @@ const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   PROTOBUF_FIELD_OFFSET(::Protocol::S_BOSS_WORLD, _impl_.success_),
   PROTOBUF_FIELD_OFFSET(::Protocol::S_BOSS_WORLD, _impl_.objkey_),
   PROTOBUF_FIELD_OFFSET(::Protocol::S_BOSS_WORLD, _impl_.matworld_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_BOSS_WORLD, _impl_.ihp_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::C_SATON_ATTACK, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -986,11 +990,11 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 272, -1, -1, sizeof(::Protocol::C_BOSS_SPAWN)},
   { 280, -1, -1, sizeof(::Protocol::S_BOSS_SPAWN)},
   { 289, -1, -1, sizeof(::Protocol::C_BOSS_WORLD)},
-  { 297, -1, -1, sizeof(::Protocol::S_BOSS_WORLD)},
-  { 306, -1, -1, sizeof(::Protocol::C_SATON_ATTACK)},
-  { 314, -1, -1, sizeof(::Protocol::S_SATON_ATTACK)},
-  { 324, -1, -1, sizeof(::Protocol::C_KOUKU_ATTACK)},
-  { 332, -1, -1, sizeof(::Protocol::S_KOUKU_ATTACK)},
+  { 298, -1, -1, sizeof(::Protocol::S_BOSS_WORLD)},
+  { 308, -1, -1, sizeof(::Protocol::C_SATON_ATTACK)},
+  { 316, -1, -1, sizeof(::Protocol::S_SATON_ATTACK)},
+  { 326, -1, -1, sizeof(::Protocol::C_KOUKU_ATTACK)},
+  { 334, -1, -1, sizeof(::Protocol::S_KOUKU_ATTACK)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -1108,22 +1112,23 @@ const char descriptor_table_protodef_Protocol_2eproto[] PROTOBUF_SECTION_VARIABL
   "_SPAWN\022\017\n\007factory\030\001 \001(\t\022 \n\006matrix\030\003 \001(\0132"
   "\020.Protocol.Matrix\"R\n\014S_BOSS_SPAWN\022\017\n\007suc"
   "cess\030\001 \001(\010\022\017\n\007factory\030\002 \001(\t\022 \n\006matrix\030\003 "
-  "\001(\0132\020.Protocol.Matrix\"B\n\014C_BOSS_WORLD\022\016\n"
+  "\001(\0132\020.Protocol.Matrix\"O\n\014C_BOSS_WORLD\022\016\n"
   "\006objKey\030\001 \001(\t\022\"\n\010matWorld\030\002 \001(\0132\020.Protoc"
-  "ol.Matrix\"S\n\014S_BOSS_WORLD\022\017\n\007success\030\001 \001"
-  "(\010\022\016\n\006objKey\030\002 \001(\t\022\"\n\010matWorld\030\003 \001(\0132\020.P"
-  "rotocol.Matrix\"\\\n\016C_SATON_ATTACK\022\'\n\007patt"
-  "ern\030\001 \001(\0162\026.Protocol.SatonPattern\022!\n\ttar"
-  "getPos\030\002 \001(\0132\016.Protocol.Vec3\"\216\001\n\016S_SATON"
-  "_ATTACK\022\017\n\007success\030\001 \001(\010\022\'\n\007pattern\030\002 \001("
-  "\0162\026.Protocol.SatonPattern\022!\n\ttargetPos\030\003"
-  " \001(\0132\016.Protocol.Vec3\022\037\n\007BossPos\030\004 \001(\0132\016."
-  "Protocol.Vec3\"\\\n\016C_KOUKU_ATTACK\022\'\n\007patte"
-  "rn\030\001 \001(\0162\026.Protocol.KoukuPattern\022!\n\ttarg"
-  "etPos\030\002 \001(\0132\016.Protocol.Vec3\"m\n\016S_KOUKU_A"
-  "TTACK\022\017\n\007success\030\001 \001(\010\022\'\n\007pattern\030\002 \001(\0162"
-  "\026.Protocol.KoukuPattern\022!\n\ttargetPos\030\003 \001"
-  "(\0132\016.Protocol.Vec3b\006proto3"
+  "ol.Matrix\022\013\n\003iHP\030\003 \001(\r\"`\n\014S_BOSS_WORLD\022\017"
+  "\n\007success\030\001 \001(\010\022\016\n\006objKey\030\002 \001(\t\022\"\n\010matWo"
+  "rld\030\003 \001(\0132\020.Protocol.Matrix\022\013\n\003iHP\030\004 \001(\r"
+  "\"\\\n\016C_SATON_ATTACK\022\'\n\007pattern\030\001 \001(\0162\026.Pr"
+  "otocol.SatonPattern\022!\n\ttargetPos\030\002 \001(\0132\016"
+  ".Protocol.Vec3\"\216\001\n\016S_SATON_ATTACK\022\017\n\007suc"
+  "cess\030\001 \001(\010\022\'\n\007pattern\030\002 \001(\0162\026.Protocol.S"
+  "atonPattern\022!\n\ttargetPos\030\003 \001(\0132\016.Protoco"
+  "l.Vec3\022\037\n\007BossPos\030\004 \001(\0132\016.Protocol.Vec3\""
+  "\\\n\016C_KOUKU_ATTACK\022\'\n\007pattern\030\001 \001(\0162\026.Pro"
+  "tocol.KoukuPattern\022!\n\ttargetPos\030\002 \001(\0132\016."
+  "Protocol.Vec3\"m\n\016S_KOUKU_ATTACK\022\017\n\007succe"
+  "ss\030\001 \001(\010\022\'\n\007pattern\030\002 \001(\0162\026.Protocol.Kou"
+  "kuPattern\022!\n\ttargetPos\030\003 \001(\0132\016.Protocol."
+  "Vec3b\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_Protocol_2eproto_deps[2] = {
   &::descriptor_table_Enum_2eproto,
@@ -1131,7 +1136,7 @@ static const ::_pbi::DescriptorTable* const descriptor_table_Protocol_2eproto_de
 };
 static ::_pbi::once_flag descriptor_table_Protocol_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Protocol_2eproto = {
-    false, false, 3466, descriptor_table_protodef_Protocol_2eproto,
+    false, false, 3492, descriptor_table_protodef_Protocol_2eproto,
     "Protocol.proto",
     &descriptor_table_Protocol_2eproto_once, descriptor_table_Protocol_2eproto_deps, 2, 40,
     schemas, file_default_instances, TableStruct_Protocol_2eproto::offsets,
@@ -9550,6 +9555,7 @@ C_BOSS_WORLD::C_BOSS_WORLD(const C_BOSS_WORLD& from)
   new (&_impl_) Impl_{
       decltype(_impl_.objkey_){}
     , decltype(_impl_.matworld_){nullptr}
+    , decltype(_impl_.ihp_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -9564,6 +9570,7 @@ C_BOSS_WORLD::C_BOSS_WORLD(const C_BOSS_WORLD& from)
   if (from._internal_has_matworld()) {
     _this->_impl_.matworld_ = new ::Protocol::Matrix(*from._impl_.matworld_);
   }
+  _this->_impl_.ihp_ = from._impl_.ihp_;
   // @@protoc_insertion_point(copy_constructor:Protocol.C_BOSS_WORLD)
 }
 
@@ -9574,6 +9581,7 @@ inline void C_BOSS_WORLD::SharedCtor(
   new (&_impl_) Impl_{
       decltype(_impl_.objkey_){}
     , decltype(_impl_.matworld_){nullptr}
+    , decltype(_impl_.ihp_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.objkey_.InitDefault();
@@ -9612,6 +9620,7 @@ void C_BOSS_WORLD::Clear() {
     delete _impl_.matworld_;
   }
   _impl_.matworld_ = nullptr;
+  _impl_.ihp_ = 0u;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -9635,6 +9644,14 @@ const char* C_BOSS_WORLD::_InternalParse(const char* ptr, ::_pbi::ParseContext* 
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
           ptr = ctx->ParseMessage(_internal_mutable_matworld(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 iHP = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.ihp_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -9685,6 +9702,12 @@ uint8_t* C_BOSS_WORLD::_InternalSerialize(
         _Internal::matworld(this).GetCachedSize(), target, stream);
   }
 
+  // uint32 iHP = 3;
+  if (this->_internal_ihp() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_ihp(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -9715,6 +9738,11 @@ size_t C_BOSS_WORLD::ByteSizeLong() const {
         *_impl_.matworld_);
   }
 
+  // uint32 iHP = 3;
+  if (this->_internal_ihp() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_ihp());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -9740,6 +9768,9 @@ void C_BOSS_WORLD::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::P
     _this->_internal_mutable_matworld()->::Protocol::Matrix::MergeFrom(
         from._internal_matworld());
   }
+  if (from._internal_ihp() != 0) {
+    _this->_internal_set_ihp(from._internal_ihp());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -9763,7 +9794,12 @@ void C_BOSS_WORLD::InternalSwap(C_BOSS_WORLD* other) {
       &_impl_.objkey_, lhs_arena,
       &other->_impl_.objkey_, rhs_arena
   );
-  swap(_impl_.matworld_, other->_impl_.matworld_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(C_BOSS_WORLD, _impl_.ihp_)
+      + sizeof(C_BOSS_WORLD::_impl_.ihp_)
+      - PROTOBUF_FIELD_OFFSET(C_BOSS_WORLD, _impl_.matworld_)>(
+          reinterpret_cast<char*>(&_impl_.matworld_),
+          reinterpret_cast<char*>(&other->_impl_.matworld_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata C_BOSS_WORLD::GetMetadata() const {
@@ -9802,6 +9838,7 @@ S_BOSS_WORLD::S_BOSS_WORLD(const S_BOSS_WORLD& from)
       decltype(_impl_.objkey_){}
     , decltype(_impl_.matworld_){nullptr}
     , decltype(_impl_.success_){}
+    , decltype(_impl_.ihp_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -9816,7 +9853,9 @@ S_BOSS_WORLD::S_BOSS_WORLD(const S_BOSS_WORLD& from)
   if (from._internal_has_matworld()) {
     _this->_impl_.matworld_ = new ::Protocol::Matrix(*from._impl_.matworld_);
   }
-  _this->_impl_.success_ = from._impl_.success_;
+  ::memcpy(&_impl_.success_, &from._impl_.success_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.ihp_) -
+    reinterpret_cast<char*>(&_impl_.success_)) + sizeof(_impl_.ihp_));
   // @@protoc_insertion_point(copy_constructor:Protocol.S_BOSS_WORLD)
 }
 
@@ -9828,6 +9867,7 @@ inline void S_BOSS_WORLD::SharedCtor(
       decltype(_impl_.objkey_){}
     , decltype(_impl_.matworld_){nullptr}
     , decltype(_impl_.success_){false}
+    , decltype(_impl_.ihp_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.objkey_.InitDefault();
@@ -9866,7 +9906,9 @@ void S_BOSS_WORLD::Clear() {
     delete _impl_.matworld_;
   }
   _impl_.matworld_ = nullptr;
-  _impl_.success_ = false;
+  ::memset(&_impl_.success_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.ihp_) -
+      reinterpret_cast<char*>(&_impl_.success_)) + sizeof(_impl_.ihp_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -9898,6 +9940,14 @@ const char* S_BOSS_WORLD::_InternalParse(const char* ptr, ::_pbi::ParseContext* 
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
           ptr = ctx->ParseMessage(_internal_mutable_matworld(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 iHP = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          _impl_.ihp_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -9954,6 +10004,12 @@ uint8_t* S_BOSS_WORLD::_InternalSerialize(
         _Internal::matworld(this).GetCachedSize(), target, stream);
   }
 
+  // uint32 iHP = 4;
+  if (this->_internal_ihp() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(4, this->_internal_ihp(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -9989,6 +10045,11 @@ size_t S_BOSS_WORLD::ByteSizeLong() const {
     total_size += 1 + 1;
   }
 
+  // uint32 iHP = 4;
+  if (this->_internal_ihp() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_ihp());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -10017,6 +10078,9 @@ void S_BOSS_WORLD::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::P
   if (from._internal_success() != 0) {
     _this->_internal_set_success(from._internal_success());
   }
+  if (from._internal_ihp() != 0) {
+    _this->_internal_set_ihp(from._internal_ihp());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -10041,8 +10105,8 @@ void S_BOSS_WORLD::InternalSwap(S_BOSS_WORLD* other) {
       &other->_impl_.objkey_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(S_BOSS_WORLD, _impl_.success_)
-      + sizeof(S_BOSS_WORLD::_impl_.success_)
+      PROTOBUF_FIELD_OFFSET(S_BOSS_WORLD, _impl_.ihp_)
+      + sizeof(S_BOSS_WORLD::_impl_.ihp_)
       - PROTOBUF_FIELD_OFFSET(S_BOSS_WORLD, _impl_.matworld_)>(
           reinterpret_cast<char*>(&_impl_.matworld_),
           reinterpret_cast<char*>(&other->_impl_.matworld_));

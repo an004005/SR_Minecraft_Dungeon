@@ -8,18 +8,18 @@
 
 CSatonController::CSatonController()
 {
-	m_fSatonFascinateCoolTime = 60.f;
+	m_fSatonFascinateCoolTime = 10000.f;
 	m_fSatonGrapCoolTime = 19.f;
 	m_fSatonBirdCoolTime = 27.f;
-	m_fFirstHammerCoolTime = 13.f;
+	m_fFirstHammerCoolTime = 11.f;
 }
 
 CSatonController::CSatonController(const CSatonController& rhs)
 {
-	m_fSatonFascinateCoolTime = 60.f;
+	m_fSatonFascinateCoolTime = 10000.f;
 	m_fSatonGrapCoolTime = 19.f;
 	m_fSatonBirdCoolTime = 27.f;
-	m_fFirstHammerCoolTime = 13.f;
+	m_fFirstHammerCoolTime = 11.f;
 }
 
 CSatonController::~CSatonController()

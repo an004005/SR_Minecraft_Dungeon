@@ -6258,6 +6258,7 @@ class C_BOSS_WORLD final :
   enum : int {
     kObjKeyFieldNumber = 1,
     kMatWorldFieldNumber = 2,
+    kIHPFieldNumber = 3,
   };
   // string objKey = 1;
   void clear_objkey();
@@ -6291,6 +6292,15 @@ class C_BOSS_WORLD final :
       ::Protocol::Matrix* matworld);
   ::Protocol::Matrix* unsafe_arena_release_matworld();
 
+  // uint32 iHP = 3;
+  void clear_ihp();
+  uint32_t ihp() const;
+  void set_ihp(uint32_t value);
+  private:
+  uint32_t _internal_ihp() const;
+  void _internal_set_ihp(uint32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.C_BOSS_WORLD)
  private:
   class _Internal;
@@ -6301,6 +6311,7 @@ class C_BOSS_WORLD final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr objkey_;
     ::Protocol::Matrix* matworld_;
+    uint32_t ihp_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -6432,6 +6443,7 @@ class S_BOSS_WORLD final :
     kObjKeyFieldNumber = 2,
     kMatWorldFieldNumber = 3,
     kSuccessFieldNumber = 1,
+    kIHPFieldNumber = 4,
   };
   // string objKey = 2;
   void clear_objkey();
@@ -6474,6 +6486,15 @@ class S_BOSS_WORLD final :
   void _internal_set_success(bool value);
   public:
 
+  // uint32 iHP = 4;
+  void clear_ihp();
+  uint32_t ihp() const;
+  void set_ihp(uint32_t value);
+  private:
+  uint32_t _internal_ihp() const;
+  void _internal_set_ihp(uint32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.S_BOSS_WORLD)
  private:
   class _Internal;
@@ -6485,6 +6506,7 @@ class S_BOSS_WORLD final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr objkey_;
     ::Protocol::Matrix* matworld_;
     bool success_;
+    uint32_t ihp_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -11546,6 +11568,26 @@ inline void C_BOSS_WORLD::set_allocated_matworld(::Protocol::Matrix* matworld) {
   // @@protoc_insertion_point(field_set_allocated:Protocol.C_BOSS_WORLD.matWorld)
 }
 
+// uint32 iHP = 3;
+inline void C_BOSS_WORLD::clear_ihp() {
+  _impl_.ihp_ = 0u;
+}
+inline uint32_t C_BOSS_WORLD::_internal_ihp() const {
+  return _impl_.ihp_;
+}
+inline uint32_t C_BOSS_WORLD::ihp() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_BOSS_WORLD.iHP)
+  return _internal_ihp();
+}
+inline void C_BOSS_WORLD::_internal_set_ihp(uint32_t value) {
+  
+  _impl_.ihp_ = value;
+}
+inline void C_BOSS_WORLD::set_ihp(uint32_t value) {
+  _internal_set_ihp(value);
+  // @@protoc_insertion_point(field_set:Protocol.C_BOSS_WORLD.iHP)
+}
+
 // -------------------------------------------------------------------
 
 // S_BOSS_WORLD
@@ -11703,6 +11745,26 @@ inline void S_BOSS_WORLD::set_allocated_matworld(::Protocol::Matrix* matworld) {
   }
   _impl_.matworld_ = matworld;
   // @@protoc_insertion_point(field_set_allocated:Protocol.S_BOSS_WORLD.matWorld)
+}
+
+// uint32 iHP = 4;
+inline void S_BOSS_WORLD::clear_ihp() {
+  _impl_.ihp_ = 0u;
+}
+inline uint32_t S_BOSS_WORLD::_internal_ihp() const {
+  return _impl_.ihp_;
+}
+inline uint32_t S_BOSS_WORLD::ihp() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_BOSS_WORLD.iHP)
+  return _internal_ihp();
+}
+inline void S_BOSS_WORLD::_internal_set_ihp(uint32_t value) {
+  
+  _impl_.ihp_ = value;
+}
+inline void S_BOSS_WORLD::set_ihp(uint32_t value) {
+  _internal_set_ihp(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_BOSS_WORLD.iHP)
 }
 
 // -------------------------------------------------------------------

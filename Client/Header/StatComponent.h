@@ -55,6 +55,7 @@ public:
 	void IsSaton() { m_bIsSaton = !m_bIsSaton; }
 	void Graped_Off() { m_bGraped = false; }
 	void Revive();
+	void SetHP(_int iHP) { m_iHP = iHP;}
 
 	// cur hp, max hp, damage
 	BaseDelegater<_int, _uint, _int> m_DamageDelegater;

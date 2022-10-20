@@ -8,16 +8,16 @@
 
 CKoukuController::CKoukuController()
 {
-	m_fBasicAttackCoolTime = 7.f;
-	m_fDoubleHammerCoolTime = 17.f;
-	m_fHorrorAttackCoolTime = 23.f;
+	m_fBasicAttackCoolTime = 5.f;
+	m_fDoubleHammerCoolTime = 21.f;
+	m_fHorrorAttackCoolTime = 13.f;
 }
 
 CKoukuController::CKoukuController(const CKoukuController& rhs)
 {
-	m_fBasicAttackCoolTime = 7.f;
-	m_fDoubleHammerCoolTime = 17.f;
-	m_fHorrorAttackCoolTime = 23.f;
+	m_fBasicAttackCoolTime = 5.f;
+	m_fDoubleHammerCoolTime = 21.f;
+	m_fHorrorAttackCoolTime = 13.f;
 }
 
 CKoukuController::~CKoukuController()
@@ -203,6 +203,7 @@ _int CKoukuController::Update_Component(const _float& fTimeDelta)
 				bossWorldPkt.set_objkey("Kouku");
 				const _matrix& matWorld = pKouku->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_matWorld;
 				CClientServiceMgr::Mat2Pkt(matWorld, *bossWorldPkt.mutable_matworld());
+				bossWorldPkt.set_ihp(koukuHP);
 				CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(bossWorldPkt));
 			}
 		}
@@ -267,6 +268,9 @@ _int CKoukuRemoteController::Update_Component(const _float& fTimeDelta)
 	{
 		pKouku->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)
 			->Set_WorldDecompose(m_matWorld);
+		pKouku->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+			->SetHP(m_iHP);
+
 		m_bWorldSet.store(false);
 	}
 

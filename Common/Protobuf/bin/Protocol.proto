@@ -235,6 +235,7 @@ message C_BOSS_WORLD
 {
 	string objKey = 1;
 	Matrix matWorld = 2;
+	uint32 iHP = 3;
 }
 
 message S_BOSS_WORLD
@@ -242,6 +243,7 @@ message S_BOSS_WORLD
 	bool success = 1;
 	string objKey = 2;
 	Matrix matWorld = 3;
+	uint32 iHP = 4;
 }
 
 // saton(big)

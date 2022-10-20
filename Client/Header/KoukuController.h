@@ -65,9 +65,10 @@ public:
 public:
 	static CKoukuRemoteController* Create();
 
-	void SetWorld(const _matrix& matWorld)
+	void SetWorld(const _matrix& matWorld, _uint iHP)
 	{
 		m_matWorld = matWorld;
+		m_iHP = iHP;
 		m_bWorldSet.store(true);
 	}
 
@@ -83,4 +84,5 @@ private:
 	Atomic<_bool> m_bWorldSet{false};
 	
 	list<pair<_vec3, Protocol::KoukuPattern>> m_patternList;
+	_uint m_iHP;
 };
