@@ -860,7 +860,20 @@ _int CMoonParticle::Update_Object(const _float& fTimeDelta)
 		if (i->_bIsAlive)
 		{
 			i->_fAge += fTimeDelta;
-			CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
+
+			CTransform*	pPlayerTransform = nullptr;
+			for (auto& e : Get_Layer(LAYER_PLAYER)->Get_MapObject())
+			{
+				if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(e.second))
+				{
+					if (pPlayer->GetID() == 0)
+					{
+						pPlayerTransform = pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+						break;
+					}
+				}
+			}
+
 			_vec3 pPos;
 			pPlayerTransform->Get_Info(INFO_POS, &pPos);
 			if (i->_color == D3DXCOLOR(1.f, 1.f, 1.f, 1.f))
@@ -906,7 +919,19 @@ void CMoonParticle::Reset_Particle(Attribute* _Attribute)
 
 	if (_Attribute->_color == D3DXCOLOR(1.f, 1.f, 1.f, 1.f))
 	{
-		CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
+
+		CTransform*	pPlayerTransform = nullptr;
+		for (auto& e : Get_Layer(LAYER_PLAYER)->Get_MapObject())
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(e.second))
+			{
+				if (pPlayer->GetID() == 0)
+				{
+					pPlayerTransform = pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+					break;
+				}
+			}
+		}
 		_vec3 pPos;
 		pPlayerTransform->Get_Info(INFO_POS, &pPos);
 
@@ -996,9 +1021,21 @@ _int CFascinated_Effect::Update_Object(const _float& fTimeDelta)
 		if (i->_bIsAlive)
 		{
 			i->_fAge += fTimeDelta;
-			CTransform*	pPlayerTransform = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
-			_vec3 pPos;
-			pPlayerTransform->Get_Info(INFO_POS, &pPos);
+
+	/*		CTransform*	pPlayerTransform = nullptr;
+			for (auto& e : Get_Layer(LAYER_PLAYER)->Get_MapObject())
+			{
+				if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(e.second))
+				{
+					if (pPlayer->GetID() == 0)
+					{
+						pPlayerTransform = pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+						break;
+					}
+				}
+			}*/
+
+			_vec3 pPos = i->_vPosition;
 			i->_vPosition = pPos;
 			i->_vPosition.y = pPos.y + 3.f;
 			if (i->_fAge > i->_fLifeTime)
@@ -1070,6 +1107,87 @@ CFascinated_Effect* CFascinated_Effect::Create(LPDIRECT3DDEVICE9 pGraphicDev, LP
 void CFascinated_Effect::Free()
 {
 	CParticleSystem::Free();
+}
+
+
+CFascinate::~CFascinate()
+{
+}
+
+HRESULT CFascinate::Ready_Object(_float _size)
+{
+   m_pBufferCom = Add_Component<CRcShader>(L"Proto_FaciCom", L"Proto_FaciCom", ID_STATIC);
+   m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
+   m_pTexture = Add_Component<CTexture>(L"Proto_Fascinated", L"Proto_Fascinated", ID_STATIC);
+   // m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
+   m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
+   m_pBufferCom->Set_TextureOption(0, 0, 0);
+
+
+   m_pTransCom->Set_Scale(_size, _size, _size);
+   // m_fSpeed = 6.f;
+   m_fTime = 4.f;
+   m_fCurTime = 0.f;
+   m_pTransCom->Update_Component(0.f);
+   return S_OK;
+}
+
+_int CFascinate::Update_Object(const _float& fTimeDelta)
+{
+   if (m_fCurTime >= m_fTime)
+      return OBJ_DEAD;
+
+   m_fCurTime += fTimeDelta;
+
+   CGameObject::Update_Object(fTimeDelta);
+
+   m_pTransCom->m_vAngle.y += D3DXToRadian(40.f) * fTimeDelta * m_fSpeed;
+
+   m_pBufferCom->m_matWorld = m_pTransCom->m_matWorld;
+
+   Add_RenderGroup(RENDER_NONALPHA, this);
+
+   return OBJ_NOEVENT;
+}
+
+void CFascinate::Render_Object()
+{
+   CGameObject::Render_Object();
+   m_pBufferCom->Render_Buffer();
+}
+
+void CFascinate::LateUpdate_Object()
+{
+   CGameObject::LateUpdate_Object();
+}
+
+void CFascinate::PreRender_Particle()
+{
+}
+
+void CFascinate::PostRender_Particle()
+{
+}
+
+void CFascinate::SetPos(const _vec3& vPos)
+{
+   m_pTransCom->m_vInfo[INFO_POS] = vPos;
+}
+
+CFascinate* CFascinate::Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size)
+{
+   CFascinate* Inst = new CFascinate(pGraphicDev);
+
+   if (FAILED(Inst->Ready_Object(_size)))
+   {
+      return nullptr;
+   }
+   return Inst;
+}
+
+void CFascinate::Free()
+{
+   CGameObject::Free();
 }
 #pragma endregion
 

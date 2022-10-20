@@ -4,7 +4,7 @@ class CPlayer;
 
 class CKoukuController :public CController
 {
-private:
+protected:
 	explicit CKoukuController(void);
 	explicit CKoukuController(const CKoukuController& rhs);
 	virtual ~CKoukuController() override;
@@ -16,7 +16,7 @@ public:
 public:
 	static CKoukuController* Create();
 
-private:
+protected:
 	CPlayer* m_pTargetPlayer = nullptr;
 
 
@@ -46,5 +46,43 @@ private:
 	_float m_fDist = 5.f;
 
 	_float m_fTargetDist = 9999.f;
+
+	_float m_fMoveToTime = 0.2f;
+	_float m_fCurMoveToTime = 0.2f;
 };
 
+class CKoukuRemoteController : public CKoukuController
+{
+private:
+	explicit CKoukuRemoteController(void);
+	explicit CKoukuRemoteController(const CKoukuRemoteController& rhs);
+	virtual ~CKoukuRemoteController() override;
+
+public:
+	virtual _int Update_Component(const _float& fTimeDelta) override;
+	virtual CComponent* Clone() override;
+	virtual void Free() override;
+public:
+	static CKoukuRemoteController* Create();
+
+	void SetWorld(const _matrix& matWorld, _uint iHP)
+	{
+		m_matWorld = matWorld;
+		m_iHP = iHP;
+		m_bWorldSet.store(true);
+	}
+
+	void SetPattern(_vec3 vTargetPos, Protocol::KoukuPattern ePattern)
+	{
+		WRITE_LOCK;
+		m_patternList.push_back({vTargetPos, ePattern});
+	}
+
+private:
+	USE_LOCK;
+	_matrix m_matWorld;
+	Atomic<_bool> m_bWorldSet{false};
+	
+	list<pair<_vec3, Protocol::KoukuPattern>> m_patternList;
+	_uint m_iHP;
+};

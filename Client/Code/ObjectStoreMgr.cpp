@@ -35,4 +35,5 @@ void CObjectStoreMgr::SetPlayerSkin(CharacterSelect eSkin)
 
 void CObjectStoreMgr::Free()
 {
+	Safe_Release(m_pPlayerInven);
 }

@@ -40,9 +40,10 @@ public:
 	_int GetHP() const { return m_iHP; }
 	_uint GetMaxHP() const { return m_iMaxHP;}
 
-	void ModifyHP(_int iModifyingHP);
+	void ModifyHP(_int iModifyingHP, _bool bEffect = true);
 	void TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCauser, DamageType eType = DT_END, _bool bCritical = false);
 	void SetJump(_bool bJump) { m_bJump = bJump; }
+	void SetDead();
 
 	_bool IsStun() const { return m_bStun || m_bKnockback; }
 	_bool IsDead() const { return m_bDead; }
@@ -54,6 +55,7 @@ public:
 	void IsSaton() { m_bIsSaton = !m_bIsSaton; }
 	void Graped_Off() { m_bGraped = false; }
 	void Revive();
+	void SetHP(_int iHP) { m_iHP = iHP;}
 
 	// cur hp, max hp, damage
 	BaseDelegater<_int, _uint, _int> m_DamageDelegater;
@@ -103,6 +105,7 @@ private:
 	_bool m_bFascinated = false;
 	_float m_fSatonFascinatedTime = 4.f;
 	_float m_fCurSatonFascinatedTime = 0.f;
+	class CFascinate* m_pFaci = nullptr;
 	// CFascinate_Effect* m_pFascinate = nullptr;
 
 	// Saton Grap

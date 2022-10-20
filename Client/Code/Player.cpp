@@ -20,6 +20,7 @@
 #include "ServerPacketHandler.h"
 #include "TerrainCubeMap.h"
 #include "LaserShotRune.h"
+#include "ObjectStoreMgr.h"
 
 /*-----------------------
  *    CCharacter
@@ -95,15 +96,37 @@ HRESULT CPlayer::Ready_Object(const wstring& wstrPath)
 		m_pInventory->AddRef();
 		m_pInventory->SetOwner(this);
 		m_pInventory->AddDefaultItems();
+		m_pInventory->SetArrow(100);
 		m_arrAnim = m_pInventory->CurWeapon(IT_MELEE)->SetarrAnim();
 	}
 	else
 	{
+		// if (CObjectStoreMgr::GetInstance()->GetInventory())
+		// {
+		// 	m_pInventory = CObjectStoreMgr::GetInstance()->GetInventory();
+		// 	m_pInventory->SetArrow(50);
+		// 	m_pInventory->AddItemToLayer();
+		// 	m_pInventory->AddRef();
+		// 	m_pInventory->SetOwner(this);
+		// 	Get_Layer(LAYER_GAMEOBJ)->Add_GameObject(L"Inventory", m_pInventory);
+		// }
+		// else
+		// {
+		// 	m_pInventory = CObjectFactory::Create<CInventory>("Inventory", L"Inventory");
+		// 	CObjectStoreMgr::GetInstance()->StoreInventory(m_pInventory);
+		// 	m_pInventory->AddRef();
+		// 	m_pInventory->SetOwner(this);
+		// 	m_pInventory->AddDefaultItems();
+		// }
 		m_pInventory = CObjectFactory::Create<CInventory>("Inventory", L"Inventory");
+		// CObjectStoreMgr::GetInstance()->StoreInventory(m_pInventory);
 		m_pInventory->AddRef();
 		m_pInventory->SetOwner(this);
 		m_pInventory->AddDefaultItems();
+
 		m_arrAnim = m_pInventory->CurWeapon(IT_MELEE)->SetarrAnim();
+		if (g_bOnline)
+			m_pInventory->RefreshInventory();
 	}
 
 
@@ -138,10 +161,13 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 			m_CurPotionCoolTime += fTimeDelta;
 
 	//IM_BEGIN("TEst");
+#ifdef _DEBUG
+	IM_BEGIN("TEst"); // 
 
-	//_vec3 vpos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
-	//ImGui::Text("%f, %f, %f", vpos.x, vpos.y, vpos.z);
-	//IM_END;
+	_vec3 vpos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+	ImGui::Text("%f, %f, %f", vpos.x, vpos.y, vpos.z);
+	IM_END;
+#endif
 
 
 	// 상태 변경 조건 설정
@@ -203,8 +229,10 @@ void CPlayer::LateUpdate_Object()
 		m_bApplyMeleeAttackNext = true;
 	}
 
-	if (s_bDropDead)
-		if (m_pRootPart->pTrans->m_vInfo[INFO_POS].y < 21.f) { m_pStat->TakeDamage(m_pStat->GetMaxHP(), CGameUtilMgr::s_vZero, this); }
+	if (m_eState != DEAD && s_bDropDead && m_pRootPart->pTrans->m_vInfo[INFO_POS].y < 15.f)
+	{
+		m_pStat->SetDead();
+	}
 	
 }
 
@@ -221,9 +249,13 @@ void CPlayer::Render_Object()
 
 		_vec2 vScreen;
 		CGameUtilMgr::World2Screen(vScreen, m_pColl->GetCollPos() + _vec3{0.f, 2.3f, 0.f}, matView, matProj, viewport);
-		const wstring tmp(m_strName.begin(), m_strName.end());
+		wstring tmp(m_strName.begin(), m_strName.end());
+#ifdef _DEBUG
+		tmp = tmp + to_wstring(m_iID);
+#endif
 		_float fHalf = 10.f * _float(tmp.size()) / 2;
 		vScreen.x -= fHalf;
+
 		Engine::Render_Font(L"Gothic_Bold20", tmp.c_str(), &vScreen, D3DCOLOR_ARGB(255, 255, 255, 255));
 
 		CSkeletalCube::Render_Object();
@@ -314,11 +346,23 @@ void CPlayer::PlayerSpawn()
 	{
 		if (CPlayerStartPos* pStartPos = dynamic_cast<CPlayerStartPos*>(obj.second))
 		{
-			m_pRootPart->pTrans->Set_WorldDecompose(pStartPos->GetWorld());
-			break;
+			if (g_bOnline)
+			{
+				if (pStartPos->GetID() == m_iID)
+				{
+					m_pRootPart->pTrans->Set_WorldDecompose(pStartPos->GetWorld());
+					break;
+				}
+			}
+			else
+			{
+				m_pRootPart->pTrans->Set_WorldDecompose(pStartPos->GetWorld());
+				break;
+			}
 		}
 	}
 
+	// todo 부활 사운드로 죽음 사운드 덮기
 	Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")->ResetPosition();
 	m_pColl->SetStart();
 	m_pStat->Revive();
@@ -508,7 +552,9 @@ void CPlayer::StateChange()
 	{
 		if (m_bReserveStop == false)
 		{
-			CSoundMgr::GetInstance()->PlaySound(L"sfx_playerDead-001_soundWave.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+			if (m_bRemote == false)
+				CSoundMgr::GetInstance()->PlaySound(L"sfx_playerDead-001_soundWave.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+				// CSoundMgr::GetInstance()->PlaySoundChannel(L"sfx_playerDead-001_soundWave.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS], SOUND_UI);
 			m_eState = DEAD;
 			PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
 			m_bRoll = false;
@@ -517,6 +563,13 @@ void CPlayer::StateChange()
 			m_bLaser = false;
 			m_bCanPlayAnim = false;
 			m_pColl->SetStop();
+
+			if (g_bOnline && m_bRemote == false)
+			{
+				Protocol::C_PLAYER_DEAD deadPkt;
+				deadPkt.mutable_player()->set_id(CClientServiceMgr::GetInstance()->m_iPlayerID);
+				CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(deadPkt));
+			}
 		}
 		return;
 	}
@@ -778,6 +831,8 @@ void CPlayer::UsePotion()
 	}
 	else
 	{
+		m_pStat->ModifyHP(_int(_float(m_pStat->GetMaxHP()) * 0.7f));
+
 		// particle
 		CEffectFactory::Create<CHealCircle>("Heal_Circle_L", L"Heal_Circle_L", m_pRootPart->pTrans->m_vInfo[INFO_POS])
 			->SetFollow(m_pRootPart->pTrans);

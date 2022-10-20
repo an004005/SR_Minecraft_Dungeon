@@ -5,6 +5,7 @@
 #include "Kouku.h"
 #include "Particle.h"
 #include "SatonController.h"
+#include "ServerPacketHandler.h"
 #include "Skeleton.h"
 #include "StatComponent.h"
 #include "StaticCamera.h"
@@ -42,8 +43,17 @@ HRESULT CSaton::Ready_Object()
 	// m_pRootPart->pTrans->Set_Pos(62.5f, 20.5f, 49.4f);
 	m_pRootPart->pTrans->m_vInfo[INFO_POS].y = 20.5f;
 
-	CController* pController = Add_Component<CSatonController>(L"Proto_SatonController", L"Proto_SatonController", ID_DYNAMIC);
-	pController->SetOwner(this);
+	if (m_bRemote)
+	{
+		CController* pController = Add_Component<CSatonController>(L"Proto_SatonRemoteController", L"Proto_SatonRemoteController", ID_DYNAMIC);
+		pController->SetOwner(this);
+	}
+	else
+	{
+		CController* pController = Add_Component<CSatonController>(L"Proto_SatonController", L"Proto_SatonController", ID_DYNAMIC);
+		pController->SetOwner(this);
+	}
+
 	m_fCurTime = 0.f;
 	m_fTime = 1.f;
 	//cc¸é¿ª
@@ -256,7 +266,7 @@ void CSaton::LateUpdate_Object()
 			{
 				CStatComponent* PlayerStatCom = pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC);
 
-				if (!PlayerStatCom->IsSatonSymbol_Blue())
+				if (pPlayer->GetID() == 0)
 				{
 					PlayerStatCom->TakeDamage(0, pPlayer->GetInfo(INFO_POS), this, DT_STUN);
 				}
@@ -435,10 +445,10 @@ void CSaton::Free()
 	CMonster::Free();
 }
 
-CSaton* CSaton::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
+CSaton* CSaton::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath, _bool bRemote)
 {
 	CSaton* pInstance = new CSaton(pGraphicDev);
-
+	pInstance->m_bRemote = bRemote;
 	if (FAILED(pInstance->Ready_Object()))
 	{
 		Safe_Release(pInstance);
@@ -470,7 +480,14 @@ void CSaton::StateChange()
 		RotateToTargetPos(m_vTargetPos);
 		PlayAnimationOnce(&m_arrAnim[FIRSTATTACK]);
 		m_bCanPlayAnim = false;
+
+		Protocol::C_DEBUG_PKT pkt;
+		string debug = "Player : " +  to_string(CClientServiceMgr::GetInstance()->m_iPlayerID) + " Hit x :"
+		+ to_string(m_vTargetPos.x) +  ", z :" + to_string(m_vTargetPos.z);
+		pkt.set_debuglog(debug);
+		CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(pkt));	
 		
+
 		SetOff();
 		return;
 	}

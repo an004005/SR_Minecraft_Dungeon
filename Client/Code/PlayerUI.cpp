@@ -46,15 +46,18 @@ void CPlayerUI::Render_Object()
 	m_pTextureCom->Set_Texture(m_iTexNum);
 	m_pBufferCom->Render_Buffer();
 
-	
 	Render_Font(L"Gothic_Bold30", L"사망하셨습니다",
 		&_vec2(WINCX * 0.42f, WINCY *0.41f),
 		D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
 
-	wstring wtrCount = L"시작까지 " + m_wstrCount + L"초";
-	Render_Font(L"Gothic_Bold20", wtrCount.c_str(),
-		&_vec2(WINCX * 0.42f, WINCY *0.5f),
-		D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
+	if (m_bCount)
+	{
+		wstring wtrCount = L"시작까지 " + m_wstrCount + L"초";
+		Render_Font(L"Gothic_Bold20", wtrCount.c_str(),
+			&_vec2(WINCX * 0.42f, WINCY *0.5f),
+			D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
+	}
+
 }
 
 void CPlayerUI::Free()
@@ -74,3 +77,4 @@ CPlayerUI * CPlayerUI::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _uint iTexNum
 
 	return pInstance;
 }
+

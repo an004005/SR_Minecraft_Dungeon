@@ -76,6 +76,7 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 	// uint64 index = playerPkt.id();
 	gameSession->_currentPlayer->name = playerPkt.name();
 	gameSession->_currentPlayer->type = pkt.playerskin();
+	gameSession->_currentPlayer->playerId = playerPkt.id();
 	std::cout << "Enter Player :  " << playerPkt.id() << " " << playerPkt.name() << endl;
 
 	Protocol::S_ENTER_GAME enterPkt;
@@ -92,11 +93,11 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 
 
 	// send mon spawn
-	Protocol::S_SPAWN_MONSTER monPkt;
-	monPkt.set_success(true);
-	monPkt.set_id(1);
-	monPkt.set_factory("Zombie");
-	session->Send(ClientPacketHandler::MakeSendBuffer(monPkt));
+	// Protocol::S_SPAWN_MONSTER monPkt;
+	// monPkt.set_success(true);
+	// monPkt.set_id(1);
+	// monPkt.set_factory("Zombie");
+	// session->Send(ClientPacketHandler::MakeSendBuffer(monPkt));
 
 	return true;
 }
@@ -109,7 +110,7 @@ bool Handle_C_PLAYER_INPUT(PacketSessionRef& session, Protocol::C_PLAYER_INPUT& 
 	inputPkt.mutable_player()->set_name(pkt.player().name());
 	inputPkt.set_inputbit(pkt.inputbit());
 
-	std::cout << "Player move :  " << pkt.player().id() << endl;
+	// std::cout << "Player move :  " << pkt.player().id() << endl;
 
 
 	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(inputPkt));
@@ -136,10 +137,10 @@ bool Handle_C_PLAYER_YAW_ACTION(PacketSessionRef& session, Protocol::C_PLAYER_YA
 	yawActionPkt.mutable_player()->CopyFrom(pkt.player());
 	yawActionPkt.set_yaw(pkt.yaw());
 	yawActionPkt.set_actionbit(pkt.actionbit());
-	if (pkt.actionbit() & PLAYER_ROLL)
-		std::cout << "Player roll :  " << pkt.player().id() << endl;
-	else if (pkt.actionbit() & PLAYER_ML)
-		std::cout << "Player melee :  " << pkt.player().id() << endl;
+	// if (pkt.actionbit() & PLAYER_ROLL)
+	// 	std::cout << "Player roll :  " << pkt.player().id() << endl;
+	// else if (pkt.actionbit() & PLAYER_ML)
+	// 	std::cout << "Player melee :  " << pkt.player().id() << endl;
 
 	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(yawActionPkt));
 	return true;
@@ -151,10 +152,10 @@ bool Handle_C_PLAYER_ACTION(PacketSessionRef& session, Protocol::C_PLAYER_ACTION
 	ActionPkt.set_success(true);
 	ActionPkt.mutable_player()->CopyFrom(pkt.player());
 	ActionPkt.set_actionbit(pkt.actionbit());
-	if (pkt.actionbit() & PLAYER_POTION)
-	{
-		std::cout << "Player POTION :  " << pkt.player().id() << endl;
-	}
+	// if (pkt.actionbit() & PLAYER_POTION)
+	// {
+	// 	std::cout << "Player POTION :  " << pkt.player().id() << endl;
+	// }
 
 
 	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(ActionPkt));
@@ -170,10 +171,10 @@ bool Handle_C_PLAYER_ARROW(PacketSessionRef& session, Protocol::C_PLAYER_ARROW& 
 	arrowPkt.mutable_vlookat()->CopyFrom(pkt.vlookat());
 	arrowPkt.set_actionbit(pkt.actionbit());
 
-	if (pkt.actionbit() & PLAYER_MR)
-	{
-		std::cout << "Player arrow :  " << pkt.player().id() << endl;
-	}
+	// if (pkt.actionbit() & PLAYER_MR)
+	// {
+	// 	std::cout << "Player arrow :  " << pkt.player().id() << endl;
+	// }
 
 	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(arrowPkt));
 
@@ -187,10 +188,49 @@ bool Handle_C_PLAYER_EQUIP(PacketSessionRef& session, Protocol::C_PLAYER_EQUIP& 
 	equipPkt.mutable_player()->CopyFrom(pkt.player());
 	equipPkt.mutable_state()->CopyFrom(pkt.state());
 
-	std::cout << "Player Equip Change :  " << pkt.player().id() << endl;
+	// std::cout << "Player Equip Change :  " << pkt.player().id() << endl;
 
 	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(equipPkt));
 
+	return true;
+}
+
+bool Handle_C_PLAYER_DEAD(PacketSessionRef& session, Protocol::C_PLAYER_DEAD& pkt)
+{
+	Protocol::S_PLAYER_DEAD deadPkt;
+	deadPkt.set_success(true);
+	deadPkt.mutable_player()->CopyFrom(pkt.player());
+
+	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(deadPkt));
+	return true;
+}
+
+bool Handle_C_PLAYER_RESPANW(PacketSessionRef& session, Protocol::C_PLAYER_RESPANW& pkt)
+{
+	Protocol::S_PLAYER_RESPAWN respawnPkt;
+	respawnPkt.set_success(true);
+	respawnPkt.mutable_player()->CopyFrom(pkt.player());
+	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(respawnPkt));
+
+	return true;
+}
+
+bool Handle_C_PLAYER_MOVE_STAGE(PacketSessionRef& session, Protocol::C_PLAYER_MOVE_STAGE& pkt)
+{
+	Protocol::S_PLAYER_MOVE_STAGE movePkt;
+	movePkt.set_success(true);
+	movePkt.set_loadingtag(pkt.loadingtag());
+	movePkt.set_stagetag(pkt.stagetag());
+	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(movePkt));
+	return true;
+}
+
+bool Handle_C_PLAYER_MOVE_STAGE_FINISH(PacketSessionRef& session, Protocol::C_PLAYER_MOVE_STAGE_FINISH& pkt)
+{
+	Protocol::S_PLAYER_MOVE_STAGE_FINISH finPkt;
+	finPkt.mutable_player()->CopyFrom(pkt.player());
+	finPkt.set_playerskin(pkt.playerskin());
+	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(finPkt));
 	return true;
 }
 
@@ -238,6 +278,103 @@ bool Handle_C_MONSTER_WORLD(PacketSessionRef& session, Protocol::C_MONSTER_WORLD
 
 	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(monPkt));
 
+	return true;
+}
+
+bool Handle_C_BOSS_SPAWN(PacketSessionRef& session, Protocol::C_BOSS_SPAWN& pkt)
+{
+	Protocol::S_BOSS_SPAWN bossSpawnPkt;
+	bossSpawnPkt.set_success(true);
+	bossSpawnPkt.set_factory(pkt.factory());
+	bossSpawnPkt.mutable_matrix()->CopyFrom(pkt.matrix());
+
+	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(bossSpawnPkt));
+
+	return true;
+}
+
+bool Handle_C_BOSS_WORLD(PacketSessionRef& session, Protocol::C_BOSS_WORLD& pkt)
+{
+	Protocol::S_BOSS_WORLD worldPkt;
+	worldPkt.set_success(true);
+	worldPkt.set_objkey(pkt.objkey());
+	worldPkt.mutable_matworld()->CopyFrom(pkt.matworld());
+	worldPkt.set_ihp(pkt.ihp());
+
+	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(worldPkt));
+
+	return true;
+}
+
+bool Handle_C_SATON_ATTACK(PacketSessionRef& session, Protocol::C_SATON_ATTACK& pkt)
+{
+	Protocol::S_SATON_ATTACK satonPkt;
+	satonPkt.set_success(true);
+	satonPkt.set_pattern(pkt.pattern());
+	satonPkt.mutable_targetpos()->CopyFrom(pkt.targetpos());
+
+	float x = pkt.targetpos().x();
+	float y = pkt.targetpos().y();
+	float z = pkt.targetpos().z();
+
+	// switch (pkt.pattern())
+	// {
+	// case Protocol::MoveTo:
+	// 	// cout << "Saton Moveto " << x << " " << y << " " << z <<endl;
+	// 	break;
+	// case Protocol::HAMMER:
+	// 	cout << "Saton HAMMER " << x << " " << y << " " << z <<endl;
+	// 	break;
+	// case Protocol::GRAB:
+	// 	cout << "Saton GRAB " << x << " " << y << " " << z <<endl;
+	// 	break;
+	// case Protocol::BIRD:
+	// 	cout << "Saton BIRD " << x << " " << y << " " << z <<endl;
+	// 	break;
+	// case Protocol::SYMBOL:
+	// 	cout << "Saton SYMBOL " << x << " " << y << " " << z <<endl;
+	// 	break;
+	// case Protocol::FASCINATE:
+	// 	cout << "Saton FASCINATE " << x << " " << y << " " << z <<endl;
+	// 	break;
+	// case Protocol::DRAWMOON:
+	// 	cout << "Saton DRAWMOON " << x << " " << y << " " << z <<endl;
+	// 	break;
+	// case Protocol::SatonPattern_INT_MIN_SENTINEL_DO_NOT_USE_: break;
+	// case Protocol::SatonPattern_INT_MAX_SENTINEL_DO_NOT_USE_: break;
+	// default: ;
+	// }
+
+	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(satonPkt));
+
+	return true;
+}
+
+bool Handle_C_KOUKU_ATTACK(PacketSessionRef& session, Protocol::C_KOUKU_ATTACK& pkt)
+{
+	Protocol::S_KOUKU_ATTACK koukuPkt;
+	koukuPkt.set_success(true);
+	koukuPkt.set_pattern(pkt.pattern());
+	koukuPkt.mutable_targetpos()->CopyFrom(pkt.targetpos());
+
+	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(koukuPkt));
+
+	return true;
+}
+
+bool Handle_C_KOUKU_COUNTER(PacketSessionRef& session, Protocol::C_KOUKU_COUNTER& pkt)
+{
+	Protocol::S_KOUKU_COUNTER counterPkt;
+	counterPkt.set_success(true);
+
+	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(counterPkt));
+
+	return true;
+}
+
+bool Handle_C_DEBUG_PKT(PacketSessionRef& session, Protocol::C_DEBUG_PKT& pkt)
+{
+	cout << pkt.debuglog() <<endl;
 	return true;
 }
 

@@ -18,10 +18,12 @@ public:
 	void Open() { m_bClose = false; }
 	_bool IsClosen() { return m_bClose; }
 	void SetUITexture(_int TexIndex) { m_iTexNum = TexIndex; }
-
+	void SetNoCount(){m_bCount = false;};
+	void SetCount(_float fCnt) { m_fCount = fCnt;}
 private:
 	_bool m_bClose = true;
 	_float m_fCount = 3.f;
 	wstring m_wstrCount = L"";
+	_bool m_bCount = true;
 };
 
