@@ -64,7 +64,7 @@ HRESULT CStage::Ready_Scene(void)
 	// Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 	// 	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
 
-	CBatchTool::Load(L"../Bin/Resource/Batch/STAE_FINAL3T.batch");
+	CBatchTool::Load(L"../Bin/Resource/Batch/ASDF.batch");
 
 	return S_OK;
 }
@@ -477,7 +477,7 @@ void CStage::CreateTrigger()
 	}, 3.f);
 
 
-	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 95.f, 4.f, 36.f });
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.0f, 1.0f, 1.0f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 95.f, 4.f, 36.f });
 	trigger = CObjectFactory::Create<CTrigger>("Trigger", L"Trigger5", matWorld);
 	trigger->SetTrigger([](set<CGameObject*>& objSet) {
 		for (auto obj : objSet)
@@ -485,10 +485,9 @@ void CStage::CreateTrigger()
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 			{
 				_matrix matWorld;
-				//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 95.f, 6.f, 16.f });
-				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 10.f, 6.f, 10.f });
-
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, 0.f ,0.f }, { 95.f, 6.f, 16.f });
 				CEnemyFactory::Create<CEnderman>("Enderman", L"Enderman", matWorld);
+				return true;
 			}
 		}
 		return false;
@@ -503,7 +502,7 @@ void CStage::CreateTrigger()
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 			{
 				CSceneFactory::LoadScene("Loading1", "Stage_Start", true, 500);
-
+				return true;
 			}
 		}
 		return false;

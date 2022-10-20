@@ -137,11 +137,11 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 		if (s_PotionCollTime > m_CurPotionCoolTime)
 			m_CurPotionCoolTime += fTimeDelta;
 
-	IM_BEGIN("TEst"); // 
+	//IM_BEGIN("TEst");
 
-	_vec3 vpos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
-	ImGui::Text("%f, %f, %f", vpos.x, vpos.y, vpos.z);
-	IM_END;
+	//_vec3 vpos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+	//ImGui::Text("%f, %f, %f", vpos.x, vpos.y, vpos.z);
+	//IM_END;
 
 
 	// 상태 변경 조건 설정
@@ -182,7 +182,6 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 	}
 
 	
-	// IM_LOG("%f, %f, %f", m_pRootPart->pTrans->m_vInfo[INFO_POS].x, m_pRootPart->pTrans->m_vInfo[INFO_POS].y, m_pRootPart->pTrans->m_vInfo[INFO_POS].z);
 
 	return OBJ_NOEVENT;
 }
