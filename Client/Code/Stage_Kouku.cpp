@@ -222,12 +222,14 @@ HRESULT CStage_Kouku::Ready_Layer_GameLogic()
 	CEffectFactory::Create<C3DBaseTexture>("3D_Base", L"3D_Base");
 	CEffectFactory::Create<CAttack_P>("Attack_Basic", L"Attack_Basic");
 	CEffectFactory::Create<CFireWork>("Saton_Particle", L"Saton_Particle");
+	CEffectFactory::Create<CFireWork_Kouku>("Counter_Particle", L"Counter_Particle");
 	CEffectFactory::Create<CFireWork_Fuze>("FireWork_Fuze", L"FireWork_Fuze");
 	CEffectFactory::Create<CFireWork>("FireWork", L"FireWork");
 	CEffectFactory::Create<CSpeedBoots>("Speed_Boots", L"Speed_Boots");
 	CEffectFactory::Create<CSpeedBoots_Particle>("Speed_Boots_Particle", L"Speed_Boots_Particle");
 	CEffectFactory::Create<CMoonParticle>("MoonParticle", L"MoonParticle");
 	CEffectFactory::Create<CFascinated_Effect>("Fascinate_Effect", L"Fascinate_Effect");
+
 
 	
 	//monsters

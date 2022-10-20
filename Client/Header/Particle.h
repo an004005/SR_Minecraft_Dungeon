@@ -157,6 +157,28 @@ private:
 	_uint tmp = 1;
 };
 
+class CFireWork_Kouku : public CParticleSystem
+{
+public:
+	explicit CFireWork_Kouku(LPDIRECT3DDEVICE9 pGraphicDev) : CParticleSystem(pGraphicDev) {}
+	virtual ~CFireWork_Kouku() override;
+
+public:
+	_int Update_Object(const _float& fTimeDelta) override;
+	void Render_Object() override;
+	void Reset_Particle(Attribute* _Attribute) override;
+	void PreRender_Particle() override;
+	void PostRender_Particle() override;
+	void Reset_tmp(void) { tmp = 1; }
+public:
+	static CFireWork_Kouku* Create(LPDIRECT3DDEVICE9 pGraphicDev, LPCWSTR _TexFileName);
+
+	void Free() override;
+
+private:
+	_uint tmp = 1;
+	_float m_fAngle = 0.f;
+};
 
 class CMoonParticle : public CParticleSystem
 {
@@ -305,7 +327,7 @@ enum CLOUDTYPE
 	SHOCKPOWDER,
 	CREEPEREX,
 	DECAL,
-	GOLEMCLOUD,
+	MONSTERCLOUD,
 	GOLEMWINDMILL
 };
 
@@ -330,6 +352,7 @@ public:
 	Engine::CTransform*			m_pTransCom = nullptr;
 	CTexture*			m_pTexture = nullptr;
 	void Free() override;
+	void SetMatrix(_matrix* matWorld) { m_pTransCom->Set_WorldMatrix(matWorld); }
 
 private:
 	_float m_fTime;

@@ -59,6 +59,7 @@
 #include "ItemTexUI.h"
 #include "RemoteInventory.h"
 #include "BossHPUI.h"
+#include "Cat_Attack.h"
 #include "EditBox.h"
 #include "PlayerUI.h"
 #include "ClearUI.h"
@@ -66,6 +67,7 @@
 #include "Enderman.h"
 #include "Stage_Kouku.h"
 #include "Logo.h"
+#include "Leaper.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -135,6 +137,8 @@ void CPlayerFactory::Ready_PlayerFactory()
 	{
 		return CPlayer::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/CubeMan/Copper.cube", true);
 	}});
+
+
 }
 
 void CEnemyFactory::Ready_EnemyFactory()
@@ -185,6 +189,10 @@ void CEnemyFactory::Ready_EnemyFactory()
 	s_mapEnemySpawner.insert({ "Enderman", []()
 	{
 		return CEnderman::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Enderman.cube");
+	} });
+	s_mapEnemySpawner.insert({ "Leaper", []()
+	{
+		return CLeaper::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Monster/Leaper.cube");
 	} });
 
 	s_mapEnemySpawner.insert({ "Kouku_Remote", []()
@@ -237,6 +245,10 @@ void CEffectFactory::Ready_EffectFactory()
 	{
 		return CFireWork::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/bump.png");
 	} });
+	s_mapEffectSpawner.insert({ "Counter_Particle", []()
+	{
+		return CFireWork_Kouku::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/bump.png");
+	} });
 	s_mapEffectSpawner.insert({ "Saton_Particle", []()
 	{
 		return CFireWork::Create(s_pGraphicDev, L"../Bin/Resource/Texture/JJH/torbellino_texture.png");
@@ -280,7 +292,7 @@ void CEffectFactory::Ready_EffectFactory()
 	} });
 	s_mapEffectSpawner.insert({ "Golem_Cloud", []()
 	{
-		return CCloud::Create(s_pGraphicDev, 2.f,GOLEMCLOUD);
+		return CCloud::Create(s_pGraphicDev, 2.f, MONSTERCLOUD);
 	} });
 	s_mapEffectSpawner.insert({ "Golem_Windmill", []()
 	{
@@ -509,9 +521,23 @@ void CObjectFactory::Ready_ObjectFactory()
 	{
 		return CBirdsBrown::Create(s_pGraphicDev, BIRD_BROWN);
 	} });
+
 	s_mapObjectSpawner.insert({ "Trigger", []()
 	{
 		return CTrigger::Create(s_pGraphicDev);
+	} });
+
+	s_mapObjectSpawner.insert({ "Bori", []()
+	{
+		return CCat_Attack::Create(s_pGraphicDev,L"../Bin/Resource/SkeletalCube/Object/bori.cube");
+	} });
+	s_mapObjectSpawner.insert({ "Rui", []()
+	{
+		return CCat_Attack::Create(s_pGraphicDev,L"../Bin/Resource/SkeletalCube/Object/rui.cube");
+	} });
+	s_mapObjectSpawner.insert({ "Hoddeuk", []()
+	{
+		return CCat_Attack::Create(s_pGraphicDev,L"../Bin/Resource/SkeletalCube/Object/hoddeuk.cube");
 	} });
 }
 

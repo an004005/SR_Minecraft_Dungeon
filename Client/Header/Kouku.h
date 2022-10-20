@@ -17,6 +17,7 @@ private:
 		SYMBOL_HIDE,
 		WALK,
 		REST,
+		STUN,
 		DEAD,
 		STATE_END
 	};
@@ -69,6 +70,12 @@ public:
 
 	void KoukuSymbol_OnOff(_bool _trueison) { m_bIsSymbolGimmick = _trueison; }
 
+	_bool Kouku_Stun(void) { return m_bStun; }
+
+	_bool Kouku_Countable(void) { return m_bCountable; }
+
+	void Kouku_Stun_Success(void);
+
 	_bool Check_SymbolGimmick(void) { return m_bIsSymbolGimmick; }
 
 	// controller 조종 함수
@@ -101,7 +108,7 @@ private:
 	_bool m_bIsSymbolGimmick = false;
 	_bool m_bIsSymbolAttackCycle = false;
 
-	_bool m_bIsKoukuRest = false;
+	_bool m_bIsKoukuRest = false; 
 
 	_uint m_iRedSymbolCnt;
 
@@ -110,6 +117,7 @@ private:
 	_float m_fCurTime;
 	// _bool m_bHammerReady = false;
 
+	_bool m_bStun = false;
 
 	// Collider
 	_bool m_bIsBasicAttackColl = false;

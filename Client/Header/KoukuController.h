@@ -30,7 +30,7 @@ protected:
 	_float m_fBasicAttackCoolTime = 10.f;
 	_float m_fDoubleHammerCoolTime = 20.f;
 	// _float m_fHorrorAttackCoolTime = 20.f;
-	_float m_fHorrorAttackCoolTime = 5.f;
+	_float m_fHorrorAttackCoolTime = 10.f;
 
 	_float m_fSymbolGimmickCoolTime = 6.2f
 	;

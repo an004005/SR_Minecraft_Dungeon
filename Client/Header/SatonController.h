@@ -29,7 +29,7 @@ protected:
 	_float m_fCurTargetingCoolTime = 3.f;
 
 	_float m_fFirstHammerCoolTime = 5.f;
-	_float m_fSatonBirdCoolTime = 25.f;
+	_float m_fSatonBirdCoolTime = 5.f;
 	_float m_fSatonGrapCoolTime = 5.f;
 	_float m_fSatonFascinateCoolTime = 10.f;
 	_float m_fSatonDrawMoonCoolTime = 2.f;

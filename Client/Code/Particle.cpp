@@ -753,6 +753,99 @@ void CFireWork::Free()
 
 #pragma endregion
 
+CFireWork_Kouku::~CFireWork_Kouku()
+{
+}
+
+_int CFireWork_Kouku::Update_Object(const _float& fTimeDelta)
+{
+	std::list<Attribute>::iterator i;
+
+	for (i = m_ParticlesList.begin(); i != m_ParticlesList.end(); i++)
+	{
+		if (i->_bIsAlive)
+		{
+			i->_vPosition += i->_vVelocity * fTimeDelta;
+	
+			i->_fAge += fTimeDelta;
+
+			if (i->_fAge > i->_fLifeTime)
+			{
+				i->_bIsAlive = false;
+			}
+		}
+	}
+
+	RemoveDeadParticles();
+	CParticleSystem::Update_Object(fTimeDelta);
+
+	return OBJ_NOEVENT;
+}
+
+void CFireWork_Kouku::Render_Object()
+{
+	CParticleSystem::Render_Object();
+}
+
+void CFireWork_Kouku::Reset_Particle(Attribute* _Attribute)
+{
+	_Attribute->_bIsAlive = true;
+	m_fSize = _Attribute->_fSize;
+
+	_vec3 min = _vec3(-1.0f, 0.0f, -1.0f);
+	_vec3 max = _vec3(1.0f, 1.0f, 1.0f);
+
+	GetRandomVector(
+		&_Attribute->_vVelocity,
+		&min,
+		&max);
+
+	D3DXVec3Normalize(
+		&_Attribute->_vVelocity,
+		&_Attribute->_vVelocity);
+
+	_Attribute->_vVelocity *= 10.f;
+	_Attribute->_vVelocity.y = 0.f;
+
+	_Attribute->_fAge = 0.0f;
+}
+
+void CFireWork_Kouku::PreRender_Particle()
+{
+	CParticleSystem::PreRender_Particle();
+	m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
+	m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, false);
+}
+
+void CFireWork_Kouku::PostRender_Particle()
+{
+	CParticleSystem::PostRender_Particle();
+	m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, true);
+}
+
+CFireWork_Kouku* CFireWork_Kouku::Create(LPDIRECT3DDEVICE9 pGraphicDev, LPCWSTR _TexFileName)
+{
+	CFireWork_Kouku* Inst = new CFireWork_Kouku(pGraphicDev);
+	Inst->Reset_tmp();
+	Inst->m_dwVtxBf_Size = 4096 * 2;
+	Inst->m_dwVtxBf_Offset = 0;
+	Inst->m_dwVtxBf_BatchSize = 1024 * 2;
+	if (FAILED(Inst->Ready_Object(_TexFileName)))
+	{
+		return nullptr;
+	}
+	return Inst;
+}
+
+void CFireWork_Kouku::Free()
+{
+	CParticleSystem::Free();
+}
+
+
+
+
 #pragma region MoonParticle
 CMoonParticle::~CMoonParticle()
 {
@@ -1233,7 +1326,7 @@ HRESULT CUVCircle::Ready_Object(_float _size, CIRCLETYPE _type)
 		//골렘 포인터로 바꿔야함 손 위치 받아오기 
 		m_pBufferCom->Set_TextureOption(3, 4, 2);
 
-		CTransform* pGolem= nullptr;
+		/*CTransform* pGolem= nullptr;
 		for (auto& e : Get_Layer(LAYER_ENEMY)->Get_MapObject())
 		{
 			if (CRedStoneMonstrosity* red = dynamic_cast<CRedStoneMonstrosity*>(e.second))
@@ -1243,7 +1336,7 @@ HRESULT CUVCircle::Ready_Object(_float _size, CIRCLETYPE _type)
 		}
 		_vec3 pPos;
 		pGolem->Get_Info(INFO_POS, &pPos);
-		m_pTransCom->Set_Pos(pPos.x, pPos.y + 0.5f, pPos.z);
+		m_pTransCom->Set_Pos(pPos.x, pPos.y + 0.5f, pPos.z);*/
 		m_pTransCom->Set_Scale(_size, _size, _size);
 	}
 
@@ -1470,7 +1563,7 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 		// m_vVelocity.z = 0.f;
 
 	}
-	else if (_type == GOLEMCLOUD)
+	else if (_type == MONSTERCLOUD)
 	{
 		m_pBufferCom = Add_Component<CRcShader>(L"Proto_WalkCloudCom", L"Proto_WalkCloudCom", ID_STATIC);
 		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
@@ -1479,36 +1572,38 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 		// m_pBufferCom->Set_TextureOption(_uint(CGameUtilMgr::GetRandomFloat(7.f, 15.f)), 4, 2);
 		m_pBufferCom->Set_TextureOption(5, 4, 2);
 
-		CTransform* pGolem= nullptr;
+	/*	CTransform* pGolem= nullptr;
 		for (auto& e : Get_Layer(LAYER_ENEMY)->Get_MapObject())
 		{
 			if (CRedStoneMonstrosity* red = dynamic_cast<CRedStoneMonstrosity*>(e.second))
 			{
 				pGolem = red->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
 			}
-		}
-		_vec3 pPos;
-		_vec3 pLook;
-		pGolem->Get_Info(INFO_POS, &pPos);
-		pGolem->Get_Info(INFO_LOOK, &pLook);
+		}*/
+		/*_vec3 pPos;
+		_vec3 pLook;*/
 
-		m_pTransCom->m_vInfo[INFO_POS] = pPos + pLook * 2.f;
+
+		//pGolem->Get_Info(INFO_POS, &pPos);
+		//pGolem->Get_Info(INFO_LOOK, &pLook);
+
+		//m_pTransCom->m_vInfo[INFO_POS] = pPos + pLook * 2.f;
 		// m_pTransCom->Set_Pos(pPos.x, pPos.y, pPos.z);
 		m_pTransCom->Set_Scale(_size, _size, _size);
 		m_fTime = 0.7f;
 		m_fCurTime = 0.f;
 		m_fSpeed = 3.5f;
 
-		_vec3 min = _vec3(-1.0f, 1.0f, -1.0f);
-		_vec3 max = _vec3(1.0f, 1.0f, 1.0f);
+		_vec3 min = _vec3(-2.0f, 1.0f, -2.0f);
+		_vec3 max = _vec3(2.0f, 1.0f, 2.0f);
 
 		CGameUtilMgr::GetRandomVector(
 			&m_vVelocity,
 			&min,
 			&max);
 
-		m_vVelocity.x += pLook.x;
-		m_vVelocity.y += pLook.y;
+		//m_vVelocity.x += pLook.x;
+		//m_vVelocity.y += pLook.y;
 
 		D3DXVec3Normalize(&m_vVelocity, &m_vVelocity);
 	}
@@ -1519,7 +1614,7 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture(0));
 		m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
 		m_pBufferCom->Set_TextureOption(20, 4, 2);
-		CTransform* pGolem= nullptr;
+		/*CTransform* pGolem= nullptr;
 		for (auto& e : Get_Layer(LAYER_ENEMY)->Get_MapObject())
 		{
 			if (CRedStoneMonstrosity* red = dynamic_cast<CRedStoneMonstrosity*>(e.second))
@@ -1529,7 +1624,7 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 		}
 		_vec3 pPos;
 		pGolem->Get_Info(INFO_POS, &pPos);
-		m_pTransCom->Set_Pos(pPos.x, pPos.y + 2.f, pPos.z);
+		m_pTransCom->Set_Pos(pPos.x, pPos.y + 2.f, pPos.z);*/
 		m_pTransCom->Set_Scale(_size, _size, _size);
 		m_fTime = 3.f;
 		m_fCurTime = 0.f;

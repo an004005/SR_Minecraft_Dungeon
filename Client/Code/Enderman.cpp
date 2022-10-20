@@ -37,10 +37,11 @@ HRESULT CEnderman::Ready_Object()
 
 	m_pStat->SetMaxHP(500);
 
-	/*m_pStat->SetHurtSound({
-		L"DLC_sfx_mob_monster_Hurt-001.ogg",
-		L"DLC_sfx_mob_monster_Hurt-002.ogg" ,
-		L"DLC_sfx_mob_monster_Hurt-003.ogg" });*/
+	m_pStat->SetHurtSound({
+		L"sfx_mob_endermanHit-001.ogg",
+		L"sfx_mob_endermanHit-002.ogg" ,
+		L"sfx_mob_endermanHit-003.ogg" ,
+		L"sfx_mob_endermanHit-004.ogg" });
 
 	
 	CController* pController = Add_Component<CEndermanController>(L"Proto_EndermanController", L"Proto_EndermanController", ID_DYNAMIC);
@@ -71,17 +72,16 @@ void CEnderman::AnimationEvent(const string & strEvent)
 	}
 	else if (strEvent == "AnimStopped")
 	{
+		
 		m_pBossHPUI->KillHpbar();
 		m_bDelete = true;
 	}
 	else if (strEvent == "Step")
 	{
 		CSoundMgr::GetInstance()->PlaySoundRandom({
-			L"sfx_mob_zombieStepGeneric-001.ogg",
-			L"sfx_mob_zombieStepGeneric-002.ogg",
-			L"sfx_mob_zombieStepGeneric-003.ogg",
-			L"sfx_mob_zombieStepGeneric-004.ogg",
-			L"sfx_mob_zombieStepGeneric-005.ogg", },
+			L"sfx_mob_endermanIdle-001.ogg",
+			L"sfx_mob_endermanIdle-002.ogg",
+			L"sfx_mob_endermanIdle-003.ogg"},
 			m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.3f);
 	}
 }
@@ -148,6 +148,7 @@ void CEnderman::LateUpdate_Object()
 
 	if (m_bAttackFire)
 	{
+
 		set<CGameObject*> setObj;
 		_vec3 vAttackPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + (m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 2.f);
 		Engine::GetOverlappedObject(setObj, vAttackPos, 2.f);
@@ -161,32 +162,38 @@ void CEnderman::LateUpdate_Object()
 	
 	
 		CSoundMgr::GetInstance()->PlaySoundRandom({
-			L"sfx_mob_zombieAttack-001.ogg",
-			L"sfx_mob_zombieAttack-002.ogg",
-			L"sfx_mob_zombieAttack-003.ogg",
-			L"sfx_mob_zombieAttack-004.ogg" }, vAttackPos, 0.2f);
+			L"sfx_mob_endermanSwing-001.ogg",
+			L"sfx_mob_endermanSwing-002.ogg",
+			L"sfx_mob_endermanSwing-003.ogg"}, vAttackPos, 0.2f);
 		m_bAttackFire = false;
 	}
 
 	if (m_bArmAttakcFire)
 	{
-		set<CGameObject*> setObj;
-		_vec3 vAttackPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
-		Engine::GetOverlappedObject(setObj, vAttackPos, 0.5f);
+		_vec3 vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+		_vec3 vLook = m_pRootPart->pTrans->m_vInfo[INFO_LOOK];
 
-		for (auto& obj : setObj)
+		for (_int i = 1; i < 10; ++i)
 		{
-			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
-				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(35, m_pRootPart->pTrans->m_vInfo[INFO_POS], this);
+			set<CGameObject*> setObj;
+			_vec3 vAttackPos = vPos + vLook * 2.f * _float(i);
+			Engine::GetOverlappedObject(setObj, vAttackPos, 1.f);
+
+			for (auto& obj : setObj)
+			{
+				if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+					pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+					->TakeDamage(35, m_pRootPart->pTrans->m_vInfo[INFO_POS], this);
+			}
 		}
+		
 
 
 		CSoundMgr::GetInstance()->PlaySoundRandom({
-			L"sfx_mob_zombieAttack-001.ogg",
-			L"sfx_mob_zombieAttack-002.ogg",
-			L"sfx_mob_zombieAttack-003.ogg",
-			L"sfx_mob_zombieAttack-004.ogg" }, vAttackPos, 0.2f);
+			L"sfx_mob_endermanTeleportVoiceHigh-001.ogg",
+			L"sfx_mob_endermanTeleportVoiceHigh-002.ogg",
+			L"sfx_mob_endermanTeleportVoiceHigh-003.ogg"},
+			m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.2f);
 		m_bArmAttakcFire = false;
 	}
 
@@ -220,12 +227,7 @@ void CEnderman::StateChange()
 	{
 		if (m_bReserveStop == false)
 		{
-			CSoundMgr::GetInstance()->PlaySoundRandom({
-				L"sfx_mob_zombieDeath-001.ogg",
-				L"sfx_mob_zombieDeath-002.ogg",
-				L"sfx_mob_zombieDeath-003.ogg" },
-				m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.5f);
-
+			CSoundMgr::GetInstance()->PlaySound(L"sfx_mob_endermanDeath-001.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 			m_eState = DEAD;
 			PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
 			m_bChop = false;

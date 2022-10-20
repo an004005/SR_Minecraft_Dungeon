@@ -85,6 +85,19 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 		}
 	}
 
+	if (m_bJump)
+	{
+		if (m_fJumpTime < m_fCurJumpTime)
+		{
+			m_bJump = false;
+			m_bGraped = false;
+		}
+		else
+		{
+			m_fCurJumpTime += fTimeDelta;
+		}
+	}
+
 
 	// 세이튼 장판 기믹 때만 해당되게 구현하기 
 	if (m_bSatonSymbol_Blue)
@@ -110,7 +123,8 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 		_vec3& vPos = m_pOwnerTrans->m_vInfo[INFO_POS];
 		if (CGameUtilMgr::Vec3Cmp(m_vKnockBackVelocity, CGameUtilMgr::s_vZero, 0.1f))
 		{
-			vPos.y = m_pCubeMap->GetHeight(vPos.x, vPos.z);
+			if(!m_bJump)
+				vPos.y = m_pCubeMap->GetHeight(vPos.x, vPos.z);
 		}
 		else
 		{
@@ -127,6 +141,7 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 			}
 		}
 	}
+
 
 	return 0;
 }
@@ -243,6 +258,8 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 		break;
 	case DT_SATON_GRAPED:
 		m_bGraped = true;
+		break;
+	case DT_JUMP:
 		break;
 	case DT_END:
 		break;

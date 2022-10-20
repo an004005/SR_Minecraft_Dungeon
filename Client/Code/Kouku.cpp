@@ -5,6 +5,8 @@
 #include "StatComponent.h"
 #include "KoukuController.h"
 #include "Particle.h"
+#include "StaticCamera.h"
+#include "Weapon.h"
 
 CKouku::CKouku(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
 {
@@ -32,6 +34,7 @@ HRESULT CKouku::Ready_Object()
 	m_arrAnim[HORROR_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_runattack.anim");
 	m_arrAnim[SYMBOL_HIDE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_hide.anim");
 	m_arrAnim[REST] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_rest.anim");
+	m_arrAnim[STUN] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_stun.anim");
 
 	m_pIdleAnim = &m_arrAnim[IDLE];
 	// m_pCurAnim = &m_arrAnim[INTRO];
@@ -41,6 +44,10 @@ HRESULT CKouku::Ready_Object()
 	m_fSpeed = 2.f;
 
 	m_iRedSymbolCnt = 0;
+
+
+	m_pStat->SetMaxHP(1000);
+
 
 
 	m_pStat->SetMaxHP(120);
@@ -55,8 +62,8 @@ HRESULT CKouku::Ready_Object()
 		pController->SetOwner(this);
 	}
 
-	m_fCurTime = 0.f;
-	m_fTime = 2.2f;
+	m_fCurTime = 2.f;
+	m_fTime = 1.1f;
 	//cc면역
 	m_bCantCC = true;
 
@@ -139,16 +146,39 @@ void CKouku::AnimationEvent(const string& strEvent)
 	}
 	else if (strEvent == "HorrorAttack_Start")
 	{
-		m_bCountable = true;
 	}
+	else if (strEvent == "Countable")
+	{
+		m_bCountable = true;
+		Get_GameObject<CFireWork_Kouku>(LAYER_EFFECT, L"Counter_Particle")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.6f, D3DXCOLOR(0.5f, 0.5f, 1.f, 0), 256, 0.4f);
+
+		//파티클 추가
+	}
+	else if (strEvent == "Countable_End")
+	{
+		m_bCountable = false;
+	}
+	
 	else if (strEvent == "Horror_Attack")
 	{
 		m_bIsHorrorAttack = true;
-		m_bCountable = false;
+		m_fCurTime = 0.f;
 	}
 	else if (strEvent == "HorrorAttack_End")
 	{
 		m_bIsHorrorAttack = false;
+	}
+	else if (strEvent == "AnimStopped")
+	{
+		if (m_eState == STUN)
+		{
+			m_eState = IDLE;
+			m_bStopAnim = false;
+		}
+		else if (m_eState == DEAD)
+		{
+			
+		}
 	}
 
 }
@@ -162,6 +192,8 @@ _int CKouku::Update_Object(const _float& fTimeDelta)
 	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
 		m_bCanPlayAnim = true;
 
+	
+
 	// 상태 변경 조건 설정
 		StateChange();
 
@@ -170,6 +202,8 @@ _int CKouku::Update_Object(const _float& fTimeDelta)
 	{
 	case INTRO:
 		m_strState = "INTRO";
+		break;
+	case STUN:
 		break;
 	case WALK:
 		m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * m_fSpeed * fTimeDelta;
@@ -185,7 +219,7 @@ _int CKouku::Update_Object(const _float& fTimeDelta)
 	case HORROR_ATTACK:
 		m_fCurTime += fTimeDelta;
 
-		if (m_fCurTime <= m_fTime && !m_bCountable)
+		if (m_fCurTime <= m_fTime)
 		{
 			m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 4.f * fTimeDelta;
 		}
@@ -207,8 +241,8 @@ _int CKouku::Update_Object(const _float& fTimeDelta)
 
 	if (m_eState != HORROR_ATTACK)
 	{
-		if (m_fCurTime > m_fTime)
-			m_fCurTime = 0.f;
+		// if (m_fCurTime > m_fTime)
+			// m_fCurTime = 0.f;
 	}
 
 	
@@ -267,7 +301,7 @@ void CKouku::LateUpdate_Object()
 			m_iRedSymbolCnt++;
 		}
 
-		DEBUG_SPHERE(Right_RedCircle_3, 10.f, 6.2f);
+		DEBUG_SPHERE(Right_RedCircle_3, 10.f, 0.1f);
 		IM_LOG("Create Right_Red_3 Circle");
 
 		set<CGameObject*> setPlayer_4;
@@ -374,9 +408,45 @@ void CKouku::LateUpdate_Object()
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
 				->TakeDamage(5, KoukuPos, this, DT_KNOCK_BACK);
 		}
+		// DEBUG_SPHERE(KoukuPos, 2.5f, 0.1f);
 
 		// m_bIsHorrorAttack = false;
 	}
+
+	// if (!m_pStat->IsStun())
+	// {
+	// 	if (m_bCountable)
+	// 	{
+	// 		set<CGameObject*> Player;
+	// 		_vec3 KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 1.5f;
+	// 		Engine::GetOverlappedObject(Player, KoukuPos, 2.5f);
+	//
+	// 		for (auto& obj : Player)
+	// 		{
+	// 			if (CWeapon* pWeapon = dynamic_cast<CWeapon*>(obj))
+	// 				m_pStat->TakeDamage(0, KoukuPos, this, DT_STUN);
+	// 			m_bCountable = false;
+	// 		}
+	// 	}
+	// }
+}
+
+void CKouku::Kouku_Stun_Success()
+{
+	_vec3 KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+
+	if(!m_pStat->IsStun())
+	{
+		if (m_bCountable)
+		{
+			m_pStat->TakeDamage(0, KoukuPos, this, DT_STUN);
+			Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+				->PlayShake(0.1f, 0.4f);
+			m_bCountable = false;
+		}
+	}
+	DEBUG_SPHERE(KoukuPos, 1.f, 0.1f);
+
 }
 
 void CKouku::Free()
@@ -410,6 +480,18 @@ void CKouku::StateChange()
 			m_eState = DEAD;
 			PlayAnimationOnce(&m_arrAnim[DEAD], true);
 			m_bCanPlayAnim = false;
+			return;
+		}
+	}
+
+	if (m_pStat->IsStun())
+	{
+		if (m_bReserveStop == false)
+		{
+			m_eState = STUN;
+			PlayAnimationOnce(&m_arrAnim[STUN], true);
+			m_bCanPlayAnim = false;
+			m_bMove = false;
 			return;
 		}
 	}
@@ -474,7 +556,7 @@ void CKouku::StateChange()
 	// 	m_pCurAnim = &m_arrAnim[WALK];
 	// 	return;
 	// }
-
+	
 
 	if (m_bCanPlayAnim)
 	{
@@ -507,3 +589,5 @@ void CKouku::Symbol_Attack()
 		}
 	}
 }
+
+

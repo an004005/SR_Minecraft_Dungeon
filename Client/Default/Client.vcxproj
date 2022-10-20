@@ -167,6 +167,7 @@
     <ClInclude Include="..\Header\AbstFactory.h" />
     <ClInclude Include="..\Header\BatchTool.h" />
     <ClInclude Include="..\Header\BossHPUI.h" />
+    <ClInclude Include="..\Header\Cat_Attack.h" />
     <ClInclude Include="..\Header\ClearUI.h" />
     <ClInclude Include="..\Header\ClientServiceMgr.h" />
     <ClInclude Include="..\Header\DamageFontMgr.h" />
@@ -180,6 +181,8 @@
     <ClInclude Include="..\Header\InventoryUI.h" />
     <ClInclude Include="..\Header\ItemTexUI.h" />
     <ClInclude Include="..\Header\LaserShotRune.h" />
+    <ClInclude Include="..\Header\Leaper.h" />
+    <ClInclude Include="..\Header\LeaperController.h" />
     <ClInclude Include="..\Header\Logo.h" />
     <ClInclude Include="..\Header\MultiShotRune.h" />
     <ClInclude Include="..\Header\PlayerStartPos.h" />
@@ -292,6 +295,7 @@
     <ClCompile Include="..\Code\AbstFactory.cpp" />
     <ClCompile Include="..\Code\BatchTool.cpp" />
     <ClCompile Include="..\Code\BossHPUI.cpp" />
+    <ClCompile Include="..\Code\Cat_Attack.cpp" />
     <ClCompile Include="..\Code\ClearUI.cpp" />
     <ClCompile Include="..\Code\DamageFontMgr.cpp" />
     <ClCompile Include="..\Code\ClientServiceMgr.cpp">
@@ -309,6 +313,8 @@
     <ClCompile Include="..\Code\InventoryUI.cpp" />
     <ClCompile Include="..\Code\ItemTexUI.cpp" />
     <ClCompile Include="..\Code\LaserShotRune.cpp" />
+    <ClCompile Include="..\Code\Leaper.cpp" />
+    <ClCompile Include="..\Code\LeaperController.cpp" />
     <ClCompile Include="..\Code\Logo.cpp" />
     <ClCompile Include="..\Code\MultiShotRune.cpp" />
     <ClCompile Include="..\Code\PlayerStartPos.cpp" />
