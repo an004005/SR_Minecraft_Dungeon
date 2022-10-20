@@ -65,6 +65,7 @@
 #include "ClearUI.h"
 #include "Trigger.h"
 #include "Enderman.h"
+#include "KoukuHpUI.h"
 #include "Stage_Kouku.h"
 #include "Logo.h"
 #include "Leaper.h"
@@ -622,6 +623,10 @@ void CUIFactory::Ready_UIFactory()
 	 s_mapUISpawner.insert({ "BossHPUI", [](_uint iTexNum)
 	 {
 		 return CBossHPUI::Create(s_pGraphicDev, -1);//not used
+	 } });
+	 s_mapUISpawner.insert({ "KoukuHPUI", [](_uint iTexNum)
+	 {
+		 return CKoukuHpUI::Create(s_pGraphicDev, -1);//not used
 	 } });
 	 s_mapUISpawner.insert({ "PotionCoolTime", [](_uint iTexNum)
 	 {

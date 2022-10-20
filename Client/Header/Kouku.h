@@ -1,6 +1,7 @@
 #pragma once
 #include "Monster.h"
 class CController;
+class CKoukuHpUI;
 
 class CKouku :public CMonster
 {
@@ -98,26 +99,19 @@ private:
 	// true : PlayAnimationOnce 사용 가능 상태(동작 애니메이션 실행 가능), false: 다른 애니메이션 실행중
 	_bool m_bCanPlayAnim = true; // 현재 실행중인 애니메이션 끊고 애니메이션 실행 가능 여부
 
-	_vec3 m_vTargetPos = CGameUtilMgr::s_vZero; // controller 입력
+	_vec3 m_vTargetPos = CGameUtilMgr::s_vZero; 
 
-	_bool m_bDoubleHammer = false; // controller 입력
-	_bool m_bHorrorAttack = false; // controller 입력
+	//KoukuPattern
+	_bool m_bDoubleHammer = false;
+	_bool m_bHorrorAttack = false; 
 	_bool m_bBasicAttack = false;
-	_bool m_bCountable = false; // contriller 입력
+	_bool m_bCountable = false;
 	_bool m_bKoukuSymbol = false;
 	_bool m_bIsSymbolGimmick = false;
 	_bool m_bIsSymbolAttackCycle = false;
-
-	_bool m_bIsKoukuRest = false; 
-
 	_uint m_iRedSymbolCnt;
+	//~KoukuPattern
 
-	_bool m_bMove = false;
-	_float m_fTime;
-	_float m_fCurTime;
-	// _bool m_bHammerReady = false;
-
-	_bool m_bStun = false;
 
 	// Collider
 	_bool m_bIsBasicAttackColl = false;
@@ -133,5 +127,17 @@ private:
 
 	_vec3 m_vKoukuHammerPos;
 
+	_bool m_bIsKoukuRest = false; 
+	_bool m_bMove = false;
+	_float m_fTime;
+	_float m_fCurTime;
+	_bool m_bStun = false;
+
+	//Intro
+	_bool m_bStartPlay = false;
+	_bool m_bIntroPlay = false;
+	//Intro
+
+	CKoukuHpUI* m_pBossHPUI = nullptr;
 };
 
