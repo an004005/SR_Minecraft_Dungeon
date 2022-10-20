@@ -183,6 +183,7 @@
     <ClInclude Include="..\Header\Leaper.h" />
     <ClInclude Include="..\Header\LeaperController.h" />
     <ClInclude Include="..\Header\Logo.h" />
+    <ClInclude Include="..\Header\MapUI.h" />
     <ClInclude Include="..\Header\MultiShotRune.h" />
     <ClInclude Include="..\Header\PlayerStartPos.h" />
     <ClInclude Include="..\Header\Kouku.h" />
@@ -250,6 +251,7 @@
     <ClInclude Include="..\Header\SphereEffect.h" />
     <ClInclude Include="..\Header\Stage.h" />
     <ClInclude Include="..\Header\Stage_Kouku.h" />
+    <ClInclude Include="..\Header\StartStage.h" />
     <ClInclude Include="..\Header\StatComponent.h" />
     <ClInclude Include="..\Header\StaticCamera.h" />
     <ClInclude Include="..\Header\StormRune.h" />
@@ -259,6 +261,7 @@
     <ClInclude Include="..\Header\Terrain.h" />
     <ClInclude Include="..\Header\TerrainCubeMap.h" />
     <ClInclude Include="..\Header\TestCube.h" />
+    <ClInclude Include="..\Header\MapTable.h" />
     <ClInclude Include="..\Header\Trigger.h" />
     <ClInclude Include="..\Header\Weapon.h" />
     <ClInclude Include="..\Header\Zombie.h" />
@@ -315,6 +318,7 @@
     <ClCompile Include="..\Code\Leaper.cpp" />
     <ClCompile Include="..\Code\LeaperController.cpp" />
     <ClCompile Include="..\Code\Logo.cpp" />
+    <ClCompile Include="..\Code\MapUI.cpp" />
     <ClCompile Include="..\Code\MultiShotRune.cpp" />
     <ClCompile Include="..\Code\PlayerStartPos.cpp" />
     <ClCompile Include="..\Code\Kouku.cpp" />
@@ -384,6 +388,7 @@
     <ClCompile Include="..\Code\SphereEffect.cpp" />
     <ClCompile Include="..\Code\Stage.cpp" />
     <ClCompile Include="..\Code\Stage_Kouku.cpp" />
+    <ClCompile Include="..\Code\StartStage.cpp" />
     <ClCompile Include="..\Code\StatComponent.cpp" />
     <ClCompile Include="..\Code\StaticCamera.cpp" />
     <ClCompile Include="..\Code\Struct.pb.cc">
@@ -395,6 +400,7 @@
     <ClCompile Include="..\Code\Terrain.cpp" />
     <ClCompile Include="..\Code\TerrainCubeMap.cpp" />
     <ClCompile Include="..\Code\TestCube.cpp" />
+    <ClCompile Include="..\Code\MapTable.cpp" />
     <ClCompile Include="..\Code\Trigger.cpp" />
     <ClCompile Include="..\Code\Weapon.cpp" />
     <ClCompile Include="..\Code\Zombie.cpp" />

@@ -64,7 +64,7 @@ _int CLayer::Update_Layer(const _float & fTimeDelta)
 		else
 		{
 			++itr;
-		}
+		} 
 	}
 
 	return LAY_NOEVENT;
