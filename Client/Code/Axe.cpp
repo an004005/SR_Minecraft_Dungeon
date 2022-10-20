@@ -154,7 +154,7 @@ void CAxe::Collision()
 		{
 			if (CKouku* pKouku = dynamic_cast<CKouku*>(obj))
 			{
-				if (pKouku->Kouku_Stun() && m_iAttackCnt == 0)
+				if (!pKouku->Kouku_Stun() && m_iAttackCnt == 0 && pKouku->Kouku_Countable())
 				{
 					pKouku->Kouku_Stun_Success();
 				}

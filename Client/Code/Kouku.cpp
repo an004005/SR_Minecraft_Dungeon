@@ -7,6 +7,7 @@
 #include "Particle.h"
 #include "StaticCamera.h"
 #include "Weapon.h"
+#include "KoukuHpUI.h"
 
 CKouku::CKouku(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
 {
@@ -54,6 +55,11 @@ HRESULT CKouku::Ready_Object()
 	m_fTime = 1.1f;
 	//cc면역
 	m_bCantCC = true;
+
+	
+	m_pBossHPUI = CUIFactory::Create<CKoukuHpUI>("KoukuHPUI", L"KoukuHPUI", -1, WINCX * 0.5f, WINCY * 0.15f, 500, 25);
+	m_pBossHPUI->SetOwner(L"쿠 크", this, m_pStat->GetMaxHP());
+	m_pBossHPUI->SetNamePos(0.47f);
 
 	// m_bCanPlayAnim = false;
 	// PlayAnimationOnce(&m_arrAnim[IDLE]);
@@ -177,10 +183,21 @@ _int CKouku::Update_Object(const _float& fTimeDelta)
 
 	CMonster::Update_Object(fTimeDelta);
 
+	
+	m_pBossHPUI->SetCurHp(m_pStat->GetHP());
+
 	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
 		m_bCanPlayAnim = true;
 
-	
+
+
+	// if (!m_bIntroPlay && m_bStartPlay)
+	// {
+	// 	PlayAnimationOnce(&m_arrAnim[INTRO]);
+	// 	m_pBossHPUI = CUIFactory::Create<CKoukuHpUI>("KoukuHPUI", L"KoukuHPUI", -1, WINCX * 0.5f, WINCY * 0.15f, 500, 25);
+	// 	m_pBossHPUI->SetOwner(L"쿠 크", this, m_pStat->GetMaxHP());
+	// 	m_bIntroPlay = true;
+	// }
 
 	// 상태 변경 조건 설정
 		StateChange();
@@ -222,6 +239,7 @@ _int CKouku::Update_Object(const _float& fTimeDelta)
 		break;
 
 	case DEAD:
+		m_pBossHPUI->KillHpbar();
 		break;
 	default:
 		break;
@@ -429,7 +447,7 @@ void CKouku::Kouku_Stun_Success()
 		{
 			m_pStat->TakeDamage(0, KoukuPos, this, DT_STUN);
 			Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
-				->PlayShake(0.1f, 0.4f);
+				->PlayShake(0.1f, 1.f);
 			m_bCountable = false;
 		}
 	}
