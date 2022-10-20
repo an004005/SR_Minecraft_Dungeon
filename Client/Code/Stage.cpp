@@ -168,7 +168,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	_matrix matWorld;
 
 
-	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 0.f, 0.f ,0.f });
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 1.f, 0.f ,1.f });
 
 	switch (CObjectStoreMgr::GetInstance()->GetPlayerSkin())
 	{
@@ -191,6 +191,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	m_pPlayer->SetName(CObjectStoreMgr::GetInstance()->GetPlayerName());
 	m_pPlayer->PlayerSpawn();
 
+
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 5.f, 7.f ,10.f });
 	CObjectFactory::Create<CCat>("Cat", L"Cat", matWorld);
 
@@ -208,34 +209,13 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	//monsters
 	{	
 	
-		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 1.f, 0.f ,3.f });
-		//CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
-		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 55.f, 0.f ,28.f });
-		//CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
-
-
-	/*	 CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 43.f, 0.f , 21.f });
-		 CEnemyFactory::Create<CCreeper>("Creeper", L"Creeper", matWorld);*/
-
-		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 45.f, 0.f ,23.f });
-		//CEnemyFactory::Create<CSkeleton>("Skeleton", L"Skeleton", matWorld);
-
-		/*CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 45.f, 0.f ,23.f });
-		CEnemyFactory::Create<CEnchanter>("Enchanter", L"Enchanter", matWorld);*/
-
 		 //CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 3.f, 0.f ,16.f });
 		// CEnemyFactory::Create<CRedStoneMonstrosity>("RedStoneMonstrosity", L"RedStoneMonstrosity", matWorld);
 
-		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 3.f, 0.f ,16.f });
-		//CEnemyFactory::Create<CEnderman>("Enderman", L"Enderman", matWorld);
-
-		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.3f, 1.3f, 1.3f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 3.f, 0.f ,16.f });
-		//CEnemyFactory::Create<CLeaper>("Leaper", L"Leaper", matWorld);
+		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.3f, 1.3f, 1.3f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 51.f, 4.f, 95.f });
+		CEnemyFactory::Create<CLeaper>("Leaper", L"Leaper", matWorld);
 	}
 	
-	// CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {6.f, 0.f ,6.f});
-	// CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
-	// CEnemyFactory::Create<CMonster>("Zombie", L"TestZombie", matWorld);
 
 	CreateTrigger();
 	return S_OK;
@@ -322,7 +302,7 @@ void CStage::CreateTrigger()
 			}
 		}
 		return false;
-	}, 7.f);
+	}, 6.f);
 
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 33.f, 4.f, 54.f });
@@ -495,4 +475,37 @@ void CStage::CreateTrigger()
 		}
 		return false;
 	}, 3.f);
+
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 95.f, 4.f, 36.f });
+	trigger = CObjectFactory::Create<CTrigger>("Trigger", L"Trigger5", matWorld);
+	trigger->SetTrigger([](set<CGameObject*>& objSet) {
+		for (auto obj : objSet)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+			{
+				_matrix matWorld;
+				//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 95.f, 6.f, 16.f });
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 10.f, 6.f, 10.f });
+
+				CEnemyFactory::Create<CEnderman>("Enderman", L"Enderman", matWorld);
+			}
+		}
+		return false;
+	}, 5.f);
+
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 95.f, 6.f, 4.f });
+	trigger = CObjectFactory::Create<CTrigger>("Trigger", L"Trigger_end", matWorld);
+	trigger->SetTrigger([](set<CGameObject*>& objSet) {
+		for (auto obj : objSet)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+			{
+				CSceneFactory::LoadScene("Loading1", "Stage_Start", true, 500);
+
+			}
+		}
+		return false;
+	}, 4.f);
 }
