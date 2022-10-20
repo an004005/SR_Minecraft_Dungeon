@@ -140,6 +140,31 @@ message S_PLAYER_RESPAWN
 	bool success = 1;
 }
 
+message C_PLAYER_MOVE_STAGE
+{
+	string loadingTag = 1;
+	string stageTag = 2;
+}
+
+message S_PLAYER_MOVE_STAGE
+{
+	bool success = 1;
+	string loadingTag = 2;
+	string stageTag = 3;
+}
+
+message C_PLAYER_MOVE_STAGE_FINISH
+{
+	Player player = 1;
+	PlayerSkin playerSkin = 2;
+}
+
+message S_PLAYER_MOVE_STAGE_FINISH
+{
+	Player player = 1;
+	PlayerSkin playerSkin = 2;
+}
+
 // test
 
 message C_SPAWN_MONSTER

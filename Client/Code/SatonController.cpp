@@ -12,7 +12,7 @@ CSatonController::CSatonController()
 
 CSatonController::CSatonController(const CSatonController& rhs)
 {
-	m_fSatonFascinateCoolTime = 10000.f;
+	m_fSatonFascinateCoolTime = 20.f;
 	m_fSatonGrapCoolTime = 11.f;
 }
 
@@ -24,9 +24,9 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 {
 	{
 		m_fCurLookAtTime += fTimeDelta;
-		m_fCurFirstHammerCoolTime += fTimeDelta;
-		m_fCurSatonBirdCoolTime += fTimeDelta;
-		m_fCurSatonGrapCoolTime += fTimeDelta;
+		// m_fCurFirstHammerCoolTime += fTimeDelta;
+		// m_fCurSatonBirdCoolTime += fTimeDelta;
+		// m_fCurSatonGrapCoolTime += fTimeDelta;
 		m_fCurSatonFascinateCoolTime += fTimeDelta;
 
 		if(m_bIsDrawMoon)

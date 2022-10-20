@@ -66,25 +66,31 @@ bool Handle_S_OTHER_PLAYER(PacketSessionRef& session, Protocol::S_OTHER_PLAYER& 
 {
 	for (int i = 0; i < pkt.player_size(); ++i)
 	{
+
 		Protocol::Player* pPlayerPkt = pkt.mutable_player(i);
 		Protocol::PlayerSkin eSkin = pkt.playerskin(i);
 		if (pPlayerPkt->id() == CClientServiceMgr::GetInstance()->m_iPlayerID)
+			continue;
+
+		wstring wstrPlayerTag = L"Player_Remote_" + to_wstring(pPlayerPkt->id());
+
+		if (Get_GameObjectUnCheck<CPlayer>(LAYER_PLAYER, wstrPlayerTag) != nullptr)
 			continue;
 
 		CPlayer* pPlayer = nullptr;
 		switch (eSkin)
 		{
 		case Protocol::PLAYER_TYPE_STEVE:
-			pPlayer = CPlayerFactory::Create<CPlayer>("Steve_Remote", L"Player_Remote_" + to_wstring(pPlayerPkt->id()), CGameUtilMgr::s_matIdentity);
+			pPlayer = CPlayerFactory::Create<CPlayer>("Steve_Remote", wstrPlayerTag, CGameUtilMgr::s_matIdentity);
 			break;
 		case Protocol::PLAYER_TYPE_PRIDE:
-			pPlayer = CPlayerFactory::Create<CPlayer>("Pride_Remote", L"Player_Remote_" + to_wstring(pPlayerPkt->id()), CGameUtilMgr::s_matIdentity);
+			pPlayer = CPlayerFactory::Create<CPlayer>("Pride_Remote", wstrPlayerTag, CGameUtilMgr::s_matIdentity);
 			break;
 		case Protocol::PLAYER_TYPE_ESHE:
-			pPlayer = CPlayerFactory::Create<CPlayer>("Eshe_Remote", L"Player_Remote_" + to_wstring(pPlayerPkt->id()), CGameUtilMgr::s_matIdentity);
+			pPlayer = CPlayerFactory::Create<CPlayer>("Eshe_Remote", wstrPlayerTag, CGameUtilMgr::s_matIdentity);
 			break;
 		case Protocol::PLAYER_TYPE_COPPER:
-			pPlayer = CPlayerFactory::Create<CPlayer>("Copper_Remote", L"Player_Remote_" + to_wstring(pPlayerPkt->id()), CGameUtilMgr::s_matIdentity);
+			pPlayer = CPlayerFactory::Create<CPlayer>("Copper_Remote", wstrPlayerTag, CGameUtilMgr::s_matIdentity);
 			break;
 		case Protocol::PlayerSkin_INT_MIN_SENTINEL_DO_NOT_USE_:
 		case Protocol::PlayerSkin_INT_MAX_SENTINEL_DO_NOT_USE_:
@@ -195,26 +201,26 @@ bool Handle_S_ALL_PLAYER_ENTER(PacketSessionRef& session, Protocol::S_ALL_PLAYER
 	if (CClientServiceMgr::GetInstance()->m_iPlayerID != 0) // if not host
 		return true;
 
-	CScene* pCurScene = CManagement::GetInstance()->GetScene();
-	if (dynamic_cast<CStage_Kouku*>(pCurScene))
-	{
-		_matrix matWorld;
-		{
-			CGameUtilMgr::MatWorldComposeEuler(matWorld, { 3.f, 3.f, 3.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 21.5f ,47.8f });
-			Protocol::C_BOSS_SPAWN satonSpawnPkt;
-			satonSpawnPkt.set_factory("Saton");
-			CClientServiceMgr::Mat2Pkt(matWorld, *satonSpawnPkt.mutable_matrix());
-
-			session->Send(ServerPacketHandler::MakeSendBuffer(satonSpawnPkt));
-		}
-		{
-			CGameUtilMgr::MatWorldComposeEuler(matWorld, { 0.7f, 0.7f, 0.7f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 25.f ,44.8f });
-			Protocol::C_BOSS_SPAWN koukuSpawnPkt;
-			koukuSpawnPkt.set_factory("Kouku");
-			CClientServiceMgr::Mat2Pkt(matWorld, *koukuSpawnPkt.mutable_matrix());
-			session->Send(ServerPacketHandler::MakeSendBuffer(koukuSpawnPkt));
-		}
-	}
+	// CScene* pCurScene = CManagement::GetInstance()->GetScene();
+	// if (dynamic_cast<CStage_Kouku*>(pCurScene))
+	// {
+	// 	_matrix matWorld;
+	// 	{
+	// 		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 3.f, 3.f, 3.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 21.5f ,47.8f });
+	// 		Protocol::C_BOSS_SPAWN satonSpawnPkt;
+	// 		satonSpawnPkt.set_factory("Saton");
+	// 		CClientServiceMgr::Mat2Pkt(matWorld, *satonSpawnPkt.mutable_matrix());
+	//
+	// 		session->Send(ServerPacketHandler::MakeSendBuffer(satonSpawnPkt));
+	// 	}
+	// 	{
+	// 		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 0.7f, 0.7f, 0.7f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 25.f ,44.8f });
+	// 		Protocol::C_BOSS_SPAWN koukuSpawnPkt;
+	// 		koukuSpawnPkt.set_factory("Kouku");
+	// 		CClientServiceMgr::Mat2Pkt(matWorld, *koukuSpawnPkt.mutable_matrix());
+	// 		session->Send(ServerPacketHandler::MakeSendBuffer(koukuSpawnPkt));
+	// 	}
+	// }
 
 	return true;
 }
@@ -247,6 +253,55 @@ bool Handle_S_PLAYER_RESPAWN(PacketSessionRef& session, Protocol::S_PLAYER_RESPA
 			pPlayer->PlayerSpawn();
 		}
 	}
+
+	return true;
+}
+
+bool Handle_S_PLAYER_MOVE_STAGE(PacketSessionRef& session, Protocol::S_PLAYER_MOVE_STAGE& pkt)
+{
+	if (pkt.success() == false)
+		return true;
+
+	CSceneFactory::LoadScene(pkt.loadingtag(), pkt.stagetag(), true, 1000);
+	return true;
+}
+
+bool Handle_S_PLAYER_MOVE_STAGE_FINISH(PacketSessionRef& session, Protocol::S_PLAYER_MOVE_STAGE_FINISH& pkt)
+{
+	Protocol::Player pPlayerPkt = pkt.player();
+	Protocol::PlayerSkin eSkin = pkt.playerskin();
+	if (pPlayerPkt.id() == CClientServiceMgr::GetInstance()->m_iPlayerID)
+		return true;
+
+	wstring wstrPlayerTag = L"Player_Remote_" + to_wstring(pPlayerPkt.id());
+
+	if (Get_GameObjectUnCheck<CPlayer>(LAYER_PLAYER, wstrPlayerTag) != nullptr)
+		return true;
+
+	CPlayer* pPlayer = nullptr;
+	switch (eSkin)
+	{
+	case Protocol::PLAYER_TYPE_STEVE:
+		pPlayer = CPlayerFactory::Create<CPlayer>("Steve_Remote", wstrPlayerTag, CGameUtilMgr::s_matIdentity);
+		break;
+	case Protocol::PLAYER_TYPE_PRIDE:
+		pPlayer = CPlayerFactory::Create<CPlayer>("Pride_Remote", wstrPlayerTag, CGameUtilMgr::s_matIdentity);
+		break;
+	case Protocol::PLAYER_TYPE_ESHE:
+		pPlayer = CPlayerFactory::Create<CPlayer>("Eshe_Remote", wstrPlayerTag, CGameUtilMgr::s_matIdentity);
+		break;
+	case Protocol::PLAYER_TYPE_COPPER:
+		pPlayer = CPlayerFactory::Create<CPlayer>("Copper_Remote", wstrPlayerTag, CGameUtilMgr::s_matIdentity);
+		break;
+	case Protocol::PlayerSkin_INT_MIN_SENTINEL_DO_NOT_USE_:
+	case Protocol::PlayerSkin_INT_MAX_SENTINEL_DO_NOT_USE_:
+	default:
+		_CRASH("Wrong Skin");
+	}
+
+	pPlayer->SetID(pPlayerPkt.id());
+	pPlayer->SetName(pPlayerPkt.name());
+	pPlayer->PlayerSpawn();
 
 	return true;
 }

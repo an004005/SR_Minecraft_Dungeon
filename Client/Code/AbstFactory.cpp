@@ -74,6 +74,8 @@
 #include "MapUI.h"
 #include "StartStage.h"
 #include "MapTable.h"
+#include "NetStartStage.h"
+#include "KoukuLoading.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -730,6 +732,10 @@ void CSceneFactory::Ready_SceneFactory()
 		{
 			return CLoading::Create(s_pGraphicDev);
 		}});
+		s_mapLoadingSpawner.insert({"KoukuLoading", []()
+		{
+			return CKoukuLoading::Create(s_pGraphicDev);
+		}});
 	}
 
 	// scene
@@ -773,6 +779,10 @@ void CSceneFactory::Ready_SceneFactory()
 		s_mapSceneSpawner.insert({ "Stage_Start", []()
 		{
 			return CStartStage::Create(s_pGraphicDev);
+		} });
+		s_mapSceneSpawner.insert({ "NetStage_Start", []()
+		{
+			return CNetStartStage::Create(s_pGraphicDev);
 		} });
 	}
 }

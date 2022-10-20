@@ -27,20 +27,24 @@ enum : uint16
 	PKT_C_PLAYER_DEAD = 1018,
 	PKT_S_PLAYER_DEAD = 1019,
 	PKT_S_PLAYER_RESPAWN = 1020,
-	PKT_C_SPAWN_MONSTER = 1021,
-	PKT_S_SPAWN_MONSTER = 1022,
-	PKT_C_MONSTER_SET_TARGET = 1023,
-	PKT_S_MONSTER_SET_TARGET = 1024,
-	PKT_C_MONSTER_WORLD = 1025,
-	PKT_S_MONSTER_WORLD = 1026,
-	PKT_C_BOSS_SPAWN = 1027,
-	PKT_S_BOSS_SPAWN = 1028,
-	PKT_C_BOSS_WORLD = 1029,
-	PKT_S_BOSS_WORLD = 1030,
-	PKT_C_SATON_ATTACK = 1031,
-	PKT_S_SATON_ATTACK = 1032,
-	PKT_C_KOUKU_ATTACK = 1033,
-	PKT_S_KOUKU_ATTACK = 1034,
+	PKT_C_PLAYER_MOVE_STAGE = 1021,
+	PKT_S_PLAYER_MOVE_STAGE = 1022,
+	PKT_C_PLAYER_MOVE_STAGE_FINISH = 1023,
+	PKT_S_PLAYER_MOVE_STAGE_FINISH = 1024,
+	PKT_C_SPAWN_MONSTER = 1025,
+	PKT_S_SPAWN_MONSTER = 1026,
+	PKT_C_MONSTER_SET_TARGET = 1027,
+	PKT_S_MONSTER_SET_TARGET = 1028,
+	PKT_C_MONSTER_WORLD = 1029,
+	PKT_S_MONSTER_WORLD = 1030,
+	PKT_C_BOSS_SPAWN = 1031,
+	PKT_S_BOSS_SPAWN = 1032,
+	PKT_C_BOSS_WORLD = 1033,
+	PKT_S_BOSS_WORLD = 1034,
+	PKT_C_SATON_ATTACK = 1035,
+	PKT_S_SATON_ATTACK = 1036,
+	PKT_C_KOUKU_ATTACK = 1037,
+	PKT_S_KOUKU_ATTACK = 1038,
 };
 
 // Custom Handlers
@@ -54,6 +58,8 @@ bool Handle_C_PLAYER_ACTION(PacketSessionRef& session, Protocol::C_PLAYER_ACTION
 bool Handle_C_PLAYER_ARROW(PacketSessionRef& session, Protocol::C_PLAYER_ARROW& pkt);
 bool Handle_C_PLAYER_EQUIP(PacketSessionRef& session, Protocol::C_PLAYER_EQUIP& pkt);
 bool Handle_C_PLAYER_DEAD(PacketSessionRef& session, Protocol::C_PLAYER_DEAD& pkt);
+bool Handle_C_PLAYER_MOVE_STAGE(PacketSessionRef& session, Protocol::C_PLAYER_MOVE_STAGE& pkt);
+bool Handle_C_PLAYER_MOVE_STAGE_FINISH(PacketSessionRef& session, Protocol::C_PLAYER_MOVE_STAGE_FINISH& pkt);
 bool Handle_C_SPAWN_MONSTER(PacketSessionRef& session, Protocol::C_SPAWN_MONSTER& pkt);
 bool Handle_C_MONSTER_SET_TARGET(PacketSessionRef& session, Protocol::C_MONSTER_SET_TARGET& pkt);
 bool Handle_C_MONSTER_WORLD(PacketSessionRef& session, Protocol::C_MONSTER_WORLD& pkt);
@@ -78,6 +84,8 @@ public:
 		GPacketHandler[PKT_C_PLAYER_ARROW] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_PLAYER_ARROW>(Handle_C_PLAYER_ARROW, session, buffer, len); };
 		GPacketHandler[PKT_C_PLAYER_EQUIP] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_PLAYER_EQUIP>(Handle_C_PLAYER_EQUIP, session, buffer, len); };
 		GPacketHandler[PKT_C_PLAYER_DEAD] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_PLAYER_DEAD>(Handle_C_PLAYER_DEAD, session, buffer, len); };
+		GPacketHandler[PKT_C_PLAYER_MOVE_STAGE] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_PLAYER_MOVE_STAGE>(Handle_C_PLAYER_MOVE_STAGE, session, buffer, len); };
+		GPacketHandler[PKT_C_PLAYER_MOVE_STAGE_FINISH] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_PLAYER_MOVE_STAGE_FINISH>(Handle_C_PLAYER_MOVE_STAGE_FINISH, session, buffer, len); };
 		GPacketHandler[PKT_C_SPAWN_MONSTER] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_SPAWN_MONSTER>(Handle_C_SPAWN_MONSTER, session, buffer, len); };
 		GPacketHandler[PKT_C_MONSTER_SET_TARGET] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_MONSTER_SET_TARGET>(Handle_C_MONSTER_SET_TARGET, session, buffer, len); };
 		GPacketHandler[PKT_C_MONSTER_WORLD] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_MONSTER_WORLD>(Handle_C_MONSTER_WORLD, session, buffer, len); };
@@ -104,6 +112,8 @@ public:
 	static SendBufferRef MakeSendBuffer(Protocol::S_ALL_PLAYER_ENTER& pkt) { return MakeSendBuffer(pkt, PKT_S_ALL_PLAYER_ENTER); }
 	static SendBufferRef MakeSendBuffer(Protocol::S_PLAYER_DEAD& pkt) { return MakeSendBuffer(pkt, PKT_S_PLAYER_DEAD); }
 	static SendBufferRef MakeSendBuffer(Protocol::S_PLAYER_RESPAWN& pkt) { return MakeSendBuffer(pkt, PKT_S_PLAYER_RESPAWN); }
+	static SendBufferRef MakeSendBuffer(Protocol::S_PLAYER_MOVE_STAGE& pkt) { return MakeSendBuffer(pkt, PKT_S_PLAYER_MOVE_STAGE); }
+	static SendBufferRef MakeSendBuffer(Protocol::S_PLAYER_MOVE_STAGE_FINISH& pkt) { return MakeSendBuffer(pkt, PKT_S_PLAYER_MOVE_STAGE_FINISH); }
 	static SendBufferRef MakeSendBuffer(Protocol::S_SPAWN_MONSTER& pkt) { return MakeSendBuffer(pkt, PKT_S_SPAWN_MONSTER); }
 	static SendBufferRef MakeSendBuffer(Protocol::S_MONSTER_SET_TARGET& pkt) { return MakeSendBuffer(pkt, PKT_S_MONSTER_SET_TARGET); }
 	static SendBufferRef MakeSendBuffer(Protocol::S_MONSTER_WORLD& pkt) { return MakeSendBuffer(pkt, PKT_S_MONSTER_WORLD); }

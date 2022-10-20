@@ -14,6 +14,7 @@ public:
 	static CPlayerStartPos* Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
 	_uint GetID() const { return m_iID; }
+	void SetID(_uint iID) { m_iID = iID; }
 	_matrix GetWorld() const { return m_pTransform->m_matWorld; }
 
 private:

@@ -32,12 +32,12 @@ void Room::Enter(PlayerRef player)
 		DoAsync(&Room::Broadcast, sendBuffer);
 	}
 
-	if (_players.size() == _playerNum)
-	{
-		Protocol::S_ALL_PLAYER_ENTER allPkt;
-		allPkt.set_success(true);
-		DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(allPkt));
-	}
+	// if (_players.size() == _playerNum)
+	// {
+	// 	Protocol::S_ALL_PLAYER_ENTER allPkt;
+	// 	allPkt.set_success(true);
+	// 	DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(allPkt));
+	// }
 }
 
 void Room::Leave(PlayerRef player)

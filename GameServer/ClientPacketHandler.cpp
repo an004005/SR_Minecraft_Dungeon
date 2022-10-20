@@ -93,11 +93,11 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 
 
 	// send mon spawn
-	Protocol::S_SPAWN_MONSTER monPkt;
-	monPkt.set_success(true);
-	monPkt.set_id(1);
-	monPkt.set_factory("Zombie");
-	session->Send(ClientPacketHandler::MakeSendBuffer(monPkt));
+	// Protocol::S_SPAWN_MONSTER monPkt;
+	// monPkt.set_success(true);
+	// monPkt.set_id(1);
+	// monPkt.set_factory("Zombie");
+	// session->Send(ClientPacketHandler::MakeSendBuffer(monPkt));
 
 	return true;
 }
@@ -198,6 +198,25 @@ bool Handle_C_PLAYER_EQUIP(PacketSessionRef& session, Protocol::C_PLAYER_EQUIP& 
 bool Handle_C_PLAYER_DEAD(PacketSessionRef& session, Protocol::C_PLAYER_DEAD& pkt)
 {
 	GRoom->DoAsync(&Room::Dead, pkt.player().id());
+	return true;
+}
+
+bool Handle_C_PLAYER_MOVE_STAGE(PacketSessionRef& session, Protocol::C_PLAYER_MOVE_STAGE& pkt)
+{
+	Protocol::S_PLAYER_MOVE_STAGE movePkt;
+	movePkt.set_success(true);
+	movePkt.set_loadingtag(pkt.loadingtag());
+	movePkt.set_stagetag(pkt.stagetag());
+	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(movePkt));
+	return true;
+}
+
+bool Handle_C_PLAYER_MOVE_STAGE_FINISH(PacketSessionRef& session, Protocol::C_PLAYER_MOVE_STAGE_FINISH& pkt)
+{
+	Protocol::S_PLAYER_MOVE_STAGE_FINISH finPkt;
+	finPkt.mutable_player()->CopyFrom(pkt.player());
+	finPkt.set_playerskin(pkt.playerskin());
+	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(finPkt));
 	return true;
 }
 

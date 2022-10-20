@@ -101,19 +101,29 @@ HRESULT CPlayer::Ready_Object(const wstring& wstrPath)
 	}
 	else
 	{
-		if (CObjectStoreMgr::GetInstance()->GetInventory())
-		{
-			m_pInventory = CObjectStoreMgr::GetInstance()->GetInventory();
-			m_pInventory->SetArrow(50);
-		}
-		else
-		{
-			m_pInventory = CObjectFactory::Create<CInventory>("Inventory", L"Inventory");
-			CObjectStoreMgr::GetInstance()->StoreInventory(m_pInventory);
-		}
+		// if (CObjectStoreMgr::GetInstance()->GetInventory())
+		// {
+		// 	m_pInventory = CObjectStoreMgr::GetInstance()->GetInventory();
+		// 	m_pInventory->SetArrow(50);
+		// 	m_pInventory->AddItemToLayer();
+		// 	m_pInventory->AddRef();
+		// 	m_pInventory->SetOwner(this);
+		// 	Get_Layer(LAYER_GAMEOBJ)->Add_GameObject(L"Inventory", m_pInventory);
+		// }
+		// else
+		// {
+		// 	m_pInventory = CObjectFactory::Create<CInventory>("Inventory", L"Inventory");
+		// 	CObjectStoreMgr::GetInstance()->StoreInventory(m_pInventory);
+		// 	m_pInventory->AddRef();
+		// 	m_pInventory->SetOwner(this);
+		// 	m_pInventory->AddDefaultItems();
+		// }
+		m_pInventory = CObjectFactory::Create<CInventory>("Inventory", L"Inventory");
+		// CObjectStoreMgr::GetInstance()->StoreInventory(m_pInventory);
 		m_pInventory->AddRef();
 		m_pInventory->SetOwner(this);
 		m_pInventory->AddDefaultItems();
+
 		m_arrAnim = m_pInventory->CurWeapon(IT_MELEE)->SetarrAnim();
 		if (g_bOnline)
 			m_pInventory->RefreshInventory();
@@ -338,6 +348,10 @@ void CPlayer::PlayerSpawn()
 			{
 				if (pStartPos->GetID() == m_iID)
 				{
+					if (m_iID == 1)
+					{
+						int a = 3;
+					}
 					m_pRootPart->pTrans->Set_WorldDecompose(pStartPos->GetWorld());
 					break;
 				}
