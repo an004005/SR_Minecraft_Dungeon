@@ -39,7 +39,7 @@ void CMapTable::LateUpdate_Object()
 void CMapTable::Render_Object()
 {
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
-	m_pTextureCom->Set_Texture(173);
+	m_pTextureCom->Set_Texture(193);
 	m_pBufferCom->Render_Buffer();	
 }
 
