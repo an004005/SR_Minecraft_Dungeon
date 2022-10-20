@@ -7,6 +7,8 @@ CTerrainCubeMap::CTerrainCubeMap(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CGameObject(pGraphicDev)
 {
 	ZeroMemory(&m_fHeight, sizeof(_float) * VTXCNTX * VTXCNTZ);
+	
+
 }
 
 CTerrainCubeMap::~CTerrainCubeMap()
@@ -116,7 +118,7 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 	m_vecTotalTex.clear();
 
 
-	HANDLE hFile = CreateFile(wstrPath.c_str(), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE hFile = CreateFile(wstrPath.c_str(), GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 	{
@@ -132,7 +134,7 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 	ReadFile(hFile, &vecCubeSize, sizeof(size_t), &dwByte, nullptr);
 	ReadFile(hFile, &vecTexSize, sizeof(size_t), &dwByte, nullptr);
 
-	while (vecCubeSize--)
+	for (size_t i = 0; i < vecCubeSize; ++i)
 	{
 		ReadFile(hFile, &tMapCubeInfo, sizeof(MapCubeInfo), &dwByte, nullptr);
 
@@ -155,13 +157,13 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 		}
 	}
 
-	while (vecTexSize--)
+	for (size_t i = 0; i < vecTexSize; ++i)
 	{
 		ReadFile(hFile, &tMapCubeInfo, sizeof(MapCubeInfo), &dwByte, nullptr);
 		m_vecTotalTex.push_back(tMapCubeInfo);
 	}
 
-	ReadFile(hFile, &m_fHeight, sizeof(_float) * VTXCNTX * VTXCNTZ, &dwByte, nullptr);
+	ReadFile(hFile, &m_fHeight, sizeof(m_fHeight), &dwByte, nullptr);
 
 	CloseHandle(hFile);
 
@@ -230,11 +232,9 @@ void CTerrainCubeMap::LoadMap(const wstring& wstrPath)
 	// BlockTex(블럭마다 소리를 다르게 하기 위해)
 	for (auto& index : m_vecLand)
 	{
-		//_vec3 vCenter{ 0.f, 0.f, 0.f };
-		//D3DXVec3TransformCoord(&vCenter, &vCenter, &index.matWorld);
-		_float fX = index.matWorld._41; //vCenter.x - 0.5f;
-		_float fZ = index.matWorld._43;//vCenter.z - 0.5f;
-		m_fBlock[(_int)fX][(_int)fZ] = index.iTexIdx;
+		_vec3 vCenter{ 0.f, 0.f, 0.f };
+		D3DXVec3TransformCoord(&vCenter, &vCenter, &index.matWorld);
+		m_arrBlock[(_int)vCenter.x][(_int)vCenter.z] = index.iTexIdx;
 	}
 
 }
@@ -265,7 +265,7 @@ void CTerrainCubeMap::SaveMap(const wstring & wstrPath)
 	for (auto iter : m_vecTotalTex)
 		WriteFile(hFile, &iter, sizeof(MapCubeInfo), &dwByte, nullptr);
 
-	WriteFile(hFile, &m_fHeight, sizeof(_float) * VTXCNTX * VTXCNTZ, &dwByte, nullptr);
+	WriteFile(hFile, &m_fHeight, sizeof(m_fHeight), &dwByte, nullptr);
 		
 	CloseHandle(hFile);
 }
@@ -286,6 +286,7 @@ void CTerrainCubeMap::Set_CubeCoordinate(void)
 		_float fZ = vCenter.z - 0.5f;
 
 		fLength = itr.fHeight / 2.f + vCenter.y;
+
 
 		if (fLength > m_fHeight[(_int)fX][(_int)fZ])
 			m_fHeight[(_int)fX][(_int)fZ] = fLength;

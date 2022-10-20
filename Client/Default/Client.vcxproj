@@ -78,8 +78,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>../Bin\</OutDir>
-    <IncludePath>$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)lib\x64;$(SolutionDir)Reference\Library;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(DXSDK_DIR)Include;$(SolutionDir)ServerCore\;$(SolutionDir)Libraries\Include\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)lib\x64;$(SolutionDir)Reference\Library;$(SolutionDir)Libraries\Libs\;$(SolutionDir)Libraries\Libs\Protobuf\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -119,7 +119,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d9.lib;d3dx9.lib;dxguid.lib;System.lib;Utility.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d9.lib;d3dx9.lib;dxguid.lib;System.lib;Utility.lib;libprotobufd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -166,16 +166,33 @@
   <ItemGroup>
     <ClInclude Include="..\Header\AbstFactory.h" />
     <ClInclude Include="..\Header\BatchTool.h" />
+    <ClInclude Include="..\Header\BossHPUI.h" />
+    <ClInclude Include="..\Header\Cat_Attack.h" />
+    <ClInclude Include="..\Header\ClearUI.h" />
+    <ClInclude Include="..\Header\ClientServiceMgr.h" />
     <ClInclude Include="..\Header\Cat.h" />
     <ClInclude Include="..\Header\Cat2.h" />
     <ClInclude Include="..\Header\DamageFontMgr.h" />
+    <ClInclude Include="..\Header\Enderman.h" />
+    <ClInclude Include="..\Header\EndermanController.h" />
+    <ClInclude Include="..\Header\EditBox.h" />
     <ClInclude Include="..\Header\FireworksArrow.h" />
     <ClInclude Include="..\Header\CamAnimation.h" />
     <ClInclude Include="..\Header\CameraTool.h" />
     <ClInclude Include="..\Header\InventoryUI.h" />
+    <ClInclude Include="..\Header\ItemTexUI.h" />
+    <ClInclude Include="..\Header\KoukuHpUI.h" />
+    <ClInclude Include="..\Header\LaserShotRune.h" />
+    <ClInclude Include="..\Header\Leaper.h" />
+    <ClInclude Include="..\Header\LeaperController.h" />
+    <ClInclude Include="..\Header\Logo.h" />
+    <ClInclude Include="..\Header\MapUI.h" />
+    <ClInclude Include="..\Header\MultiShotRune.h" />
     <ClInclude Include="..\Header\PlayerStartPos.h" />
     <ClInclude Include="..\Header\Kouku.h" />
     <ClInclude Include="..\Header\KoukuController.h" />
+    <ClInclude Include="..\Header\NetStage.h" />
+    <ClInclude Include="..\Header\PlayerUI.h" />
     <ClInclude Include="..\Header\Posion.h" />
     <ClInclude Include="..\Header\AnimationTool.h" />
     <ClInclude Include="..\Header\Apple.h" />
@@ -216,13 +233,19 @@
     <ClInclude Include="..\Header\Particle.h" />
     <ClInclude Include="..\Header\Player.h" />
     <ClInclude Include="..\Header\PlayerController.h" />
+    <ClInclude Include="..\Header\PowerRune.h" />
+    <ClInclude Include="..\Header\Protocol.pb.h" />
     <ClInclude Include="..\Header\RedStoneMonstrosityBullet.h" />
     <ClInclude Include="..\Header\RedStoneCube.h" />
     <ClInclude Include="..\Header\RedStoneCubeController.h" />
     <ClInclude Include="..\Header\RedStoneMonstrosity.h" />
     <ClInclude Include="..\Header\RedStoneMonstrosityController.h" />
+    <ClInclude Include="..\Header\RemoteInventory.h" />
+    <ClInclude Include="..\Header\Rune.h" />
     <ClInclude Include="..\Header\Saton.h" />
+    <ClInclude Include="..\Header\SatonCircle.h" />
     <ClInclude Include="..\Header\SatonController.h" />
+    <ClInclude Include="..\Header\ServerPacketHandler.h" />
     <ClInclude Include="..\Header\ShockPowder.h" />
     <ClInclude Include="..\Header\SkeletalCube.h" />
     <ClInclude Include="..\Header\Skeleton.h" />
@@ -230,12 +253,20 @@
     <ClInclude Include="..\Header\SoundMgr.h" />
     <ClInclude Include="..\Header\SphereEffect.h" />
     <ClInclude Include="..\Header\Stage.h" />
+    <ClInclude Include="..\Header\Stage_Kouku.h" />
+    <ClInclude Include="..\Header\StartStage.h" />
     <ClInclude Include="..\Header\StatComponent.h" />
     <ClInclude Include="..\Header\StaticCamera.h" />
+    <ClInclude Include="..\Header\StormRune.h" />
+    <ClInclude Include="..\Header\StunRune.h" />
+    <ClInclude Include="..\Header\Struct.pb.h" />
     <ClInclude Include="..\Header\Sword.h" />
     <ClInclude Include="..\Header\Terrain.h" />
     <ClInclude Include="..\Header\TerrainCubeMap.h" />
     <ClInclude Include="..\Header\TestCube.h" />
+    <ClInclude Include="..\Header\MapTable.h" />
+    <ClInclude Include="..\Header\Trigger.h" />
+    <ClInclude Include="..\Header\Weapon.h" />
     <ClInclude Include="..\Header\Zombie.h" />
     <ClInclude Include="..\Header\ZombieController.h" />
     <ClInclude Include="..\Header\UI.h" />
@@ -258,6 +289,8 @@
     <ClInclude Include="imstb_textedit.h" />
     <ClInclude Include="imstb_truetype.h" />
     <ClInclude Include="ImZoomSlider.h" />
+    <ClInclude Include="ItemUI.h" />
+    <ClInclude Include="LightningRune.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stb\stb_image.h" />
     <ClInclude Include="stdafx.h" />
@@ -266,15 +299,37 @@
   <ItemGroup>
     <ClCompile Include="..\Code\AbstFactory.cpp" />
     <ClCompile Include="..\Code\BatchTool.cpp" />
+    <ClCompile Include="..\Code\BossHPUI.cpp" />
+    <ClCompile Include="..\Code\Cat_Attack.cpp" />
+    <ClCompile Include="..\Code\ClearUI.cpp" />
     <ClCompile Include="..\Code\Cat2.cpp" />
     <ClCompile Include="..\Code\DamageFontMgr.cpp" />
+    <ClCompile Include="..\Code\ClientServiceMgr.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\Code\Enderman.cpp" />
+    <ClCompile Include="..\Code\EndermanController.cpp" />
+    <ClCompile Include="..\Code\EditBox.cpp" />
+    <ClCompile Include="..\Code\Enum.pb.cc">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\Code\FireworksArrow.cpp" />
     <ClCompile Include="..\Code\CamAnimation.cpp" />
     <ClCompile Include="..\Code\CameraTool.cpp" />
     <ClCompile Include="..\Code\InventoryUI.cpp" />
+    <ClCompile Include="..\Code\ItemTexUI.cpp" />
+    <ClCompile Include="..\Code\KoukuHpUI.cpp" />
+    <ClCompile Include="..\Code\LaserShotRune.cpp" />
+    <ClCompile Include="..\Code\Leaper.cpp" />
+    <ClCompile Include="..\Code\LeaperController.cpp" />
+    <ClCompile Include="..\Code\Logo.cpp" />
+    <ClCompile Include="..\Code\MapUI.cpp" />
+    <ClCompile Include="..\Code\MultiShotRune.cpp" />
     <ClCompile Include="..\Code\PlayerStartPos.cpp" />
     <ClCompile Include="..\Code\Kouku.cpp" />
     <ClCompile Include="..\Code\KoukuController.cpp" />
+    <ClCompile Include="..\Code\PlayerUI.cpp" />
+    <ClCompile Include="..\Code\NetStage.cpp" />
     <ClCompile Include="..\Code\Posion.cpp" />
     <ClCompile Include="..\Code\AnimationTool.cpp" />
     <ClCompile Include="..\Code\Apple.cpp" />
@@ -315,13 +370,21 @@
     <ClCompile Include="..\Code\Particle.cpp" />
     <ClCompile Include="..\Code\Player.cpp" />
     <ClCompile Include="..\Code\PlayerController.cpp" />
+    <ClCompile Include="..\Code\PowerRune.cpp" />
+    <ClCompile Include="..\Code\Protocol.pb.cc">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\Code\RedStoneMonstrosityBullet.cpp" />
     <ClCompile Include="..\Code\RedStoneCube.cpp" />
     <ClCompile Include="..\Code\RedStoneCubeController.cpp" />
     <ClCompile Include="..\Code\RedStoneMonstrosity.cpp" />
     <ClCompile Include="..\Code\RedStoneMonstrosityController.cpp" />
+    <ClCompile Include="..\Code\RemoteInventory.cpp" />
+    <ClCompile Include="..\Code\Rune.cpp" />
     <ClCompile Include="..\Code\Saton.cpp" />
+    <ClCompile Include="..\Code\SatonCircle.cpp" />
     <ClCompile Include="..\Code\SatonController.cpp" />
+    <ClCompile Include="..\Code\ServerPacketHandler.cpp" />
     <ClCompile Include="..\Code\ShockPowder.cpp" />
     <ClCompile Include="..\Code\SkeletalCube.cpp" />
     <ClCompile Include="..\Code\Skeleton.cpp" />
@@ -329,12 +392,22 @@
     <ClCompile Include="..\Code\SoundMgr.cpp" />
     <ClCompile Include="..\Code\SphereEffect.cpp" />
     <ClCompile Include="..\Code\Stage.cpp" />
+    <ClCompile Include="..\Code\Stage_Kouku.cpp" />
+    <ClCompile Include="..\Code\StartStage.cpp" />
     <ClCompile Include="..\Code\StatComponent.cpp" />
     <ClCompile Include="..\Code\StaticCamera.cpp" />
+    <ClCompile Include="..\Code\Struct.pb.cc">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\Code\StormRune.cpp" />
+    <ClCompile Include="..\Code\StunRune.cpp" />
     <ClCompile Include="..\Code\Sword.cpp" />
     <ClCompile Include="..\Code\Terrain.cpp" />
     <ClCompile Include="..\Code\TerrainCubeMap.cpp" />
     <ClCompile Include="..\Code\TestCube.cpp" />
+    <ClCompile Include="..\Code\MapTable.cpp" />
+    <ClCompile Include="..\Code\Trigger.cpp" />
+    <ClCompile Include="..\Code\Weapon.cpp" />
     <ClCompile Include="..\Code\Zombie.cpp" />
     <ClCompile Include="..\Code\ZombieController.cpp" />
     <ClCompile Include="..\Code\UI.cpp" />
@@ -393,6 +466,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="ItemUI.cpp" />
+    <ClCompile Include="LightningRune.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

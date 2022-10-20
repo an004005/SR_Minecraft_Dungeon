@@ -20,7 +20,7 @@ private:
 	_float m_fWallCoolTime = 8.f;
 
 	_float m_fCurBombCoolTime = 0.f;
-	_float m_fBombCoolTime = 4.f;
+	_float m_fBombCoolTime = 5.f;
 
 	_float m_fAttackRange = 15.f; // 사정거리
 	_float m_fRunDist = 7.f;

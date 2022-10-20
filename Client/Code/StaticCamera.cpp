@@ -34,6 +34,8 @@ HRESULT CStaticCamera::Ready_Object()
 void CStaticCamera::Set_Mode()
 {
 	m_pTransform->Rotation(ROT_Y, D3DXToRadian(-50.f));
+	m_pTransform->Rotation(ROT_X, D3DXToRadian(-10.f));
+
 }
 
 
@@ -45,7 +47,7 @@ Engine::_int CStaticCamera::Update_Object(const _float& fTimeDelta)
 	{
 	case CAM_NORMAL:
 		Update_DefaultFollow(fTimeDelta);
-		break;
+		break; 
 	case CAM_ANIMATION:
 		m_pCamAnim->GetCamWorld(m_pTransform->m_matWorld);
 		if (m_pCamAnim->IsFinish())
@@ -56,6 +58,12 @@ Engine::_int CStaticCamera::Update_Object(const _float& fTimeDelta)
 			// cam reset pos to normal
 		}
 		break;
+	case CAM_LOGO_FOLLOW:
+		if (m_pFollowPart)
+			m_pTransform->m_matWorld = m_pFollowPart->GetWorldMat();
+		break;
+	case CAM_WAIT:
+
 	default: ;
 	}
 

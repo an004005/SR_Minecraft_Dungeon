@@ -1,9 +1,8 @@
 #pragma once
-#include "EquipItem.h"
-
+#include "Weapon.h"
 
 class CCrossbow :
-	public CEquipItem
+	public CWeapon
 {
 private:
 	explicit CCrossbow(LPDIRECT3DDEVICE9 pGraphicDev);
@@ -23,9 +22,9 @@ public:
 	virtual _int Attack() override;
 	virtual void Equipment(SkeletalPart* pSkeletalPart) override;
 	void LoadFireWork() { m_bFireWork = true; }
+	_bool IsFireWork() const { return m_bFireWork; }
 
 private:
-	_bool PickTargetEnemy(OUT _vec3& vLookAt);
 	_bool m_bFireWork = false;
 };
 

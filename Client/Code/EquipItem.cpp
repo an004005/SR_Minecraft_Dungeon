@@ -1,11 +1,9 @@
 #include "stdafx.h"
 #include "..\Header\EquipItem.h"
-#include "Player.h"
-#include "SkeletalCube.h"
-#include "Transform.h"
 
 CEquipItem::CEquipItem(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CItem(pGraphicDev)
+	, m_pItemUI(nullptr)
 {
 	m_eItemType = IT_END;
 	m_iAttackCnt = 0;

@@ -6,6 +6,8 @@ enum CamMode
 {
 	CAM_NORMAL,
 	CAM_ANIMATION,
+	CAM_LOGO_FOLLOW,
+	CAM_WAIT,
 	CAM_END
 };
 class CCamAnimation;
@@ -31,6 +33,7 @@ public:
 	void PlayeCamAnimation(const wstring& wstrAnim);
 	void Set_Mode(void);
 	void ResetPosition();
+	void SetSkeletalFollowMode(SkeletalPart* pPart) { m_pFollowPart = pPart; m_eMode = CAM_LOGO_FOLLOW;}
 
 private:
 	void Update_DefaultFollow(const _float& fTimeDelta);
@@ -58,6 +61,10 @@ private:
 	// anim mode
 	CCamAnimation* m_pCamAnim = nullptr;
 	// anim mode
+
+	// logo mode
+	SkeletalPart* m_pFollowPart = nullptr;
+	//
 
 public:
 	static CStaticCamera* Create(LPDIRECT3DDEVICE9 pGraphicDev);

@@ -11,6 +11,11 @@ class CTerrainRcTex;
 
 END
 
+typedef _int(*BlockIndex)[VTXCNTZ];
+
+template<int VX, int VZ>
+using BlockArray = array<array<_int, VZ>, VX>;
+
 struct MapCubeInfo
 {
 	_matrix matWorld;
@@ -32,6 +37,7 @@ private:
 
 public:
 	_float	GetHeight(_float fX, _float fZ) { return m_fHeight[(_int)fX][(_int)fZ]; }
+	void SetHeight(_uint iX, _uint iZ, _float fY) { m_fHeight[iX][iZ] = fY; }
 
 public:
 	virtual HRESULT Ready_Object(const wstring& wstrPath = L"");
@@ -49,7 +55,7 @@ public:
 	void			     DeleteCube(int iToDel);
 	void				 AddTex(const MapCubeInfo& tInfo);
 	void			     DeleteTex(_vec3 PickPos);
-	
+	array<array<_int, VTXCNTZ>, VTXCNTX>		 GetBlockIndex() { return m_arrBlock; }
 
 private:
 	vector<MapCubeInfo> m_vecTotalCube;
@@ -67,8 +73,7 @@ private:
 private:
 	_float			m_fHeight[VTXCNTX][VTXCNTZ];
 	_bool			m_bRendState = false;
-	_float			m_fBlock[VTXCNTX][VTXCNTZ];
-
+	BlockArray<VTXCNTX, VTXCNTZ> m_arrBlock{};
 public:
 	static CTerrainCubeMap*		Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath = L"");
 

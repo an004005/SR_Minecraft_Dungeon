@@ -26,6 +26,8 @@
 #include "Renderer.h"
 #include "GameUtilMgr.h"
 #include "Collider.h"
+#include "RcBossHPTex.h"
+
 
 
 BEGIN(Engine)
@@ -49,6 +51,17 @@ BEGIN(Engine)
 		CComponent* pComponent = CManagement::GetInstance()->Get_Component(eLayerID, pObjTag, pComponentTag, eID);
 		T* pCasted = dynamic_cast<T*>(pComponent);
 		NULL_CHECK_RETURN(pCasted, nullptr);
+
+		return pCasted;
+	}
+	template <typename T>
+	T* Get_ComponentUnCheck(LAYERID eLayerID,
+	                                 const wstring& pObjTag,
+	                                 const wstring& pComponentTag,
+	                                 COMPONENTID eID)
+	{
+		CComponent* pComponent = CManagement::GetInstance()->Get_Component(eLayerID, pObjTag, pComponentTag, eID);
+		T* pCasted = dynamic_cast<T*>(pComponent);
 
 		return pCasted;
 	}

@@ -1,7 +1,6 @@
 #pragma once
-#include "EquipItem.h"
-class CGlaive :
-	public CEquipItem
+#include "Weapon.h"
+class CGlaive : public CWeapon
 {
 private:
 	explicit CGlaive(LPDIRECT3DDEVICE9 pGraphicDev);

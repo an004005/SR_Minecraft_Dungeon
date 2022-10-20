@@ -17,6 +17,9 @@
 #include "Inventory.h"
 #include "Emerald.h"
 #include "PlayerStartPos.h"
+#include "ServerPacketHandler.h"
+#include "TerrainCubeMap.h"
+#include "LaserShotRune.h"
 
 /*-----------------------
  *    CCharacter
@@ -24,6 +27,7 @@
 
 const _float CPlayer::s_PotionCollTime = 20.f;
 const _float CPlayer::s_RollCoolTime = 3.f;
+_bool CPlayer::s_bDropDead = false;
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev) : CSkeletalCube(pGraphicDev)
 {
@@ -36,16 +40,26 @@ CPlayer::~CPlayer()
 {
 }
 
-HRESULT CPlayer::Ready_Object()
+HRESULT CPlayer::Ready_Object(const wstring& wstrPath)
 {
 	CSkeletalCube::Ready_Object();
-
+	if (wstrPath.empty() == false)
+		LoadSkeletal(wstrPath);
 
 	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 	m_pCurAnim = m_pIdleAnim;
 
-	CController* pController = Add_Component<CPlayerController>(L"Proto_PlayerController", L"Proto_PlayerController", ID_DYNAMIC);
-	pController->SetOwner(this);
+	if (m_bRemote)
+	{
+		CController* pController = Add_Component<CPlayerController>(L"Proto_PlayerRemoteController", L"Proto_PlayerRemoteController", ID_DYNAMIC);
+		pController->SetOwner(this);
+	}
+	else
+	{
+		CController* pController = Add_Component<CPlayerController>(L"Proto_PlayerController", L"Proto_PlayerController", ID_DYNAMIC);
+		pController->SetOwner(this);
+	}
+
 
 	m_pColl = Add_Component<CCollisionCom>(L"Proto_CollisionCom", L"Proto_CollisionCom", ID_DYNAMIC);
 	m_pColl->SetOwner(this);
@@ -58,7 +72,7 @@ HRESULT CPlayer::Ready_Object()
 	m_CurPotionCoolTime = 20.f;
 
 	m_pStat = Add_Component<CStatComponent>(L"Proto_StatCom", L"Proto_StatCom", ID_DYNAMIC);
-	m_pStat->SetMaxHP(100);
+	m_pStat->SetMaxHP(300);
 	m_pStat->SetTransform(m_pRootPart->pTrans);
 	m_pStat->SetHurtSound({
 		L"DLC_sfx_mob_whisperer_hit_1.ogg",
@@ -69,34 +83,66 @@ HRESULT CPlayer::Ready_Object()
 		L"DLC_sfx_mob_whisperer_hit_6.ogg" });
 
 	// 항상 카메라 먼저 만들고 플레이어 만들기!
-	Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")->SetTarget(this);
+	if (m_bRemote == false)
+		Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")->SetTarget(this);
+
 	m_dwWalkDust = GetTickCount();
 	m_dwRollDust = GetTickCount();
 
+	if (m_bRemote)
+	{
+		m_pInventory = CObjectFactory::Create<CInventory>("RemoteInventory", L"RemoteInventory");
+		m_pInventory->AddRef();
+		m_pInventory->SetOwner(this);
+		m_pInventory->AddDefaultItems();
+		m_arrAnim = m_pInventory->CurWeapon(IT_MELEE)->SetarrAnim();
+	}
+	else
+	{
+		m_pInventory = CObjectFactory::Create<CInventory>("Inventory", L"Inventory");
+		m_pInventory->AddRef();
+		m_pInventory->SetOwner(this);
+		m_pInventory->AddDefaultItems();
+		m_arrAnim = m_pInventory->CurWeapon(IT_MELEE)->SetarrAnim();
+	}
 
-	m_pInventory = CObjectFactory::Create<CInventory>("Inventory", L"Inventory");
-	m_pInventory->AddRef();
-	m_arrAnim = m_pInventory->CurWeapon(IT_MELEE)->SetarrAnim();
 
 	m_pRootPart->pTrans->Update_Component(0.f);
 	//test
 	// PlayerSpawn();
 
+	//큐브의 인덱스를 받아옴
+	CTerrainCubeMap* pTerrainCube = Get_GameObject<CTerrainCubeMap>(LAYER_ENV, L"TerrainCubeMap");
+	arrBlock = pTerrainCube->GetBlockIndex();
 	return S_OK;
 }
 
 _int CPlayer::Update_Object(const _float& fTimeDelta)
 {
 	CSkeletalCube::Update_Object(fTimeDelta);
+
+		
 	DEBUG_SPHERE(m_pColl->GetCollPos(), m_pColl->GetRadius(), 0.1f);
 
-	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
-		m_bCanPlayAnim = true;
+	if (m_pStat->IsSatonFascinate())
+		m_strStatus = "Fascinate";
+	else
+		m_strStatus = "Nothing";
 
-	if (s_RollCoolTime > m_CurRollCoolTime)
-		m_CurRollCoolTime += fTimeDelta;
-	if (s_PotionCollTime > m_CurPotionCoolTime)
-		m_CurPotionCoolTime += fTimeDelta;
+		if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
+			m_bCanPlayAnim = true;
+
+		if (s_RollCoolTime > m_CurRollCoolTime)
+			m_CurRollCoolTime += fTimeDelta;
+		if (s_PotionCollTime > m_CurPotionCoolTime)
+			m_CurPotionCoolTime += fTimeDelta;
+
+	IM_BEGIN("TEst"); // 
+
+	_vec3 vpos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+	ImGui::Text("%f, %f, %f", vpos.x, vpos.y, vpos.z);
+	IM_END;
+
 
 	// 상태 변경 조건 설정
 	StateChange();
@@ -119,20 +165,24 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 		m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * m_fRollSpeed * fTimeDelta;
 		if (m_dwRollDust + 300 < GetTickCount())
 		{
-			CEffectFactory::Create<CCloud>("Roll_Cloud", L"Roll_Cloud");
+			CEffectFactory::Create<CCloud>("Roll_Cloud", L"Roll_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS] + _vec3{0.f, 0.5f, 0.f});
 			m_dwRollDust = GetTickCount();
 		}
 		break;
 	case LEGACY:
 		break;
+	case FASCINATE:
+		RotationToSaton();
+		m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_vTargetPos * m_fSpeed * fTimeDelta;
+		break;
 	case DEAD:
-		if (m_bDeadTime > 3.f) 
-			PlayerSpawn();
-		m_bDeadTime += fTimeDelta;
 		break;
 	default:
 		break;
 	}
+
+	
+	// IM_LOG("%f, %f, %f", m_pRootPart->pTrans->m_vInfo[INFO_POS].x, m_pRootPart->pTrans->m_vInfo[INFO_POS].y, m_pRootPart->pTrans->m_vInfo[INFO_POS].z);
 
 	return OBJ_NOEVENT;
 }
@@ -153,12 +203,32 @@ void CPlayer::LateUpdate_Object()
 		m_bApplyMeleeAttack = false;
 		m_bApplyMeleeAttackNext = true;
 	}
+
+	if (s_bDropDead)
+		if (m_pRootPart->pTrans->m_vInfo[INFO_POS].y < 21.f) { m_pStat->TakeDamage(m_pStat->GetMaxHP(), CGameUtilMgr::s_vZero, this); }
+	
 }
 
 void CPlayer::Render_Object()
 {
 	if (m_bVisible)
+	{
+		_matrix matView, matProj;
+		D3DVIEWPORT9 viewport;
+		ZeroMemory(&viewport, sizeof(D3DVIEWPORT9));
+		m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
+		m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &matProj);
+		m_pGraphicDev->GetViewport(&viewport);
+
+		_vec2 vScreen;
+		CGameUtilMgr::World2Screen(vScreen, m_pColl->GetCollPos() + _vec3{0.f, 2.3f, 0.f}, matView, matProj, viewport);
+		const wstring tmp(m_strName.begin(), m_strName.end());
+		_float fHalf = 10.f * _float(tmp.size()) / 2;
+		vScreen.x -= fHalf;
+		Engine::Render_Font(L"Gothic_Bold20", tmp.c_str(), &vScreen, D3DCOLOR_ARGB(255, 255, 255, 255));
+
 		CSkeletalCube::Render_Object();
+	}
 }
 
 void CPlayer::Free()
@@ -182,21 +252,38 @@ void CPlayer::AnimationEvent(const string& strEvent)
 		{
 			Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 				->PlayShake(0.15f, 0.4f);
-			CEffectFactory::Create<CCrack>("Exe_Decal", L"Exe_Decal");
+			_vec3 vDecalPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 3.f;
+			vDecalPos.y = 0.5f + Get_GameObject<CTerrainCubeMap>(LAYER_ENV, L"TerrainCubeMap")->GetHeight(vDecalPos.x, vDecalPos.z);
+
+			CEffectFactory::Create<CCrack>("Exe_Decal", L"Exe_Decal", vDecalPos);
 			for (int i = 0; i < 5; i++)
 			{
-				CEffectFactory::Create<CCloud>("Decal_Cloud", L"Decal_Cloud");
+				CEffectFactory::Create<CCloud>("Decal_Cloud", L"Decal_Cloud", vDecalPos);
 			}
 		}
 		// axe crack
 	}
 	else if (strEvent == "step")
 	{
-		CSoundMgr::GetInstance()->PlaySoundRandom({ L"sfx_player_stepStone-001.ogg", L"sfx_player_stepStone-002.ogg" ,L"sfx_player_stepStone-003.ogg" }, m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+		if ((_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].x <= 0 || (_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].z <= 0 ||
+			(_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].x > 129 || (_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].z > 129)
+			return;
+
+		if (arrBlock[(_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].x][(_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].z] == 13)
+		{
+			CSoundMgr::GetInstance()->PlaySoundRandom({ L"sfx_player_stepGrass-001.ogg", L"sfx_player_stepGrass-002.ogg" ,L"sfx_player_stepGrass-003.ogg" }, m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+		}
+		else if (arrBlock[(_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].x][(_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].z] == 15)
+		{
+			CSoundMgr::GetInstance()->PlaySound(L"DLC_Ice_SluiceGate_Water_LOOP.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+
+		}
+		else
+			CSoundMgr::GetInstance()->PlaySoundRandom({ L"sfx_player_stepStone-001.ogg", L"sfx_player_stepStone-002.ogg" ,L"sfx_player_stepStone-003.ogg" }, m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 
 		if (m_dwWalkDust + 500 < GetTickCount())
 		{
-			CEffectFactory::Create<CCloud>("Walk_Cloud", L"Walk_Cloud");
+			CEffectFactory::Create<CCloud>("Walk_Cloud", L"Walk_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS] + _vec3{0.f, 0.5f, 0.f});
 			m_dwWalkDust = GetTickCount();
 		}
 	}
@@ -208,11 +295,15 @@ void CPlayer::AnimationEvent(const string& strEvent)
 	{
 		CSoundMgr::GetInstance()->PlaySound(L"sfx_player_landing.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 		for (int j = 0; j < 15; j++)
-			CEffectFactory::Create<CCloud>("ShockPowder_Cloud", L"ShockPowder_Cloud");
+			CEffectFactory::Create<CCloud>("ShockPowder_Cloud", L"ShockPowder_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS] + _vec3{0.f, 0.5f, 0.f});
 	}
 	else if (strEvent == "visible")
 	{
 		SetVisible(true);
+	}
+	else if (strEvent == "RangeFire")
+	{
+		PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK3]);
 	}
 }
 
@@ -236,8 +327,138 @@ void CPlayer::PlayerSpawn()
 	m_bStopAnim = false;
 	m_bCanPlayAnim = false;
 	PlayAnimationOnce(&landing);
-	m_bDeadTime = 0.f;
 	SetVisible(true);
+}
+
+
+void CPlayer::SpawnArrow(_uint iDamage, PlayerArrowType eType, _bool bCritical, ArrowType eArrowType)
+{
+	_vec3 vLookAt;
+	const _vec3 vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + _vec3{0.f, 1.3f, 0.f};
+
+	if (m_bRemote == false)
+	{
+		if (PickTargetEnemy(OUT vLookAt) == false)
+			vLookAt = vPos + m_pRootPart->pTrans->m_vInfo[INFO_LOOK];
+
+		// pkt
+		if (g_bOnline)
+		{
+			Protocol::C_PLAYER_ARROW arrowActionPkt;
+			arrowActionPkt.mutable_player()->set_id(CClientServiceMgr::GetInstance()->m_iPlayerID);
+			arrowActionPkt.mutable_player()->set_name("Player_test");
+			arrowActionPkt.set_yaw(GetYawToCursor());
+			arrowActionPkt.mutable_vlookat()->set_x(vLookAt.x);
+			arrowActionPkt.mutable_vlookat()->set_y(vLookAt.y);
+			arrowActionPkt.mutable_vlookat()->set_z(vLookAt.z);
+			arrowActionPkt.set_actionbit(PLAYER_MR);
+		
+			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(arrowActionPkt));
+		}
+
+		switch (eType)
+		{
+		case PlayerArrowType::NORMAL:
+			CSoundMgr::GetInstance()->PlaySound(L"sfx_item_arrow_fire.ogg", vPos);
+			CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 
+			{_float(iDamage), bCritical, COLL_PLAYER_BULLET, eArrowType},
+				vPos, vLookAt);
+			break;
+		case PlayerArrowType::MULTISHOT:
+			{
+				CSoundMgr::GetInstance()->PlaySound(L"sfx_item_arrow_fire.ogg", vPos);
+
+				_matrix matRot, matRotReverse;
+				D3DXMatrixRotationY(&matRotReverse, D3DXToRadian(-15.f));
+				D3DXMatrixRotationY(&matRot, D3DXToRadian(5.f));
+
+				_vec3 vLook = vLookAt - vPos;
+				D3DXVec3TransformNormal(&vLook, &vLook, &matRotReverse);
+
+				for (int i = 0; i < 5; ++i)
+				{
+					D3DXVec3TransformNormal(&vLook, &vLook, &matRot);
+					CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 
+					{_float(iDamage), bCritical, COLL_PLAYER_BULLET, eArrowType},
+						vPos, vLook + vPos);
+				}
+			}
+			break;
+		case PlayerArrowType::LASER:
+			m_bLaser = true;
+			m_fCurLaserTime = 0.f;
+			break;
+		default:;
+		}
+	}
+	else
+	{
+		vLookAt = m_vArrowLookAt;
+
+		switch (eType)
+		{
+		case PlayerArrowType::NORMAL:
+			CSoundMgr::GetInstance()->PlaySound(L"sfx_item_arrow_fire.ogg", vPos);
+			CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 
+			{_float(iDamage), bCritical, COLL_PLAYER_BULLET, eArrowType},
+				vPos, vLookAt);
+			break;
+		case PlayerArrowType::MULTISHOT:
+			{
+				CSoundMgr::GetInstance()->PlaySound(L"sfx_item_arrow_fire.ogg", vPos);
+
+				_matrix matRot, matRotReverse;
+				D3DXMatrixRotationY(&matRotReverse, D3DXToRadian(-15.f));
+				D3DXMatrixRotationY(&matRot, D3DXToRadian(5.f));
+
+				_vec3 vLook = vLookAt - vPos;
+				D3DXVec3TransformNormal(&vLook, &vLook, &matRotReverse);
+
+				for (int i = 0; i < 5; ++i)
+				{
+					D3DXVec3TransformNormal(&vLook, &vLook, &matRot);
+					CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 
+					{_float(iDamage), bCritical, COLL_PLAYER_BULLET, eArrowType},
+						vPos, vLook + vPos);
+				}
+			}
+			break;
+		case PlayerArrowType::LASER:
+			m_bLaser = true;
+			m_fCurLaserTime = 0.f;
+			break;
+		default:;
+		}
+	}
+}
+
+_bool CPlayer::PickTargetEnemy(_vec3& vLookAt)
+{
+	// https://gohen.tistory.com/79 참조(광선과 직선 교차판정)
+
+	_vec3 vOrigin, vRayDir;
+	_matrix matView, matProj;
+	D3DVIEWPORT9 ViewPort;
+
+	ZeroMemory(&ViewPort, sizeof(D3DVIEWPORT9));
+	m_pGraphicDev->GetViewport(&ViewPort);
+	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &matProj);
+	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
+	CGameUtilMgr::GetPickingRay(vOrigin, vRayDir, g_hWnd, matView, matProj, ViewPort);
+
+	for (const auto& enemy : Engine::Get_Layer(LAYER_ENEMY)->Get_MapObject())
+	{
+		const auto pColl = enemy.second->Get_Component<CCollisionCom>(L"Proto_CollisionCom", ID_DYNAMIC);
+		const _vec3 vSubject = vOrigin - pColl->GetCollPos();
+		const _float fB = D3DXVec3Dot(&vRayDir, &vSubject);
+		const _float fC = D3DXVec3Dot(&vSubject, &vSubject) - pColl->GetRadius();
+		if (fB * fB  - fC >= 0.f)
+		{
+			vLookAt = pColl->GetCollPos();
+			return true;
+		}
+	}
+	return false;
 }
 
 void CPlayer::SetMoveDir(_float fX, _float fZ)
@@ -257,38 +478,22 @@ void CPlayer::AttackState()
 	{
 		m_bCanPlayAnim = false;
 		m_iAttackCnt = m_pInventory->CurWeapon(IT_MELEE)->Attack();// 애니메이션 실행
-
-
 	}
 	else if (m_bRangeAttack)
 	{
-		//기본이 근거리라 원거리로 바꿔줘야 텍스처가 나옴
-		WeaponChange(IT_RANGE);
+
 		m_bCanPlayAnim = false;
 		m_iAttackCnt = m_pInventory->CurWeapon(IT_RANGE)->Attack();
-		m_pInventory->UseArrow(1);
+		if (m_bRemote == false)
+		{
+			m_pInventory->UseArrow(1);
+		}
 	}
-
-#pragma region Lazer 
-	 //CEffectFactory::Create<CLazer>("Lazer_Beam", L"Lazer_Beam");
-	 //for (int i = 0; i < 12; i++)
-	 //{
-	 //	CEffectFactory::Create<CLazer_Circle>("Lazer_Beam_Circle", L"Lazer_Beam_Circle");
-	 //}
-#pragma endregion 
 
 #pragma region Loading Box 
  	 //CEffectFactory::Create<CCrack>("LoadingBox", L"LoadingBox");
 #pragma endregion
 
-#pragma region Item DropEffect 
-	// CEffectFactory::Create<CGradation_Beam>("Gradation_Beam", L"Gradation_Beam");
-	// Get_GameObject<C3DBaseTexture>(LAYER_EFFECT, L"3D_Base")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 3.f, D3DXCOLOR(1.f, 1.f, 0.f, 0.f), 1, 30.f,1);
-#pragma endregion
-
-#pragma region Lava_Paticle
-	// CEffectFactory::Create<CLava_Particle>("Lava_Particle", L"Lava_Particle");
-#pragma endregion
 
 #pragma region Attack_Basic
 	// Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.3f, RED, 4, 0.2f);
@@ -304,11 +509,13 @@ void CPlayer::StateChange()
 	{
 		if (m_bReserveStop == false)
 		{
+			CSoundMgr::GetInstance()->PlaySound(L"sfx_playerDead-001_soundWave.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 			m_eState = DEAD;
 			PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
 			m_bRoll = false;
 			m_bCanPlayAnim = false;
 			m_bMove = false;
+			m_bLaser = false;
 			m_bCanPlayAnim = false;
 			m_pColl->SetStop();
 		}
@@ -319,6 +526,17 @@ void CPlayer::StateChange()
 	{
 		m_eState = STUN;
 		m_bRoll = false;
+		m_fCurLaserTime = 3.f;
+		return;
+	}
+
+	if (m_pStat->IsSatonFascinate())
+	{
+		m_strStatus = "Fascinate";
+		m_eState = FASCINATE;
+		m_bRoll = false;
+		m_pIdleAnim = &m_arrAnim[ANIM_WALK];
+		m_pCurAnim = &m_arrAnim[ANIM_WALK];
 		return;
 	}
 
@@ -326,14 +544,45 @@ void CPlayer::StateChange()
 	{
 		CSoundMgr::GetInstance()->PlaySound(L"sfx_player_stepCloth-003.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 		m_eState = ROLL;
-		RotateToCursor();
+		if (m_bRemote == false)
+		{
+			RotateToCursor();
+			m_CurRollCoolTime = 0.f;
+
+			if (g_bOnline)
+			{
+				Protocol::C_PLAYER_YAW_ACTION yawActionPkt;
+				yawActionPkt.mutable_player()->set_id(CClientServiceMgr::GetInstance()->m_iPlayerID);
+				yawActionPkt.mutable_player()->set_name("Player_test");
+				yawActionPkt.set_yaw(GetYawToCursor());
+				yawActionPkt.set_actionbit(PLAYER_ROLL);
+			
+				CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(yawActionPkt));
+			}
+		}
 		m_bCanPlayAnim = false;
+		m_fCurLaserTime = 3.f;
 		PlayAnimationOnce(&m_arrAnim[ANIM_ROLL]);
 		m_bRoll = false;
-		m_CurRollCoolTime = 0.f;
+
 		return;
 	}
 
+	if (m_bLaser && m_bCanPlayAnim)
+	{
+		if (m_fLaserTime < m_fCurLaserTime)
+		{
+			m_bLaser = false;
+			Get_GameObject<CLaserShotRune>(LAYER_ITEM, L"LaserShotRune")->KillLaser();
+		}
+		else
+		{
+			Get_GameObject<CLaserShotRune>(LAYER_ITEM, L"LaserShotRune")->Collision();
+			m_fCurLaserTime += CGameUtilMgr::s_fTimeDelta;
+			return;
+		}	
+	}
+	
 	if (m_bLegacy1 && m_bCanPlayAnim)
 	{
 		m_bLegacy1 = false;
@@ -347,6 +596,16 @@ void CPlayer::StateChange()
 		m_bCanPlayAnim = false;
 		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY1]);
 		m_pInventory->CurWeapon(IT_LEGACY1)->Use();
+
+		if (g_bOnline && m_bRemote == false)
+		{
+			Protocol::C_PLAYER_ACTION actionPkt;
+			actionPkt.mutable_player()->set_id(CClientServiceMgr::GetInstance()->m_iPlayerID);
+			actionPkt.mutable_player()->set_name("Player_test");
+			actionPkt.set_actionbit(PLAYER_1);
+		
+			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(actionPkt));
+		}
 		return;
 	}
 
@@ -363,6 +622,16 @@ void CPlayer::StateChange()
 		m_bCanPlayAnim = false;
 		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY2]);
 		m_pInventory->CurWeapon(IT_LEGACY2)->Use();
+
+		if (g_bOnline && m_bRemote == false)
+		{
+			Protocol::C_PLAYER_ACTION actionPkt;
+			actionPkt.mutable_player()->set_id(CClientServiceMgr::GetInstance()->m_iPlayerID);
+			actionPkt.mutable_player()->set_name("Player_test");
+			actionPkt.set_actionbit(PLAYER_2);
+		
+			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(actionPkt));
+		}
 		return;
 	}
 
@@ -379,13 +648,36 @@ void CPlayer::StateChange()
 		m_bCanPlayAnim = false;
 		PlayAnimationOnce(&m_arrAnim[ANIM_LEGACY2]);
 		m_pInventory->CurWeapon(IT_LEGACY3)->Use();
+
+		if (g_bOnline && m_bRemote == false)
+		{
+			Protocol::C_PLAYER_ACTION actionPkt;
+			actionPkt.mutable_player()->set_id(CClientServiceMgr::GetInstance()->m_iPlayerID);
+			actionPkt.mutable_player()->set_name("Player_test");
+			actionPkt.set_actionbit(PLAYER_3);
+		
+			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(actionPkt));
+		}
 		return;
 	}
 
 	if (m_bMeleeAttack && m_bCanPlayAnim)
 	{
 		m_eState = ATTACK;
-		RotateToCursor();
+		if (m_bRemote == false)
+		{
+			RotateToCursor();
+			if (g_bOnline)
+			{
+				Protocol::C_PLAYER_YAW_ACTION yawActionPkt;
+				yawActionPkt.mutable_player()->set_id(CClientServiceMgr::GetInstance()->m_iPlayerID);
+				yawActionPkt.mutable_player()->set_name("Player_test");
+				yawActionPkt.set_yaw(GetYawToCursor());
+				yawActionPkt.set_actionbit(PLAYER_ML);
+			
+				CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(yawActionPkt));
+			}
+		}
 		WeaponChange(IT_MELEE);
 		return;
 	}
@@ -393,9 +685,10 @@ void CPlayer::StateChange()
 	if (m_bRangeAttack && m_bCanPlayAnim && m_pInventory->GetArrowCnt() > 0)
 	{
 		m_eState = ATTACK;
-		RotateToCursor();
+		if (m_bRemote == false)
+			RotateToCursor();
 		m_bDelay = true;
-		WeaponChange(IT_MELEE);
+		WeaponChange(IT_RANGE);
 		return;
 	}
 
@@ -413,6 +706,7 @@ void CPlayer::StateChange()
 
 	if (m_bCanPlayAnim)
 	{
+
 		m_eState = IDLE;
 		m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 		m_pCurAnim = &m_arrAnim[ANIM_IDLE];
@@ -425,44 +719,153 @@ void CPlayer::StateChange()
 
 }
 
-void CPlayer::UsePotion()
+void CPlayer::RotationToSaton(void)
 {
-	if (s_PotionCollTime <= m_CurPotionCoolTime)
-	{
-		m_pStat->ModifyHP(_int(_float(m_pStat->GetMaxHP()) * 0.7f));
-		m_CurPotionCoolTime = 0.f;
+	_vec3 vLook = _vec3(62.5f, 0.f, 44.5f) -m_pRootPart->pTrans->m_vInfo[INFO_POS];
 
-		// particle
-		CEffectFactory::Create<CHealCircle>("Heal_Circle_L", L"Heal_Circle_L");
-		for (int i = 0; i < 12; i++)
-		{
-			CEffectFactory::Create<CHeartParticle>("HeartParticle", L"HeartParticle");
-		}
-		// particle
-	}
+	D3DXVec3Normalize(&vLook, &vLook);
 
-	CSoundMgr::GetInstance()->PlaySoundRandom({
-		L"sfx_ui_healthsynergy-001.ogg",
-		L"sfx_ui_healthsynergy-002.ogg",
-		L"sfx_ui_healthsynergy-003.ogg",
-		L"sfx_ui_healthsynergy-004.ogg"},
-		m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+	m_pRootPart->pTrans->m_vInfo[INFO_LOOK] = -vLook;
+
+	m_vTargetPos = vLook;
+
+	const _vec2 v2Look{ 0.f, 1.f };
+
+	_vec2 v2ToDest{ vLook.x, vLook.z };
+
+	const _float fDot = D3DXVec2Dot(&v2Look, &v2ToDest);
+
+	if (vLook.x < 0)
+		m_pRootPart->pTrans->m_vAngle.y = -acosf(fDot);
+	else
+		m_pRootPart->pTrans->m_vAngle.y = acosf(fDot);
 }
 
-CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
+void CPlayer::UsePotion()
+{
+	if (m_bRemote == false)
+	{
+		if (s_PotionCollTime <= m_CurPotionCoolTime)
+		{
+			m_pStat->ModifyHP(_int(_float(m_pStat->GetMaxHP()) * 0.7f));
+			m_CurPotionCoolTime = 0.f;
+
+			// particle
+			CEffectFactory::Create<CHealCircle>("Heal_Circle_L", L"Heal_Circle_L", m_pRootPart->pTrans->m_vInfo[INFO_POS])
+				->SetFollow(m_pRootPart->pTrans);
+			for (int i = 0; i < 12; i++)
+			{
+				CEffectFactory::Create<CHeartParticle>("HeartParticle", L"HeartParticle", m_pRootPart->pTrans->m_vInfo[INFO_POS])
+					->SetFollow(m_pRootPart->pTrans);
+			}
+			
+			CSoundMgr::GetInstance()->PlaySoundRandom({
+				L"sfx_ui_healthsynergy-001.ogg",
+				L"sfx_ui_healthsynergy-002.ogg",
+				L"sfx_ui_healthsynergy-003.ogg",
+				L"sfx_ui_healthsynergy-004.ogg" },
+				m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+
+			if (g_bOnline)
+			{
+				Protocol::C_PLAYER_ACTION actionPkt;
+				actionPkt.mutable_player()->set_id(CClientServiceMgr::GetInstance()->m_iPlayerID);
+				actionPkt.mutable_player()->set_name("Player_test");
+				actionPkt.set_actionbit(PLAYER_POTION);
+			
+				CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(actionPkt));
+			}
+		}
+	}
+	else
+	{
+		// particle
+		CEffectFactory::Create<CHealCircle>("Heal_Circle_L", L"Heal_Circle_L", m_pRootPart->pTrans->m_vInfo[INFO_POS])
+			->SetFollow(m_pRootPart->pTrans);
+		for (int i = 0; i < 12; i++)
+		{
+			CEffectFactory::Create<CHeartParticle>("HeartParticle", L"HeartParticle", m_pRootPart->pTrans->m_vInfo[INFO_POS])
+				->SetFollow(m_pRootPart->pTrans);
+		}
+		
+		CSoundMgr::GetInstance()->PlaySoundRandom({
+			L"sfx_ui_healthsynergy-001.ogg",
+			L"sfx_ui_healthsynergy-002.ogg",
+			L"sfx_ui_healthsynergy-003.ogg",
+			L"sfx_ui_healthsynergy-004.ogg" },
+			m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+	}
+}
+
+CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath, _bool bRemote)
 {
 	CPlayer* pInstance = new CPlayer(pGraphicDev);
+	pInstance->m_bRemote = bRemote;
 
-	if (FAILED(pInstance->Ready_Object()))
+	if (FAILED(pInstance->Ready_Object(wstrPath)))
 	{
 		Safe_Release(pInstance);
 		return nullptr;
 	}
 
-	if (!wstrPath.empty())
-		pInstance->LoadSkeletal(wstrPath);
+	// if (!wstrPath.empty())
+	// 	pInstance->LoadSkeletal(wstrPath);
 
 	return pInstance;
+}
+
+_float CPlayer::GetYawToCursor()
+{
+	POINT ptMouse{};
+
+	GetCursorPos(&ptMouse);
+	ScreenToClient(g_hWnd, &ptMouse);
+
+	_vec3 vPoint;
+	_vec3 vAt;
+
+	D3DVIEWPORT9 ViewPort;
+	ZeroMemory(&ViewPort, sizeof(D3DVIEWPORT9));
+	m_pGraphicDev->GetViewport(&ViewPort);
+
+	// 뷰포트 -> 투영
+	vPoint.x = (_float)ptMouse.x / ((_float)ViewPort.Width * 0.5f) - 1.f;
+	vPoint.y = (_float)ptMouse.y / -((_float)ViewPort.Height * 0.5f) + 1.f;
+	vPoint.z = 0.f;
+	vAt.x = vPoint.x;
+	vAt.y = vPoint.y;
+	vAt.z = 1.f;
+
+	_matrix matProj;
+	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &matProj);
+	D3DXMatrixInverse(&matProj, nullptr, &matProj);
+	D3DXVec3TransformCoord(&vPoint, &vPoint, &matProj);
+	D3DXVec3TransformCoord(&vAt, &vAt, &matProj);
+
+	_matrix matView;
+	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
+	D3DXMatrixInverse(&matView, nullptr, &matView);
+	D3DXVec3TransformCoord(&vPoint, &vPoint, &matView);
+	D3DXVec3TransformCoord(&vAt, &vAt, &matView);
+
+	D3DXPLANE tmpPlane;
+	D3DXPlaneFromPointNormal(&tmpPlane, &m_pRootPart->pTrans->m_vInfo[INFO_POS], &CGameUtilMgr::s_vUp);
+
+	_vec3 vLookAt;
+	D3DXPlaneIntersectLine(&vLookAt, &tmpPlane, &vPoint, &vAt);
+
+	_vec3 vLook = vLookAt - m_pRootPart->pTrans->m_vInfo[INFO_POS];
+	D3DXVec3Normalize(&vLook, &vLook);
+
+	const _vec2 v2Look{0.f, 1.f};
+	_vec2 v2ToDest{vLook.x, vLook.z};
+
+	const _float fDot = D3DXVec2Dot(&v2Look, &v2ToDest);
+
+	if (vLook.x < 0)
+		return -acosf(fDot);
+	else
+		return acosf(fDot);
 }
 
 void CPlayer::RotateToCursor()
@@ -537,6 +940,15 @@ void CPlayer::RotateToMove()
 		m_pRootPart->pTrans->m_vAngle.y = acosf(fDot);
 }
 
+void CPlayer::RotateTo(_float fYaw)
+{
+	m_pRootPart->pTrans->m_vAngle.y = fYaw;
+	m_pRootPart->pTrans->Update_Component(0.f);
+
+	m_pIdleAnim = &m_arrAnim[ANIM_WALK];
+	m_pCurAnim = m_pIdleAnim;
+}
+
 void CPlayer::Legacy4Press()
 { 
 	WeaponChange(IT_MELEE);
@@ -546,7 +958,7 @@ void CPlayer::WeaponChange(ITEMTYPE eIT)
 {
 	if (m_pWeaponPart == nullptr)
 	{
-		auto& itr = m_mapParts.find("weapon_r");
+		const auto itr = m_mapParts.find("weapon_r");
 		if (itr == m_mapParts.end())
 			return;
 		m_pWeaponPart = itr->second;

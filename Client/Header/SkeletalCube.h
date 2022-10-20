@@ -60,6 +60,8 @@ struct CubeAnimFrame
 	static CubeAnimFrame Load(const wstring& wstrPath);
 	void Save(const wstring& wstrPath);
 	void SortFrame(const string& strPart);
+
+	static map<wstring, CubeAnimFrame> s_mapFrame;
 };
 
 class CSkeletalCube : public CGameObject
@@ -84,13 +86,21 @@ public:
 	static CSkeletalCube* Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrPath = L"");
 
 	virtual void PlayAnimationOnce(CubeAnimFrame* frame, bool bReserveStop = false);
+	virtual void PlayAnimationLoop(CubeAnimFrame* frame);
+	_bool IsStop() const { return m_bStopAnim; }
 	virtual void StopCurAnimation();
 	void SetAnimationSpeed(_float fAnimSpeed) { m_fAnimSpeed = fAnimSpeed; }
 
 	void LoadSkeletal(wstring wstrPath);
 	void SaveSkeletal(wstring wstrPath);
 
-	SkeletalPart* Get_SkeletalPart() { return m_pRootPart; }
+	SkeletalPart* Get_SkeletalPart(const string& strPartName)
+	{
+		const auto itr = m_mapParts.find(strPartName);
+		if (itr == m_mapParts.end())
+			return nullptr;
+		return itr->second;
+	}
 
 private:
 	virtual void SaveRecursive(HANDLE hFile, SkeletalPart* pPart);

@@ -27,7 +27,28 @@ HRESULT CUI::Ready_Object(void)
 
 _int CUI::Update_Object(const _float& fTimeDelta)
 {
+	if (m_bDelete) return OBJ_DEAD;
 	Engine::CGameObject::Update_Object(fTimeDelta);
+
+	if (m_bButtom && m_bVisible)
+	{
+		const _vec3& vPos = m_pTransCom->m_vInfo[INFO_POS];
+		const _vec3& vSize = m_pTransCom->m_vScale;
+		const _float fX = vPos.x + WINCX / 2;
+		const _float fY = -vPos.y + WINCY / 2;
+		const RECT rcUI = { LONG(fX - vSize.x * 0.5f), LONG(fY - vSize.y * 0.5f), LONG(fX + vSize.x * 0.5f), LONG(fY + vSize.y * 0.5f) };
+		POINT		ptMouse;
+		GetCursorPos(&ptMouse);
+		ScreenToClient(g_hWnd, &ptMouse);
+
+		if (PtInRect(&rcUI, ptMouse) && MouseKeyDown(DIM_LB))
+		{
+			if (m_pCallback)
+				m_pCallback();
+		}
+	}
+
+
 
 	Add_RenderGroup(RENDER_UI, this);
 
@@ -44,12 +65,23 @@ void CUI::Render_Object(void)
 	// Render_Font(L"Font_Jinji", L"0", &_vec2(1110.f, 640.f), D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
 	// old view, proj 복원은 renderer에 있음
 
+	if (m_bVisible == false) return;
+
 	m_pGraphicDev->SetTransform(D3DTS_VIEW, &CGameUtilMgr::s_matIdentity);
 	m_pGraphicDev->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
 
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
 	m_pTextureCom->Set_Texture(m_iTexNum);
 	m_pBufferCom->Render_Buffer();
+
+	if (m_wstrText.empty() == false)
+	{
+		const _vec3& vPos = m_pTransCom->m_vInfo[INFO_POS];
+		const _float fX = vPos.x + WINCX / 2;
+		const _float fY = -vPos.y + WINCY / 2;
+
+		Render_Font(m_wstrFont, m_wstrText.c_str(), &_vec2{fX + m_vTextOffset.x, fY + m_vTextOffset.y}, m_TextColor);
+	}
 }
 
 CUI* CUI::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _uint iTexNum)

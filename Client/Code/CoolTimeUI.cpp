@@ -59,7 +59,7 @@ _int CCoolTimeUI::Update_Object(const _float& fTimeDelta)
 		m_bWorldSet = true;
 	}
 
-	ITEMTYPE eLegacyType = IT_END;
+	LEGACY_SLOT eLegacyType = LEGACY_SLOT_END;
 	switch (m_eTarget)
 	{
 	case CoolTimeTarget::ROLL:
@@ -84,20 +84,20 @@ _int CCoolTimeUI::Update_Object(const _float& fTimeDelta)
 		}
 		break;
 	case CoolTimeTarget::LEGACY1:
-		eLegacyType = IT_LEGACY1;
+		eLegacyType = LEGACY_SLOT1;
 		break;
 	case CoolTimeTarget::LEGACY2:
-		eLegacyType = IT_LEGACY2;
+		eLegacyType = LEGACY_SLOT2;
 		break;
 	case CoolTimeTarget::LEGACY3:
-		eLegacyType = IT_LEGACY3;
+		eLegacyType = LEGACY_SLOT3;
 		break;
 	case CoolTimeTarget::COOL_END:
 		break;
 	default: ;
 	}
 
-	if (eLegacyType != IT_END)
+	if (eLegacyType != LEGACY_SLOT_END)
 	{
 		const CInventory* pInventory = Get_GameObjectUnCheck<CPlayer>(LAYER_PLAYER, L"Player")->GetInventory();
 		_float fS = pInventory->GetLegacyCoolTime(eLegacyType);

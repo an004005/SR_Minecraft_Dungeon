@@ -1,6 +1,10 @@
 #pragma once
 #include "Item.h"
 #include "SkeletalCube.h"
+#include "ItemUI.h"
+
+class CPlayer;
+
 
 class CEquipItem :
 	public CItem
@@ -43,25 +47,31 @@ public:
 	virtual _int Attack() { return 0; }
 	virtual void Use() { m_bUse = true; }
 	_float GetCoolTime() const { return m_fCurCoolTime / m_fCoolTime; }
-
+	void SetOwner(CPlayer* pOwner) { m_pOwner = pOwner; NULL_CHECK(m_pOwner); }
 	
 public:
 	const array<CubeAnimFrame, ANIM_END>& SetarrAnim(){ return m_arrAnim; }
 	ITEMTYPE GetItemType() { return m_eItemType; }
-	_int GetUITexNum() const { return m_iUItexNum; }
+	_int	GetUITexNum() { return m_iUItexNum; }
+	CItemUI* GetItemUI() { return m_pItemUI; }
 
 protected:
+	CPlayer* m_pOwner = nullptr;
 	Engine::CTexture*	m_pTextureCom = nullptr;
 	Engine::CVoxelTex*	m_pBufferCom = nullptr;
 	
+	//UI
+	CItemUI* m_pItemUI;
+	_uint m_iUItexNum;
 
 	array<CubeAnimFrame, ANIM_END> m_arrAnim{};
 	_uint m_iAttackCnt; // 콤보 번호
 	_bool m_bUse;
 	ITEMTYPE	m_eItemType;
-	_uint m_iUItexNum;
+
 
 	// 유물 쿨타임(Legacy로 상속단계 추가했어야 했는데....)
+	// 굿
 	_float m_fCoolTime = 1.f;
 	_float m_fCurCoolTime = 1.f; 
 };

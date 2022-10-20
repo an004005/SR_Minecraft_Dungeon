@@ -21,7 +21,10 @@ HRESULT CZombie::Ready_Object()
 
 	m_arrAnim[ANIM_IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Zombie/idle.anim");
 	m_arrAnim[ANIM_WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Zombie/walk.anim");
-	m_arrAnim[ANIM_DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Zombie/dead_a.anim");
+	if (rand() % 2 == 0)
+		m_arrAnim[ANIM_DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Zombie/dead_a.anim");
+	else
+		m_arrAnim[ANIM_DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Zombie/dead_b.anim");
 	m_arrAnim[ANIM_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Zombie/attack.anim");
 	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 	m_pCurAnim = m_pIdleAnim;
@@ -35,8 +38,17 @@ HRESULT CZombie::Ready_Object()
 		L"DLC_sfx_mob_monster_Hurt-002.ogg" ,
 		L"DLC_sfx_mob_monster_Hurt-003.ogg" });
 
-	CController* pController = Add_Component<CZombieController>(L"Proto_ZombieController", L"Proto_ZombieController", ID_DYNAMIC);
-	pController->SetOwner(this);
+	if (m_bRemote)
+	{
+		CController* pController = Add_Component<CZombieController>(L"Proto_ZombieRemoteController", L"Proto_ZombieRemoteController", ID_DYNAMIC);
+		pController->SetOwner(this);
+	}
+	else
+	{
+		CController* pController = Add_Component<CZombieController>(L"Proto_ZombieController", L"Proto_ZombieController", ID_DYNAMIC);
+		pController->SetOwner(this);
+	}
+
 
 	return S_OK;
 }
@@ -133,9 +145,10 @@ void CZombie::Free()
 	CMonster::Free();
 }
 
-CZombie* CZombie::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
+CZombie* CZombie::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath, _bool bRemote)
 {
 	CZombie* pInstance = new CZombie(pGraphicDev);
+	pInstance->m_bRemote = bRemote;
 
 	if (FAILED(pInstance->Ready_Object()))
 	{

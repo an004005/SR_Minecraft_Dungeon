@@ -1,6 +1,6 @@
 #pragma once
-#include "EquipItem.h"
-class CAxe : public CEquipItem
+#include "Weapon.h"
+class CAxe : public CWeapon
 {
 private:
 	explicit CAxe(LPDIRECT3DDEVICE9 pGraphicDev);
@@ -14,6 +14,8 @@ public:
 	virtual _int Attack() override;
 	virtual void Equipment(SkeletalPart* pSkeletalPart) override;
 	virtual void Collision() override;
+
+	virtual void Free() override;
 };
 
 
