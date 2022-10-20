@@ -237,7 +237,6 @@ bool Handle_S_PLAYER_DEAD(PacketSessionRef& session, Protocol::S_PLAYER_DEAD& pk
 		pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)->SetDead();
 	}
 
-
 	return true;
 }
 
@@ -246,12 +245,12 @@ bool Handle_S_PLAYER_RESPAWN(PacketSessionRef& session, Protocol::S_PLAYER_RESPA
 	if (pkt.success() == false)
 		return true;
 
-	for (auto& e : Get_Layer(LAYER_PLAYER)->Get_MapObject())
+	if (CClientServiceMgr::GetInstance()->m_iPlayerID == pkt.player().id()) 
+		return true;
+
+	if (CPlayer* pPlayer = Get_GameObjectUnCheck<CPlayer>(LAYER_PLAYER, L"Player_Remote_" + to_wstring(pkt.player().id())))
 	{
-		if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(e.second))
-		{
-			pPlayer->PlayerSpawn();
-		}
+		pPlayer->PlayerSpawn();
 	}
 
 	return true;

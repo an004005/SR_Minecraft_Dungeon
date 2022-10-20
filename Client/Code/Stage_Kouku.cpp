@@ -55,12 +55,22 @@ _int CStage_Kouku::Update_Scene(const _float & fTimeDelta)
 	{
 		if (m_pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)->IsDead())
 		{
+			if (m_fDeadTime > 5.f)
+			{
+				m_pPlayer->PlayerSpawn();
+
+				Protocol::C_PLAYER_RESPANW respawnPkt;
+				respawnPkt.mutable_player()->set_id(CClientServiceMgr::GetInstance()->m_iPlayerID);
+				CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(respawnPkt));
+			}
+			m_fDeadTime += fTimeDelta;
+
 			if (m_bPlayerAlive)
 			{
 				m_pPlayerUI = CUIFactory::Create<CPlayerUI>("PlayerUI", L"PlayerDead", 0, WINCX * 0.5f, WINCY * 0.5f, WINCX, WINCY);
 				m_pPlayerUI->Open();
 				m_pPlayerUI->SetUITexture(25);
-				m_pPlayerUI->SetNoCount();
+				m_pPlayerUI->SetCount(5.f);
 			}
 			m_bPlayerAlive = false;
 		}
@@ -72,6 +82,7 @@ _int CStage_Kouku::Update_Scene(const _float & fTimeDelta)
 				m_pPlayerUI = nullptr;
 			}
 			m_bPlayerAlive = true;
+			m_fDeadTime = 0.f;
 		}
 	}
 	else

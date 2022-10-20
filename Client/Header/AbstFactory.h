@@ -135,7 +135,7 @@ public:
 		Engine::CTransform* pTrans = pCasted->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
 		pTrans->m_vInfo[INFO_POS] = vPos;
 		pTrans->m_vInfo[INFO_POS].y += 1.f;
-
+		pTrans->m_vScale *= 1.5f;
 		pTrans->Update_Component(0.f);
 
 		return pCasted;

@@ -8,16 +8,16 @@
 
 CKoukuController::CKoukuController()
 {
-	m_fBasicAttackCoolTime = 5.f;
-	m_fDoubleHammerCoolTime = 13.f;
-	m_fHorrorAttackCoolTime = 19.f;
+	m_fBasicAttackCoolTime = 7.f;
+	m_fDoubleHammerCoolTime = 17.f;
+	m_fHorrorAttackCoolTime = 23.f;
 }
 
 CKoukuController::CKoukuController(const CKoukuController& rhs)
 {
-	m_fBasicAttackCoolTime = 5.f;
-	m_fDoubleHammerCoolTime = 13.f;
-	m_fHorrorAttackCoolTime = 19.f;
+	m_fBasicAttackCoolTime = 7.f;
+	m_fDoubleHammerCoolTime = 17.f;
+	m_fHorrorAttackCoolTime = 23.f;
 }
 
 CKoukuController::~CKoukuController()

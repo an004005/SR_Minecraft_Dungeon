@@ -47,7 +47,7 @@ HRESULT CKouku::Ready_Object()
 	m_iRedSymbolCnt = 0;
 
 
-	m_pStat->SetMaxHP(10000);
+	m_pStat->SetMaxHP(1000);
 
 
 	if (m_bRemote)
@@ -371,8 +371,7 @@ void CKouku::LateUpdate_Object()
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
 				->TakeDamage(15, FromPos, this, DT_KNOCK_BACK);
 		}
-		CEffectFactory::Create<CUVCircle>("Kouku_Explosion", L"Kouku_Explosion",
-			_vec3(m_vKoukuHammerPos.x, m_vKoukuHammerPos.y + 0.2f, m_vKoukuHammerPos.z));
+		
 		m_bIsBasicAttackColl = false;
 	}
 
@@ -389,7 +388,8 @@ void CKouku::LateUpdate_Object()
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
 				->TakeDamage(20, KoukuPos, this, DT_KNOCK_BACK);
 		}
-
+		CEffectFactory::Create<CUVCircle>("Kouku_Explosion", L"Kouku_Explosion",
+			_vec3(m_vKoukuHammerPos.x, m_vKoukuHammerPos.y + 0.2f, m_vKoukuHammerPos.z));
 		m_bIsDoubleHammerColl_1 = false;
 	}
 

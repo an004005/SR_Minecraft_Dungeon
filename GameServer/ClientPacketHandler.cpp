@@ -197,7 +197,21 @@ bool Handle_C_PLAYER_EQUIP(PacketSessionRef& session, Protocol::C_PLAYER_EQUIP& 
 
 bool Handle_C_PLAYER_DEAD(PacketSessionRef& session, Protocol::C_PLAYER_DEAD& pkt)
 {
-	GRoom->DoAsync(&Room::Dead, pkt.player().id());
+	Protocol::S_PLAYER_DEAD deadPkt;
+	deadPkt.set_success(true);
+	deadPkt.mutable_player()->CopyFrom(pkt.player());
+
+	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(deadPkt));
+	return true;
+}
+
+bool Handle_C_PLAYER_RESPANW(PacketSessionRef& session, Protocol::C_PLAYER_RESPANW& pkt)
+{
+	Protocol::S_PLAYER_RESPAWN respawnPkt;
+	respawnPkt.set_success(true);
+	respawnPkt.mutable_player()->CopyFrom(pkt.player());
+	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(respawnPkt));
+
 	return true;
 }
 

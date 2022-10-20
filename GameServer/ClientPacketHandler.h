@@ -26,25 +26,26 @@ enum : uint16
 	PKT_S_ALL_PLAYER_ENTER = 1017,
 	PKT_C_PLAYER_DEAD = 1018,
 	PKT_S_PLAYER_DEAD = 1019,
-	PKT_S_PLAYER_RESPAWN = 1020,
-	PKT_C_PLAYER_MOVE_STAGE = 1021,
-	PKT_S_PLAYER_MOVE_STAGE = 1022,
-	PKT_C_PLAYER_MOVE_STAGE_FINISH = 1023,
-	PKT_S_PLAYER_MOVE_STAGE_FINISH = 1024,
-	PKT_C_SPAWN_MONSTER = 1025,
-	PKT_S_SPAWN_MONSTER = 1026,
-	PKT_C_MONSTER_SET_TARGET = 1027,
-	PKT_S_MONSTER_SET_TARGET = 1028,
-	PKT_C_MONSTER_WORLD = 1029,
-	PKT_S_MONSTER_WORLD = 1030,
-	PKT_C_BOSS_SPAWN = 1031,
-	PKT_S_BOSS_SPAWN = 1032,
-	PKT_C_BOSS_WORLD = 1033,
-	PKT_S_BOSS_WORLD = 1034,
-	PKT_C_SATON_ATTACK = 1035,
-	PKT_S_SATON_ATTACK = 1036,
-	PKT_C_KOUKU_ATTACK = 1037,
-	PKT_S_KOUKU_ATTACK = 1038,
+	PKT_C_PLAYER_RESPANW = 1020,
+	PKT_S_PLAYER_RESPAWN = 1021,
+	PKT_C_PLAYER_MOVE_STAGE = 1022,
+	PKT_S_PLAYER_MOVE_STAGE = 1023,
+	PKT_C_PLAYER_MOVE_STAGE_FINISH = 1024,
+	PKT_S_PLAYER_MOVE_STAGE_FINISH = 1025,
+	PKT_C_SPAWN_MONSTER = 1026,
+	PKT_S_SPAWN_MONSTER = 1027,
+	PKT_C_MONSTER_SET_TARGET = 1028,
+	PKT_S_MONSTER_SET_TARGET = 1029,
+	PKT_C_MONSTER_WORLD = 1030,
+	PKT_S_MONSTER_WORLD = 1031,
+	PKT_C_BOSS_SPAWN = 1032,
+	PKT_S_BOSS_SPAWN = 1033,
+	PKT_C_BOSS_WORLD = 1034,
+	PKT_S_BOSS_WORLD = 1035,
+	PKT_C_SATON_ATTACK = 1036,
+	PKT_S_SATON_ATTACK = 1037,
+	PKT_C_KOUKU_ATTACK = 1038,
+	PKT_S_KOUKU_ATTACK = 1039,
 };
 
 // Custom Handlers
@@ -58,6 +59,7 @@ bool Handle_C_PLAYER_ACTION(PacketSessionRef& session, Protocol::C_PLAYER_ACTION
 bool Handle_C_PLAYER_ARROW(PacketSessionRef& session, Protocol::C_PLAYER_ARROW& pkt);
 bool Handle_C_PLAYER_EQUIP(PacketSessionRef& session, Protocol::C_PLAYER_EQUIP& pkt);
 bool Handle_C_PLAYER_DEAD(PacketSessionRef& session, Protocol::C_PLAYER_DEAD& pkt);
+bool Handle_C_PLAYER_RESPANW(PacketSessionRef& session, Protocol::C_PLAYER_RESPANW& pkt);
 bool Handle_C_PLAYER_MOVE_STAGE(PacketSessionRef& session, Protocol::C_PLAYER_MOVE_STAGE& pkt);
 bool Handle_C_PLAYER_MOVE_STAGE_FINISH(PacketSessionRef& session, Protocol::C_PLAYER_MOVE_STAGE_FINISH& pkt);
 bool Handle_C_SPAWN_MONSTER(PacketSessionRef& session, Protocol::C_SPAWN_MONSTER& pkt);
@@ -84,6 +86,7 @@ public:
 		GPacketHandler[PKT_C_PLAYER_ARROW] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_PLAYER_ARROW>(Handle_C_PLAYER_ARROW, session, buffer, len); };
 		GPacketHandler[PKT_C_PLAYER_EQUIP] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_PLAYER_EQUIP>(Handle_C_PLAYER_EQUIP, session, buffer, len); };
 		GPacketHandler[PKT_C_PLAYER_DEAD] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_PLAYER_DEAD>(Handle_C_PLAYER_DEAD, session, buffer, len); };
+		GPacketHandler[PKT_C_PLAYER_RESPANW] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_PLAYER_RESPANW>(Handle_C_PLAYER_RESPANW, session, buffer, len); };
 		GPacketHandler[PKT_C_PLAYER_MOVE_STAGE] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_PLAYER_MOVE_STAGE>(Handle_C_PLAYER_MOVE_STAGE, session, buffer, len); };
 		GPacketHandler[PKT_C_PLAYER_MOVE_STAGE_FINISH] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_PLAYER_MOVE_STAGE_FINISH>(Handle_C_PLAYER_MOVE_STAGE_FINISH, session, buffer, len); };
 		GPacketHandler[PKT_C_SPAWN_MONSTER] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_SPAWN_MONSTER>(Handle_C_SPAWN_MONSTER, session, buffer, len); };
