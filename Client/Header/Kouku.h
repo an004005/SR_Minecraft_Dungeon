@@ -70,7 +70,11 @@ public:
 
 	void KoukuSymbol_OnOff(_bool _trueison) { m_bIsSymbolGimmick = _trueison; }
 
-	// void Kouku_Groggy(void) {}
+	_bool Kouku_Stun(void) { return m_bStun; }
+
+	_bool Kouku_Countable(void) { return m_bCountable; }
+
+	void Kouku_Stun_Success(void);
 
 	_bool Check_SymbolGimmick(void) { return m_bIsSymbolGimmick; }
 
@@ -104,7 +108,7 @@ private:
 	_bool m_bIsSymbolGimmick = false;
 	_bool m_bIsSymbolAttackCycle = false;
 
-	_bool m_bIsKoukuRest = false;
+	_bool m_bIsKoukuRest = false; 
 
 	_uint m_iRedSymbolCnt;
 

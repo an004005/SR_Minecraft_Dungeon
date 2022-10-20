@@ -8,6 +8,7 @@
 #include "TerrainCubeMap.h"
 #include "Rune.h"
 #include "Inventory.h"
+#include "Kouku.h"
 #include "Service.h"
 
 
@@ -202,7 +203,15 @@ void CSword::Collision()
 		if (CMonster* monster = dynamic_cast<CMonster*>(obj))
 		{
 			DamageType eDT = DT_END;
+			if(CKouku* pKouku = dynamic_cast<CKouku*>(obj))
+			{
+				if(!pKouku->Kouku_Stun() && m_iAttackCnt == 0 && pKouku->Kouku_Countable())
+				{
+					pKouku->Kouku_Stun_Success();
+				}
+			}
 			if (m_iAttackCnt == 0) eDT = DT_KNOCK_BACK;
+			
 			if (monster->CheckCC()) eDT = DT_END;
 			monster->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
 				->TakeDamage(m_iDamage, vPos, this, eDT, m_bCritical);

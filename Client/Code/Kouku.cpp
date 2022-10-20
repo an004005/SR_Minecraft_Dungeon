@@ -5,6 +5,7 @@
 #include "StatComponent.h"
 #include "KoukuController.h"
 #include "Particle.h"
+#include "Weapon.h"
 
 CKouku::CKouku(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
 {
@@ -44,12 +45,12 @@ HRESULT CKouku::Ready_Object()
 	m_iRedSymbolCnt = 0;
 
 
-	m_pStat->SetMaxHP(120);
+	m_pStat->SetMaxHP(1000);
 
 	CController* pController = Add_Component<CKoukuController>(L"Proto_KoukuController", L"Proto_KoukuController", ID_DYNAMIC);
 	pController->SetOwner(this);
-	m_fCurTime = 0.f;
-	m_fTime = 2.2f;
+	m_fCurTime = 2.f;
+	m_fTime = 1.1f;
 	//cc면역
 	m_bCantCC = true;
 
@@ -136,6 +137,8 @@ void CKouku::AnimationEvent(const string& strEvent)
 	else if (strEvent == "Countable")
 	{
 		m_bCountable = true;
+		Get_GameObject<CFireWork>(LAYER_EFFECT, L"FireWork")->Add_Particle(m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.3f, D3DXCOLOR(1.f, 0.4f, 0.25f, 0), 256, 0.4f);
+
 		//파티클 추가
 	}
 	else if (strEvent == "Countable_End")
@@ -146,6 +149,7 @@ void CKouku::AnimationEvent(const string& strEvent)
 	else if (strEvent == "Horror_Attack")
 	{
 		m_bIsHorrorAttack = true;
+		m_fCurTime = 0.f;
 	}
 	else if (strEvent == "HorrorAttack_End")
 	{
@@ -202,7 +206,7 @@ _int CKouku::Update_Object(const _float& fTimeDelta)
 	case HORROR_ATTACK:
 		m_fCurTime += fTimeDelta;
 
-		if (m_fCurTime <= m_fTime && !m_pStat->IsStun())
+		if (m_fCurTime <= m_fTime)
 		{
 			m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 4.f * fTimeDelta;
 		}
@@ -224,8 +228,8 @@ _int CKouku::Update_Object(const _float& fTimeDelta)
 
 	if (m_eState != HORROR_ATTACK)
 	{
-		if (m_fCurTime > m_fTime)
-			m_fCurTime = 0.f;
+		// if (m_fCurTime > m_fTime)
+			// m_fCurTime = 0.f;
 	}
 
 	
@@ -396,23 +400,38 @@ void CKouku::LateUpdate_Object()
 		// m_bIsHorrorAttack = false;
 	}
 
-	if (!m_pStat->IsStun())
+	// if (!m_pStat->IsStun())
+	// {
+	// 	if (m_bCountable)
+	// 	{
+	// 		set<CGameObject*> Player;
+	// 		_vec3 KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 1.5f;
+	// 		Engine::GetOverlappedObject(Player, KoukuPos, 2.5f);
+	//
+	// 		for (auto& obj : Player)
+	// 		{
+	// 			if (CWeapon* pWeapon = dynamic_cast<CWeapon*>(obj))
+	// 				m_pStat->TakeDamage(0, KoukuPos, this, DT_STUN);
+	// 			m_bCountable = false;
+	// 		}
+	// 	}
+	// }
+}
+
+void CKouku::Kouku_Stun_Success()
+{
+	_vec3 KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+
+	if(!m_pStat->IsStun())
 	{
 		if (m_bCountable)
 		{
-			set<CGameObject*> Player;
-			_vec3 KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 1.5f;
-			Engine::GetOverlappedObject(Player, KoukuPos, 2.5f);
-
-			for (auto& obj : Player)
-			{
-				if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
-					m_pStat->TakeDamage(0, KoukuPos, this, DT_STUN);
-				m_bCountable = false;
-			}
-			DEBUG_SPHERE(KoukuPos, 1.f, 0.1f);
+			m_pStat->TakeDamage(0, KoukuPos, this, DT_STUN);
+			m_bCountable = false;
 		}
 	}
+	DEBUG_SPHERE(KoukuPos, 1.f, 0.1f);
+
 }
 
 void CKouku::Free()
@@ -554,3 +573,5 @@ void CKouku::Symbol_Attack()
 		}
 	}
 }
+
+
