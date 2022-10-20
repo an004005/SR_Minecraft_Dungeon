@@ -160,6 +160,7 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 		if (s_PotionCollTime > m_CurPotionCoolTime)
 			m_CurPotionCoolTime += fTimeDelta;
 
+	//IM_BEGIN("TEst");
 #ifdef _DEBUG
 	IM_BEGIN("TEst"); // 
 
@@ -207,7 +208,6 @@ _int CPlayer::Update_Object(const _float& fTimeDelta)
 	}
 
 	
-	// IM_LOG("%f, %f, %f", m_pRootPart->pTrans->m_vInfo[INFO_POS].x, m_pRootPart->pTrans->m_vInfo[INFO_POS].y, m_pRootPart->pTrans->m_vInfo[INFO_POS].z);
 
 	return OBJ_NOEVENT;
 }

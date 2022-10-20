@@ -167,6 +167,7 @@
     <ClInclude Include="..\Header\AbstFactory.h" />
     <ClInclude Include="..\Header\BatchTool.h" />
     <ClInclude Include="..\Header\BossHPUI.h" />
+    <ClInclude Include="..\Header\BossStage.h" />
     <ClInclude Include="..\Header\Cat_Attack.h" />
     <ClInclude Include="..\Header\ClearUI.h" />
     <ClInclude Include="..\Header\ClientServiceMgr.h" />
@@ -303,6 +304,7 @@
     <ClCompile Include="..\Code\AbstFactory.cpp" />
     <ClCompile Include="..\Code\BatchTool.cpp" />
     <ClCompile Include="..\Code\BossHPUI.cpp" />
+    <ClCompile Include="..\Code\BossStage.cpp" />
     <ClCompile Include="..\Code\Cat_Attack.cpp" />
     <ClCompile Include="..\Code\ClearUI.cpp" />
     <ClCompile Include="..\Code\Cat2.cpp" />

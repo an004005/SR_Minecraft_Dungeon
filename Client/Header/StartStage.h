@@ -7,7 +7,7 @@ class CMapUI;
 
 class CStartStage : public CScene
 {
-public:
+private:
 	explicit CStartStage(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual ~CStartStage();
 

@@ -47,7 +47,7 @@ _int CEndermanController::Update_Component(const _float & fTimeDelta)
 		}
 	}
 
-	if (pTargetPlayer = nullptr)
+	if (pTargetPlayer == nullptr)
 		return 0;
 
 	pEnderman->SetTarget(vTargetPos);

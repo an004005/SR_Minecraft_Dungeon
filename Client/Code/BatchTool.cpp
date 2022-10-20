@@ -176,7 +176,9 @@ void CBatchTool::Load(const wstring& wstrPath)
 
 
 		strEnemyTag.assign(tmp.begin(), tmp.end());
-		CEnemyFactory::Create<CGameObject>(strEnemyTag, tmp + L"_" + to_wstring(iObjNum++), matWorld);
+
+		if(tmp == L"Zombie" && iObjNum != 55)
+			CEnemyFactory::Create<CGameObject>(strEnemyTag, tmp + L"_" + to_wstring(iObjNum++), matWorld);
 	}
 
 

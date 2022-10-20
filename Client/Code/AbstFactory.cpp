@@ -76,6 +76,7 @@
 #include "MapTable.h"
 #include "NetStartStage.h"
 #include "KoukuLoading.h"
+#include "BossStage.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -782,6 +783,10 @@ void CSceneFactory::Ready_SceneFactory()
 		s_mapSceneSpawner.insert({ "Stage_Start", []()
 		{
 			return CStartStage::Create(s_pGraphicDev);
+		} });
+		s_mapSceneSpawner.insert({ "Stage_Boss", []()
+		{
+			return CBossStage::Create(s_pGraphicDev);
 		} });
 		s_mapSceneSpawner.insert({ "NetStage_Start", []()
 		{
