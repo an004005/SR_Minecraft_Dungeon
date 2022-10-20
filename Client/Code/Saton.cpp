@@ -265,7 +265,7 @@ void CSaton::LateUpdate_Object()
 			{
 				CStatComponent* PlayerStatCom = pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC);
 
-				if (!PlayerStatCom->IsSatonSymbol_Blue())
+				if (pPlayer->GetID() == 0)
 				{
 					PlayerStatCom->TakeDamage(0, pPlayer->GetInfo(INFO_POS), this, DT_STUN);
 				}

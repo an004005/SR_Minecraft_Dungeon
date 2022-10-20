@@ -12,7 +12,7 @@ CSatonController::CSatonController()
 
 CSatonController::CSatonController(const CSatonController& rhs)
 {
-	m_fSatonFascinateCoolTime = 20.f;
+	m_fSatonFascinateCoolTime = 10.f;
 	m_fSatonGrapCoolTime = 11.f;
 }
 
@@ -157,6 +157,19 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 	if(m_fCurSatonDrawMoonCoolTime >= m_fSatonDrawMoonCoolTime && m_fTargetDist <= m_fSatonFascinateDist)
 	{
 		m_fCurSatonDrawMoonCoolTime = 0.f;
+
+		for (auto& e : Get_Layer(LAYER_PLAYER)->Get_MapObject())
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(e.second))
+			{
+				if (pPlayer->GetID() == 0)
+				{
+					vTargetPos = pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
+					break;
+				}
+			}
+		}
+
 		saton->SatonDrawMoon(vTargetPos);
 		if (g_bOnline)
 		{
@@ -269,14 +282,13 @@ _int CSatonRemoteController::Update_Component(const _float& fTimeDelta)
 			case Protocol::SYMBOL:
 				m_vLookFront = saton->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_LOOK] - _vec3(62.5f, 0, 45.f);
 				saton->SatonSymbolAnim(m_vLookFront);
-
 				break;
 			case Protocol::FASCINATE:
 				m_vLookFront = saton->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_LOOK] - _vec3(62.5f, 0, 45.f);
 				saton->SatonFascinate(m_vLookFront, pattern.first);
 				break;
 			case Protocol::DRAWMOON:
-				saton->SatonBird(pattern.first);
+				saton->SatonDrawMoon(pattern.first);
 				break;
 			case Protocol::SatonPattern_INT_MIN_SENTINEL_DO_NOT_USE_: break;
 			case Protocol::SatonPattern_INT_MAX_SENTINEL_DO_NOT_USE_: break;

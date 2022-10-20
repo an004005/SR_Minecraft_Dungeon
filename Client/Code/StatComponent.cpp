@@ -33,7 +33,10 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 		{
 			m_bStun = false;
 			if (m_pStun)
+			{
 				m_pStun->SetDead();
+				m_pStun = nullptr;
+			}
 		}
 		else
 		{
@@ -78,10 +81,20 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 	if (m_bFascinated)
 	{
 		if (m_fSatonFascinatedTime < m_fCurSatonFascinatedTime)
+		{
 			m_bFascinated = false;
+			if (m_pFaci)
+			{
+				m_pFaci->SetDead();
+				m_pFaci = nullptr;
+			}
+
+		}
 		else
 		{
 			m_fCurSatonFascinatedTime += fTimeDelta;
+			if (m_pFaci)
+				m_pFaci->SetPos(m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{0.f, 3.f, 0.f});
 		}
 	}
 
@@ -254,7 +267,7 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 	case DT_SATON_FASCINATED:
 		m_bFascinated = true;
 		m_fCurSatonSymbolTime = 0.f;
-		Engine::Get_GameObject<CFascinated_Effect>(LAYER_EFFECT, L"Fascinate_Effect")->Add_Particle(m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{ 0.f, 3.5f, 0.f }, 1.f, RED, 1, 4.f, 0);
+		m_pFaci = CEffectFactory::Create<CFascinate>("Facinate", L"Facinate", m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{0.f, 3.f, 0.f});
 		break;
 	case DT_SATON_GRAPED:
 		m_bGraped = true;

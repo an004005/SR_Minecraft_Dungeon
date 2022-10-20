@@ -25,7 +25,7 @@ HRESULT CClientServiceMgr::ReadyClientService()
 	this_thread::sleep_for(1s);
 
 	_service = MakeShared<ClientService>(
-		NetAddress(L"127.0.0.1", 7777),
+		NetAddress(L"172.30.1.24", 7777),
 		MakeShared<IocpCore>(),
 		MakeShared<ServerSession>, // TODO : SessionManager µî
 		1);

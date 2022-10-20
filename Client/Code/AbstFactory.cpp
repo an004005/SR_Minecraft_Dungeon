@@ -385,7 +385,10 @@ void CEffectFactory::Ready_EffectFactory()
 	{
 		return CStun::Create(s_pGraphicDev, 1.f);
 	} });
-
+	s_mapEffectSpawner.insert({ "Facinate",[]()
+	{
+		return CFascinate::Create(s_pGraphicDev, 1.f);
+	} });
 	s_mapEffectSpawner.insert({ "Heal_Circle_R",[]()
 	{
 		return CHealCircle::Create(s_pGraphicDev, 1.4f, 90.f, HEAL);

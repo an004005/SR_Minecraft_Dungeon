@@ -220,6 +220,35 @@ public:
 
 private:
 };
+
+class CFascinate : public CGameObject
+{
+public:
+   explicit CFascinate(LPDIRECT3DDEVICE9 pGraphicDev) : CGameObject(pGraphicDev) {}
+   ~CFascinate() override;
+
+public:
+   virtual HRESULT Ready_Object(_float _size);
+   _int Update_Object(const _float& fTimeDelta) override;
+   void Render_Object() override;
+   void LateUpdate_Object() override;
+   void PreRender_Particle();
+   void PostRender_Particle();
+   void SetPos(const _vec3& vPos);
+   void SetDead() { m_fCurTime = m_fTime; };
+
+public:
+   static CFascinate* Create(LPDIRECT3DDEVICE9 pGraphicDev, _float _size);
+   CRcShader*         m_pBufferCom = nullptr;
+   CTransform*         m_pTransCom = nullptr;
+   CTexture*         m_pTexture = nullptr;
+   void Free() override;
+
+private:
+   _float m_fTime;
+   _float m_fCurTime;
+   _float m_fSpeed;
+};
 #pragma endregion
 
 

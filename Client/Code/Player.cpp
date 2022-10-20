@@ -348,10 +348,6 @@ void CPlayer::PlayerSpawn()
 			{
 				if (pStartPos->GetID() == m_iID)
 				{
-					if (m_iID == 1)
-					{
-						int a = 3;
-					}
 					m_pRootPart->pTrans->Set_WorldDecompose(pStartPos->GetWorld());
 					break;
 				}

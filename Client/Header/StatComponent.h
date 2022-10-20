@@ -104,6 +104,7 @@ private:
 	_bool m_bFascinated = false;
 	_float m_fSatonFascinatedTime = 4.f;
 	_float m_fCurSatonFascinatedTime = 0.f;
+	class CFascinate* m_pFaci = nullptr;
 	// CFascinate_Effect* m_pFascinate = nullptr;
 
 	// Saton Grap
