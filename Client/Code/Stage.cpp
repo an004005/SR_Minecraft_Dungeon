@@ -39,6 +39,9 @@
 #include "Birds.h"
 #include "BirdsBrown.h"
 #include "ObjectStoreMgr.h"
+#include "Player.h"
+#include "Cat.h"
+#include "Cat2.h"
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
 {
@@ -53,7 +56,7 @@ HRESULT CStage::Ready_Scene(void)
 {
 	if (FAILED(Engine::CScene::Ready_Scene()))
 		return E_FAIL;
-
+	
 	FAILED_CHECK_RETURN(Ready_Layer_Environment(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_GameLogic(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_UI(), E_FAIL);
@@ -190,7 +193,13 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	}
 	m_pPlayer->SetName(CObjectStoreMgr::GetInstance()->GetPlayerName());
 	m_pPlayer->PlayerSpawn();
-	
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 5.f, 7.f ,10.f });
+	CObjectFactory::Create<CCat>("Cat", L"Cat", matWorld);
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f ,1.f }, { 0.f, D3DXToRadian(90.f), 0.f }, { 33.f, 0.f, 109.f });
+	CObjectFactory::Create<CCat2>("Cat2", L"Cat2", matWorld);
+
 	CEffectFactory::Create<C3DBaseTexture>("3D_Base", L"3D_Base");
 	CEffectFactory::Create<CAttack_P>("Attack_Basic", L"Attack_Basic");
 	CEffectFactory::Create<CFireWork_Fuze>("FireWork_Fuze", L"FireWork_Fuze");
@@ -223,31 +232,31 @@ HRESULT CStage::Ready_Layer_GameLogic()
 		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 3.f, 0.f ,16.f });
 		//CEnemyFactory::Create<CEnderman>("Enderman", L"Enderman", matWorld);
 
-		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 3.f, 0.f ,16.f });
-		CEnemyFactory::Create<CLeaper>("Leaper", L"Leaper", matWorld);
+		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.3f, 1.3f, 1.3f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 3.f, 0.f ,16.f });
+		//CEnemyFactory::Create<CLeaper>("Leaper", L"Leaper", matWorld);
 	}
 	
 	// CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {6.f, 0.f ,6.f});
 	// CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
 	// CEnemyFactory::Create<CMonster>("Zombie", L"TestZombie", matWorld);
 
-	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 4.7f, 9.f, 26.f });
+	//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 4.7f, 9.f, 26.f });
 
 
-	CTrigger* trigger =  CObjectFactory::Create<CTrigger>("Trigger", L"Trigger", matWorld);
-	trigger->SetTrigger([](set<CGameObject*>& objSet) {
-		for (auto obj : objSet)
-		{
-			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
-			{
-				_matrix matWorld;
-				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 4.7f, 9.f, 26.f });
-				CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
-				return true;
-			}
-		}
-		return false;
-	}, 5.f);
+	//CTrigger* trigger =  CObjectFactory::Create<CTrigger>("Trigger", L"Trigger", matWorld);
+	//trigger->SetTrigger([](set<CGameObject*>& objSet) {
+	//	for (auto obj : objSet)
+	//	{
+	//		if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+	//		{
+	//			_matrix matWorld;
+	//			CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 4.7f, 9.f, 26.f });
+	//			CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+	//			return true;
+	//		}
+	//	}
+	//	return false;
+	//}, 5.f);
 
 	// 9 
 
@@ -293,6 +302,6 @@ CStage * CStage::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 
 void CStage::Free(void)
 {
-	Safe_Release(m_pPlayer);
+	//Safe_Release(m_pPlayer);
 	CScene::Free();
 }

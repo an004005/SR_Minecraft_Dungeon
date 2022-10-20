@@ -514,7 +514,28 @@
       <Filter>02. GameObject\06. Inventory</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\EditBox.h" />
+    <ClInclude Include="..\Header\StartStage.h">
+      <Filter>01. Scene\01. Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\MapUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\MapTable.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
     <ClInclude Include="..\Header\Cat_Attack.h" />
+    <ClInclude Include="..\Header\BossHPUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\KoukuHpUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Cat.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Cat2.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -926,7 +947,28 @@
       <Filter>02. GameObject\06. Inventory</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\EditBox.cpp" />
+    <ClCompile Include="..\Code\StartStage.cpp">
+      <Filter>01. Scene\01. Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MapUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MapTable.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
     <ClCompile Include="..\Code\Cat_Attack.cpp" />
+    <ClCompile Include="..\Code\BossHPUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\KoukuHpUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Cat.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Cat2.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">

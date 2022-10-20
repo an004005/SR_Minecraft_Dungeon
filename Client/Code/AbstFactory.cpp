@@ -55,6 +55,8 @@
 #include "LightningRune.h"
 #include "LaserShotRune.h"
 #include "NetStage.h"
+#include "Cat.h"
+#include "Cat2.h"
 
 #include "ItemTexUI.h"
 #include "RemoteInventory.h"
@@ -65,9 +67,13 @@
 #include "ClearUI.h"
 #include "Trigger.h"
 #include "Enderman.h"
+#include "KoukuHpUI.h"
 #include "Stage_Kouku.h"
 #include "Logo.h"
 #include "Leaper.h"
+#include "MapUI.h"
+#include "StartStage.h"
+#include "MapTable.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -539,6 +545,20 @@ void CObjectFactory::Ready_ObjectFactory()
 	{
 		return CCat_Attack::Create(s_pGraphicDev,L"../Bin/Resource/SkeletalCube/Object/hoddeuk.cube");
 	} });
+	s_mapObjectSpawner.insert({ "MapTable", []()
+	{
+		return CMapTable::Create(s_pGraphicDev);
+	} });
+	
+	s_mapObjectSpawner.insert({ "Cat", []()
+	{
+		return CCat::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Object/cat.cube");
+	} });
+
+	s_mapObjectSpawner.insert({ "Cat2", []()
+	{
+		return CCat2::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Object/cat.cube");
+	} });
 }
 
 void CItemFactory::Ready_ItemFactory()
@@ -633,6 +653,10 @@ void CUIFactory::Ready_UIFactory()
 	 {
 		 return CBossHPUI::Create(s_pGraphicDev, -1);//not used
 	 } });
+	 s_mapUISpawner.insert({ "KoukuHPUI", [](_uint iTexNum)
+	 {
+		 return CKoukuHpUI::Create(s_pGraphicDev, -1);//not used
+	 } });
 	 s_mapUISpawner.insert({ "PotionCoolTime", [](_uint iTexNum)
 	 {
 	 	return CCoolTimeUI::Create(s_pGraphicDev, -1, CoolTimeTarget::POTION);
@@ -686,11 +710,13 @@ void CUIFactory::Ready_UIFactory()
 	 {
 		 return CClearUI::Create(s_pGraphicDev, 0);
 	 } });
-
-	
 	 s_mapUISpawner.insert({ "EditBox", [](_uint iTexNum)
 	 {
 		 return CEditBox::Create(s_pGraphicDev);
+	 } });
+	 s_mapUISpawner.insert({ "MapUI", [](_uint iTexNum)
+	 {
+		 return CMapUI::Create(s_pGraphicDev, 0);
 	 } });
 	
 }
@@ -744,5 +770,9 @@ void CSceneFactory::Ready_SceneFactory()
 		{
 			return CLogo::Create(s_pGraphicDev);
 		}});
+		s_mapSceneSpawner.insert({ "Stage_Start", []()
+		{
+			return CStartStage::Create(s_pGraphicDev);
+		} });
 	}
 }

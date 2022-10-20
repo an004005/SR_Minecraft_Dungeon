@@ -36,17 +36,27 @@ void CTransform::Set_WorldDecompose(const _matrix& matWorld)
 
 void CTransform::Chase_Target(const _vec3* pTargetPos, const _float& fSpeed, const _float& fTimeDelta)
 {
-	_vec3		vDir = *pTargetPos - m_vInfo[INFO_POS];
+	/*_vec3		vDir = *pTargetPos - m_vInfo[INFO_POS];
 
 	m_vInfo[INFO_POS] += *D3DXVec3Normalize(&vDir, &vDir) * fSpeed * fTimeDelta;
 
 	_matrix		matRot = *Compute_LookAtTarget(pTargetPos);
 	_matrix		matScale, matTrans;
-
+	
 	D3DXMatrixScaling(&matScale, m_vScale.x, m_vScale.y, m_vScale.z);
 	D3DXMatrixTranslation(&matTrans, m_vInfo[INFO_POS].x, m_vInfo[INFO_POS].y, m_vInfo[INFO_POS].z);
+	
+	m_matWorld = matScale * matRot * matTrans;*/
 
-	m_matWorld = matScale * matRot * matTrans;
+	_vec3		vDir = *pTargetPos - m_vInfo[INFO_POS];
+
+	m_vInfo[INFO_POS] += *D3DXVec3Normalize(&vDir, &vDir) * fSpeed * fTimeDelta;
+
+	_matrix		matTrans;
+
+	D3DXMatrixTranslation(&matTrans, m_vInfo[INFO_POS].x, m_vInfo[INFO_POS].y, m_vInfo[INFO_POS].z);
+
+	m_matWorld =  matTrans;
 }
 
 const _matrix* CTransform::Compute_LookAtTarget(const _vec3* pTargetPos)
@@ -59,8 +69,10 @@ const _matrix* CTransform::Compute_LookAtTarget(const _vec3* pTargetPos)
 	// D3DXMatrixRotationAxis : 임의의 축회전 행렬을 만들어주는 함수
 	return D3DXMatrixRotationAxis(&matRot, 
 									D3DXVec3Cross(&vAxis, &m_vInfo[INFO_UP], &vLook),
-									acosf(D3DXVec3Dot(D3DXVec3Normalize(&vLook, &vLook), 
+									acosf(D3DXVec3Dot(D3DXVec3Normalize(&vLook, &vLook),
 												D3DXVec3Normalize(&vUp, &m_vInfo[INFO_UP]))));
+
+	
 }
 
 void CTransform::RotateToLookAt(const _vec3& vLookAt)

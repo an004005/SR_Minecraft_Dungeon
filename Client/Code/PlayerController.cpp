@@ -10,6 +10,8 @@
 #include "AbstFactory.h"
 #include "Protocol.pb.h"
 #include "ServerPacketHandler.h"
+#include "MapUI.h"
+#include "MapTable.h"
 
 CPlayerController::CPlayerController() : CController()
 {
@@ -82,7 +84,7 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 	if (DIKeyDown(DIK_F))
 	{
 		_vec3 vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
-		//¹Ú½º ¿­±â , ÆøÅº ÁÝ±â
+		//¹Ú½º ¿­±â , ÆøÅº ÁÝ±â, MapUI¿­±â
 		pickGameObj(pPlayer, vTargetPos);
 		//¾ÆÀÌÅÛ ¸Ô±â
 		putItem(pPlayer, vTargetPos);		
@@ -272,8 +274,10 @@ void CPlayerController::pickGameObj(CPlayer* pPlayer, const _vec3& vTargetPos)
 {
 	_float fDynamiteDist = 3.f;
 	_float fBoxDist = 3.f;
+	_float fTableDist = 3.f;
 	CBox* pBox = nullptr;
 	CDynamite* pDynamite = nullptr;
+	CMapTable* pMapTable = nullptr;
 
 	for (auto& ele : Get_Layer(LAYER_GAMEOBJ)->Get_MapObject())
 	{
@@ -301,6 +305,18 @@ void CPlayerController::pickGameObj(CPlayer* pPlayer, const _vec3& vTargetPos)
 				fBoxDist = fDist;
 			}
 		}
+
+		if (CMapTable* pGameObj = dynamic_cast<CMapTable*>(ele.second))
+		{
+			_vec3 vDiff = vTargetPos - pGameObj->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
+			_float fDist = D3DXVec3Length(&vDiff);
+
+			if (fDist < fTableDist)
+			{
+				pMapTable = pGameObj;
+				fTableDist = fDist;
+			}
+		}
 	}
 
 	if (pBox)
@@ -313,6 +329,12 @@ void CPlayerController::pickGameObj(CPlayer* pPlayer, const _vec3& vTargetPos)
 	{
 		pDynamite->SetState(DYNAMITE_PICK);
 		m_pDynamite = pDynamite;
+		return;
+	}
+
+	if (pMapTable)
+	{
+		Engine::Get_GameObject<CMapUI>(LAYER_UI, L"MapUI")->Open();
 		return;
 	}
 	CSoundMgr::GetInstance()->PlaySoundRandom({
