@@ -506,6 +506,12 @@
     <ClInclude Include="..\Header\KoukuHpUI.h">
       <Filter>02. GameObject\05. UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\Cat.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Cat2.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -912,6 +918,12 @@
     </ClCompile>
     <ClCompile Include="..\Code\KoukuHpUI.cpp">
       <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Cat.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Cat2.cpp">
+      <Filter>02. GameObject\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
