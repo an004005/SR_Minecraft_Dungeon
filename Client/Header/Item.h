@@ -28,7 +28,7 @@ public:
 		m_fPower = fPower;
 	}
 	ITEMSTATE GetItemState() { return m_eItemState; }
-	void SetDelete() { m_bDelete = true; }
+	virtual void SetDelete() { m_bDelete = true; }
 	const string& GetFactoryTag() const { return m_strFactoryTag;}
 
 protected:

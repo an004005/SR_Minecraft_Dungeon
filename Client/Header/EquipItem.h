@@ -48,7 +48,7 @@ public:
 	virtual void Use() { m_bUse = true; }
 	_float GetCoolTime() const { return m_fCurCoolTime / m_fCoolTime; }
 	void SetOwner(CPlayer* pOwner) { m_pOwner = pOwner; NULL_CHECK(m_pOwner); }
-	
+	virtual void SetDelete() override;
 public:
 	const array<CubeAnimFrame, ANIM_END>& SetarrAnim(){ return m_arrAnim; }
 	ITEMTYPE GetItemType() { return m_eItemType; }

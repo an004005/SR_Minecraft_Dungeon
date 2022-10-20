@@ -118,7 +118,7 @@ void CStormRune::Render_Object()
 
 void CStormRune::Free()
 {
-	m_pItemUI->SetDelete();
+	// m_pItemUI->SetDelete();
 	for (auto& e : m_vecFlame)
 		Safe_Release(e);
 	m_vecFlame.clear();
