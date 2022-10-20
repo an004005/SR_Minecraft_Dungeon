@@ -33,9 +33,9 @@ HRESULT CEnderman::Ready_Object()
 	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 	m_pCurAnim = m_pIdleAnim;
 	m_eState = IDLE;
-	m_fSpeed = 3.f;
+	m_fSpeed = 3.5f;
 
-	m_pStat->SetMaxHP(500);
+	m_pStat->SetMaxHP(2000);
 
 	m_pStat->SetHurtSound({
 		L"sfx_mob_endermanHit-001.ogg",

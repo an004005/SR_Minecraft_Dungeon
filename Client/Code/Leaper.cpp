@@ -32,7 +32,7 @@ HRESULT CLeaper::Ready_Object()
 	m_eState = State::IDLE;
 	m_fSpeed = 2.5f;
 
-	m_pStat->SetMaxHP(500);
+	m_pStat->SetMaxHP(1000);
 
 	m_pStat->SetHurtSound({
 	L"DLC_Mob_Leaper_GetHit1.ogg",
