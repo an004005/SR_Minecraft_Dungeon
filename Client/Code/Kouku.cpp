@@ -5,6 +5,7 @@
 #include "StatComponent.h"
 #include "KoukuController.h"
 #include "Particle.h"
+#include "StaticCamera.h"
 #include "Weapon.h"
 
 CKouku::CKouku(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
@@ -427,6 +428,8 @@ void CKouku::Kouku_Stun_Success()
 		if (m_bCountable)
 		{
 			m_pStat->TakeDamage(0, KoukuPos, this, DT_STUN);
+			Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+				->PlayShake(0.1f, 0.4f);
 			m_bCountable = false;
 		}
 	}
