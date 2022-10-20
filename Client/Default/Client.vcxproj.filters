@@ -491,6 +491,15 @@
       <Filter>01. Scene</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\EditBox.h" />
+    <ClInclude Include="..\Header\StartStage.h">
+      <Filter>01. Scene\01. Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\MapUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\MapTable.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -883,6 +892,15 @@
       <Filter>01. Scene</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\EditBox.cpp" />
+    <ClCompile Include="..\Code\StartStage.cpp">
+      <Filter>01. Scene\01. Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MapUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MapTable.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
