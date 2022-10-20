@@ -105,27 +105,42 @@ private:
 	_vec3 m_vTargetPos = CGameUtilMgr::s_vZero; // controller 입력
 
 	_bool m_bFirstHammerAttack = false; // controller 입력
+
+	//SatonGrab
 	_bool m_bSatonGrap = false;
+	_bool m_bIsGrap = false;
+	_bool m_bIsGrapEndAttack = false;
+	// ~SatonGrab
+
+	//SatoCat
 	_bool m_bSatonBird = false;
+	//~SatoCat
+
+	//SatonSymbol
 	_bool m_bSatonSymbolAnim = false;
+	//~SatonSymbol
+
+	//SatonFascinate
 	_bool m_bSatonFascinate = false;
 	_bool m_bSatonDrawMoon = false;
 	_bool m_bSatonDrawMoonPair = false;
-
 	_bool m_bStatonExplodeMoon = false;
-	
+	_vec3 m_vExplodMoonPos;
+	//~SatonFascinate
+
+	//Coll
 	_bool m_bIsAttack_1_Coll = false;
 	_bool m_bIsAttack_2_Coll = false;
-	_bool m_bIsGrap = false;
-	_bool m_bIsGrapEndAttack = false;
-	
+	_bool m_bIsCatColl = false;
+	//~Coll
 
+	//AttackRangeCircle
 	_vec3 m_vATKRNGCirclePos;
+	//AttackRangeCircle
 
-	_vec3 m_vExplodMoonPos;
 	_float m_fTime;
 	_float m_fCurTime;
-	// _bool m_bHammerReady = false;
+
 
 
 	set<CPlayer*> m_pGrabbedList;

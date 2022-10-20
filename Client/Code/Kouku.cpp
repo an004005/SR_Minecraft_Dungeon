@@ -259,7 +259,7 @@ void CKouku::LateUpdate_Object()
 			m_iRedSymbolCnt++;
 		}
 
-		DEBUG_SPHERE(Right_RedCircle_3, 10.f, 6.2f);
+		DEBUG_SPHERE(Right_RedCircle_3, 10.f, 0.1f);
 		IM_LOG("Create Right_Red_3 Circle");
 
 		set<CGameObject*> setPlayer_4;
