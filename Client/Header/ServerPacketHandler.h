@@ -46,6 +46,9 @@ enum : uint16
 	PKT_S_SATON_ATTACK = 1037,
 	PKT_C_KOUKU_ATTACK = 1038,
 	PKT_S_KOUKU_ATTACK = 1039,
+	PKT_C_KOUKU_COUNTER = 1040,
+	PKT_S_KOUKU_COUNTER = 1041,
+	PKT_C_DEBUG_PKT = 1042,
 };
 
 // Custom Handlers
@@ -71,6 +74,7 @@ bool Handle_S_BOSS_SPAWN(PacketSessionRef& session, Protocol::S_BOSS_SPAWN& pkt)
 bool Handle_S_BOSS_WORLD(PacketSessionRef& session, Protocol::S_BOSS_WORLD& pkt);
 bool Handle_S_SATON_ATTACK(PacketSessionRef& session, Protocol::S_SATON_ATTACK& pkt);
 bool Handle_S_KOUKU_ATTACK(PacketSessionRef& session, Protocol::S_KOUKU_ATTACK& pkt);
+bool Handle_S_KOUKU_COUNTER(PacketSessionRef& session, Protocol::S_KOUKU_COUNTER& pkt);
 
 class ServerPacketHandler
 {
@@ -100,6 +104,7 @@ public:
 		GPacketHandler[PKT_S_BOSS_WORLD] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_BOSS_WORLD>(Handle_S_BOSS_WORLD, session, buffer, len); };
 		GPacketHandler[PKT_S_SATON_ATTACK] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_SATON_ATTACK>(Handle_S_SATON_ATTACK, session, buffer, len); };
 		GPacketHandler[PKT_S_KOUKU_ATTACK] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_KOUKU_ATTACK>(Handle_S_KOUKU_ATTACK, session, buffer, len); };
+		GPacketHandler[PKT_S_KOUKU_COUNTER] = [](PacketSessionRef& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S_KOUKU_COUNTER>(Handle_S_KOUKU_COUNTER, session, buffer, len); };
 	}
 
 	static bool HandlePacket(PacketSessionRef& session, BYTE* buffer, int32 len)
@@ -126,6 +131,8 @@ public:
 	static SendBufferRef MakeSendBuffer(Protocol::C_BOSS_WORLD& pkt) { return MakeSendBuffer(pkt, PKT_C_BOSS_WORLD); }
 	static SendBufferRef MakeSendBuffer(Protocol::C_SATON_ATTACK& pkt) { return MakeSendBuffer(pkt, PKT_C_SATON_ATTACK); }
 	static SendBufferRef MakeSendBuffer(Protocol::C_KOUKU_ATTACK& pkt) { return MakeSendBuffer(pkt, PKT_C_KOUKU_ATTACK); }
+	static SendBufferRef MakeSendBuffer(Protocol::C_KOUKU_COUNTER& pkt) { return MakeSendBuffer(pkt, PKT_C_KOUKU_COUNTER); }
+	static SendBufferRef MakeSendBuffer(Protocol::C_DEBUG_PKT& pkt) { return MakeSendBuffer(pkt, PKT_C_DEBUG_PKT); }
 
 private:
 	template<typename PacketType, typename ProcessFunc>

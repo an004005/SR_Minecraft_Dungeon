@@ -274,3 +274,19 @@ message S_KOUKU_ATTACK
 	KoukuPattern pattern = 2;
 	Vec3 targetPos = 3;
 }
+
+message C_KOUKU_COUNTER
+{
+
+}
+
+message S_KOUKU_COUNTER
+{
+	bool success = 1;
+}
+
+
+message C_DEBUG_PKT
+{
+	string debugLog = 1;
+}

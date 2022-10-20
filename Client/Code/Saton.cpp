@@ -5,6 +5,7 @@
 #include "Kouku.h"
 #include "Particle.h"
 #include "SatonController.h"
+#include "ServerPacketHandler.h"
 #include "Skeleton.h"
 #include "StatComponent.h"
 #include "StaticCamera.h"
@@ -479,7 +480,14 @@ void CSaton::StateChange()
 		RotateToTargetPos(m_vTargetPos);
 		PlayAnimationOnce(&m_arrAnim[FIRSTATTACK]);
 		m_bCanPlayAnim = false;
+
+		Protocol::C_DEBUG_PKT pkt;
+		string debug = "Player : " +  to_string(CClientServiceMgr::GetInstance()->m_iPlayerID) + " Hit x :"
+		+ to_string(m_vTargetPos.x) +  ", z :" + to_string(m_vTargetPos.z);
+		pkt.set_debuglog(debug);
+		CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(pkt));	
 		
+
 		SetOff();
 		return;
 	}

@@ -260,19 +260,19 @@ HRESULT CStage_Kouku::Ready_Layer_GameLogic()
 	pPlayer->SetName(CObjectStoreMgr::GetInstance()->GetPlayerName());
 
 
-	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 59.5f, 25.f ,33.5f });
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 59.5f, 25.f ,35.5f });
 	CObjectFactory::Create<CPlayerStartPos>("PlayerPos", L"PlayerPos", matWorld)
 		->SetID(0);
 
-	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 61.5f, 25.f ,33.5f });
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 61.5f, 25.f ,35.5f });
 	CObjectFactory::Create<CPlayerStartPos>("PlayerPos", L"PlayerPos", matWorld)
 		->SetID(1);
 
-	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 63.5f, 25.f ,33.5f });
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 63.5f, 25.f ,35.5f });
 	CObjectFactory::Create<CPlayerStartPos>("PlayerPos", L"PlayerPos", matWorld)
 		->SetID(2);
 
-	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 65.5f, 25.f ,33.5f });
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 65.5f, 25.f ,35.5f });
 	CObjectFactory::Create<CPlayerStartPos>("PlayerPos", L"PlayerPos", matWorld)
 		->SetID(3);
 

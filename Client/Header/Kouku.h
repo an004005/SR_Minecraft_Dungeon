@@ -76,6 +76,7 @@ public:
 	_bool Kouku_Countable(void) { return m_bCountable; }
 
 	void Kouku_Stun_Success(void);
+	void SetKoukuCounter();
 
 	_bool Check_SymbolGimmick(void) { return m_bIsSymbolGimmick; }
 

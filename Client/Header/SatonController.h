@@ -50,8 +50,8 @@ protected:
 
 	_float m_fTargetDist = 9999.f;
 
-	_float m_fLookAtTime = 0.2f;
-	_float m_fCurLookAtTime = 0.2f;
+	_float m_fLookAtTime = 0.3f;
+	_float m_fCurLookAtTime = 0.3f;
 
 };
 

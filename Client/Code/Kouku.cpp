@@ -8,6 +8,7 @@
 #include "StaticCamera.h"
 #include "Weapon.h"
 #include "KoukuHpUI.h"
+#include "ServerPacketHandler.h"
 
 CKouku::CKouku(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
 {
@@ -455,12 +456,15 @@ void CKouku::Kouku_Stun_Success()
 	{
 		if (m_bCountable)
 		{
-			m_pStat->TakeDamage(0, KoukuPos, this, DT_STUN);
-			Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
-				->PlayShake(0.1f, 1.f);
+			// m_pStat->TakeDamage(0, KoukuPos, this, DT_STUN);
+			// Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+			// 	->PlayShake(0.1f, 1.f);
+			SetKoukuCounter();
+
 			if (g_bOnline)
 			{
-				
+				Protocol::C_KOUKU_COUNTER counterPkt;
+				CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(counterPkt));	
 			}
 
 			m_bCountable = false;
@@ -468,6 +472,14 @@ void CKouku::Kouku_Stun_Success()
 	}
 	DEBUG_SPHERE(KoukuPos, 1.f, 0.1f);
 
+}
+
+void CKouku::SetKoukuCounter()
+{
+	const _vec3& KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+	m_pStat->TakeDamage(0, KoukuPos, this, DT_STUN);
+	Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+		->PlayShake(0.1f, 1.f);
 }
 
 void CKouku::Free()

@@ -32,6 +32,9 @@ HRESULT CStartStage::Ready_Scene(void)
 
 _int CStartStage::Update_Scene(const _float & fTimeDelta)
 {
+	// 임시 조치
+
+
 	CSoundMgr::GetInstance()->Update_Listener(LAYER_ENV, L"StaticCamera");
 	return Engine::CScene::Update_Scene(fTimeDelta);
 }
@@ -39,6 +42,10 @@ _int CStartStage::Update_Scene(const _float & fTimeDelta)
 void CStartStage::LateUpdate_Scene(void)
 {
 	Engine::CScene::LateUpdate_Scene();
+	if (DIKeyDown(DIK_0))
+	{
+		CSceneFactory::LoadScene("Loading1", "NetStage_Start", true ,500);
+	}
 }
 
 void CStartStage::Render_Scene(void)

@@ -362,6 +362,7 @@ void CPlayer::PlayerSpawn()
 		}
 	}
 
+	// todo 부활 사운드로 죽음 사운드 덮기
 	Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")->ResetPosition();
 	m_pColl->SetStart();
 	m_pStat->Revive();
@@ -553,6 +554,7 @@ void CPlayer::StateChange()
 		{
 			if (m_bRemote == false)
 				CSoundMgr::GetInstance()->PlaySound(L"sfx_playerDead-001_soundWave.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+				// CSoundMgr::GetInstance()->PlaySoundChannel(L"sfx_playerDead-001_soundWave.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS], SOUND_UI);
 			m_eState = DEAD;
 			PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);
 			m_bRoll = false;

@@ -35,5 +35,4 @@ enum KoukuPattern
 	KOUKU_HAMMER = 3;
 	KOUKU_HORROR = 4;
 	KOUKU_BASIC = 5;
-	KOUKU_COUNTER = 6;
 }

@@ -2,6 +2,7 @@
 #include "ServerPacketHandler.h"
 #include "ClientServiceMgr.h"
 #include "AbstFactory.h"
+#include "Kouku.h"
 #include "KoukuController.h"
 #include "Player.h"
 #include "PlayerController.h"
@@ -479,5 +480,28 @@ bool Handle_S_KOUKU_ATTACK(PacketSessionRef& session, Protocol::S_KOUKU_ATTACK& 
 		pCon->SetPattern(vTargetPos, pkt.pattern());
 	}
 	return true;
+}
+
+bool Handle_S_KOUKU_COUNTER(PacketSessionRef& session, Protocol::S_KOUKU_COUNTER& pkt)
+{
+	if (pkt.success() == false)
+		return true;
+
+	CKouku* pKouku = nullptr;
+
+	if (CClientServiceMgr::GetInstance()->m_iPlayerID == 0) // if host
+	{
+		pKouku = Get_GameObject<CKouku>(LAYER_ENEMY, L"Kouku");
+	}
+	else
+	{
+		pKouku = Get_GameObject<CKouku>(LAYER_ENEMY, L"Kouku_Remote");
+	}
+
+	if (pKouku == nullptr) _CRASH("Kouku not exist");
+
+	CStatComponent* pStat = pKouku->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC);
+	if (pStat->IsStun() == false)
+		pKouku->SetKoukuCounter();
 }
 

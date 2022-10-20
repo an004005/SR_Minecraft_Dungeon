@@ -54,12 +54,18 @@ extern C_BOSS_SPAWNDefaultTypeInternal _C_BOSS_SPAWN_default_instance_;
 class C_BOSS_WORLD;
 struct C_BOSS_WORLDDefaultTypeInternal;
 extern C_BOSS_WORLDDefaultTypeInternal _C_BOSS_WORLD_default_instance_;
+class C_DEBUG_PKT;
+struct C_DEBUG_PKTDefaultTypeInternal;
+extern C_DEBUG_PKTDefaultTypeInternal _C_DEBUG_PKT_default_instance_;
 class C_ENTER_GAME;
 struct C_ENTER_GAMEDefaultTypeInternal;
 extern C_ENTER_GAMEDefaultTypeInternal _C_ENTER_GAME_default_instance_;
 class C_KOUKU_ATTACK;
 struct C_KOUKU_ATTACKDefaultTypeInternal;
 extern C_KOUKU_ATTACKDefaultTypeInternal _C_KOUKU_ATTACK_default_instance_;
+class C_KOUKU_COUNTER;
+struct C_KOUKU_COUNTERDefaultTypeInternal;
+extern C_KOUKU_COUNTERDefaultTypeInternal _C_KOUKU_COUNTER_default_instance_;
 class C_LOGIN;
 struct C_LOGINDefaultTypeInternal;
 extern C_LOGINDefaultTypeInternal _C_LOGIN_default_instance_;
@@ -120,6 +126,9 @@ extern S_ENTER_GAMEDefaultTypeInternal _S_ENTER_GAME_default_instance_;
 class S_KOUKU_ATTACK;
 struct S_KOUKU_ATTACKDefaultTypeInternal;
 extern S_KOUKU_ATTACKDefaultTypeInternal _S_KOUKU_ATTACK_default_instance_;
+class S_KOUKU_COUNTER;
+struct S_KOUKU_COUNTERDefaultTypeInternal;
+extern S_KOUKU_COUNTERDefaultTypeInternal _S_KOUKU_COUNTER_default_instance_;
 class S_LOGIN;
 struct S_LOGINDefaultTypeInternal;
 extern S_LOGINDefaultTypeInternal _S_LOGIN_default_instance_;
@@ -172,8 +181,10 @@ extern S_SPAWN_MONSTERDefaultTypeInternal _S_SPAWN_MONSTER_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
 template<> ::Protocol::C_BOSS_SPAWN* Arena::CreateMaybeMessage<::Protocol::C_BOSS_SPAWN>(Arena*);
 template<> ::Protocol::C_BOSS_WORLD* Arena::CreateMaybeMessage<::Protocol::C_BOSS_WORLD>(Arena*);
+template<> ::Protocol::C_DEBUG_PKT* Arena::CreateMaybeMessage<::Protocol::C_DEBUG_PKT>(Arena*);
 template<> ::Protocol::C_ENTER_GAME* Arena::CreateMaybeMessage<::Protocol::C_ENTER_GAME>(Arena*);
 template<> ::Protocol::C_KOUKU_ATTACK* Arena::CreateMaybeMessage<::Protocol::C_KOUKU_ATTACK>(Arena*);
+template<> ::Protocol::C_KOUKU_COUNTER* Arena::CreateMaybeMessage<::Protocol::C_KOUKU_COUNTER>(Arena*);
 template<> ::Protocol::C_LOGIN* Arena::CreateMaybeMessage<::Protocol::C_LOGIN>(Arena*);
 template<> ::Protocol::C_MONSTER_SET_TARGET* Arena::CreateMaybeMessage<::Protocol::C_MONSTER_SET_TARGET>(Arena*);
 template<> ::Protocol::C_MONSTER_WORLD* Arena::CreateMaybeMessage<::Protocol::C_MONSTER_WORLD>(Arena*);
@@ -194,6 +205,7 @@ template<> ::Protocol::S_BOSS_SPAWN* Arena::CreateMaybeMessage<::Protocol::S_BOS
 template<> ::Protocol::S_BOSS_WORLD* Arena::CreateMaybeMessage<::Protocol::S_BOSS_WORLD>(Arena*);
 template<> ::Protocol::S_ENTER_GAME* Arena::CreateMaybeMessage<::Protocol::S_ENTER_GAME>(Arena*);
 template<> ::Protocol::S_KOUKU_ATTACK* Arena::CreateMaybeMessage<::Protocol::S_KOUKU_ATTACK>(Arena*);
+template<> ::Protocol::S_KOUKU_COUNTER* Arena::CreateMaybeMessage<::Protocol::S_KOUKU_COUNTER>(Arena*);
 template<> ::Protocol::S_LOGIN* Arena::CreateMaybeMessage<::Protocol::S_LOGIN>(Arena*);
 template<> ::Protocol::S_MONSTER_SET_TARGET* Arena::CreateMaybeMessage<::Protocol::S_MONSTER_SET_TARGET>(Arena*);
 template<> ::Protocol::S_MONSTER_WORLD* Arena::CreateMaybeMessage<::Protocol::S_MONSTER_WORLD>(Arena*);
@@ -7226,6 +7238,425 @@ class S_KOUKU_ATTACK final :
   union { Impl_ _impl_; };
   friend struct ::TableStruct_Protocol_2eproto;
 };
+// -------------------------------------------------------------------
+
+class C_KOUKU_COUNTER final :
+    public ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase /* @@protoc_insertion_point(class_definition:Protocol.C_KOUKU_COUNTER) */ {
+ public:
+  inline C_KOUKU_COUNTER() : C_KOUKU_COUNTER(nullptr) {}
+  explicit PROTOBUF_CONSTEXPR C_KOUKU_COUNTER(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  C_KOUKU_COUNTER(const C_KOUKU_COUNTER& from);
+  C_KOUKU_COUNTER(C_KOUKU_COUNTER&& from) noexcept
+    : C_KOUKU_COUNTER() {
+    *this = ::std::move(from);
+  }
+
+  inline C_KOUKU_COUNTER& operator=(const C_KOUKU_COUNTER& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline C_KOUKU_COUNTER& operator=(C_KOUKU_COUNTER&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const C_KOUKU_COUNTER& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const C_KOUKU_COUNTER* internal_default_instance() {
+    return reinterpret_cast<const C_KOUKU_COUNTER*>(
+               &_C_KOUKU_COUNTER_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    40;
+
+  friend void swap(C_KOUKU_COUNTER& a, C_KOUKU_COUNTER& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(C_KOUKU_COUNTER* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(C_KOUKU_COUNTER* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  C_KOUKU_COUNTER* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<C_KOUKU_COUNTER>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyFrom;
+  inline void CopyFrom(const C_KOUKU_COUNTER& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl(*this, from);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeFrom;
+  void MergeFrom(const C_KOUKU_COUNTER& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl(*this, from);
+  }
+  public:
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.C_KOUKU_COUNTER";
+  }
+  protected:
+  explicit C_KOUKU_COUNTER(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:Protocol.C_KOUKU_COUNTER)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+  };
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class S_KOUKU_COUNTER final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S_KOUKU_COUNTER) */ {
+ public:
+  inline S_KOUKU_COUNTER() : S_KOUKU_COUNTER(nullptr) {}
+  ~S_KOUKU_COUNTER() override;
+  explicit PROTOBUF_CONSTEXPR S_KOUKU_COUNTER(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S_KOUKU_COUNTER(const S_KOUKU_COUNTER& from);
+  S_KOUKU_COUNTER(S_KOUKU_COUNTER&& from) noexcept
+    : S_KOUKU_COUNTER() {
+    *this = ::std::move(from);
+  }
+
+  inline S_KOUKU_COUNTER& operator=(const S_KOUKU_COUNTER& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S_KOUKU_COUNTER& operator=(S_KOUKU_COUNTER&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S_KOUKU_COUNTER& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S_KOUKU_COUNTER* internal_default_instance() {
+    return reinterpret_cast<const S_KOUKU_COUNTER*>(
+               &_S_KOUKU_COUNTER_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    41;
+
+  friend void swap(S_KOUKU_COUNTER& a, S_KOUKU_COUNTER& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S_KOUKU_COUNTER* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S_KOUKU_COUNTER* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  S_KOUKU_COUNTER* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<S_KOUKU_COUNTER>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const S_KOUKU_COUNTER& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const S_KOUKU_COUNTER& from) {
+    S_KOUKU_COUNTER::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S_KOUKU_COUNTER* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S_KOUKU_COUNTER";
+  }
+  protected:
+  explicit S_KOUKU_COUNTER(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kSuccessFieldNumber = 1,
+  };
+  // bool success = 1;
+  void clear_success();
+  bool success() const;
+  void set_success(bool value);
+  private:
+  bool _internal_success() const;
+  void _internal_set_success(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.S_KOUKU_COUNTER)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    bool success_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class C_DEBUG_PKT final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C_DEBUG_PKT) */ {
+ public:
+  inline C_DEBUG_PKT() : C_DEBUG_PKT(nullptr) {}
+  ~C_DEBUG_PKT() override;
+  explicit PROTOBUF_CONSTEXPR C_DEBUG_PKT(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  C_DEBUG_PKT(const C_DEBUG_PKT& from);
+  C_DEBUG_PKT(C_DEBUG_PKT&& from) noexcept
+    : C_DEBUG_PKT() {
+    *this = ::std::move(from);
+  }
+
+  inline C_DEBUG_PKT& operator=(const C_DEBUG_PKT& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline C_DEBUG_PKT& operator=(C_DEBUG_PKT&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const C_DEBUG_PKT& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const C_DEBUG_PKT* internal_default_instance() {
+    return reinterpret_cast<const C_DEBUG_PKT*>(
+               &_C_DEBUG_PKT_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    42;
+
+  friend void swap(C_DEBUG_PKT& a, C_DEBUG_PKT& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(C_DEBUG_PKT* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(C_DEBUG_PKT* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  C_DEBUG_PKT* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<C_DEBUG_PKT>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const C_DEBUG_PKT& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const C_DEBUG_PKT& from) {
+    C_DEBUG_PKT::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(C_DEBUG_PKT* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.C_DEBUG_PKT";
+  }
+  protected:
+  explicit C_DEBUG_PKT(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kDebugLogFieldNumber = 1,
+  };
+  // string debugLog = 1;
+  void clear_debuglog();
+  const std::string& debuglog() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_debuglog(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_debuglog();
+  PROTOBUF_NODISCARD std::string* release_debuglog();
+  void set_allocated_debuglog(std::string* debuglog);
+  private:
+  const std::string& _internal_debuglog() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_debuglog(const std::string& value);
+  std::string* _internal_mutable_debuglog();
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.C_DEBUG_PKT)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr debuglog_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Protocol_2eproto;
+};
 // ===================================================================
 
 
@@ -12328,9 +12759,97 @@ inline void S_KOUKU_ATTACK::set_allocated_targetpos(::Protocol::Vec3* targetpos)
   // @@protoc_insertion_point(field_set_allocated:Protocol.S_KOUKU_ATTACK.targetPos)
 }
 
+// -------------------------------------------------------------------
+
+// C_KOUKU_COUNTER
+
+// -------------------------------------------------------------------
+
+// S_KOUKU_COUNTER
+
+// bool success = 1;
+inline void S_KOUKU_COUNTER::clear_success() {
+  _impl_.success_ = false;
+}
+inline bool S_KOUKU_COUNTER::_internal_success() const {
+  return _impl_.success_;
+}
+inline bool S_KOUKU_COUNTER::success() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_KOUKU_COUNTER.success)
+  return _internal_success();
+}
+inline void S_KOUKU_COUNTER::_internal_set_success(bool value) {
+  
+  _impl_.success_ = value;
+}
+inline void S_KOUKU_COUNTER::set_success(bool value) {
+  _internal_set_success(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_KOUKU_COUNTER.success)
+}
+
+// -------------------------------------------------------------------
+
+// C_DEBUG_PKT
+
+// string debugLog = 1;
+inline void C_DEBUG_PKT::clear_debuglog() {
+  _impl_.debuglog_.ClearToEmpty();
+}
+inline const std::string& C_DEBUG_PKT::debuglog() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_DEBUG_PKT.debugLog)
+  return _internal_debuglog();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void C_DEBUG_PKT::set_debuglog(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.debuglog_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C_DEBUG_PKT.debugLog)
+}
+inline std::string* C_DEBUG_PKT::mutable_debuglog() {
+  std::string* _s = _internal_mutable_debuglog();
+  // @@protoc_insertion_point(field_mutable:Protocol.C_DEBUG_PKT.debugLog)
+  return _s;
+}
+inline const std::string& C_DEBUG_PKT::_internal_debuglog() const {
+  return _impl_.debuglog_.Get();
+}
+inline void C_DEBUG_PKT::_internal_set_debuglog(const std::string& value) {
+  
+  _impl_.debuglog_.Set(value, GetArenaForAllocation());
+}
+inline std::string* C_DEBUG_PKT::_internal_mutable_debuglog() {
+  
+  return _impl_.debuglog_.Mutable(GetArenaForAllocation());
+}
+inline std::string* C_DEBUG_PKT::release_debuglog() {
+  // @@protoc_insertion_point(field_release:Protocol.C_DEBUG_PKT.debugLog)
+  return _impl_.debuglog_.Release();
+}
+inline void C_DEBUG_PKT::set_allocated_debuglog(std::string* debuglog) {
+  if (debuglog != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.debuglog_.SetAllocated(debuglog, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.debuglog_.IsDefault()) {
+    _impl_.debuglog_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C_DEBUG_PKT.debugLog)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

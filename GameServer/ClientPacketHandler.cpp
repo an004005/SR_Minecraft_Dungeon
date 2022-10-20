@@ -317,33 +317,33 @@ bool Handle_C_SATON_ATTACK(PacketSessionRef& session, Protocol::C_SATON_ATTACK& 
 	float y = pkt.targetpos().y();
 	float z = pkt.targetpos().z();
 
-	switch (pkt.pattern())
-	{
-	case Protocol::MoveTo:
-		// cout << "Saton Moveto " << x << " " << y << " " << z <<endl;
-		break;
-	case Protocol::HAMMER:
-		cout << "Saton HAMMER " << x << " " << y << " " << z <<endl;
-		break;
-	case Protocol::GRAB:
-		cout << "Saton GRAB " << x << " " << y << " " << z <<endl;
-		break;
-	case Protocol::BIRD:
-		cout << "Saton BIRD " << x << " " << y << " " << z <<endl;
-		break;
-	case Protocol::SYMBOL:
-		cout << "Saton SYMBOL " << x << " " << y << " " << z <<endl;
-		break;
-	case Protocol::FASCINATE:
-		cout << "Saton FASCINATE " << x << " " << y << " " << z <<endl;
-		break;
-	case Protocol::DRAWMOON:
-		cout << "Saton DRAWMOON " << x << " " << y << " " << z <<endl;
-		break;
-	case Protocol::SatonPattern_INT_MIN_SENTINEL_DO_NOT_USE_: break;
-	case Protocol::SatonPattern_INT_MAX_SENTINEL_DO_NOT_USE_: break;
-	default: ;
-	}
+	// switch (pkt.pattern())
+	// {
+	// case Protocol::MoveTo:
+	// 	// cout << "Saton Moveto " << x << " " << y << " " << z <<endl;
+	// 	break;
+	// case Protocol::HAMMER:
+	// 	cout << "Saton HAMMER " << x << " " << y << " " << z <<endl;
+	// 	break;
+	// case Protocol::GRAB:
+	// 	cout << "Saton GRAB " << x << " " << y << " " << z <<endl;
+	// 	break;
+	// case Protocol::BIRD:
+	// 	cout << "Saton BIRD " << x << " " << y << " " << z <<endl;
+	// 	break;
+	// case Protocol::SYMBOL:
+	// 	cout << "Saton SYMBOL " << x << " " << y << " " << z <<endl;
+	// 	break;
+	// case Protocol::FASCINATE:
+	// 	cout << "Saton FASCINATE " << x << " " << y << " " << z <<endl;
+	// 	break;
+	// case Protocol::DRAWMOON:
+	// 	cout << "Saton DRAWMOON " << x << " " << y << " " << z <<endl;
+	// 	break;
+	// case Protocol::SatonPattern_INT_MIN_SENTINEL_DO_NOT_USE_: break;
+	// case Protocol::SatonPattern_INT_MAX_SENTINEL_DO_NOT_USE_: break;
+	// default: ;
+	// }
 
 	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(satonPkt));
 
@@ -359,6 +359,22 @@ bool Handle_C_KOUKU_ATTACK(PacketSessionRef& session, Protocol::C_KOUKU_ATTACK& 
 
 	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(koukuPkt));
 
+	return true;
+}
+
+bool Handle_C_KOUKU_COUNTER(PacketSessionRef& session, Protocol::C_KOUKU_COUNTER& pkt)
+{
+	Protocol::S_KOUKU_COUNTER counterPkt;
+	counterPkt.set_success(true);
+
+	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(counterPkt));
+
+	return true;
+}
+
+bool Handle_C_DEBUG_PKT(PacketSessionRef& session, Protocol::C_DEBUG_PKT& pkt)
+{
+	cout << pkt.debuglog() <<endl;
 	return true;
 }
 
