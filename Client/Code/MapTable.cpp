@@ -44,7 +44,7 @@ void CMapTable::Render_Object()
 }
 
 void CMapTable::Free()
-{
+{	
 	CGameObject::Free();
 }
 
