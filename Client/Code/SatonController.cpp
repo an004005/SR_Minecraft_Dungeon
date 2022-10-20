@@ -12,7 +12,7 @@ CSatonController::CSatonController()
 
 CSatonController::CSatonController(const CSatonController& rhs)
 {
-	m_fSatonFascinateCoolTime = 10.f;
+	m_fSatonFascinateCoolTime = 8.f;
 	m_fSatonGrapCoolTime = 11.f;
 }
 
@@ -138,7 +138,7 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 	{
 		m_fCurSatonFascinateCoolTime = 0.f;
 		saton->SatonFascinate(m_vLookFront, vTargetPos);
-		m_fSatonFascinateCoolTime = 60.f;
+		// m_fSatonFascinateCoolTime = 60.f;
 
 		m_bIsDrawMoon = true;
 
