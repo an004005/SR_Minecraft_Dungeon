@@ -55,7 +55,6 @@ CPowerRune* CPowerRune::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 
 void CPowerRune::Free()
 {
-	m_pItemUI->SetDelete();
 	CRune::Free();
 }
 

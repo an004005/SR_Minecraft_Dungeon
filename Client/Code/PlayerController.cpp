@@ -41,43 +41,61 @@ _int CPlayerController::Update_Component(const _float& fTimeDelta)
 	if (pPlayer->GetInventory()->InputLock())
 		return 0;
 
+	m_vPressDir = CGameUtilMgr::s_vZero;
 	// 움직임 입력
 	{
-		if (DIKeyDown(DIK_W))
+		if (DIKeyPressing(DIK_W))
 		{
 			m_vPressDir.z += 1.f;
 		}
-		if (DIKeyUp(DIK_S))
-		{
-			m_vPressDir.z += 1.f;
-		}
-
-		if (DIKeyDown(DIK_A))
+		if (DIKeyPressing(DIK_A))
 		{
 			m_vPressDir.x += -1.f;
 		}
-		if (DIKeyUp(DIK_D))
-		{
-			m_vPressDir.x += -1.f;
-		}
-
-		if (DIKeyDown(DIK_S))
+		if (DIKeyPressing(DIK_S))
 		{
 			m_vPressDir.z += -1.f;
 		}
-		if (DIKeyUp(DIK_W))
+		if (DIKeyPressing(DIK_D))
 		{
-			m_vPressDir.z += -1.f;
+			m_vPressDir.x += 1.f;
 		}
 
-		if (DIKeyDown(DIK_D))
-		{
-			m_vPressDir.x += 1.f;
-		}
-		if (DIKeyUp(DIK_A))
-		{
-			m_vPressDir.x += 1.f;
-		}
+		// if (DIKeyDown(DIK_W))
+		// {
+		// 	m_vPressDir.z += 1.f;
+		// }
+		// if (DIKeyUp(DIK_S))
+		// {
+		// 	m_vPressDir.z += 1.f;
+		// }
+		//
+		// if (DIKeyDown(DIK_A))
+		// {
+		// 	m_vPressDir.x += -1.f;
+		// }
+		// if (DIKeyUp(DIK_D))
+		// {
+		// 	m_vPressDir.x += -1.f;
+		// }
+		//
+		// if (DIKeyDown(DIK_S))
+		// {
+		// 	m_vPressDir.z += -1.f;
+		// }
+		// if (DIKeyUp(DIK_W))
+		// {
+		// 	m_vPressDir.z += -1.f;
+		// }
+		//
+		// if (DIKeyDown(DIK_D))
+		// {
+		// 	m_vPressDir.x += 1.f;
+		// }
+		// if (DIKeyUp(DIK_A))
+		// {
+		// 	m_vPressDir.x += 1.f;
+		// }
 	}
 
 	//box open
