@@ -2,31 +2,6 @@
 #include "Monster.h"
 #include <functional>
 
-//struct Time77
-//{
-//public:
-//	_float fTime = 0.f;
-//
-//private:
-//	_float fCurTime = 0.f;
-//	std::function<void()> callBack;
-//
-//public:
-//	void Tick(_float fTimeDelta)
-//	{
-//		if (fCurTime > 0.f)
-//			fCurTime -= fTimeDelta;
-//		else
-//		{
-//			fCurTime = fTime;
-//			callBack();
-//		}
-//	}
-//
-//	Time77(_float fTime, std::function<void()> callBack)
-//		: fTime(fTime), callBack(callBack) {}
-//};
-
 class CController;
 class CBossHPUI;
 
@@ -64,7 +39,6 @@ public:
 	// controller 조종 함수
 	_vec3 Get_TargetPos() { return m_vTargetPos; }
 	void WalkToTarget(const _vec3& vTargetPos) { m_vTargetPos = vTargetPos; }
-	void SetStart() { m_bStartPlay = true; }
 	void Chop(const _vec3& vTargetPos)
 	{
 		m_bChop = true;
@@ -116,7 +90,6 @@ private:
 
 	ULONGLONG m_dwWindTime = 0;
 
-	_bool m_bStartPlay = false;
 	_bool m_bIntroPlay = false;
 
 	CBossHPUI* m_pBossHPUI = nullptr;

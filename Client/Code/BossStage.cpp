@@ -111,7 +111,7 @@ HRESULT CBossStage::Ready_Layer_GameLogic()
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 			{
 				_matrix matWorld;
-				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 109.f, 0.54f, 14.f });
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, D3DXToRadian(250.f) ,0.f }, { 109.f, 0.54f, 14.f });
 				CEnemyFactory::Create<CRedStoneMonstrosity>("RedStoneMonstrosity", L"RedStoneMonstrosity", matWorld);
 				return true;
 			}

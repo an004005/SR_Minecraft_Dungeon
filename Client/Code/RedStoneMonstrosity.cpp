@@ -39,7 +39,7 @@ HRESULT CRedStoneMonstrosity::Ready_Object()
 	m_eState = INTRO;
 	m_fSpeed = 2.f;
 
-	m_pStat->SetMaxHP(100);
+	m_pStat->SetMaxHP(3000);
 
 	m_pStat->SetHurtSound({
 		L"sfx_mob_redstoneGolemHurt-001.ogg",
@@ -190,10 +190,6 @@ _int CRedStoneMonstrosity::Update_Object(const _float& fTimeDelta)
 
 	if(m_pBossHPUI)
 		m_pBossHPUI->SetCurHp(m_pStat->GetHP());
-
-	if (!m_bStartPlay)
-		return OBJ_NOEVENT;
-	
 
 
 	if (!m_bIntroPlay)
