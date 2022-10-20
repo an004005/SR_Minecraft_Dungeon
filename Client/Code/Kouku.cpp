@@ -32,6 +32,7 @@ HRESULT CKouku::Ready_Object()
 	m_arrAnim[HORROR_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_runattack.anim");
 	m_arrAnim[SYMBOL_HIDE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_hide.anim");
 	m_arrAnim[REST] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_rest.anim");
+	m_arrAnim[STUN] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_stun.anim");
 
 	m_pIdleAnim = &m_arrAnim[IDLE];
 	// m_pCurAnim = &m_arrAnim[INTRO];
@@ -131,16 +132,36 @@ void CKouku::AnimationEvent(const string& strEvent)
 	}
 	else if (strEvent == "HorrorAttack_Start")
 	{
-		m_bCountable = true;
 	}
+	else if (strEvent == "Countable")
+	{
+		m_bCountable = true;
+		//파티클 추가
+	}
+	else if (strEvent == "Countable_End")
+	{
+		m_bCountable = false;
+	}
+	
 	else if (strEvent == "Horror_Attack")
 	{
 		m_bIsHorrorAttack = true;
-		m_bCountable = false;
 	}
 	else if (strEvent == "HorrorAttack_End")
 	{
 		m_bIsHorrorAttack = false;
+	}
+	else if (strEvent == "AnimStopped")
+	{
+		if (m_eState == STUN)
+		{
+			m_eState = IDLE;
+			m_bStopAnim = false;
+		}
+		else if (m_eState == DEAD)
+		{
+			
+		}
 	}
 
 }
@@ -154,6 +175,8 @@ _int CKouku::Update_Object(const _float& fTimeDelta)
 	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
 		m_bCanPlayAnim = true;
 
+	
+
 	// 상태 변경 조건 설정
 		StateChange();
 
@@ -162,6 +185,8 @@ _int CKouku::Update_Object(const _float& fTimeDelta)
 	{
 	case INTRO:
 		m_strState = "INTRO";
+		break;
+	case STUN:
 		break;
 	case WALK:
 		m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * m_fSpeed * fTimeDelta;
@@ -177,7 +202,7 @@ _int CKouku::Update_Object(const _float& fTimeDelta)
 	case HORROR_ATTACK:
 		m_fCurTime += fTimeDelta;
 
-		if (m_fCurTime <= m_fTime && !m_bCountable)
+		if (m_fCurTime <= m_fTime && !m_pStat->IsStun())
 		{
 			m_pRootPart->pTrans->m_vInfo[INFO_POS] += m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 4.f * fTimeDelta;
 		}
@@ -366,8 +391,27 @@ void CKouku::LateUpdate_Object()
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
 				->TakeDamage(5, KoukuPos, this, DT_KNOCK_BACK);
 		}
+		// DEBUG_SPHERE(KoukuPos, 2.5f, 0.1f);
 
 		// m_bIsHorrorAttack = false;
+	}
+
+	if (!m_pStat->IsStun())
+	{
+		if (m_bCountable)
+		{
+			set<CGameObject*> Player;
+			_vec3 KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 1.5f;
+			Engine::GetOverlappedObject(Player, KoukuPos, 2.5f);
+
+			for (auto& obj : Player)
+			{
+				if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+					m_pStat->TakeDamage(0, KoukuPos, this, DT_STUN);
+				m_bCountable = false;
+			}
+			DEBUG_SPHERE(KoukuPos, 1.f, 0.1f);
+		}
 	}
 }
 
@@ -401,6 +445,18 @@ void CKouku::StateChange()
 			m_eState = DEAD;
 			PlayAnimationOnce(&m_arrAnim[DEAD], true);
 			m_bCanPlayAnim = false;
+			return;
+		}
+	}
+
+	if (m_pStat->IsStun())
+	{
+		if (m_bReserveStop == false)
+		{
+			m_eState = STUN;
+			PlayAnimationOnce(&m_arrAnim[STUN], true);
+			m_bCanPlayAnim = false;
+			m_bMove = false;
 			return;
 		}
 	}
@@ -465,7 +521,7 @@ void CKouku::StateChange()
 	// 	m_pCurAnim = &m_arrAnim[WALK];
 	// 	return;
 	// }
-
+	
 
 	if (m_bCanPlayAnim)
 	{
