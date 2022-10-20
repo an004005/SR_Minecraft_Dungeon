@@ -126,7 +126,7 @@ void CZombie::LateUpdate_Object()
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				       ->TakeDamage(1, m_pRootPart->pTrans->m_vInfo[INFO_POS], this);
+				       ->TakeDamage(10, m_pRootPart->pTrans->m_vInfo[INFO_POS], this);
 		}
 		DEBUG_SPHERE(vAttackPos, 1.f, 1.f);
 		IM_LOG("Fire");

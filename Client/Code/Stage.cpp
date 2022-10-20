@@ -64,7 +64,7 @@ HRESULT CStage::Ready_Scene(void)
 	// Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 	// 	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
 
-	//CBatchTool::Load(L"../Bin/Resource/Batch/stage1_test.batch");
+	CBatchTool::Load(L"../Bin/Resource/Batch/STAE_FINAL3T.batch");
 
 	return S_OK;
 }
@@ -167,9 +167,6 @@ HRESULT CStage::Ready_Layer_GameLogic()
 {
 	_matrix matWorld;
 
-	 // CObjectFactory::Create<CBox>("Box", L"Box" , { 2.f, 7.5f, 6.f });
-	//CObjectFactory::Create<CBox>("Box", L"Box2", { 4.f, 9.f, 15.f });
-	// CObjectFactory::Create<CDynamite>("Dynamite", L"Dynamite");
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 0.f, 0.f ,0.f });
 
@@ -240,27 +237,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	// CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
 	// CEnemyFactory::Create<CMonster>("Zombie", L"TestZombie", matWorld);
 
-	//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 4.7f, 9.f, 26.f });
-
-
-	//CTrigger* trigger =  CObjectFactory::Create<CTrigger>("Trigger", L"Trigger", matWorld);
-	//trigger->SetTrigger([](set<CGameObject*>& objSet) {
-	//	for (auto obj : objSet)
-	//	{
-	//		if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
-	//		{
-	//			_matrix matWorld;
-	//			CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 4.7f, 9.f, 26.f });
-	//			CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
-	//			return true;
-	//		}
-	//	}
-	//	return false;
-	//}, 5.f);
-
-	// 9 
-
-
+	CreateTrigger();
 	return S_OK;
 }
 
@@ -302,6 +279,220 @@ CStage * CStage::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 
 void CStage::Free(void)
 {
-	//Safe_Release(m_pPlayer);
 	CScene::Free();
+}
+
+void CStage::CreateTrigger()
+{
+	_matrix matWorld;
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 52.f, 4.f, 28.f });
+
+	CTrigger* trigger =  CObjectFactory::Create<CTrigger>("Trigger", L"Trigger1", matWorld);
+	trigger->SetTrigger([](set<CGameObject*>& objSet) {
+		for (auto obj : objSet)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+			{
+				_matrix matWorld;
+				_int iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 48.f, 4.f, 42.f });
+				CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 54.f, 4.f, 37.f });
+				CEnemyFactory::Create<CSkeleton>("Skeleton", L"Skeleton", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 58.f, 4.f, 30.f });
+				CEnemyFactory::Create<CSkeleton>("Skeleton", L"Skeleton", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 57.f, 4.f, 25.f });
+				CEnemyFactory::Create<CSkeleton>("Skeleton", L"Skeleton", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 55.f, 4.f, 20.f });
+				CEnemyFactory::Create<CSkeleton>("Skeleton", L"Skeleton", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 29.f, 4.f, 17.f });
+				CEnemyFactory::Create<CSkeleton>("Skeleton", L"Skeleton", matWorld);
+				
+				return true;
+			}
+		}
+		return false;
+	}, 7.f);
+
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 33.f, 4.f, 54.f });
+
+	trigger = CObjectFactory::Create<CTrigger>("Trigger", L"Trigger2", matWorld);
+	trigger->SetTrigger([](set<CGameObject*>& objSet) {
+		for (auto obj : objSet)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+			{
+				_matrix matWorld;
+				_int iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 2.f, 2.f, 2.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 36.f, 4.f, 56.f });
+				CEnemyFactory::Create<CCreeper>("Creeper", L"Creeper", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 2.f, 2.f, 2.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 32.f, 4.f, 58.f });
+				CEnemyFactory::Create<CCreeper>("Creeper", L"Creeper", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 2.f, 2.f, 2.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 33.f, 4.f, 50.f });
+				CEnemyFactory::Create<CCreeper>("Creeper", L"Creeper", matWorld);
+				return true;
+			}
+		}
+		return false;
+	}, 5.f);
+
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 62.f, 3.f, 84.f });
+
+	trigger = CObjectFactory::Create<CTrigger>("Trigger", L"Trigger3", matWorld);
+	trigger->SetTrigger([](set<CGameObject*>& objSet) {
+		for (auto obj : objSet)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+			{
+				_matrix matWorld;
+				_int iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 66.f, 3.f, 89.f });
+				CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 63.f, 3.f, 90.f });
+				CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 61.f, 3.f, 92.f });
+				CEnemyFactory::Create<CCreeper>("Creeper", L"Creeper", matWorld);
+
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 56.f, 3.f, 92.f });
+				CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 52.f, 3.f, 91.f });
+				CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 52.f, 4.f, 88.f });
+				CEnemyFactory::Create<CCreeper>("Creeper", L"Creeper", matWorld);
+
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 54.f, 3.f, 84.f });
+				CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 57.f, 3.f, 79.f });
+				CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 62.f, 3.f, 79.f });
+				CEnemyFactory::Create<CCreeper>("Creeper", L"Creeper", matWorld);
+				return true;
+			}
+		}
+		return false;
+	}, 3.f);
+
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 76.f, 4.f, 114.f });
+
+	trigger = CObjectFactory::Create<CTrigger>("Trigger", L"Trigger4", matWorld);
+	trigger->SetTrigger([](set<CGameObject*>& objSet) {
+		for (auto obj : objSet)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+			{
+				_matrix matWorld;
+				_int iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 70.f, 4.f, 115.f });
+				CEnemyFactory::Create<CCreeper>("Creeper", L"Creeper", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.8f, 1.8f, 1.8f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 81.f, 4.f, 111.f });
+				CEnemyFactory::Create<CCreeper>("Creeper", L"Creeper", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 81.f, 4.f, 111.f });
+				CEnemyFactory::Create<CEnchanter>("Enchanter", L"Enchanter", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 69.f, 4.f, 118.f });
+				CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 69.f, 4.f, 114.f });
+				CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 68.f, 4.f, 114.f });
+				CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 68.f, 4.f, 118.f });
+				CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 67.f, 4.f, 118.f });
+				CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 67.f, 4.f, 114.f });
+				CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 66.f, 4.f, 114.f });
+				CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 66.f, 4.f, 118.f });
+				CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 80.f, 4.f, 107.f });
+				CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 80.f, 4.f, 106.f });
+				CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 84.f, 4.f, 107.f });
+				CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 84.f, 4.f, 106.f });
+				CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 2.f, 2.f, 2.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 82.f, 4.f, 105.f });
+				CEnemyFactory::Create<CZombie>("Zombie", L"Zombie", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 65.f, 4.f, 116.f });
+				CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 85.f, 4.f, 104.f });
+				CEnemyFactory::Create<CSkeleton>("Skeleton", L"Skeleton", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 83.f, 4.f, 104.f });
+				CEnemyFactory::Create<CSkeleton>("Skeleton", L"Skeleton", matWorld);
+
+				iLook = rand() % 361;
+				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(iLook) ,0.f }, { 80.f, 4.f, 104.f });
+				CEnemyFactory::Create<CSkeleton>("Skeleton", L"Skeleton", matWorld);
+				return true;
+			}
+		}
+		return false;
+	}, 3.f);
 }

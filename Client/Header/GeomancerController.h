@@ -22,7 +22,7 @@ private:
 	_float m_fCurBombCoolTime = 0.f;
 	_float m_fBombCoolTime = 5.f;
 
-	_float m_fAttackRange = 15.f; // 사정거리
+	_float m_fAttackRange = 17.f; // 사정거리
 	_float m_fRunDist = 7.f;
 
 	vector<_vec3> m_vecWallPos;

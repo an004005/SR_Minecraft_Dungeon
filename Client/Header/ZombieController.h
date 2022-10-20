@@ -19,8 +19,8 @@ protected:
 	_float m_fCurAttackCoolTime = 0.f;
 	_float m_fAttackCoolTime = 2.f;
 
-	_float m_fDetectRange = 12.f; // 사정거리
-	_float m_fAttackDist = 2.f; // 공격 사거리
+	_float m_fDetectRange = 14.f; // 사정거리
+	_float m_fAttackDist = 3.f; // 공격 사거리
 
 	_float m_fWorldRefreshTime = 1.f;
 	_float m_fCurWorldRefreshTime = 1.f;

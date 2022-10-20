@@ -151,7 +151,7 @@ void CEnderman::LateUpdate_Object()
 
 		set<CGameObject*> setObj;
 		_vec3 vAttackPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + (m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 2.f);
-		Engine::GetOverlappedObject(setObj, vAttackPos, 2.f);
+		Engine::GetOverlappedObject(setObj, vAttackPos, 2.5f);
 
 		for (auto& obj : setObj)
 		{
