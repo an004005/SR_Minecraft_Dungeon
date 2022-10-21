@@ -64,7 +64,7 @@ HRESULT CStage::Ready_Scene(void)
 	// Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 	// 	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
 
-	CBatchTool::Load(L"../Bin/Resource/Batch/STAE_FINAL3T.batch");
+	CBatchTool::Load(L"../Bin/Resource/Batch/LASTLASTLASTSTAGE.batch");
 
 	return S_OK;
 }
@@ -151,15 +151,6 @@ HRESULT CStage::Ready_Layer_Environment()
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", pGameObject), E_FAIL);
 
-	//  Birds
-
-	for (int i = 0; i < 10; ++i)
-	{
-		CBirdsBrown* bird = CObjectFactory::Create<CBirdsBrown>("BirdsBrown", L"BirdsWhite");
-		bird->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->Set_Pos(3.f, 9.5f, 18.f + i);
-
-	}
-	
 	return S_OK;
 }
 
@@ -486,11 +477,27 @@ void CStage::CreateTrigger()
 				_matrix matWorld;
 				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, 0.f ,0.f }, { 95.f, 6.f, 16.f });
 				CEnemyFactory::Create<CEnderman>("Enderman", L"Enderman", matWorld);
+				CSoundMgr::GetInstance()->PlayBGM(L"Endermanbgm01.ogg", 0.2f);
 				return true;
 			}
 		}
 		return false;
 	}, 5.f);
+
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 45.f, 4.f, 75.f });
+	trigger = CObjectFactory::Create<CTrigger>("Trigger", L"Trigger_end", matWorld);
+	trigger->SetTrigger([](set<CGameObject*>& objSet) {
+		for (auto obj : objSet)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+			{
+				CSoundMgr::GetInstance()->PlayBGM(L"madness(leaper)_001.ogg", 0.2f);
+				return true;
+			}
+		}
+		return false;
+	}, 7.f);
 
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 95.f, 6.f, 4.f });
@@ -506,4 +513,11 @@ void CStage::CreateTrigger()
 		}
 		return false;
 	}, 4.f);
+
+
+
+
+
+
+
 }

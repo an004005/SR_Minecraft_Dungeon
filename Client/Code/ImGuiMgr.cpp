@@ -945,14 +945,14 @@ void CImGuiMgr::BatchControl(CCamera* pCamera, CTransform*& pTransform, CTerrain
 			{
 				wstring tmp;
 				tmp.assign(strEnemyFactoryTag.begin(), strEnemyFactoryTag.end());
-				CEnemyFactory::Create<CGameObject>(strEnemyFactoryTag, tmp + L"$" + to_wstring(iObjNumber++), pMap->m_vecLand[iCurCube].matWorld);
+				CEnemyFactory::Create<CGameObject>(strEnemyFactoryTag, tmp + L"_" + to_wstring(iObjNumber++), pMap->m_vecLand[iCurCube].matWorld);
 			}
 
 			if (iFactoryNum == 1 && strobjFactoryTag.empty() == false)
 			{
 				wstring tmp;
 				tmp.assign(strobjFactoryTag.begin(), strobjFactoryTag.end());
-				CObjectFactory::Create<CGameObject>(strobjFactoryTag, tmp + L"$" + to_wstring(iObjNumber++), pMap->m_vecLand[iCurCube].matWorld);
+				CObjectFactory::Create<CGameObject>(strobjFactoryTag, tmp + L"_" + to_wstring(iObjNumber++), pMap->m_vecLand[iCurCube].matWorld);
 			}
 		}
 	}
