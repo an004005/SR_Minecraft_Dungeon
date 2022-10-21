@@ -29,6 +29,7 @@
 #include "RcBossHPTex.h"
 
 #include "LightMgr.h"
+#include "Shader.h"
 
 
 BEGIN(Engine)

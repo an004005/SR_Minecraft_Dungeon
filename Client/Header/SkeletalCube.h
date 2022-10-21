@@ -122,6 +122,13 @@ protected:
 	_float m_fAccTime = 0.f;	  // 애니메이션 현재 시간
 	_float m_fAnimSpeed = 1.f;
 
+	//Shader
+	CShader*			m_pShaderCom = nullptr;
+
+	_float m_fTime;
+	_bool m_bDead;
+
 	_bool m_bStopAnim = false;
 	_bool m_bReserveStop = false;
+	_bool m_bHit = false;
 };
