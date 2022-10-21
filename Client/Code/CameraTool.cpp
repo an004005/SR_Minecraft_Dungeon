@@ -8,6 +8,7 @@
 #include "SkeletalCube.h"
 #include "StaticCamera.h"
 #include "TerrainCubeMap.h"
+#include "RedStoneMonstrosity.h"
 
 CCameraTool::CCameraTool(LPDIRECT3DDEVICE9 pGraphicDev) : CScene(pGraphicDev)
 {
@@ -36,10 +37,15 @@ HRESULT CCameraTool::Ready_Scene()
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_GAMEOBJ]->Add_GameObject(L"Skeletal", pGameObject), E_FAIL);
 	// m_pSelectedTransform = dynamic_cast<CTestCube*>(pGameObject)->m_pTransCom;
 
-	pGameObject = CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/Stage1.map");
+	pGameObject = CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/Stage2.map");
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", pGameObject), E_FAIL);
 
+
+
+	_matrix matWorld;
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, D3DXToRadian(250.f) ,0.f }, { 109.f, 0.54f, 14.f });
+	CEnemyFactory::Create<CRedStoneMonstrosity>("RedStoneMonstrosity", L"RedStoneMonstrosity", matWorld);
 
 	CEnvFactory::Create<CStaticCamera>("StaticCamera", L"StaticCamera");
 
@@ -61,15 +67,14 @@ _int CCameraTool::Update_Scene(const _float& fTimeDelta)
 
 	/*CTransform*	pStaticCamTransform = Engine::Get_Component<CTransform>(LAYER_ENV, L"StaticCamera", L"Proto_TransformCom", ID_DYNAMIC);*/
 	
-
-
 	IM_BEGIN("cam");
+
 	if (ImGui::Button("Play Anim"))
 	{
 
 
 		Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
-			->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
+			->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/redston2.anim");
 		m_pCam->m_bStop = true;
 	}
 

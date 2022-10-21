@@ -418,10 +418,6 @@ void CInventory::AddDefaultItems()
 	m_arrItem[0]->AddRef();
 	m_arrItem[0]->SetOwner(m_pOwner);
 
-	m_arrItem[1] = CItemFactory::Create<CLaserShotRune>("LaserShotRune", L"LaserShotRune", IS_TAKE);
-	m_arrItem[1]->AddRef();
-	m_arrItem[1]->SetOwner(m_pOwner);
-
 	m_arrItem[2] = CItemFactory::Create<CStormRune>("StormRune", L"StormRune", IS_TAKE);
 	m_arrItem[2]->AddRef();
 	m_arrItem[2]->SetOwner(m_pOwner);
@@ -437,13 +433,13 @@ void CInventory::AddDefaultItems()
 	m_arrItem[3]->SetOwner(m_pOwner);
 
 	// test
-	m_arrItem[8] = CItemFactory::Create<CRune>("LightningRune", L"LightningRune", IS_TAKE);
-	m_arrItem[8]->AddRef();
-	m_arrItem[8]->SetOwner(m_pOwner);
+	m_arrItem[1] = CItemFactory::Create<CRune>("LightningRune", L"LightningRune", IS_TAKE);
+	m_arrItem[1]->AddRef();
+	m_arrItem[1]->SetOwner(m_pOwner);
 	
-	m_arrItem[9] = CItemFactory::Create<CRune>("MultishotRune", L"MultishotRune", IS_TAKE);
-	m_arrItem[9]->SetOwner(m_pOwner);
-	m_arrItem[9]->AddRef();
+	m_arrItem[7] = CItemFactory::Create<CRune>("MultishotRune", L"MultishotRune", IS_TAKE);
+	m_arrItem[7]->SetOwner(m_pOwner);
+	m_arrItem[7]->AddRef();
 
 
 	// test
@@ -456,13 +452,13 @@ void CInventory::AddDefaultItems()
 	m_arrItem[6]->AddRef();
 	m_arrItem[6]->SetOwner(m_pOwner);
 
+	m_arrItem[8] = CItemFactory::Create<CBootsOfSwiftness>("BootsOfSwiftness", L"BootsOfSwiftness", IS_TAKE);
+	m_arrItem[8]->AddRef();
+	m_arrItem[8]->SetOwner(m_pOwner);
+
 	m_arrLegacy[LEGACY_SLOT1] = CItemFactory::Create<CShockPowder>("ShockPowder", L"ShockPowder", IS_TAKE);
 	m_arrLegacy[LEGACY_SLOT1]->AddRef();
 	m_arrLegacy[LEGACY_SLOT1]->SetOwner(m_pOwner);
-
-	m_arrItem[10] = CItemFactory::Create<CFireworksArrow>("FireworksArrow", L"FireworksArrow", IS_TAKE);
-	m_arrItem[10]->AddRef();
-	m_arrItem[10]->SetOwner(m_pOwner);
 
 	//m_pLegacy2 = CItemFactory::Create<CBootsOfSwiftness>("BootsOfSwiftness", L"BootsOfSwiftness", IS_TAKE);
 	//m_pLegacy2->AddRef();

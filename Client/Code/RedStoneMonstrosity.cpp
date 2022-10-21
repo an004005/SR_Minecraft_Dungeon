@@ -25,7 +25,7 @@ CRedStoneMonstrosity::~CRedStoneMonstrosity()
 HRESULT CRedStoneMonstrosity::Ready_Object()
 {
 	CMonster::Ready_Object();
-
+	
 	m_arrAnim[INTRO] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/RedStoneMonstrosity/intro.anim");
 	m_arrAnim[WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/RedStoneMonstrosity/walk.anim");
 	m_arrAnim[DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/RedStoneMonstrosity/dead.anim");
@@ -99,6 +99,7 @@ void CRedStoneMonstrosity::AnimationEvent(const string& strEvent)
 		if (m_pBossHPUI)
 			m_pBossHPUI->KillHpbar();
 
+		CSoundMgr::GetInstance()->StopAll();
 		CClearUI* pClearUI = CUIFactory::Create<CClearUI>("ClearUI", L"ClearUI", 0, WINCX * 0.5f, WINCY * 0.2f, WINCX* 0.4f, WINCY* 0.4f);
 		pClearUI->SetUITexture(26);
 
@@ -180,6 +181,7 @@ void CRedStoneMonstrosity::AnimationEvent(const string& strEvent)
 			L"sfx_mob_redstoneGolemStepHeavy-004.ogg" },
 			m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.5f);
 	}
+
 }
 
 _int CRedStoneMonstrosity::Update_Object(const _float& fTimeDelta)
@@ -245,7 +247,7 @@ void CRedStoneMonstrosity::LateUpdate_Object()
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(1, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_KNOCK_BACK);
+				->TakeDamage(1000, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_KNOCK_BACK);
 		}
 		DEBUG_SPHERE(vAttackPos, 6.f, 1.f);
 		IM_LOG("Fire");

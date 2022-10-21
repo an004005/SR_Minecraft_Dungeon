@@ -527,7 +527,9 @@
     <ClInclude Include="..\Header\KoukuLoading.h">
       <Filter>01. Scene</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\BossStage.h" />
+    <ClInclude Include="..\Header\BossStage.h">
+      <Filter>01. Scene\01. Stage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -952,7 +954,9 @@
     <ClCompile Include="..\Code\KoukuLoading.cpp">
       <Filter>01. Scene</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\BossStage.cpp" />
+    <ClCompile Include="..\Code\BossStage.cpp">
+      <Filter>01. Scene\01. Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
