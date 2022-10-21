@@ -73,7 +73,7 @@ HRESULT CPlayer::Ready_Object(const wstring& wstrPath)
 	m_CurPotionCoolTime = 20.f;
 
 	m_pStat = Add_Component<CStatComponent>(L"Proto_StatCom", L"Proto_StatCom", ID_DYNAMIC);
-	m_pStat->SetMaxHP(300);
+	m_pStat->SetMaxHP(150);
 	m_pStat->SetTransform(m_pRootPart->pTrans);
 	m_pStat->SetHurtSound({
 		L"DLC_sfx_mob_whisperer_hit_1.ogg",
