@@ -15,6 +15,7 @@ private:
 		SMASH,
 		CLOCKING,
 		ARMATTACK,
+		PISTOL,
 		STUN,
 		DEAD,
 		STATE_END
@@ -28,6 +29,7 @@ private:
 		ANIM_CHOP,
 		ANIM_SMASH,
 		ANIM_ARMATTACK,
+		ANIM_PISTOL,
 		ANIM_END
 	};
 
@@ -52,6 +54,7 @@ public:
 	void DoSmash() { m_bSmash = true; }
 	void DoIdle() { m_bMove = false; }
 	void DoArmAttack() { m_bArmAttack = true; }
+	void DoPistol() { m_bPistol = true; }
 	void DoClocking(_vec3 vLook)
 	{
 		m_bClocking = true;
@@ -78,9 +81,14 @@ private:
 	_bool m_bClocking = false; // anim event 입력
 	_bool m_bArmAttack = false; // anim event 입력
 	_bool m_bArmAttakcFire = false;
+	_bool m_bPistol = false;
+	_bool m_bPistolStart = false;
 
 	_float m_fClockingCollTime = 2.5f;
 	_float m_fCurClockingCollTime = 0.f;
+
+	_float m_fPistolFreq = 0.2f;
+	_float m_fCurPistolTime = 0.4f;
 
 	_vec3 m_vBeforTargetLook;
 	CBossHPUI* m_pBossHPUI = nullptr;
