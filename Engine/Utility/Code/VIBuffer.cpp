@@ -81,7 +81,6 @@ void CVIBuffer::Render_Buffer(void)
 
 	m_pGraphicDev->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, m_dwVtxCnt, 0, m_dwTriCnt);
 
-
 	/*// 도형 그리기 함수
 	m_pGraphicDev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, m_dwTriCnt);
 	// 1. 삼각형을 그리는 방식

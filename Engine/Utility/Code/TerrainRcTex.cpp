@@ -37,19 +37,25 @@ HRESULT CTerrainRcTex::Ready_Buffer(const vector<_matrix>& _vecmatworld)
 	vector<VTXTEX> vecVtxTmps;
 	vector<INDEX32> vecIdxTmps;
 
+	_vec3 vNormal{0.2f, 0.2f, 1.f};
+	D3DXVec3Normalize(&vNormal, &vNormal);
 	
 	for (size_t i = 0; i < _vecmatworld.size(); ++i)
 	{
 		VtxTmp[0].vPos = { -0.5f, 0.5f, 0.f };
+		VtxTmp[0].vNormal = vNormal;
 		VtxTmp[0].vTexUV = { 0.f, 0.f };
 
 		VtxTmp[1].vPos = { 0.5f, 0.5f, 0.f };
+		VtxTmp[1].vNormal = vNormal;
 		VtxTmp[1].vTexUV = { 1.f, 0.f };
 
 		VtxTmp[2].vPos = { 0.5f, -0.5f, 0.f };
+		VtxTmp[2].vNormal = vNormal;
 		VtxTmp[2].vTexUV = { 1.f, 1.f };
 
 		VtxTmp[3].vPos = { -0.5f, -0.5f, 0.f };
+		VtxTmp[3].vNormal = vNormal;
 		VtxTmp[3].vTexUV = { 0.f, 1.f };
 
 		for (int j = 0; j < 4; ++j)
