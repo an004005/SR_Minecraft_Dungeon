@@ -93,6 +93,7 @@ void CLeaper::AnimationEvent(const string & strEvent)
 	}
 	else if (strEvent == "AnimStopped")
 	{
+		CSoundMgr::GetInstance()->StopAll();
 		m_bDelete = true;
 	}
 	else if (strEvent == "Step")

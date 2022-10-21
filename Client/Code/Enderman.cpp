@@ -72,7 +72,7 @@ void CEnderman::AnimationEvent(const string & strEvent)
 	}
 	else if (strEvent == "AnimStopped")
 	{
-		
+		CSoundMgr::GetInstance()->StopAll();
 		m_pBossHPUI->KillHpbar();
 		m_bDelete = true;
 	}

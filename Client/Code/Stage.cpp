@@ -486,11 +486,27 @@ void CStage::CreateTrigger()
 				_matrix matWorld;
 				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, 0.f ,0.f }, { 95.f, 6.f, 16.f });
 				CEnemyFactory::Create<CEnderman>("Enderman", L"Enderman", matWorld);
+				CSoundMgr::GetInstance()->PlayBGM(L"Endermanbgm01.ogg", 0.2f);
 				return true;
 			}
 		}
 		return false;
 	}, 5.f);
+
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 45.f, 4.f, 75.f });
+	trigger = CObjectFactory::Create<CTrigger>("Trigger", L"Trigger_end", matWorld);
+	trigger->SetTrigger([](set<CGameObject*>& objSet) {
+		for (auto obj : objSet)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+			{
+				CSoundMgr::GetInstance()->PlayBGM(L"madness(leaper)_001.ogg", 0.2f);
+				return true;
+			}
+		}
+		return false;
+	}, 7.f);
 
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 95.f, 6.f, 4.f });
@@ -506,4 +522,11 @@ void CStage::CreateTrigger()
 		}
 		return false;
 	}, 4.f);
+
+
+
+
+
+
+
 }
