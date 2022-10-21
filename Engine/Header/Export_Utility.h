@@ -27,7 +27,7 @@
 #include "GameUtilMgr.h"
 #include "Collider.h"
 #include "RcBossHPTex.h"
-
+#include "Shader.h"
 
 
 BEGIN(Engine)

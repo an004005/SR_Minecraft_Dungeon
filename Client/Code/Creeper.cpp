@@ -118,7 +118,7 @@ void CCreeper::LateUpdate_Object()
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				       ->TakeDamage(50, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_KNOCK_BACK);
+				       ->TakeDamage(70, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_KNOCK_BACK);
 		}
 		DEBUG_SPHERE(vAttackPos, 3.5f, 1.f);
 

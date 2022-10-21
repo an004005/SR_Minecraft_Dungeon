@@ -174,13 +174,10 @@ void CBatchTool::Load(const wstring& wstrPath)
 		tmp = wszBuf;
 		ReadFile(hFile, &matWorld, sizeof(_matrix), &dwByte, nullptr);
 
-
 		strEnemyTag.assign(tmp.begin(), tmp.end());
 
-		if(tmp == L"Zombie" && iObjNum != 55)
-			CEnemyFactory::Create<CGameObject>(strEnemyTag, tmp + L"_" + to_wstring(iObjNum++), matWorld);
+		CEnemyFactory::Create<CGameObject>(strEnemyTag, tmp + L"_" + to_wstring(iObjNum++), matWorld);
 	}
-
 
 	ReadFile(hFile, &mapSize, sizeof(size_t), &dwByte, nullptr);
 
@@ -220,7 +217,7 @@ void CBatchTool::Save(const wstring& wstrPath)
 	{
 		// target part name
 		wstring strFactoryTag = e.first;
-		strFactoryTag = SplitWString(strFactoryTag, '$').front();
+		strFactoryTag = SplitWString(strFactoryTag, '_').front();
 
 		dwStrByte = (DWORD)strFactoryTag.size() * sizeof(_tchar);
 		WriteFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
@@ -243,7 +240,7 @@ void CBatchTool::Save(const wstring& wstrPath)
 		if (e.first == L"DynamicCamera") continue;
 
 		wstring strFactoryTag = e.first;
-		strFactoryTag = SplitWString(strFactoryTag, '$').front();
+		strFactoryTag = SplitWString(strFactoryTag, '_').front();
 
 		// target part name
 		dwStrByte = (DWORD)strFactoryTag.size() * sizeof(_tchar);

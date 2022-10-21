@@ -73,8 +73,9 @@ HRESULT CPlayer::Ready_Object(const wstring& wstrPath)
 	m_CurPotionCoolTime = 20.f;
 
 	m_pStat = Add_Component<CStatComponent>(L"Proto_StatCom", L"Proto_StatCom", ID_DYNAMIC);
-	m_pStat->SetMaxHP(300);
+	m_pStat->SetMaxHP(150);
 	m_pStat->SetTransform(m_pRootPart->pTrans);
+	m_pStat->SetOwner(this);
 	m_pStat->SetHurtSound({
 		L"DLC_sfx_mob_whisperer_hit_1.ogg",
 		L"DLC_sfx_mob_whisperer_hit_2.ogg",
@@ -257,6 +258,7 @@ void CPlayer::Render_Object()
 		vScreen.x -= fHalf;
 
 		Engine::Render_Font(L"Gothic_Bold20", tmp.c_str(), &vScreen, D3DCOLOR_ARGB(255, 255, 255, 255));
+
 
 		CSkeletalCube::Render_Object();
 	}

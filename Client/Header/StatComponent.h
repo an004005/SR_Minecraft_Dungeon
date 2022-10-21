@@ -34,6 +34,7 @@ public:
 	virtual void Free() override;
 	static CStatComponent* Create();
 
+	void SetOwner(CGameObject* pOwner) {NULL_CHECK(pOwner); m_pOwner = pOwner;}
 	void SetTransform(Engine::CTransform* pOwnerTrans) { NULL_CHECK(pOwnerTrans); m_pOwnerTrans = pOwnerTrans; m_pOwnerTrans->AddRef(); };
 	void SetMaxHP(_uint iMaxHP) { m_iMaxHP = iMaxHP; m_iHP = static_cast<_int>(m_iMaxHP); }
 
@@ -64,6 +65,7 @@ public:
 private:
 	Engine::CTransform* m_pOwnerTrans = nullptr;
 	CTerrainCubeMap* m_pCubeMap = nullptr;
+	CGameObject* m_pOwner = nullptr;
 
 	vector<wstring> m_vHurtSound;
 

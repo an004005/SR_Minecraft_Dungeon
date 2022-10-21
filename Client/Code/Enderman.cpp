@@ -157,7 +157,7 @@ void CEnderman::LateUpdate_Object()
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(25, m_pRootPart->pTrans->m_vInfo[INFO_POS], this);
+				->TakeDamage(50, m_pRootPart->pTrans->m_vInfo[INFO_POS], this);
 		}
 	
 	
@@ -183,7 +183,7 @@ void CEnderman::LateUpdate_Object()
 			{
 				if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 					pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-					->TakeDamage(35, m_pRootPart->pTrans->m_vInfo[INFO_POS], this);
+					->TakeDamage(80, m_pRootPart->pTrans->m_vInfo[INFO_POS], this);
 			}
 		}
 		

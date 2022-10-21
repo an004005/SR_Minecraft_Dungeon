@@ -37,7 +37,7 @@ HRESULT CRedStoneMonstrosity::Ready_Object()
 	m_pIdleAnim = &m_arrAnim[WALK];
 	m_pCurAnim = &m_arrAnim[INTRO];
 	m_eState = INTRO;
-	m_fSpeed = 2.f;
+	m_fSpeed = 1.5f;
 
 	m_pStat->SetMaxHP(3000);
 
@@ -247,7 +247,7 @@ void CRedStoneMonstrosity::LateUpdate_Object()
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(1000, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_KNOCK_BACK);
+				->TakeDamage(50, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_KNOCK_BACK);
 		}
 		DEBUG_SPHERE(vAttackPos, 6.f, 1.f);
 		IM_LOG("Fire");
@@ -267,7 +267,7 @@ void CRedStoneMonstrosity::LateUpdate_Object()
 			{
 				if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 					pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-					->TakeDamage(1, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_KNOCK_BACK);
+					->TakeDamage(25, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_KNOCK_BACK);
 			}
 			DEBUG_SPHERE(vAttackPos, 7.f, 1.f);
 
