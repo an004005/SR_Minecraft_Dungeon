@@ -12,6 +12,9 @@
 #include "ArrowCubeMgr.h"
 #include "TerrainCubeMap.h"
 #include "RedStoneMonstrosity.h"
+#include "StatComponent.h"
+#include "PlayerUI.h"
+
 
 CBossStage::CBossStage(LPDIRECT3DDEVICE9 pGraphicDev) : CScene(pGraphicDev)
 {
@@ -36,6 +39,35 @@ HRESULT CBossStage::Ready_Scene(void)
 
 _int CBossStage::Update_Scene(const _float & fTimeDelta)
 {
+	if (m_pPlayer != nullptr)
+	{
+		if (m_pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)->IsDead())
+		{
+			if (m_fDeadTime > 3.f)
+				m_pPlayer->PlayerSpawn();
+			m_fDeadTime += fTimeDelta;
+
+			if (m_bPlayerAlive)
+			{
+				m_pPlayerUI = CUIFactory::Create<CPlayerUI>("PlayerUI", L"PlayerDead", 0, WINCX * 0.5f, WINCY * 0.5f, WINCX, WINCY);
+				m_pPlayerUI->Open();
+				m_pPlayerUI->SetUITexture(25);
+			}
+			m_bPlayerAlive = false;
+
+		}
+		else
+		{
+			if (m_pPlayerUI != nullptr)
+			{
+				m_pPlayerUI->Close();
+				m_pPlayerUI = nullptr;
+			}
+			m_bPlayerAlive = true;
+			m_fDeadTime = 0.f;
+		}
+	}
+
 	CSoundMgr::GetInstance()->Update_Listener(LAYER_ENV, L"StaticCamera");
 	CDamageFontMgr::GetInstance()->Update_DamageFontMgr(fTimeDelta);
 	return Engine::CScene::Update_Scene(fTimeDelta);
@@ -111,9 +143,17 @@ HRESULT CBossStage::Ready_Layer_GameLogic()
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 			{
+
 				_matrix matWorld;
+				//CreateBoss
 				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, D3DXToRadian(250.f) ,0.f }, { 109.f, 0.54f, 14.f });
 				CEnemyFactory::Create<CRedStoneMonstrosity>("RedStoneMonstrosity", L"RedStoneMonstrosity", matWorld);
+
+				//ActionCam Start
+				Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+					->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/redston.anim");
+
+				CSoundMgr::GetInstance()->PlayBGM(L"OST_Commander_of_Beast_Valtan_LOST_ARK_Official_Soundtrack.ogg", 0.3f);
 				return true;
 			}
 		}

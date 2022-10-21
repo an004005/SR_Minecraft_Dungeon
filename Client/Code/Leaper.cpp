@@ -32,7 +32,7 @@ HRESULT CLeaper::Ready_Object()
 	m_eState = State::IDLE;
 	m_fSpeed = 2.5f;
 
-	m_pStat->SetMaxHP(1000);
+	m_pStat->SetMaxHP(1200);
 
 	m_pStat->SetHurtSound({
 	L"DLC_Mob_Leaper_GetHit1.ogg",
@@ -93,6 +93,7 @@ void CLeaper::AnimationEvent(const string & strEvent)
 	}
 	else if (strEvent == "AnimStopped")
 	{
+		CSoundMgr::GetInstance()->StopAll();
 		m_bDelete = true;
 	}
 	else if (strEvent == "Step")
@@ -160,8 +161,8 @@ void CLeaper::LateUpdate_Object()
 	if (m_bAttackFire)
 	{
 		set<CGameObject*> setObj;
-		_vec3 vAttackPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + (m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 2.f);
-		Engine::GetOverlappedObject(setObj, vAttackPos, 2.f);
+		_vec3 vAttackPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + (m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 1.5f);
+		Engine::GetOverlappedObject(setObj, vAttackPos, 2.5f);
 
 		for (auto& obj : setObj)
 		{

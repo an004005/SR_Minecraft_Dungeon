@@ -2,6 +2,7 @@
 #include "Scene.h"
 
 class CPlayer;
+class CPlayerUI;
 
 class CBossStage :
 	public CScene
@@ -27,6 +28,10 @@ public:
 
 private:
 	virtual void	Free(void);
+
+	_bool m_bPlayerAlive = false;
+	CPlayerUI* m_pPlayerUI = nullptr;
 	CPlayer* m_pPlayer = nullptr;
+	_float m_fDeadTime = 0.f;
 };
 

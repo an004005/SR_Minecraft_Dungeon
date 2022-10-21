@@ -126,7 +126,8 @@ void CStaticCamera::PlayeCamAnimation(const wstring& wstrAnim)
 
 void CStaticCamera::ResetPosition()
 {
-	m_pTransform->m_vInfo[INFO_POS] = m_pTargetTrans->m_vInfo[INFO_POS] + (m_pTransform->m_vInfo[INFO_LOOK] * -m_fDistance);
+	if (m_pTargetTrans)
+		m_pTransform->m_vInfo[INFO_POS] = m_pTargetTrans->m_vInfo[INFO_POS] + (m_pTransform->m_vInfo[INFO_LOOK] * -m_fDistance);
 }
 
 void CStaticCamera::PlayShake(_float fDuration, _float fMagnitude)

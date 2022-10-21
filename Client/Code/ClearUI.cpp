@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Header\ClearUI.h"
 #include "AbstFactory.h"
+#include "Player.h"
 
 CClearUI::CClearUI(LPDIRECT3DDEVICE9 pGraphicDev) : CUI(pGraphicDev)
 {
@@ -20,6 +21,8 @@ HRESULT CClearUI::Ready_Object()
 	m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 
 	m_iRenderPriority = 6;
+
+	CSoundMgr::GetInstance()->PlaySound(L"sfx_ui_missionEndVictoryCrown-001.ogg", Engine::Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player")->GetInfo((INFO_POS)));
 	return S_OK;
 }
 
