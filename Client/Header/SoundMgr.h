@@ -51,7 +51,7 @@ private:
 	FMOD_SYSTEM* m_pSystem;
 
 	_vec3 m_vListenerPos = CGameUtilMgr::s_vZero;
-	_float m_fMaxListenDist = 30.f;
+	_float m_fMaxListenDist;
 	_float m_fMasterVolume;
 
 };

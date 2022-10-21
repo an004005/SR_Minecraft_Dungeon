@@ -8,7 +8,7 @@ CSoundMgr::CSoundMgr()
 {
 	Ready_SoundMgr();
 	m_fMasterVolume = 0.8f;
-
+	m_fMaxListenDist = 45.f;
 }
 
 CSoundMgr::~CSoundMgr()
