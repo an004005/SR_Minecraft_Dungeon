@@ -124,7 +124,7 @@ void CGeomancerWall::LateUpdate_Object()
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 			{
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				       ->TakeDamage(15, vPos, this, DT_KNOCK_BACK);
+				       ->TakeDamage(30, vPos, this, DT_KNOCK_BACK);
 				IM_LOG("damage");
 				break;
 			}

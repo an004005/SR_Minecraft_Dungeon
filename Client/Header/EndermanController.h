@@ -22,7 +22,7 @@ private:
 	_float m_fClockingCollTime = 3.f;
 	_float m_fCurClockingCollTime = 0.f;
 
-	_float m_fArmAttackCollTime = 15.f;
+	_float m_fArmAttackCollTime = 12.f;
 	_float m_fCurArmAttackCollTime = 0.f;
 
 };

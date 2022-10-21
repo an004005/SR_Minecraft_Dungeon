@@ -37,6 +37,7 @@ HRESULT CBossStage::Ready_Scene(void)
 _int CBossStage::Update_Scene(const _float & fTimeDelta)
 {
 	CSoundMgr::GetInstance()->Update_Listener(LAYER_ENV, L"StaticCamera");
+	CDamageFontMgr::GetInstance()->Update_DamageFontMgr(fTimeDelta);
 	return Engine::CScene::Update_Scene(fTimeDelta);
 }
 
