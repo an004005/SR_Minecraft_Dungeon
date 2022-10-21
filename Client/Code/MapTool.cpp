@@ -163,7 +163,7 @@ HRESULT CMapTool::Ready_Layer_Environment()
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"Terrain", pGameObject), E_FAIL);
 
 	//TerrainCubeMap
-	m_pCubeMap = CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/StartMap.map");
+	m_pCubeMap = CTerrainCubeMap::Create(m_pGraphicDev, L"../Bin/Resource/Map/koukusaton_size_s.map");
 	NULL_CHECK_RETURN(m_pCubeMap, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", m_pCubeMap), E_FAIL);
 

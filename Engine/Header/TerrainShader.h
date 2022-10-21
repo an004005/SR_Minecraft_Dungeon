@@ -48,7 +48,7 @@ public:
 		 m_fUVSpeed = _uvspeed;
 
 	}
-
+	void Set_Env(void);
 
 
 	_matrix					 m_matWorld;
@@ -64,6 +64,7 @@ private:
 	LPDIRECT3DVERTEXDECLARATION9	m_pVtxDeclare = nullptr;
 	IDirect3DBaseTexture9*			m_pTexture = nullptr;
 
+	LPDIRECT3DCUBETEXTURE9	gpSnowENV = NULL;
 
 public:
 
@@ -88,5 +89,12 @@ public:
 	_float m_fWaveFreq = 0.f;
 	_float m_fUVSpeed = 0.f;
 
+
+
+	D3DXVECTOR4				gWorldLightPosition;
+	D3DXVECTOR4				gLightColor;
+	D3DXVECTOR4				gWorldCameraPosition;
 };
+
+
 END
