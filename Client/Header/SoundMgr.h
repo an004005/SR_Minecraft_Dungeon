@@ -4,8 +4,9 @@
 enum CHANNELID 
 {
 	MAX_FREE_CHANNEL = 31,
-	SOUND_BGM = MAX_FREE_CHANNEL,
-	SOUND_UI = MAX_FREE_CHANNEL + 1,
+	SOUND_ARROW = MAX_FREE_CHANNEL,
+	SOUND_BGM = MAX_FREE_CHANNEL + 1,
+	SOUND_UI = MAX_FREE_CHANNEL + 2,
 	MAXCHANNEL = 33
 };
 
@@ -22,6 +23,7 @@ public:
 	void PlaySound(const wstring& pSoundKey, const _vec3& vSoundPos, float fVolume = 1.f);
 	void PlaySoundRandom(const vector<wstring>& vecSoundKey, const _vec3& vSoundPos, float fVolume = 1.f);
 	void PlaySoundChannel(const wstring& pSoundKey, const _vec3& vSoundPos, CHANNELID eID, float fVolume = 1.f);
+	// void PlaySoundRandom(const wstring& pSoundKey, const _vec3& vSoundPos, CHANNELID eID, float fVolume = 1.f);
 
 	void PlayBGM(const wstring& pSoundKey, float fVolume);
 	

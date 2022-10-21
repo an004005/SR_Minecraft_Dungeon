@@ -29,7 +29,7 @@ HRESULT CCreeper::Ready_Object()
 	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 	m_pCurAnim = m_pIdleAnim;
 	m_eState = IDLE;
-	m_fSpeed = 2.5f;
+	m_fSpeed = 3.f;
 
 	m_pStat->SetMaxHP(100);
 
@@ -118,7 +118,7 @@ void CCreeper::LateUpdate_Object()
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				       ->TakeDamage(1, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_KNOCK_BACK);
+				       ->TakeDamage(70, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_KNOCK_BACK);
 		}
 		DEBUG_SPHERE(vAttackPos, 3.5f, 1.f);
 

@@ -35,7 +35,7 @@ public:
 	virtual void LateUpdate_Object() override;
 	virtual void Free() override;
 
-	static CKouku* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath);
+	static CKouku* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath, _bool bRemote = false);
 
 	virtual void StateChange();
 
@@ -76,6 +76,7 @@ public:
 	_bool Kouku_Countable(void) { return m_bCountable; }
 
 	void Kouku_Stun_Success(void);
+	void SetKoukuCounter();
 
 	_bool Check_SymbolGimmick(void) { return m_bIsSymbolGimmick; }
 

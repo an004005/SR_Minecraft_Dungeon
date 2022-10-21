@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "..\Header\ClearUI.h"
-
+#include "AbstFactory.h"
 
 CClearUI::CClearUI(LPDIRECT3DDEVICE9 pGraphicDev) : CUI(pGraphicDev)
 {
@@ -27,7 +27,10 @@ _int CClearUI::Update_Object(const _float & fTimeDelta)
 {
 	
 	if (m_fCount <= 0)
+	{
+		CSceneFactory::LoadScene("Loading1", "Stage_Start", true, 500);
 		return OBJ_DEAD;
+	}		
 	else
 		m_wstrCount = to_wstring(_int(m_fCount -= fTimeDelta));
 

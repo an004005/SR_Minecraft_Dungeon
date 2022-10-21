@@ -33,7 +33,10 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 		{
 			m_bStun = false;
 			if (m_pStun)
+			{
 				m_pStun->SetDead();
+				m_pStun = nullptr;
+			}
 		}
 		else
 		{
@@ -78,10 +81,20 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 	if (m_bFascinated)
 	{
 		if (m_fSatonFascinatedTime < m_fCurSatonFascinatedTime)
+		{
 			m_bFascinated = false;
+			if (m_pFaci)
+			{
+				m_pFaci->SetDead();
+				m_pFaci = nullptr;
+			}
+
+		}
 		else
 		{
 			m_fCurSatonFascinatedTime += fTimeDelta;
+			if (m_pFaci)
+				m_pFaci->SetPos(m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{0.f, 3.f, 0.f});
 		}
 	}
 
@@ -121,7 +134,7 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 	if (!m_bGraped)
 	{
 		_vec3& vPos = m_pOwnerTrans->m_vInfo[INFO_POS];
-		if (CGameUtilMgr::Vec3Cmp(m_vKnockBackVelocity, CGameUtilMgr::s_vZero))
+		if (CGameUtilMgr::Vec3Cmp(m_vKnockBackVelocity, CGameUtilMgr::s_vZero, 0.1f))
 		{
 			if(!m_bJump)
 				vPos.y = m_pCubeMap->GetHeight(vPos.x, vPos.z);
@@ -134,9 +147,10 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 
 			m_vKnockBackVelocity.y -= 80.f * fTimeDelta;
 
-			if (vPos.y < m_pCubeMap->GetHeight(vPos.x, vPos.z) || m_bKnockback == false)
+			if (vPos.y <= m_pCubeMap->GetHeight(vPos.x, vPos.z) || m_bKnockback == false)
 			{
 				m_vKnockBackVelocity = CGameUtilMgr::s_vZero;
+				m_bKnockback = false;
 			}
 		}
 	}
@@ -162,7 +176,7 @@ CStatComponent* CStatComponent::Create()
 	return new CStatComponent();
 }
 
-void CStatComponent::ModifyHP(_int iModifyingHP)
+void CStatComponent::ModifyHP(_int iModifyingHP, _bool bEffect)
 {
 	m_iHP += iModifyingHP;
 
@@ -171,12 +185,15 @@ void CStatComponent::ModifyHP(_int iModifyingHP)
 		m_bDamaged = true;
 		m_fCurDamagedTime = 0.f;
 
-		// 피타격 이펙트
-		Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")
-			->Add_Particle(m_pOwnerTrans->m_vInfo[INFO_POS] +_vec3{0.f, 1.2f, 0.f}, CGameUtilMgr::GetRandomFloat(0.15f,0.3f), RED, 20, 0.2f);
+		if (bEffect)
+		{
+			// 피타격 이펙트
+			Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")
+				->Add_Particle(m_pOwnerTrans->m_vInfo[INFO_POS] +_vec3{0.f, 1.2f, 0.f}, CGameUtilMgr::GetRandomFloat(0.15f,0.3f), RED, 20, 0.2f);
 
-		if(m_vHurtSound.size() > 0)
-			CSoundMgr::GetInstance()->PlaySoundRandom(m_vHurtSound, m_pOwnerTrans->m_vInfo[INFO_POS], 0.2f);
+			if(m_vHurtSound.size() > 0)
+				CSoundMgr::GetInstance()->PlaySoundRandom(m_vHurtSound, m_pOwnerTrans->m_vInfo[INFO_POS], 0.2f);
+		}
 	}
 
 	if (m_iHP <= 0)
@@ -249,8 +266,8 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 		break;
 	case DT_SATON_FASCINATED:
 		m_bFascinated = true;
-		m_fCurSatonSymbolTime = 0.f;
-		Engine::Get_GameObject<CFascinated_Effect>(LAYER_EFFECT, L"Fascinate_Effect")->Add_Particle(m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{ 0.f, 3.5f, 0.f }, 1.f, RED, 1, 4.f, 0);
+		m_fCurSatonFascinatedTime = 0.f;
+		m_pFaci = CEffectFactory::Create<CFascinate>("Facinate", L"Facinate", m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{0.f, 3.f, 0.f});
 		break;
 	case DT_SATON_GRAPED:
 		m_bGraped = true;
@@ -274,6 +291,11 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 			D3DCOLOR_ARGB(255, 255, 255, 255),
 			bCritical);
 	}
+}
+
+void CStatComponent::SetDead()
+{
+	ModifyHP(-(static_cast<_int>(m_iMaxHP)), false);
 }
 
 void CStatComponent::Revive()

@@ -163,7 +163,6 @@ void CLightningRune::UnEquipRune(CWeapon* pWeapon)
 
 void CLightningRune::Free()
 {
-	m_pItemUI->SetDelete();
 	for(auto& e : m_vecSparks)
 		Safe_Release(e);
 	m_vecSparks.clear();

@@ -1,19 +1,15 @@
 #pragma once
-
-#include "Engine_Include.h"
 #include "Scene.h"
 #include "TerrainCubeMap.h"
 
-class CArrowCubeMgr;
-class CPlayerUI;
 class CPlayer;
-class CTerrainWater;
+class CMapUI;
 
-class CStage : public Engine::CScene
+class CNetStartStage : public CScene
 {
-private:
-	explicit CStage(LPDIRECT3DDEVICE9 pGraphicDev);
-	virtual ~CStage();
+public:
+	explicit CNetStartStage(LPDIRECT3DDEVICE9 pGraphicDev);
+	virtual ~CNetStartStage();
 
 public:
 	virtual HRESULT Ready_Scene(void) override;
@@ -28,14 +24,11 @@ private:
 	_vec3			m_vDir;
 
 public:
-	static CStage*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
+	static CNetStartStage*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
 private:
 	virtual void	Free(void);
-	void CreateTrigger();
-	_bool m_bPlayerAlive = false;
-	CPlayerUI* m_pPlayerUI = nullptr;
 	CPlayer* m_pPlayer = nullptr;
-	_float m_fDeadTime = 0.f;
+	CMapUI* m_pMapUI = nullptr;
 };
 

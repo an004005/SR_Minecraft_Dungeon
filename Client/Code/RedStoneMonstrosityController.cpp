@@ -35,42 +35,25 @@ _int CRedStoneMonstrosityController::Update_Component(const _float& fTimeDelta)
 	_float fTargetDist = 15.f;
 
 
-	if (m_fCurTargetingCoolTime > m_fTargetingCoolTime)
+	
+	for (auto& ele : Get_Layer(LAYER_PLAYER)->Get_MapObject())
 	{
-		for (auto& ele : Get_Layer(LAYER_PLAYER)->Get_MapObject())
+		if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(ele.second))
 		{
-			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(ele.second))
-			{
-				vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
-				_vec3 vDiff = vTargetPos - vPos;
-				_float fDist = D3DXVec3Length(&vDiff);
+			vTargetPos = pPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
+			_vec3 vDiff = vTargetPos - vPos;
+			_float fDist = D3DXVec3Length(&vDiff);
 
-				if (fTargetDist > fDist) // 플레이어 감지
-				{
-					m_pTargetPlayer = pPlayer;
-					fTargetDist = fDist;
-				}
+			if (fTargetDist > fDist) // 플레이어 감지
+			{
+				m_pTargetPlayer = pPlayer;
+				fTargetDist = fDist;
 			}
 		}
-
-		m_fCurTargetingCoolTime = 0.f;
-		if (m_pTargetPlayer == nullptr) return 0;
-
-		//Reset Intro and walk start
-		if (fTargetDist < 10.f)
-			pRedStoneMonstrosity->SetStart();
 	}
-	else
-	{
-		m_fCurTargetingCoolTime += fTimeDelta;
-		if (m_pTargetPlayer == nullptr) return 0;
 
-		// when do not change target, have to find targetpos
-		vTargetPos = m_pTargetPlayer->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
-		_vec3 vDiff = vTargetPos - vPos;
-		_float fDist = D3DXVec3Length(&vDiff);	
-	}
-	
+	if (m_pTargetPlayer == nullptr)
+		return 0;
 	
 
 	if (m_fCurChopCoolTime >= m_fChopCoolTime && fTargetDist <= m_fChopDist)

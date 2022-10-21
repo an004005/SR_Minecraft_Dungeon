@@ -150,7 +150,6 @@ CSword * CSword::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 
 void CSword::Free()
 {
-	m_pItemUI->SetDelete();
 	CWeapon::Free();
 }
 

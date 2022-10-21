@@ -32,7 +32,7 @@ HRESULT CLeaper::Ready_Object()
 	m_eState = State::IDLE;
 	m_fSpeed = 2.5f;
 
-	m_pStat->SetMaxHP(500);
+	m_pStat->SetMaxHP(1000);
 
 	m_pStat->SetHurtSound({
 	L"DLC_Mob_Leaper_GetHit1.ogg",
@@ -165,7 +165,7 @@ void CLeaper::LateUpdate_Object()
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(20, m_pRootPart->pTrans->m_vInfo[INFO_POS], this);
+				->TakeDamage(40, m_pRootPart->pTrans->m_vInfo[INFO_POS], this);
 		}
 
 
@@ -186,7 +186,7 @@ void CLeaper::LateUpdate_Object()
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(50, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_KNOCK_BACK);
+				->TakeDamage(70, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_KNOCK_BACK);
 		}
 
 		for (int j = 0; j < 10; j++)

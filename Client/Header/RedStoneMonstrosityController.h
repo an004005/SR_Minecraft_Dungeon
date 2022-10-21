@@ -26,14 +26,12 @@ private:
 	_float m_fCurSpitCoolTime = 0.f;
 	_float m_fCurSummonCoolTime = 0.f;
 	_float m_fCurWindmillCoolTime = 0.f;
-	_float m_fCurTargetingCoolTime = 1.f;
 
 	_float m_fChopCoolTime = 15.f;
 	_float m_fSpitCoolTime = 13.f;
 	_float m_fSummonCoolTime = 22.f;
 	/*_float m_fWindmillCoolTime = 25.f;*/
 	_float m_fWindmillCoolTime = 27.f;
-	_float m_fTargetingCoolTime = 3.f;
 
 	_float m_fChopDist = 4.f;
 	_float m_fSpitDist = 10.f;
