@@ -115,12 +115,14 @@ _int CLeaper::Update_Object(const _float & fTimeDelta)
 	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
 		m_bCanPlayAnim = true;
 
+#ifdef  _DEBUG
 	IM_BEGIN("LOGO");
 
 	_vec3 vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
 	ImGui::Text("%f, %f, %f", vPos.x, vPos.y, vPos.z);
 
 	IM_END;
+#endif
 
 	// 상태 변경 조건 설정
 	StateChange();
