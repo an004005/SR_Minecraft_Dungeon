@@ -28,6 +28,7 @@
 #include "Collider.h"
 #include "RcBossHPTex.h"
 
+#include "LightMgr.h"
 
 
 BEGIN(Engine)
@@ -107,6 +108,7 @@ BEGIN(Engine)
 	inline void GetOverlappedObject(OUT set<CGameObject*>& objList, const _vec3& vPos, _float fRadius);
 	inline void Clear_ColliderAll();
 
+	inline HRESULT	Ready_Light(LPDIRECT3DDEVICE9 pGraphicDev, const D3DLIGHT9* pLightInfo, const _uint& iIndex);
 
 	inline void Release_Utility(void);
 

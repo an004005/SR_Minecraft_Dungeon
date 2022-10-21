@@ -56,7 +56,18 @@ HRESULT CStage::Ready_Scene(void)
 {
 	if (FAILED(Engine::CScene::Ready_Scene()))
 		return E_FAIL;
-	
+
+	D3DLIGHT9		tLightInfo;
+	ZeroMemory(&tLightInfo, sizeof(D3DLIGHT9));
+
+	tLightInfo.Type		= D3DLIGHT_DIRECTIONAL;
+	tLightInfo.Diffuse	= D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	tLightInfo.Specular	= D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	tLightInfo.Ambient	= D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	tLightInfo.Direction  = _vec3(0.f, -1.f, 1.f);
+	FAILED_CHECK_RETURN(Engine::Ready_Light(m_pGraphicDev, &tLightInfo, 0), E_FAIL);
+
+
 	FAILED_CHECK_RETURN(Ready_Layer_Environment(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_GameLogic(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_UI(), E_FAIL);
@@ -76,8 +87,7 @@ _int CStage::Update_Scene(const _float & fTimeDelta)
 	//CUIFactory::Create<CUI>("UI_HP", L"UI", 600.f, 650.f - fY, 55.f, 40.f);
 	//Engine::Get_Component<CTransform>(LAYER_UI, L"UI_HP", L"Proto_TransformCom", ID_DYNAMIC)
 	//	->m_vAngle.y += D3DXToRadian(40.f) * fTimeDelta;
-
-	
+	m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, true);
 
 	if(m_pPlayer != nullptr)
 	{
