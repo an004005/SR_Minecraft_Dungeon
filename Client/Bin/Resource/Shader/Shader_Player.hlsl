@@ -78,7 +78,7 @@ PS_OUT PS_MAIN(PS_IN In)
 
 	if (true == g_isDead)
 	{
-		vColor.a = In.vTexUV.y - g_Time;
+		vColor.a = 1.f- g_Time;
 	}
 	else
 		vColor.a = 1.f;

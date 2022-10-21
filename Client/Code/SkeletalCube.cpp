@@ -95,7 +95,7 @@ void CSkeletalCube::RenderObjectRecur(SkeletalPart* pPart)
 			m_pShaderCom->Set_Bool("g_isDead", pStat->IsDead());
 			if (pStat->IsDead())
 			{
-				m_fTime += CGameUtilMgr::s_fTimeDelta / 50.f;
+				m_fTime += CGameUtilMgr::s_fTimeDelta / 20.f;
 				m_pShaderCom->Set_RawValue("g_Time", &m_fTime, sizeof(_float));
 
 			}
