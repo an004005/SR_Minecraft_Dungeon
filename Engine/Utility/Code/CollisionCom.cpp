@@ -96,5 +96,8 @@ void CCollisionCom::CollisionStatic(const _vec3& vCenter, _float fRadius)
 		D3DXVec3Normalize(&vDiff, &vDiff);
 		
 		vPos += fMoved * vDiff;
+
+		if (m_pStaticCallback)
+			m_pStaticCallback();
 	}
 }
