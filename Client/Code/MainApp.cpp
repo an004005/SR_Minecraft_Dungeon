@@ -174,8 +174,18 @@ HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement
 	(*ppManagement)->AddRef();
 
 	 // CSceneFactory::LoadScene("Loading1", "Stage_Start", true ,0);
-	CSceneFactory::LoadScene("Loading1", "Logo", true ,500);
-	// CSceneFactory::LoadScene("Loading1", "NetStage_Start", true ,0);
+	// CSceneFactory::LoadScene("Loading1", "Logo", true ,500);
+	CSceneFactory::LoadScene("Loading1", "Stage_Default", true ,0);
+
+	D3DLIGHT9		tLightInfo;
+	ZeroMemory(&tLightInfo, sizeof(D3DLIGHT9));
+
+	tLightInfo.Type		= D3DLIGHT_DIRECTIONAL;
+	tLightInfo.Diffuse	= D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	tLightInfo.Specular	= D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	tLightInfo.Ambient	= D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.f);
+	tLightInfo.Direction  = _vec3(0.f, -10.f, 10.f);
+	FAILED_CHECK_RETURN(Engine::Ready_Light(m_pGraphicDev, &tLightInfo, 0), E_FAIL);
 
 	return S_OK;
 }
@@ -200,7 +210,7 @@ HRESULT CMainApp::Ready_Proto()
 
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CubeTexCom", Engine::CCubeTex::Create(m_pGraphicDev)), E_FAIL);
 
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CubeTexture", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/SkyBox/burger%d.dds", TEX_CUBE, 4)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CubeTexture", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/SkyBox/Sky_Box_%d.dds", TEX_CUBE, 2)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_MinecraftCubeTexture", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/MinscraftCubeTile/CubeTile_%d.dds", TEX_CUBE, 194)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_TransformCom", Engine::CTransform::Create()), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_BossCubeTile", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/BossCubeTile/boss_%d.dds", TEX_CUBE, 17)), E_FAIL);
@@ -327,6 +337,12 @@ HRESULT CMainApp::Ready_Proto()
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_BirdsWhiteTextCom", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Object/BirdsWhite/BirdsWhite_%d.png", TEX_NORMAL, 5)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_BirdsBrownTextCom", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Object/BirdsBrown/BirdsBrown_%d.png", TEX_NORMAL, 5)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Totem", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/SingleTex/Totem.png", TEX_NORMAL)), E_FAIL);
+
+
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_SkySphere", CShereBuffer::Create(m_pGraphicDev, 20, 20)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_SkySphereShaderCom", CShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/Shader_Sky.hlsl")), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_SkySphereTexture", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/SkySphere/sky_%d.png", TEX_NORMAL, 3)), E_FAIL);
+
 
 	return S_OK;
 }

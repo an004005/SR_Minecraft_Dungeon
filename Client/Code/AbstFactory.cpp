@@ -77,6 +77,7 @@
 #include "NetStartStage.h"
 #include "KoukuLoading.h"
 #include "BossStage.h"
+#include "SkyBox.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -473,7 +474,10 @@ void CEnvFactory::Ready_EnvFactory()
 	{
 		return CStaticCamera::Create(s_pGraphicDev);
 	} });
-
+	s_mapEnvSpawner.insert({ "SkyBox", []()
+	{
+		return CSkyBox::Create(s_pGraphicDev);
+	} });
 
 
 }

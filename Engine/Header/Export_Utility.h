@@ -30,6 +30,7 @@
 
 #include "LightMgr.h"
 #include "Shader.h"
+#include "ShereBuffer.h"
 
 
 BEGIN(Engine)

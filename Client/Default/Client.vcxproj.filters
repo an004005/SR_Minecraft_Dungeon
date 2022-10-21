@@ -528,6 +528,9 @@
       <Filter>01. Scene</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\BossStage.h" />
+    <ClInclude Include="..\Header\SkyBox.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -953,6 +956,9 @@
       <Filter>01. Scene</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\BossStage.cpp" />
+    <ClCompile Include="..\Code\SkyBox.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -974,5 +980,6 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\Resource\Shader\Shader_Player.hlsl" />
+    <FxCompile Include="..\Bin\Resource\Shader\Shader_Sky.hlsl" />
   </ItemGroup>
 </Project>

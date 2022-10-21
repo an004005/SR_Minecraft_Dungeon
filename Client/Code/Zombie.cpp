@@ -91,7 +91,6 @@ _int CZombie::Update_Object(const _float& fTimeDelta)
 
 	CMonster::Update_Object(fTimeDelta);
 
-	m_bHit = m_pStat->IsDamaged();
 
 
 	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
@@ -177,7 +176,6 @@ void CZombie::StateChange()
 	{
 		if (m_bReserveStop == false)
 		{
-			m_bDead = true;
 			CSoundMgr::GetInstance()->PlaySoundRandom({
 				L"sfx_mob_zombieDeath-001.ogg",
 				L"sfx_mob_zombieDeath-002.ogg",

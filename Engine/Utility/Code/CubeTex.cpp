@@ -62,28 +62,36 @@ HRESULT CCubeTex::Ready_Buffer(void)
 	// pVertex[7].vTexUV = pVertex[7].vPos;
 
 	pVertex[0].vPos = { -0.5f, 0.5f, -0.5f };
+	// D3DXVec3Normalize(&pVertex[0].vNormal, &pVertex[0].vPos);
 	pVertex[0].vTexUV = pVertex[0].vPos;
 	
 	pVertex[1].vPos = { 0.5f, 0.5f, -0.5f };
+	// D3DXVec3Normalize(&pVertex[1].vNormal, &pVertex[1].vPos);
 	pVertex[1].vTexUV = pVertex[1].vPos;
 	
 	pVertex[2].vPos = { 0.5f, -0.5f, -0.5f };
+	// D3DXVec3Normalize(&pVertex[2].vNormal, &pVertex[2].vPos);
 	pVertex[2].vTexUV = pVertex[2].vPos;
 	
 	pVertex[3].vPos = { -0.5f, -0.5f, -0.5f };
+	// D3DXVec3Normalize(&pVertex[3].vNormal, &pVertex[3].vPos);
 	pVertex[3].vTexUV = pVertex[3].vPos;
 	
 	// µÞ¸é
 	pVertex[4].vPos = { -0.5f, 0.5f, 0.5f };
+	// D3DXVec3Normalize(&pVertex[4].vNormal, &pVertex[4].vPos);
 	pVertex[4].vTexUV = pVertex[4].vPos;
 	
 	pVertex[5].vPos = { 0.5f, 0.5f, 0.5f };
+	// D3DXVec3Normalize(&pVertex[5].vNormal, &pVertex[5].vPos);
 	pVertex[5].vTexUV = pVertex[5].vPos;
 	
 	pVertex[6].vPos = { 0.5f, -0.5f, 0.5f };
+	// D3DXVec3Normalize(&pVertex[6].vNormal, &pVertex[6].vPos);
 	pVertex[6].vTexUV = pVertex[6].vPos;
 	
 	pVertex[7].vPos = { -0.5f, -0.5f, 0.5f };
+	// D3DXVec3Normalize(&pVertex[7].vNormal, &pVertex[7].vPos);
 	pVertex[7].vTexUV = pVertex[7].vPos;
 	m_pVB->Unlock();
 
