@@ -126,9 +126,10 @@ protected:
 	CShader*			m_pShaderCom = nullptr;
 
 	_float m_fTime;
-	_bool m_bDead;
+	_bool m_bRenderMachine = true;
+	// shader
 
 	_bool m_bStopAnim = false;
 	_bool m_bReserveStop = false;
-	_bool m_bHit = false;
+	D3DMATERIAL9 m_Material;
 };

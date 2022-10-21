@@ -530,6 +530,10 @@
     <ClInclude Include="..\Header\BossStage.h">
       <Filter>01. Scene\01. Stage</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\BossStage.h" />
+    <ClInclude Include="..\Header\SkyBox.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -957,6 +961,10 @@
     <ClCompile Include="..\Code\BossStage.cpp">
       <Filter>01. Scene\01. Stage</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\BossStage.cpp" />
+    <ClCompile Include="..\Code\SkyBox.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -978,5 +986,6 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\Resource\Shader\Shader_Player.hlsl" />
+    <FxCompile Include="..\Bin\Resource\Shader\Shader_Sky.hlsl" />
   </ItemGroup>
 </Project>

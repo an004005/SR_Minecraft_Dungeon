@@ -150,7 +150,16 @@
     <ClInclude Include="..\..\Header\RcBossHPTex.h">
       <Filter>00. Component\00. VIBuffer\RcBossHPTex</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Header\LightMgr.h">
+      <Filter>04. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Header\Light.h">
+      <Filter>04. Manager</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Header\Shader.h">
+      <Filter>00. Component\00. VIBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Header\ShereBuffer.h">
       <Filter>00. Component\00. VIBuffer</Filter>
     </ClInclude>
   </ItemGroup>
@@ -240,6 +249,15 @@
       <Filter>00. Component\00. VIBuffer\RcBossHPTex</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Shader.cpp">
+      <Filter>00. Component\00. VIBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Light.cpp">
+      <Filter>04. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\LightMgr.cpp">
+      <Filter>04. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ShereBuffer.cpp">
       <Filter>00. Component\00. VIBuffer</Filter>
     </ClCompile>
   </ItemGroup>

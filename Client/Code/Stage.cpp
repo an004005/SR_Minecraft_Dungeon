@@ -42,6 +42,9 @@
 #include "Player.h"
 #include "Cat.h"
 #include "Cat2.h"
+#include "PlayerStartPos.h"
+#include "SkyBox.h"
+
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
 {
@@ -56,13 +59,13 @@ HRESULT CStage::Ready_Scene(void)
 {
 	if (FAILED(Engine::CScene::Ready_Scene()))
 		return E_FAIL;
-	
+
 	FAILED_CHECK_RETURN(Ready_Layer_Environment(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_GameLogic(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_UI(), E_FAIL);
 
-	// Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
-	// 	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
+	Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+		->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
 
 	CBatchTool::Load(L"../Bin/Resource/Batch/LASTLASTLASTSTAGE.batch");
 
@@ -76,8 +79,7 @@ _int CStage::Update_Scene(const _float & fTimeDelta)
 	//CUIFactory::Create<CUI>("UI_HP", L"UI", 600.f, 650.f - fY, 55.f, 40.f);
 	//Engine::Get_Component<CTransform>(LAYER_UI, L"UI_HP", L"Proto_TransformCom", ID_DYNAMIC)
 	//	->m_vAngle.y += D3DXToRadian(40.f) * fTimeDelta;
-
-	
+	// m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, true);
 
 	if(m_pPlayer != nullptr)
 	{
@@ -141,6 +143,8 @@ HRESULT CStage::Ready_Layer_Environment()
 {
 	CGameObject*		pGameObject = nullptr;
 
+	CEnvFactory::Create<CSkyBox>("SkyBox", L"SkyBox");
+
 	CEnvFactory::Create<CStaticCamera>("StaticCamera", L"StaticCamera");
 
 	// Terrain
@@ -158,6 +162,9 @@ HRESULT CStage::Ready_Layer_GameLogic()
 {
 	_matrix matWorld;
 
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 3.6f, 7.f ,3.5f });
+	CObjectFactory::Create<CPlayerStartPos>("PlayerPos", L"PlayerPos", matWorld);
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 1.f, 0.f ,1.f });
 
@@ -180,7 +187,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 		default: ;
 	}
 	m_pPlayer->SetName(CObjectStoreMgr::GetInstance()->GetPlayerName());
-	m_pPlayer->PlayerSpawn();
+	// m_pPlayer->PlayerSpawn();
 
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 5.f, 7.f ,10.f });

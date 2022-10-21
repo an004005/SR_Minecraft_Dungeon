@@ -78,6 +78,7 @@ void CRenderer::RenderUI(LPDIRECT3DDEVICE9& pGraphicDev)
 	pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	pGraphicDev->SetTransform(D3DTS_VIEW, &OldViewMatrix);
 	pGraphicDev->SetTransform(D3DTS_PROJECTION, &OldProjMatrix);
+
 }
 
 void Engine::CRenderer::Free(void)

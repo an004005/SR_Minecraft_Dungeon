@@ -28,6 +28,8 @@ HRESULT CStaticCamera::Ready_Object()
 
 	m_fShakeTime = 0.f;
 	m_fCurShakeTime = 0.f;
+
+
 	return S_OK;
 }
 

@@ -189,6 +189,8 @@ call CopyUtility.bat</Command>
     <ClInclude Include="..\..\Header\GameObject.h" />
     <ClInclude Include="..\..\Header\GameUtilMgr.h" />
     <ClInclude Include="..\..\Header\Layer.h" />
+    <ClInclude Include="..\..\Header\Light.h" />
+    <ClInclude Include="..\..\Header\LightMgr.h" />
     <ClInclude Include="..\..\Header\Management.h" />
     <ClInclude Include="..\..\Header\ParticleSystem.h" />
     <ClInclude Include="..\..\Header\ProtoMgr.h" />
@@ -198,6 +200,7 @@ call CopyUtility.bat</Command>
     <ClInclude Include="..\..\Header\Renderer.h" />
     <ClInclude Include="..\..\Header\Scene.h" />
     <ClInclude Include="..\..\Header\Shader.h" />
+    <ClInclude Include="..\..\Header\ShereBuffer.h" />
     <ClInclude Include="..\..\Header\SphereMesh.h" />
     <ClInclude Include="..\..\Header\TerrainCubeTex.h" />
     <ClInclude Include="..\..\Header\TerrainRcTex.h" />
@@ -220,6 +223,8 @@ call CopyUtility.bat</Command>
     <ClCompile Include="..\Code\GameObject.cpp" />
     <ClCompile Include="..\Code\GameUtilMgr.cpp" />
     <ClCompile Include="..\Code\Layer.cpp" />
+    <ClCompile Include="..\Code\Light.cpp" />
+    <ClCompile Include="..\Code\LightMgr.cpp" />
     <ClCompile Include="..\Code\Management.cpp" />
     <ClCompile Include="..\Code\ParticleSystem.cpp" />
     <ClCompile Include="..\Code\ProtoMgr.cpp" />
@@ -229,6 +234,7 @@ call CopyUtility.bat</Command>
     <ClCompile Include="..\Code\Renderer.cpp" />
     <ClCompile Include="..\Code\Scene.cpp" />
     <ClCompile Include="..\Code\Shader.cpp" />
+    <ClCompile Include="..\Code\ShereBuffer.cpp" />
     <ClCompile Include="..\Code\SphereMesh.cpp" />
     <ClCompile Include="..\Code\TerrainCubeTex.cpp" />
     <ClCompile Include="..\Code\TerrainRcTex.cpp" />
