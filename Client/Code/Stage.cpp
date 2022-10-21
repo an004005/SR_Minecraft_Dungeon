@@ -236,9 +236,9 @@ HRESULT CStage::Ready_Layer_GameLogic()
 		//CEnemyFactory::Create<CLeaper>("Leaper", L"Leaper", matWorld);
 	}
 	
-	// CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {6.f, 0.f ,6.f});
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, {1.f, 1.f, 1.f}, {0.f, D3DXToRadian(90.f) ,0.f }, {6.f, 0.f ,6.f});
 	// CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
-	// CEnemyFactory::Create<CMonster>("Zombie", L"TestZombie", matWorld);
+	CEnemyFactory::Create<CMonster>("Zombie", L"TestZombie", matWorld);
 
 	//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 4.7f, 9.f, 26.f });
 

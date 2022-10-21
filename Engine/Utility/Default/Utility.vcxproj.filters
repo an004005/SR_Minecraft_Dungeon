@@ -150,7 +150,9 @@
     <ClInclude Include="..\..\Header\RcBossHPTex.h">
       <Filter>00. Component\00. VIBuffer\RcBossHPTex</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Header\Shader.h" />
+    <ClInclude Include="..\..\Header\Shader.h">
+      <Filter>00. Component\00. VIBuffer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\VIBuffer.cpp">
@@ -237,7 +239,9 @@
     <ClCompile Include="..\Code\RcBossHPTex.cpp">
       <Filter>00. Component\00. VIBuffer\RcBossHPTex</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Shader.cpp" />
+    <ClCompile Include="..\Code\Shader.cpp">
+      <Filter>00. Component\00. VIBuffer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Header\Export_Utility.inl">

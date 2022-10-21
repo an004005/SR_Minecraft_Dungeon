@@ -944,4 +944,7 @@
       <Filter>99. Default</Filter>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Bin\Resource\Shader\Shader_Player.hlsl" />
+  </ItemGroup>
 </Project>
