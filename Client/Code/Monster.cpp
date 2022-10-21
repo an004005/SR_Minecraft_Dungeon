@@ -31,7 +31,8 @@ HRESULT CMonster::Ready_Object()
 	m_pStat = Add_Component<CStatComponent>(L"Proto_StatCom", L"Proto_StatCom", ID_DYNAMIC);
 	m_pStat->SetMaxHP(100);
 	m_pStat->SetTransform(m_pRootPart->pTrans);
-	
+	m_pStat->SetOwner(this);
+
 	return S_OK;
 }
 
