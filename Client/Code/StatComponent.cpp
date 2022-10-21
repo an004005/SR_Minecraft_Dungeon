@@ -25,6 +25,13 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 	{
 		m_pCubeMap = Get_GameObject<CTerrainCubeMap>(LAYER_ENV, L"TerrainCubeMap");
 		m_pCubeMap->AddRef();
+
+		CCollisionCom* pColl = m_pOwner->Get_Component<CCollisionCom>(L"Proto_CollisionCom", ID_DYNAMIC);
+		pColl->SetStaticCallBack([this]()
+		{
+			m_vKnockBackVelocity = CGameUtilMgr::s_vZero;
+			m_bKnockback = false;
+		});
 	}
 
 	if (m_bStun)
@@ -88,7 +95,6 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 				m_pFaci->SetDead();
 				m_pFaci = nullptr;
 			}
-
 		}
 		else
 		{
@@ -120,7 +126,6 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 		else
 		{
 			m_fCurSatonSymbolTime += fTimeDelta;
-
 		}
 	}
 
@@ -129,14 +134,13 @@ _int CStatComponent::Update_Component(const _float& fTimeDelta)
 	// 	Engine::Get_GameObject<CFascinated_Effect>(LAYER_EFFECT, L"Fascinate_Effect")->Add_Particle(m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{ 0.f, 3.f, 0.f }, 1.f, RED, 1, 0.1f, 0);
 	// }
 
-	
 
 	if (!m_bGraped)
 	{
 		_vec3& vPos = m_pOwnerTrans->m_vInfo[INFO_POS];
 		if (CGameUtilMgr::Vec3Cmp(m_vKnockBackVelocity, CGameUtilMgr::s_vZero, 0.1f))
 		{
-			if(!m_bJump)
+			if (!m_bJump)
 				vPos.y = m_pCubeMap->GetHeight(vPos.x, vPos.z);
 		}
 		else
@@ -189,9 +193,10 @@ void CStatComponent::ModifyHP(_int iModifyingHP, _bool bEffect)
 		{
 			// 피타격 이펙트
 			Get_GameObject<CAttack_P>(LAYER_EFFECT, L"Attack_Basic")
-				->Add_Particle(m_pOwnerTrans->m_vInfo[INFO_POS] +_vec3{0.f, 1.2f, 0.f}, CGameUtilMgr::GetRandomFloat(0.15f,0.3f), RED, 20, 0.2f);
+				->Add_Particle(m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{0.f, 1.2f, 0.f},
+				               CGameUtilMgr::GetRandomFloat(0.15f, 0.3f), RED, 20, 0.2f);
 
-			if(m_vHurtSound.size() > 0)
+			if (m_vHurtSound.size() > 0)
 				CSoundMgr::GetInstance()->PlaySoundRandom(m_vHurtSound, m_pOwnerTrans->m_vInfo[INFO_POS], 0.2f);
 		}
 	}
@@ -214,7 +219,8 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 	case DT_STUN:
 		m_bStun = true;
 		m_fCurStunTime = 0.f;
-		m_pStun = CEffectFactory::Create<CStun>("Monster_Stun", L"Monster_Stun", m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{0.f, 3.f, 0.f});
+		m_pStun = CEffectFactory::Create<CStun>("Monster_Stun", L"Monster_Stun",
+		                                        m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{0.f, 3.f, 0.f});
 		break;
 	case DT_KNOCK_BACK:
 		m_bKnockback = true;
@@ -267,7 +273,8 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 	case DT_SATON_FASCINATED:
 		m_bFascinated = true;
 		m_fCurSatonFascinatedTime = 0.f;
-		m_pFaci = CEffectFactory::Create<CFascinate>("Facinate", L"Facinate", m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{0.f, 3.f, 0.f});
+		m_pFaci = CEffectFactory::Create<CFascinate>("Facinate", L"Facinate",
+		                                             m_pOwnerTrans->m_vInfo[INFO_POS] + _vec3{0.f, 3.f, 0.f});
 		break;
 	case DT_SATON_GRAPED:
 		m_bGraped = true;
@@ -310,5 +317,4 @@ void CStatComponent::Revive()
 	m_bSatonSymbol_Red = false;
 	m_bSatonSymbol_Blue = false;
 	m_bFascinated = false;
-
 }

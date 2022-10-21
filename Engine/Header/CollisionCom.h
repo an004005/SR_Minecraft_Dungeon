@@ -36,6 +36,7 @@ public:
 		m_pCollisionDynamic = pDynamicCallBack;
 		m_pCollisionStatic = pStaticCallBack;
 	}
+	void SetStaticCallBack(std::function<void()> pstaticCallback) { m_pStaticCallback = pstaticCallback;}
 	//
 
 	CGameObject* GetOwner() const { return m_pOwner; }
@@ -58,6 +59,7 @@ protected:
 
 	std::function<void(CCollisionCom*)> m_pCollisionDynamic = nullptr;
 	std::function<void(_vec3, _float)> m_pCollisionStatic = nullptr;
+	std::function<void()> m_pStaticCallback = nullptr;
 
 	bool m_bStop = false;
 };
