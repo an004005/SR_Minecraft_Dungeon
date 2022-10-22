@@ -261,18 +261,13 @@ void CSaton::LateUpdate_Object()
 	{
 		set<CGameObject*> setPlayer;
 		Engine::GetOverlappedObject(setPlayer, m_vExplodMoonPos, 4.f);
-
+		DEBUG_SPHERE(m_vExplodMoonPos, 4.f, 1.f);
 		for (auto& obj : setPlayer)
 		{
-
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 			{
 				CStatComponent* PlayerStatCom = pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC);
-
-				if (pPlayer->GetID() == 0)
-				{
-					PlayerStatCom->TakeDamage(0, pPlayer->GetInfo(INFO_POS), this, DT_STUN);
-				}
+				PlayerStatCom->TakeDamage(0, pPlayer->GetInfo(INFO_POS), this, DT_STUN);
 			}
 		}
 		for (int j = 0; j < 10; j++)

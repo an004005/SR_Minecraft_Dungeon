@@ -167,7 +167,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 		default: ;
 	}
 	m_pPlayer->SetName(CObjectStoreMgr::GetInstance()->GetPlayerName());
-		 m_pPlayer->PlayerSpawn();
+	m_pPlayer->PlayerSpawn();
 
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 5.f, 7.f ,10.f });
