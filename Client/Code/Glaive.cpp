@@ -13,7 +13,7 @@ CGlaive::CGlaive(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CWeapon(pGraphicDev)
 {
 	m_eType = WEAPON_GLAIVE;
-	m_iDamage = 35;
+	m_iDamage = 30;
 	m_strFactoryTag = "Glaive";
 }
 
