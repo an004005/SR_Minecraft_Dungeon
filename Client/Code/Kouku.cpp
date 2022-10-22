@@ -26,7 +26,7 @@ HRESULT CKouku::Ready_Object()
 {
 	CMonster::Ready_Object();
 
-	// m_arrAnim[INTRO] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/RedStoneMonstrosity/intro.anim");
+	m_arrAnim[INTRO] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_intro.anim");
 	m_arrAnim[WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_walk.anim");
 	m_arrAnim[BASIC_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_basicattack.anim");
 	m_arrAnim[IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_idle.anim");
@@ -39,14 +39,15 @@ HRESULT CKouku::Ready_Object()
 	m_arrAnim[STUN] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_stun.anim");
 
 	m_pIdleAnim = &m_arrAnim[IDLE];
-	// m_pCurAnim = &m_arrAnim[INTRO];
-	m_pCurAnim = m_pIdleAnim;
-
+	m_pCurAnim = &m_arrAnim[INTRO];
+	// m_pCurAnim = m_pIdleAnim;
+	m_vTargetPos = CGameUtilMgr::s_vZero + _vec3{ 67.5f,25.f,49.5f };
 	m_eState = IDLE;
 	m_fSpeed = 2.f;
 
 	m_iRedSymbolCnt = 0;
 
+	m_bIntroPlay = true;
 
 	m_pStat->SetMaxHP(1000);
 
@@ -255,6 +256,7 @@ _int CKouku::Update_Object(const _float& fTimeDelta)
 	default:
 		break;
 	}
+
 
 	if (m_eState != HORROR_ATTACK)
 	{
@@ -527,6 +529,20 @@ void CKouku::StateChange()
 			m_bMove = false;
 			return;
 		}
+	}
+	if (m_bIntroPlay)
+	{
+		m_eState = INTRO;
+		_vec3 vLook{ _vec3(62.5f, 25.f, 33.5f) };
+		D3DXVec3Normalize(&vLook, &vLook);
+		m_pRootPart->pTrans->m_vInfo[INFO_LOOK] = m_vTargetPos;
+
+		PlayAnimationOnce(&m_arrAnim[INTRO]);
+		m_bIntroPlay = false;
+		m_bCanPlayAnim = false;
+		m_bMove = false;
+		SetOff();
+		return;
 	}
 
 	if (m_bBasicAttack && m_bCanPlayAnim)

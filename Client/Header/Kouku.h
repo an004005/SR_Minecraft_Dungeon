@@ -100,7 +100,7 @@ private:
 	// true : PlayAnimationOnce 사용 가능 상태(동작 애니메이션 실행 가능), false: 다른 애니메이션 실행중
 	_bool m_bCanPlayAnim = true; // 현재 실행중인 애니메이션 끊고 애니메이션 실행 가능 여부
 
-	_vec3 m_vTargetPos = CGameUtilMgr::s_vZero; 
+	_vec3 m_vTargetPos = CGameUtilMgr::s_vZero;
 
 	//KoukuPattern
 	_bool m_bDoubleHammer = false;

@@ -198,11 +198,13 @@ _int CSaton::Update_Object(const _float& fTimeDelta)
 		}
 	}
 
+	_float tmp = D3DXToDegree(m_pRootPart->pTrans->m_vAngle.y);
 
-	//
-	// NULL_CHECK_RETURN(pkouku, 0);
-	//
-	// _vec3 vPos = saton->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
+	IM_BEGIN("Saton_Angle");
+
+	ImGui::Text("%f", tmp);
+
+	IM_END;
 
 	// 상태 변경 조건 설정
 	StateChange();
