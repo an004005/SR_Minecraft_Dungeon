@@ -118,6 +118,8 @@ void CKouku::AnimationEvent(const string& strEvent)
 	else if (strEvent == "Kouku_Hide")
 	{
 		m_pRootPart->pTrans->m_vInfo[INFO_POS] = _vec3(62.5f, 0.f, 48.7f);
+		CSoundMgr::GetInstance()->PlaySoundRandom({ L"smokebomb1_2_sws_bip.wav", L"smokebomb1_sws_bip_1.wav" }, m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+
 		// PlayAnimationOnce(&m_arrAnim[REST]);
 	}
 	else if (strEvent == "Ready_Circle")
@@ -154,6 +156,7 @@ void CKouku::AnimationEvent(const string& strEvent)
 	}
 	else if (strEvent == "HorrorAttack_Start")
 	{
+		CSoundMgr::GetInstance()->PlaySoundRandomChannel({ L"horror_1.wav", L"horror_2.wav" }, m_pRootPart->pTrans->m_vInfo[INFO_POS], CHANNELID(23));
 	}
 	else if (strEvent == "Countable")
 	{
@@ -170,6 +173,8 @@ void CKouku::AnimationEvent(const string& strEvent)
 	else if (strEvent == "Horror_Attack")
 	{
 		m_bIsHorrorAttack = true;
+
+
 		m_fCurTime = 0.f;
 	}
 	else if (strEvent == "HorrorAttack_End")
@@ -178,7 +183,7 @@ void CKouku::AnimationEvent(const string& strEvent)
 	}
 	else if (strEvent == "Intro_End")
 	{
-		CSoundMgr::GetInstance()->PlayBGM(L"kouku_bgm_0.ogg", 1.f);
+		CSoundMgr::GetInstance()->PlayBGM(L"kouku_bgm_0.ogg", 0.6f);
 	}
 	else if (strEvent == "AnimStopped")
 	{
@@ -391,10 +396,12 @@ void CKouku::LateUpdate_Object()
 		for (auto& obj : Player)
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+			{
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(15, FromPos, this, DT_KNOCK_BACK);
+					->TakeDamage(15, FromPos, this, DT_KNOCK_BACK);
+				CSoundMgr::GetInstance()->PlaySoundRandom({ L"attack1_hit.wav", L"attack1_hit_2.wav" }, m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+			}
 		}
-		
 		m_bIsBasicAttackColl = false;
 	}
 
@@ -502,6 +509,7 @@ void CKouku::SetKoukuCounter()
 	m_pStat->TakeDamage(0, KoukuPos, this, DT_STUN);
 	Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 		->PlayShake(0.1f, 1.f);
+	CSoundMgr::GetInstance()->PlaySoundChannel(L"counter.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS], CHANNELID(23));
 }
 
 void CKouku::Free()
@@ -570,6 +578,7 @@ void CKouku::StateChange()
 		m_eState = BASIC_ATTACK;
 		RotateToTargetPos(m_vTargetPos);
 		PlayAnimationOnce(&m_arrAnim[BASIC_ATTACK]);
+		CSoundMgr::GetInstance()->PlaySoundRandom({ L"attack1_1.wav", L"attack1_2.wav" ,L"attack1_3.wav" }, m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 		m_bCanPlayAnim = false;
 		m_bMove = false;
 		SetOff();
@@ -617,14 +626,14 @@ void CKouku::StateChange()
 		m_pCurAnim = &m_arrAnim[WALK];
 		return;
 	}
-	if (m_bCanPlayAnim)
-	{
-		m_eState = WALK;
-		RotateToTargetPos(m_vTargetPos);
-		m_pIdleAnim = &m_arrAnim[WALK];
-		m_pCurAnim = &m_arrAnim[WALK];
-		return;
-	}
+	// if (m_bCanPlayAnim)
+	// {
+	// 	m_eState = WALK;
+	// 	RotateToTargetPos(m_vTargetPos);
+	// 	m_pIdleAnim = &m_arrAnim[WALK];
+	// 	m_pCurAnim = &m_arrAnim[WALK];
+	// 	return;
+	// }
 	
 
 	if (m_bCanPlayAnim)
