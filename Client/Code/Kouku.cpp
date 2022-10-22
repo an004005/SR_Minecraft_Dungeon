@@ -70,7 +70,7 @@ HRESULT CKouku::Ready_Object()
 	//cc¸é¿ª
 	m_bCantCC = true;
 
-	
+
 	m_pBossHPUI = CUIFactory::Create<CKoukuHpUI>("KoukuHPUI", L"KoukuHPUI", -1, WINCX * 0.5f, WINCY * 0.15f, 500, 25);
 	m_pBossHPUI->SetOwner(L"Äí Å©", this, m_pStat->GetMaxHP());
 	m_pBossHPUI->SetNamePos(0.47f);
@@ -176,6 +176,10 @@ void CKouku::AnimationEvent(const string& strEvent)
 	{
 		m_bIsHorrorAttack = false;
 	}
+	else if (strEvent == "Intro_End")
+	{
+		CSoundMgr::GetInstance()->PlayBGM(L"kouku_bgm_0.ogg", 1.f);
+	}
 	else if (strEvent == "AnimStopped")
 	{
 		if (m_eState == STUN)
@@ -193,6 +197,7 @@ void CKouku::AnimationEvent(const string& strEvent)
 				CEffectFactory::Create<CCloud>("Creeper_Cloud", L"Creeper_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 			}
 			CSoundMgr::GetInstance()->PlaySound(L"koukuSaton_Dead_0.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+			CSoundMgr::GetInstance()->StopSound(SOUND_BGM);
 			// CClearUI* pClearUI = CUIFactory::Create<CClearUI>("ClearUI", L"ClearUI", 0, WINCX * 0.5f, WINCY * 0.2f, WINCX* 0.4f, WINCY* 0.4f);
 			// pClearUI->SetUITexture(26);
 			m_bDelete = true;
@@ -203,7 +208,10 @@ void CKouku::AnimationEvent(const string& strEvent)
 
 _int CKouku::Update_Object(const _float& fTimeDelta)
 {
-	if (m_bDelete) return OBJ_DEAD;
+	if (m_bDelete)
+	{
+		return OBJ_DEAD;
+	}
 
 	CMonster::Update_Object(fTimeDelta);
 
