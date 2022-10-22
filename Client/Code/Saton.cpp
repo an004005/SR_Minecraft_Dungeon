@@ -479,7 +479,7 @@ void CSaton::StateChange()
 
 	if (m_bSatonIntro && m_bCanPlayAnim)
 	{
-		CSoundMgr::GetInstance()->PlaySound(L"saton_Intro_0_2_1_1.ogg", _vec3(62.5f, 20.5f, 49.4f));
+		CSoundMgr::GetInstance()->PlaySound(L"Saton_Intro_0_2_1_1.ogg", { 59.5f, 25.f ,35.5f });
 		m_eState = INTRO;
 		RotateToTargetPos(m_vTargetPos);
 		PlayAnimationOnce(&m_arrAnim[INTRO]);

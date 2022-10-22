@@ -282,5 +282,6 @@ CLogo* CLogo::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 
 void CLogo::Free()
 {
+	m_pGraphicDev->LightEnable(0, FALSE);
 	CScene::Free();
 }
