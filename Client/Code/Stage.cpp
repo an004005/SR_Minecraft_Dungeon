@@ -113,7 +113,7 @@ void CStage::LateUpdate_Scene(void)
 
 void CStage::Render_Scene(void)
 {
-	CArrowCubeMgr::GetInst().Render_Buffer(); // todo : 렌더러에서 동작하게 바꾸기
+	CArrowCubeMgr::GetInst().Render_Buffer(); // todo : ?�더?�에???�작?�게 바꾸�?
 	CDamageFontMgr::GetInstance()->Render_DamageFontMgr();
 }
 
@@ -198,7 +198,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 
 HRESULT CStage::Ready_Layer_UI()
 {
-	// 플레이어 생성하고 생성하기
+	// ?�레?�어 ?�성?�고 ?�성?�기
 	CUIFactory::Create<CUI>("HPUI", L"HPUI", -1, WINCX/2, WINCY - 50, 100, 80);
 	CUIFactory::Create<CCoolTimeUI>("PotionCoolTime", L"PotionCoolTime", -1, WINCX/2 + 90, WINCY - 40, 50, 50);
 	CUIFactory::Create<CCoolTimeUI>("RollCoolTime", L"RollCoolTime", -1, WINCX/2 + 140, WINCY - 30, 30, 30);
@@ -211,7 +211,7 @@ HRESULT CStage::Ready_Layer_UI()
 	CUIFactory::Create<CCountUI>("ArrowUI", L"ArrowUI", -1, WINCX/2 + 190, WINCY - 30, 50, 50);
 	CUIFactory::Create<CCountUI>("EmeraldUI", L"EmeraldUI", -1, WINCX/2 + 250, WINCY - 30, 20, 30);
 
-	// 플레이어 생성하고 생성하기
+	// ?�레?�어 ?�성?�고 ?�성?�기
 
 	return S_OK;
 }

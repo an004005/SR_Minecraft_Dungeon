@@ -107,7 +107,7 @@ void CMainApp::Render_MainApp(void)
 
 HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 * ppGraphicDev)
 {
-	// 디바이스 초기화
+	// ?�바?�스 초기??
 	FAILED_CHECK_RETURN(Engine::Ready_GraphicDev(g_hWnd, MODE_WIN, WINCX, WINCY, &m_pDeviceClass), E_FAIL);
 	m_pDeviceClass->AddRef();
 
@@ -157,7 +157,7 @@ HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 * ppGraphicDev)
     ImGui_ImplWin32_Init(g_hWnd);
     ImGui_ImplDX9_Init(m_pGraphicDev);
 
-	// 매니저 초기화
+	// 매니?� 초기??
 	CArrowCubeMgr::Create(m_pGraphicDev);
 	CDamageFontMgr::GetInstance()->SetGraphicDev(m_pGraphicDev);
 	CObjectStoreMgr::GetInstance();
@@ -168,8 +168,8 @@ HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 * ppGraphicDev)
 HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement** ppManagement)
 {
 
-	// scene 생성시 Management에 자동 set됩니다. scene을 보존하고 싶으면 ref 1올려서 저장하기
-	// Scene::Ready_Scene 에서 Management에 set
+	// scene ?�성??Management???�동 set?�니?? scene??보존?�고 ?�으�?ref 1?�려???�?�하�?
+	// Scene::Ready_Scene ?�서 Management??set
 	FAILED_CHECK_RETURN(Engine::Create_Management(pGraphicDev, ppManagement), E_FAIL);
 	(*ppManagement)->AddRef();
 
