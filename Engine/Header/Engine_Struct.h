@@ -63,6 +63,13 @@ namespace Engine
 	};
 	const _ulong		FVF_CUBE_NOR = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1 | D3DFVF_TEXCOORDSIZE3(0);		// D3DFVF_TEXCOORDSIZE3 : 텍스처의 UV값이 FLOAT 형 3개의 크기만큼이며, 괄호산의 숫자 0의 의미는 본래 버텍스에 텍스처 UV 값이 여러개가 올 수 있는데 그중 0번째 것이 값을 지정하겠다는 의미이다.
 
+	struct VertexCubeNormal2
+	{
+		_vec3 vPos;
+		_vec3 vNormal;
+		_vec2 vTexUV;
+	};
+	const _ulong		FVF_CUBE_NOR2 = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1 ;
 
 
 	//MapImGuiTool

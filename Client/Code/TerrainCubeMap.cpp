@@ -94,7 +94,6 @@ void CTerrainCubeMap::Render_Object(void)
 	
 	for (auto& cubeTex : vecAlphaTex)
 	{
-
 		m_pCubeTextureCom->Set_Texture(cubeTex.first);
 		cubeTex.second->Render_Buffer();
 	}

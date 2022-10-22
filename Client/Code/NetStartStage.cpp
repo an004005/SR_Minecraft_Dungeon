@@ -12,6 +12,7 @@
 #include "Zombie.h"
 #include "MapUI.h"
 #include "MapTable.h"
+#include "PlayerStartPos.h"
 
 CNetStartStage::CNetStartStage(LPDIRECT3DDEVICE9 pGraphicDev) : CScene(pGraphicDev)
 {
@@ -25,6 +26,17 @@ HRESULT CNetStartStage::Ready_Scene(void)
 {
 	if (FAILED(Engine::CScene::Ready_Scene()))
 		return E_FAIL;
+
+	D3DLIGHT9		tLightInfo;
+	ZeroMemory(&tLightInfo, sizeof(D3DLIGHT9));
+
+	tLightInfo.Type		= D3DLIGHT_DIRECTIONAL;
+	tLightInfo.Diffuse	= D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.f);
+	tLightInfo.Specular	= D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.f);
+	tLightInfo.Ambient	= D3DXCOLOR(0.6f, 0.6f, 0.45f, 1.f);
+	tLightInfo.Direction  = _vec3(0.3f, -1.f, 0.15f);
+	m_pGraphicDev->SetLight(0, &tLightInfo);
+	m_pGraphicDev->LightEnable(0, TRUE);
 
 	FAILED_CHECK_RETURN(Ready_Layer_Environment(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_GameLogic(), E_FAIL);
@@ -96,8 +108,25 @@ HRESULT CNetStartStage::Ready_Layer_GameLogic()
 	// m_pPlayer->SetName(CObjectStoreMgr::GetInstance()->GetPlayerName());
 	// m_pPlayer->PlayerSpawn();
 
-	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 2.f, 0.5f, 2.5f }, { 0.f, 0 ,0.f }, { 33.2f, 3.5f ,17.2f });
 
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 2.f, 1.f, 9.f });
+	CObjectFactory::Create<CPlayerStartPos>("PlayerPos", L"PlayerPos", matWorld)
+		->SetID(0);
+	
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 2.f, 1.f, 7.f });
+	CObjectFactory::Create<CPlayerStartPos>("PlayerPos", L"PlayerPos", matWorld)
+		->SetID(1);
+	
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 2.f, 1.f, 5.f });
+	CObjectFactory::Create<CPlayerStartPos>("PlayerPos", L"PlayerPos", matWorld)
+		->SetID(2);
+	
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 2.f, 1.f, 3.f });
+	CObjectFactory::Create<CPlayerStartPos>("PlayerPos", L"PlayerPos", matWorld)
+		->SetID(3);
+
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 2.f, 0.5f, 2.5f }, { 0.f, 0 ,0.f }, { 33.2f, 3.5f ,17.2f });
 	CObjectFactory::Create<CMapTable>("MapTable", L"MapTable", matWorld);
 
 	CEffectFactory::Create<C3DBaseTexture>("3D_Base", L"3D_Base");

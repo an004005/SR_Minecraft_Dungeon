@@ -37,7 +37,7 @@ HRESULT CTerrainRcTex::Ready_Buffer(const vector<_matrix>& _vecmatworld)
 	vector<VTXTEX> vecVtxTmps;
 	vector<INDEX32> vecIdxTmps;
 
-	_vec3 vNormal{0.2f, 0.2f, 1.f};
+	_vec3 vNormal{0.5f, 0.5f, 0.5f};
 	D3DXVec3Normalize(&vNormal, &vNormal);
 	
 	for (size_t i = 0; i < _vecmatworld.size(); ++i)

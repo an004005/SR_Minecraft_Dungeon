@@ -40,6 +40,17 @@ HRESULT CStage_Kouku::Ready_Scene(void)
 	if (FAILED(Engine::CScene::Ready_Scene()))
 		return E_FAIL;
 
+	D3DLIGHT9		tLightInfo;
+	ZeroMemory(&tLightInfo, sizeof(D3DLIGHT9));
+
+	tLightInfo.Type		= D3DLIGHT_DIRECTIONAL;
+	tLightInfo.Diffuse	= D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.f);
+	tLightInfo.Specular	= D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.f);
+	tLightInfo.Ambient	= D3DXCOLOR(0.6f, 0.6f, 0.3f, 1.f);
+	tLightInfo.Direction  = _vec3(0.3f, -1.f, 0.15f);
+	m_pGraphicDev->SetLight(0, &tLightInfo);
+	m_pGraphicDev->LightEnable(0, TRUE);
+
 	FAILED_CHECK_RETURN(Ready_Layer_Environment(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_GameLogic(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_UI(), E_FAIL);

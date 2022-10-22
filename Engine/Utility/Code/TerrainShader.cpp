@@ -123,14 +123,6 @@ HRESULT CTerrainShader::Ready_Buffer(const wstring& _shaderfile, const _ulong& d
 
 void CTerrainShader::Render_Buffer()
 {
-
-	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-	m_pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	m_pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0xcc);
-	m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-
 	m_iPlayOnFrameCnt++;
 
 	if (m_iPlayOnFrameCnt == m_iFrameCnt)
@@ -195,10 +187,6 @@ void CTerrainShader::Render_Buffer()
 		}
 	}
 	m_pEffect->End();
-
-	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-	m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
 }
 
 CTerrainShader* CTerrainShader::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& _shaderfile, const _ulong& dwCntX, const _ulong& dwCntZ, const _ulong& dwVtxItv,
