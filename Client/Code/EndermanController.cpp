@@ -20,7 +20,6 @@ _int CEndermanController::Update_Component(const _float & fTimeDelta)
 	m_fCurAttackCollTime += fTimeDelta;
 	m_fCurClockingCollTime += fTimeDelta;
 	m_fCurArmAttackCollTime += fTimeDelta;
-	m_fCurPistolCollTime += fTimeDelta;
 
 	CEnderman* pEnderman = dynamic_cast<CEnderman*>(m_pOwner);
 	NULL_CHECK_RETURN(pEnderman, 0);
@@ -65,13 +64,6 @@ _int CEndermanController::Update_Component(const _float & fTimeDelta)
 	{
 		pEnderman->DoArmAttack();
 		m_fCurArmAttackCollTime = 0.f;
-		return 0;
-	}
-
-	if (m_fCurPistolCollTime > m_fPistolCollTime)
-	{
-		pEnderman->DoPistol();
-		m_fCurPistolCollTime = 0.f;
 		return 0;
 	}
 

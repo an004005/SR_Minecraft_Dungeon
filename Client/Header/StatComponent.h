@@ -87,7 +87,7 @@ private:
 
 	_bool m_bStiffen = false;
 	_float m_fStiffeTime = 10.2f;
-	_float m_fCurStiffeTime = 0.1f;
+	_float m_fCurStiffeTime = 0.2f;
 
 	_vec3 m_vKnockBackVelocity = CGameUtilMgr::s_vZero;
 
