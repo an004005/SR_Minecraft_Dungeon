@@ -23,4 +23,7 @@ private:
 	_float m_fAge = 0.f;
 	_bool m_bEnd = false;
 
+
+	_float m_fCurTrailTime = 0.15f;
+	_float m_fTrailTime = 0.15f;
 };

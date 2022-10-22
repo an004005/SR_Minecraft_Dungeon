@@ -363,6 +363,7 @@ void CSkeletalCube::LoadSkeletal(wstring wstrPath)
 		IM_LOG(tmp.c_str());
 		return;
 	}
+	m_wstrPath = wstrPath;
 
 	for (auto& child : m_pRootPart->vecChild)
 	{
