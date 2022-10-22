@@ -35,6 +35,8 @@ public:
 	_int		Update_Scene(const _float& fTimeDelta);
 	void		LateUpdate_Scene(void);
 	void		Render_Scene(LPDIRECT3DDEVICE9 pGraphicDev);
+
+	CScene* GetScene() { return m_pScene; }
 	
 private:
 	CScene*		m_pScene = nullptr;

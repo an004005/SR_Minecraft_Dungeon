@@ -1,5 +1,7 @@
 #include "Texture.h"
 
+#include "Shader.h"
+
 
 CTexture::CTexture(LPDIRECT3DDEVICE9 pGraphicDev)
 	: CComponent(pGraphicDev)
@@ -61,6 +63,14 @@ void CTexture::Set_Texture(const _uint& iIndex)
 		return;
 
 	m_pGraphicDev->SetTexture(0, m_vecTexture[iIndex]);
+}
+
+void CTexture::Set_Texture(CShader * pShaderCom, D3DXHANDLE hHandle, const _uint & iIndex)
+{
+	if (nullptr == pShaderCom)
+		return;
+
+	pShaderCom->Set_Texture(hHandle, m_vecTexture[iIndex]);
 }
 
 CTexture* CTexture::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _tchar* pPath, TEXTUREID eType, const _uint& iCnt)

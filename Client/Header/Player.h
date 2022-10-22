@@ -124,6 +124,7 @@ public:
 	void SetName(const string& strName) {m_strName = strName;}
 
 	_float GetYawToCursor();
+	string GetName() { return m_strName;}
 
 	static _bool s_bDropDead;
 private:
@@ -184,6 +185,8 @@ protected:
 	_bool m_bLaser = false;
 	_float m_fLaserTime = 2.f;
 	_float m_fCurLaserTime = 0.f;
+
+
 
 
 	_vec3 m_vArrowLookAt; // for remote player

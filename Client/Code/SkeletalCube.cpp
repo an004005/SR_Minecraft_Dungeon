@@ -2,12 +2,20 @@
 #include "SkeletalCube.h"
 #include "GameUtilMgr.h"
 #include <mutex>
+#include "StatComponent.h"
 
 string CSkeletalCube::s_strRoot = "root";
 map<wstring, CubeAnimFrame> CubeAnimFrame::s_mapFrame;
 
 CSkeletalCube::CSkeletalCube(LPDIRECT3DDEVICE9 pGraphicDev): CGameObject(pGraphicDev)
 {
+	ZeroMemory(&m_Material, sizeof(D3DMATERIAL9));
+
+	m_Material.Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	m_Material.Specular = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	m_Material.Ambient = D3DXCOLOR(0.1f, 0.1f, 0.1f, 1.f);
+	m_Material.Emissive = D3DXCOLOR(0.f, 0.f, 0.f, 1.f);
+	m_Material.Power = 0.f;
 }
 
 CSkeletalCube::~CSkeletalCube()
@@ -21,14 +29,14 @@ HRESULT CSkeletalCube::Ready_Object()
 	// root
 	m_pRootPart = new SkeletalPart;
 	// 루트 부분 수정하지 말기
-
+	m_pShaderCom = Add_Component<CShader>(L"Proto_CubeShaderCom", L"Proto_CubeShaderCom", ID_DYNAMIC);
 	m_pRootPart->pTrans = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 
 	m_pRootPart->strName = s_strRoot;
 	m_mapParts.insert({s_strRoot, m_pRootPart});
 	m_pRootPart->strTransProto = L"Proto_TransformCom";
 	m_pRootPart->strTransCom = L"Proto_TransformCom";
-
+	m_fTime = 0.f;
 	return S_OK;
 }
 
@@ -37,7 +45,6 @@ _int CSkeletalCube::Update_Object(const _float& fTimeDelta)
 	CGameObject::Update_Object(fTimeDelta);
 
 	AnimFrameConsume(fTimeDelta);
-
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
 
@@ -59,13 +66,43 @@ void CSkeletalCube::Render_Object()
  //   m_pGraphicDev->SetRenderState(D3DRS_ALPHAREF, 0xcc);
  //   m_pGraphicDev->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
+	_matrix ViewMatrix, ProjMatrix;
+
+	m_pGraphicDev->GetTransform(D3DTS_VIEW, &ViewMatrix);
+	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &ProjMatrix);
+
+	m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix, &ViewMatrix), sizeof(_matrix));
+	m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix, &ProjMatrix), sizeof(_matrix));
+
+	m_pShaderCom->Set_Bool("g_isHit", false);
+	m_pShaderCom->Set_Bool("g_isDead", false);
+
+	for (auto& com : m_mapComponent[ID_DYNAMIC])
+	{
+		if (CStatComponent* pStat = dynamic_cast<CStatComponent*>(com.second))
+		{
+			m_pShaderCom->Set_Bool("g_isHit", pStat->IsDamaged());
+			m_pShaderCom->Set_Bool("g_isDead", pStat->IsDead());
+			m_bRenderMachine = !pStat->IsDamaged() && !pStat->IsDead();
+			if (pStat->IsDead())
+			{
+				m_fTime += CGameUtilMgr::s_fTimeDelta * 0.33f;
+				m_pShaderCom->Set_RawValue("g_Time", &m_fTime, sizeof(_float));
+			}
+			break;
+		}
+	}
+
+	// m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, TRUE);
+
+	m_pGraphicDev->SetMaterial(&m_Material);
 	m_pRootPart->matParents = m_pRootPart->pTrans->m_matWorld;
 	for (const auto& child : m_pRootPart->vecChild)
 	{
-	
 		RenderObjectRecur(child);
-		
 	}
+
+	// m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, FALSE);
 
    // m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
    // m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
@@ -73,16 +110,31 @@ void CSkeletalCube::Render_Object()
 
 void CSkeletalCube::RenderObjectRecur(SkeletalPart* pPart)
 {
-	const _matrix matPartWorld = pPart->GetWorldMat();
-	m_pGraphicDev->SetTransform(D3DTS_WORLD, &matPartWorld);
-	if (pPart->strName == "bow")
+	_matrix matPartWorld = pPart->GetWorldMat();
+
+	if (dynamic_cast<CVoxelTex*>(pPart->pBuf) || m_bRenderMachine)
 	{
-		int a= 3;
+
+		m_pGraphicDev->SetTransform(D3DTS_WORLD, &matPartWorld);
+		if (pPart->pTex)
+			pPart->pTex->Set_Texture(pPart->iTexIdx);
+		if (pPart->pBuf)
+			pPart->pBuf->Render_Buffer();
 	}
-	if (pPart->pTex)
-		pPart->pTex->Set_Texture(pPart->iTexIdx);
-	if (pPart->pBuf)
-		pPart->pBuf->Render_Buffer();
+	else
+	{
+		m_pShaderCom->Set_RawValue("g_WorldMatrix", D3DXMatrixTranspose(&matPartWorld, &matPartWorld), sizeof(_matrix));
+		if (pPart->pTex)
+		{
+			pPart->pTex->Set_Texture(m_pShaderCom, "g_DefaultTexture", pPart->iTexIdx);
+		}
+		if (pPart->pBuf)
+		{
+			m_pShaderCom->Begin_Shader(0);
+			pPart->pBuf->Render_Buffer();
+			m_pShaderCom->End_Shader();
+		}
+	}
 
 	for (const auto& child : pPart->vecChild)
 		RenderObjectRecur(child);

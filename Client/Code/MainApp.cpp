@@ -8,6 +8,7 @@
 #include "TerrainCubeMap.h"
 #include "Stage.h"
 #include "time.h"
+#include "Shader.h"
 #include "ArrowCubeMgr.h"
 #include "PlayerController.h"
 #include "StatComponent.h"
@@ -171,11 +172,13 @@ HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement
 	// Scene::Ready_Scene ¿¡¼­ Management¿¡ set
 	FAILED_CHECK_RETURN(Engine::Create_Management(pGraphicDev, ppManagement), E_FAIL);
 	(*ppManagement)->AddRef();
-	CSceneFactory::LoadScene("Loading1", "Animation Tool", true ,0);
-	// CSceneFactory::LoadScene("Loading1", "Stage_Default", true, 0);
-	
-	
-	 
+
+	  // CSceneFactory::LoadScene("Loading1", "Stage_Default", true ,0);
+	//CSceneFactory::LoadScene("Loading1", "Logo", true ,500);
+	// CSceneFactory::LoadScene("Loading1", "NetStage_Start", true ,0);
+	CSceneFactory::LoadScene("Loading1", "Animation Tool", true, 0);
+
+
 
 	return S_OK;
 }
@@ -200,7 +203,7 @@ HRESULT CMainApp::Ready_Proto()
 
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CubeTexCom", Engine::CCubeTex::Create(m_pGraphicDev)), E_FAIL);
 
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CubeTexture", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/SkyBox/burger%d.dds", TEX_CUBE, 4)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CubeTexture", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/SkyBox/Sky_Box_%d.dds", TEX_CUBE, 2)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_MinecraftCubeTexture", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/MinscraftCubeTile/CubeTile_%d.dds", TEX_CUBE, 194)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_TransformCom", Engine::CTransform::Create()), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_BossCubeTile", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/BossCubeTile/boss_%d.dds", TEX_CUBE, 17)), E_FAIL);
@@ -220,6 +223,8 @@ HRESULT CMainApp::Ready_Proto()
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_LazerCircleTex", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/JJH/Circle.png", TEX_NORMAL)), E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Stun", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/JJH/Stun.png", TEX_NORMAL)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Fascinated", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/JJH/Fascinate.png", TEX_NORMAL)), E_FAIL);
+
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Heal", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/JJH/Heal_Circle1.png", TEX_NORMAL)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Attack_Circle", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/JJH/CircleTest.png", TEX_NORMAL)), E_FAIL);
 
@@ -229,7 +234,8 @@ HRESULT CMainApp::Ready_Proto()
 
 	// FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_RcShaderCom", CRcShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/UVAnimation.fx", _vec2(0.0f, 0.0f), _vec2(0.25f, 0.0f), _vec2(0.25f, 0.25f), _vec2(0.0f, 0.25f))), E_FAIL);
 
-
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CubeShaderCom", CShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/Shader_Player.hlsl")), E_FAIL);
+	
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_RcShaderCom", CRcShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/UVAnimation.fx",_vec2(0.0f,0.0f),_vec2(0.25f,0.f),_vec2(0.25f,0.25f),_vec2(0.0f,0.25f))), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_ShockPowderCloudCom", CRcShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/ShockPowder_Cloud.fx",_vec2(0.0f, 0.0f), _vec2(0.25f, 0.f), _vec2(0.25f, 0.25f), _vec2(0.0f, 0.25f))), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CreeperExCloudCom", CRcShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/CreeperEx_Cloud.fx", _vec2(0.0f, 0.0f), _vec2(0.25f, 0.f), _vec2(0.25f, 0.25f), _vec2(0.0f, 0.25f))), E_FAIL);
@@ -242,6 +248,7 @@ HRESULT CMainApp::Ready_Proto()
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_SphereCom_L", CSphereMesh::Create(m_pGraphicDev, L"../Bin/Resource/Shader/TextureMapping.fx", L"../Bin/Resource/Texture/JJH/YellowSphere.png")), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_SphereCom_M", CSphereMesh::Create(m_pGraphicDev, L"../Bin/Resource/Shader/TextureMapping.fx", L"../Bin/Resource/Texture/JJH/YellowSphere.png")), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_StunCom", CRcShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/UVAnimation.fx", _vec2(0.0f, 0.0f), _vec2(1.f, 0.0f), _vec2(1.f, 1.0f), _vec2(0.0f, 1.f))), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_FaciCom", CRcShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/UVAnimation_Faci.fx", _vec2(0.0f, 0.0f), _vec2(1.f, 0.0f), _vec2(1.f, 1.0f), _vec2(0.0f, 1.f))), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_HealCom", CRcShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/UVAnimation_Crack.fx", _vec2(0.0f, 0.0f), _vec2(1.f, 0.0f), _vec2(1.f, 1.0f), _vec2(0.0f, 1.f))), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_BlueCom", CRcShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/UVAnimation_BlueCircle.fx", _vec2(0.0f, 0.0f), _vec2(1.f, 0.0f), _vec2(1.f, 1.0f), _vec2(0.0f, 1.f))), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Ready_Range_CircleCom", CRcShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/Attack_Range_Circle_0.fx", _vec2(0.0f, 0.0f), _vec2(1.f, 0.0f), _vec2(1.f, 1.0f), _vec2(0.0f, 1.f))), E_FAIL);
@@ -297,12 +304,14 @@ HRESULT CMainApp::Ready_Proto()
 	// remote controller
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_PlayerRemoteController", CPlayerRemoteController::Create()), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_ZombieRemoteController", CZombieRemoteController::Create()), E_FAIL);
-
+	// FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_KoukuController", CKoukuController::Create()), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_SatonRemoteController", CSatonRemoteController::Create()), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_KoukuRemoteController", CKoukuRemoteController::Create()), E_FAIL);
 
 
 	// UI
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_RcTexCom", CRcTex::Create(m_pGraphicDev)), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_UI_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/UI/UI_%d.png", TEX_NORMAL, 39)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_UI_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/UI/UI_%d.png", TEX_NORMAL, 40)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_InventoryUI_Texture", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/UI/InventoryUI/UI_%d.png", TEX_NORMAL, 21)), E_FAIL);
 
 	// FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Loading", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Loading/loading%d.png", TEX_NORMAL, 1)), E_FAIL);
@@ -321,6 +330,12 @@ HRESULT CMainApp::Ready_Proto()
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_BirdsWhiteTextCom", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Object/BirdsWhite/BirdsWhite_%d.png", TEX_NORMAL, 5)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_BirdsBrownTextCom", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/Object/BirdsBrown/BirdsBrown_%d.png", TEX_NORMAL, 5)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_Totem", CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/SingleTex/Totem.png", TEX_NORMAL)), E_FAIL);
+
+
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_SkySphere", CShereBuffer::Create(m_pGraphicDev, 20, 20)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_SkySphereShaderCom", CShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/Shader_Sky.hlsl")), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_SkySphereTexture", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/SkySphere/sky_%d.png", TEX_NORMAL, 3)), E_FAIL);
+
 
 	return S_OK;
 }
@@ -344,6 +359,7 @@ void CMainApp::Free(void)
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
 
+	CClientServiceMgr::DestroyInstance();
 	CObjectStoreMgr::DestroyInstance();
 	CArrowCubeMgr::DeleteInst();
 	CDamageFontMgr::DestroyInstance();

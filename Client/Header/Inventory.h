@@ -43,7 +43,7 @@ public:
 
 	void UseArrow(_uint iArrowCnt) { m_iArrow -= iArrowCnt;}
 	void SetOwner(CPlayer* pOwner) { m_pOwner = pOwner; NULL_CHECK(m_pOwner);}
-
+	void SetArrow(_uint iArrowCnt) { m_iArrow = iArrowCnt; }
 	void AddDefaultItems();
 
 
@@ -76,6 +76,12 @@ public:
 	void CreateClickFrame();
 	void CreateCollFrame(CEquipItem* pCurCollItem);
 
+	void RefreshInventory()
+	{
+		for (auto& e : m_arrPreEquipProtocol)
+			e.Clear();
+		m_bEquipChange = true;
+	}
 protected:
 	// for network
 	void GetProtocolFromEquip(OUT Protocol::EquipState& state, CEquipItem* pEquipItem);

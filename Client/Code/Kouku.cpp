@@ -8,6 +8,7 @@
 #include "StaticCamera.h"
 #include "Weapon.h"
 #include "KoukuHpUI.h"
+#include "ServerPacketHandler.h"
 
 CKouku::CKouku(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
 {
@@ -49,8 +50,18 @@ HRESULT CKouku::Ready_Object()
 
 	m_pStat->SetMaxHP(1000);
 
-	CController* pController = Add_Component<CKoukuController>(L"Proto_KoukuController", L"Proto_KoukuController", ID_DYNAMIC);
-	pController->SetOwner(this);
+
+	if (m_bRemote)
+	{
+		CController* pController = Add_Component<CKoukuRemoteController>(L"Proto_KoukuRemoteController", L"Proto_KoukuRemoteController", ID_DYNAMIC);
+		pController->SetOwner(this);
+	}
+	else
+	{
+		CController* pController = Add_Component<CKoukuController>(L"Proto_KoukuController", L"Proto_KoukuController", ID_DYNAMIC);
+		pController->SetOwner(this);
+	}
+
 	m_fCurTime = 2.f;
 	m_fTime = 1.1f;
 	//cc¸é¿ª
@@ -361,8 +372,7 @@ void CKouku::LateUpdate_Object()
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
 				->TakeDamage(15, FromPos, this, DT_KNOCK_BACK);
 		}
-		CEffectFactory::Create<CUVCircle>("Kouku_Explosion", L"Kouku_Explosion",
-			_vec3(m_vKoukuHammerPos.x, m_vKoukuHammerPos.y + 0.2f, m_vKoukuHammerPos.z));
+		
 		m_bIsBasicAttackColl = false;
 	}
 
@@ -379,7 +389,8 @@ void CKouku::LateUpdate_Object()
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
 				->TakeDamage(20, KoukuPos, this, DT_KNOCK_BACK);
 		}
-
+		CEffectFactory::Create<CUVCircle>("Kouku_Explosion", L"Kouku_Explosion",
+			_vec3(m_vKoukuHammerPos.x, m_vKoukuHammerPos.y + 0.2f, m_vKoukuHammerPos.z));
 		m_bIsDoubleHammerColl_1 = false;
 	}
 
@@ -445,9 +456,17 @@ void CKouku::Kouku_Stun_Success()
 	{
 		if (m_bCountable)
 		{
-			m_pStat->TakeDamage(0, KoukuPos, this, DT_STUN);
-			Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
-				->PlayShake(0.1f, 1.f);
+			// m_pStat->TakeDamage(0, KoukuPos, this, DT_STUN);
+			// Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+			// 	->PlayShake(0.1f, 1.f);
+			SetKoukuCounter();
+
+			if (g_bOnline)
+			{
+				Protocol::C_KOUKU_COUNTER counterPkt;
+				CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(counterPkt));	
+			}
+
 			m_bCountable = false;
 		}
 	}
@@ -455,14 +474,23 @@ void CKouku::Kouku_Stun_Success()
 
 }
 
+void CKouku::SetKoukuCounter()
+{
+	const _vec3& KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+	m_pStat->TakeDamage(0, KoukuPos, this, DT_STUN);
+	Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+		->PlayShake(0.1f, 1.f);
+}
+
 void CKouku::Free()
 {
 	CMonster::Free();
 }
 
-CKouku* CKouku::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath)
+CKouku* CKouku::Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath, _bool bRemote)
 {
 	CKouku* pInstance = new CKouku(pGraphicDev);
+	pInstance->m_bRemote = bRemote;
 
 	if (FAILED(pInstance->Ready_Object()))
 	{

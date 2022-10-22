@@ -6,9 +6,11 @@
 #include "Player.h"
 #include "ObjectStoreMgr.h"
 #include "Trigger.h"
-#include "Zombie.h"
 #include "MapUI.h"
 #include "MapTable.h"
+#include "CoolTimeUI.h"
+#include "DamageFontMgr.h"
+#include "ArrowCubeMgr.h"
 
 CStartStage::CStartStage(LPDIRECT3DDEVICE9 pGraphicDev) : CScene(pGraphicDev)
 {
@@ -32,6 +34,9 @@ HRESULT CStartStage::Ready_Scene(void)
 
 _int CStartStage::Update_Scene(const _float & fTimeDelta)
 {
+	// 임시 조치
+
+
 	CSoundMgr::GetInstance()->Update_Listener(LAYER_ENV, L"StaticCamera");
 	return Engine::CScene::Update_Scene(fTimeDelta);
 }
@@ -39,10 +44,16 @@ _int CStartStage::Update_Scene(const _float & fTimeDelta)
 void CStartStage::LateUpdate_Scene(void)
 {
 	Engine::CScene::LateUpdate_Scene();
+	if (DIKeyDown(DIK_0))
+	{
+		CSceneFactory::LoadScene("Loading1", "NetStage_Start", true ,500);
+	}
 }
 
 void CStartStage::Render_Scene(void)
 {
+	CArrowCubeMgr::GetInst().Render_Buffer(); 
+	CDamageFontMgr::GetInstance()->Render_DamageFontMgr();
 }
 
 HRESULT CStartStage::Ready_Layer_Environment()
@@ -66,14 +77,7 @@ HRESULT CStartStage::Ready_Layer_GameLogic()
 {
 	_matrix matWorld;
 
-	// CObjectFactory::Create<CBox>("Box", L"Box" , { 2.f, 7.5f, 6.f });
-	//CObjectFactory::Create<CBox>("Box", L"Box2", { 4.f, 9.f, 15.f });
-	// CObjectFactory::Create<CDynamite>("Dynamite", L"Dynamite");
-
-
-	
-
-	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 30.f, 2.f ,10.f });
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 2.f, 1.f, 7.f });
 
 	switch (CObjectStoreMgr::GetInstance()->GetPlayerSkin())
 	{
@@ -97,8 +101,15 @@ HRESULT CStartStage::Ready_Layer_GameLogic()
 	m_pPlayer->PlayerSpawn();
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 2.f, 0.5f, 2.5f }, { 0.f, 0 ,0.f }, { 33.2f, 3.5f ,17.2f });
-
 	CObjectFactory::Create<CMapTable>("MapTable", L"MapTable", matWorld);
+
+
+	CEffectFactory::Create<C3DBaseTexture>("3D_Base", L"3D_Base");
+	CEffectFactory::Create<CAttack_P>("Attack_Basic", L"Attack_Basic");
+	CEffectFactory::Create<CFireWork_Fuze>("FireWork_Fuze", L"FireWork_Fuze");
+	CEffectFactory::Create<CFireWork>("FireWork", L"FireWork");
+	CEffectFactory::Create<CSpeedBoots>("Speed_Boots", L"Speed_Boots");
+	CEffectFactory::Create<CSpeedBoots_Particle>("Speed_Boots_Particle", L"Speed_Boots_Particle");
 	return S_OK;
 }
 
@@ -111,6 +122,18 @@ HRESULT CStartStage::Ready_Layer_UI()
 	m_pMapUI = CUIFactory::Create<CMapUI>("MapUI", L"MapUI", 0, WINCX * 0.5f, WINCY * 0.5f, WINCX, WINCY);
 	m_pMapUI->Close();
 	
+	// 플레이어 생성하고 생성하기
+	CUIFactory::Create<CUI>("HPUI", L"HPUI", -1, WINCX / 2, WINCY - 50, 100, 80);
+	CUIFactory::Create<CCoolTimeUI>("PotionCoolTime", L"PotionCoolTime", -1, WINCX / 2 + 90, WINCY - 40, 50, 50);
+	CUIFactory::Create<CCoolTimeUI>("RollCoolTime", L"RollCoolTime", -1, WINCX / 2 + 140, WINCY - 30, 30, 30);
+
+
+	CUIFactory::Create<CCoolTimeUI>("Legacy1CoolTime", L"Legacy1CoolTime", -1, WINCX / 2 - 210, WINCY - 40, 50, 50);
+	CUIFactory::Create<CCoolTimeUI>("Legacy2CoolTime", L"Legacy2CoolTime", -1, WINCX / 2 - 150, WINCY - 40, 50, 50);
+	CUIFactory::Create<CCoolTimeUI>("Legacy3CoolTime", L"Legacy3CoolTime", -1, WINCX / 2 - 90, WINCY - 40, 50, 50);
+
+	CUIFactory::Create<CCountUI>("ArrowUI", L"ArrowUI", -1, WINCX / 2 + 190, WINCY - 30, 50, 50);
+	CUIFactory::Create<CCountUI>("EmeraldUI", L"EmeraldUI", -1, WINCX / 2 + 250, WINCY - 30, 20, 30);
 	return S_OK;
 }
 

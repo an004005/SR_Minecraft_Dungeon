@@ -176,6 +176,5 @@ void CAxe::Collision()
 
 void CAxe::Free()
 {
-	m_pItemUI->SetDelete();
 	CWeapon::Free();
 }

@@ -45,3 +45,9 @@ void CEquipItem::Free()
 	CItem::Free();
 }
 
+void CEquipItem::SetDelete()
+{
+	CItem::SetDelete();
+	m_pItemUI->SetDelete();
+}
+

@@ -32,7 +32,7 @@ HRESULT CLeaper::Ready_Object()
 	m_eState = State::IDLE;
 	m_fSpeed = 2.5f;
 
-	m_pStat->SetMaxHP(500);
+	m_pStat->SetMaxHP(1200);
 
 	m_pStat->SetHurtSound({
 	L"DLC_Mob_Leaper_GetHit1.ogg",
@@ -93,6 +93,7 @@ void CLeaper::AnimationEvent(const string & strEvent)
 	}
 	else if (strEvent == "AnimStopped")
 	{
+		CSoundMgr::GetInstance()->StopAll();
 		m_bDelete = true;
 	}
 	else if (strEvent == "Step")
@@ -115,12 +116,14 @@ _int CLeaper::Update_Object(const _float & fTimeDelta)
 	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
 		m_bCanPlayAnim = true;
 
+#ifdef  _DEBUG
 	IM_BEGIN("LOGO");
 
 	_vec3 vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
 	ImGui::Text("%f, %f, %f", vPos.x, vPos.y, vPos.z);
 
 	IM_END;
+#endif
 
 	// 상태 변경 조건 설정
 	StateChange();
@@ -158,14 +161,14 @@ void CLeaper::LateUpdate_Object()
 	if (m_bAttackFire)
 	{
 		set<CGameObject*> setObj;
-		_vec3 vAttackPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + (m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 2.f);
-		Engine::GetOverlappedObject(setObj, vAttackPos, 2.f);
+		_vec3 vAttackPos = m_pRootPart->pTrans->m_vInfo[INFO_POS] + (m_pRootPart->pTrans->m_vInfo[INFO_LOOK] * 1.5f);
+		Engine::GetOverlappedObject(setObj, vAttackPos, 2.5f);
 
 		for (auto& obj : setObj)
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(20, m_pRootPart->pTrans->m_vInfo[INFO_POS], this);
+				->TakeDamage(40, m_pRootPart->pTrans->m_vInfo[INFO_POS], this);
 		}
 
 
@@ -186,7 +189,7 @@ void CLeaper::LateUpdate_Object()
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(50, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_KNOCK_BACK);
+				->TakeDamage(70, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_KNOCK_BACK);
 		}
 
 		for (int j = 0; j < 10; j++)

@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00. Client", "00. Client", "{611D668D-6E69-46A6-89A5-AE85B8F2A3A8}"
+	ProjectSection(SolutionItems) = preProject
+		Client\Bin\Resource\Shader\Shader_Player.hlsl = Client\Bin\Resource\Shader\Shader_Player.hlsl
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01. Engine", "01. Engine", "{E2DB8607-E2CD-4028-8BAF-953E79263A6D}"
 EndProject

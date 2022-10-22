@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Header\MapUI.h"
 #include "AbstFactory.h"
+#include "ServerPacketHandler.h"
 
 CMapUI::CMapUI(LPDIRECT3DDEVICE9 pGraphicDev) : CUI(pGraphicDev)
 {
@@ -252,9 +253,15 @@ void CMapUI::MouseEvent(_matrix & matWorld)
 	}
 	else if (matWorld == m_matWorld[(_int)MapUIWorld::KoukuWindowEnter])
 	{
-		if (PtInRect(&rcUI, ptMouse))
+		if (PtInRect(&rcUI, ptMouse) && MouseKeyDown(DIM_LB))
 		{
-			//ÄíÅ© ¾ÀÀ¸·Î ÀüÈ¯
+			if (g_bOnline)
+			{
+				Protocol::C_PLAYER_MOVE_STAGE moveStage;
+				moveStage.set_loadingtag("KoukuLoading");
+				moveStage.set_stagetag("Stage_Kouku");
+				CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(moveStage));	
+			}
 		}
 		
 	}

@@ -42,6 +42,10 @@ void CCamAnimation::AnimationEvent(const string& strEvent)
 	{
 		Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player")->PlayerSpawn();
 	}
+	else if (strEvent == "RedStoneBossStop")
+	{
+
+	}
 }
 
 void CCamAnimation::Render_Object()

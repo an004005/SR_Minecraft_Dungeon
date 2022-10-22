@@ -81,9 +81,17 @@ void CZombie::AnimationEvent(const string& strEvent)
 
 _int CZombie::Update_Object(const _float& fTimeDelta)
 {
-	if (m_bDelete) return OBJ_DEAD;
+
+
+	if (m_bDelete)
+	{
+
+		return OBJ_DEAD;
+	}
 
 	CMonster::Update_Object(fTimeDelta);
+
+
 
 	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
 		m_bCanPlayAnim = true;
@@ -126,7 +134,7 @@ void CZombie::LateUpdate_Object()
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				       ->TakeDamage(1, m_pRootPart->pTrans->m_vInfo[INFO_POS], this);
+				       ->TakeDamage(20, m_pRootPart->pTrans->m_vInfo[INFO_POS], this);
 		}
 		DEBUG_SPHERE(vAttackPos, 1.f, 1.f);
 		IM_LOG("Fire");
@@ -195,6 +203,7 @@ void CZombie::StateChange()
 		
 		return;
 	}
+
 
 	if (m_bAttack && m_bCanPlayAnim)
 	{

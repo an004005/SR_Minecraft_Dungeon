@@ -32,6 +32,7 @@ public:
 
 private:
 	virtual void	Free(void);
+	void CreateTrigger();
 	_bool m_bPlayerAlive = false;
 	CPlayerUI* m_pPlayerUI = nullptr;
 	CPlayer* m_pPlayer = nullptr;

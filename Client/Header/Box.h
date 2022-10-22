@@ -33,5 +33,5 @@ private:
 private:
 	//template<class T>
 	void InitFunction();
-	std::function<void(const _vec3)> m_fCreateItem[8];
+	std::function<void(const _vec3)> m_fCreateItem[4];
 };

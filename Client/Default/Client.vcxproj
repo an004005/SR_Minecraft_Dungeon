@@ -106,6 +106,14 @@
       <LargeAddressAware>true</LargeAddressAware>
       <AdditionalLibraryDirectories>../../Reference/Library</AdditionalLibraryDirectories>
     </Link>
+    <FxCompile />
+    <FxCompile />
+    <FxCompile>
+      <ShaderType>Effect</ShaderType>
+    </FxCompile>
+    <FxCompile>
+      <ShaderModel>2.0</ShaderModel>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -121,6 +129,12 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d9.lib;d3dx9.lib;dxguid.lib;System.lib;Utility.lib;libprotobufd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <FxCompile>
+      <ShaderType>Effect</ShaderType>
+    </FxCompile>
+    <FxCompile>
+      <ShaderModel>2.0</ShaderModel>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -167,6 +181,7 @@
     <ClInclude Include="..\Header\AbstFactory.h" />
     <ClInclude Include="..\Header\BatchTool.h" />
     <ClInclude Include="..\Header\BossHPUI.h" />
+    <ClInclude Include="..\Header\BossStage.h" />
     <ClInclude Include="..\Header\Cat_Attack.h" />
     <ClInclude Include="..\Header\ClearUI.h" />
     <ClInclude Include="..\Header\ClientServiceMgr.h" />
@@ -176,18 +191,21 @@
     <ClInclude Include="..\Header\Enderman.h" />
     <ClInclude Include="..\Header\EndermanController.h" />
     <ClInclude Include="..\Header\EditBox.h" />
+    <ClInclude Include="..\Header\Enum.pb.h" />
     <ClInclude Include="..\Header\FireworksArrow.h" />
     <ClInclude Include="..\Header\CamAnimation.h" />
     <ClInclude Include="..\Header\CameraTool.h" />
     <ClInclude Include="..\Header\InventoryUI.h" />
     <ClInclude Include="..\Header\ItemTexUI.h" />
     <ClInclude Include="..\Header\KoukuHpUI.h" />
+    <ClInclude Include="..\Header\KoukuLoading.h" />
     <ClInclude Include="..\Header\LaserShotRune.h" />
     <ClInclude Include="..\Header\Leaper.h" />
     <ClInclude Include="..\Header\LeaperController.h" />
     <ClInclude Include="..\Header\Logo.h" />
     <ClInclude Include="..\Header\MapUI.h" />
     <ClInclude Include="..\Header\MultiShotRune.h" />
+    <ClInclude Include="..\Header\NetStartStage.h" />
     <ClInclude Include="..\Header\PlayerStartPos.h" />
     <ClInclude Include="..\Header\Kouku.h" />
     <ClInclude Include="..\Header\KoukuController.h" />
@@ -250,6 +268,7 @@
     <ClInclude Include="..\Header\SkeletalCube.h" />
     <ClInclude Include="..\Header\Skeleton.h" />
     <ClInclude Include="..\Header\SkeletonController.h" />
+    <ClInclude Include="..\Header\SkyBox.h" />
     <ClInclude Include="..\Header\SoundMgr.h" />
     <ClInclude Include="..\Header\SphereEffect.h" />
     <ClInclude Include="..\Header\Stage.h" />
@@ -300,6 +319,7 @@
     <ClCompile Include="..\Code\AbstFactory.cpp" />
     <ClCompile Include="..\Code\BatchTool.cpp" />
     <ClCompile Include="..\Code\BossHPUI.cpp" />
+    <ClCompile Include="..\Code\BossStage.cpp" />
     <ClCompile Include="..\Code\Cat_Attack.cpp" />
     <ClCompile Include="..\Code\ClearUI.cpp" />
     <ClCompile Include="..\Code\Cat2.cpp" />
@@ -319,12 +339,14 @@
     <ClCompile Include="..\Code\InventoryUI.cpp" />
     <ClCompile Include="..\Code\ItemTexUI.cpp" />
     <ClCompile Include="..\Code\KoukuHpUI.cpp" />
+    <ClCompile Include="..\Code\KoukuLoading.cpp" />
     <ClCompile Include="..\Code\LaserShotRune.cpp" />
     <ClCompile Include="..\Code\Leaper.cpp" />
     <ClCompile Include="..\Code\LeaperController.cpp" />
     <ClCompile Include="..\Code\Logo.cpp" />
     <ClCompile Include="..\Code\MapUI.cpp" />
     <ClCompile Include="..\Code\MultiShotRune.cpp" />
+    <ClCompile Include="..\Code\NetStartStage.cpp" />
     <ClCompile Include="..\Code\PlayerStartPos.cpp" />
     <ClCompile Include="..\Code\Kouku.cpp" />
     <ClCompile Include="..\Code\KoukuController.cpp" />
@@ -389,6 +411,7 @@
     <ClCompile Include="..\Code\SkeletalCube.cpp" />
     <ClCompile Include="..\Code\Skeleton.cpp" />
     <ClCompile Include="..\Code\SkeletonController.cpp" />
+    <ClCompile Include="..\Code\SkyBox.cpp" />
     <ClCompile Include="..\Code\SoundMgr.cpp" />
     <ClCompile Include="..\Code\SphereEffect.cpp" />
     <ClCompile Include="..\Code\Stage.cpp" />
@@ -481,6 +504,10 @@
   <ItemGroup>
     <Image Include="Client.ico" />
     <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Bin\Resource\Shader\Shader_Player.hlsl" />
+    <FxCompile Include="..\Bin\Resource\Shader\Shader_Sky.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

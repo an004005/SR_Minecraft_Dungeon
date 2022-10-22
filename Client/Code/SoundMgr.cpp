@@ -147,7 +147,10 @@ void CSoundMgr::PlayBGM(const wstring& pSoundKey, float fVolume)
 
 void CSoundMgr::StopSound(CHANNELID eID)
 {
-	FMOD_Channel_Stop(m_pChannelArr[eID]);
+	FMOD_BOOL bPlay = false;
+	FMOD_Channel_IsPlaying(m_pChannelArr[eID], &bPlay);
+	if (bPlay)
+		FMOD_Channel_Stop(m_pChannelArr[eID]);
 }
 
 void CSoundMgr::StopAll()
@@ -190,7 +193,7 @@ void CSoundMgr::LoadSoundFile()
 	_finddata_t fd;
 
 	// _findfirst : <io.h>에서 제공하며 사용자가 설정한 경로 내에서 가장 첫 번째 파일을 찾는 함수
-	intptr_t handle = _findfirst("../Bin/Resource/Sound/*.ogg", &fd);
+	intptr_t handle = _findfirst("../Bin/Resource/Sound/*.*", &fd);
 
 	if (handle == -1L)
 		return;
