@@ -8,7 +8,8 @@
 
 CSatonController::CSatonController()
 {
-	m_fSatonFascinateCoolTime = 10000.f;
+	//67
+	m_fSatonFascinateCoolTime = 67.f;
 	m_fSatonGrapCoolTime = 19.f;
 	m_fSatonBirdCoolTime = 27.f;
 	m_fFirstHammerCoolTime = 11.f;
@@ -16,7 +17,7 @@ CSatonController::CSatonController()
 
 CSatonController::CSatonController(const CSatonController& rhs)
 {
-	m_fSatonFascinateCoolTime = 10000.f;
+	m_fSatonFascinateCoolTime = 67.f;
 	m_fSatonGrapCoolTime = 19.f;
 	m_fSatonBirdCoolTime = 27.f;
 	m_fFirstHammerCoolTime = 11.f;
@@ -33,7 +34,7 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 		m_fCurFirstHammerCoolTime += fTimeDelta;
 		m_fCurSatonBirdCoolTime += fTimeDelta;
 		m_fCurSatonGrapCoolTime += fTimeDelta;
-		// m_fCurSatonFascinateCoolTime += fTimeDelta;
+		m_fCurSatonFascinateCoolTime += fTimeDelta;
 
 		if(m_bIsDrawMoon)
 		{
@@ -147,10 +148,18 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 
 	if (m_fCurSatonFascinateCoolTime >= m_fSatonFascinateCoolTime && m_fTargetDist <= m_fSatonFascinateDist)
 	{
+		for (auto& e : Get_Layer(LAYER_PLAYER)->Get_MapObject())
+		{
+			CPlayer* pPlayer = dynamic_cast<CPlayer*>(e.second);
+			if (pPlayer && pPlayer->GetID() == 0 && pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)->IsDead())
+			{
+				m_fCurSatonFascinateCoolTime -= 10.f;
+				return 0;
+			}
+		}
+
 		m_fCurSatonFascinateCoolTime = 0.f;
 		saton->SatonFascinate(m_vLookFront, vTargetPos);
-		m_fSatonFascinateCoolTime = 60.f;
-
 		m_bIsDrawMoon = true;
 
 		if (g_bOnline)
