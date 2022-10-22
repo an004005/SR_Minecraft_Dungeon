@@ -62,7 +62,7 @@ PS_OUT PS_MAIN(PS_IN In)
 	vColor.a = 1.f;
 	vColor.r = max((1 - g_Time), 0.f);
 
-	Out.vColor.r = Out.vColor.r * vColor.r;
+	Out.vColor.r = min((Out.vColor.r + vColor.r), 1);
 
 	return Out;
 }
