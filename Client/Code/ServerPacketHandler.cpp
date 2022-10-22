@@ -54,9 +54,9 @@ bool Handle_S_ENTER_GAME(PacketSessionRef& session, Protocol::S_ENTER_GAME& pkt)
 	{
 		CPlayer* pPlayer = Get_GameObjectUnCheck<CPlayer>(LAYER_PLAYER, L"Player");
 
-		pPlayer->PlayerSpawn();
 		pPlayer->SetID(CClientServiceMgr::GetInstance()->m_iPlayerID);
 		pPlayer->SetName(pkt.player().name());
+		pPlayer->PlayerSpawn();
 		return true;
 	}
 
@@ -503,5 +503,7 @@ bool Handle_S_KOUKU_COUNTER(PacketSessionRef& session, Protocol::S_KOUKU_COUNTER
 	CStatComponent* pStat = pKouku->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC);
 	if (pStat->IsStun() == false)
 		pKouku->SetKoukuCounter();
+
+	return true;
 }
 

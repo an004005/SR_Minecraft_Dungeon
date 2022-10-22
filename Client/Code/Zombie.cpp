@@ -81,9 +81,17 @@ void CZombie::AnimationEvent(const string& strEvent)
 
 _int CZombie::Update_Object(const _float& fTimeDelta)
 {
-	if (m_bDelete) return OBJ_DEAD;
+
+
+	if (m_bDelete)
+	{
+
+		return OBJ_DEAD;
+	}
 
 	CMonster::Update_Object(fTimeDelta);
+
+
 
 	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
 		m_bCanPlayAnim = true;
@@ -195,6 +203,7 @@ void CZombie::StateChange()
 		
 		return;
 	}
+
 
 	if (m_bAttack && m_bCanPlayAnim)
 	{

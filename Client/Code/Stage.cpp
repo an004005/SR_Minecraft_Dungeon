@@ -6,42 +6,32 @@
 #include "Player.h"
 #include "AbstFactory.h"
 
-#include "DynamicCamera.h"
 #include "Particle.h"
-#include "Arrow.h"
 #include "ArrowCubeMgr.h"
-#include "Box.h"
-#include "Dynamite.h"
-#include "BossHPUI.h"
 #include "StatComponent.h"
 #include "PlayerUI.h"
 
 //monster
-#include "Monster.h"
 #include "Geomancer.h"
 #include "Zombie.h"
 #include "Creeper.h"
 #include "Skeleton.h"
 #include "Enchanter.h"
-#include "RedStoneCube.h"
-#include "RedStoneMonstrosity.h"
 #include "UI.h"
 #include "CoolTimeUI.h"
 #include "BatchTool.h"
 #include "DamageFontMgr.h"
-#include "Kouku.h"
-#include "Saton.h"
 #include "Trigger.h"
 #include "Enderman.h"
 #include "Leaper.h"
 
 // object
-#include "Birds.h"
-#include "BirdsBrown.h"
 #include "ObjectStoreMgr.h"
-#include "Player.h"
 #include "Cat.h"
 #include "Cat2.h"
+#include "PlayerStartPos.h"
+#include "SkyBox.h"
+
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
 {
@@ -56,29 +46,32 @@ HRESULT CStage::Ready_Scene(void)
 {
 	if (FAILED(Engine::CScene::Ready_Scene()))
 		return E_FAIL;
-	
+
+	D3DLIGHT9		tLightInfo;
+	ZeroMemory(&tLightInfo, sizeof(D3DLIGHT9));
+
+	tLightInfo.Type		= D3DLIGHT_DIRECTIONAL;
+	tLightInfo.Diffuse	= D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.f);
+	tLightInfo.Specular	= D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.f);
+	tLightInfo.Ambient	= D3DXCOLOR(0.6f, 0.6f, 0.3f, 1.f);
+	tLightInfo.Direction  = _vec3(0.3f, -1.f, 0.15f);
+	m_pGraphicDev->SetLight(0, &tLightInfo);
+	m_pGraphicDev->LightEnable(0, TRUE);
+
 	FAILED_CHECK_RETURN(Ready_Layer_Environment(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_GameLogic(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_UI(), E_FAIL);
 
-	// Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
-	// 	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
+	Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+		->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
 
-	CBatchTool::Load(L"../Bin/Resource/Batch/STAE_FINAL3T.batch");
+	CBatchTool::Load(L"../Bin/Resource/Batch/LASTLASTLASTSTAGE.batch");
 
 	return S_OK;
 }
 
 _int CStage::Update_Scene(const _float & fTimeDelta)
 {
-	// m_pTransform->Get_Info(INFO_POS, &_vec3(0.f, -0.5f, 0.f));
-	// m_pTransform->Set_Scale(0.f, 1.f, 0.f);
-	//CUIFactory::Create<CUI>("UI_HP", L"UI", 600.f, 650.f - fY, 55.f, 40.f);
-	//Engine::Get_Component<CTransform>(LAYER_UI, L"UI_HP", L"Proto_TransformCom", ID_DYNAMIC)
-	//	->m_vAngle.y += D3DXToRadian(40.f) * fTimeDelta;
-
-	
-
 	if(m_pPlayer != nullptr)
 	{
 		if (m_pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)->IsDead())
@@ -115,31 +108,20 @@ _int CStage::Update_Scene(const _float & fTimeDelta)
 
 void CStage::LateUpdate_Scene(void)
 {
-	
-	//IM_BEGIN("cam");
-	//if (ImGui::Button("Play Anim"))
-	//{
-	//	// m_pCamAnim->GetCamWorld(pStaticCamTransform->m_matWorld);
-
-	//	_matrix matView;
-	//	Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
-	//		->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/WorldTest.anim");
-	//	//m_pCam->m_bStop = true;
-	//}
-
-	//IM_END;
 	Engine::CScene::LateUpdate_Scene();
 }
 
 void CStage::Render_Scene(void)
 {
-	CArrowCubeMgr::GetInst().Render_Buffer(); // todo : ·»´õ·¯¿¡¼­ µ¿ÀÛÇÏ°Ô ¹Ù²Ù±â
+	CArrowCubeMgr::GetInst().Render_Buffer(); // todo : ?Œë”?¬ì—???™ìž‘?˜ê²Œ ë°”ê¾¸ê¸?
 	CDamageFontMgr::GetInstance()->Render_DamageFontMgr();
 }
 
 HRESULT CStage::Ready_Layer_Environment()
 {
 	CGameObject*		pGameObject = nullptr;
+
+	CEnvFactory::Create<CSkyBox>("SkyBox", L"SkyBox");
 
 	CEnvFactory::Create<CStaticCamera>("StaticCamera", L"StaticCamera");
 
@@ -151,15 +133,6 @@ HRESULT CStage::Ready_Layer_Environment()
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", pGameObject), E_FAIL);
 
-	//  Birds
-
-	for (int i = 0; i < 10; ++i)
-	{
-		CBirdsBrown* bird = CObjectFactory::Create<CBirdsBrown>("BirdsBrown", L"BirdsWhite");
-		bird->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->Set_Pos(3.f, 9.5f, 18.f + i);
-
-	}
-	
 	return S_OK;
 }
 
@@ -167,6 +140,9 @@ HRESULT CStage::Ready_Layer_GameLogic()
 {
 	_matrix matWorld;
 
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 3.6f, 7.f ,3.5f });
+	CObjectFactory::Create<CPlayerStartPos>("PlayerPos", L"PlayerPos", matWorld);
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 1.f, 0.f ,1.f });
 
@@ -486,11 +462,27 @@ void CStage::CreateTrigger()
 				_matrix matWorld;
 				CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, 0.f ,0.f }, { 95.f, 6.f, 16.f });
 				CEnemyFactory::Create<CEnderman>("Enderman", L"Enderman", matWorld);
+				CSoundMgr::GetInstance()->PlayBGM(L"Endermanbgm01.ogg", 0.2f);
 				return true;
 			}
 		}
 		return false;
 	}, 5.f);
+
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 45.f, 4.f, 75.f });
+	trigger = CObjectFactory::Create<CTrigger>("Trigger", L"Trigger_end", matWorld);
+	trigger->SetTrigger([](set<CGameObject*>& objSet) {
+		for (auto obj : objSet)
+		{
+			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+			{
+				CSoundMgr::GetInstance()->PlayBGM(L"madness(leaper)_001.ogg", 0.2f);
+				return true;
+			}
+		}
+		return false;
+	}, 7.f);
 
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 95.f, 6.f, 4.f });
@@ -506,4 +498,11 @@ void CStage::CreateTrigger()
 		}
 		return false;
 	}, 4.f);
+
+
+
+
+
+
+
 }

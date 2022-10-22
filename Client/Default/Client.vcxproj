@@ -106,6 +106,14 @@
       <LargeAddressAware>true</LargeAddressAware>
       <AdditionalLibraryDirectories>../../Reference/Library</AdditionalLibraryDirectories>
     </Link>
+    <FxCompile />
+    <FxCompile />
+    <FxCompile>
+      <ShaderType>Effect</ShaderType>
+    </FxCompile>
+    <FxCompile>
+      <ShaderModel>2.0</ShaderModel>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -121,6 +129,12 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d9.lib;d3dx9.lib;dxguid.lib;System.lib;Utility.lib;libprotobufd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <FxCompile>
+      <ShaderType>Effect</ShaderType>
+    </FxCompile>
+    <FxCompile>
+      <ShaderModel>2.0</ShaderModel>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -254,6 +268,7 @@
     <ClInclude Include="..\Header\SkeletalCube.h" />
     <ClInclude Include="..\Header\Skeleton.h" />
     <ClInclude Include="..\Header\SkeletonController.h" />
+    <ClInclude Include="..\Header\SkyBox.h" />
     <ClInclude Include="..\Header\SoundMgr.h" />
     <ClInclude Include="..\Header\SphereEffect.h" />
     <ClInclude Include="..\Header\Stage.h" />
@@ -396,6 +411,7 @@
     <ClCompile Include="..\Code\SkeletalCube.cpp" />
     <ClCompile Include="..\Code\Skeleton.cpp" />
     <ClCompile Include="..\Code\SkeletonController.cpp" />
+    <ClCompile Include="..\Code\SkyBox.cpp" />
     <ClCompile Include="..\Code\SoundMgr.cpp" />
     <ClCompile Include="..\Code\SphereEffect.cpp" />
     <ClCompile Include="..\Code\Stage.cpp" />
@@ -488,6 +504,10 @@
   <ItemGroup>
     <Image Include="Client.ico" />
     <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Bin\Resource\Shader\Shader_Player.hlsl" />
+    <FxCompile Include="..\Bin\Resource\Shader\Shader_Sky.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
