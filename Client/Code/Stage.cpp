@@ -6,40 +6,27 @@
 #include "Player.h"
 #include "AbstFactory.h"
 
-#include "DynamicCamera.h"
 #include "Particle.h"
-#include "Arrow.h"
 #include "ArrowCubeMgr.h"
-#include "Box.h"
-#include "Dynamite.h"
-#include "BossHPUI.h"
 #include "StatComponent.h"
 #include "PlayerUI.h"
 
 //monster
-#include "Monster.h"
 #include "Geomancer.h"
 #include "Zombie.h"
 #include "Creeper.h"
 #include "Skeleton.h"
 #include "Enchanter.h"
-#include "RedStoneCube.h"
-#include "RedStoneMonstrosity.h"
 #include "UI.h"
 #include "CoolTimeUI.h"
 #include "BatchTool.h"
 #include "DamageFontMgr.h"
-#include "Kouku.h"
-#include "Saton.h"
 #include "Trigger.h"
 #include "Enderman.h"
 #include "Leaper.h"
 
 // object
-#include "Birds.h"
-#include "BirdsBrown.h"
 #include "ObjectStoreMgr.h"
-#include "Player.h"
 #include "Cat.h"
 #include "Cat2.h"
 #include "PlayerStartPos.h"
@@ -75,8 +62,8 @@ HRESULT CStage::Ready_Scene(void)
 	FAILED_CHECK_RETURN(Ready_Layer_GameLogic(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_UI(), E_FAIL);
 
-	// Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
-	// 	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
+	Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+		->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
 
 	CBatchTool::Load(L"../Bin/Resource/Batch/LASTLASTLASTSTAGE.batch");
 
@@ -85,13 +72,6 @@ HRESULT CStage::Ready_Scene(void)
 
 _int CStage::Update_Scene(const _float & fTimeDelta)
 {
-	// m_pTransform->Get_Info(INFO_POS, &_vec3(0.f, -0.5f, 0.f));
-	// m_pTransform->Set_Scale(0.f, 1.f, 0.f);
-	//CUIFactory::Create<CUI>("UI_HP", L"UI", 600.f, 650.f - fY, 55.f, 40.f);
-	//Engine::Get_Component<CTransform>(LAYER_UI, L"UI_HP", L"Proto_TransformCom", ID_DYNAMIC)
-	//	->m_vAngle.y += D3DXToRadian(40.f) * fTimeDelta;
-	// m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, true);
-
 	if(m_pPlayer != nullptr)
 	{
 		if (m_pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)->IsDead())
@@ -128,19 +108,6 @@ _int CStage::Update_Scene(const _float & fTimeDelta)
 
 void CStage::LateUpdate_Scene(void)
 {
-	
-	//IM_BEGIN("cam");
-	//if (ImGui::Button("Play Anim"))
-	//{
-	//	// m_pCamAnim->GetCamWorld(pStaticCamTransform->m_matWorld);
-
-	//	_matrix matView;
-	//	Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
-	//		->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/WorldTest.anim");
-	//	//m_pCam->m_bStop = true;
-	//}
-
-	//IM_END;
 	Engine::CScene::LateUpdate_Scene();
 }
 
