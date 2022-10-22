@@ -27,6 +27,7 @@ HRESULT CGeomancerWall::Ready_Object()
 	m_pTransform = Add_Component<Engine::CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 	m_pTexture = Add_Component<CTexture>(L"Proto_MinecraftCubeTexture", L"Proto_MinecraftCubeTexture", ID_STATIC);
 	m_pBuffer = Add_Component<CCubeTex>(L"Proto_CubeTexCom", L"Proto_CubeTexCom", ID_STATIC);
+	m_pShaderCom = Add_Component<CShader>(L"Proto_ColumnShaderCom", L"Proto_ColumnShaderCom", ID_DYNAMIC);
 
 	CCollisionCom* m_pCollCom = Add_Component<CCollisionCom>(L"Proto_CollisionCom", L"Proto_CollisionCom", ID_DYNAMIC);
 	m_pCollCom->SetOwner(this);
@@ -153,9 +154,32 @@ void CGeomancerWall::LateUpdate_Object()
 
 void CGeomancerWall::Render_Object()
 {
-	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_pTransform->m_matWorld);
-	m_pTexture->Set_Texture(m_iTexNum);
-	m_pBuffer->Render_Buffer();
+	if (!m_bBomb)
+	{
+		m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_pTransform->m_matWorld);
+		m_pTexture->Set_Texture(m_iTexNum);
+		m_pBuffer->Render_Buffer();
+	}
+	else
+	{
+		_matrix		WorldMtrix, ViewMatrix, ProjMaatrix;
+
+		m_pTransform->Get_WorldMatrix(&WorldMtrix);
+		m_pGraphicDev->GetTransform(D3DTS_VIEW, &ViewMatrix);
+		m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &ProjMaatrix);
+
+		m_pShaderCom->Set_RawValue("g_WorldMatrix", D3DXMatrixTranspose(&WorldMtrix, &WorldMtrix), sizeof(_matrix));
+		m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix, &ViewMatrix), sizeof(_matrix));
+		m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMaatrix, &ProjMaatrix), sizeof(_matrix));
+
+		m_pTexture->Set_Texture(m_pShaderCom, "g_DefaultTexture", m_iTexNum);
+		m_pShaderCom->Set_RawValue("g_Time", &m_fLifeTime, sizeof(_float));
+
+		m_pShaderCom->Begin_Shader(0);
+		m_pBuffer->Render_Buffer();
+		m_pShaderCom->End_Shader();
+	}
+	
 }
 
 CGeomancerWall* CGeomancerWall::Create(LPDIRECT3DDEVICE9 pGraphicDev, _bool bBomb)
