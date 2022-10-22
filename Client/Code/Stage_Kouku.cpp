@@ -290,8 +290,7 @@ HRESULT CStage_Kouku::Ready_Layer_GameLogic()
 	//monsters
 	if (CClientServiceMgr::GetInstance()->m_iPlayerID == 0) // host
 	{
-		// D3DXToRadian(90.f)
-		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 3.f, 3.f, 3.f }, { 0.f, D3DXToDegree(65.f)  ,0.f }, { 62.5f, 21.5f ,47.8f });
+		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 3.f, 3.f, 3.f }, { 0.f, 0.f ,0.f }, { 62.5f, 21.5f ,47.8f });
 		CEnemyFactory::Create<CSaton>("Saton", L"Saton", matWorld);
 
 		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 0.7f, 0.7f, 0.7f }, { 0.f, 0.f ,0.f }, { 62.5f, 25.f ,44.8f });
@@ -299,7 +298,7 @@ HRESULT CStage_Kouku::Ready_Layer_GameLogic()
 	}
 	else
 	{
-		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 3.f, 3.f, 3.f }, { 0.f,  D3DXToDegree(65.f) ,0.f }, { 62.5f, 21.5f ,47.8f });
+		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 3.f, 3.f, 3.f }, { 0.f,  0.f ,0.f }, { 62.5f, 21.5f ,47.8f });
 		CEnemyFactory::Create<CSaton>("Saton_Remote", L"Saton_Remote", matWorld);
 
 		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 0.7f, 0.7f, 0.7f }, { 0.f, 0.f ,0.f }, { 62.5f, 25.f ,44.8f });

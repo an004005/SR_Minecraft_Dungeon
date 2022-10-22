@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Header\Kouku.h"
 #include "AbstFactory.h"
+#include "ClearUI.h"
 #include "Skeleton.h"
 #include "StatComponent.h"
 #include "KoukuController.h"
@@ -37,6 +38,7 @@ HRESULT CKouku::Ready_Object()
 	m_arrAnim[SYMBOL_HIDE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_hide.anim");
 	m_arrAnim[REST] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_rest.anim");
 	m_arrAnim[STUN] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_stun.anim");
+	m_arrAnim[DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_dead.anim");
 
 	m_pIdleAnim = &m_arrAnim[IDLE];
 	m_pCurAnim = &m_arrAnim[INTRO];
@@ -49,7 +51,7 @@ HRESULT CKouku::Ready_Object()
 
 	m_bIntroPlay = true;
 
-	m_pStat->SetMaxHP(1000);
+	m_pStat->SetMaxHP(100);
 
 
 	if (m_bRemote)
@@ -183,7 +185,17 @@ void CKouku::AnimationEvent(const string& strEvent)
 		}
 		else if (m_eState == DEAD)
 		{
-			
+			if (m_pBossHPUI)
+				m_pBossHPUI->KillHpbar();
+
+			for (int i = 0; i < 5; i++)
+			{
+				CEffectFactory::Create<CCloud>("Creeper_Cloud", L"Creeper_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+			}
+			CSoundMgr::GetInstance()->PlaySound(L"koukuSaton_Dead_0.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+			// CClearUI* pClearUI = CUIFactory::Create<CClearUI>("ClearUI", L"ClearUI", 0, WINCX * 0.5f, WINCY * 0.2f, WINCX* 0.4f, WINCY* 0.4f);
+			// pClearUI->SetUITexture(26);
+			m_bDelete = true;
 		}
 	}
 
@@ -597,14 +609,14 @@ void CKouku::StateChange()
 		m_pCurAnim = &m_arrAnim[WALK];
 		return;
 	}
-	// if (m_bCanPlayAnim)
-	// {
-	// 	m_eState = WALK;
-	// 	RotateToTargetPos(m_vTargetPos);
-	// 	m_pIdleAnim = &m_arrAnim[WALK];
-	// 	m_pCurAnim = &m_arrAnim[WALK];
-	// 	return;
-	// }
+	if (m_bCanPlayAnim)
+	{
+		m_eState = WALK;
+		RotateToTargetPos(m_vTargetPos);
+		m_pIdleAnim = &m_arrAnim[WALK];
+		m_pCurAnim = &m_arrAnim[WALK];
+		return;
+	}
 	
 
 	if (m_bCanPlayAnim)

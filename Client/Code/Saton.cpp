@@ -42,6 +42,8 @@ HRESULT CSaton::Ready_Object()
 	// m_pRootPart->pTrans->Set_Pos(62.5f, 20.5f, 49.4f);
 	m_pRootPart->pTrans->m_vInfo[INFO_POS].y = 20.5f;
 
+	m_vTargetPos = _vec3(60.f,25.f,33.f);
+
 	if (m_bRemote)
 	{
 		CController* pController = Add_Component<CSatonController>(L"Proto_SatonRemoteController", L"Proto_SatonRemoteController", ID_DYNAMIC);
