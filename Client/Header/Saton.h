@@ -141,7 +141,8 @@ private:
 	_float m_fTime;
 	_float m_fCurTime;
 
-
+	//intro
+	_bool m_bSatonIntro = true;
 
 	set<CPlayer*> m_pGrabbedList;
 };

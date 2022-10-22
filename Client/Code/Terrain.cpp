@@ -17,6 +17,7 @@ HRESULT CTerrain::Ready_Object(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
+	
 	return S_OK;
 }
 
@@ -119,7 +120,19 @@ HRESULT CTerrainWater::Ready_Object()
 	// pPlayerTransform->Get_Info(INFO_POS, &pPos);
 	m_pTransCom->m_vInfo[INFO_POS] = _vec3(- 100.f, - 10.f, - 100.f);
 	m_pTransCom->m_vScale *= 4.f;
+
+
+
+
+
+
+
+
+
 	m_pTransCom->Update_Component(0.f);
+
+
+
 
 	m_pBufferCom->m_matWorld = m_pTransCom->m_matWorld;
 
@@ -164,12 +177,6 @@ void CTerrainWater::LateUpdate_Object()
 
 void CTerrainWater::Render_Object()
 {
-	// m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
-	// m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-
-	// m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
-
-	// m_pTextureCom->Set_Texture(0);	// 텍스처 정보 세팅을 우선적으로 한다.
 	m_pBufferCom->Render_Buffer();
 
 	// m_pGraphicDev->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);

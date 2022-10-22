@@ -23,7 +23,7 @@ HRESULT CSaton::Ready_Object()
 	CMonster::Ready_Object();
 	m_pColl->SetCollType(COLL_WALL);
 
-	// m_arrAnim[INTRO] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/RedStoneMonstrosity/intro.anim");
+	m_arrAnim[INTRO] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_intro.anim");
 	m_arrAnim[FIRSTATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_doubleattack.anim");
 	// m_arrAnim[SECONDATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_attack2.anim");
 	m_arrAnim[IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_idle.anim");
@@ -36,7 +36,7 @@ HRESULT CSaton::Ready_Object()
 	// m_pCurAnim = &m_arrAnim[INTRO];
 	m_pCurAnim = m_pIdleAnim;
 
-	m_eState = IDLE;
+	m_eState = INTRO;
 	m_fSpeed = 2.f;
 	// m_pStat->IsSaton();
 	m_pStat->SetMaxHP(100);
@@ -239,6 +239,7 @@ _int CSaton::Update_Object(const _float& fTimeDelta)
 	default:
 		break;
 	}
+	if (m_bSatonIntro) return OBJ_NOEVENT;
 
 
 	IM_BEGIN("StatePos");
@@ -472,6 +473,17 @@ void CSaton::StateChange()
 			m_bCanPlayAnim = false;
 			return;
 		}
+	}
+
+	if (m_bSatonIntro && m_bCanPlayAnim)
+	{
+		m_eState = INTRO;
+		RotateToTargetPos(m_vTargetPos);
+		PlayAnimationOnce(&m_arrAnim[INTRO]);
+		m_bCanPlayAnim = false;
+		// SetOff();
+		m_bSatonIntro = false;
+		return;
 	}
 
 	if (m_bFirstHammerAttack && m_bCanPlayAnim)

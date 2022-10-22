@@ -151,6 +151,7 @@ HRESULT CAttack_Range_Circle::Ready_Object(const ATKRNGOPTION& circleOption)
 		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
 		m_pBufferCom->Set_TextureOption(0, 0, 0);
 		m_pTransCom->m_vScale = m_ATKRNGOption._vMinSize;
+		m_ATKRNGOption._vMaxSize *= 1.5f;
 		tmp = 0.15f;
 	}
 	m_pTransCom->Update_Component(0.f);
