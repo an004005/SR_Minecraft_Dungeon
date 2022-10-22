@@ -136,6 +136,50 @@ void CCreeper::LateUpdate_Object()
 		m_bAttackFire = false;
 		m_bDelete = true;
 	}
+	
+}
+
+void CCreeper::Render_Object()
+{
+
+	_matrix ViewMatrix, ProjMatrix;
+
+	m_pGraphicDev->GetTransform(D3DTS_VIEW, &ViewMatrix);
+	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &ProjMatrix);
+
+	m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix, &ViewMatrix), sizeof(_matrix));
+	m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix, &ProjMatrix), sizeof(_matrix));
+
+	m_pShaderCom->Set_Bool("g_isHit", false);
+	m_pShaderCom->Set_Bool("g_isDead", false);
+
+	for (auto& com : m_mapComponent[ID_DYNAMIC])
+	{
+		if (CStatComponent* pStat = dynamic_cast<CStatComponent*>(com.second))
+		{
+			m_pShaderCom->Set_Bool("g_isHit", pStat->IsDamaged());
+			m_pShaderCom->Set_Bool("g_isDead", pStat->IsDead());
+			m_bRenderMachine = !pStat->IsDamaged() && !pStat->IsDead();
+			if (pStat->IsDead())
+			{
+				m_fTime += CGameUtilMgr::s_fTimeDelta * 0.33f;
+				m_pShaderCom->Set_RawValue("g_Time", &m_fTime, sizeof(_float));
+			}
+			break;
+		}
+	}
+
+	m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, TRUE);
+
+
+	m_pGraphicDev->SetMaterial(&m_Material);
+	m_pRootPart->matParents = m_pRootPart->pTrans->m_matWorld;
+	for (const auto& child : m_pRootPart->vecChild)
+	{
+		RenderObjectRecur(child);
+	}
+
+	m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, FALSE);
 }
 
 void CCreeper::Free()
