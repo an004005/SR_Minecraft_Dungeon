@@ -77,6 +77,7 @@
 #include "NetStartStage.h"
 #include "KoukuLoading.h"
 #include "BossStage.h"
+#include "SkyBox.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -473,7 +474,10 @@ void CEnvFactory::Ready_EnvFactory()
 	{
 		return CStaticCamera::Create(s_pGraphicDev);
 	} });
-
+	s_mapEnvSpawner.insert({ "SkyBox", []()
+	{
+		return CSkyBox::Create(s_pGraphicDev);
+	} });
 
 
 }
@@ -558,7 +562,7 @@ void CObjectFactory::Ready_ObjectFactory()
 	
 	s_mapObjectSpawner.insert({ "Cat", []()
 	{
-		return CCat::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Object/cat.cube");
+		return CCat::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Object/bori.cube");
 	} });
 
 	s_mapObjectSpawner.insert({ "Cat2", []()

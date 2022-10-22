@@ -93,8 +93,8 @@ private:
 
 	// damaged
 	_bool m_bDamaged = false;
-	_float m_fDamagedTime = 0.5;
-	_float m_fCurDamagedTime = 0.5;
+	_float m_fDamagedTime = 0.2f;
+	_float m_fCurDamagedTime = 0.2f;
 
 	// Saton Symbol
 	_bool m_bSatonSymbol_Blue = false;

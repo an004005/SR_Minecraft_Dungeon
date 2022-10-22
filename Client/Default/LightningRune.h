@@ -27,5 +27,10 @@ private:
 	vector<CChainLightning*> m_vecSparks;
 
 	CWeapon* m_pEquippedWeapon = nullptr;
+
+	D3DLIGHT9 m_LightningLight;
+
+	_float m_fLightTime = 0.2f;
+	_float m_fCurLightTime = 0.2f;
 };
 

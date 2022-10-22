@@ -259,6 +259,7 @@ void CPlayer::Render_Object()
 
 		Engine::Render_Font(L"Gothic_Bold20", tmp.c_str(), &vScreen, D3DCOLOR_ARGB(255, 255, 255, 255));
 
+
 		CSkeletalCube::Render_Object();
 	}
 }
