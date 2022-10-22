@@ -29,12 +29,13 @@ private:
 	Engine::CTexture*	m_pTextureCom = nullptr;
 	Engine::CCubeTex*	m_pBufferCom = nullptr;
 	Engine::CTransform*	m_pTransCom = nullptr;
+	Engine::CShader*	m_pShaderCom = nullptr;
 	DYNAMITE_STATE m_eState = DYNAMITE_END;
 	BOUNCE m_eBounce = THROWING;
 
 	_bool m_bRotate = false;
 	_float m_fTime = 0.f;
-	_float m_fPower = 16.f;
+	_float m_fPower = 15.f;
 	_float m_fAngle = 0.f;
 	_bool m_bDead = false;
 	_bool m_bExplosion = false;
@@ -42,5 +43,11 @@ private:
 	CCollisionCom* m_pColl = nullptr;
 	void RotateToCursor();
 	void Parabola(const _float & fTimeDelta);
+
+	_bool m_bTwinkle = false;
+	_float m_fFireShaderCount = 0.25f;
+	_float m_fCurFireShaderCount = 1.f;
+	_float m_fFreq = 1.f;
+
 };
 

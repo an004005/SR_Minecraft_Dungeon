@@ -1,11 +1,9 @@
 
 matrix		g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 
-bool		g_isHit = false;
-bool		g_isDead = false;
 bool		g_Countdown = false;
 
-float		g_Time = 0.f;
+
 
 textureCUBE		g_DefaultTexture;
 
@@ -62,7 +60,6 @@ PS_OUT PS_MAIN(PS_IN In)
 {
 	PS_OUT		Out = (PS_OUT)0;
 	vector		vColor = Out.vColor.rgba;
-	vector		vHitColor = Out.vColor.rgba;
 	vector		vCountColor = Out.vColor.rgba;
 	vector		vOriginColor = texCUBE(DefaultSampler, In.vTexUV);
 
@@ -76,22 +73,9 @@ PS_OUT PS_MAIN(PS_IN In)
 	
 		vColor = vCountColor;
 	}
-	else if (true == g_isHit)
-	{
-		vHitColor.r = 1.0f;
-		vHitColor.g = 0.6f;
-		vHitColor.b = 0.6f;
-		vColor = vHitColor * vOriginColor;
-	}
 	else
 		vColor = texCUBE(DefaultSampler, In.vTexUV);
 
-	if (true == g_isDead)
-	{
-		vColor.a = 1.f- g_Time;
-	}
-	else
-		vColor.a = 1.f;
 
 	Out.vColor = vColor;
 

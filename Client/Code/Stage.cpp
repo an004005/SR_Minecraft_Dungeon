@@ -31,6 +31,7 @@
 #include "Cat2.h"
 #include "PlayerStartPos.h"
 #include "SkyBox.h"
+#include "Dynamite.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
@@ -114,7 +115,7 @@ void CStage::LateUpdate_Scene(void)
 
 void CStage::Render_Scene(void)
 {
-	CArrowCubeMgr::GetInst().Render_Buffer(); // todo : ?Œë”?¬ì—???™ìž‘?˜ê²Œ ë°”ê¾¸ê¸?
+	CArrowCubeMgr::GetInst().Render_Buffer();
 	CDamageFontMgr::GetInstance()->Render_DamageFontMgr();
 }
 
@@ -186,8 +187,8 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	//monsters
 	{	
 	
-		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 10.f, 4.f, 10.f });
-		CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
+		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 4.5f, 9.f, 29.f });
+		CObjectFactory::Create<CDynamite>("Dynamite", L"Dynamite", matWorld);
 
 		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.3f, 1.3f, 1.3f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 51.f, 4.f, 95.f });
 		CEnemyFactory::Create<CLeaper>("Leaper", L"Leaper", matWorld);

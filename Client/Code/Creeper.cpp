@@ -23,6 +23,8 @@ HRESULT CCreeper::Ready_Object()
 {
 	CMonster::Ready_Object();
 
+	m_pShaderCom = Add_Component<CShader>(L"Proto_CreeperShaderCom", L"Proto_CreeperShaderCom", ID_DYNAMIC);
+
 	m_arrAnim[ANIM_IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Creeper/idle.anim");
 	m_arrAnim[ANIM_WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Creeper/walk.anim");
 	m_arrAnim[ANIM_DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Creeper/dead.anim");
@@ -71,6 +73,19 @@ _int CCreeper::Update_Object(const _float& fTimeDelta)
 	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
 		m_bCanPlayAnim = true;
 
+	if (m_bAttackCount)
+	{
+		if (m_fCurFireShaderCount > m_fFireShaderCount)
+		{
+			m_bTwinkle = !m_bTwinkle;
+			m_fCurFireShaderCount = 0.f;
+			m_fFreq *= 1.1f;
+		}
+		else
+		{
+			m_fCurFireShaderCount += fTimeDelta * m_fFreq;
+		}
+	}
 	// 상태 변경 조건 설정
 	StateChange();
 
@@ -152,6 +167,7 @@ void CCreeper::Render_Object()
 
 	m_pShaderCom->Set_Bool("g_isHit", false);
 	m_pShaderCom->Set_Bool("g_isDead", false);
+	m_pShaderCom->Set_Bool("g_Countdown", m_bTwinkle);
 
 	for (auto& com : m_mapComponent[ID_DYNAMIC])
 	{
@@ -159,7 +175,7 @@ void CCreeper::Render_Object()
 		{
 			m_pShaderCom->Set_Bool("g_isHit", pStat->IsDamaged());
 			m_pShaderCom->Set_Bool("g_isDead", pStat->IsDead());
-			m_bRenderMachine = !pStat->IsDamaged() && !pStat->IsDead();
+			m_bRenderMachine = !pStat->IsDamaged() && !pStat->IsDead() && !m_bTwinkle;
 			if (pStat->IsDead())
 			{
 				m_fTime += CGameUtilMgr::s_fTimeDelta * 0.33f;

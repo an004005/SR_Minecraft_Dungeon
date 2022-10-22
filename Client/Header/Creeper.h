@@ -66,5 +66,10 @@ private:
 	_bool m_bMove = false; 
 	_bool m_bAttack = false; 
 	_bool m_bAttackCount = false; 
+	_bool m_bTwinkle = false;
 	_vec3 m_vTargetPos = CGameUtilMgr::s_vZero;
+
+	_float m_fFireShaderCount = 0.3f;
+	_float m_fCurFireShaderCount = 1.f;
+	_float m_fFreq = 1.f;
 };
