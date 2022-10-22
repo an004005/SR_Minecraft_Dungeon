@@ -113,6 +113,7 @@ float4 UVAnimation_Pass_0_Pixel_Shader_ps_main(PS_INPUT Input) : COLOR
 
    if (albedo.w > 0)
    {
+			albedo.a = 0.7f;
  			return albedo.rgba;
    }
    
@@ -126,6 +127,10 @@ technique UVAnimation
 {
    pass Pass_0
    {
+		AlphaBlendEnable = true;
+		SrcBlend = SrcAlpha;
+		DestBlend = InvSrcAlpha;
+		BlendOp = Add;
       VertexShader = compile vs_2_0 UVAnimation_Pass_0_Vertex_Shader_vs_main();
       PixelShader = compile ps_2_0 UVAnimation_Pass_0_Pixel_Shader_ps_main();
    }

@@ -30,5 +30,8 @@ private:
 	virtual void	Free(void);
 	CPlayer* m_pPlayer = nullptr;
 	CMapUI* m_pMapUI = nullptr;
+
+	_bool m_bSpawn = false;
+	_float m_SpawnCounter = 2.f;
 };
 

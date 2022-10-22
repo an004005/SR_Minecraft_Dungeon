@@ -9,6 +9,7 @@
 #include "Rune.h"
 #include "Inventory.h"
 #include "Kouku.h"
+#include "StaticCamera.h"
 
 
 CAxe::CAxe(LPDIRECT3DDEVICE9 pGraphicDev): CWeapon(pGraphicDev)
@@ -117,6 +118,8 @@ _int CAxe::Attack()
 	{
 		pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK1]);
 		CSoundMgr::GetInstance()->PlaySound(L"sfx_item_axeSwingSwong-001.ogg", pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS]);
+		Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+			->PlayShake(0.1f, 0.1f);
 	}
 	else if (m_iAttackCnt == 1)
 	{

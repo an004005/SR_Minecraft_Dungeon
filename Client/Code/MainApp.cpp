@@ -174,6 +174,7 @@ HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement
 	(*ppManagement)->AddRef();
 
 	  // CSceneFactory::LoadScene("Loading1", "Stage_Default", true ,0);
+	  // CSceneFactory::LoadScene("Loading1", "Animation Tool", true ,0);
 	CSceneFactory::LoadScene("Loading1", "Logo", true ,500);
 	// CSceneFactory::LoadScene("Loading1", "NetStage_Start", true ,0);
 
@@ -333,7 +334,7 @@ HRESULT CMainApp::Ready_Proto()
 
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_SkySphere", CShereBuffer::Create(m_pGraphicDev, 20, 20)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_SkySphereShaderCom", CShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/Shader_Sky.hlsl")), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_SkySphereTexture", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/SkySphere/sky_%d.png", TEX_NORMAL, 3)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_SkySphereTexture", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/SkySphere/sky_%d.png", TEX_NORMAL, 4)), E_FAIL);
 
 
 	return S_OK;

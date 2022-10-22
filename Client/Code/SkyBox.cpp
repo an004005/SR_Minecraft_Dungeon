@@ -45,7 +45,7 @@ void CSkyBox::Render_Object(void)
 	m_pShader->Set_RawValue("g_WorldMatrix", &CGameUtilMgr::s_matIdentity, sizeof(_matrix));
 	m_pShader->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix, &ViewMatrix), sizeof(_matrix));
 	m_pShader->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix, &ProjMatrix), sizeof(_matrix));
-	m_pTextureCom->Set_Texture(m_pShader, "g_DefaultTexture", 2);
+	m_pTextureCom->Set_Texture(m_pShader, "g_DefaultTexture", m_iTexNum);
 
 	m_pShader->Begin_Shader(0);
 	m_pBuffer->Render_Buffer();
