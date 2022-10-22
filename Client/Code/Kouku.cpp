@@ -130,6 +130,8 @@ void CKouku::AnimationEvent(const string& strEvent)
 			, READY_CIRCLE, CGameUtilMgr::s_vZero, _vec3(4.f, 4.f, 4.f), 35, 35);
 		CEffectFactory::AttackRange_Create("Attack_Range_Circle", L"Attack_Range_Circle", m_vKoukuHammerPos
 			, ATTACK_CIRCLE, CGameUtilMgr::s_vZero, _vec3(4.f, 4.f, 4.f), 100, 35);
+		CEffectFactory::Create<CUVCircle>("Kouku_Explosion", L"Kouku_Explosion",
+			_vec3(m_vKoukuHammerPos.x, m_vKoukuHammerPos.y + 0.2f, m_vKoukuHammerPos.z));
 		
 	}
 	else if(strEvent == "BasicAttackColl_1")
@@ -147,7 +149,7 @@ void CKouku::AnimationEvent(const string& strEvent)
 
 		CEffectFactory::AttackRange_Create("Attack_Range_Circle", L"Attack_Range_Circle", m_vKoukuHammerPos
 			, ATTACK_CIRCLE, CGameUtilMgr::s_vZero, _vec3(5.f, 5.f, 5.f), 100, 34);
-		CEffectFactory::Create<CUVCircle>("Hammer1_Explosion", L"Hammer1_Explosion",
+		CEffectFactory::Create<CUVCircle>("Hammer2_Explosion", L"Hammer2_Explosion",
 			_vec3(m_vKoukuHammerPos.x, m_vKoukuHammerPos.y + 0.2f, m_vKoukuHammerPos.z));
 	}
 	else if (strEvent == "DoubleHammer_2")
@@ -177,13 +179,18 @@ void CKouku::AnimationEvent(const string& strEvent)
 
 		m_fCurTime = 0.f;
 	}
+
+	else if (strEvent == "counter_sound")
+	{
+		// CSoundMgr::GetInstance()->PlaySoundChannel(L"counter_hit5.wav", m_pRootPart->pTrans->m_vInfo[INFO_POS], CHANNELID(23));
+	}
 	else if (strEvent == "HorrorAttack_End")
 	{
 		m_bIsHorrorAttack = false;
 	}
 	else if (strEvent == "Intro_End")
 	{
-		CSoundMgr::GetInstance()->PlayBGM(L"kouku_bgm_0.ogg", 0.6f);
+		CSoundMgr::GetInstance()->PlayBGM(L"kouku_bgm_0.wav", 0.6f);
 	}
 	else if (strEvent == "AnimStopped")
 	{
@@ -201,7 +208,7 @@ void CKouku::AnimationEvent(const string& strEvent)
 			{
 				CEffectFactory::Create<CCloud>("Creeper_Cloud", L"Creeper_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 			}
-			CSoundMgr::GetInstance()->PlaySound(L"koukuSaton_Dead_0.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+			CSoundMgr::GetInstance()->PlaySound(L"koukuSaton_Dead_0.ogg", { 59.5f, 25.f ,35.5f });
 			CSoundMgr::GetInstance()->StopSound(SOUND_BGM);
 			// CClearUI* pClearUI = CUIFactory::Create<CClearUI>("ClearUI", L"ClearUI", 0, WINCX * 0.5f, WINCY * 0.2f, WINCX* 0.4f, WINCY* 0.4f);
 			// pClearUI->SetUITexture(26);
@@ -399,7 +406,8 @@ void CKouku::LateUpdate_Object()
 			{
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
 					->TakeDamage(15, FromPos, this, DT_KNOCK_BACK);
-				CSoundMgr::GetInstance()->PlaySoundRandom({ L"attack1_hit.wav", L"attack1_hit_2.wav" }, m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+				CSoundMgr::GetInstance()->PlaySoundRandom({ L"attack1_hit.wav", L"attack1_hit_2.wav" }, { 59.5f, 25.f ,35.5f });
+
 			}
 		}
 		m_bIsBasicAttackColl = false;
@@ -418,8 +426,7 @@ void CKouku::LateUpdate_Object()
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
 				->TakeDamage(20, KoukuPos, this, DT_KNOCK_BACK);
 		}
-		// CEffectFactory::Create<CUVCircle>("Kouku_Explosion", L"Kouku_Explosion",
-		// 	_vec3(m_vKoukuHammerPos.x, m_vKoukuHammerPos.y + 0.2f, m_vKoukuHammerPos.z));
+		CSoundMgr::GetInstance()->PlaySoundRandom({ L"attack1_hit.wav", L"attack1_hit_2.wav" }, m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 		m_bIsDoubleHammerColl_1 = false;
 	}
 
@@ -436,8 +443,7 @@ void CKouku::LateUpdate_Object()
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
 				->TakeDamage(20, FromPos, this, DT_KNOCK_BACK);
 		}
-		CEffectFactory::Create<CUVCircle>("Hammer1_Explosion", L"Hammer1_Explosion",
-			_vec3(m_vKoukuHammerPos.x, m_vKoukuHammerPos.y + 0.2f, m_vKoukuHammerPos.z));
+		CSoundMgr::GetInstance()->PlaySoundRandom({ L"attack1_hit.wav", L"attack1_hit_2.wav" }, m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 		m_bIsDoubleHammerColl_2 = false;
 	}
 
@@ -508,8 +514,8 @@ void CKouku::SetKoukuCounter()
 	const _vec3& KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
 	m_pStat->TakeDamage(0, KoukuPos, this, DT_STUN);
 	Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
-		->PlayShake(0.1f, 1.f);
-	CSoundMgr::GetInstance()->PlaySoundChannel(L"counter.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS], CHANNELID(23));
+		->PlayShake(0.15f, 1.f);
+	CSoundMgr::GetInstance()->PlaySoundChannel(L"grogi_edit.wav", m_pRootPart->pTrans->m_vInfo[INFO_POS], CHANNELID(23),1.f);
 }
 
 void CKouku::Free()
@@ -553,6 +559,7 @@ void CKouku::StateChange()
 		{
 			m_eState = STUN;
 			PlayAnimationOnce(&m_arrAnim[STUN], true);
+			// CSoundMgr::GetInstance()->PlaySoundChannel(L"counter_hit5.wav", m_pRootPart->pTrans->m_vInfo[INFO_POS], CHANNELID(23));
 			m_bCanPlayAnim = false;
 			m_bMove = false;
 			return;
@@ -590,6 +597,7 @@ void CKouku::StateChange()
 		m_eState = HAMMER_ATTACK;
 		RotateToTargetPos(m_vTargetPos);
 		PlayAnimationOnce(&m_arrAnim[HAMMER_ATTACK]);
+		CSoundMgr::GetInstance()->PlaySoundRandom({ L"attack2_1.wav", L"attack2_2.wav" }, m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 		m_bCanPlayAnim = false;
 		m_bMove = false;
 		SetOff();

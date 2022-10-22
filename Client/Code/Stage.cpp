@@ -168,7 +168,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	m_pPlayer->PlayerSpawn();
 
 
-	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 5.f, 7.f ,10.f });
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 5.75f, 7.f ,10.f });
 	CObjectFactory::Create<CCat>("Cat", L"Cat", matWorld);
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f ,1.f }, { 0.f, D3DXToRadian(90.f), 0.f }, { 33.f, 0.f, 109.f });

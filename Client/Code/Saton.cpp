@@ -483,7 +483,7 @@ void CSaton::StateChange()
 
 	if (m_bSatonIntro && m_bCanPlayAnim)
 	{
-		CSoundMgr::GetInstance()->PlaySound(L"Saton_Intro_0_2_1_1.ogg", { 59.5f, 25.f ,35.5f });
+		CSoundMgr::GetInstance()->PlaySound(L"Saton_Intro_0_2_1_1.wav", { 59.5f, 25.f ,35.5f });
 		m_eState = INTRO;
 		RotateToTargetPos(m_vTargetPos);
 		PlayAnimationOnce(&m_arrAnim[INTRO]);
@@ -504,7 +504,7 @@ void CSaton::StateChange()
 		+ to_string(m_vTargetPos.x) +  ", z :" + to_string(m_vTargetPos.z);
 		pkt.set_debuglog(debug);
 		CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(pkt));	
-		CSoundMgr::GetInstance()->PlaySoundRandom({ L"attack2_1.wav", L"attack2_2.wav",L"attack2_3" }, { 59.5f, 25.f ,40.5f });
+		CSoundMgr::GetInstance()->PlaySoundRandom({ L"attack2_big.wav", L"attack2_big_1.wav" }, { 59.5f, 25.f ,40.5f });
 		SetOff();
 		return;
 	}
