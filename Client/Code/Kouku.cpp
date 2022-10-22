@@ -559,7 +559,6 @@ void CKouku::StateChange()
 		{
 			m_eState = STUN;
 			PlayAnimationOnce(&m_arrAnim[STUN], true);
-			// CSoundMgr::GetInstance()->PlaySoundChannel(L"counter_hit5.wav", m_pRootPart->pTrans->m_vInfo[INFO_POS], CHANNELID(23));
 			m_bCanPlayAnim = false;
 			m_bMove = false;
 			return;
