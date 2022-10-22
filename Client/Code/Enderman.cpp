@@ -28,7 +28,6 @@ HRESULT CEnderman::Ready_Object()
 	m_arrAnim[ANIM_CHOP] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Enderman/chop.anim");
 	m_arrAnim[ANIM_SMASH] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Enderman/smash.anim");
 	m_arrAnim[ANIM_ARMATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Enderman/armattack.anim");
-	m_arrAnim[ANIM_PISTOL] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Enderman/pistol.anim");
 	m_arrAnim[ANIM_DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Enderman/dead.anim");
 
 	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
@@ -67,14 +66,6 @@ void CEnderman::AnimationEvent(const string & strEvent)
 	{
 		m_bArmAttakcFire = true;
 	}
-	else if (strEvent == "PistolStart")
-	{
-		m_bPistolStart = true;
-	}
-	else if (strEvent == "PistolFire")
-	{
-		m_bPistolStart = false;
-	}
 	else if (strEvent == "ActionEnd")
 	{
 		m_bCanPlayAnim = true;
@@ -99,9 +90,8 @@ _int CEnderman::Update_Object(const _float & fTimeDelta)
 {
 	if (m_bDelete) return OBJ_DEAD;
 
-	m_fCurPistolTime += fTimeDelta;
-	m_fCurClockingCollTime += fTimeDelta;
 
+	m_fCurClockingCollTime += fTimeDelta;
 	if (m_bClocking && m_fCurClockingCollTime > m_fClockingCollTime)
 	{
 		m_bClocking = false;
@@ -110,7 +100,7 @@ _int CEnderman::Update_Object(const _float & fTimeDelta)
 		m_pBossHPUI->SetRender(true);
 	}
 
-	if (m_bClocking && 	m_eState != DEAD && m_eState != PISTOL && m_eState != ARMATTACK && m_eState != CHOP && m_eState != SMASH)
+	if (m_bClocking && 	m_eState != DEAD)
 	{
 		m_pBossHPUI->SetRender(false);
 		return OBJ_NOEVENT;
@@ -140,8 +130,6 @@ _int CEnderman::Update_Object(const _float & fTimeDelta)
 	case CLOCKING:
 		break;
 	case ARMATTACK:
-		break;
-	case PISTOL:
 		break;
 	case STUN:
 		break;
@@ -185,17 +173,17 @@ void CEnderman::LateUpdate_Object()
 		_vec3 vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
 		_vec3 vLook = m_pRootPart->pTrans->m_vInfo[INFO_LOOK];
 
-		for (_int i = 1; i < 4; ++i)
+		for (_int i = 1; i < 10; ++i)
 		{
 			set<CGameObject*> setObj;
 			_vec3 vAttackPos = vPos + vLook * 2.f * _float(i);
-			Engine::GetOverlappedObject(setObj, vAttackPos, 1.2f);
+			Engine::GetOverlappedObject(setObj, vAttackPos, 1.f);
 
 			for (auto& obj : setObj)
 			{
 				if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 					pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-					->TakeDamage(80, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_KNOCK_BACK);
+					->TakeDamage(80, m_pRootPart->pTrans->m_vInfo[INFO_POS], this);
 			}
 		}
 		
@@ -207,37 +195,6 @@ void CEnderman::LateUpdate_Object()
 			L"sfx_mob_endermanTeleportVoiceHigh-003.ogg"},
 			m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.2f);
 		m_bArmAttakcFire = false;
-	}
-
-	if (m_bPistolStart && m_fCurPistolTime > m_fPistolFreq)
-	{
-		_vec3 vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
-		_vec3 vLook = m_pRootPart->pTrans->m_vInfo[INFO_LOOK];
-
-		for (_int i = 1; i < 4; ++i)
-		{
-			set<CGameObject*> setObj;
-			_vec3 vAttackPos = vPos + vLook * 2.f * _float(i);
-			Engine::GetOverlappedObject(setObj, vAttackPos, 1.5f);
-
-			for (auto& obj : setObj)
-			{
-				if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
-					pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-					->TakeDamage(10, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_STIFFEN);
-			}
-		}
-
-
-
-		CSoundMgr::GetInstance()->PlaySoundRandom({
-			L"sfx_mob_endermanTeleportVoiceHigh-001.ogg",
-			L"sfx_mob_endermanTeleportVoiceHigh-002.ogg",
-			L"sfx_mob_endermanTeleportVoiceHigh-003.ogg" },
-			m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.2f);
-		
-
-		m_fCurPistolTime = 0.f;
 	}
 
 }
@@ -313,17 +270,6 @@ void CEnderman::StateChange()
 		m_bCanPlayAnim = false;
 		m_bMove = false;
 		m_bChop = false;
-		return;
-	}
-
-	if (m_bPistol && m_bCanPlayAnim)
-	{
-		m_eState = PISTOL;
-		RotateToTargetPos(m_vTargetPos);
-		PlayAnimationOnce(&m_arrAnim[ANIM_PISTOL]);
-		m_bCanPlayAnim = false;
-		m_bMove = false;
-		m_bPistol = false;
 		return;
 	}
 
