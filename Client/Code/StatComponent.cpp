@@ -271,6 +271,7 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 		m_fCurSatonSymbolTime = 0.f;
 		break;
 	case DT_SATON_FASCINATED:
+		if (m_bDead) break;
 		m_bFascinated = true;
 		m_fCurSatonFascinatedTime = 0.f;
 		m_pFaci = CEffectFactory::Create<CFascinate>("Facinate", L"Facinate",
