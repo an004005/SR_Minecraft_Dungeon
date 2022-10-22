@@ -6,40 +6,27 @@
 #include "Player.h"
 #include "AbstFactory.h"
 
-#include "DynamicCamera.h"
 #include "Particle.h"
-#include "Arrow.h"
 #include "ArrowCubeMgr.h"
-#include "Box.h"
-#include "Dynamite.h"
-#include "BossHPUI.h"
 #include "StatComponent.h"
 #include "PlayerUI.h"
 
 //monster
-#include "Monster.h"
 #include "Geomancer.h"
 #include "Zombie.h"
 #include "Creeper.h"
 #include "Skeleton.h"
 #include "Enchanter.h"
-#include "RedStoneCube.h"
-#include "RedStoneMonstrosity.h"
 #include "UI.h"
 #include "CoolTimeUI.h"
 #include "BatchTool.h"
 #include "DamageFontMgr.h"
-#include "Kouku.h"
-#include "Saton.h"
 #include "Trigger.h"
 #include "Enderman.h"
 #include "Leaper.h"
 
 // object
-#include "Birds.h"
-#include "BirdsBrown.h"
 #include "ObjectStoreMgr.h"
-#include "Player.h"
 #include "Cat.h"
 #include "Cat2.h"
 #include "PlayerStartPos.h"
@@ -60,6 +47,17 @@ HRESULT CStage::Ready_Scene(void)
 	if (FAILED(Engine::CScene::Ready_Scene()))
 		return E_FAIL;
 
+	D3DLIGHT9		tLightInfo;
+	ZeroMemory(&tLightInfo, sizeof(D3DLIGHT9));
+
+	tLightInfo.Type		= D3DLIGHT_DIRECTIONAL;
+	tLightInfo.Diffuse	= D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.f);
+	tLightInfo.Specular	= D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.f);
+	tLightInfo.Ambient	= D3DXCOLOR(0.6f, 0.6f, 0.3f, 1.f);
+	tLightInfo.Direction  = _vec3(0.3f, -1.f, 0.15f);
+	m_pGraphicDev->SetLight(0, &tLightInfo);
+	m_pGraphicDev->LightEnable(0, TRUE);
+
 	FAILED_CHECK_RETURN(Ready_Layer_Environment(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_GameLogic(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_UI(), E_FAIL);
@@ -74,8 +72,6 @@ HRESULT CStage::Ready_Scene(void)
 
 _int CStage::Update_Scene(const _float & fTimeDelta)
 {
-	
-
 	if(m_pPlayer != nullptr)
 	{
 		if (m_pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)->IsDead())
@@ -112,25 +108,12 @@ _int CStage::Update_Scene(const _float & fTimeDelta)
 
 void CStage::LateUpdate_Scene(void)
 {
-	
-	//IM_BEGIN("cam");
-	//if (ImGui::Button("Play Anim"))
-	//{
-	//	// m_pCamAnim->GetCamWorld(pStaticCamTransform->m_matWorld);
-
-	//	_matrix matView;
-	//	Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
-	//		->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/WorldTest.anim");
-	//	//m_pCam->m_bStop = true;
-	//}
-
-	//IM_END;
 	Engine::CScene::LateUpdate_Scene();
 }
 
 void CStage::Render_Scene(void)
 {
-	CArrowCubeMgr::GetInst().Render_Buffer(); // todo : ·»´õ·¯¿¡¼­ µ¿ÀÛÇÏ°Ô ¹Ù²Ù±â
+	CArrowCubeMgr::GetInst().Render_Buffer(); // todo : ë Œë”ëŸ¬ì—ì„œ ë™ì‘í•˜ê²Œ ë°”ê¾¸ê¸°
 	CDamageFontMgr::GetInstance()->Render_DamageFontMgr();
 }
 
@@ -182,7 +165,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 		default: ;
 	}
 	m_pPlayer->SetName(CObjectStoreMgr::GetInstance()->GetPlayerName());
-	 m_pPlayer->PlayerSpawn();
+	m_pPlayer->PlayerSpawn();
 
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 5.f, 7.f ,10.f });
@@ -215,7 +198,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 
 HRESULT CStage::Ready_Layer_UI()
 {
-	// ÇÃ·¹ÀÌ¾î »ı¼ºÇÏ°í »ı¼ºÇÏ±â
+	// í”Œë ˆì´ì–´ ìƒì„±í•˜ê³  ìƒì„±í•˜ê¸°
 	CUIFactory::Create<CUI>("HPUI", L"HPUI", -1, WINCX/2, WINCY - 50, 100, 80);
 	CUIFactory::Create<CCoolTimeUI>("PotionCoolTime", L"PotionCoolTime", -1, WINCX/2 + 90, WINCY - 40, 50, 50);
 	CUIFactory::Create<CCoolTimeUI>("RollCoolTime", L"RollCoolTime", -1, WINCX/2 + 140, WINCY - 30, 30, 30);
@@ -228,7 +211,7 @@ HRESULT CStage::Ready_Layer_UI()
 	CUIFactory::Create<CCountUI>("ArrowUI", L"ArrowUI", -1, WINCX/2 + 190, WINCY - 30, 50, 50);
 	CUIFactory::Create<CCountUI>("EmeraldUI", L"EmeraldUI", -1, WINCX/2 + 250, WINCY - 30, 20, 30);
 
-	// ÇÃ·¹ÀÌ¾î »ı¼ºÇÏ°í »ı¼ºÇÏ±â
+	// í”Œë ˆì´ì–´ ìƒì„±í•˜ê³  ìƒì„±í•˜ê¸°
 
 	return S_OK;
 }

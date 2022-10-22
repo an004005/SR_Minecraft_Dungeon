@@ -74,6 +74,9 @@ private:
 	_float			m_fHeight[VTXCNTX][VTXCNTZ];
 	_bool			m_bRendState = false;
 	BlockArray<VTXCNTX, VTXCNTZ> m_arrBlock{};
+
+	D3DMATERIAL9 m_Material;
+
 public:
 	static CTerrainCubeMap*		Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath = L"");
 

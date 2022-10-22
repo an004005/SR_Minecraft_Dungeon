@@ -228,7 +228,7 @@ void CParticleSystem::PreRender_Particle()
 
 void CParticleSystem::PostRender_Particle()
 {
-	m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, false);
+	m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, true);
 	m_pGraphicDev->SetRenderState(D3DRS_POINTSPRITEENABLE, false);
 	m_pGraphicDev->SetRenderState(D3DRS_POINTSCALEENABLE, false);
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, false);

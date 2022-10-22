@@ -562,7 +562,7 @@ void CObjectFactory::Ready_ObjectFactory()
 	
 	s_mapObjectSpawner.insert({ "Cat", []()
 	{
-		return CCat::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Object/cat.cube");
+		return CCat::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Object/bori.cube");
 	} });
 
 	s_mapObjectSpawner.insert({ "Cat2", []()
