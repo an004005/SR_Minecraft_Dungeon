@@ -167,12 +167,12 @@ HRESULT CMapTool::Ready_Layer_Environment()
 	NULL_CHECK_RETURN(m_pCubeMap, E_FAIL);
 	FAILED_CHECK_RETURN(m_arrLayer[LAYER_ENV]->Add_GameObject(L"TerrainCubeMap", m_pCubeMap), E_FAIL);
 
-	 _matrix firstCube;
+	 /*_matrix firstCube;
 	 D3DXMatrixIdentity(&firstCube);
 	 firstCube._41 = 0.5f;
 	 firstCube._42 = 0.5f;
 	 firstCube._43 = 0.5f;
-	 m_pCubeMap->AddCube({firstCube, 0, TYPE_LAND, 1.f});
+	 m_pCubeMap->AddCube({firstCube, 0, TYPE_LAND, 1.f});*/
 
 	return S_OK;
 }
