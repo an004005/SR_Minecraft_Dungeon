@@ -113,7 +113,7 @@ void CStage::LateUpdate_Scene(void)
 
 void CStage::Render_Scene(void)
 {
-	CArrowCubeMgr::GetInst().Render_Buffer(); // todo : ·»´õ·¯¿¡¼­ µ¿ÀÛÇÏ°Ô ¹Ù²Ù±â
+	CArrowCubeMgr::GetInst().Render_Buffer(); // todo : ?Œë”?¬ì—???™ìž‘?˜ê²Œ ë°”ê¾¸ê¸?
 	CDamageFontMgr::GetInstance()->Render_DamageFontMgr();
 }
 
