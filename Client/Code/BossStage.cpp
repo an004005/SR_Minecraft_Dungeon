@@ -43,8 +43,9 @@ _int CBossStage::Update_Scene(const _float & fTimeDelta)
 	{
 		if (m_pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)->IsDead())
 		{
-			if (m_fDeadTime > 3.f)
+			if (m_fDeadTime > 3.f)		
 				m_pPlayer->PlayerSpawn();
+			
 			m_fDeadTime += fTimeDelta;
 
 			if (m_bPlayerAlive)
