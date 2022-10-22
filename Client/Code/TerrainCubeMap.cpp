@@ -8,7 +8,13 @@ CTerrainCubeMap::CTerrainCubeMap(LPDIRECT3DDEVICE9 pGraphicDev)
 {
 	ZeroMemory(&m_fHeight, sizeof(_float) * VTXCNTX * VTXCNTZ);
 	
+	ZeroMemory(&m_Material, sizeof(D3DMATERIAL9));
 
+	m_Material.Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	m_Material.Specular = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+	m_Material.Ambient = D3DXCOLOR(0.45f, 0.45f, 0.45f, 1.f);
+	m_Material.Emissive = D3DXCOLOR(0.f, 0.f, 0.f, 1.f);
+	m_Material.Power = 0.f;
 }
 
 CTerrainCubeMap::~CTerrainCubeMap()
@@ -66,13 +72,15 @@ void CTerrainCubeMap::Render_Object(void)
 
 
 	m_pGraphicDev->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
-
+	m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, TRUE);
+	m_pGraphicDev->SetMaterial(&m_Material);
 
 	for (auto& cubeTex : vecNonAlphaTex)
 	{
 		m_pCubeTextureCom->Set_Texture(cubeTex.first);
 		cubeTex.second->Render_Buffer();
 	}
+
 
 
 	m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
@@ -86,7 +94,6 @@ void CTerrainCubeMap::Render_Object(void)
 	
 	for (auto& cubeTex : vecAlphaTex)
 	{
-
 		m_pCubeTextureCom->Set_Texture(cubeTex.first);
 		cubeTex.second->Render_Buffer();
 	}

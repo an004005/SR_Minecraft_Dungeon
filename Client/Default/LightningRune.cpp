@@ -14,6 +14,8 @@ CLightningRune::CLightningRune(LPDIRECT3DDEVICE9 pGraphicDev): CRune(pGraphicDev
 	m_iUItexNum = 17;
 	m_eItemType = IT_RUNE;
 	m_strFactoryTag = "LightningRune";
+
+	ZeroMemory(&m_LightningLight, sizeof(D3DLIGHT9));
 }
 
 CLightningRune::~CLightningRune()
@@ -25,6 +27,18 @@ HRESULT CLightningRune::Ready_Object()
 	CRune::Ready_Object();
 	m_pItemUI = CUIFactory::Create<CItemUI>("ItemUI", L"LightningRuneUI", 0);
 	m_pItemUI->SetUITexture(m_iUItexNum);
+
+	m_LightningLight.Type = D3DLIGHT_POINT;
+	m_LightningLight.Diffuse.r = 0.f;
+	m_LightningLight.Diffuse.g = 0.f;
+	m_LightningLight.Diffuse.b = 1.f;
+	m_LightningLight.Ambient = {0.f, 0.f, 1.f};
+	m_LightningLight.Specular = {0.f, 0.f, 1.f};
+	m_LightningLight.Attenuation0 = 0.4f;
+	m_LightningLight.Range = 4.f;
+
+	m_fLightTime = 0.2f;
+	m_fCurLightTime = 0.2f;
 
 	return S_OK;
 }
@@ -82,7 +96,19 @@ _int CLightningRune::Update_Object(const _float& fTimeDelta)
 			}
 		}
 	}
-	
+
+
+	if (m_fLightTime < m_fCurLightTime)
+	{
+		m_pGraphicDev->LightEnable(1, FALSE);
+	}
+	else
+	{
+		m_fCurLightTime += fTimeDelta;
+	}
+
+
+
 
 	return OBJ_NOEVENT;
 }
@@ -127,6 +153,11 @@ void CLightningRune::Collision()
 			CEffectFactory::Create<CChainLightning>("ChainLightning", L"ChainLightning", vMonsterPos);
 		}
 	}
+	//
+	m_fCurLightTime = 0.f;
+	m_LightningLight.Position = vOwnerPos + _vec3{0.f, 2.f, 0.f};
+	m_pGraphicDev->SetLight(1, &m_LightningLight);
+	m_pGraphicDev->LightEnable(1, TRUE);
 }
 
 CLightningRune* CLightningRune::Create(LPDIRECT3DDEVICE9 pGraphicDev)

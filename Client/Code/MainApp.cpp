@@ -334,7 +334,7 @@ HRESULT CMainApp::Ready_Proto()
 
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_SkySphere", CShereBuffer::Create(m_pGraphicDev, 20, 20)), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_SkySphereShaderCom", CShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/Shader_Sky.hlsl")), E_FAIL);
-	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_SkySphereTexture", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/SkySphere/sky_%d.png", TEX_NORMAL, 3)), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_SkySphereTexture", Engine::CTexture::Create(m_pGraphicDev, L"../Bin/Resource/Texture/SkySphere/sky_%d.png", TEX_NORMAL, 4)), E_FAIL);
 
 
 	return S_OK;

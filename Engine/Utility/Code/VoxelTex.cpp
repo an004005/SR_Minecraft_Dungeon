@@ -35,8 +35,8 @@ HRESULT CVoxelTex::Ready_Buffer(const char* strTexPath, _float fCellSize)
 
 	m_dwVtxCnt = 0;
 	m_dwTriCnt = 0;
-	m_dwVtxSize = sizeof(VTXCUBE2);
-	m_dwFVF = FVF_CUBE2;
+	m_dwVtxSize = sizeof(VertexCubeNormal2);
+	m_dwFVF = FVF_CUBE_NOR2;
 
 	m_dwIdxSize = sizeof(INDEX32);
 	m_IdxFmt = D3DFMT_INDEX32;
@@ -49,43 +49,43 @@ HRESULT CVoxelTex::Ready_Buffer(const char* strTexPath, _float fCellSize)
 	_float h2 = 0.5f;
 	_float d2 = 0.5f;
 
-	VTXCUBE2 tVtxCubeDefault[FACE_END][4]
+	VertexCubeNormal2 tVtxCubeDefault[FACE_END][4]
 	{
 		{
-			{{-w2, -h2, +d2}, {}},
-			{{+w2, -h2, +d2}, {}},
-			{{+w2, +h2, +d2}, {}},
-			{{-w2, +h2, +d2}, {}}
+			{{-w2, -h2, +d2}, {0.f, 0.f, 1.f}, {}},
+			{{+w2, -h2, +d2}, {0.f, 0.f, 1.f}, {}},
+			{{+w2, +h2, +d2}, {0.f, 0.f, 1.f}, {}},
+			{{-w2, +h2, +d2}, {0.f, 0.f, 1.f}, {}}
 		}, // look
 		{
-			{{-w2, -h2, -d2}, {}},
-			{{-w2, +h2, -d2}, {}},
-			{{+w2, +h2, -d2}, {}},
-			{{+w2, -h2, -d2}, {}}
+			{{-w2, -h2, -d2}, {0.f, 0.f, -1.f}, {}},
+			{{-w2, +h2, -d2}, {0.f, 0.f, -1.f}, {}},
+			{{+w2, +h2, -d2}, {0.f, 0.f, -1.f}, {}},
+			{{+w2, -h2, -d2}, {0.f, 0.f, -1.f}, {}}
 		}, // back
 		{
-			{{-w2, -h2, +d2}, {}},
-			{{-w2, +h2, +d2}, {}},
-			{{-w2, +h2, -d2}, {}},
-			{{-w2, -h2, -d2}, {}}
+			{{-w2, -h2, +d2}, {-1.f, 0.f, 0.f}, {}},
+			{{-w2, +h2, +d2}, {-1.f, 0.f, 0.f}, {}},
+			{{-w2, +h2, -d2}, {-1.f, 0.f, 0.f}, {}},
+			{{-w2, -h2, -d2}, {-1.f, 0.f, 0.f}, {}}
 		}, // left
 		{
-			{{+w2, -h2, -d2}, {}},
-			{{+w2, +h2, -d2}, {}},
-			{{+w2, +h2, +d2}, {}},
-			{{+w2, -h2, +d2}, {}}
+			{{+w2, -h2, -d2}, {1.f, 0.f, 0.f}, {}},
+			{{+w2, +h2, -d2}, {1.f, 0.f, 0.f}, {}},
+			{{+w2, +h2, +d2}, {1.f, 0.f, 0.f}, {}},
+			{{+w2, -h2, +d2}, {1.f, 0.f, 0.f}, {}}
 		}, // right
 		{
-			{{-w2, +h2, -d2}, {}},
-			{{-w2, +h2, +d2}, {}},
-			{{+w2, +h2, +d2}, {}},
-			{{+w2, +h2, -d2}, {}}
+			{{-w2, +h2, -d2}, {0.f, 1.f, 0.f}, {}},
+			{{-w2, +h2, +d2}, {0.f, 1.f, 0.f}, {}},
+			{{+w2, +h2, +d2}, {0.f, 1.f, 0.f}, {}},
+			{{+w2, +h2, -d2}, {0.f, 1.f, 0.f}, {}}
 		}, // up
 		{
-			{{-w2, -h2, -d2}, {}},
-			{{+w2, -h2, -d2}, {}},
-			{{+w2, -h2, +d2}, {}},
-			{{-w2, -h2, +d2}, {}}
+			{{-w2, -h2, -d2}, {0.f, -1.f, 0.f}, {}},
+			{{+w2, -h2, -d2}, {0.f, -1.f, 0.f}, {}},
+			{{+w2, -h2, +d2}, {0.f, -1.f, 0.f}, {}},
+			{{-w2, -h2, +d2}, {0.f, -1.f, 0.f}, {}}
 		}, // down
 	};
 
@@ -100,7 +100,7 @@ HRESULT CVoxelTex::Ready_Buffer(const char* strTexPath, _float fCellSize)
 		}
 	}
 
-	vector<VTXCUBE2> vecVtxCube2;
+	vector<VertexCubeNormal2> vecVtxCube2;
 	vector<INDEX32> vecIdx;
 
 	for (int i = 0; i < iHeight; ++i) // x รเ
@@ -121,7 +121,7 @@ HRESULT CVoxelTex::Ready_Buffer(const char* strTexPath, _float fCellSize)
 				{(float)(j + 1) / iHeight, (float)i / iWidth}
 			};
 
-			VTXCUBE2 tVtxTmp[FACE_END][4];
+			VertexCubeNormal2 tVtxTmp[FACE_END][4];
 			::memcpy(tVtxTmp, tVtxCubeDefault, sizeof(tVtxTmp));
 
 			for (int w = 0; w < FACE_END; ++w)
@@ -144,11 +144,11 @@ HRESULT CVoxelTex::Ready_Buffer(const char* strTexPath, _float fCellSize)
 
 	FAILED_CHECK_RETURN(CVIBuffer::Ready_Buffer(), E_FAIL);
 
-	VTXCUBE2* pVertex = nullptr;
+	VertexCubeNormal2* pVertex = nullptr;
 	INDEX32* pIndex = nullptr;
 
 	m_pVB->Lock(0, 0, (void**)&pVertex, 0);
-	memcpy(pVertex, vecVtxCube2.data(), sizeof(VTXCUBE2) * vecVtxCube2.size());
+	memcpy(pVertex, vecVtxCube2.data(), sizeof(VertexCubeNormal2) * vecVtxCube2.size());
 	m_pVB->Unlock();
 
 	m_pIB->Lock(0, 0, (void**)&pIndex, 0);
