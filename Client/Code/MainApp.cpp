@@ -173,10 +173,9 @@ HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement
 	FAILED_CHECK_RETURN(Engine::Create_Management(pGraphicDev, ppManagement), E_FAIL);
 	(*ppManagement)->AddRef();
 
-	  // CSceneFactory::LoadScene("Loading1", "Stage_Default", true ,0);
-	  // CSceneFactory::LoadScene("Loading1", "Animation Tool", true ,0);
-	CSceneFactory::LoadScene("Loading1", "Logo", true ,500);
-	// CSceneFactory::LoadScene("Loading1", "NetStage_Start", true ,0);
+	  CSceneFactory::LoadScene("Loading1", "Stage_Default", true ,0);
+	//CSceneFactory::LoadScene("Loading1", "Logo", true ,500);
+	//CSceneFactory::LoadScene("Loading1", "NetStage_Start", true ,0);
 
 
 
@@ -235,6 +234,7 @@ HRESULT CMainApp::Ready_Proto()
 	// FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_RcShaderCom", CRcShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/UVAnimation.fx", _vec2(0.0f, 0.0f), _vec2(0.25f, 0.0f), _vec2(0.25f, 0.25f), _vec2(0.0f, 0.25f))), E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_CubeShaderCom", CShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/Shader_Player.hlsl")), E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_ColumnShaderCom", CShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/Shader_Column.hlsl")), E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_RcShaderCom", CRcShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/UVAnimation.fx",_vec2(0.0f,0.0f),_vec2(0.25f,0.f),_vec2(0.25f,0.25f),_vec2(0.0f,0.25f))), E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Proto(L"Proto_ShockPowderCloudCom", CRcShader::Create(m_pGraphicDev, L"../Bin/Resource/Shader/ShockPowder_Cloud.fx",_vec2(0.0f, 0.0f), _vec2(0.25f, 0.f), _vec2(0.25f, 0.25f), _vec2(0.0f, 0.25f))), E_FAIL);

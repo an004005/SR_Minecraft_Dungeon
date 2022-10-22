@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Header\Kouku.h"
 #include "AbstFactory.h"
+#include "ClearUI.h"
 #include "Skeleton.h"
 #include "StatComponent.h"
 #include "KoukuController.h"
@@ -26,7 +27,7 @@ HRESULT CKouku::Ready_Object()
 {
 	CMonster::Ready_Object();
 
-	// m_arrAnim[INTRO] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/RedStoneMonstrosity/intro.anim");
+	m_arrAnim[INTRO] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_intro.anim");
 	m_arrAnim[WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_walk.anim");
 	m_arrAnim[BASIC_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_basicattack.anim");
 	m_arrAnim[IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_idle.anim");
@@ -37,18 +38,20 @@ HRESULT CKouku::Ready_Object()
 	m_arrAnim[SYMBOL_HIDE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_hide.anim");
 	m_arrAnim[REST] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_rest.anim");
 	m_arrAnim[STUN] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_stun.anim");
+	m_arrAnim[DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_dead.anim");
 
 	m_pIdleAnim = &m_arrAnim[IDLE];
-	// m_pCurAnim = &m_arrAnim[INTRO];
-	m_pCurAnim = m_pIdleAnim;
-
+	m_pCurAnim = &m_arrAnim[INTRO];
+	// m_pCurAnim = m_pIdleAnim;
+	m_vTargetPos = CGameUtilMgr::s_vZero + _vec3{ 67.5f,25.f,49.5f };
 	m_eState = IDLE;
 	m_fSpeed = 2.f;
 
 	m_iRedSymbolCnt = 0;
 
+	m_bIntroPlay = true;
 
-	m_pStat->SetMaxHP(1000);
+	m_pStat->SetMaxHP(100);
 
 
 	if (m_bRemote)
@@ -67,7 +70,7 @@ HRESULT CKouku::Ready_Object()
 	//cc¸é¿ª
 	m_bCantCC = true;
 
-	
+
 	m_pBossHPUI = CUIFactory::Create<CKoukuHpUI>("KoukuHPUI", L"KoukuHPUI", -1, WINCX * 0.5f, WINCY * 0.15f, 500, 25);
 	m_pBossHPUI->SetOwner(L"Äí Å©", this, m_pStat->GetMaxHP());
 	m_pBossHPUI->SetNamePos(0.47f);
@@ -173,6 +176,10 @@ void CKouku::AnimationEvent(const string& strEvent)
 	{
 		m_bIsHorrorAttack = false;
 	}
+	else if (strEvent == "Intro_End")
+	{
+		CSoundMgr::GetInstance()->PlayBGM(L"kouku_bgm_0.ogg", 1.f);
+	}
 	else if (strEvent == "AnimStopped")
 	{
 		if (m_eState == STUN)
@@ -182,7 +189,18 @@ void CKouku::AnimationEvent(const string& strEvent)
 		}
 		else if (m_eState == DEAD)
 		{
-			
+			if (m_pBossHPUI)
+				m_pBossHPUI->KillHpbar();
+
+			for (int i = 0; i < 5; i++)
+			{
+				CEffectFactory::Create<CCloud>("Creeper_Cloud", L"Creeper_Cloud", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+			}
+			CSoundMgr::GetInstance()->PlaySound(L"koukuSaton_Dead_0.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+			CSoundMgr::GetInstance()->StopSound(SOUND_BGM);
+			// CClearUI* pClearUI = CUIFactory::Create<CClearUI>("ClearUI", L"ClearUI", 0, WINCX * 0.5f, WINCY * 0.2f, WINCX* 0.4f, WINCY* 0.4f);
+			// pClearUI->SetUITexture(26);
+			m_bDelete = true;
 		}
 	}
 
@@ -190,7 +208,10 @@ void CKouku::AnimationEvent(const string& strEvent)
 
 _int CKouku::Update_Object(const _float& fTimeDelta)
 {
-	if (m_bDelete) return OBJ_DEAD;
+	if (m_bDelete)
+	{
+		return OBJ_DEAD;
+	}
 
 	CMonster::Update_Object(fTimeDelta);
 
@@ -255,6 +276,7 @@ _int CKouku::Update_Object(const _float& fTimeDelta)
 	default:
 		break;
 	}
+
 
 	if (m_eState != HORROR_ATTACK)
 	{
@@ -389,8 +411,8 @@ void CKouku::LateUpdate_Object()
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
 				->TakeDamage(20, KoukuPos, this, DT_KNOCK_BACK);
 		}
-		CEffectFactory::Create<CUVCircle>("Kouku_Explosion", L"Kouku_Explosion",
-			_vec3(m_vKoukuHammerPos.x, m_vKoukuHammerPos.y + 0.2f, m_vKoukuHammerPos.z));
+		// CEffectFactory::Create<CUVCircle>("Kouku_Explosion", L"Kouku_Explosion",
+		// 	_vec3(m_vKoukuHammerPos.x, m_vKoukuHammerPos.y + 0.2f, m_vKoukuHammerPos.z));
 		m_bIsDoubleHammerColl_1 = false;
 	}
 
@@ -528,6 +550,20 @@ void CKouku::StateChange()
 			return;
 		}
 	}
+	if (m_bIntroPlay)
+	{
+		m_eState = INTRO;
+		_vec3 vLook{ _vec3(62.5f, 25.f, 33.5f) };
+		D3DXVec3Normalize(&vLook, &vLook);
+		m_pRootPart->pTrans->m_vInfo[INFO_LOOK] = m_vTargetPos;
+
+		PlayAnimationOnce(&m_arrAnim[INTRO]);
+		m_bIntroPlay = false;
+		m_bCanPlayAnim = false;
+		m_bMove = false;
+		SetOff();
+		return;
+	}
 
 	if (m_bBasicAttack && m_bCanPlayAnim)
 	{
@@ -581,14 +617,14 @@ void CKouku::StateChange()
 		m_pCurAnim = &m_arrAnim[WALK];
 		return;
 	}
-	// if (m_bCanPlayAnim)
-	// {
-	// 	m_eState = WALK;
-	// 	RotateToTargetPos(m_vTargetPos);
-	// 	m_pIdleAnim = &m_arrAnim[WALK];
-	// 	m_pCurAnim = &m_arrAnim[WALK];
-	// 	return;
-	// }
+	if (m_bCanPlayAnim)
+	{
+		m_eState = WALK;
+		RotateToTargetPos(m_vTargetPos);
+		m_pIdleAnim = &m_arrAnim[WALK];
+		m_pCurAnim = &m_arrAnim[WALK];
+		return;
+	}
 	
 
 	if (m_bCanPlayAnim)

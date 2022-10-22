@@ -92,7 +92,12 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 		}
 	}
 
-	CKouku* pKouku = Engine::Get_GameObject<CKouku>(LAYER_ENEMY, L"Kouku");
+	CKouku* pKouku = Get_GameObjectUnCheck<CKouku>(LAYER_ENEMY, L"Kouku");
+	if (pKouku == nullptr) 
+	{
+		saton->IsDeadTrue();
+		return 0;
+	}
 	m_vLookFront = saton->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_LOOK] - _vec3(62.5f, 0, 45.f);
 	_vec3 vLookFront = pKouku->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
 	if(pKouku->Check_SymbolGimmick() && !m_bIsKoukuSymbol)

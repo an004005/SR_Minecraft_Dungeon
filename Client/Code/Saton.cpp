@@ -31,7 +31,6 @@ HRESULT CSaton::Ready_Object()
 	m_arrAnim[SATON_GRAP] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_grap.anim");
 	m_arrAnim[SATON_SYMBOL] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_symbol.anim");
 	m_arrAnim[SATON_FASCINATE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_fascinate.anim");
-
 	m_pIdleAnim = &m_arrAnim[IDLE];
 	// m_pCurAnim = &m_arrAnim[INTRO];
 	m_pCurAnim = m_pIdleAnim;
@@ -42,6 +41,8 @@ HRESULT CSaton::Ready_Object()
 	m_pStat->SetMaxHP(100);
 	// m_pRootPart->pTrans->Set_Pos(62.5f, 20.5f, 49.4f);
 	m_pRootPart->pTrans->m_vInfo[INFO_POS].y = 20.5f;
+
+	m_vTargetPos = _vec3(60.f,25.f,33.f);
 
 	if (m_bRemote)
 	{
@@ -58,7 +59,6 @@ HRESULT CSaton::Ready_Object()
 	m_fTime = 1.f;
 	//cc면역
 	m_bCantCC = true;
-
 	m_bCanPlayAnim = false;
 	PlayAnimationOnce(&m_arrAnim[IDLE]);
 
@@ -187,7 +187,7 @@ _int CSaton::Update_Object(const _float& fTimeDelta)
 	CMonster::Update_Object(fTimeDelta);
 
 	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
-		m_bCanPlayAnim = true;
+		m_bCanPlayAnim = true;	
 
 	if(m_bSatonDrawMoon)
 	{
@@ -200,11 +200,13 @@ _int CSaton::Update_Object(const _float& fTimeDelta)
 		}
 	}
 
+	_float tmp = D3DXToDegree(m_pRootPart->pTrans->m_vAngle.y);
 
-	//
-	// NULL_CHECK_RETURN(pkouku, 0);
-	//
-	// _vec3 vPos = saton->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
+	IM_BEGIN("Saton_Angle");
+
+	ImGui::Text("%f", tmp);
+
+	IM_END;
 
 	// 상태 변경 조건 설정
 	StateChange();
@@ -477,6 +479,7 @@ void CSaton::StateChange()
 
 	if (m_bSatonIntro && m_bCanPlayAnim)
 	{
+		CSoundMgr::GetInstance()->PlaySound(L"Saton_Intro_0_2_1_1.ogg", { 59.5f, 25.f ,35.5f });
 		m_eState = INTRO;
 		RotateToTargetPos(m_vTargetPos);
 		PlayAnimationOnce(&m_arrAnim[INTRO]);

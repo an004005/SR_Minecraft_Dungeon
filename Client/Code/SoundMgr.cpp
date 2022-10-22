@@ -8,7 +8,7 @@ CSoundMgr::CSoundMgr()
 {
 	Ready_SoundMgr();
 	m_fMasterVolume = 0.8f;
-
+	m_fMaxListenDist = 45.f;
 }
 
 CSoundMgr::~CSoundMgr()
@@ -147,10 +147,7 @@ void CSoundMgr::PlayBGM(const wstring& pSoundKey, float fVolume)
 
 void CSoundMgr::StopSound(CHANNELID eID)
 {
-	FMOD_BOOL bPlay = false;
-	FMOD_Channel_IsPlaying(m_pChannelArr[eID], &bPlay);
-	if (bPlay)
-		FMOD_Channel_Stop(m_pChannelArr[eID]);
+	FMOD_Channel_Stop(m_pChannelArr[eID]);
 }
 
 void CSoundMgr::StopAll()
