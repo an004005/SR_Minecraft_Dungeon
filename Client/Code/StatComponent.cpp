@@ -4,6 +4,8 @@
 #include "Particle.h"
 #include "TerrainCubeMap.h"
 #include "DamageFontMgr.h"
+#include "Kouku.h"
+#include "ServerPacketHandler.h"
 
 CStatComponent::CStatComponent()
 {
@@ -213,6 +215,21 @@ void CStatComponent::ModifyHP(_int iModifyingHP, _bool bEffect)
 void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCauser, DamageType eType, _bool bCritical)
 {
 	if (m_bDead) return;
+
+	if (g_bOnline)
+	{
+		CKouku* pKouku =  dynamic_cast<CKouku*>(m_pOwner);
+		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pCauser);
+		if (pKouku && pPlayer && pKouku->IsRemote() == false)
+		{
+			Protocol::C_KOUKU_DAMAGE damagePkt;
+			damagePkt.mutable_player()->set_id(pPlayer->GetID());
+			damagePkt.set_damage(iDamage);
+
+			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(damagePkt));	
+		}
+	}
+
 
 	switch (eType)
 	{

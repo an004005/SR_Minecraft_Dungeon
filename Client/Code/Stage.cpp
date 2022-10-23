@@ -32,6 +32,7 @@
 #include "PlayerStartPos.h"
 #include "SkyBox.h"
 #include "Dynamite.h"
+#include "Portrait.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
@@ -63,10 +64,10 @@ HRESULT CStage::Ready_Scene(void)
 	FAILED_CHECK_RETURN(Ready_Layer_GameLogic(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_UI(), E_FAIL);
 
-	//Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
-	//	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
+	Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+		->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
 
-	// CBatchTool::Load(L"../Bin/Resource/Batch/LASTLASTLASTSTAGE.batch");
+	CBatchTool::Load(L"../Bin/Resource/Batch/LASTLASTLASTSTAGE.batch");
 
 	return S_OK;
 }
@@ -174,7 +175,7 @@ HRESULT CStage::Ready_Layer_GameLogic()
 		default: ;
 	}
 	m_pPlayer->SetName(CObjectStoreMgr::GetInstance()->GetPlayerName());
-	m_pPlayer->PlayerSpawn();
+	// m_pPlayer->PlayerSpawn();
 
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 5.75f, 7.f ,10.f });
@@ -194,8 +195,9 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	//monsters
 	{	
 	
-		// CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 10.f, 4.f, 10.f });
-		// CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
+		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, 0.f ,0.f }, { 5.f, 4.f, 29.f });
+		//CEnemyFactory::Create<CEnderman>("Enderman", L"Enderman", matWorld);
+
 
 		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.3f, 1.3f, 1.3f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 51.f, 4.f, 95.f });
 		CEnemyFactory::Create<CLeaper>("Leaper", L"Leaper", matWorld);

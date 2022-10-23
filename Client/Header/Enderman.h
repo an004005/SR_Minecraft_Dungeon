@@ -15,6 +15,7 @@ private:
 		SMASH,
 		CLOCKING,
 		ARMATTACK,
+		PISTOL,
 		STUN,
 		DEAD,
 		STATE_END
@@ -28,6 +29,7 @@ private:
 		ANIM_CHOP,
 		ANIM_SMASH,
 		ANIM_ARMATTACK,
+		ANIM_PISTOL,
 		ANIM_END
 	};
 
@@ -52,6 +54,7 @@ public:
 	void DoSmash() { m_bSmash = true; }
 	void DoIdle() { m_bMove = false; }
 	void DoArmAttack() { m_bArmAttack = true; }
+	void DoPistol() { m_bPistol = true; }
 	void DoClocking(_vec3 vLook)
 	{
 		m_bClocking = true;
@@ -59,7 +62,7 @@ public:
 		m_vBeforTargetLook = vLook;
 	}
 	void SetTarget(_vec3 vTargetPos){ m_vTargetPos = vTargetPos; }
-
+	void CreateTrail(const vector<string>& vecExcludeParts);
 	//
 
 private:
@@ -84,5 +87,12 @@ private:
 
 	_vec3 m_vBeforTargetLook;
 	CBossHPUI* m_pBossHPUI = nullptr;
+
+	_bool m_bPistol = false;
+	_bool m_bPistolStart = false;
+	_float m_fPistolFreq = 0.2f;
+	_float m_fCurPistolTime = 0.4f;
+
+	_bool m_bCreateTrail = false;
 };
 

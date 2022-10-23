@@ -110,7 +110,7 @@ bool Handle_C_PLAYER_INPUT(PacketSessionRef& session, Protocol::C_PLAYER_INPUT& 
 	inputPkt.mutable_player()->set_name(pkt.player().name());
 	inputPkt.set_inputbit(pkt.inputbit());
 
-	// std::cout << "Player move :  " << pkt.player().id() << endl;
+	std::cout << "Player move :  " << pkt.player().id() << endl;
 
 
 	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(inputPkt));
@@ -137,10 +137,10 @@ bool Handle_C_PLAYER_YAW_ACTION(PacketSessionRef& session, Protocol::C_PLAYER_YA
 	yawActionPkt.mutable_player()->CopyFrom(pkt.player());
 	yawActionPkt.set_yaw(pkt.yaw());
 	yawActionPkt.set_actionbit(pkt.actionbit());
-	// if (pkt.actionbit() & PLAYER_ROLL)
-	// 	std::cout << "Player roll :  " << pkt.player().id() << endl;
-	// else if (pkt.actionbit() & PLAYER_ML)
-	// 	std::cout << "Player melee :  " << pkt.player().id() << endl;
+	if (pkt.actionbit() & PLAYER_ROLL)
+		std::cout << "Player roll :  " << pkt.player().id() << endl;
+	else if (pkt.actionbit() & PLAYER_ML)
+		std::cout << "Player melee :  " << pkt.player().id() << endl;
 
 	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(yawActionPkt));
 	return true;
@@ -152,10 +152,10 @@ bool Handle_C_PLAYER_ACTION(PacketSessionRef& session, Protocol::C_PLAYER_ACTION
 	ActionPkt.set_success(true);
 	ActionPkt.mutable_player()->CopyFrom(pkt.player());
 	ActionPkt.set_actionbit(pkt.actionbit());
-	// if (pkt.actionbit() & PLAYER_POTION)
-	// {
-	// 	std::cout << "Player POTION :  " << pkt.player().id() << endl;
-	// }
+	if (pkt.actionbit() & PLAYER_POTION)
+	{
+		std::cout << "Player POTION :  " << pkt.player().id() << endl;
+	}
 
 
 	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(ActionPkt));
@@ -171,10 +171,10 @@ bool Handle_C_PLAYER_ARROW(PacketSessionRef& session, Protocol::C_PLAYER_ARROW& 
 	arrowPkt.mutable_vlookat()->CopyFrom(pkt.vlookat());
 	arrowPkt.set_actionbit(pkt.actionbit());
 
-	// if (pkt.actionbit() & PLAYER_MR)
-	// {
-	// 	std::cout << "Player arrow :  " << pkt.player().id() << endl;
-	// }
+	if (pkt.actionbit() & PLAYER_MR)
+	{
+		std::cout << "Player arrow :  " << pkt.player().id() << endl;
+	}
 
 	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(arrowPkt));
 
@@ -188,7 +188,7 @@ bool Handle_C_PLAYER_EQUIP(PacketSessionRef& session, Protocol::C_PLAYER_EQUIP& 
 	equipPkt.mutable_player()->CopyFrom(pkt.player());
 	equipPkt.mutable_state()->CopyFrom(pkt.state());
 
-	// std::cout << "Player Equip Change :  " << pkt.player().id() << endl;
+	std::cout << "Player Equip Change :  " << pkt.player().id() << endl;
 
 	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(equipPkt));
 
@@ -317,33 +317,33 @@ bool Handle_C_SATON_ATTACK(PacketSessionRef& session, Protocol::C_SATON_ATTACK& 
 	float y = pkt.targetpos().y();
 	float z = pkt.targetpos().z();
 
-	// switch (pkt.pattern())
-	// {
-	// case Protocol::MoveTo:
-	// 	// cout << "Saton Moveto " << x << " " << y << " " << z <<endl;
-	// 	break;
-	// case Protocol::HAMMER:
-	// 	cout << "Saton HAMMER " << x << " " << y << " " << z <<endl;
-	// 	break;
-	// case Protocol::GRAB:
-	// 	cout << "Saton GRAB " << x << " " << y << " " << z <<endl;
-	// 	break;
-	// case Protocol::BIRD:
-	// 	cout << "Saton BIRD " << x << " " << y << " " << z <<endl;
-	// 	break;
-	// case Protocol::SYMBOL:
-	// 	cout << "Saton SYMBOL " << x << " " << y << " " << z <<endl;
-	// 	break;
-	// case Protocol::FASCINATE:
-	// 	cout << "Saton FASCINATE " << x << " " << y << " " << z <<endl;
-	// 	break;
-	// case Protocol::DRAWMOON:
-	// 	cout << "Saton DRAWMOON " << x << " " << y << " " << z <<endl;
-	// 	break;
-	// case Protocol::SatonPattern_INT_MIN_SENTINEL_DO_NOT_USE_: break;
-	// case Protocol::SatonPattern_INT_MAX_SENTINEL_DO_NOT_USE_: break;
-	// default: ;
-	// }
+	switch (pkt.pattern())
+	{
+	case Protocol::MoveTo:
+		// cout << "Saton Moveto " << x << " " << y << " " << z <<endl;
+		break;
+	case Protocol::HAMMER:
+		cout << "Saton HAMMER " << x << " " << y << " " << z <<endl;
+		break;
+	case Protocol::GRAB:
+		cout << "Saton GRAB " << x << " " << y << " " << z <<endl;
+		break;
+	case Protocol::BIRD:
+		cout << "Saton BIRD " << x << " " << y << " " << z <<endl;
+		break;
+	case Protocol::SYMBOL:
+		cout << "Saton SYMBOL " << x << " " << y << " " << z <<endl;
+		break;
+	case Protocol::FASCINATE:
+		cout << "Saton FASCINATE " << x << " " << y << " " << z <<endl;
+		break;
+	case Protocol::DRAWMOON:
+		cout << "Saton DRAWMOON " << x << " " << y << " " << z <<endl;
+		break;
+	case Protocol::SatonPattern_INT_MIN_SENTINEL_DO_NOT_USE_: break;
+	case Protocol::SatonPattern_INT_MAX_SENTINEL_DO_NOT_USE_: break;
+	default: ;
+	}
 
 	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(satonPkt));
 
@@ -368,13 +368,27 @@ bool Handle_C_KOUKU_COUNTER(PacketSessionRef& session, Protocol::C_KOUKU_COUNTER
 	counterPkt.set_success(true);
 
 	GRoom->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(counterPkt));
+	GRoom->DoAsync(&Room::DoCounter, (uint32)pkt.player().id());
 
+	GRoom->DoTimer(3000, &Room::CounterUnlock);
 	return true;
 }
 
 bool Handle_C_DEBUG_PKT(PacketSessionRef& session, Protocol::C_DEBUG_PKT& pkt)
 {
 	cout << pkt.debuglog() <<endl;
+	return true;
+}
+
+bool Handle_C_KOUKU_DAMAGE(PacketSessionRef& session, Protocol::C_KOUKU_DAMAGE& pkt)
+{
+	GRoom->DoAsync(&Room::DoDamage, (uint32)pkt.player().id(), pkt.damage());
+	return true;
+}
+
+bool Handle_C_KOUKU_RESULT(PacketSessionRef& session, Protocol::C_KOUKU_RESULT& pkt)
+{
+	GRoom->DoTimer(5000, &Room::BroadcastResult);
 	return true;
 }
 

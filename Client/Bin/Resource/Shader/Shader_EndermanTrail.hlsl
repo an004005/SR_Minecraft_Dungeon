@@ -1,23 +1,14 @@
 
 matrix		g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
-
-bool		g_isHit = false;
-bool		g_isDead = false;
-
-float		g_Time = 0.f;
-
+vector g_baseColor;
+float g_Rate;
+bool g_Clocking = false;
 textureCUBE		g_DefaultTexture;
 
 sampler		DefaultSampler = sampler_state 
 {
 	texture = g_DefaultTexture;
-	// minfilter = linear;
-	// magfilter = linear;
 };
-
-float		g_fData = 10.f;
-
-
 
 struct VS_IN
 {
@@ -60,30 +51,13 @@ struct PS_OUT
 PS_OUT PS_MAIN(PS_IN In)
 {
 	PS_OUT		Out = (PS_OUT)0;
-	vector		vColor = Out.vColor.rgba;
-	vector		vHitColor = Out.vColor.rgba;
-	vector		vOriginColor = texCUBE(DefaultSampler, In.vTexUV);
 
-	Out.vColor = texCUBE(DefaultSampler, In.vTexUV);
-
-	if (true == g_isHit)
+	if (!g_Clocking)
 	{
-		vHitColor.r = 1.0f;
-		vHitColor.g = 0.6f;
-		vHitColor.b = 0.6f;
-		vColor = vHitColor * vOriginColor;
+		Out.vColor = g_baseColor;
+		Out.vColor.a = (1.f - g_Rate) *Out.vColor.a;
 	}
-	else
-		vColor = texCUBE(DefaultSampler, In.vTexUV);
-
-	if (true == g_isDead)
-	{
-		vColor.a = 1.f- g_Time;
-	}
-	else
-		vColor.a = 1.f;
-
-	Out.vColor = vColor;
+	
 
 	return Out;
 }
@@ -100,8 +74,6 @@ technique DefaultTechnique
 		VertexShader = compile vs_3_0 VS_MAIN();
 		PixelShader = compile ps_3_0 PS_MAIN();
 	}
-
-
 
 }
 
