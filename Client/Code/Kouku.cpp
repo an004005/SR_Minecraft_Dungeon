@@ -515,7 +515,7 @@ void CKouku::SetKoukuCounter()
 	m_pStat->TakeDamage(0, KoukuPos, this, DT_STUN);
 	Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 		->PlayShake(0.15f, 1.f);
-	CSoundMgr::GetInstance()->PlaySoundChannel(L"grogi_edit.wav", m_pRootPart->pTrans->m_vInfo[INFO_POS], CHANNELID(23),1.f);
+	CSoundMgr::GetInstance()->PlaySoundChannel(L"grogi_edit_2_2.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS], CHANNELID(23),1.f);
 }
 
 void CKouku::Free()
