@@ -408,15 +408,17 @@ void CInventory::AddDefaultItems()
 	m_pRange = CItemFactory::Create<CCrossbow>("Crossbow", L"Crossbow", IS_TAKE);
 	m_pRange->AddRef();
 	m_pRange->SetOwner(m_pOwner);
-	
+	dynamic_cast<CWeapon*>(m_pRange)->SetInventory(this);
 
 	m_pMelee = CItemFactory::Create<CSword>("Sword", L"Sword", IS_TAKE);
 	m_pMelee->AddRef();
 	m_pMelee->SetOwner(m_pOwner);
+	dynamic_cast<CWeapon*>(m_pMelee)->SetInventory(this);
 
 	m_arrItem[0] = CItemFactory::Create<CGlaive>("Glaive", L"Glaive", IS_TAKE);
 	m_arrItem[0]->AddRef();
 	m_arrItem[0]->SetOwner(m_pOwner);
+	dynamic_cast<CWeapon*>(m_arrItem[0])->SetInventory(this);
 
 	m_arrItem[2] = CItemFactory::Create<CStormRune>("StormRune", L"StormRune", IS_TAKE);
 	m_arrItem[2]->AddRef();
@@ -431,6 +433,7 @@ void CInventory::AddDefaultItems()
 	m_arrItem[3] = CItemFactory::Create<CAxe>("Axe", L"Axe", IS_TAKE);
 	m_arrItem[3]->AddRef();
 	m_arrItem[3]->SetOwner(m_pOwner);
+	dynamic_cast<CWeapon*>(m_arrItem[3])->SetInventory(this);
 
 	// test
 	m_arrItem[1] = CItemFactory::Create<CRune>("LightningRune", L"LightningRune", IS_TAKE);
