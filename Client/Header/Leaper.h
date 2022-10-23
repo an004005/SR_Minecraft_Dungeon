@@ -39,7 +39,7 @@ public:
 	static CLeaper* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath, _bool bRemote = false);
 
 	virtual void StateChange();
-
+	void RotateToTargetSlow(const _vec3& vTargetPos);
 	// controller 조종 함수
 	void WalkToTarget() { m_bMove = true; }
 	void DoAttack() { m_bAttack = true; }

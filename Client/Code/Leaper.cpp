@@ -290,6 +290,7 @@ void CLeaper::StateChange()
 	if (m_bCanPlayAnim)
 	{
 		m_eState = State::IDLE;
+		RotateToTargetPos(m_vTargetPos);
 		m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 		m_pCurAnim = &m_arrAnim[ANIM_IDLE];
 		return;
@@ -313,4 +314,21 @@ void CLeaper::JumpToPlayer(const _float& fTimeDelta)
 		m_bMove = false;
 	}
 	
+}
+
+void CLeaper::RotateToTargetSlow(const _vec3& vTargetPos)
+{
+	_vec3 vLook = vTargetPos - m_pRootPart->pTrans->m_vInfo[INFO_POS];
+
+	D3DXVec3Normalize(&vLook, &vLook);
+
+	const _vec2 v2Look{ 0.f, 1.f };
+	_vec2 v2ToDest{ vLook.x, vLook.z };
+
+	const _float fDot = D3DXVec2Dot(&v2Look, &v2ToDest);
+
+	if (vLook.x < 0)
+		m_pRootPart->pTrans->m_vAngle.y = -acosf(fDot);
+	else
+		m_pRootPart->pTrans->m_vAngle.y = acosf(fDot);
 }
