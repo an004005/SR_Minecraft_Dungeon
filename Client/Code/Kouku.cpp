@@ -221,6 +221,12 @@ void CKouku::AnimationEvent(const string& strEvent)
 			// pClearUI->SetUITexture(26);
 			m_bDelete = true;
 
+			for (auto e: Get_Layer(LAYER_GAMEOBJ)->Get_MapObject())
+			{
+				if (auto pTrail = dynamic_cast<CSkeletalGhostTrail*>(e.second))
+					pTrail->SetDead();
+			}
+
 			if (g_bOnline && m_bRemote == false)
 			{
 				Protocol::C_KOUKU_RESULT pkt;
@@ -253,7 +259,7 @@ _int CKouku::Update_Object(const _float& fTimeDelta)
 
 	m_fCurTrailTime += fTimeDelta;
 
-	if (m_bKoukuShadow)
+	if (m_bKoukuShadow && m_eState != DEAD)
 	{
 		if (m_fCurTrailTime > m_fTrailTime)
 		{

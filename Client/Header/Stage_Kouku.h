@@ -34,12 +34,16 @@ public:
 		m_pGraphicDev->SetLight(0, &tLightInfo);
 		m_pGraphicDev->LightEnable(0, TRUE);
 	}
+
+	Atomic<_bool> m_bLoadingDone{false};
+
 private:
 	HRESULT			Ready_Layer_Environment();
 	HRESULT			Ready_Layer_GameLogic();
 	HRESULT			Ready_Layer_UI();
 
 	_vec3			m_vDir;
+
 
 public:
 	static CStage_Kouku*		Create(LPDIRECT3DDEVICE9 pGraphicDev);

@@ -252,7 +252,7 @@ void CPlayer::Render_Object()
 		CGameUtilMgr::World2Screen(vScreen, m_pColl->GetCollPos() + _vec3{0.f, 2.3f, 0.f}, matView, matProj, viewport);
 		wstring tmp(m_strName.begin(), m_strName.end());
 #ifdef _DEBUG
-		tmp = tmp + to_wstring(m_iID);
+		// tmp = tmp + to_wstring(m_iID);
 #endif
 		_float fHalf = 10.f * _float(tmp.size()) / 2;
 		vScreen.x -= fHalf;

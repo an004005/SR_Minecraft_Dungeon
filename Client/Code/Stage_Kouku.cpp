@@ -330,6 +330,7 @@ HRESULT CStage_Kouku::Ready_Layer_GameLogic()
 
 	pPlayer->PlayerSpawn();
 
+	m_bLoadingDone.store(true);
 	return S_OK;
 }
 

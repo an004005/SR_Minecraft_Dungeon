@@ -288,6 +288,14 @@ bool Handle_S_PLAYER_MOVE_STAGE(PacketSessionRef& session, Protocol::S_PLAYER_MO
 
 bool Handle_S_PLAYER_MOVE_STAGE_FINISH(PacketSessionRef& session, Protocol::S_PLAYER_MOVE_STAGE_FINISH& pkt)
 {
+	if (auto pKoukuScene = dynamic_cast<CStage_Kouku*>(CManagement::GetInstance()->GetScene()))
+	{
+		while(pKoukuScene->m_bLoadingDone == false)
+		{
+			
+		}
+	}
+
 	Protocol::Player pPlayerPkt = pkt.player();
 	Protocol::PlayerSkin eSkin = pkt.playerskin();
 	if (pPlayerPkt.id() == CClientServiceMgr::GetInstance()->m_iPlayerID)
