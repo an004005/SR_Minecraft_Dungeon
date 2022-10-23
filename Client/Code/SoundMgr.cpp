@@ -101,11 +101,19 @@ void CSoundMgr::PlaySoundChannel(const wstring& pSoundKey, const _vec3& vSoundPo
 
 	fVolume = fVolume *  (1.f - (fDistance / m_fMaxListenDist));
 
+	FMOD_Channel_Stop(m_pChannelArr[eID]);
+
 	FMOD_System_PlaySound(m_pSystem, iter->second, nullptr, FALSE, &m_pChannelArr[eID]);
 
 	FMOD_Channel_SetVolume(m_pChannelArr[eID], fVolume);
 
 	FMOD_System_Update(m_pSystem);
+}
+
+void CSoundMgr::PlaySoundRandomChannel(const vector<wstring>& vecSoundKey, const _vec3& vSoundPos, CHANNELID eID,
+	float fVolume)
+{
+	PlaySoundChannel(vecSoundKey[rand() % vecSoundKey.size()], vSoundPos, eID, fVolume);
 }
 
 // void CSoundMgr::PlaySoundRandom(float fVolume, const _vec3& vSoundPos int iNum, TCHAR* ...)
