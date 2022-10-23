@@ -24,6 +24,7 @@
 #include "ObjectStoreMgr.h"
 #include "PlayerStartPos.h"
 #include "ServerPacketHandler.h"
+#include "Portrait.h"
 
 CStage_Kouku::CStage_Kouku(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
@@ -40,11 +41,26 @@ HRESULT CStage_Kouku::Ready_Scene(void)
 	if (FAILED(Engine::CScene::Ready_Scene()))
 		return E_FAIL;
 
+	D3DLIGHT9		tLightInfo;
+	ZeroMemory(&tLightInfo, sizeof(D3DLIGHT9));
+
+	tLightInfo.Type		= D3DLIGHT_DIRECTIONAL;
+
+	tLightInfo.Diffuse	= D3DXCOLOR(m_fLightColor, m_fLightColor, m_fLightColor, 1.f);
+	tLightInfo.Specular	= D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.f);
+	tLightInfo.Ambient	= D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.f);
+	tLightInfo.Direction  = _vec3(0.3f, -1.f, 0.15f);
+	m_pGraphicDev->SetLight(0, &tLightInfo);
+	m_pGraphicDev->LightEnable(0, TRUE);
+
 	FAILED_CHECK_RETURN(Ready_Layer_Environment(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_GameLogic(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_UI(), E_FAIL);
 
 	// CClientServiceMgr::GetInstance()->ReadyClientService();
+
+
+
 
 	return S_OK;
 }
@@ -94,7 +110,7 @@ _int CStage_Kouku::Update_Scene(const _float & fTimeDelta)
 	}
 	
 
-	CSoundMgr::GetInstance()->Update_Listener(LAYER_ENV, L"StaticCamera");
+	CSoundMgr::GetInstance()->Update_Listener(LAYER_PLAYER, L"Player");
 	CDamageFontMgr::GetInstance()->Update_DamageFontMgr(fTimeDelta);
 	return Engine::CScene::Update_Scene(fTimeDelta);
 }
@@ -289,19 +305,19 @@ HRESULT CStage_Kouku::Ready_Layer_GameLogic()
 	
 	//monsters
 	if (CClientServiceMgr::GetInstance()->m_iPlayerID == 0) // host
-	{	
-		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 3.f, 3.f, 3.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 21.5f ,47.8f });
+	{
+		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 3.f, 3.f, 3.f }, { 0.f, 0.f ,0.f }, { 62.5f, 21.5f ,47.8f });
 		CEnemyFactory::Create<CSaton>("Saton", L"Saton", matWorld);
 
-		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 0.7f, 0.7f, 0.7f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 25.f ,44.8f });
+		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 0.7f, 0.7f, 0.7f }, { 0.f, 0.f ,0.f }, { 62.5f, 25.f ,44.8f });
 		CEnemyFactory::Create<CKouku>("Kouku", L"Kouku", matWorld);
 	}
 	else
 	{
-		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 3.f, 3.f, 3.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 21.5f ,47.8f });
+		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 3.f, 3.f, 3.f }, { 0.f,  0.f ,0.f }, { 62.5f, 21.5f ,47.8f });
 		CEnemyFactory::Create<CSaton>("Saton_Remote", L"Saton_Remote", matWorld);
 
-		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 0.7f, 0.7f, 0.7f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 62.5f, 25.f ,44.8f });
+		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 0.7f, 0.7f, 0.7f }, { 0.f, 0.f ,0.f }, { 62.5f, 25.f ,44.8f });
 		CEnemyFactory::Create<CKouku>("Kouku_Remote", L"Kouku_Remote", matWorld);
 	}
 

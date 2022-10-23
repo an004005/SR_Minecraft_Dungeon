@@ -151,6 +151,7 @@ HRESULT CAttack_Range_Circle::Ready_Object(const ATKRNGOPTION& circleOption)
 		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture());
 		m_pBufferCom->Set_TextureOption(0, 0, 0);
 		m_pTransCom->m_vScale = m_ATKRNGOption._vMinSize;
+		m_ATKRNGOption._vMaxSize *= 1.5f;
 		tmp = 0.15f;
 	}
 	m_pTransCom->Update_Component(0.f);
@@ -1141,7 +1142,7 @@ _int CFascinate::Update_Object(const _float& fTimeDelta)
 
    CGameObject::Update_Object(fTimeDelta);
 
-   m_pTransCom->m_vAngle.y += D3DXToRadian(40.f) * fTimeDelta * m_fSpeed;
+   // m_pTransCom->m_vAngle.y += D3DXToRadian(40.f) * fTimeDelta * m_fSpeed;
 
    m_pBufferCom->m_matWorld = m_pTransCom->m_matWorld;
 
@@ -1568,16 +1569,16 @@ HRESULT CCloud::Ready_Object(_float _size, CLOUDTYPE _type)
 		m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 		m_pBufferCom->Set_Texture(m_pTexture->GetDXTexture(0));
 		m_pTransCom->Rotation(ROT_X, D3DXToRadian(90.f));
-		m_pBufferCom->Set_TextureOption(15, 4, 2);
+		m_pBufferCom->Set_TextureOption(5, 4, 2);
 		// CTransform*	pPlayer = Engine::Get_Component<CTransform>(LAYER_PLAYER, L"Player", L"Proto_TransformCom", ID_DYNAMIC);
 		// _vec3 pPos;
 		// pPlayer->Get_Info(INFO_POS, &pPos);
 		// m_pTransCom->Set_Pos(pPos.x, pPos.y + 0.5f, pPos.z);
 		m_pTransCom->m_vInfo[INFO_POS].y += 0.5f;
 		m_pTransCom->Set_Scale(_size, _size, _size);
-		m_fTime = 1.5f;
+		m_fTime = 0.5f;
 		m_fCurTime = 0.f;
-		m_fSpeed = 0.f;
+		m_fSpeed = 0.5f;
 
 		_vec3 min = _vec3(-1.0f, 1.0f, -1.0f);
 		_vec3 max = _vec3(1.0f, 1.0f, 1.0f);

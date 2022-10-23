@@ -296,6 +296,10 @@ void CPlayer::AnimationEvent(const string& strEvent)
 		}
 		// axe crack
 	}
+	else if (strEvent == "Glaive_Attack")
+	{
+		m_bApplyMeleeAttackNext = true;
+	}
 	else if (strEvent == "step")
 	{
 		if ((_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].x <= 0 || (_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].z <= 0 ||
@@ -555,7 +559,7 @@ void CPlayer::StateChange()
 		if (m_bReserveStop == false)
 		{
 			if (m_bRemote == false)
-				CSoundMgr::GetInstance()->PlaySound(L"sfx_playerDead-001_soundWave.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+				CSoundMgr::GetInstance()->PlaySoundChannel(L"sfx_playerDead-001_soundWave.mp3", m_pRootPart->pTrans->m_vInfo[INFO_POS], SOUND_UI);
 				// CSoundMgr::GetInstance()->PlaySoundChannel(L"sfx_playerDead-001_soundWave.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS], SOUND_UI);
 			m_eState = DEAD;
 			PlayAnimationOnce(&m_arrAnim[ANIM_DEAD], true);

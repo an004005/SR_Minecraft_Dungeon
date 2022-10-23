@@ -51,7 +51,7 @@ public:
 		return Find_Component(pComponentTag, eID) != nullptr;
 	}
 
-	_bool IsRemove() const { return m_bRemote; }
+	_bool IsRemote() const { return m_bRemote; }
 
 
 public:

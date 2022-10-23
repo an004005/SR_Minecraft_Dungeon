@@ -49,7 +49,10 @@ private:
 
 
 
+
+
 public:
 	static CTerrainWater*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
 	virtual void	Free(void);
+
 };

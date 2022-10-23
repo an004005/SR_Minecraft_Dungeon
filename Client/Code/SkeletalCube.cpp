@@ -13,7 +13,7 @@ CSkeletalCube::CSkeletalCube(LPDIRECT3DDEVICE9 pGraphicDev): CGameObject(pGraphi
 
 	m_Material.Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
 	m_Material.Specular = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
-	m_Material.Ambient = D3DXCOLOR(0.1f, 0.1f, 0.1f, 1.f);
+	m_Material.Ambient = D3DXCOLOR(0.45f, 0.45f, 0.45f, 1.f);
 	m_Material.Emissive = D3DXCOLOR(0.f, 0.f, 0.f, 1.f);
 	m_Material.Power = 0.f;
 }
@@ -93,8 +93,9 @@ void CSkeletalCube::Render_Object()
 		}
 	}
 
-	// m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, TRUE);
 
+	m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, m_bLight);
+	
 	m_pGraphicDev->SetMaterial(&m_Material);
 	m_pRootPart->matParents = m_pRootPart->pTrans->m_matWorld;
 	for (const auto& child : m_pRootPart->vecChild)
@@ -102,7 +103,7 @@ void CSkeletalCube::Render_Object()
 		RenderObjectRecur(child);
 	}
 
-	// m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, FALSE);
+	m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, FALSE);
 
    // m_pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
    // m_pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
@@ -362,6 +363,7 @@ void CSkeletalCube::LoadSkeletal(wstring wstrPath)
 		IM_LOG(tmp.c_str());
 		return;
 	}
+	m_wstrPath = wstrPath;
 
 	for (auto& child : m_pRootPart->vecChild)
 	{

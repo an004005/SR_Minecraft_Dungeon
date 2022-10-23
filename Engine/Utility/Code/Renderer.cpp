@@ -50,6 +50,7 @@ void CRenderer::Clear_RenderGroup(void)
 
 void CRenderer::RenderUI(LPDIRECT3DDEVICE9& pGraphicDev)
 {
+	pGraphicDev->SetRenderState(D3DRS_LIGHTING, FALSE);
 	pGraphicDev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	pGraphicDev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	pGraphicDev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
@@ -78,6 +79,7 @@ void CRenderer::RenderUI(LPDIRECT3DDEVICE9& pGraphicDev)
 	pGraphicDev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	pGraphicDev->SetTransform(D3DTS_VIEW, &OldViewMatrix);
 	pGraphicDev->SetTransform(D3DTS_PROJECTION, &OldProjMatrix);
+	pGraphicDev->SetRenderState(D3DRS_LIGHTING, TRUE);
 
 }
 

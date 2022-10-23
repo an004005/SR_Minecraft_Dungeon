@@ -12,6 +12,7 @@
 #include "SatonController.h"
 #include "StatComponent.h"
 #include "ObjectStoreMgr.h"
+#include "Portrait.h"
 
 PacketHandlerFunc GPacketHandler[UINT16_MAX];
 
@@ -54,9 +55,9 @@ bool Handle_S_ENTER_GAME(PacketSessionRef& session, Protocol::S_ENTER_GAME& pkt)
 	{
 		CPlayer* pPlayer = Get_GameObjectUnCheck<CPlayer>(LAYER_PLAYER, L"Player");
 
-		pPlayer->PlayerSpawn();
 		pPlayer->SetID(CClientServiceMgr::GetInstance()->m_iPlayerID);
 		pPlayer->SetName(pkt.player().name());
+		pPlayer->PlayerSpawn();
 		return true;
 	}
 
@@ -503,5 +504,26 @@ bool Handle_S_KOUKU_COUNTER(PacketSessionRef& session, Protocol::S_KOUKU_COUNTER
 	CStatComponent* pStat = pKouku->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC);
 	if (pStat->IsStun() == false)
 		pKouku->SetKoukuCounter();
+
+	return true;
+}
+
+bool Handle_S_KOUKU_RESULT(PacketSessionRef& session, Protocol::S_KOUKU_RESULT& pkt)
+{
+	if (pkt.success() == false)
+		return true;
+
+	CPortrait* port = CUIFactory::Create<CPortrait>("PortraitUI", L"PortraitUI", -1, WINCX/2, WINCY/2, WINCX, WINCY);
+
+	for (int i = 0; i < pkt.result_size(); ++i)
+	{
+		Protocol::PlayerResult* pResult = pkt.mutable_result(i);
+
+		wstring tmp(pResult->player().name().begin(), pResult->player().name().end());
+
+		port->SetPlayerSkeletal(pResult->skin(), PLAYER_MVP_TYPE(i), pResult->damage() / 10000.f, pResult->counter(), tmp);
+	}
+
+	return true;
 }
 

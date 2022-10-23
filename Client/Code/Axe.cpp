@@ -9,6 +9,7 @@
 #include "Rune.h"
 #include "Inventory.h"
 #include "Kouku.h"
+#include "StaticCamera.h"
 
 
 CAxe::CAxe(LPDIRECT3DDEVICE9 pGraphicDev): CWeapon(pGraphicDev)
@@ -117,6 +118,8 @@ _int CAxe::Attack()
 	{
 		pPlayer->PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK1]);
 		CSoundMgr::GetInstance()->PlaySound(L"sfx_item_axeSwingSwong-001.ogg", pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS]);
+		Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+			->PlayShake(0.1f, 0.1f);
 	}
 	else if (m_iAttackCnt == 1)
 	{
@@ -156,7 +159,7 @@ void CAxe::Collision()
 			{
 				if (!pKouku->Kouku_Stun() && m_iAttackCnt == 0 && pKouku->Kouku_Countable())
 				{
-					pKouku->Kouku_Stun_Success();
+					pKouku->Kouku_Stun_Success(m_pOwner->GetID());
 				}
 			}
 
@@ -164,7 +167,7 @@ void CAxe::Collision()
 			if (m_iAttackCnt == 0) eDT = DT_KNOCK_BACK;
 			if (monster->CheckCC()) eDT = DT_END;
 			monster->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(m_iDamage, vPos, this, eDT, m_bCritical);
+				->TakeDamage(m_iDamage, vPos, m_pOwner, eDT, m_bCritical);
 		}
 	}
 

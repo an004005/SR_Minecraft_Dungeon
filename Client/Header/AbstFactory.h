@@ -2,6 +2,8 @@
 #include <functional>
 #include "Arrow.h"
 #include "Particle.h"
+#include "SkeletalCube.h"
+#include "SkeletalGhostTrail.h"
 
 class CAbstFactory
 {
@@ -256,10 +258,24 @@ public:
 		return pCasted;
 	}
 
+	static CSkeletalGhostTrail* CreateGhostTrail(const string& strFactoryTag, const wstring& wstrObjTag, CSkeletalCube* pTarget, const _matrix& matWorld)
+	{
+		CSkeletalGhostTrail* pCasted = dynamic_cast<CSkeletalGhostTrail*>(s_mapGhostSpawner.find(strFactoryTag)->second(pTarget));
+		_ASSERT_CRASH(pCasted != nullptr);
+		Engine::AddGameObject(LAYER_GAMEOBJ, wstrObjTag, pCasted);
+
+		Engine::CTransform* pTrans = pCasted->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+		pTrans->Set_WorldDecompose(matWorld);
+		pTrans->Update_Component(0.f);
+
+		return pCasted;
+	}
+
 	static void Ready_ObjectFactory();
 
 private:
 	static map<string, std::function<CGameObject*()>> s_mapObjectSpawner;
+	static map<string, std::function<CGameObject*(CSkeletalCube*)>> s_mapGhostSpawner;
 };
 
 class CItemFactory : CAbstFactory

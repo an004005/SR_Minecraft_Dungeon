@@ -102,10 +102,17 @@ public:
 		return itr->second;
 	}
 
+	wstring& GetCubePath() { return m_wstrPath; }
+	CubeAnimFrame*  GetCurAnimFrame() { return m_pCurAnim; }
+	_float GetCurFrameTime() const { return m_fAccTime; }
+	void SetLight(_bool bLight) { m_bLight = bLight; }
+
 private:
 	virtual void SaveRecursive(HANDLE hFile, SkeletalPart* pPart);
 	virtual void DeleteRecursive(const string& strPart);
 	static void TransFrameLerp(_matrix& matOut, const TransFrame& PrevFrame, const TransFrame& NextFrame, const _float fS);
+
+protected:
 	virtual void AnimFrameConsume(_float fTimeDelta);
 
 
@@ -127,9 +134,12 @@ protected:
 
 	_float m_fTime;
 	_bool m_bRenderMachine = true;
+	_bool m_bLight = true;
 	// shader
 
 	_bool m_bStopAnim = false;
 	_bool m_bReserveStop = false;
 	D3DMATERIAL9 m_Material;
+
+	wstring m_wstrPath;
 };

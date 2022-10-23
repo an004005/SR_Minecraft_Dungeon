@@ -23,7 +23,7 @@ HRESULT CSaton::Ready_Object()
 	CMonster::Ready_Object();
 	m_pColl->SetCollType(COLL_WALL);
 
-	// m_arrAnim[INTRO] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/RedStoneMonstrosity/intro.anim");
+	m_arrAnim[INTRO] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_intro.anim");
 	m_arrAnim[FIRSTATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_doubleattack.anim");
 	// m_arrAnim[SECONDATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_attack2.anim");
 	m_arrAnim[IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_idle.anim");
@@ -31,17 +31,18 @@ HRESULT CSaton::Ready_Object()
 	m_arrAnim[SATON_GRAP] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_grap.anim");
 	m_arrAnim[SATON_SYMBOL] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_symbol.anim");
 	m_arrAnim[SATON_FASCINATE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/saton_fascinate.anim");
-
 	m_pIdleAnim = &m_arrAnim[IDLE];
 	// m_pCurAnim = &m_arrAnim[INTRO];
 	m_pCurAnim = m_pIdleAnim;
 
-	m_eState = IDLE;
+	m_eState = INTRO;
 	m_fSpeed = 2.f;
 	// m_pStat->IsSaton();
 	m_pStat->SetMaxHP(100);
 	// m_pRootPart->pTrans->Set_Pos(62.5f, 20.5f, 49.4f);
 	m_pRootPart->pTrans->m_vInfo[INFO_POS].y = 20.5f;
+
+	m_vTargetPos = _vec3(60.f,25.f,33.f);
 
 	if (m_bRemote)
 	{
@@ -58,7 +59,6 @@ HRESULT CSaton::Ready_Object()
 	m_fTime = 1.f;
 	//cc면역
 	m_bCantCC = true;
-
 	m_bCanPlayAnim = false;
 	PlayAnimationOnce(&m_arrAnim[IDLE]);
 
@@ -138,6 +138,7 @@ void CSaton::AnimationEvent(const string& strEvent)
 	{
 		IM_LOG("Grap_Start");
 		m_bIsGrap = true;
+		CSoundMgr::GetInstance()->PlaySound(L"grab_attack.wav", _vec3{ 62.5f,25.f,40.5f });
 	}
 	else if (strEvent == "Grap_End")
 	{
@@ -162,6 +163,8 @@ void CSaton::AnimationEvent(const string& strEvent)
 		CObjectFactory::Create<CCat_Attack>("Bori", L"Bori", matBoriWorld);
 		CObjectFactory::Create<CCat_Attack>("Rui", L"Rui", matRuiWorld);
 		CObjectFactory::Create<CCat_Attack>("Hoddeuk", L"Hoddeuk", matHoddeukWorld);
+		CSoundMgr::GetInstance()->PlaySoundRandom({ L"catspawn1_1.wav", L"catspawn1_2.wav" }, m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+
 		m_bIsCatColl = true; 
 	}
 	else if(strEvent == "Cat_Dead")
@@ -187,7 +190,7 @@ _int CSaton::Update_Object(const _float& fTimeDelta)
 	CMonster::Update_Object(fTimeDelta);
 
 	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
-		m_bCanPlayAnim = true;
+		m_bCanPlayAnim = true;	
 
 	if(m_bSatonDrawMoon)
 	{
@@ -200,11 +203,13 @@ _int CSaton::Update_Object(const _float& fTimeDelta)
 		}
 	}
 
+	_float tmp = D3DXToDegree(m_pRootPart->pTrans->m_vAngle.y);
 
-	//
-	// NULL_CHECK_RETURN(pkouku, 0);
-	//
-	// _vec3 vPos = saton->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS];
+#ifdef _DEBUG
+	IM_BEGIN("Saton_Angle");
+	ImGui::Text("%f", tmp);
+	IM_END;
+#endif
 
 	// 상태 변경 조건 설정
 	StateChange();
@@ -239,13 +244,16 @@ _int CSaton::Update_Object(const _float& fTimeDelta)
 	default:
 		break;
 	}
+	if (m_bSatonIntro) return OBJ_NOEVENT;
 
-
+#ifdef _DEBUG
 	IM_BEGIN("StatePos");
 
 	ImGui::Text("%f,%f,%f",m_pRootPart->pTrans->m_vInfo[INFO_POS].x, m_pRootPart->pTrans->m_vInfo[INFO_POS].y, m_pRootPart->pTrans->m_vInfo[INFO_POS].z);
 
 	IM_END;
+#endif
+
 
 	return OBJ_NOEVENT;
 }
@@ -258,18 +266,13 @@ void CSaton::LateUpdate_Object()
 	{
 		set<CGameObject*> setPlayer;
 		Engine::GetOverlappedObject(setPlayer, m_vExplodMoonPos, 4.f);
-
+		DEBUG_SPHERE(m_vExplodMoonPos, 4.f, 1.f);
 		for (auto& obj : setPlayer)
 		{
-
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 			{
 				CStatComponent* PlayerStatCom = pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC);
-
-				if (pPlayer->GetID() == 0)
-				{
-					PlayerStatCom->TakeDamage(0, pPlayer->GetInfo(INFO_POS), this, DT_STUN);
-				}
+				PlayerStatCom->TakeDamage(0, pPlayer->GetInfo(INFO_POS), this, DT_STUN);
 			}
 		}
 		for (int j = 0; j < 10; j++)
@@ -322,6 +325,7 @@ void CSaton::LateUpdate_Object()
 			}
 		}
 		m_bIsAttack_1_Coll = false;
+		CSoundMgr::GetInstance()->PlaySound(L"attack2_hit_1.wav", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 	}
 
 	if(m_bIsAttack_2_Coll)
@@ -474,20 +478,30 @@ void CSaton::StateChange()
 		}
 	}
 
+	if (m_bSatonIntro && m_bCanPlayAnim)
+	{
+		CSoundMgr::GetInstance()->PlaySound(L"Saton_Intro_0_2_1_1.wav", { 59.5f, 25.f ,35.5f });
+		m_eState = INTRO;
+		RotateToTargetPos(m_vTargetPos);
+		PlayAnimationOnce(&m_arrAnim[INTRO]);
+		m_bCanPlayAnim = false;
+		// SetOff();
+		m_bSatonIntro = false;
+		return;
+	}
+
 	if (m_bFirstHammerAttack && m_bCanPlayAnim)
 	{
 		m_eState = FIRSTATTACK;
 		RotateToTargetPos(m_vTargetPos);
 		PlayAnimationOnce(&m_arrAnim[FIRSTATTACK]);
 		m_bCanPlayAnim = false;
-
 		Protocol::C_DEBUG_PKT pkt;
 		string debug = "Player : " +  to_string(CClientServiceMgr::GetInstance()->m_iPlayerID) + " Hit x :"
 		+ to_string(m_vTargetPos.x) +  ", z :" + to_string(m_vTargetPos.z);
 		pkt.set_debuglog(debug);
 		CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(pkt));	
-		
-
+		CSoundMgr::GetInstance()->PlaySoundRandom({ L"attack2_big.wav", L"attack2_big_1.wav" }, { 59.5f, 25.f ,40.5f });
 		SetOff();
 		return;
 	}
@@ -514,6 +528,7 @@ void CSaton::StateChange()
 	if (m_bSatonSymbolAnim && m_bCanPlayAnim && m_eState == IDLE)
 	{
 		m_eState = SATON_SYMBOL;
+		CSoundMgr::GetInstance()->PlaySound(L"fear1.wav", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 		RotateToTargetPos(m_vTargetPos);
 		PlayAnimationOnce(&m_arrAnim[SATON_SYMBOL]);
 		m_bCanPlayAnim = false;
@@ -523,6 +538,8 @@ void CSaton::StateChange()
 	if (m_bSatonFascinate && m_bCanPlayAnim)
 	{
 		m_eState = SATON_FASCINATE;
+		CSoundMgr::GetInstance()->PlaySound(L"hook.wav", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+
 		RotateToTargetPos(m_vTargetPos);
 		PlayAnimationOnce(&m_arrAnim[SATON_FASCINATE]);
 		m_bCanPlayAnim = false;

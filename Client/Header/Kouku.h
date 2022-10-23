@@ -75,7 +75,7 @@ public:
 
 	_bool Kouku_Countable(void) { return m_bCountable; }
 
-	void Kouku_Stun_Success(void);
+	void Kouku_Stun_Success(_uint iID);
 	void SetKoukuCounter();
 
 	_bool Check_SymbolGimmick(void) { return m_bIsSymbolGimmick; }
@@ -100,7 +100,7 @@ private:
 	// true : PlayAnimationOnce 사용 가능 상태(동작 애니메이션 실행 가능), false: 다른 애니메이션 실행중
 	_bool m_bCanPlayAnim = true; // 현재 실행중인 애니메이션 끊고 애니메이션 실행 가능 여부
 
-	_vec3 m_vTargetPos = CGameUtilMgr::s_vZero; 
+	_vec3 m_vTargetPos = CGameUtilMgr::s_vZero;
 
 	//KoukuPattern
 	_bool m_bDoubleHammer = false;
@@ -134,6 +134,17 @@ private:
 	_float m_fCurTime;
 	_bool m_bStun = false;
 
+	_bool m_bKoukuShadow = false;
+
+	//light
+	D3DLIGHT9 m_CounterLight;
+	_float m_fLightTime = 0.1f;
+	_float m_fCurLightTime = 0.1f;
+	//~light
+
+	//shadow
+	_float m_fCurTrailTime = 0.15f;
+	_float m_fTrailTime = 0.15f;
 	//Intro
 	_bool m_bStartPlay = false;
 	_bool m_bIntroPlay = false;

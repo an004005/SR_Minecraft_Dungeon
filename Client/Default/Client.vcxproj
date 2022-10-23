@@ -192,6 +192,7 @@
     <ClInclude Include="..\Header\Enderman.h" />
     <ClInclude Include="..\Header\EndermanController.h" />
     <ClInclude Include="..\Header\EditBox.h" />
+    <ClInclude Include="..\Header\EndermanTrail.h" />
     <ClInclude Include="..\Header\Enum.pb.h" />
     <ClInclude Include="..\Header\FireworksArrow.h" />
     <ClInclude Include="..\Header\CamAnimation.h" />
@@ -212,6 +213,7 @@
     <ClInclude Include="..\Header\KoukuController.h" />
     <ClInclude Include="..\Header\NetStage.h" />
     <ClInclude Include="..\Header\PlayerUI.h" />
+    <ClInclude Include="..\Header\Portrait.h" />
     <ClInclude Include="..\Header\Posion.h" />
     <ClInclude Include="..\Header\AnimationTool.h" />
     <ClInclude Include="..\Header\Apple.h" />
@@ -267,6 +269,7 @@
     <ClInclude Include="..\Header\ServerPacketHandler.h" />
     <ClInclude Include="..\Header\ShockPowder.h" />
     <ClInclude Include="..\Header\SkeletalCube.h" />
+    <ClInclude Include="..\Header\SkeletalGhostTrail.h" />
     <ClInclude Include="..\Header\Skeleton.h" />
     <ClInclude Include="..\Header\SkeletonController.h" />
     <ClInclude Include="..\Header\SkyBox.h" />
@@ -332,6 +335,7 @@
     <ClCompile Include="..\Code\Enderman.cpp" />
     <ClCompile Include="..\Code\EndermanController.cpp" />
     <ClCompile Include="..\Code\EditBox.cpp" />
+    <ClCompile Include="..\Code\EndermanTrail.cpp" />
     <ClCompile Include="..\Code\Enum.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -354,6 +358,7 @@
     <ClCompile Include="..\Code\KoukuController.cpp" />
     <ClCompile Include="..\Code\PlayerUI.cpp" />
     <ClCompile Include="..\Code\NetStage.cpp" />
+    <ClCompile Include="..\Code\Portrait.cpp" />
     <ClCompile Include="..\Code\Posion.cpp" />
     <ClCompile Include="..\Code\AnimationTool.cpp" />
     <ClCompile Include="..\Code\Apple.cpp" />
@@ -411,6 +416,7 @@
     <ClCompile Include="..\Code\ServerPacketHandler.cpp" />
     <ClCompile Include="..\Code\ShockPowder.cpp" />
     <ClCompile Include="..\Code\SkeletalCube.cpp" />
+    <ClCompile Include="..\Code\SkeletalGhostTrail.cpp" />
     <ClCompile Include="..\Code\Skeleton.cpp" />
     <ClCompile Include="..\Code\SkeletonController.cpp" />
     <ClCompile Include="..\Code\SkyBox.cpp" />
@@ -508,8 +514,10 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\Bin\Resource\Shader\Shader_GhostTrail.hlsl" />
     <FxCompile Include="..\Bin\Resource\Shader\Shader_Player.hlsl" />
     <FxCompile Include="..\Bin\Resource\Shader\Shader_Sky.hlsl" />
+    <FxCompile Include="..\Bin\Resource\Shader\UVAnimation.fx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

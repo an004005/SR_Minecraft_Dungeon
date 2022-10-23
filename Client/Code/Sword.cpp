@@ -206,14 +206,15 @@ void CSword::Collision()
 			{
 				if(!pKouku->Kouku_Stun() && m_iAttackCnt == 0 && pKouku->Kouku_Countable())
 				{
-					pKouku->Kouku_Stun_Success();
+					pKouku->Kouku_Stun_Success(m_pOwner->GetID());
+
 				}
 			}
 			if (m_iAttackCnt == 0) eDT = DT_KNOCK_BACK;
 			
 			if (monster->CheckCC()) eDT = DT_END;
 			monster->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(m_iDamage, vPos, this, eDT, m_bCritical);
+				->TakeDamage(m_iDamage, vPos, m_pOwner, eDT, m_bCritical);
 		}
 	}
 

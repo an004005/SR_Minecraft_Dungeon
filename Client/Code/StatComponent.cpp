@@ -4,6 +4,8 @@
 #include "Particle.h"
 #include "TerrainCubeMap.h"
 #include "DamageFontMgr.h"
+#include "Kouku.h"
+#include "ServerPacketHandler.h"
 
 CStatComponent::CStatComponent()
 {
@@ -214,6 +216,21 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 {
 	if (m_bDead) return;
 
+	if (g_bOnline)
+	{
+		CKouku* pKouku =  dynamic_cast<CKouku*>(m_pOwner);
+		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pCauser);
+		if (pKouku && pPlayer && pKouku->IsRemote() == false)
+		{
+			Protocol::C_KOUKU_DAMAGE damagePkt;
+			damagePkt.mutable_player()->set_id(pPlayer->GetID());
+			damagePkt.set_damage(iDamage);
+
+			CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(damagePkt));	
+		}
+	}
+
+
 	switch (eType)
 	{
 	case DT_STUN:
@@ -271,6 +288,7 @@ void CStatComponent::TakeDamage(_int iDamage, _vec3 vFromPos, CGameObject* pCaus
 		m_fCurSatonSymbolTime = 0.f;
 		break;
 	case DT_SATON_FASCINATED:
+		if (m_bDead) break;
 		m_bFascinated = true;
 		m_fCurSatonFascinatedTime = 0.f;
 		m_pFaci = CEffectFactory::Create<CFascinate>("Facinate", L"Facinate",

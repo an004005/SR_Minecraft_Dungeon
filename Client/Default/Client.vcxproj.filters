@@ -65,26 +65,11 @@
     <Filter Include="02. GameObject\06. Inventory">
       <UniqueIdentifier>{fcce4791-e493-43f9-b897-5adda5582bb6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObject\07. Item">
-      <UniqueIdentifier>{e2226c9a-f276-4c87-aff3-ea3e2b871f4c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\07. Item\Equip">
-      <UniqueIdentifier>{bac7e08f-da62-4ef5-94fd-1b468d27a049}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\07. Item\Consume">
-      <UniqueIdentifier>{668c2bd9-3d07-49be-853c-076e93334e1c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObject\05. UI">
       <UniqueIdentifier>{ccd7142e-0ace-4ebb-a0fa-ab4858a4884e}</UniqueIdentifier>
     </Filter>
     <Filter Include="99. Default\fmod">
       <UniqueIdentifier>{ecdc1d57-d2d0-4795-b9a5-0995be8f09e6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\07. Item\Rune">
-      <UniqueIdentifier>{d16df8c3-d21e-4ee4-87a9-cb5f352ce375}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObject\07. Item\Weapon">
-      <UniqueIdentifier>{3871ea02-a479-440a-9475-0722e825632c}</UniqueIdentifier>
     </Filter>
     <Filter Include="02. GameObject\Particle">
       <UniqueIdentifier>{a097aa65-4bb2-4da6-803b-331fe7896605}</UniqueIdentifier>
@@ -100,6 +85,21 @@
     </Filter>
     <Filter Include="network">
       <UniqueIdentifier>{42fb0a63-e782-4979-b687-946596b8bea0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Scene\07. Item">
+      <UniqueIdentifier>{e2226c9a-f276-4c87-aff3-ea3e2b871f4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Scene\07. Item\Equip">
+      <UniqueIdentifier>{bac7e08f-da62-4ef5-94fd-1b468d27a049}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Scene\07. Item\Consume">
+      <UniqueIdentifier>{668c2bd9-3d07-49be-853c-076e93334e1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Scene\07. Item\Rune">
+      <UniqueIdentifier>{d16df8c3-d21e-4ee4-87a9-cb5f352ce375}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Scene\07. Item\Weapon">
+      <UniqueIdentifier>{3871ea02-a479-440a-9475-0722e825632c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -287,16 +287,16 @@
       <Filter>02. GameObject\Object</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Item.h">
-      <Filter>02. GameObject\07. Item</Filter>
+      <Filter>01. Scene\07. Item</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Arrow.h">
-      <Filter>02. GameObject\07. Item\Equip</Filter>
+      <Filter>01. Scene\07. Item\Equip</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\EquipItem.h">
-      <Filter>02. GameObject\07. Item\Equip</Filter>
+      <Filter>01. Scene\07. Item\Equip</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Emerald.h">
-      <Filter>02. GameObject\07. Item\Consume</Filter>
+      <Filter>01. Scene\07. Item\Consume</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Box.h" />
     <ClInclude Include="..\Header\Dynamite.h" />
@@ -307,37 +307,37 @@
       <Filter>02. GameObject\Object</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Sword.h">
-      <Filter>02. GameObject\07. Item\Equip</Filter>
+      <Filter>01. Scene\07. Item\Equip</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Axe.h">
-      <Filter>02. GameObject\07. Item\Equip</Filter>
+      <Filter>01. Scene\07. Item\Equip</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\ConsumeItem.h">
-      <Filter>02. GameObject\07. Item\Consume</Filter>
+      <Filter>01. Scene\07. Item\Consume</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Apple.h">
-      <Filter>02. GameObject\07. Item\Consume</Filter>
+      <Filter>01. Scene\07. Item\Consume</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\ArrowBundle.h">
-      <Filter>02. GameObject\07. Item\Consume</Filter>
+      <Filter>01. Scene\07. Item\Consume</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Bread.h">
-      <Filter>02. GameObject\07. Item\Consume</Filter>
+      <Filter>01. Scene\07. Item\Consume</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Posion.h">
-      <Filter>02. GameObject\07. Item\Consume</Filter>
+      <Filter>01. Scene\07. Item\Consume</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\ArrowCubeMgr.h">
-      <Filter>02. GameObject\07. Item\Equip</Filter>
+      <Filter>01. Scene\07. Item\Equip</Filter>
     </ClInclude>
     <ClInclude Include="BootsOfSwiftness.h">
-      <Filter>02. GameObject\07. Item\Equip</Filter>
+      <Filter>01. Scene\07. Item\Equip</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\FireworksArrow.h">
-      <Filter>02. GameObject\07. Item\Equip</Filter>
+      <Filter>01. Scene\07. Item\Equip</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\ShockPowder.h">
-      <Filter>02. GameObject\07. Item\Equip</Filter>
+      <Filter>01. Scene\07. Item\Equip</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\UI.h">
       <Filter>02. GameObject\05. UI</Filter>
@@ -395,22 +395,22 @@
       <Filter>02. GameObject\Object</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Rune.h">
-      <Filter>02. GameObject\07. Item\Rune</Filter>
+      <Filter>01. Scene\07. Item\Rune</Filter>
     </ClInclude>
     <ClInclude Include="LightningRune.h">
-      <Filter>02. GameObject\07. Item\Rune</Filter>
+      <Filter>01. Scene\07. Item\Rune</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Sword.h">
       <Filter>02. GameObject\07. Item\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Weapon.h">
-      <Filter>02. GameObject\07. Item\Weapon</Filter>
+      <Filter>01. Scene\07. Item\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Glaive.h">
-      <Filter>02. GameObject\07. Item\Weapon</Filter>
+      <Filter>01. Scene\07. Item\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Crossbow.h">
-      <Filter>02. GameObject\07. Item\Weapon</Filter>
+      <Filter>01. Scene\07. Item\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Axe.h">
       <Filter>02. GameObject\07. Item\Weapon</Filter>
@@ -422,19 +422,19 @@
       <Filter>02. GameObject\Camera</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\StormRune.h">
-      <Filter>02. GameObject\07. Item\Rune</Filter>
+      <Filter>01. Scene\07. Item\Rune</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\StunRune.h">
-      <Filter>02. GameObject\07. Item\Rune</Filter>
+      <Filter>01. Scene\07. Item\Rune</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\PowerRune.h">
-      <Filter>02. GameObject\07. Item\Rune</Filter>
+      <Filter>01. Scene\07. Item\Rune</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\MultiShotRune.h">
-      <Filter>02. GameObject\07. Item\Rune</Filter>
+      <Filter>01. Scene\07. Item\Rune</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\LaserShotRune.h">
-      <Filter>02. GameObject\07. Item\Rune</Filter>
+      <Filter>01. Scene\07. Item\Rune</Filter>
     </ClInclude>
     <ClInclude Include="ItemUI.h">
       <Filter>02. GameObject\05. UI</Filter>
@@ -518,9 +518,6 @@
     <ClInclude Include="..\Header\Cat.h" />
     <ClInclude Include="..\Header\Cat2.h" />
     <ClInclude Include="..\Header\KoukuHpUI.h" />
-    <ClInclude Include="..\Header\MapUI.h" />
-    <ClInclude Include="..\Header\StartStage.h" />
-    <ClInclude Include="..\Header\MapTable.h" />
     <ClInclude Include="..\Header\NetStartStage.h">
       <Filter>01. Scene\01. Stage</Filter>
     </ClInclude>
@@ -532,6 +529,24 @@
     </ClInclude>
     <ClInclude Include="..\Header\BossStage.h" />
     <ClInclude Include="..\Header\SkyBox.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\StartStage.h">
+      <Filter>01. Scene\01. Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\MapUI.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\MapTable.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Portrait.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\SkeletalGhostTrail.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\EndermanTrail.h">
       <Filter>02. GameObject\Object</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Cat_Idle.h" />
@@ -704,16 +719,16 @@
       <Filter>02. GameObject\Object</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Item.cpp">
-      <Filter>02. GameObject\07. Item</Filter>
+      <Filter>01. Scene\07. Item</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Arrow.cpp">
-      <Filter>02. GameObject\07. Item\Equip</Filter>
+      <Filter>01. Scene\07. Item\Equip</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\EquipItem.cpp">
-      <Filter>02. GameObject\07. Item\Equip</Filter>
+      <Filter>01. Scene\07. Item\Equip</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Emerald.cpp">
-      <Filter>02. GameObject\07. Item\Consume</Filter>
+      <Filter>01. Scene\07. Item\Consume</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Box.cpp" />
     <ClCompile Include="..\Code\Dynamite.cpp" />
@@ -724,10 +739,10 @@
       <Filter>02. GameObject\Object</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Sword.cpp">
-      <Filter>02. GameObject\07. Item\Equip</Filter>
+      <Filter>01. Scene\07. Item\Equip</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Axe.cpp">
-      <Filter>02. GameObject\07. Item\Equip</Filter>
+      <Filter>01. Scene\07. Item\Equip</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Arrow.cpp">
       <Filter>02. GameObject\07. Item\Equip</Filter>
@@ -736,37 +751,37 @@
       <Filter>02. GameObject\07. Item\Equip</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Glaive.cpp">
-      <Filter>02. GameObject\07. Item\Equip</Filter>
+      <Filter>01. Scene\07. Item\Equip</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Crossbow.cpp">
-      <Filter>02. GameObject\07. Item\Equip</Filter>
+      <Filter>01. Scene\07. Item\Equip</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\ConsumeItem.cpp">
-      <Filter>02. GameObject\07. Item\Consume</Filter>
+      <Filter>01. Scene\07. Item\Consume</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Apple.cpp">
-      <Filter>02. GameObject\07. Item\Consume</Filter>
+      <Filter>01. Scene\07. Item\Consume</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\ArrowBundle.cpp">
-      <Filter>02. GameObject\07. Item\Consume</Filter>
+      <Filter>01. Scene\07. Item\Consume</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Bread.cpp">
-      <Filter>02. GameObject\07. Item\Consume</Filter>
+      <Filter>01. Scene\07. Item\Consume</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Posion.cpp">
-      <Filter>02. GameObject\07. Item\Consume</Filter>
+      <Filter>01. Scene\07. Item\Consume</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\ArrowCubeMgr.cpp">
-      <Filter>02. GameObject\07. Item\Equip</Filter>
+      <Filter>01. Scene\07. Item\Equip</Filter>
     </ClCompile>
     <ClCompile Include="BootsOfSwiftness.cpp">
-      <Filter>02. GameObject\07. Item\Equip</Filter>
+      <Filter>01. Scene\07. Item\Equip</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\FireworksArrow.cpp">
-      <Filter>02. GameObject\07. Item\Equip</Filter>
+      <Filter>01. Scene\07. Item\Equip</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\ShockPowder.cpp">
-      <Filter>02. GameObject\07. Item\Equip</Filter>
+      <Filter>01. Scene\07. Item\Equip</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Sword.cpp">
       <Filter>02. GameObject\07. Item\Equip</Filter>
@@ -830,13 +845,13 @@
       <Filter>02. GameObject\Object</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Rune.cpp">
-      <Filter>02. GameObject\07. Item\Rune</Filter>
+      <Filter>01. Scene\07. Item\Rune</Filter>
     </ClCompile>
     <ClCompile Include="LightningRune.cpp">
-      <Filter>02. GameObject\07. Item\Rune</Filter>
+      <Filter>01. Scene\07. Item\Rune</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Weapon.cpp">
-      <Filter>02. GameObject\07. Item\Weapon</Filter>
+      <Filter>01. Scene\07. Item\Weapon</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Sword.cpp">
       <Filter>02. GameObject\07. Item\Weapon</Filter>
@@ -857,19 +872,19 @@
       <Filter>02. GameObject\Camera</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\StormRune.cpp">
-      <Filter>02. GameObject\07. Item\Rune</Filter>
+      <Filter>01. Scene\07. Item\Rune</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\StunRune.cpp">
-      <Filter>02. GameObject\07. Item\Rune</Filter>
+      <Filter>01. Scene\07. Item\Rune</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\PowerRune.cpp">
-      <Filter>02. GameObject\07. Item\Rune</Filter>
+      <Filter>01. Scene\07. Item\Rune</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\LaserShotRune.cpp">
-      <Filter>02. GameObject\07. Item\Rune</Filter>
+      <Filter>01. Scene\07. Item\Rune</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\MultiShotRune.cpp">
-      <Filter>02. GameObject\07. Item\Rune</Filter>
+      <Filter>01. Scene\07. Item\Rune</Filter>
     </ClCompile>
     <ClCompile Include="ItemUI.cpp">
       <Filter>02. GameObject\05. UI</Filter>
@@ -949,9 +964,6 @@
     <ClCompile Include="..\Code\Cat_Attack.cpp" />
     <ClCompile Include="..\Code\Cat2.cpp" />
     <ClCompile Include="..\Code\KoukuHpUI.cpp" />
-    <ClCompile Include="..\Code\MapUI.cpp" />
-    <ClCompile Include="..\Code\StartStage.cpp" />
-    <ClCompile Include="..\Code\MapTable.cpp" />
     <ClCompile Include="Cat.cpp" />
     <ClCompile Include="..\Code\NetStartStage.cpp">
       <Filter>01. Scene\01. Stage</Filter>
@@ -964,6 +976,24 @@
     </ClCompile>
     <ClCompile Include="..\Code\BossStage.cpp" />
     <ClCompile Include="..\Code\SkyBox.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\StartStage.cpp">
+      <Filter>01. Scene\01. Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MapUI.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MapTable.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Portrait.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SkeletalGhostTrail.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\EndermanTrail.cpp">
       <Filter>02. GameObject\Object</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Cat_Idle.cpp" />
@@ -989,5 +1019,7 @@
   <ItemGroup>
     <FxCompile Include="..\Bin\Resource\Shader\Shader_Player.hlsl" />
     <FxCompile Include="..\Bin\Resource\Shader\Shader_Sky.hlsl" />
+    <FxCompile Include="..\Bin\Resource\Shader\Shader_GhostTrail.hlsl" />
+    <FxCompile Include="..\Bin\Resource\Shader\UVAnimation.fx" />
   </ItemGroup>
 </Project>

@@ -178,5 +178,5 @@ CComponent* CShereBuffer::Clone()
 void CShereBuffer::Free()
 {
 	Safe_Release(gpSphere);
-	CVIBuffer::Free();
+	Safe_Release(m_pGraphicDev);
 }

@@ -31,6 +31,7 @@
 #include "LightMgr.h"
 #include "Shader.h"
 #include "ShereBuffer.h"
+#include "TargetTexture.h"
 
 
 BEGIN(Engine)

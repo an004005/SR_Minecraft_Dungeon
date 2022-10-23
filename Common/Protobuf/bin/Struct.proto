@@ -39,3 +39,11 @@ message Matrix
 	Vec4 vLook = 3;
 	Vec4 vPos = 4;
 }
+
+message PlayerResult
+{
+	Player player = 1;
+	PlayerSkin skin = 2;
+	uint32 damage = 3;
+	uint32 counter = 4;
+}

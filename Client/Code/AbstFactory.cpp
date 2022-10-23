@@ -79,6 +79,8 @@
 #include "KoukuLoading.h"
 #include "BossStage.h"
 #include "SkyBox.h"
+#include "SkeletalGhostTrail.h"
+#include "Portrait.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -89,6 +91,8 @@ map<string, std::function<CGameObject*(const ATKRNGOPTION& circleOption)>> CEffe
 map<string, std::function<CGameObject*()>> CEnvFactory::s_mapEnvSpawner;
 map<string, std::function<CGameObject*(ArrowParams)>> CBulletFactory::s_mapBulletSpawner;
 map<string, std::function<CGameObject*()>> CObjectFactory::s_mapObjectSpawner;
+map<string, std::function<CGameObject*(CSkeletalCube*)>> CObjectFactory::s_mapGhostSpawner;
+
 map<string, std::function<CGameObject*()>> CItemFactory::s_mapItemSpawner;
 map<string, std::function<CGameObject*(_uint)>> CUIFactory::s_mapUISpawner;
 
@@ -563,7 +567,7 @@ void CObjectFactory::Ready_ObjectFactory()
 	
 	s_mapObjectSpawner.insert({ "Cat", []()
 	{
-		return CCat::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Object/cat.cube");
+		return CCat::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Object/bori.cube");
 	} });
 
 	s_mapObjectSpawner.insert({ "Cat2", []()
@@ -584,6 +588,12 @@ void CObjectFactory::Ready_ObjectFactory()
 	s_mapObjectSpawner.insert({ "hoddeuk", []()
 	{
 		return CCat_Idle::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Object/hoddeuk.cube");
+	} });
+
+
+	s_mapGhostSpawner.insert({ "GhostTrail", [](CSkeletalCube* pTarget)
+	{
+		return CSkeletalGhostTrail::Create(s_pGraphicDev, pTarget);
 	} });
 }
 
@@ -744,7 +754,11 @@ void CUIFactory::Ready_UIFactory()
 	 {
 		 return CMapUI::Create(s_pGraphicDev, 0);
 	 } });
-	
+
+	 s_mapUISpawner.insert({ "PortraitUI", [](_uint iTexNum)
+	 {
+		 return CPortrait::Create(s_pGraphicDev, 0);
+	 } });
 }
 
 

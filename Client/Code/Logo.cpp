@@ -8,6 +8,7 @@
 #include "TerrainCubeMap.h"
 #include "ObjectStoreMgr.h"
 #include "SkeletalCube.h"
+#include "SkyBox.h"
 
 CLogo::CLogo(LPDIRECT3DDEVICE9 pGraphicDev) : CScene(pGraphicDev)
 {
@@ -21,6 +22,9 @@ HRESULT CLogo::Ready_Scene()
 {
 	if (FAILED(Engine::CScene::Ready_Scene()))
 		return E_FAIL;
+
+
+
 	CGameObject* pGameObject = nullptr;
 	_matrix matWorld;
 
@@ -59,6 +63,8 @@ HRESULT CLogo::Ready_Scene()
 
 	m_pCamMove = CSkeletalCube::Create(m_pGraphicDev, L"../Bin/Resource/SkeletalCube/Object/logocam.cube");
 	m_arrLayer[LAYER_ENV]->Add_GameObject(L"CamMove", m_pCamMove);
+	CEnvFactory::Create<CSkyBox>("SkyBox", L"SkyBox")
+		->SetTex(3);
 
 
 	m_pCamMove->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_vInfo[INFO_POS] = m_vCamSelectPos +
@@ -113,6 +119,25 @@ HRESULT CLogo::Ready_Scene()
 
 _int CLogo::Update_Scene(const _float& fTimeDelta)
 {
+	D3DLIGHT9		tLightInfo;
+	ZeroMemory(&tLightInfo, sizeof(D3DLIGHT9));
+
+	tLightInfo.Type		= D3DLIGHT_POINT;
+	tLightInfo.Diffuse	= D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.f);
+	tLightInfo.Specular	= D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.f);
+	tLightInfo.Ambient	= D3DXCOLOR(0.6f, 0.6f, 0.5f, 1.f);
+	tLightInfo.Attenuation0 = 0.5f;
+	tLightInfo.Range = 8.f;
+	
+	_matrix view;
+	m_pGraphicDev->GetTransform(D3DTS_VIEW, &view);
+	D3DXMatrixInverse(&view, nullptr, &view);
+	
+	tLightInfo.Position = {view._41, view._42 + 3.f, view._43};
+	m_pGraphicDev->SetLight(0, &tLightInfo);
+	m_pGraphicDev->LightEnable(0, TRUE);
+
+
 	switch (eState)
 	{
 	case INPUT_NAME:
@@ -218,7 +243,7 @@ _int CLogo::Update_Scene(const _float& fTimeDelta)
 			{
 				if (m_arrChar[m_iCharNum]->IsStop())
 				{
-					CSceneFactory::LoadScene("Loading1", "Stage_Start", true ,500);
+					CSceneFactory::LoadScene("Loading1", "Stage_Start", true ,300);
 				}
 			}
 		}
@@ -257,5 +282,6 @@ CLogo* CLogo::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 
 void CLogo::Free()
 {
+	m_pGraphicDev->LightEnable(0, FALSE);
 	CScene::Free();
 }

@@ -3,11 +3,11 @@
 // max 32 chan
 enum CHANNELID 
 {
-	MAX_FREE_CHANNEL = 31,
+	MAX_FREE_CHANNEL = 29,
 	SOUND_ARROW = MAX_FREE_CHANNEL,
 	SOUND_BGM = MAX_FREE_CHANNEL + 1,
 	SOUND_UI = MAX_FREE_CHANNEL + 2,
-	MAXCHANNEL = 33
+	MAXCHANNEL = 32
 };
 
 
@@ -23,6 +23,7 @@ public:
 	void PlaySound(const wstring& pSoundKey, const _vec3& vSoundPos, float fVolume = 1.f);
 	void PlaySoundRandom(const vector<wstring>& vecSoundKey, const _vec3& vSoundPos, float fVolume = 1.f);
 	void PlaySoundChannel(const wstring& pSoundKey, const _vec3& vSoundPos, CHANNELID eID, float fVolume = 1.f);
+	void PlaySoundRandomChannel(const vector<wstring>& vecSoundKey, const _vec3& vSoundPos, CHANNELID eID, float fVolume = 1.f);
 	// void PlaySoundRandom(const wstring& pSoundKey, const _vec3& vSoundPos, CHANNELID eID, float fVolume = 1.f);
 
 	void PlayBGM(const wstring& pSoundKey, float fVolume);
@@ -51,7 +52,7 @@ private:
 	FMOD_SYSTEM* m_pSystem;
 
 	_vec3 m_vListenerPos = CGameUtilMgr::s_vZero;
-	_float m_fMaxListenDist = 30.f;
+	_float m_fMaxListenDist;
 	_float m_fMasterVolume;
 
 };

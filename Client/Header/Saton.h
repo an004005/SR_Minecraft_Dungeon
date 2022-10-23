@@ -31,7 +31,7 @@ public:
 	virtual _int Update_Object(const _float& fTimeDelta) override;
 	virtual void LateUpdate_Object() override;
 	virtual void Free() override;
-
+	void IsDeadTrue() { m_bDelete = true; }
 	static CSaton* Create(LPDIRECT3DDEVICE9 pGraphicDev, const wstring& wstrPath, _bool bRemote = false);
 
 	virtual void StateChange();
@@ -141,7 +141,8 @@ private:
 	_float m_fTime;
 	_float m_fCurTime;
 
-
+	//intro
+	_bool m_bSatonIntro = true;
 
 	set<CPlayer*> m_pGrabbedList;
 };
