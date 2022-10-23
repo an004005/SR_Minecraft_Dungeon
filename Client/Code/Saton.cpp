@@ -138,6 +138,7 @@ void CSaton::AnimationEvent(const string& strEvent)
 	{
 		IM_LOG("Grap_Start");
 		m_bIsGrap = true;
+		CSoundMgr::GetInstance()->PlaySound(L"grab_attack.wav", _vec3{ 62.5f,25.f,40.5f });
 	}
 	else if (strEvent == "Grap_End")
 	{
@@ -162,6 +163,8 @@ void CSaton::AnimationEvent(const string& strEvent)
 		CObjectFactory::Create<CCat_Attack>("Bori", L"Bori", matBoriWorld);
 		CObjectFactory::Create<CCat_Attack>("Rui", L"Rui", matRuiWorld);
 		CObjectFactory::Create<CCat_Attack>("Hoddeuk", L"Hoddeuk", matHoddeukWorld);
+		CSoundMgr::GetInstance()->PlaySoundRandom({ L"catspawn1_1.wav", L"catspawn1_2.wav" }, m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+
 		m_bIsCatColl = true; 
 	}
 	else if(strEvent == "Cat_Dead")
@@ -322,6 +325,7 @@ void CSaton::LateUpdate_Object()
 			}
 		}
 		m_bIsAttack_1_Coll = false;
+		CSoundMgr::GetInstance()->PlaySound(L"attack2_hit_1.wav", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 	}
 
 	if(m_bIsAttack_2_Coll)
@@ -476,7 +480,7 @@ void CSaton::StateChange()
 
 	if (m_bSatonIntro && m_bCanPlayAnim)
 	{
-		CSoundMgr::GetInstance()->PlaySound(L"Saton_Intro_0_2_1_1.ogg", { 59.5f, 25.f ,35.5f });
+		CSoundMgr::GetInstance()->PlaySound(L"Saton_Intro_0_2_1_1.wav", { 59.5f, 25.f ,35.5f });
 		m_eState = INTRO;
 		RotateToTargetPos(m_vTargetPos);
 		PlayAnimationOnce(&m_arrAnim[INTRO]);
@@ -492,14 +496,12 @@ void CSaton::StateChange()
 		RotateToTargetPos(m_vTargetPos);
 		PlayAnimationOnce(&m_arrAnim[FIRSTATTACK]);
 		m_bCanPlayAnim = false;
-
 		Protocol::C_DEBUG_PKT pkt;
 		string debug = "Player : " +  to_string(CClientServiceMgr::GetInstance()->m_iPlayerID) + " Hit x :"
 		+ to_string(m_vTargetPos.x) +  ", z :" + to_string(m_vTargetPos.z);
 		pkt.set_debuglog(debug);
 		CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(pkt));	
-		
-
+		CSoundMgr::GetInstance()->PlaySoundRandom({ L"attack2_big.wav", L"attack2_big_1.wav" }, { 59.5f, 25.f ,40.5f });
 		SetOff();
 		return;
 	}
@@ -526,6 +528,7 @@ void CSaton::StateChange()
 	if (m_bSatonSymbolAnim && m_bCanPlayAnim && m_eState == IDLE)
 	{
 		m_eState = SATON_SYMBOL;
+		CSoundMgr::GetInstance()->PlaySound(L"fear1.wav", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 		RotateToTargetPos(m_vTargetPos);
 		PlayAnimationOnce(&m_arrAnim[SATON_SYMBOL]);
 		m_bCanPlayAnim = false;
@@ -535,6 +538,8 @@ void CSaton::StateChange()
 	if (m_bSatonFascinate && m_bCanPlayAnim)
 	{
 		m_eState = SATON_FASCINATE;
+		CSoundMgr::GetInstance()->PlaySound(L"hook.wav", m_pRootPart->pTrans->m_vInfo[INFO_POS]);
+
 		RotateToTargetPos(m_vTargetPos);
 		PlayAnimationOnce(&m_arrAnim[SATON_FASCINATE]);
 		m_bCanPlayAnim = false;
