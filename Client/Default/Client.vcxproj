@@ -191,6 +191,7 @@
     <ClInclude Include="..\Header\Enderman.h" />
     <ClInclude Include="..\Header\EndermanController.h" />
     <ClInclude Include="..\Header\EditBox.h" />
+    <ClInclude Include="..\Header\EndermanTrail.h" />
     <ClInclude Include="..\Header\Enum.pb.h" />
     <ClInclude Include="..\Header\FireworksArrow.h" />
     <ClInclude Include="..\Header\CamAnimation.h" />
@@ -332,6 +333,7 @@
     <ClCompile Include="..\Code\Enderman.cpp" />
     <ClCompile Include="..\Code\EndermanController.cpp" />
     <ClCompile Include="..\Code\EditBox.cpp" />
+    <ClCompile Include="..\Code\EndermanTrail.cpp" />
     <ClCompile Include="..\Code\Enum.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>

@@ -4,6 +4,7 @@
 #include "EndermanController.h"
 #include "BossHPUI.h"
 #include "AbstFactory.h"
+#include "EndermanTrail.h"
 
 CEnderman::CEnderman(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
 {
@@ -24,16 +25,16 @@ HRESULT CEnderman::Ready_Object()
 
 	m_arrAnim[ANIM_IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Enderman/idle.anim");
 	m_arrAnim[ANIM_WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Enderman/walk.anim");	
-	//m_arrAnim[ANIM_DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Zombie/dead_a.anim");
 	m_arrAnim[ANIM_CHOP] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Enderman/chop.anim");
 	m_arrAnim[ANIM_SMASH] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Enderman/smash.anim");
 	m_arrAnim[ANIM_ARMATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Enderman/armattack.anim");
+	m_arrAnim[ANIM_PISTOL] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Enderman/pistol.anim");
 	m_arrAnim[ANIM_DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Enderman/dead.anim");
 
 	m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 	m_pCurAnim = m_pIdleAnim;
 	m_eState = IDLE;
-	m_fSpeed = 3.5f;
+	m_fSpeed = 3.f;
 
 	m_pStat->SetMaxHP(2000);
 
@@ -60,7 +61,16 @@ void CEnderman::AnimationEvent(const string & strEvent)
 {
 	if (strEvent == "AttackFire")
 	{
+		m_bCreateTrail = false;
 		m_bAttackFire = true;
+	}
+	else if (strEvent == "PistolStart")
+	{
+		m_bPistolStart = true;
+	}
+	else if (strEvent == "PistolFire")
+	{
+		m_bPistolStart = false;
 	}
 	else if (strEvent == "ArmAttack")
 	{
@@ -84,30 +94,41 @@ void CEnderman::AnimationEvent(const string & strEvent)
 			L"sfx_mob_endermanIdle-003.ogg"},
 			m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.3f);
 	}
+	else if (strEvent == "CreateShader")
+	{
+		m_bCreateTrail = true;
+	}
 }
 
 _int CEnderman::Update_Object(const _float & fTimeDelta)
 {
 	if (m_bDelete) return OBJ_DEAD;
 
-
+	m_fCurPistolTime += fTimeDelta;
 	m_fCurClockingCollTime += fTimeDelta;
+
+	//clockingoff
 	if (m_bClocking && m_fCurClockingCollTime > m_fClockingCollTime)
 	{
 		m_bClocking = false;
 		D3DXVec3Normalize(&m_vBeforTargetLook, &m_vBeforTargetLook);
-		m_pRootPart->pTrans->m_vInfo[INFO_POS] = m_vTargetPos + m_vBeforTargetLook * 2.f;
+		m_pRootPart->pTrans->m_vInfo[INFO_POS] = m_vTargetPos + m_vBeforTargetLook * 3.f;
 		m_pBossHPUI->SetRender(true);
 	}
 
-	if (m_bClocking && 	m_eState != DEAD)
+	//clockingOn
+	if (m_bClocking && m_eState != SMASH &&m_eState != CHOP &&m_eState != ARMATTACK && m_eState != PISTOL)
 	{
 		m_pBossHPUI->SetRender(false);
 		return OBJ_NOEVENT;
 	}
 
+	
 	CMonster::Update_Object(fTimeDelta);
 	m_pBossHPUI->SetCurHp(m_pStat->GetHP());
+
+	
+
 
 	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
 		m_bCanPlayAnim = true;
@@ -131,6 +152,8 @@ _int CEnderman::Update_Object(const _float & fTimeDelta)
 		break;
 	case ARMATTACK:
 		break;
+	case PISTOL:
+		break;
 	case STUN:
 		break;
 	case DEAD:
@@ -145,6 +168,10 @@ _int CEnderman::Update_Object(const _float & fTimeDelta)
 void CEnderman::LateUpdate_Object()
 {
 	CMonster::LateUpdate_Object();
+
+	if (m_bCreateTrail)
+		CreateTrail({ "body","head", "leg_l", "leg_r" });
+	
 
 	if (m_bAttackFire)
 	{
@@ -168,12 +195,13 @@ void CEnderman::LateUpdate_Object()
 		m_bAttackFire = false;
 	}
 
+	
 	if (m_bArmAttakcFire)
 	{
 		_vec3 vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
 		_vec3 vLook = m_pRootPart->pTrans->m_vInfo[INFO_LOOK];
 
-		for (_int i = 1; i < 10; ++i)
+		for (_int i = 1; i < 4; ++i)
 		{
 			set<CGameObject*> setObj;
 			_vec3 vAttackPos = vPos + vLook * 2.f * _float(i);
@@ -197,7 +225,41 @@ void CEnderman::LateUpdate_Object()
 		m_bArmAttakcFire = false;
 	}
 
+	if (m_bPistolStart && m_fCurPistolTime > m_fPistolFreq)
+	{
+		_vec3 vPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
+		_vec3 vLook = m_pRootPart->pTrans->m_vInfo[INFO_LOOK];
+
+		for (_int i = 1; i < 4; ++i)
+		{
+			set<CGameObject*> setObj;
+			_vec3 vAttackPos = vPos + vLook * 2.f * _float(i);
+			Engine::GetOverlappedObject(setObj, vAttackPos, 1.5f);
+
+			for (auto& obj : setObj)
+			{
+				if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
+					pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
+					->TakeDamage(10, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_STIFFEN);
+			}
+		}
+
+
+
+		CSoundMgr::GetInstance()->PlaySoundRandom({
+			L"sfx_mob_endermanTeleportVoiceHigh-001.ogg",
+			L"sfx_mob_endermanTeleportVoiceHigh-002.ogg",
+			L"sfx_mob_endermanTeleportVoiceHigh-003.ogg" },
+			m_pRootPart->pTrans->m_vInfo[INFO_POS], 0.2f);
+
+
+		m_fCurPistolTime = 0.f;
+	}
+
 }
+
+
+
 
 void CEnderman::Free()
 {
@@ -273,6 +335,17 @@ void CEnderman::StateChange()
 		return;
 	}
 
+	if (m_bPistol && m_bCanPlayAnim)
+	{
+		m_eState = PISTOL;
+		RotateToTargetPos(m_vTargetPos);
+		PlayAnimationOnce(&m_arrAnim[ANIM_PISTOL]);
+		m_bCanPlayAnim = false;
+		m_bMove = false;
+		m_bPistol = false;
+		return;
+	}
+
 	if (m_bArmAttack && m_bCanPlayAnim)
 	{
 		m_eState = ARMATTACK;
@@ -300,4 +373,24 @@ void CEnderman::StateChange()
 		m_pCurAnim = &m_arrAnim[ANIM_IDLE];
 		return;
 	}
+}
+
+void CEnderman::CreateTrail(const vector<string>& vecExcludeParts)
+{
+	//생성
+	Engine::CLayer*		pLayer = Engine::CLayer::Create();
+	NULL_CHECK(pLayer);
+
+	CGameObject* pGameObject = nullptr;
+	pGameObject = CEndermanTrail::Create(m_pGraphicDev, this, vecExcludeParts);
+	NULL_CHECK(pGameObject);
+	Engine::AddGameObject(LAYER_GAMEOBJ, L"Proto_EndermanTrailShaderCom", pGameObject);
+	dynamic_cast<CEndermanTrail*>(pGameObject)->SetColorTime(1.f, D3DCOLOR_ARGB(200, 255, 051, 255));
+	Engine::CTransform* pTrans = pGameObject->Get_Component<Engine::CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+	_matrix matWorld = m_pRootPart->pTrans->m_matWorld;
+	matWorld.m[0][0] *= 0.7f;
+	matWorld.m[1][1] *= 0.7f;
+	matWorld.m[2][2] *= 0.7f;
+	pTrans->Set_WorldDecompose(matWorld);
+	//
 }
