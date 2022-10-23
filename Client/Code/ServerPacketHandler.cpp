@@ -295,6 +295,7 @@ bool Handle_S_PLAYER_MOVE_STAGE_FINISH(PacketSessionRef& session, Protocol::S_PL
 			
 		}
 	}
+	
 
 	Protocol::Player pPlayerPkt = pkt.player();
 	Protocol::PlayerSkin eSkin = pkt.playerskin();
@@ -529,7 +530,7 @@ bool Handle_S_KOUKU_RESULT(PacketSessionRef& session, Protocol::S_KOUKU_RESULT& 
 
 		wstring tmp(pResult->player().name().begin(), pResult->player().name().end());
 
-		port->SetPlayerSkeletal(pResult->skin(), PLAYER_MVP_TYPE(i), (_float)pResult->damage() / 10000.f, pResult->counter(), tmp);
+		port->SetPlayerSkeletal(pResult->skin(), PLAYER_MVP_TYPE(i), (_float)pResult->damage() * 100.f / 10000.f, pResult->counter(), tmp);
 	}
 
 	return true;
