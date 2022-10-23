@@ -78,6 +78,7 @@
 #include "KoukuLoading.h"
 #include "BossStage.h"
 #include "SkyBox.h"
+#include "SkeletalGhostTrail.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -88,6 +89,8 @@ map<string, std::function<CGameObject*(const ATKRNGOPTION& circleOption)>> CEffe
 map<string, std::function<CGameObject*()>> CEnvFactory::s_mapEnvSpawner;
 map<string, std::function<CGameObject*(ArrowParams)>> CBulletFactory::s_mapBulletSpawner;
 map<string, std::function<CGameObject*()>> CObjectFactory::s_mapObjectSpawner;
+map<string, std::function<CGameObject*(CSkeletalCube*)>> CObjectFactory::s_mapGhostSpawner;
+
 map<string, std::function<CGameObject*()>> CItemFactory::s_mapItemSpawner;
 map<string, std::function<CGameObject*(_uint)>> CUIFactory::s_mapUISpawner;
 
@@ -568,6 +571,12 @@ void CObjectFactory::Ready_ObjectFactory()
 	s_mapObjectSpawner.insert({ "Cat2", []()
 	{
 		return CCat2::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Object/cat.cube");
+	} });
+
+
+	s_mapGhostSpawner.insert({ "GhostTrail", [](CSkeletalCube* pTarget)
+	{
+		return CSkeletalGhostTrail::Create(s_pGraphicDev, pTarget);
 	} });
 }
 

@@ -66,7 +66,7 @@ HRESULT CStage::Ready_Scene(void)
 	//Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 	//	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
 
-	//CBatchTool::Load(L"../Bin/Resource/Batch/LASTLASTLASTSTAGE.batch");
+	// CBatchTool::Load(L"../Bin/Resource/Batch/LASTLASTLASTSTAGE.batch");
 
 	return S_OK;
 }
@@ -87,6 +87,13 @@ _int CStage::Update_Scene(const _float & fTimeDelta)
 				m_pPlayerUI = CUIFactory::Create<CPlayerUI>("PlayerUI", L"PlayerDead", 0, WINCX * 0.5f, WINCY * 0.5f, WINCX, WINCY);
 				m_pPlayerUI->Open();
 				m_pPlayerUI->SetUITexture(25);
+
+				CPlayerStartPos* startPos = Get_GameObjectUnCheck<CPlayerStartPos>(LAYER_GAMEOBJ, L"PlayerPos");
+				if (startPos)
+				{
+					_matrix matWorld = m_pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_matWorld;
+					startPos->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->Set_WorldDecompose(matWorld);
+				}
 			}
 			m_bPlayerAlive = false;
 			
@@ -187,8 +194,8 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	//monsters
 	{	
 	
-		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 4.5f, 9.f, 29.f });
-		CObjectFactory::Create<CDynamite>("Dynamite", L"Dynamite", matWorld);
+		// CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 10.f, 4.f, 10.f });
+		// CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
 
 		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.3f, 1.3f, 1.3f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 51.f, 4.f, 95.f });
 		CEnemyFactory::Create<CLeaper>("Leaper", L"Leaper", matWorld);

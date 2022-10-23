@@ -3,6 +3,7 @@
 #include "Particle.h"
 #include "AbstFactory.h"
 #include "Player.h"
+#include "SkeletalGhostTrail.h"
 
 CBootsOfSwiftness::CBootsOfSwiftness(LPDIRECT3DDEVICE9 pGraphicDev)
 	:CEquipItem(pGraphicDev)
@@ -19,8 +20,9 @@ HRESULT CBootsOfSwiftness::Ready_Object()
 {
 	m_pTransCom = Add_Component<CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 	m_iUItexNum = 11;
-	m_fCurCoolTime = 5.f;
-	m_fCoolTime = 5.f;
+	m_fCurCoolTime = 10.f;
+	m_fCoolTime = 10.f;
+	m_fLifeTime = 8.f;
 
 	m_pItemUI = CUIFactory::Create<CItemUI>("ItemUI", L"BootsUI", 0);
 	m_pItemUI->SetUITexture(m_iUItexNum);
@@ -32,6 +34,16 @@ _int CBootsOfSwiftness::Update_Object(const _float & fTimeDelta)
 {
 	if (m_bDelete) return OBJ_DEAD;
 
+	if (m_bEnd)
+		m_fCurTrailTime += fTimeDelta;
+	if (m_bEnd && m_fCurTrailTime > m_fTrailTime)
+	{
+		m_fCurTrailTime = 0.f;
+		
+		CObjectFactory::CreateGhostTrail("GhostTrail", L"GhostTrail", m_pOwner, m_pOwner->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_matWorld)
+			->SetColorTime(0.7f, D3DCOLOR_ARGB(150, 000, 204, 255));
+	}
+
 	if (m_fCoolTime > m_fCurCoolTime)
 	{
 		m_fCurCoolTime += fTimeDelta;
@@ -42,24 +54,17 @@ _int CBootsOfSwiftness::Update_Object(const _float & fTimeDelta)
 	if (m_bUse)
 	{
 		m_fCurCoolTime = 0.f;
-
 		m_fAge = 0.f;
 	
 		CPlayer* pPlayer = m_pOwner;
 		pPlayer->SetSpeed(7.5f);
 		_vec3 vPos = pPlayer->GetInfo(INFO_POS);
 
-		Get_GameObject<C3DBaseTexture>(LAYER_EFFECT, L"3D_Base")->Add_Particle(vPos, 3.f, D3DXCOLOR(0.f, 0.63f, 0.82f, 0.f), 1, 1.5f);
-		Get_GameObject<CSpeedBoots>(LAYER_EFFECT, L"Speed_Boots")->Add_Particle(vPos, 3.f, D3DXCOLOR(0.2f, 0.2f, 0.5f, 1.f), 1, 1.5f);
-		Get_GameObject<CSpeedBoots_Particle>(LAYER_EFFECT, L"Speed_Boots_Particle")->Add_Particle(
-			_vec3(vPos.x, vPos.y + 15.f, vPos.z),
-			1.f, D3DXCOLOR(0.3f, 0.4f, 0.7f, 1.f), 18, m_fLifeTime);
-
 		CSoundMgr::GetInstance()->PlaySound(L"sfx_item_glaiveSwing-004.ogg", vPos);
 		m_bEnd = true;
 		m_bUse = false;
-		
 	}
+
 
 	m_fAge += fTimeDelta;
 
