@@ -13,11 +13,13 @@ public:
 	virtual void Render_Object() override;
 	void SetColorTime(_float fLife, D3DXCOLOR BaseColor);
 
-	static CEndermanTrail* Create(LPDIRECT3DDEVICE9 pGraphicDev, CSkeletalCube* pSkeletal, vector<string>& vecExcludePart);
+	static CEndermanTrail* Create(LPDIRECT3DDEVICE9 pGraphicDev, CSkeletalCube* pSkeletal, const vector<string>& vecExcludePart);
+	
 
 private:
 	_float m_fLife = 0.f;
 	_float m_fInitLife = 0.f;
 	D3DXCOLOR m_BaseColor;
+
 };
 

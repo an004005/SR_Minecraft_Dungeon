@@ -2,6 +2,7 @@
 matrix		g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 vector g_baseColor;
 float g_Rate;
+bool g_Clocking = false;
 textureCUBE		g_DefaultTexture;
 
 sampler		DefaultSampler = sampler_state 
@@ -50,8 +51,13 @@ struct PS_OUT
 PS_OUT PS_MAIN(PS_IN In)
 {
 	PS_OUT		Out = (PS_OUT)0;
-	Out.vColor = g_baseColor;
-	Out.vColor.a = (1.f - g_Rate) *Out.vColor.a;
+
+	if (!g_Clocking)
+	{
+		Out.vColor = g_baseColor;
+		Out.vColor.a = (1.f - g_Rate) *Out.vColor.a;
+	}
+	
 
 	return Out;
 }

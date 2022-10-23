@@ -28,7 +28,8 @@ _int CEndermanTrail::Update_Object(const _float& fTimeDelta)
 	CGameObject::Update_Object(fTimeDelta);
 
 	m_fLife -= fTimeDelta;
-	if (m_fLife < 0.f) return OBJ_NOEVENT;
+	if (m_fLife < 0.f) return OBJ_DEAD;
+
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
 	return OBJ_NOEVENT;
@@ -46,6 +47,7 @@ void CEndermanTrail::Render_Object()
 	m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix, &ProjMatrix), sizeof(_matrix));
 	m_pShaderCom->Set_RawValue("g_Rate", &fS, sizeof(_float));
 
+	
 	m_bRenderMachine = false;
 
 	m_pRootPart->matParents = m_pRootPart->pTrans->m_matWorld;
@@ -63,7 +65,7 @@ void CEndermanTrail::SetColorTime(_float fLife, D3DXCOLOR BaseColor)
 	m_pShaderCom->Set_RawValue("g_baseColor", &m_BaseColor, sizeof(D3DXCOLOR));
 }
 
-CEndermanTrail* CEndermanTrail::Create(LPDIRECT3DDEVICE9 pGraphicDev, CSkeletalCube* pSkeletal, vector<string>& vecExcludePart)
+CEndermanTrail* CEndermanTrail::Create(LPDIRECT3DDEVICE9 pGraphicDev, CSkeletalCube* pSkeletal, const vector<string>& vecExcludePart)
 {
 	NULL_CHECK_RETURN(pSkeletal, nullptr);
 
@@ -73,6 +75,7 @@ CEndermanTrail* CEndermanTrail::Create(LPDIRECT3DDEVICE9 pGraphicDev, CSkeletalC
 		Safe_Release(pInst);
 		return nullptr;
 	}
+
 	
 	pInst->LoadSkeletal(pSkeletal->GetCubePath());
 

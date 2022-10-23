@@ -62,7 +62,7 @@ public:
 		m_vBeforTargetLook = vLook;
 	}
 	void SetTarget(_vec3 vTargetPos){ m_vTargetPos = vTargetPos; }
-
+	void CreateTrail(const vector<string>& vecExcludeParts);
 	//
 
 private:
@@ -92,5 +92,7 @@ private:
 	_bool m_bPistolStart = false;
 	_float m_fPistolFreq = 0.2f;
 	_float m_fCurPistolTime = 0.4f;
+
+	_bool m_bCreateTrail = false;
 };
 
