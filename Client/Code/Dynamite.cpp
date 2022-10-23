@@ -23,7 +23,7 @@ HRESULT CDynamite::Ready_Object()
 	m_pTransCom = Add_Component<Engine::CTransform>(L"Proto_TransformCom", L"Proto_TransformCom", ID_DYNAMIC);
 	m_pBufferCom = Add_Component<Engine::CCubeTex>(L"Proto_CubeTexCom", L"Proto_CubeTexCom", ID_STATIC);
 	m_pTextureCom = Add_Component<Engine::CTexture>(L"Proto_MinecraftCubeTexture", L"Proto_MinecraftCubeTexture", ID_STATIC);
-
+	m_pShaderCom = Add_Component<Engine::CShader>(L"Proto_DynamiteShaderCom", L"Proto_DynamiteShaderCom", ID_DYNAMIC);
 	m_pTransCom->m_vInfo[INFO_POS] = { 3.f, 7.5f, 4.f };
 
 	m_pColl = Add_Component<CCollisionCom>(L"Proto_CollisionCom", L"Proto_CollisionCom", ID_DYNAMIC);
@@ -40,6 +40,21 @@ _int CDynamite::Update_Object(const _float & fTimeDelta)
 {
 	if (m_bDead)
 		return OBJ_DEAD;
+
+	//for shader
+	if (m_eState == DYNAMITE_BOOM)
+	{
+		if (m_fCurFireShaderCount > m_fFireShaderCount)
+		{
+			m_bTwinkle = !m_bTwinkle;
+			m_fCurFireShaderCount = 0.f;
+			m_fFreq *= 1.2f;
+		}
+		else
+		{
+			m_fCurFireShaderCount += fTimeDelta * m_fFreq;
+		}
+	}
 
 	switch (m_eState)
 	{
@@ -124,7 +139,7 @@ void CDynamite::LateUpdate_Object()
 			L"twinblast_grenade_explosion_01.ogg",
 			L"twinblast_grenade_explosion_02.ogg" ,
 			L"twinblast_grenade_explosion_03.ogg" },
-			m_pTransCom->m_vInfo[INFO_POS], 1.f);
+			Get_GameObject<CPlayer>(LAYER_PLAYER, L"Player")->GetInfo(INFO_POS), 1.f);
 
 		m_bDead = true;
 	}
@@ -134,9 +149,31 @@ void CDynamite::LateUpdate_Object()
 
 void CDynamite::Render_Object()
 {
-	m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
-	m_pTextureCom->Set_Texture(59);
-	m_pBufferCom->Render_Buffer();
+	if (!m_bTwinkle)
+	{
+		m_pGraphicDev->SetTransform(D3DTS_WORLD, m_pTransCom->Get_WorldMatrixPointer());
+		m_pTextureCom->Set_Texture(59);
+		m_pBufferCom->Render_Buffer();
+	}
+	else
+	{
+		_matrix		WorldMtrix, ViewMatrix, ProjMaatrix;
+
+		m_pTransCom->Get_WorldMatrix(&WorldMtrix);
+		m_pGraphicDev->GetTransform(D3DTS_VIEW, &ViewMatrix);
+		m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &ProjMaatrix);
+
+		m_pShaderCom->Set_RawValue("g_WorldMatrix", D3DXMatrixTranspose(&WorldMtrix, &WorldMtrix), sizeof(_matrix));
+		m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix, &ViewMatrix), sizeof(_matrix));
+		m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMaatrix, &ProjMaatrix), sizeof(_matrix));
+		m_pShaderCom->Set_Bool("g_Countdown", m_bTwinkle);
+		m_pTextureCom->Set_Texture(m_pShaderCom, "g_DefaultTexture", 59);
+
+		m_pShaderCom->Begin_Shader(0);
+		m_pBufferCom->Render_Buffer();
+		m_pShaderCom->End_Shader();
+	}
+	
 }
 
 void CDynamite::Free()
@@ -257,8 +294,8 @@ void CDynamite::Parabola(const _float & fTimeDelta)
 			D3DXMatrixRotationAxis(&matRot, &vAxis,m_fAngle);
 
 			m_pTransCom->m_vInfo[INFO_POS].y += m_fPower * 0.7f * m_fTime * fTimeDelta - (9.8f * m_fTime * m_fTime * fTimeDelta * 0.5f);
-			m_pTransCom->m_vInfo[INFO_POS].x += m_fPower * 0.7f * m_pTransCom->m_vInfo[INFO_LOOK].x * fTimeDelta;
-			m_pTransCom->m_vInfo[INFO_POS].z += m_fPower * 0.7f * m_pTransCom->m_vInfo[INFO_LOOK].z * fTimeDelta;
+			m_pTransCom->m_vInfo[INFO_POS].x += m_fPower * 0.5f * m_pTransCom->m_vInfo[INFO_LOOK].x * fTimeDelta;
+			m_pTransCom->m_vInfo[INFO_POS].z += m_fPower * 0.5f * m_pTransCom->m_vInfo[INFO_LOOK].z * fTimeDelta;
 			m_fTime += 7.f * fTimeDelta;
 
 			D3DXMatrixTranslation(&matTrans, m_pTransCom->m_vInfo[INFO_POS].x, m_pTransCom->m_vInfo[INFO_POS].y, m_pTransCom->m_vInfo[INFO_POS].z);

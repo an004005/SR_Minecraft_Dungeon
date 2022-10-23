@@ -31,6 +31,7 @@
 #include "Cat2.h"
 #include "PlayerStartPos.h"
 #include "SkyBox.h"
+#include "Dynamite.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
@@ -121,7 +122,7 @@ void CStage::LateUpdate_Scene(void)
 
 void CStage::Render_Scene(void)
 {
-	CArrowCubeMgr::GetInst().Render_Buffer(); // todo : ?Œë”?¬ì—???™ìž‘?˜ê²Œ ë°”ê¾¸ê¸?
+	CArrowCubeMgr::GetInst().Render_Buffer();
 	CDamageFontMgr::GetInstance()->Render_DamageFontMgr();
 }
 
