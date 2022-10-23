@@ -23,6 +23,8 @@ HRESULT CCreeper::Ready_Object()
 {
 	CMonster::Ready_Object();
 
+	m_pShaderCom = Add_Component<CShader>(L"Proto_CreeperShaderCom", L"Proto_CreeperShaderCom", ID_DYNAMIC);
+
 	m_arrAnim[ANIM_IDLE] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Creeper/idle.anim");
 	m_arrAnim[ANIM_WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Creeper/walk.anim");
 	m_arrAnim[ANIM_DEAD] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Creeper/dead.anim");
@@ -71,6 +73,19 @@ _int CCreeper::Update_Object(const _float& fTimeDelta)
 	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
 		m_bCanPlayAnim = true;
 
+	if (m_bAttackCount)
+	{
+		if (m_fCurFireShaderCount > m_fFireShaderCount)
+		{
+			m_bTwinkle = !m_bTwinkle;
+			m_fCurFireShaderCount = 0.f;
+			m_fFreq *= 1.1f;
+		}
+		else
+		{
+			m_fCurFireShaderCount += fTimeDelta * m_fFreq;
+		}
+	}
 	// 상태 변경 조건 설정
 	StateChange();
 
@@ -136,6 +151,51 @@ void CCreeper::LateUpdate_Object()
 		m_bAttackFire = false;
 		m_bDelete = true;
 	}
+	
+}
+
+void CCreeper::Render_Object()
+{
+
+	_matrix ViewMatrix, ProjMatrix;
+
+	m_pGraphicDev->GetTransform(D3DTS_VIEW, &ViewMatrix);
+	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &ProjMatrix);
+
+	m_pShaderCom->Set_RawValue("g_ViewMatrix", D3DXMatrixTranspose(&ViewMatrix, &ViewMatrix), sizeof(_matrix));
+	m_pShaderCom->Set_RawValue("g_ProjMatrix", D3DXMatrixTranspose(&ProjMatrix, &ProjMatrix), sizeof(_matrix));
+
+	m_pShaderCom->Set_Bool("g_isHit", false);
+	m_pShaderCom->Set_Bool("g_isDead", false);
+	m_pShaderCom->Set_Bool("g_Countdown", m_bTwinkle);
+
+	for (auto& com : m_mapComponent[ID_DYNAMIC])
+	{
+		if (CStatComponent* pStat = dynamic_cast<CStatComponent*>(com.second))
+		{
+			m_pShaderCom->Set_Bool("g_isHit", pStat->IsDamaged());
+			m_pShaderCom->Set_Bool("g_isDead", pStat->IsDead());
+			m_bRenderMachine = !pStat->IsDamaged() && !pStat->IsDead() && !m_bTwinkle;
+			if (pStat->IsDead())
+			{
+				m_fTime += CGameUtilMgr::s_fTimeDelta * 0.33f;
+				m_pShaderCom->Set_RawValue("g_Time", &m_fTime, sizeof(_float));
+			}
+			break;
+		}
+	}
+
+	m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, TRUE);
+
+
+	m_pGraphicDev->SetMaterial(&m_Material);
+	m_pRootPart->matParents = m_pRootPart->pTrans->m_matWorld;
+	for (const auto& child : m_pRootPart->vecChild)
+	{
+		RenderObjectRecur(child);
+	}
+
+	m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, FALSE);
 }
 
 void CCreeper::Free()
