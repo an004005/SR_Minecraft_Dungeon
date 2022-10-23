@@ -10,6 +10,8 @@ enum class MapUITexNum : _int
 	CloseActive,
 	koukuEnter,
 	kouku,
+	OnlineModeIcon = 40,
+	OnlineModeIconHover,
 	End
 };
 
@@ -22,8 +24,7 @@ enum class MapUIWorld : _int
 	KoukuWindow,
 	KoukuWindowEnter,
 	Close,
-	CloseHover,
-	CloseActive,
+	OnlineMode,
 	End
 };
 
@@ -34,6 +35,7 @@ enum class MapUIRend : _int
 	CloseHover,
 	CloseActive,
 	KoukuWindow,
+	OnlineHover,
 	End
 };
 

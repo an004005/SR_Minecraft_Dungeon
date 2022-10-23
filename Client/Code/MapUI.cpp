@@ -78,6 +78,13 @@ _int CMapUI::Update_Object(const _float & fTimeDelta)
 		fY = -vPos.y + WINCY * 0.5f;
 		vSize = { WINCX * 0.04f, WINCX * 0.04f, 0.f };
 		CGameUtilMgr::MatWorldComposeEuler(m_matWorld[(_int)MapUIWorld::Close], vSize, { 0.f, 0.f ,0.f }, { fX, fY, 0.f });
+
+		//Online Mode
+		vPos = { WINCX * 0.85f, WINCY * 0.9f , 0.f };
+		fX = vPos.x - WINCX * 0.5f;
+		fY = -vPos.y + WINCY * 0.5f;
+		vSize = { WINCX * 0.2f, WINCX * 0.07f, 0.f };
+		CGameUtilMgr::MatWorldComposeEuler(m_matWorld[(_int)MapUIWorld::OnlineMode], vSize, { 0.f, 0.f ,0.f }, { fX, fY, 0.f });
 		m_bWorldSet = true;
 	}
 
@@ -86,6 +93,7 @@ _int CMapUI::Update_Object(const _float & fTimeDelta)
 		MouseEvent(m_matWorld[(_int)MapUIWorld::Creeper]);
 		MouseEvent(m_matWorld[(_int)MapUIWorld::Kouku]);
 		MouseEvent(m_matWorld[(_int)MapUIWorld::Close]);
+		MouseEvent(m_matWorld[(_int)MapUIWorld::OnlineMode]);
 	}
 	else	
 		MouseEvent(m_matWorld[(_int)MapUIWorld::KoukuWindowEnter]);
@@ -113,6 +121,10 @@ void CMapUI::Render_Object()
 
 	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matWorld[(_int)MapUIWorld::Close]);
 	m_pTextureCom->Set_Texture(static_cast<_int>(MapUITexNum::CloseIcon));
+	m_pBufferCom->Render_Buffer();
+
+	m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matWorld[(_int)MapUIWorld::OnlineMode]);
+	m_pTextureCom->Set_Texture(static_cast<_int>(MapUITexNum::OnlineModeIcon));
 	m_pBufferCom->Render_Buffer();
 
 	if (m_bRend[(_int)MapUIRend::CreeperHover])
@@ -151,6 +163,13 @@ void CMapUI::Render_Object()
 
 		m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matWorld[(_int)MapUIWorld::KoukuWindowEnter]);
 		m_pTextureCom->Set_Texture(static_cast<_int>(MapUITexNum::koukuEnter));
+		m_pBufferCom->Render_Buffer();
+	}
+
+	if (m_bRend[(_int)MapUIRend::OnlineHover])
+	{
+		m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_matWorld[(_int)MapUIWorld::OnlineMode]);
+		m_pTextureCom->Set_Texture(static_cast<_int>(MapUITexNum::OnlineModeIconHover));
 		m_pBufferCom->Render_Buffer();
 	}
 
@@ -225,6 +244,20 @@ void CMapUI::MouseEvent(_matrix & matWorld)
 		}
 		else
 			m_bRend[(_int)MapUIRend::KoukuHover] = false;
+	}
+	else if (matWorld == m_matWorld[(_int)MapUIWorld::OnlineMode])
+	{
+		if (PtInRect(&rcUI, ptMouse))
+		{
+			m_bRend[(_int)MapUIRend::OnlineHover] = true;
+
+			if (MouseKeyDown(DIM_LB))
+			{
+				CSceneFactory::LoadScene("Loading1", "NetStage_Start", true, 500);
+			}
+		}
+		else
+			m_bRend[(_int)MapUIRend::OnlineHover] = false;
 	}
 	else if(matWorld == m_matWorld[(_int)MapUIWorld::Close])
 	{
