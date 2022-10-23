@@ -44,9 +44,10 @@ HRESULT CStage_Kouku::Ready_Scene(void)
 	ZeroMemory(&tLightInfo, sizeof(D3DLIGHT9));
 
 	tLightInfo.Type		= D3DLIGHT_DIRECTIONAL;
-	tLightInfo.Diffuse	= D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.f);
+
+	tLightInfo.Diffuse	= D3DXCOLOR(m_fLightColor, m_fLightColor, m_fLightColor, 1.f);
 	tLightInfo.Specular	= D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.f);
-	tLightInfo.Ambient	= D3DXCOLOR(0.6f, 0.6f, 0.3f, 1.f);
+	tLightInfo.Ambient	= D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.f);
 	tLightInfo.Direction  = _vec3(0.3f, -1.f, 0.15f);
 	m_pGraphicDev->SetLight(0, &tLightInfo);
 	m_pGraphicDev->LightEnable(0, TRUE);

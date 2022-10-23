@@ -513,6 +513,7 @@
     <FxCompile Include="..\Bin\Resource\Shader\Shader_GhostTrail.hlsl" />
     <FxCompile Include="..\Bin\Resource\Shader\Shader_Player.hlsl" />
     <FxCompile Include="..\Bin\Resource\Shader\Shader_Sky.hlsl" />
+    <FxCompile Include="..\Bin\Resource\Shader\UVAnimation.fx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
