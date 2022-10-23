@@ -63,10 +63,6 @@ _int CStartStage::Update_Scene(const _float & fTimeDelta)
 void CStartStage::LateUpdate_Scene(void)
 {
 	Engine::CScene::LateUpdate_Scene();
-	if (DIKeyDown(DIK_0))
-	{
-		CSceneFactory::LoadScene("Loading1", "NetStage_Start", true ,500);
-	}
 }
 
 void CStartStage::Render_Scene(void)
