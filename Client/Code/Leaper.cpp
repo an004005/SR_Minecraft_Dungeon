@@ -175,7 +175,7 @@ void CLeaper::LateUpdate_Object()
 		CSoundMgr::GetInstance()->PlaySoundRandom({
 			L"DLC_Mob_Leaper_BasickAttack1.ogg",
 			L"DLC_Mob_Leaper_BasickAttack2.ogg",
-			L"DLC_Mob_Leaper_BasickAttack3.ogg"}, vAttackPos, 0.2f);
+			L"DLC_Mob_Leaper_BasickAttack3.ogg"}, vAttackPos, 0.3f);
 		m_bAttackFire = false;
 	}
 
@@ -199,7 +199,7 @@ void CLeaper::LateUpdate_Object()
 		CEffectFactory::Create<CUVCircle>("Golem_Circle", L"Golem_Circle", vAttackPos);
 
 		DEBUG_SPHERE(vAttackPos, 4.f, 1.f);
-		CSoundMgr::GetInstance()->PlaySound({L"sfx_multi_explode-002.ogg"}, vAttackPos, 0.2f);
+		CSoundMgr::GetInstance()->PlaySound({L"sfx_multi_explode-002.ogg"}, vAttackPos, 0.3f);
 		m_bJumpFire = false;
 	}
 }

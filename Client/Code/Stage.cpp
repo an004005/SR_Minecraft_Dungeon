@@ -31,6 +31,7 @@
 #include "Cat2.h"
 #include "PlayerStartPos.h"
 #include "SkyBox.h"
+#include "Dynamite.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
@@ -62,10 +63,10 @@ HRESULT CStage::Ready_Scene(void)
 	FAILED_CHECK_RETURN(Ready_Layer_GameLogic(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Layer_UI(), E_FAIL);
 
-	Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
-		->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
+	//Engine::Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
+	//	->PlayeCamAnimation(L"../Bin/Resource/CubeAnim/Cam/10_12_Done.anim");
 
-	CBatchTool::Load(L"../Bin/Resource/Batch/LASTLASTLASTSTAGE.batch");
+	// CBatchTool::Load(L"../Bin/Resource/Batch/LASTLASTLASTSTAGE.batch");
 
 	return S_OK;
 }
@@ -78,6 +79,7 @@ _int CStage::Update_Scene(const _float & fTimeDelta)
 		{
 			if (m_fDeadTime > 3.f)
 				m_pPlayer->PlayerSpawn();
+				
 			m_fDeadTime += fTimeDelta;
 
 			if (m_bPlayerAlive)
@@ -85,6 +87,13 @@ _int CStage::Update_Scene(const _float & fTimeDelta)
 				m_pPlayerUI = CUIFactory::Create<CPlayerUI>("PlayerUI", L"PlayerDead", 0, WINCX * 0.5f, WINCY * 0.5f, WINCX, WINCY);
 				m_pPlayerUI->Open();
 				m_pPlayerUI->SetUITexture(25);
+
+				CPlayerStartPos* startPos = Get_GameObjectUnCheck<CPlayerStartPos>(LAYER_GAMEOBJ, L"PlayerPos");
+				if (startPos)
+				{
+					_matrix matWorld = m_pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_matWorld;
+					startPos->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->Set_WorldDecompose(matWorld);
+				}
 			}
 			m_bPlayerAlive = false;
 			
@@ -113,7 +122,7 @@ void CStage::LateUpdate_Scene(void)
 
 void CStage::Render_Scene(void)
 {
-	CArrowCubeMgr::GetInst().Render_Buffer(); // todo : ?Œë”?¬ì—???™ìž‘?˜ê²Œ ë°”ê¾¸ê¸?
+	CArrowCubeMgr::GetInst().Render_Buffer();
 	CDamageFontMgr::GetInstance()->Render_DamageFontMgr();
 }
 
@@ -185,7 +194,8 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	//monsters
 	{	
 	
-		// CEnemyFactory::Create<CRedStoneMonstrosity>("RedStoneMonstrosity", L"RedStoneMonstrosity", matWorld);
+		// CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 10.f, 4.f, 10.f });
+		// CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
 
 		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.3f, 1.3f, 1.3f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 51.f, 4.f, 95.f });
 		CEnemyFactory::Create<CLeaper>("Leaper", L"Leaper", matWorld);
@@ -477,12 +487,12 @@ void CStage::CreateTrigger()
 		{
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 			{
-				CSoundMgr::GetInstance()->PlayBGM(L"madness(leaper)_001.ogg", 0.2f);
+				CSoundMgr::GetInstance()->PlayBGM(L"madness(leaper)_001.ogg", 0.35f);
 				return true;
 			}
 		}
 		return false;
-	}, 7.f);
+	}, 5.f);
 
 
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 95.f, 6.f, 4.f });
