@@ -62,6 +62,7 @@
 #include "RemoteInventory.h"
 #include "BossHPUI.h"
 #include "Cat_Attack.h"
+#include "Cat_Idle.h"
 #include "EditBox.h"
 #include "PlayerUI.h"
 #include "ClearUI.h"
@@ -572,6 +573,21 @@ void CObjectFactory::Ready_ObjectFactory()
 	s_mapObjectSpawner.insert({ "Cat2", []()
 	{
 		return CCat2::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Object/cat.cube");
+	} });
+
+	s_mapObjectSpawner.insert({ "bori", []()
+	{
+		return CCat_Idle::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Object/bori.cube");
+	} });
+
+	s_mapObjectSpawner.insert({ "rui", []()
+	{
+		return CCat_Idle::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Object/rui.cube");
+	} });
+
+	s_mapObjectSpawner.insert({ "hoddeuk", []()
+	{
+		return CCat_Idle::Create(s_pGraphicDev, L"../Bin/Resource/SkeletalCube/Object/hoddeuk.cube");
 	} });
 
 

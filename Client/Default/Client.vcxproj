@@ -183,6 +183,7 @@
     <ClInclude Include="..\Header\BossHPUI.h" />
     <ClInclude Include="..\Header\BossStage.h" />
     <ClInclude Include="..\Header\Cat_Attack.h" />
+    <ClInclude Include="..\Header\Cat_Idle.h" />
     <ClInclude Include="..\Header\ClearUI.h" />
     <ClInclude Include="..\Header\ClientServiceMgr.h" />
     <ClInclude Include="..\Header\Cat.h" />
@@ -324,6 +325,7 @@
     <ClCompile Include="..\Code\BossHPUI.cpp" />
     <ClCompile Include="..\Code\BossStage.cpp" />
     <ClCompile Include="..\Code\Cat_Attack.cpp" />
+    <ClCompile Include="..\Code\Cat_Idle.cpp" />
     <ClCompile Include="..\Code\ClearUI.cpp" />
     <ClCompile Include="..\Code\Cat2.cpp" />
     <ClCompile Include="..\Code\DamageFontMgr.cpp" />

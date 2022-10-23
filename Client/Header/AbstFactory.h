@@ -255,8 +255,6 @@ public:
 			pTrans->Update_Component(0.f);
 		}
 
-		
-
 		return pCasted;
 	}
 

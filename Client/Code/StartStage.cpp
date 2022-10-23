@@ -11,6 +11,7 @@
 #include "CoolTimeUI.h"
 #include "DamageFontMgr.h"
 #include "ArrowCubeMgr.h"
+#include "Cat_Idle.h"
 
 CStartStage::CStartStage(LPDIRECT3DDEVICE9 pGraphicDev) : CScene(pGraphicDev)
 {
@@ -118,6 +119,52 @@ HRESULT CStartStage::Ready_Layer_GameLogic()
 	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 2.f, 0.5f, 2.5f }, { 0.f, 0 ,0.f }, { 33.2f, 3.5f ,17.2f });
 	CObjectFactory::Create<CMapTable>("MapTable", L"MapTable", matWorld);
 
+	// Cat
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 0.5f, 2.5f, 16.f});
+	CObjectFactory::Create<CCat_Idle>("bori", L"bori", matWorld);
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 2.7f, 7.f, 21.f });
+	CObjectFactory::Create<CCat_Idle>("bori", L"bori", matWorld);
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 30.f, 2.f, 19.f });
+	CObjectFactory::Create<CCat_Idle>("bori", L"bori", matWorld);
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 30.f, 5.f, 30.f });
+	CObjectFactory::Create<CCat_Idle>("bori", L"bori", matWorld);
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 34.f, 6.5f, 26.f });
+	CObjectFactory::Create<CCat_Idle>("rui", L"rui", matWorld);
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 5.5f, 1.f, 11.f });
+	CObjectFactory::Create<CCat_Idle>("rui", L"rui", matWorld);
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(5.f) ,0.f }, { 35.f, 2.f, 8.f });
+	CObjectFactory::Create<CCat_Idle>("rui", L"rui", matWorld);
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(5.f) ,0.f }, { 16.f, 1.f, 1.f });
+	CObjectFactory::Create<CCat_Idle>("rui", L"rui", matWorld);
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(5.f) ,0.f }, { 19.f, 1.f, 14.f });
+	CObjectFactory::Create<CCat_Idle>("hoddeuk", L"hoddeuk", matWorld);
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 22.f, 7.f, 26.f });
+	CObjectFactory::Create<CCat_Idle>("hoddeuk", L"hoddeuk", matWorld);
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 14.f, 7.f, 26.f });
+	CObjectFactory::Create<CCat_Idle>("hoddeuk", L"hoddeuk", matWorld);
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(5.f) ,0.f }, { 31.f, 2.f, 5.f });
+	CObjectFactory::Create<CCat_Idle>("hoddeuk", L"hoddeuk", matWorld);
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 30.f, 7.f, 27.f });
+	CObjectFactory::Create<CCat_Idle>("hoddeuk", L"hoddeuk", matWorld);
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(90.f) ,0.f }, { 7.f, 1.f, 17.f });
+	CObjectFactory::Create<CCat_Idle>("hoddeuk", L"hoddeuk", matWorld);
+
+	CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, D3DXToRadian(0.f) ,0.f }, { 6.4f, 1.f, 20.f });
+	CObjectFactory::Create<CCat_Idle>("hoddeuk", L"hoddeuk", matWorld);
 
 	CEffectFactory::Create<C3DBaseTexture>("3D_Base", L"3D_Base");
 	CEffectFactory::Create<CAttack_P>("Attack_Basic", L"Attack_Basic");

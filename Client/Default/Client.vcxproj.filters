@@ -549,6 +549,7 @@
     <ClInclude Include="..\Header\EndermanTrail.h">
       <Filter>02. GameObject\Object</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\Cat_Idle.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -995,6 +996,7 @@
     <ClCompile Include="..\Code\EndermanTrail.cpp">
       <Filter>02. GameObject\Object</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\Cat_Idle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">

@@ -174,8 +174,11 @@ HRESULT CMainApp::Ready_Scene(LPDIRECT3DDEVICE9 pGraphicDev, Engine::CManagement
 	(*ppManagement)->AddRef();
 
 	  // CSceneFactory::LoadScene("Loading1", "Stage_Default", true ,0);
-	CSceneFactory::LoadScene("Loading1", "Logo", true ,500);
+	//CSceneFactory::LoadScene("Loading1", "Logo", true ,500);
 	// CSceneFactory::LoadScene("Loading1", "NetStage_Start", true ,0);
+	// CSceneFactory::LoadScene("Loading1", "Animation Tool", true, 0);
+	CSceneFactory::LoadScene("Loading1", "Stage_Start", true, 0);
+	
 
 
 
