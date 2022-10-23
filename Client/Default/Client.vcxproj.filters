@@ -540,9 +540,14 @@
     <ClInclude Include="..\Header\MapTable.h">
       <Filter>02. GameObject\Object</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\SkeletalGhostTrail.h" />
     <ClInclude Include="..\Header\Portrait.h">
       <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\SkeletalGhostTrail.h">
+      <Filter>02. GameObject\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\EndermanTrail.h">
+      <Filter>02. GameObject\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -981,9 +986,14 @@
     <ClCompile Include="..\Code\MapTable.cpp">
       <Filter>02. GameObject\Object</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\SkeletalGhostTrail.cpp" />
     <ClCompile Include="..\Code\Portrait.cpp">
       <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SkeletalGhostTrail.cpp">
+      <Filter>02. GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\EndermanTrail.cpp">
+      <Filter>02. GameObject\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1008,5 +1018,6 @@
     <FxCompile Include="..\Bin\Resource\Shader\Shader_Player.hlsl" />
     <FxCompile Include="..\Bin\Resource\Shader\Shader_Sky.hlsl" />
     <FxCompile Include="..\Bin\Resource\Shader\Shader_GhostTrail.hlsl" />
+    <FxCompile Include="..\Bin\Resource\Shader\UVAnimation.fx" />
   </ItemGroup>
 </Project>

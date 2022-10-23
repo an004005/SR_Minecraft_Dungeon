@@ -296,6 +296,10 @@ void CPlayer::AnimationEvent(const string& strEvent)
 		}
 		// axe crack
 	}
+	else if (strEvent == "Glaive_Attack")
+	{
+		m_bApplyMeleeAttackNext = true;
+	}
 	else if (strEvent == "step")
 	{
 		if ((_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].x <= 0 || (_int)m_pRootPart->pTrans->m_vInfo[INFO_POS].z <= 0 ||

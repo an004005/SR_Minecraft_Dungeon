@@ -22,5 +22,7 @@ private:
 	_float m_fDetectRange = 6.f; // 사정거리
 	_float m_fBuffDiff = 7.f;
 	_float m_fAttackDist = 3.f; // 공격 사거리
+
+	
 };
 

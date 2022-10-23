@@ -134,6 +134,17 @@ private:
 	_float m_fCurTime;
 	_bool m_bStun = false;
 
+	_bool m_bKoukuShadow = false;
+
+	//light
+	D3DLIGHT9 m_CounterLight;
+	_float m_fLightTime = 0.1f;
+	_float m_fCurLightTime = 0.1f;
+	//~light
+
+	//shadow
+	_float m_fCurTrailTime = 0.15f;
+	_float m_fTrailTime = 0.15f;
 	//Intro
 	_bool m_bStartPlay = false;
 	_bool m_bIntroPlay = false;

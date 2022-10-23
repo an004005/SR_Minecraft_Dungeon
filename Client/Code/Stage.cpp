@@ -195,8 +195,9 @@ HRESULT CStage::Ready_Layer_GameLogic()
 	//monsters
 	{	
 	
-		// CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.f, 1.f, 1.f }, { 0.f, 0.f ,0.f }, { 10.f, 4.f, 10.f });
-		// CEnemyFactory::Create<CGeomancer>("Geomancer", L"Geomancer", matWorld);
+		//CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.5f, 1.5f, 1.5f }, { 0.f, 0.f ,0.f }, { 5.f, 4.f, 29.f });
+		//CEnemyFactory::Create<CEnderman>("Enderman", L"Enderman", matWorld);
+
 
 		CGameUtilMgr::MatWorldComposeEuler(matWorld, { 1.3f, 1.3f, 1.3f }, { 0.f, D3DXToRadian(180.f) ,0.f }, { 51.f, 4.f, 95.f });
 		CEnemyFactory::Create<CLeaper>("Leaper", L"Leaper", matWorld);

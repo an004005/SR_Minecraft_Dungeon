@@ -10,6 +10,7 @@
 #include "Weapon.h"
 #include "KoukuHpUI.h"
 #include "ServerPacketHandler.h"
+#include "Stage_Kouku.h"
 #include "ObjectStoreMgr.h"
 
 CKouku::CKouku(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
@@ -22,12 +23,14 @@ CKouku::CKouku(const CMonster& rhs) : CMonster(rhs)
 
 CKouku::~CKouku()
 {
+	CSoundMgr::GetInstance()->StopAll();
 }
 
 HRESULT CKouku::Ready_Object()
 {
 	CMonster::Ready_Object();
-
+	m_fCurTrailTime = 0.005f;
+	m_fTrailTime = 0.005f;
 	m_arrAnim[INTRO] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_intro.anim");
 	m_arrAnim[WALK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_walk.anim");
 	m_arrAnim[BASIC_ATTACK] = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/KoukuSaton/kouku_basicattack.anim");
@@ -71,7 +74,8 @@ HRESULT CKouku::Ready_Object()
 	//cc면역
 	m_bCantCC = true;
 
-
+	m_fCurLightTime = 1.f;
+	m_fLightTime = 0.08f;
 	m_pBossHPUI = CUIFactory::Create<CKoukuHpUI>("KoukuHPUI", L"KoukuHPUI", -1, WINCX * 0.5f, WINCY * 0.15f, 500, 25);
 	m_pBossHPUI->SetOwner(L"쿠 크", this, m_pStat->GetMaxHP());
 	m_pBossHPUI->SetNamePos(0.47f);
@@ -131,8 +135,7 @@ void CKouku::AnimationEvent(const string& strEvent)
 			, READY_CIRCLE, CGameUtilMgr::s_vZero, _vec3(4.f, 4.f, 4.f), 35, 35);
 		CEffectFactory::AttackRange_Create("Attack_Range_Circle", L"Attack_Range_Circle", m_vKoukuHammerPos
 			, ATTACK_CIRCLE, CGameUtilMgr::s_vZero, _vec3(4.f, 4.f, 4.f), 100, 35);
-		CEffectFactory::Create<CUVCircle>("Kouku_Explosion", L"Kouku_Explosion",
-			_vec3(m_vKoukuHammerPos.x, m_vKoukuHammerPos.y + 0.2f, m_vKoukuHammerPos.z));
+		
 		
 	}
 	else if(strEvent == "BasicAttackColl_1")
@@ -150,8 +153,7 @@ void CKouku::AnimationEvent(const string& strEvent)
 
 		CEffectFactory::AttackRange_Create("Attack_Range_Circle", L"Attack_Range_Circle", m_vKoukuHammerPos
 			, ATTACK_CIRCLE, CGameUtilMgr::s_vZero, _vec3(5.f, 5.f, 5.f), 100, 34);
-		CEffectFactory::Create<CUVCircle>("Hammer2_Explosion", L"Hammer2_Explosion",
-			_vec3(m_vKoukuHammerPos.x, m_vKoukuHammerPos.y + 0.2f, m_vKoukuHammerPos.z));
+	
 	}
 	else if (strEvent == "DoubleHammer_2")
 	{
@@ -160,6 +162,7 @@ void CKouku::AnimationEvent(const string& strEvent)
 	else if (strEvent == "HorrorAttack_Start")
 	{
 		CSoundMgr::GetInstance()->PlaySoundRandomChannel({ L"horror_1.wav", L"horror_2.wav" }, m_pRootPart->pTrans->m_vInfo[INFO_POS], CHANNELID(23));
+		m_bKoukuShadow = true;
 	}
 	else if (strEvent == "Countable")
 	{
@@ -175,6 +178,8 @@ void CKouku::AnimationEvent(const string& strEvent)
 	
 	else if (strEvent == "Horror_Attack")
 	{
+
+		
 		m_bIsHorrorAttack = true;
 
 
@@ -188,6 +193,7 @@ void CKouku::AnimationEvent(const string& strEvent)
 	else if (strEvent == "HorrorAttack_End")
 	{
 		m_bIsHorrorAttack = false;
+		m_bKoukuShadow = false;
 	}
 	else if (strEvent == "Intro_End")
 	{
@@ -233,8 +239,33 @@ _int CKouku::Update_Object(const _float& fTimeDelta)
 	}
 
 	CMonster::Update_Object(fTimeDelta);
+	CScene* pCurScene = CManagement::GetInstance()->GetScene();
+	if(m_fLightTime > m_fCurLightTime)
+	{
+		//씬 가져오기
+		dynamic_cast<CStage_Kouku*>(pCurScene)->CounterLightColor(0.4f);
+	}
+	else 
+		dynamic_cast<CStage_Kouku*>(pCurScene)->CounterLightColor(0.8f);
 
-	
+
+	m_fCurLightTime += fTimeDelta;
+
+	m_fCurTrailTime += fTimeDelta;
+
+	if (m_bKoukuShadow)
+	{
+		if (m_fCurTrailTime > m_fTrailTime)
+		{
+			m_fCurTrailTime = 0.f;
+			CTransform* pOwnerTrans = this->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+			_matrix matWorld;
+			CGameUtilMgr::MatWorldComposeEuler(matWorld, { 0.6f, 0.6f, 0.6f }, pOwnerTrans->m_vAngle, pOwnerTrans->m_vInfo[INFO_POS]);
+			CObjectFactory::CreateGhostTrail("GhostTrail", L"GhostTrail", this, matWorld)
+				->SetColorTime(0.3f, D3DCOLOR_ARGB(180, 200,55 ,0));
+		}
+	}
+
 	m_pBossHPUI->SetCurHp(m_pStat->GetHP());
 
 	if (m_pCurAnim == m_pIdleAnim) // 이전 애니메이션 종료
@@ -433,6 +464,8 @@ void CKouku::LateUpdate_Object()
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
 				->TakeDamage(20, KoukuPos, this, DT_KNOCK_BACK);
 		}
+		CEffectFactory::Create<CUVCircle>("Kouku_Explosion", L"Kouku_Explosion",
+			_vec3(m_vKoukuHammerPos.x, m_vKoukuHammerPos.y + 0.2f, m_vKoukuHammerPos.z));
 		CSoundMgr::GetInstance()->PlaySoundRandom({ L"attack1_hit.wav", L"attack1_hit_2.wav" }, m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 		m_bIsDoubleHammerColl_1 = false;
 	}
@@ -450,6 +483,8 @@ void CKouku::LateUpdate_Object()
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
 				->TakeDamage(20, FromPos, this, DT_KNOCK_BACK);
 		}
+		CEffectFactory::Create<CUVCircle>("Hammer2_Explosion", L"Hammer2_Explosion",
+			_vec3(m_vKoukuHammerPos.x, m_vKoukuHammerPos.y + 0.2f, m_vKoukuHammerPos.z));
 		CSoundMgr::GetInstance()->PlaySoundRandom({ L"attack1_hit.wav", L"attack1_hit_2.wav" }, m_pRootPart->pTrans->m_vInfo[INFO_POS]);
 		m_bIsDoubleHammerColl_2 = false;
 	}
@@ -524,6 +559,9 @@ void CKouku::SetKoukuCounter()
 	Get_GameObject<CStaticCamera>(LAYER_ENV, L"StaticCamera")
 		->PlayShake(0.15f, 1.f);
 	CSoundMgr::GetInstance()->PlaySoundChannel(L"grogi_edit_2_2.ogg", m_pRootPart->pTrans->m_vInfo[INFO_POS], CHANNELID(23),1.f);
+	m_bKoukuShadow = false;
+
+	m_fCurLightTime = 0.f;
 }
 
 void CKouku::Free()
