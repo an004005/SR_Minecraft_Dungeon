@@ -211,6 +211,7 @@
     <ClInclude Include="..\Header\KoukuController.h" />
     <ClInclude Include="..\Header\NetStage.h" />
     <ClInclude Include="..\Header\PlayerUI.h" />
+    <ClInclude Include="..\Header\Portrait.h" />
     <ClInclude Include="..\Header\Posion.h" />
     <ClInclude Include="..\Header\AnimationTool.h" />
     <ClInclude Include="..\Header\Apple.h" />
@@ -353,6 +354,7 @@
     <ClCompile Include="..\Code\KoukuController.cpp" />
     <ClCompile Include="..\Code\PlayerUI.cpp" />
     <ClCompile Include="..\Code\NetStage.cpp" />
+    <ClCompile Include="..\Code\Portrait.cpp" />
     <ClCompile Include="..\Code\Posion.cpp" />
     <ClCompile Include="..\Code\AnimationTool.cpp" />
     <ClCompile Include="..\Code\Apple.cpp" />

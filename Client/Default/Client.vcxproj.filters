@@ -541,6 +541,9 @@
       <Filter>02. GameObject\Object</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\SkeletalGhostTrail.h" />
+    <ClInclude Include="..\Header\Portrait.h">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -979,6 +982,9 @@
       <Filter>02. GameObject\Object</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\SkeletalGhostTrail.cpp" />
+    <ClCompile Include="..\Code\Portrait.cpp">
+      <Filter>02. GameObject\05. UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
