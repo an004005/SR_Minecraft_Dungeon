@@ -46,6 +46,8 @@ public:
 	void StaticCallBack(_vec3 vCenter, _float fRadius);
 
 	//
+
+	class CPlayer* m_pOwner = nullptr;
 private:
 	Engine::CTransform* m_pTransform = nullptr;
 	CCollisionCom* m_pCollCom = nullptr;

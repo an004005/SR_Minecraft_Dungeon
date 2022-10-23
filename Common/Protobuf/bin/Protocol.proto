@@ -277,7 +277,7 @@ message S_KOUKU_ATTACK
 
 message C_KOUKU_COUNTER
 {
-
+	Player player = 1;
 }
 
 message S_KOUKU_COUNTER
@@ -295,4 +295,15 @@ message C_KOUKU_DAMAGE
 {
 	Player player = 1;
 	uint32 damage = 2;
+}
+
+message C_KOUKU_RESULT
+{
+	
+}
+
+message S_KOUKU_RESULT
+{
+	bool success = 1;
+	repeated PlayerResult result = 2;
 }

@@ -155,7 +155,7 @@ void CArrow::FireWork()
 		if (CMonster* pMonster = dynamic_cast<CMonster*>(obj))
 		{
 			pMonster->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-			        ->TakeDamage((_int)m_fDamage, m_pTransform->m_vInfo[INFO_POS], this);
+			        ->TakeDamage((_int)m_fDamage, m_pTransform->m_vInfo[INFO_POS], m_pOwner);
 			DEBUG_SPHERE(m_pTransform->m_vInfo[INFO_POS], 5.f, 1.f);
 		}
 	}
@@ -176,7 +176,7 @@ void CArrow::DynamicCallBack(CCollisionCom* pOther)
 
 			m_pParentStat = pOther->GetOwner()->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC);
 			m_pParentStat->AddRef();
-			m_pParentStat->TakeDamage((_int)m_fDamage, m_pTransform->m_vInfo[INFO_POS], this, DT_END, m_bCritical);
+			m_pParentStat->TakeDamage((_int)m_fDamage, m_pTransform->m_vInfo[INFO_POS], m_pOwner, DT_END, m_bCritical);
 
 			m_pParentTrans = pOther->GetTransform();
 			m_pParentTrans->AddRef();
