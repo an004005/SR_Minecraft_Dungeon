@@ -40,6 +40,7 @@ public:
 
 	virtual void StateChange();
 	void RotateToTargetSlow(const _vec3& vTargetPos);
+
 	// controller 조종 함수
 	void WalkToTarget() { m_bMove = true; }
 	void DoAttack() { m_bAttack = true; }

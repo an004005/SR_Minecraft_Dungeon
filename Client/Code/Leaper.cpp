@@ -258,7 +258,7 @@ void CLeaper::StateChange()
 	if (m_bAttack && m_bCanPlayAnim)
 	{
 		m_eState = State::ATTACK;
-		RotateToTargetPos(m_vTargetPos);
+		RotateToTargetSlow(m_vTargetPos);
 		PlayAnimationOnce(&m_arrAnim[ANIM_ATTACK]);
 		m_bCanPlayAnim = false;
 		m_bMove = false;
@@ -269,7 +269,7 @@ void CLeaper::StateChange()
 	if (m_bJump && m_bCanPlayAnim)
 	{
 		m_eState = State::JUMP;
-		RotateToTargetPos(m_vTargetPos);
+		RotateToTargetSlow(m_vTargetPos);
 		PlayAnimationOnce(&m_arrAnim[ANIM_JUMP]);
 		m_vJumpTargetPos = m_vTargetPos;
 		m_bCanPlayAnim = false;
@@ -281,7 +281,7 @@ void CLeaper::StateChange()
 	if (m_bMove && m_bCanPlayAnim)
 	{
 		m_eState = State::WALK;
-		RotateToTargetPos(m_vTargetPos);
+		RotateToTargetSlow(m_vTargetPos);
 		m_pIdleAnim = &m_arrAnim[ANIM_WALK];
 		m_pCurAnim = &m_arrAnim[ANIM_WALK];
 		return;
@@ -290,7 +290,7 @@ void CLeaper::StateChange()
 	if (m_bCanPlayAnim)
 	{
 		m_eState = State::IDLE;
-		RotateToTargetPos(m_vTargetPos);
+		RotateToTargetSlow(m_vTargetPos);
 		m_pIdleAnim = &m_arrAnim[ANIM_IDLE];
 		m_pCurAnim = &m_arrAnim[ANIM_IDLE];
 		return;
@@ -328,7 +328,7 @@ void CLeaper::RotateToTargetSlow(const _vec3& vTargetPos)
 	const _float fDot = D3DXVec2Dot(&v2Look, &v2ToDest);
 
 	if (vLook.x < 0)
-		m_pRootPart->pTrans->m_vAngle.y = -acosf(fDot);
+		m_pRootPart->pTrans->m_vAngle.y = -acosf(fDot) ;
 	else
-		m_pRootPart->pTrans->m_vAngle.y = acosf(fDot);
+		m_pRootPart->pTrans->m_vAngle.y = acosf(fDot) ;
 }
