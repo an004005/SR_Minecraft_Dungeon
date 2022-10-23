@@ -1,6 +1,8 @@
 #pragma once
 #include "Component.h"
 #include "GameObject.h"
+#include "RcTex.h"
+#include "Texture.h"
 
 BEGIN(Engine)
 class ENGINE_DLL CTargetTexture : public CComponent
@@ -21,6 +23,9 @@ private:
 	IDirect3DTexture9*		m_pTexture;
 	ID3DXRenderToSurface* m_pRender2Surface;
 	list<CGameObject*> m_RenderList;
+
+	CTexture* m_pMvpTexture = nullptr;
+	CRcTex* m_pBuff = nullptr;
 
 public:
 	static	CTargetTexture*		Create(LPDIRECT3DDEVICE9 pGraphicDev);

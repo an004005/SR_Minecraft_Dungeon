@@ -31,10 +31,10 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 {
 	{
 		// m_fCurLookAtTime += fTimeDelta;
-		// m_fCurFirstHammerCoolTime += fTimeDelta;
-		// m_fCurSatonBirdCoolTime += fTimeDelta;
-		// m_fCurSatonGrapCoolTime += fTimeDelta;
-		// m_fCurSatonFascinateCoolTime += fTimeDelta;
+		m_fCurFirstHammerCoolTime += fTimeDelta;
+		m_fCurSatonBirdCoolTime += fTimeDelta;
+		m_fCurSatonGrapCoolTime += fTimeDelta;
+		m_fCurSatonFascinateCoolTime += fTimeDelta;
 
 		if(m_bIsDrawMoon)
 		{

@@ -11,6 +11,7 @@
 #include "KoukuHpUI.h"
 #include "ServerPacketHandler.h"
 #include "Stage_Kouku.h"
+#include "ObjectStoreMgr.h"
 
 CKouku::CKouku(LPDIRECT3DDEVICE9 pGraphicDev) : CMonster(pGraphicDev)
 {
@@ -54,7 +55,7 @@ HRESULT CKouku::Ready_Object()
 
 	m_bIntroPlay = true;
 
-	m_pStat->SetMaxHP(10000);
+	m_pStat->SetMaxHP(8000);
 
 
 	if (m_bRemote)
@@ -219,6 +220,12 @@ void CKouku::AnimationEvent(const string& strEvent)
 			// CClearUI* pClearUI = CUIFactory::Create<CClearUI>("ClearUI", L"ClearUI", 0, WINCX * 0.5f, WINCY * 0.2f, WINCX* 0.4f, WINCY* 0.4f);
 			// pClearUI->SetUITexture(26);
 			m_bDelete = true;
+
+			if (g_bOnline && m_bRemote == false)
+			{
+				Protocol::C_KOUKU_RESULT pkt;
+				CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(pkt));	
+			}
 		}
 	}
 
@@ -518,7 +525,7 @@ void CKouku::LateUpdate_Object()
 	// }
 }
 
-void CKouku::Kouku_Stun_Success()
+void CKouku::Kouku_Stun_Success(_uint iID)
 {
 	_vec3 KoukuPos = m_pRootPart->pTrans->m_vInfo[INFO_POS];
 
@@ -534,6 +541,7 @@ void CKouku::Kouku_Stun_Success()
 			if (g_bOnline)
 			{
 				Protocol::C_KOUKU_COUNTER counterPkt;
+				counterPkt.mutable_player()->set_id(iID);
 				CClientServiceMgr::GetInstance()->Broadcast(ServerPacketHandler::MakeSendBuffer(counterPkt));	
 			}
 

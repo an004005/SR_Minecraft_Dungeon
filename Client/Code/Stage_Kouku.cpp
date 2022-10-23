@@ -24,6 +24,7 @@
 #include "ObjectStoreMgr.h"
 #include "PlayerStartPos.h"
 #include "ServerPacketHandler.h"
+#include "Portrait.h"
 
 CStage_Kouku::CStage_Kouku(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
@@ -57,6 +58,9 @@ HRESULT CStage_Kouku::Ready_Scene(void)
 	FAILED_CHECK_RETURN(Ready_Layer_UI(), E_FAIL);
 
 	// CClientServiceMgr::GetInstance()->ReadyClientService();
+
+
+
 
 	return S_OK;
 }

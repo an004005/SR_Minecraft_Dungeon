@@ -605,7 +605,9 @@ struct S_KOUKU_ATTACKDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 S_KOUKU_ATTACKDefaultTypeInternal _S_KOUKU_ATTACK_default_instance_;
 PROTOBUF_CONSTEXPR C_KOUKU_COUNTER::C_KOUKU_COUNTER(
-    ::_pbi::ConstantInitialized) {}
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.player_)*/nullptr
+  , /*decltype(_impl_._cached_size_)*/{}} {}
 struct C_KOUKU_COUNTERDefaultTypeInternal {
   PROTOBUF_CONSTEXPR C_KOUKU_COUNTERDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
@@ -641,8 +643,47 @@ struct C_DEBUG_PKTDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 C_DEBUG_PKTDefaultTypeInternal _C_DEBUG_PKT_default_instance_;
+PROTOBUF_CONSTEXPR C_KOUKU_DAMAGE::C_KOUKU_DAMAGE(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.player_)*/nullptr
+  , /*decltype(_impl_.damage_)*/0u
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct C_KOUKU_DAMAGEDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR C_KOUKU_DAMAGEDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~C_KOUKU_DAMAGEDefaultTypeInternal() {}
+  union {
+    C_KOUKU_DAMAGE _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 C_KOUKU_DAMAGEDefaultTypeInternal _C_KOUKU_DAMAGE_default_instance_;
+PROTOBUF_CONSTEXPR C_KOUKU_RESULT::C_KOUKU_RESULT(
+    ::_pbi::ConstantInitialized) {}
+struct C_KOUKU_RESULTDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR C_KOUKU_RESULTDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~C_KOUKU_RESULTDefaultTypeInternal() {}
+  union {
+    C_KOUKU_RESULT _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 C_KOUKU_RESULTDefaultTypeInternal _C_KOUKU_RESULT_default_instance_;
+PROTOBUF_CONSTEXPR S_KOUKU_RESULT::S_KOUKU_RESULT(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.result_)*/{}
+  , /*decltype(_impl_.success_)*/false
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct S_KOUKU_RESULTDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR S_KOUKU_RESULTDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~S_KOUKU_RESULTDefaultTypeInternal() {}
+  union {
+    S_KOUKU_RESULT _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 S_KOUKU_RESULTDefaultTypeInternal _S_KOUKU_RESULT_default_instance_;
 }  // namespace Protocol
-static ::_pb::Metadata file_level_metadata_Protocol_2eproto[43];
+static ::_pb::Metadata file_level_metadata_Protocol_2eproto[46];
 static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_Protocol_2eproto = nullptr;
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_Protocol_2eproto = nullptr;
 
@@ -996,6 +1037,7 @@ const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_KOUKU_COUNTER, _impl_.player_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::S_KOUKU_COUNTER, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -1010,6 +1052,28 @@ const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::C_DEBUG_PKT, _impl_.debuglog_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_KOUKU_DAMAGE, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_KOUKU_DAMAGE, _impl_.player_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_KOUKU_DAMAGE, _impl_.damage_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_KOUKU_RESULT, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_KOUKU_RESULT, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_KOUKU_RESULT, _impl_.success_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_KOUKU_RESULT, _impl_.result_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::Protocol::C_LOGIN)},
@@ -1053,8 +1117,11 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 326, -1, -1, sizeof(::Protocol::C_KOUKU_ATTACK)},
   { 334, -1, -1, sizeof(::Protocol::S_KOUKU_ATTACK)},
   { 343, -1, -1, sizeof(::Protocol::C_KOUKU_COUNTER)},
-  { 349, -1, -1, sizeof(::Protocol::S_KOUKU_COUNTER)},
-  { 356, -1, -1, sizeof(::Protocol::C_DEBUG_PKT)},
+  { 350, -1, -1, sizeof(::Protocol::S_KOUKU_COUNTER)},
+  { 357, -1, -1, sizeof(::Protocol::C_DEBUG_PKT)},
+  { 364, -1, -1, sizeof(::Protocol::C_KOUKU_DAMAGE)},
+  { 372, -1, -1, sizeof(::Protocol::C_KOUKU_RESULT)},
+  { 378, -1, -1, sizeof(::Protocol::S_KOUKU_RESULT)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -1101,6 +1168,9 @@ static const ::_pb::Message* const file_default_instances[] = {
   &::Protocol::_C_KOUKU_COUNTER_default_instance_._instance,
   &::Protocol::_S_KOUKU_COUNTER_default_instance_._instance,
   &::Protocol::_C_DEBUG_PKT_default_instance_._instance,
+  &::Protocol::_C_KOUKU_DAMAGE_default_instance_._instance,
+  &::Protocol::_C_KOUKU_RESULT_default_instance_._instance,
+  &::Protocol::_S_KOUKU_RESULT_default_instance_._instance,
 };
 
 const char descriptor_table_protodef_Protocol_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -1191,9 +1261,14 @@ const char descriptor_table_protodef_Protocol_2eproto[] PROTOBUF_SECTION_VARIABL
   "Protocol.Vec3\"m\n\016S_KOUKU_ATTACK\022\017\n\007succe"
   "ss\030\001 \001(\010\022\'\n\007pattern\030\002 \001(\0162\026.Protocol.Kou"
   "kuPattern\022!\n\ttargetPos\030\003 \001(\0132\016.Protocol."
-  "Vec3\"\021\n\017C_KOUKU_COUNTER\"\"\n\017S_KOUKU_COUNT"
-  "ER\022\017\n\007success\030\001 \001(\010\"\037\n\013C_DEBUG_PKT\022\020\n\010de"
-  "bugLog\030\001 \001(\tb\006proto3"
+  "Vec3\"3\n\017C_KOUKU_COUNTER\022 \n\006player\030\001 \001(\0132"
+  "\020.Protocol.Player\"\"\n\017S_KOUKU_COUNTER\022\017\n\007"
+  "success\030\001 \001(\010\"\037\n\013C_DEBUG_PKT\022\020\n\010debugLog"
+  "\030\001 \001(\t\"B\n\016C_KOUKU_DAMAGE\022 \n\006player\030\001 \001(\013"
+  "2\020.Protocol.Player\022\016\n\006damage\030\002 \001(\r\"\020\n\016C_"
+  "KOUKU_RESULT\"I\n\016S_KOUKU_RESULT\022\017\n\007succes"
+  "s\030\001 \001(\010\022&\n\006result\030\002 \003(\0132\026.Protocol.Playe"
+  "rResultb\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_Protocol_2eproto_deps[2] = {
   &::descriptor_table_Enum_2eproto,
@@ -1201,9 +1276,9 @@ static const ::_pbi::DescriptorTable* const descriptor_table_Protocol_2eproto_de
 };
 static ::_pbi::once_flag descriptor_table_Protocol_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Protocol_2eproto = {
-    false, false, 3580, descriptor_table_protodef_Protocol_2eproto,
+    false, false, 3775, descriptor_table_protodef_Protocol_2eproto,
     "Protocol.proto",
-    &descriptor_table_Protocol_2eproto_once, descriptor_table_Protocol_2eproto_deps, 2, 43,
+    &descriptor_table_Protocol_2eproto_once, descriptor_table_Protocol_2eproto_deps, 2, 46,
     schemas, file_default_instances, TableStruct_Protocol_2eproto::offsets,
     file_level_metadata_Protocol_2eproto, file_level_enum_descriptors_Protocol_2eproto,
     file_level_service_descriptors_Protocol_2eproto,
@@ -11222,35 +11297,194 @@ void S_KOUKU_ATTACK::InternalSwap(S_KOUKU_ATTACK* other) {
 
 class C_KOUKU_COUNTER::_Internal {
  public:
+  static const ::Protocol::Player& player(const C_KOUKU_COUNTER* msg);
 };
 
+const ::Protocol::Player&
+C_KOUKU_COUNTER::_Internal::player(const C_KOUKU_COUNTER* msg) {
+  return *msg->_impl_.player_;
+}
+void C_KOUKU_COUNTER::clear_player() {
+  if (GetArenaForAllocation() == nullptr && _impl_.player_ != nullptr) {
+    delete _impl_.player_;
+  }
+  _impl_.player_ = nullptr;
+}
 C_KOUKU_COUNTER::C_KOUKU_COUNTER(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase(arena, is_message_owned) {
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
   // @@protoc_insertion_point(arena_constructor:Protocol.C_KOUKU_COUNTER)
 }
 C_KOUKU_COUNTER::C_KOUKU_COUNTER(const C_KOUKU_COUNTER& from)
-  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase() {
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
   C_KOUKU_COUNTER* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.player_){nullptr}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  if (from._internal_has_player()) {
+    _this->_impl_.player_ = new ::Protocol::Player(*from._impl_.player_);
+  }
   // @@protoc_insertion_point(copy_constructor:Protocol.C_KOUKU_COUNTER)
 }
 
+inline void C_KOUKU_COUNTER::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.player_){nullptr}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
 
+C_KOUKU_COUNTER::~C_KOUKU_COUNTER() {
+  // @@protoc_insertion_point(destructor:Protocol.C_KOUKU_COUNTER)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
 
+inline void C_KOUKU_COUNTER::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  if (this != internal_default_instance()) delete _impl_.player_;
+}
 
+void C_KOUKU_COUNTER::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void C_KOUKU_COUNTER::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.C_KOUKU_COUNTER)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  if (GetArenaForAllocation() == nullptr && _impl_.player_ != nullptr) {
+    delete _impl_.player_;
+  }
+  _impl_.player_ = nullptr;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* C_KOUKU_COUNTER::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // .Protocol.Player player = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_player(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* C_KOUKU_COUNTER::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.C_KOUKU_COUNTER)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .Protocol.Player player = 1;
+  if (this->_internal_has_player()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(1, _Internal::player(this),
+        _Internal::player(this).GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.C_KOUKU_COUNTER)
+  return target;
+}
+
+size_t C_KOUKU_COUNTER::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.C_KOUKU_COUNTER)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // .Protocol.Player player = 1;
+  if (this->_internal_has_player()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.player_);
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
 
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData C_KOUKU_COUNTER::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl,
-    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl,
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    C_KOUKU_COUNTER::MergeImpl
 };
 const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*C_KOUKU_COUNTER::GetClassData() const { return &_class_data_; }
 
 
+void C_KOUKU_COUNTER::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<C_KOUKU_COUNTER*>(&to_msg);
+  auto& from = static_cast<const C_KOUKU_COUNTER&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:Protocol.C_KOUKU_COUNTER)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
 
+  if (from._internal_has_player()) {
+    _this->_internal_mutable_player()->::Protocol::Player::MergeFrom(
+        from._internal_player());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
 
+void C_KOUKU_COUNTER::CopyFrom(const C_KOUKU_COUNTER& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.C_KOUKU_COUNTER)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
 
+bool C_KOUKU_COUNTER::IsInitialized() const {
+  return true;
+}
 
+void C_KOUKU_COUNTER::InternalSwap(C_KOUKU_COUNTER* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_.player_, other->_impl_.player_);
+}
 
 ::PROTOBUF_NAMESPACE_ID::Metadata C_KOUKU_COUNTER::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
@@ -11639,6 +11873,491 @@ void C_DEBUG_PKT::InternalSwap(C_DEBUG_PKT* other) {
       file_level_metadata_Protocol_2eproto[42]);
 }
 
+// ===================================================================
+
+class C_KOUKU_DAMAGE::_Internal {
+ public:
+  static const ::Protocol::Player& player(const C_KOUKU_DAMAGE* msg);
+};
+
+const ::Protocol::Player&
+C_KOUKU_DAMAGE::_Internal::player(const C_KOUKU_DAMAGE* msg) {
+  return *msg->_impl_.player_;
+}
+void C_KOUKU_DAMAGE::clear_player() {
+  if (GetArenaForAllocation() == nullptr && _impl_.player_ != nullptr) {
+    delete _impl_.player_;
+  }
+  _impl_.player_ = nullptr;
+}
+C_KOUKU_DAMAGE::C_KOUKU_DAMAGE(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:Protocol.C_KOUKU_DAMAGE)
+}
+C_KOUKU_DAMAGE::C_KOUKU_DAMAGE(const C_KOUKU_DAMAGE& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  C_KOUKU_DAMAGE* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.player_){nullptr}
+    , decltype(_impl_.damage_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  if (from._internal_has_player()) {
+    _this->_impl_.player_ = new ::Protocol::Player(*from._impl_.player_);
+  }
+  _this->_impl_.damage_ = from._impl_.damage_;
+  // @@protoc_insertion_point(copy_constructor:Protocol.C_KOUKU_DAMAGE)
+}
+
+inline void C_KOUKU_DAMAGE::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.player_){nullptr}
+    , decltype(_impl_.damage_){0u}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+C_KOUKU_DAMAGE::~C_KOUKU_DAMAGE() {
+  // @@protoc_insertion_point(destructor:Protocol.C_KOUKU_DAMAGE)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void C_KOUKU_DAMAGE::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  if (this != internal_default_instance()) delete _impl_.player_;
+}
+
+void C_KOUKU_DAMAGE::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void C_KOUKU_DAMAGE::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.C_KOUKU_DAMAGE)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  if (GetArenaForAllocation() == nullptr && _impl_.player_ != nullptr) {
+    delete _impl_.player_;
+  }
+  _impl_.player_ = nullptr;
+  _impl_.damage_ = 0u;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* C_KOUKU_DAMAGE::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // .Protocol.Player player = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_player(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 damage = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.damage_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* C_KOUKU_DAMAGE::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.C_KOUKU_DAMAGE)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .Protocol.Player player = 1;
+  if (this->_internal_has_player()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(1, _Internal::player(this),
+        _Internal::player(this).GetCachedSize(), target, stream);
+  }
+
+  // uint32 damage = 2;
+  if (this->_internal_damage() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(2, this->_internal_damage(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.C_KOUKU_DAMAGE)
+  return target;
+}
+
+size_t C_KOUKU_DAMAGE::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.C_KOUKU_DAMAGE)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // .Protocol.Player player = 1;
+  if (this->_internal_has_player()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.player_);
+  }
+
+  // uint32 damage = 2;
+  if (this->_internal_damage() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_damage());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData C_KOUKU_DAMAGE::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    C_KOUKU_DAMAGE::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*C_KOUKU_DAMAGE::GetClassData() const { return &_class_data_; }
+
+
+void C_KOUKU_DAMAGE::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<C_KOUKU_DAMAGE*>(&to_msg);
+  auto& from = static_cast<const C_KOUKU_DAMAGE&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:Protocol.C_KOUKU_DAMAGE)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_has_player()) {
+    _this->_internal_mutable_player()->::Protocol::Player::MergeFrom(
+        from._internal_player());
+  }
+  if (from._internal_damage() != 0) {
+    _this->_internal_set_damage(from._internal_damage());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void C_KOUKU_DAMAGE::CopyFrom(const C_KOUKU_DAMAGE& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.C_KOUKU_DAMAGE)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool C_KOUKU_DAMAGE::IsInitialized() const {
+  return true;
+}
+
+void C_KOUKU_DAMAGE::InternalSwap(C_KOUKU_DAMAGE* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(C_KOUKU_DAMAGE, _impl_.damage_)
+      + sizeof(C_KOUKU_DAMAGE::_impl_.damage_)
+      - PROTOBUF_FIELD_OFFSET(C_KOUKU_DAMAGE, _impl_.player_)>(
+          reinterpret_cast<char*>(&_impl_.player_),
+          reinterpret_cast<char*>(&other->_impl_.player_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata C_KOUKU_DAMAGE::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
+      file_level_metadata_Protocol_2eproto[43]);
+}
+
+// ===================================================================
+
+class C_KOUKU_RESULT::_Internal {
+ public:
+};
+
+C_KOUKU_RESULT::C_KOUKU_RESULT(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase(arena, is_message_owned) {
+  // @@protoc_insertion_point(arena_constructor:Protocol.C_KOUKU_RESULT)
+}
+C_KOUKU_RESULT::C_KOUKU_RESULT(const C_KOUKU_RESULT& from)
+  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase() {
+  C_KOUKU_RESULT* const _this = this; (void)_this;
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:Protocol.C_KOUKU_RESULT)
+}
+
+
+
+
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData C_KOUKU_RESULT::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl,
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl,
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*C_KOUKU_RESULT::GetClassData() const { return &_class_data_; }
+
+
+
+
+
+
+
+::PROTOBUF_NAMESPACE_ID::Metadata C_KOUKU_RESULT::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
+      file_level_metadata_Protocol_2eproto[44]);
+}
+
+// ===================================================================
+
+class S_KOUKU_RESULT::_Internal {
+ public:
+};
+
+void S_KOUKU_RESULT::clear_result() {
+  _impl_.result_.Clear();
+}
+S_KOUKU_RESULT::S_KOUKU_RESULT(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:Protocol.S_KOUKU_RESULT)
+}
+S_KOUKU_RESULT::S_KOUKU_RESULT(const S_KOUKU_RESULT& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  S_KOUKU_RESULT* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.result_){from._impl_.result_}
+    , decltype(_impl_.success_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_impl_.success_ = from._impl_.success_;
+  // @@protoc_insertion_point(copy_constructor:Protocol.S_KOUKU_RESULT)
+}
+
+inline void S_KOUKU_RESULT::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.result_){arena}
+    , decltype(_impl_.success_){false}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+S_KOUKU_RESULT::~S_KOUKU_RESULT() {
+  // @@protoc_insertion_point(destructor:Protocol.S_KOUKU_RESULT)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void S_KOUKU_RESULT::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.result_.~RepeatedPtrField();
+}
+
+void S_KOUKU_RESULT::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void S_KOUKU_RESULT::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.S_KOUKU_RESULT)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.result_.Clear();
+  _impl_.success_ = false;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* S_KOUKU_RESULT::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // bool success = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.success_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated .Protocol.PlayerResult result = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_result(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* S_KOUKU_RESULT::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.S_KOUKU_RESULT)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(1, this->_internal_success(), target);
+  }
+
+  // repeated .Protocol.PlayerResult result = 2;
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_result_size()); i < n; i++) {
+    const auto& repfield = this->_internal_result(i);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+        InternalWriteMessage(2, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.S_KOUKU_RESULT)
+  return target;
+}
+
+size_t S_KOUKU_RESULT::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.S_KOUKU_RESULT)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .Protocol.PlayerResult result = 2;
+  total_size += 1UL * this->_internal_result_size();
+  for (const auto& msg : this->_impl_.result_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    total_size += 1 + 1;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData S_KOUKU_RESULT::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    S_KOUKU_RESULT::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*S_KOUKU_RESULT::GetClassData() const { return &_class_data_; }
+
+
+void S_KOUKU_RESULT::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<S_KOUKU_RESULT*>(&to_msg);
+  auto& from = static_cast<const S_KOUKU_RESULT&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:Protocol.S_KOUKU_RESULT)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_impl_.result_.MergeFrom(from._impl_.result_);
+  if (from._internal_success() != 0) {
+    _this->_internal_set_success(from._internal_success());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void S_KOUKU_RESULT::CopyFrom(const S_KOUKU_RESULT& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.S_KOUKU_RESULT)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool S_KOUKU_RESULT::IsInitialized() const {
+  return true;
+}
+
+void S_KOUKU_RESULT::InternalSwap(S_KOUKU_RESULT* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.result_.InternalSwap(&other->_impl_.result_);
+  swap(_impl_.success_, other->_impl_.success_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata S_KOUKU_RESULT::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
+      file_level_metadata_Protocol_2eproto[45]);
+}
+
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace Protocol
 PROTOBUF_NAMESPACE_OPEN
@@ -11813,6 +12532,18 @@ Arena::CreateMaybeMessage< ::Protocol::S_KOUKU_COUNTER >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::Protocol::C_DEBUG_PKT*
 Arena::CreateMaybeMessage< ::Protocol::C_DEBUG_PKT >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::C_DEBUG_PKT >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::C_KOUKU_DAMAGE*
+Arena::CreateMaybeMessage< ::Protocol::C_KOUKU_DAMAGE >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::C_KOUKU_DAMAGE >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::C_KOUKU_RESULT*
+Arena::CreateMaybeMessage< ::Protocol::C_KOUKU_RESULT >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::C_KOUKU_RESULT >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::S_KOUKU_RESULT*
+Arena::CreateMaybeMessage< ::Protocol::S_KOUKU_RESULT >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::S_KOUKU_RESULT >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

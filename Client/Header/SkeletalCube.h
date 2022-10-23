@@ -105,7 +105,7 @@ public:
 	wstring& GetCubePath() { return m_wstrPath; }
 	CubeAnimFrame*  GetCurAnimFrame() { return m_pCurAnim; }
 	_float GetCurFrameTime() const { return m_fAccTime; }
-	
+	void SetLight(_bool bLight) { m_bLight = bLight; }
 
 private:
 	virtual void SaveRecursive(HANDLE hFile, SkeletalPart* pPart);
@@ -134,6 +134,7 @@ protected:
 
 	_float m_fTime;
 	_bool m_bRenderMachine = true;
+	_bool m_bLight = true;
 	// shader
 
 	_bool m_bStopAnim = false;

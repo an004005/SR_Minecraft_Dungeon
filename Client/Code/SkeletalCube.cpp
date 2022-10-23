@@ -93,9 +93,9 @@ void CSkeletalCube::Render_Object()
 		}
 	}
 
-	m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, TRUE);
-	
 
+	m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, m_bLight);
+	
 	m_pGraphicDev->SetMaterial(&m_Material);
 	m_pRootPart->matParents = m_pRootPart->pTrans->m_matWorld;
 	for (const auto& child : m_pRootPart->vecChild)

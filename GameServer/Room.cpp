@@ -85,3 +85,42 @@ void Room::Dead(uint64 iID)
 		DoTimer(3000, &Room::Broadcast, ClientPacketHandler::MakeSendBuffer(respawnPkt));
 	}
 }
+
+void Room::DoDamage(uint32 iID, uint32 damage)
+{
+	_players.find(iID)->second->totalDamage += damage;
+}
+
+void Room::DoCounter(uint32 iID)
+{
+	if (bCounterLock) return;
+
+	bCounterLock.store(true);
+	_players.find(iID)->second->counterCnt++;
+}
+
+void Room::BroadcastResult()
+{
+	vector<PlayerRef> players;
+	for (auto player : _players)
+		players.push_back(player.second);
+
+	std::sort(players.begin(), players.end(), [](PlayerRef p1, PlayerRef p2)
+	{
+		return p1->totalDamage > p2->totalDamage;
+	});
+
+	Protocol::S_KOUKU_RESULT resultPkt;
+	resultPkt.set_success(true);
+	for (auto player : _players)
+	{
+		auto repeatedResult = resultPkt.add_result();
+		repeatedResult->mutable_player()->set_id(player.first);
+		repeatedResult->mutable_player()->set_name(player.second->name);
+		repeatedResult->set_skin(player.second->type);
+		repeatedResult->set_damage(player.second->totalDamage);
+		repeatedResult->set_counter(player.second->counterCnt);
+	}
+
+	DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(resultPkt));
+}
