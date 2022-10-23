@@ -73,11 +73,13 @@ CSkeletalGhostTrail* CSkeletalGhostTrail::Create(LPDIRECT3DDEVICE9 pGraphicDev, 
 		Safe_Release(pInst);
 		return nullptr;
 	}
-
+	
 	pInst->LoadSkeletal(pSkeletal->GetCubePath());
-	pInst->Get_SkeletalPart("weapon_r")->pBuf = nullptr;
+	if (pInst->Get_SkeletalPart("weapon_r"))
+		pInst->Get_SkeletalPart("weapon_r")->pBuf = nullptr;
 	pInst->m_fAccTime = pSkeletal->GetCurFrameTime();
 	pInst->m_pCurAnim = pSkeletal->GetCurAnimFrame();
+	pInst->AnimFrameConsume(0.f);
 
 	return pInst;
 }

@@ -202,6 +202,7 @@ call CopyUtility.bat</Command>
     <ClInclude Include="..\..\Header\Shader.h" />
     <ClInclude Include="..\..\Header\ShereBuffer.h" />
     <ClInclude Include="..\..\Header\SphereMesh.h" />
+    <ClInclude Include="..\..\Header\TargetTexture.h" />
     <ClInclude Include="..\..\Header\TerrainCubeTex.h" />
     <ClInclude Include="..\..\Header\TerrainRcTex.h" />
     <ClInclude Include="..\..\Header\TerrainShader.h" />
@@ -236,6 +237,7 @@ call CopyUtility.bat</Command>
     <ClCompile Include="..\Code\Shader.cpp" />
     <ClCompile Include="..\Code\ShereBuffer.cpp" />
     <ClCompile Include="..\Code\SphereMesh.cpp" />
+    <ClCompile Include="..\Code\TargetTexture.cpp" />
     <ClCompile Include="..\Code\TerrainCubeTex.cpp" />
     <ClCompile Include="..\Code\TerrainRcTex.cpp" />
     <ClCompile Include="..\Code\TerrainShader.cpp" />

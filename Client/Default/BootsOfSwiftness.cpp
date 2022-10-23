@@ -39,8 +39,11 @@ _int CBootsOfSwiftness::Update_Object(const _float & fTimeDelta)
 	if (m_bEnd && m_fCurTrailTime > m_fTrailTime)
 	{
 		m_fCurTrailTime = 0.f;
-		
-		CObjectFactory::CreateGhostTrail("GhostTrail", L"GhostTrail", m_pOwner, m_pOwner->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)->m_matWorld)
+
+		CTransform* pOwnerTrans = m_pOwner->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC);
+		_matrix matWorld;
+		CGameUtilMgr::MatWorldComposeEuler(matWorld, {0.85f, 0.85f, 0.85f}, pOwnerTrans->m_vAngle, pOwnerTrans->m_vInfo[INFO_POS]);
+		CObjectFactory::CreateGhostTrail("GhostTrail", L"GhostTrail", m_pOwner, matWorld)
 			->SetColorTime(0.7f, D3DCOLOR_ARGB(150, 000, 204, 255));
 	}
 

@@ -162,6 +162,9 @@
     <ClInclude Include="..\..\Header\ShereBuffer.h">
       <Filter>00. Component\00. VIBuffer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Header\TargetTexture.h">
+      <Filter>00. Component\02. Texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\VIBuffer.cpp">
@@ -259,6 +262,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\ShereBuffer.cpp">
       <Filter>00. Component\00. VIBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\TargetTexture.cpp">
+      <Filter>00. Component\02. Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
