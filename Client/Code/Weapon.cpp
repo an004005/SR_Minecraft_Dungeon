@@ -13,7 +13,7 @@ CWeapon::~CWeapon()
 
 HRESULT CWeapon::Ready_Object()
 {
-	m_pInventory = Get_GameObject<CInventory>(LAYER_GAMEOBJ, L"Inventory");
+	// m_pInventory = Get_GameObject<CInventory>(LAYER_GAMEOBJ, L"Inventory");
 	return S_OK;
 }
 

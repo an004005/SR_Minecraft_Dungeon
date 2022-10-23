@@ -48,6 +48,8 @@ _int CRemoteInventory::Update_Object(const _float& fTimeDelta)
 						// Safe_Release(m_pMelee);
 						m_pMelee = GetEquipFromProtocol(state);
 						m_pOwner->WeaponChange(IT_MELEE);
+						dynamic_cast<CWeapon*>(m_pMelee)->SetInventory(this);
+
 					}
 					break;
 				case Protocol::RANGE:
@@ -62,6 +64,7 @@ _int CRemoteInventory::Update_Object(const _float& fTimeDelta)
 						pWeapon->SetDelete();
 						// Safe_Release(m_pRange);
 						m_pRange = GetEquipFromProtocol(state);
+						dynamic_cast<CWeapon*>(m_pRange)->SetInventory(this);
 						m_pOwner->WeaponChange(IT_RANGE);
 					}
 					break;

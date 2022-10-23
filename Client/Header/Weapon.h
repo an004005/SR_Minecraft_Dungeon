@@ -37,6 +37,7 @@ public:
 		if (m_bEquipped == false)
 			m_iAttackCnt = 0;
 	}
+	void SetInventory(CInventory* pInventory) { m_pInventory = pInventory; }
 
 	virtual void Free() override;
 
