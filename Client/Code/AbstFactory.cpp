@@ -79,6 +79,7 @@
 #include "BossStage.h"
 #include "SkyBox.h"
 #include "SkeletalGhostTrail.h"
+#include "Portrait.h"
 
 LPDIRECT3DDEVICE9 CAbstFactory::s_pGraphicDev = nullptr;
 
@@ -737,7 +738,11 @@ void CUIFactory::Ready_UIFactory()
 	 {
 		 return CMapUI::Create(s_pGraphicDev, 0);
 	 } });
-	
+
+	 s_mapUISpawner.insert({ "PortraitUI", [](_uint iTexNum)
+	 {
+		 return CPortrait::Create(s_pGraphicDev, 0);
+	 } });
 }
 
 

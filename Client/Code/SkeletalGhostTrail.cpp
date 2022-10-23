@@ -28,7 +28,7 @@ _int CSkeletalGhostTrail::Update_Object(const _float& fTimeDelta)
 	CGameObject::Update_Object(fTimeDelta);
 
 	m_fLife -= fTimeDelta;
-	if (m_fLife < 0.f) return OBJ_NOEVENT;
+	if (m_fLife < 0.f) return OBJ_DEAD;
 
 	Add_RenderGroup(RENDER_NONALPHA, this);
 	return OBJ_NOEVENT;
@@ -79,7 +79,8 @@ CSkeletalGhostTrail* CSkeletalGhostTrail::Create(LPDIRECT3DDEVICE9 pGraphicDev, 
 		pInst->Get_SkeletalPart("weapon_r")->pBuf = nullptr;
 	pInst->m_fAccTime = pSkeletal->GetCurFrameTime();
 	pInst->m_pCurAnim = pSkeletal->GetCurAnimFrame();
-	pInst->AnimFrameConsume(0.f);
+	if (pInst->m_pCurAnim != nullptr)
+		pInst->AnimFrameConsume(0.f);
 
 	return pInst;
 }

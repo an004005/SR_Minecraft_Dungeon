@@ -24,6 +24,7 @@
 #include "ObjectStoreMgr.h"
 #include "PlayerStartPos.h"
 #include "ServerPacketHandler.h"
+#include "Portrait.h"
 
 CStage_Kouku::CStage_Kouku(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
@@ -56,6 +57,13 @@ HRESULT CStage_Kouku::Ready_Scene(void)
 	FAILED_CHECK_RETURN(Ready_Layer_UI(), E_FAIL);
 
 	// CClientServiceMgr::GetInstance()->ReadyClientService();
+
+
+	// CPortrait* port = CUIFactory::Create<CPortrait>("PortraitUI", L"PortraitUI", -1, WINCX/2, WINCY/2, WINCX, WINCY);
+	// port->SetPlayerSkeletal(Protocol::PLAYER_TYPE_PRIDE, PLAYER_MVP, 20.f, 3, L"test1");
+	// port->SetPlayerSkeletal(Protocol::PLAYER_TYPE_ESHE, PLAYER_COUNTER, 20.f, 3, L"test2");
+	// port->SetPlayerSkeletal(Protocol::PLAYER_TYPE_COPPER, PLAYER_POTION_, 20.f, 10, L"test3");
+	// port->SetPlayerSkeletal(Protocol::PLAYER_TYPE_STEVE, PLAYER_WALK, 1.f, 3, L"test4");
 
 	return S_OK;
 }

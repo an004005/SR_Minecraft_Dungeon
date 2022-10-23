@@ -1142,7 +1142,7 @@ _int CFascinate::Update_Object(const _float& fTimeDelta)
 
    CGameObject::Update_Object(fTimeDelta);
 
-   m_pTransCom->m_vAngle.y += D3DXToRadian(40.f) * fTimeDelta * m_fSpeed;
+   // m_pTransCom->m_vAngle.y += D3DXToRadian(40.f) * fTimeDelta * m_fSpeed;
 
    m_pBufferCom->m_matWorld = m_pTransCom->m_matWorld;
 

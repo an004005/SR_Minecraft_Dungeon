@@ -290,3 +290,9 @@ message C_DEBUG_PKT
 {
 	string debugLog = 1;
 }
+
+message C_KOUKU_DAMAGE
+{
+	Player player = 1;
+	uint32 damage = 2;
+}
