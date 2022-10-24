@@ -42,11 +42,11 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 		}
 	}
 
-#ifdef _DEBUG
-	IM_BEGIN("Saton_CoolTime");
-	ImGui::Text("Fascinate Cur CoolTime : %f", m_fCurSatonFascinateCoolTime);
-	IM_END;
-#endif
+// #ifdef _DEBUG
+// 	IM_BEGIN("Saton_CoolTime");
+// 	ImGui::Text("Fascinate Cur CoolTime : %f", m_fCurSatonFascinateCoolTime);
+// 	IM_END;
+// #endif
 
 
 	CSaton* saton = dynamic_cast<CSaton*>(m_pOwner);

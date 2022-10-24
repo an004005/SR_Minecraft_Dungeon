@@ -205,11 +205,7 @@ _int CSaton::Update_Object(const _float& fTimeDelta)
 
 	_float tmp = D3DXToDegree(m_pRootPart->pTrans->m_vAngle.y);
 
-#ifdef _DEBUG
-	IM_BEGIN("Saton_Angle");
-	ImGui::Text("%f", tmp);
-	IM_END;
-#endif
+
 
 	// 상태 변경 조건 설정
 	StateChange();
@@ -246,13 +242,13 @@ _int CSaton::Update_Object(const _float& fTimeDelta)
 	}
 	if (m_bSatonIntro) return OBJ_NOEVENT;
 
-#ifdef _DEBUG
-	IM_BEGIN("StatePos");
-
-	ImGui::Text("%f,%f,%f",m_pRootPart->pTrans->m_vInfo[INFO_POS].x, m_pRootPart->pTrans->m_vInfo[INFO_POS].y, m_pRootPart->pTrans->m_vInfo[INFO_POS].z);
-
-	IM_END;
-#endif
+// #ifdef _DEBUG
+// 	IM_BEGIN("StatePos");
+//
+// 	ImGui::Text("%f,%f,%f",m_pRootPart->pTrans->m_vInfo[INFO_POS].x, m_pRootPart->pTrans->m_vInfo[INFO_POS].y, m_pRootPart->pTrans->m_vInfo[INFO_POS].z);
+//
+// 	IM_END;
+// #endif
 
 
 	return OBJ_NOEVENT;
