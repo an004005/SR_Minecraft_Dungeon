@@ -530,7 +530,7 @@ bool Handle_S_KOUKU_RESULT(PacketSessionRef& session, Protocol::S_KOUKU_RESULT& 
 
 		wstring tmp(pResult->player().name().begin(), pResult->player().name().end());
 
-		port->SetPlayerSkeletal(pResult->skin(), PLAYER_MVP_TYPE(i), (_float)pResult->damage() * 100.f / 13257.f, pResult->counter(), tmp);
+		port->SetPlayerSkeletal(pResult->skin(), PLAYER_MVP_TYPE(i), (_float)pResult->damage() * 100.f / 12000, pResult->counter(), tmp);
 	}
 
 	return true;

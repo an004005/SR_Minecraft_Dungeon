@@ -55,7 +55,7 @@ HRESULT CKouku::Ready_Object()
 
 	m_bIntroPlay = true;
 
-	m_pStat->SetMaxHP(13257);
+	m_pStat->SetMaxHP(12000);
 
 
 	if (m_bRemote)
@@ -568,6 +568,7 @@ void CKouku::SetKoukuCounter()
 	m_bKoukuShadow = false;
 
 	m_fCurLightTime = 0.f;
+	m_bCountable = false;
 }
 
 void CKouku::Free()

@@ -148,6 +148,7 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 
 	if (m_fCurSatonFascinateCoolTime >= m_fSatonFascinateCoolTime && m_fTargetDist <= m_fSatonFascinateDist)
 	{
+		m_fSatonFascinateCoolTime = 99999.f;
 		for (auto& e : Get_Layer(LAYER_PLAYER)->Get_MapObject())
 		{
 			CPlayer* pPlayer = dynamic_cast<CPlayer*>(e.second);
