@@ -34,7 +34,7 @@ HRESULT CCat_Idle::Ready_Object(const wstring & wstrPath)
 
 	else if (wstrPath == L"../Bin/Resource/SkeletalCube/Object/rui.cube")
 	{
-		m_iIdle = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Cat/cat_Slipping.anim");
+		m_iIdle = CubeAnimFrame::Load(L"../Bin/Resource/CubeAnim/Cat/love_jjh.anim");
 	}
 
 	//else if (wstrPath == L"../Bin/Resource/SkeletalCube/Object/rui.cube")
