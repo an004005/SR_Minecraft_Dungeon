@@ -9,7 +9,7 @@
 CSatonController::CSatonController()
 {
 	//67
-	m_fSatonFascinateCoolTime = 67.f;
+	m_fSatonFascinateCoolTime = 35.f;
 	m_fSatonGrapCoolTime = 19.f;
 	m_fSatonBirdCoolTime = 27.f;
 	m_fFirstHammerCoolTime = 11.f;
@@ -17,7 +17,7 @@ CSatonController::CSatonController()
 
 CSatonController::CSatonController(const CSatonController& rhs)
 {
-	m_fSatonFascinateCoolTime = 67.f;
+	m_fSatonFascinateCoolTime = 35.f;
 	m_fSatonGrapCoolTime = 19.f;
 	m_fSatonBirdCoolTime = 27.f;
 	m_fFirstHammerCoolTime = 11.f;
@@ -148,6 +148,9 @@ _int CSatonController::Update_Component(const _float& fTimeDelta)
 
 	if (m_fCurSatonFascinateCoolTime >= m_fSatonFascinateCoolTime && m_fTargetDist <= m_fSatonFascinateDist)
 	{
+		m_fCurFirstHammerCoolTime -= 15.f;
+		m_fCurSatonBirdCoolTime -= 15.f;
+		m_fCurSatonGrapCoolTime -= 15.f;
 		m_fSatonFascinateCoolTime = 99999.f;
 		for (auto& e : Get_Layer(LAYER_PLAYER)->Get_MapObject())
 		{

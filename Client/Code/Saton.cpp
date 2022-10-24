@@ -315,7 +315,7 @@ void CSaton::LateUpdate_Object()
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 			{
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-					->TakeDamage(10, vPos, this, DT_HUGE_KNOCK_BACK);
+					->TakeDamage(15, vPos, this, DT_HUGE_KNOCK_BACK);
 				IM_LOG("damage");
 				break;
 			}
@@ -336,7 +336,7 @@ void CSaton::LateUpdate_Object()
 				if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 				{
 					pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-						->TakeDamage(10, vPos, this, DT_HUGE_KNOCK_BACK);
+						->TakeDamage(25, vPos, this, DT_HUGE_KNOCK_BACK);
 					IM_LOG("damage");
 					break;
 				}
@@ -378,7 +378,7 @@ void CSaton::LateUpdate_Object()
 		{
 	
 			pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-				->TakeDamage(1, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_HIGH_KNOCK_BACK);
+				->TakeDamage(50, m_pRootPart->pTrans->m_vInfo[INFO_POS], this, DT_HIGH_KNOCK_BACK);
 			// pPlayer->Get_Component<CTransform>(L"Proto_TransformCom", ID_DYNAMIC)
 			// 	->Set_Pos(vPos.x, vPos.y - 1.5f, vPos.z);
 			pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
@@ -405,7 +405,7 @@ void CSaton::LateUpdate_Object()
 			if (CPlayer* pPlayer = dynamic_cast<CPlayer*>(obj))
 			{
 				pPlayer->Get_Component<CStatComponent>(L"Proto_StatCom", ID_DYNAMIC)
-					->TakeDamage(30, vPos, this, DT_KNOCK_BACK);
+					->TakeDamage(20, vPos, this, DT_KNOCK_BACK);
 
 				IM_LOG("damage");
 				break;
