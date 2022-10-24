@@ -55,7 +55,7 @@ HRESULT CStage::Ready_Scene(void)
 	tLightInfo.Type		= D3DLIGHT_DIRECTIONAL;
 	tLightInfo.Diffuse	= D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.f);
 	tLightInfo.Specular	= D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.f);
-	tLightInfo.Ambient	= D3DXCOLOR(0.6f, 0.6f, 0.3f, 1.f);
+	tLightInfo.Ambient	= D3DXCOLOR(0.6f, 0.6f, 0.5f, 1.f);
 	tLightInfo.Direction  = _vec3(0.3f, -1.f, 0.15f);
 	m_pGraphicDev->SetLight(0, &tLightInfo);
 	m_pGraphicDev->LightEnable(0, TRUE);
