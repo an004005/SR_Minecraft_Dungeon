@@ -55,7 +55,7 @@ HRESULT CKouku::Ready_Object()
 
 	m_bIntroPlay = true;
 
-	m_pStat->SetMaxHP(12000);
+	m_pStat->SetMaxHP(1000);
 
 
 	if (m_bRemote)

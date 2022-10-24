@@ -114,6 +114,7 @@ void Room::BroadcastResult()
 	resultPkt.set_success(true);
 	for (auto player : _players)
 	{
+		cout << "player " << player.second->name << " : " << player.second->totalDamage<<endl;
 		auto repeatedResult = resultPkt.add_result();
 		repeatedResult->mutable_player()->set_id(player.first);
 		repeatedResult->mutable_player()->set_name(player.second->name);

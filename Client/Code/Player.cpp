@@ -21,6 +21,7 @@
 #include "TerrainCubeMap.h"
 #include "LaserShotRune.h"
 #include "ObjectStoreMgr.h"
+#include "Arrow.h"
 
 /*-----------------------
  *    CCharacter
@@ -409,9 +410,9 @@ void CPlayer::SpawnArrow(_uint iDamage, PlayerArrowType eType, _bool bCritical, 
 		{
 		case PlayerArrowType::NORMAL:
 			CSoundMgr::GetInstance()->PlaySound(L"sfx_item_arrow_fire.ogg", vPos);
-			CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 
+			CBulletFactory::Create<CArrow>("PlayerNormalArrow", L"PlayerNormalArrow", 
 			{_float(iDamage), bCritical, COLL_PLAYER_BULLET, eArrowType},
-				vPos, vLookAt);
+				vPos, vLookAt)->m_pOwner = this;
 			break;
 		case PlayerArrowType::MULTISHOT:
 			{
@@ -427,9 +428,9 @@ void CPlayer::SpawnArrow(_uint iDamage, PlayerArrowType eType, _bool bCritical, 
 				for (int i = 0; i < 5; ++i)
 				{
 					D3DXVec3TransformNormal(&vLook, &vLook, &matRot);
-					CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 
+					CBulletFactory::Create<CArrow>("PlayerNormalArrow", L"PlayerNormalArrow", 
 					{_float(iDamage), bCritical, COLL_PLAYER_BULLET, eArrowType},
-						vPos, vLook + vPos);
+						vPos, vLook + vPos)->m_pOwner = this;
 				}
 			}
 			break;
@@ -448,9 +449,10 @@ void CPlayer::SpawnArrow(_uint iDamage, PlayerArrowType eType, _bool bCritical, 
 		{
 		case PlayerArrowType::NORMAL:
 			CSoundMgr::GetInstance()->PlaySound(L"sfx_item_arrow_fire.ogg", vPos);
-			CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 
+			CBulletFactory::Create<CArrow>("PlayerNormalArrow", L"PlayerNormalArrow", 
 			{_float(iDamage), bCritical, COLL_PLAYER_BULLET, eArrowType},
-				vPos, vLookAt);
+				vPos, vLookAt)->m_pOwner = this;
+			
 			break;
 		case PlayerArrowType::MULTISHOT:
 			{
@@ -466,9 +468,9 @@ void CPlayer::SpawnArrow(_uint iDamage, PlayerArrowType eType, _bool bCritical, 
 				for (int i = 0; i < 5; ++i)
 				{
 					D3DXVec3TransformNormal(&vLook, &vLook, &matRot);
-					CBulletFactory::Create<CGameObject>("PlayerNormalArrow", L"PlayerNormalArrow", 
+					CBulletFactory::Create<CArrow>("PlayerNormalArrow", L"PlayerNormalArrow", 
 					{_float(iDamage), bCritical, COLL_PLAYER_BULLET, eArrowType},
-						vPos, vLook + vPos);
+						vPos, vLook + vPos)->m_pOwner = this;
 				}
 			}
 			break;

@@ -524,14 +524,24 @@ bool Handle_S_KOUKU_RESULT(PacketSessionRef& session, Protocol::S_KOUKU_RESULT& 
 
 	CPortrait* port = CUIFactory::Create<CPortrait>("PortraitUI", L"PortraitUI", -1, WINCX/2, WINCY/2, WINCX, WINCY);
 
+	vector<Protocol::PlayerResult*> vecResult;
 	for (int i = 0; i < pkt.result_size(); ++i)
 	{
-		Protocol::PlayerResult* pResult = pkt.mutable_result(i);
-
-		wstring tmp(pResult->player().name().begin(), pResult->player().name().end());
-
-		port->SetPlayerSkeletal(pResult->skin(), PLAYER_MVP_TYPE(i), (_float)pResult->damage() * 100.f / 12000, pResult->counter(), tmp);
+		vecResult.push_back(pkt.mutable_result(i));
 	}
+
+	std::sort(vecResult.begin(), vecResult.end(), [](Protocol::PlayerResult* p1, Protocol::PlayerResult* p2)
+	{
+		return p1->damage() > p2->damage();
+	});
+
+	
+	for (size_t i = 0 ; i < vecResult.size(); ++i)
+	{
+		wstring tmp(vecResult[i]->player().name().begin(), vecResult[i]->player().name().end());
+		port->SetPlayerSkeletal(vecResult[i]->skin(), PLAYER_MVP_TYPE(i), (_float)vecResult[i]->damage() * 100.f / 12000, vecResult[i]->counter(), tmp);
+	}
+
 
 	return true;
 }
