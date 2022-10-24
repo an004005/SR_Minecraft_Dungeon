@@ -8,6 +8,7 @@ enum CamMode
 	CAM_ANIMATION,
 	CAM_LOGO_FOLLOW,
 	CAM_WAIT,
+	CAM_PERSONAL,
 	CAM_END
 };
 class CCamAnimation;
@@ -35,8 +36,10 @@ public:
 	void ResetPosition();
 	void SetSkeletalFollowMode(SkeletalPart* pPart) { m_pFollowPart = pPart; m_eMode = CAM_LOGO_FOLLOW;}
 
+	void SetPersonalMode(bool bPersonal);
 private:
 	void Update_DefaultFollow(const _float& fTimeDelta);
+	void Update_Personal(const _float& fTimeDelta);
 
 private:
 	CamMode m_eMode = CAM_NORMAL;

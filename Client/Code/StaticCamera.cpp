@@ -45,6 +45,15 @@ Engine::_int CStaticCamera::Update_Object(const _float& fTimeDelta)
 {
 	CGameObject::Update_Object(fTimeDelta);
 
+	if (DIKeyDown(DIK_F5))
+	{
+		SetPersonalMode(true);
+	}
+	if (DIKeyDown(DIK_F6))
+	{
+		SetPersonalMode(false);
+	}
+
 	switch (m_eMode)
 	{
 	case CAM_NORMAL:
@@ -63,6 +72,9 @@ Engine::_int CStaticCamera::Update_Object(const _float& fTimeDelta)
 	case CAM_LOGO_FOLLOW:
 		if (m_pFollowPart)
 			m_pTransform->m_matWorld = m_pFollowPart->GetWorldMat();
+		break;
+	case CAM_PERSONAL:
+		Update_Personal(fTimeDelta);
 		break;
 	case CAM_WAIT:
 
@@ -158,6 +170,21 @@ CStaticCamera* CStaticCamera::Create(LPDIRECT3DDEVICE9 pGraphicDev)
 	return pInstance;
 }
 
+void CStaticCamera::SetPersonalMode(bool bPersonal)
+{
+	if (bPersonal)
+	{
+		m_eMode = CAM_PERSONAL;
+		_matrix matTargetWorld = m_pTargetTrans->m_matWorld;
+		matTargetWorld._42 += 2.3f;
+		m_pTransform->Set_WorldDecompose(matTargetWorld);
+	}
+	else
+	{
+		m_eMode = CAM_NORMAL;
+	}
+}
+
 void CStaticCamera::Update_DefaultFollow(const _float& fTimeDelta)
 {
 	if (m_pTargetTrans == nullptr) return;
@@ -167,4 +194,22 @@ void CStaticCamera::Update_DefaultFollow(const _float& fTimeDelta)
 	D3DXVec3Lerp(&vSmoothPos, &m_pTransform->m_vInfo[INFO_POS], &vDesiredPos, m_fSmoothSpeed);
 
 	m_pTransform->m_vInfo[INFO_POS] = vSmoothPos;
+}
+
+void CStaticCamera::Update_Personal(const _float& fTimeDelta)
+{
+	if (m_pTargetTrans == nullptr) return;
+	m_pTransform->m_vInfo[INFO_POS] = m_pTargetTrans->m_vInfo[INFO_POS] + _vec3{0.f, 2.3f, 0.f};
+
+	_long		dwMouseMove = 0;
+
+	if (dwMouseMove = Engine::Get_DIMouseMove(DIMS_X))
+	{
+		m_pTransform->m_vAngle.y += D3DXToRadian(dwMouseMove / 10.f);
+	}
+
+	if (dwMouseMove = Engine::Get_DIMouseMove(DIMS_Y))
+	{
+		m_pTransform->m_vAngle.x += D3DXToRadian(dwMouseMove / 10.f);
+	}
 }
